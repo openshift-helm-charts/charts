@@ -1,0 +1,29 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+
+      - name: Configure Git
+        run: |
+          git config user.name "Baiju Muthukadan"
+          git config user.email "baiju.m.mail@gmail.com"
+
+      - name: Release Charts
+        run: |
+          make
+          ./chart-releaser push-release
+          ./chart-releases push-index
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        ref: 'gh-pages'
