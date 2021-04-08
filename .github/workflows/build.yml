@@ -5,17 +5,12 @@ on:
 
 jobs:
   valid-user:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Configure Git
-        run: |
-          git config user.name "Baiju Muthukadan"
-          git config user.email "baiju.m.mail@gmail.com"
 
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
