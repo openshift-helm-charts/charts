@@ -1,0 +1,25 @@
+name: Build and Verify
+
+on:
+  pull_request: {}
+
+jobs:
+  valid-user:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Verify PR
+        run: |
+          gpg
+          python3 -m venv ve1
+          ve1/bin/python3 setup.py install
+          ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
