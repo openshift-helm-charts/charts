@@ -21,5 +21,5 @@ jobs:
         run: |
           gpg --version
           python3 -m venv ve1
-          ve1/bin/python3 setup.py install
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
