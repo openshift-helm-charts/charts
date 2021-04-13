@@ -17,6 +17,19 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: 'Comment PR'
+        uses: actions/github-script@v3
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
+
       - name: Verify PR
         run: |
           gpg --version
