@@ -4,7 +4,7 @@ chart:
 publicPgpKey: unknown
 users:
 - githubUsername: araszka
-- githubUsername: mercury
+- githubUsername: mercury-1
 vendor:
   label: crunchydata
   name: Crunchy Data
