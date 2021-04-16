@@ -27,10 +27,11 @@ jobs:
           ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
 
       - name: "Comment pr review error [1]"
+        if: steps.verifypr.conclusion == 'failure'
         uses: mshick/add-pr-comment@v1
         with:
           message: |
-            PR review has been failed with an error. ${{ steps.verifypr.outputs.exit_code }}
+            PR review has been failed with an error. ${{ steps.verifypr.outputs }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
           allow-repeats: true # This is the default
