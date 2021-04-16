@@ -31,7 +31,7 @@ jobs:
         uses: mshick/add-pr-comment@v1
         with:
           message: |
-            PR review has been failed with an error. ${{ steps.verifypr.conclusion }} : ${{ steps.verifypr.outcome }}
+            Automated PR review has been failed with an error.
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
           allow-repeats: true # This is the default
