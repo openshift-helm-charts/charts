@@ -27,7 +27,7 @@ jobs:
           ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
 
       - name: "Comment pr review error [1]"
-        if: failure() && steps.verify-pr.outputs.op_test_error_code == '1'
+        if: failure() # && steps.verify-pr.outputs.op_test_error_code == '1'
         uses: mshick/add-pr-comment@v1
         with:
           message: |
