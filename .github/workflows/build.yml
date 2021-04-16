@@ -25,6 +25,9 @@ jobs:
           gpg --version
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/pip3 install requests && cd .. #ensure 'requests' package is installed
+          curl -o sanity-check.py -sL https://raw.githubusercontent.com/openshift-helm-charts/scripts/main/sanity-check.py
+          ./ve1/bin/python3 sanity-check.py --pr-number=${{ github.event.number }}
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
 
