@@ -1,5 +1,8 @@
 ---
-public-key: |
+chart:
+  name: test-chart
+  shortDescription: Lorem ipsum
+publicPgpKey: |
     -----BEGIN PGP PUBLIC KEY BLOCK-----
 
     mQINBGBbcMUBEACbJJbKDlFJKAnSbEqapKhfDwFC/QhF3yKhmEWvQwFDstRcsxHU
@@ -52,6 +55,9 @@ public-key: |
     WhdA6TU=
     =f4ai
     -----END PGP PUBLIC KEY BLOCK-----
-usernames:
-  - baijum
-  - nonexistinguser76576
+users:
+  - githubUsername: baijum
+  - githubUsername: someuserdoesnotexist1234
+vendor:
+  label: test-org1
+  name: Balabit

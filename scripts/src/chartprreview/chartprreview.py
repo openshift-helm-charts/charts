@@ -16,7 +16,7 @@ def get_modified_charts(number):
     url = f'https://api.github.com/repos/openshift-helm-charts/repo/pulls/{number}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(url, headers=headers)
-    pattern = re.compile("charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
+    pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
     count = 0
     for f in r.json():
         m = pattern.match(f["filename"])
@@ -27,17 +27,17 @@ def get_modified_charts(number):
     return "", "", "", ""
 
 
-def verify_user(username, category, organization, chart, version):
-    data = open(os.path.join("charts", category, organization, chart, "owner.yaml")).read()
+def verify_user(username, category, organization, chart):
+    data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
-    if username not in out['usernames']:
+    if username not in [x['githubUsername'] for x in out['users']]:
         print("User doesn't exist in list of owners:", username)
         sys.exit(1)
 
 def verify_report(category, organization, chart, version):
-    data = open(os.path.join("charts", category, organization, chart, "owner.yaml")).read()
+    data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
-    publickey = out['public-key']
+    publickey = out['publicPgpKey']
     with open("public.key", "w") as fd:
         fd.write(publickey)
     out = subprocess.run(["gpg", "--import", "public.key"], capture_output=True)
@@ -65,6 +65,6 @@ def main():
                                         help="current pull request number")
     args = parser.parse_args()
     category, organization, chart, version = get_modified_charts(args.number)
-    verify_user(args.username, category, organization, chart, version)
+    verify_user(args.username, category, organization, chart)
     report_path = verify_report(category, organization, chart, version)
     check_report_success(report_path)
