@@ -21,6 +21,8 @@ jobs:
       - name: Verify PR
         id: verifypr
         continue-on-error: true
+        env:
+          VERIFY_CHECKSUM: false
         run: |
           gpg --version
           python3 -m venv ve1
@@ -28,6 +30,8 @@ jobs:
           cd scripts && ../ve1/bin/pip3 install requests && cd .. #ensure 'requests' package is installed
           curl -o sanity-check.py -sL https://raw.githubusercontent.com/openshift-helm-charts/scripts/main/sanity-check.py
           ./ve1/bin/python3 sanity-check.py --pr-number=${{ github.event.number }}
+          docker pull quay.io/redhat-certification/chart-verifier:latest
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
 

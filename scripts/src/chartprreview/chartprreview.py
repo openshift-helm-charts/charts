@@ -57,6 +57,21 @@ def check_report_success(report_path):
         print("Report is not successful")
         sys.exit(1)
 
+def generate_and_verify_report(category, organization, chart, version):
+    src = os.path.join("charts", category, organization, chart, version, "src")
+    out = subprocess.run(["helm", "package", src], capture_output=True)
+    print(out.stdout.decode("utf-8"))
+    print(out.stderr.decode("utf-8"))
+    dn = os.path.dirname(out.stdout.decode("utf-8").split(":")[1].strip())
+    fn = os.path.basename(out.stdout.decode("utf-8").split(":")[1].strip())
+    out = subprocess.run(["docker", "run", "-it", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts", fn)], capture_output=True)
+    print(out.stdout.decode("utf-8"))
+    print(out.stderr.decode("utf-8"))
+    with open("report.yaml", "w") as fd:
+        fd.write(out.stdout.decode("utf-8"))
+
+    return "report.yaml"
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-u", "--verify-user", dest="username", type=str, required=True,
@@ -66,5 +81,10 @@ def main():
     args = parser.parse_args()
     category, organization, chart, version = get_modified_charts(args.number)
     verify_user(args.username, category, organization, chart)
-    report_path = verify_report(category, organization, chart, version)
+    report = os.path.join("charts", category, organization, chart, version, "report.yaml")
+    if os.path.exists(report):
+        report_path = verify_report(category, organization, chart, version)
+    else:
+        report_path = generate_and_verify_report(category, organization, chart, version)
+
     check_report_success(report_path)
