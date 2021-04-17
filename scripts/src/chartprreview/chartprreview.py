@@ -83,8 +83,10 @@ def main():
     verify_user(args.username, category, organization, chart)
     report = os.path.join("charts", category, organization, chart, version, "report.yaml")
     if os.path.exists(report):
+        print("Report exists: ", report)
         report_path = verify_report(category, organization, chart, version)
     else:
+        print("Report does not exist: ", report)
         report_path = generate_and_verify_report(category, organization, chart, version)
 
     check_report_success(report_path)
