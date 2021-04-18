@@ -52,7 +52,15 @@ def verify_report(category, organization, chart, version):
 
 def check_report_success(report_path):
     data = open(report_path).read()
-    out = yaml.load(data, Loader=Loader)
+    try:
+        out = yaml.load(data, Loader=Loader)
+    except yaml.scanner.ScannerError as err:
+        print("YAML error: {0}".format(err))
+        sys.exit(1)
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        sys.exit(1)
+
     if not out['ok']:
         print("Report is not successful")
         sys.exit(1)
