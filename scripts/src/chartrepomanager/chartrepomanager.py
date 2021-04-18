@@ -1,3 +1,4 @@
+import argparse
 import shutil
 import os
 import re
@@ -48,7 +49,7 @@ def create_worktree_for_index():
     subprocess.run(["git", "worktree", "add", "--detach", dr, "origin/gh-pages"], capture_output=True)
     return dr
 
-def create_index(indexdir, chartname, category, organization, chart, version):
+def create_index(indexdir, branch, chartname, category, organization, chart, version):
     path = os.path.join("charts", category, organization, chart, version)
     token = os.environ.get("GITHUB_TOKEN")
     r = requests.get('https://github.com/openshift-helm-charts/charts/raw/gh-pages/index.yaml')
@@ -77,15 +78,20 @@ def create_index(indexdir, chartname, category, organization, chart, version):
         fd.write(out)
     out = subprocess.run(["git", "add", os.path.join(indexdir, "index.yaml")], cwd=indexdir, capture_output=True)
     out = subprocess.run(["git", "commit", indexdir, "-m", "Update index.html"], cwd=indexdir, capture_output=True)
-    out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/openshift-helm-charts/repo", "HEAD:refs/heads/gh-pages", "-f"], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/openshift-helm-charts/repo", "HEAD:refs/heads/"+branch, "-f"], cwd=indexdir, capture_output=True)
 
 def update_chart_annotation(chartname):
     subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", chartname)], capture_output=True)
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-b", "--index-branch", dest="branch", type=str, required=True,
+                                        help="index branch")
+    args = parser.parse_args()
+
     category, organization, chart, version = get_modified_charts()
     chartname = prepare_chart_for_release(category, organization, chart, version )
     #push_chart_release()
     #update_chart_annotation(chartname)
     indexdir = create_worktree_for_index()
-    create_index(indexdir, chartname, category, organization, chart, version)
+    create_index(indexdir, args.branch, chartname, category, organization, chart, version)

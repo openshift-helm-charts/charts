@@ -3,27 +3,33 @@ name: Release Charts
 on:
   push:
     branches:
+      - dev
+      - stage
       - main
+      - demo
 
 jobs:
-  release:
+  release-charts:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-
       - name: Configure Git
         run: |
-          git config user.name "Baiju Muthukadan"
-          git config user.email "baiju.m.mail@gmail.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
 
       - name: Release Charts
         run: |
-          make
-          ./chart-releaser push-release
-          ./chart-releases push-index
-
-      - name: Checkout
-        uses: actions/checkout@v2
-        ref: 'gh-pages'
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          docker pull quay.io/redhat-certification/chart-verifier:latest
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          ve1/bin/chart-repo-manager --index-branch=gh-pages
