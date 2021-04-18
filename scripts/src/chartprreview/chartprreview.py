@@ -60,15 +60,17 @@ def check_report_success(report_path):
 def generate_and_verify_report(category, organization, chart, version):
     src = os.path.join("charts", category, organization, chart, version, "src")
     out = subprocess.run(["helm", "package", src], capture_output=True)
-    print(out.stdout.decode("utf-8"))
+    stdout = out.stdout.decode("utf-8")
+    print(stdout)
     print(out.stderr.decode("utf-8"))
-    dn = os.path.dirname(out.stdout.decode("utf-8").split(":")[1].strip())
-    fn = os.path.basename(out.stdout.decode("utf-8").split(":")[1].strip())
+    dn = os.path.dirname(stdout.split(":")[1].strip())
+    fn = os.path.basename(stdout.split(":")[1].strip())
     out = subprocess.run(["docker", "run", "-it", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts", fn)], capture_output=True)
-    print(out.stdout.decode("utf-8"))
+    stdout = out.stdout.decode("utf-8")
+    print(stdout)
     print(out.stderr.decode("utf-8"))
     with open("report.yaml", "w") as fd:
-        fd.write(out.stdout.decode("utf-8"))
+        fd.write(stdout)
 
     return "report.yaml"
 
