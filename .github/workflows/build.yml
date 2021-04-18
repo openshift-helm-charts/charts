@@ -1,7 +1,7 @@
 name: Build and Verify
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
@@ -19,34 +17,22 @@ jobs:
           python-version: '3.9'
 
       - name: Verify PR
-        id: verifypr
-        continue-on-error: true
-        env:
-          VERIFY_CHECKSUM: false
         run: |
           gpg --version
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/pip3 install requests && cd .. #ensure 'requests' package is installed
-          curl -o sanity-check.py -sL https://raw.githubusercontent.com/openshift-helm-charts/scripts/main/sanity-check.py
-          ./ve1/bin/python3 sanity-check.py --pr-number=${{ github.event.number }}
           docker pull quay.io/redhat-certification/chart-verifier:latest
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
 
-      - name: "Comment pr review error"
-        if: steps.verifypr.outcome == 'failure'
-        uses: mshick/add-pr-comment@v1
-        with:
-          message: |
-            Automated PR review has been failed with an error.
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-          allow-repeats: true # This is the default
-
-      - name: "Fail pr review on error"
-        if: steps.verifypr.outcome == 'failure'
+      - name: Save PR number
+        if: always()
         run: |
-          echo "See the 'Verify PR' section"
-          exit 1
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: pr
+          path: pr/
