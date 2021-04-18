@@ -1,6 +1,7 @@
 import argparse
 import shutil
 import os
+import sys
 import re
 import subprocess
 import datetime
@@ -29,7 +30,8 @@ def get_modified_charts():
         if m:
             category, organization, chart, version = m.groups()
             return category, organization, chart, version
-    return "", "", "", ""
+    print("No modified files out.")
+    sys.exit(0)
 
 def prepare_chart_for_release(category, organization, chart, version):
     path = os.path.join("charts", category, organization, chart, version, "src")
