@@ -73,15 +73,16 @@ def generate_and_verify_report(category, organization, chart, version):
     print(out.stderr.decode("utf-8"))
     dn = os.path.dirname(stdout.split(":")[1].strip())
     fn = os.path.basename(stdout.split(":")[1].strip())
-    print("dn", dn, "fn", fn)
     out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts", fn)], capture_output=True)
     stdout = out.stdout.decode("utf-8")
-    print(stdout)
-    print(out.stderr.decode("utf-8"))
-    with open("report.yaml", "w") as fd:
-        fd.write(stdout)
+    stderr = out.stderr.decode("utf-8")
+    report_path = os.path.join(dn, "report.yaml")
+    fd = open(report_path, "w")
+    fd.write(stderr)
+    fd.close()
 
-    return "report.yaml"
+    data = open(report_path).read()
+    return report_path
 
 def main():
     parser = argparse.ArgumentParser()
