@@ -34,4 +34,4 @@ jobs:
           docker pull quay.io/redhat-certification/chart-verifier:latest
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-          ve1/bin/chart-repo-manager --index-branch=gh-pages
+          ve1/bin/chart-repo-manager --index-branch=demo-gh-pages
