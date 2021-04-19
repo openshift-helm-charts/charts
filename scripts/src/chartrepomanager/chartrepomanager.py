@@ -54,9 +54,9 @@ def push_chart_release():
         print(out.stdout.decode("utf-8"))
         print(out.stderr.decode("utf-8"))
 
-def create_worktree_for_index():
+def create_worktree_for_index(branch):
     dr = tempfile.mkdtemp(prefix="crm-")
-    out = subprocess.run(["git", "worktree", "add", "--detach", dr, "origin/gh-pages"], capture_output=True)
+    out = subprocess.run(["git", "worktree", "add", "--detach", dr, f"origin/{branch}"], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
     return dr
@@ -64,7 +64,7 @@ def create_worktree_for_index():
 def create_index(indexdir, branch, chartname, category, organization, chart, version):
     path = os.path.join("charts", category, organization, chart, version)
     token = os.environ.get("GITHUB_TOKEN")
-    r = requests.get('https://github.com/openshift-helm-charts/charts/raw/gh-pages/index.yaml')
+    r = requests.get(f'https://github.com/openshift-helm-charts/charts/raw/{branch}/index.yaml')
     if r.status_code == 200:
         data = yaml.load(r.text, Loader=Loader)
     else:
@@ -96,7 +96,7 @@ def create_index(indexdir, branch, chartname, category, organization, chart, ver
     out = subprocess.run(["git", "commit", indexdir, "-m", "Update index.html"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
-    out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/openshift-helm-charts/repo", "HEAD:refs/heads/"+branch, "-f"], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/openshift-helm-charts/repo", f"HEAD:refs/heads/{branch}", "-f"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
 
@@ -115,5 +115,5 @@ def main():
     chartname = prepare_chart_for_release(category, organization, chart, version )
     #push_chart_release()
     #update_chart_annotation(chartname)
-    indexdir = create_worktree_for_index()
+    indexdir = create_worktree_for_index(args.branch)
     create_index(indexdir, args.branch, chartname, category, organization, chart, version)
