@@ -46,13 +46,13 @@ jobs:
             var issue_number = fs.readFileSync('./NR');
             var vendor_label = fs.readFileSync('./vendor');
             var chart_name = fs.readFileSync('./chart');
-            await github.issues.createComment({
+            github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: Number(issue_number),
               body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
             });
-            await github.issues.addLabels({
+            github.issues.addLabels({
               issue_number: Number(issue_number),
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -97,13 +97,13 @@ jobs:
             var issue_number = fs.readFileSync('./NR');
             var vendor_label = fs.readFileSync('./vendor');
             var chart_name = fs.readFileSync('./chart');
-            await github.issues.createComment({
+            github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: Number(issue_number),
               body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
             });
-            await github.issues.addLabels({
+            github.issues.addLabels({
               issue_number: Number(issue_number),
               owner: context.repo.owner,
               repo: context.repo.repo,
