@@ -26,11 +26,10 @@ jobs:
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
 
-      - name: Save PR number
+      - name: Save PR artifact
         if: always()
         run: |
-          mkdir -p ./pr
-          echo ${{ github.event.number }} > ./pr/NR
+          ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }}
       - uses: actions/upload-artifact@v2
         if: always()
         with:
