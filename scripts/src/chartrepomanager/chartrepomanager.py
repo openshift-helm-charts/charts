@@ -30,7 +30,7 @@ def get_modified_charts():
         if m:
             category, organization, chart, version = m.groups()
             return category, organization, chart, version
-    print("No modified files out.")
+    print("No modified files found.")
     sys.exit(0)
 
 def prepare_chart_for_release(category, organization, chart, version):
@@ -64,7 +64,8 @@ def create_worktree_for_index(branch):
 def create_index(indexdir, branch, chartname, category, organization, chart, version):
     path = os.path.join("charts", category, organization, chart, version)
     token = os.environ.get("GITHUB_TOKEN")
-    r = requests.get(f'https://github.com/openshift-helm-charts/charts/raw/{branch}/index.yaml')
+    r = requests.get(f'https://raw.githubusercontent.com/openshift-helm-charts/repo/{branch}/index.yaml')
+    original_etag = r.headers.get('etag')
     if r.status_code == 200:
         data = yaml.load(r.text, Loader=Loader)
     else:
@@ -96,9 +97,18 @@ def create_index(indexdir, branch, chartname, category, organization, chart, ver
     out = subprocess.run(["git", "commit", indexdir, "-m", "Update index.html"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
+    r = requests.head(f'https://raw.githubusercontent.com/openshift-helm-charts/repo/{branch}/index.yaml')
+    etag = r.headers.get('etag')
+    if original_etag and etag and (original_etag != etag):
+        print("index.html updated. ETag mismatch.")
+        sys.exit(1)
     out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/openshift-helm-charts/repo", f"HEAD:refs/heads/{branch}", "-f"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
-    print(out.stderr.decode("utf-8"))
+    err = out.stderr.decode("utf-8")
+    print("error:", err)
+    if out.returncode:
+        print("index.html updated. Push failed.")
+        sys.exit(1)
 
 def update_chart_annotation(chartname):
     out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", chartname)], capture_output=True)
