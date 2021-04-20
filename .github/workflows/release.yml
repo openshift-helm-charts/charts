@@ -8,6 +8,8 @@ on:
       - main
       - demo
 
+concurrency: chart_index
+
 jobs:
   release-charts:
     runs-on: ubuntu-20.04
