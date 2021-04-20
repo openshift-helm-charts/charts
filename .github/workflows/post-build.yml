@@ -52,6 +52,12 @@ jobs:
               issue_number: Number(issue_number),
               body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
             });
+            await github.issues.addLabels({
+              issue_number: Number(issue_number),
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['authorized-request']
+            })
   post-build-and-verify-success:
     runs-on: ubuntu-20.04
     if: >-
@@ -97,3 +103,9 @@ jobs:
               issue_number: Number(issue_number),
               body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
             });
+            await github.issues.addLabels({
+              issue_number: Number(issue_number),
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['authorized-request']
+            })
