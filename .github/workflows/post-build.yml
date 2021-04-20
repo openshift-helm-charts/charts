@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  post-build-and-verify:
+  post-build-and-verify-failure:
     runs-on: ubuntu-20.04
     if: >-
       ${{ github.event.workflow_run.conclusion == 'failure' }}
@@ -43,10 +43,57 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = Number(fs.readFileSync('./NR'));
+            var issue_number = fs.readFileSync('./NR');
+            var vendor_label = fs.readFileSync('./vendor');
+            var chart_name = fs.readFileSync('./chart');
             await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: issue_number,
-              body: 'Thank you for the PR! There are some error. Please check the log.'
+              issue_number: Number(issue_number),
+              body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
+            });
+  post-build-and-verify-success:
+    runs-on: ubuntu-20.04
+    if: >-
+      ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: 'Download artifact'
+        uses: actions/github-script@v3
+        with:
+          script: |
+            var artifacts = await github.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: ${{github.event.workflow_run.id }},
+            });
+            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "pr"
+            })[0];
+            var download = await github.actions.downloadArtifact({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            var fs = require('fs');
+            fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
+      - run: unzip pr.zip
+
+      - name: 'Comment on PR'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = fs.readFileSync('./NR');
+            var vendor_label = fs.readFileSync('./vendor');
+            var chart_name = fs.readFileSync('./chart');
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(issue_number),
+              body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
             });
