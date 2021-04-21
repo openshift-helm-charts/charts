@@ -44,6 +44,12 @@ jobs:
           script: |
             var fs = require('fs');
             var issue_number = fs.readFileSync('./NR');
+            github.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(issue_number),
+              name: 'authorized-request'
+            })
             var vendor_label = fs.readFileSync('./vendor');
             var chart_name = fs.readFileSync('./chart');
             github.issues.createComment({
@@ -95,6 +101,12 @@ jobs:
           script: |
             var fs = require('fs');
             var issue_number = fs.readFileSync('./NR');
+            github.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(issue_number),
+              name: 'authorized-request'
+            })
             var vendor_label = fs.readFileSync('./vendor');
             var chart_name = fs.readFileSync('./chart');
             github.issues.createComment({
