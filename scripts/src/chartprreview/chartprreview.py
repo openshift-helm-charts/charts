@@ -34,6 +34,21 @@ def verify_user(username, category, organization, chart):
         print("User doesn't exist in list of owners:", username)
         sys.exit(1)
 
+def check_owners_file_against_directory_structure(username, category, organization, chart):
+    data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
+    out = yaml.load(data, Loader=Loader)
+    vendor_label = out["vendor"]["label"]
+    chart_name = out["chart"]["name"]
+    error_exit = False
+    if organization != vendor_label:
+        error_exit = True
+        print("vendor/label in OWNERS file doesn't match the directory structure.")
+    if chart != chart_name:
+        print("chart/name in OWNERS file doesn't match the directory structure.")
+        error_exit = True
+    if error_exit:
+        sys.exit(1)
+
 def verify_report(category, organization, chart, version):
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
@@ -93,6 +108,7 @@ def main():
     args = parser.parse_args()
     category, organization, chart, version = get_modified_charts(args.number)
     verify_user(args.username, category, organization, chart)
+    check_owners_file_against_directory_structure(args.username, category, organization, chart)
     report = os.path.join("charts", category, organization, chart, version, "report.yaml")
     if os.path.exists(report):
         print("Report exists: ", report)
