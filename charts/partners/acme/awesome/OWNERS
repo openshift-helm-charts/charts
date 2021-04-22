@@ -45,7 +45,7 @@ t1o9abVwZPRb8zlEKmTF/tY2TDbO7gLqsEKniK21xg==
 =++Ei
 -----END PGP PUBLIC KEY BLOCK-----
 users:
-  - githubUsername: mmulholla
+- githubUsername: mmulholla
 vendor:
   label: acme
   name: acme inc
