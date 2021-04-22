@@ -30,10 +30,13 @@ jobs:
           python-version: '3.9'
 
       - name: Release Charts
+        env:
+          GITHUB_REF: ${{ github.head_ref }}
         run: |
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           docker pull quay.io/redhat-certification/chart-verifier:latest
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-          ve1/bin/chart-repo-manager --index-branch=gh-pages
+          INDEX_BRANCH=$(if [ "${GITHUG_REF}" = "main" ]; then echo "gh-pages"; else echo "${GITHUG_REF}-gh-pages"; fi)
+          ve1/bin/chart-repo-manager --index-branch=${INDEX_BRANCH}
