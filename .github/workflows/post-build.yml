@@ -75,12 +75,15 @@ jobs:
           script: |
             var fs = require('fs');
             var issue_number = fs.readFileSync('./NR');
-            github.issues.addLabels({
-              issue_number: Number(issue_number),
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['authorized-request']
-            })
+            var vendor_label = fs.readFileSync('./vendor');
+            var chart_name = fs.readFileSync('./chart');
+            if (vendor_label !== "" && chart_name !== "") {
+              github.issues.addLabels({
+                issue_number: Number(issue_number),
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['authorized-request']
+            })};
 
   post-build-and-verify-success:
     runs-on: ubuntu-20.04
@@ -150,9 +153,12 @@ jobs:
           script: |
             var fs = require('fs');
             var issue_number = fs.readFileSync('./NR');
-            github.issues.addLabels({
-              issue_number: Number(issue_number),
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['authorized-request']
-            })
+            var vendor_label = fs.readFileSync('./vendor');
+            var chart_name = fs.readFileSync('./chart');
+            if (vendor_label !== "" && chart_name !== "") {
+              github.issues.addLabels({
+                issue_number: Number(issue_number),
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['authorized-request']
+            })};
