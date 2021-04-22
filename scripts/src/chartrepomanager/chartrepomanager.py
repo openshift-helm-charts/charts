@@ -58,7 +58,9 @@ def create_worktree_for_index(branch):
     dr = tempfile.mkdtemp(prefix="crm-")
     out = subprocess.run(["git", "worktree", "add", "--detach", dr, f"origin/{branch}"], capture_output=True)
     print(out.stdout.decode("utf-8"))
-    print(out.stderr.decode("utf-8"))
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Creating worktree failed:", err, "branch", branch, "directory", dr)
     return dr
 
 def create_index(indexdir, branch, chartname, category, organization, chart, version):
@@ -93,21 +95,25 @@ def create_index(indexdir, branch, chartname, category, organization, chart, ver
         fd.write(out)
     out = subprocess.run(["git", "add", os.path.join(indexdir, "index.yaml")], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
-    print(out.stderr.decode("utf-8"))
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Error adding index.yaml to git staging area", "index directory", indexdir, "branch", branch)
     out = subprocess.run(["git", "commit", indexdir, "-m", "Update index.html"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
-    print(out.stderr.decode("utf-8"))
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Error committing index.yaml", "index directory", indexdir, "branch", branch)
     r = requests.head(f'https://raw.githubusercontent.com/openshift-helm-charts/repo/{branch}/index.yaml')
     etag = r.headers.get('etag')
     if original_etag and etag and (original_etag != etag):
-        print("index.html updated. ETag mismatch.")
+        print("index.html not updated. ETag mismatch.", "original ETag", original_etag, "new ETag", etag, "index directory", indexdir, "branch", branch)
         sys.exit(1)
     out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/openshift-helm-charts/repo", f"HEAD:refs/heads/{branch}", "-f"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     print("error:", err)
     if out.returncode:
-        print("index.html updated. Push failed.")
+        print("index.html not updated. Push failed.", "index directory", indexdir, "branch", branch)
         sys.exit(1)
 
 def update_chart_annotation(chartname):
@@ -120,10 +126,10 @@ def main():
     parser.add_argument("-b", "--index-branch", dest="branch", type=str, required=True,
                                         help="index branch")
     args = parser.parse_args()
-
+    branch = args.branch.split("/")[-1]
     category, organization, chart, version = get_modified_charts()
     chartname = prepare_chart_for_release(category, organization, chart, version )
     #push_chart_release()
     #update_chart_annotation(chartname)
-    indexdir = create_worktree_for_index(args.branch)
-    create_index(indexdir, args.branch, chartname, category, organization, chart, version)
+    indexdir = create_worktree_for_index(branch)
+    create_index(indexdir, branch, chartname, category, organization, chart, version)
