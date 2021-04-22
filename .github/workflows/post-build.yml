@@ -37,7 +37,7 @@ jobs:
             fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
       - run: unzip pr.zip
 
-      - name: 'Comment on PR'
+      - name: 'Remove label from PR'
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -50,6 +50,14 @@ jobs:
               issue_number: Number(issue_number),
               name: 'authorized-request'
             })
+
+      - name: 'Comment on PR'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = fs.readFileSync('./NR');
             var vendor_label = fs.readFileSync('./vendor');
             var chart_name = fs.readFileSync('./chart');
             github.issues.createComment({
@@ -58,12 +66,21 @@ jobs:
               issue_number: Number(issue_number),
               body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
             });
+
+      - name: 'Add label to PR'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = fs.readFileSync('./NR');
             github.issues.addLabels({
               issue_number: Number(issue_number),
               owner: context.repo.owner,
               repo: context.repo.repo,
               labels: ['authorized-request']
             })
+
   post-build-and-verify-success:
     runs-on: ubuntu-20.04
     if: >-
@@ -94,7 +111,7 @@ jobs:
             fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
       - run: unzip pr.zip
 
-      - name: 'Comment on PR'
+      - name: 'Remove label from PR'
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -107,6 +124,14 @@ jobs:
               issue_number: Number(issue_number),
               name: 'authorized-request'
             })
+
+      - name: 'Comment on PR'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = fs.readFileSync('./NR');
             var vendor_label = fs.readFileSync('./vendor');
             var chart_name = fs.readFileSync('./chart');
             github.issues.createComment({
@@ -115,6 +140,14 @@ jobs:
               issue_number: Number(issue_number),
               body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
             });
+
+      - name: 'Add label to PR'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = fs.readFileSync('./NR');
             github.issues.addLabels({
               issue_number: Number(issue_number),
               owner: context.repo.owner,
