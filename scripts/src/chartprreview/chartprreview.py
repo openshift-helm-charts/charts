@@ -49,7 +49,7 @@ def check_owners_file_against_directory_structure(username, category, organizati
     if error_exit:
         sys.exit(1)
 
-def verify_report(category, organization, chart, version):
+def verify_signature(category, organization, chart, version):
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
     publickey = out['publicPgpKey']
@@ -112,7 +112,7 @@ def main():
     report = os.path.join("charts", category, organization, chart, version, "report.yaml")
     if os.path.exists(report):
         print("Report exists: ", report)
-        report_path = verify_report(category, organization, chart, version)
+        report_path = verify_signature(category, organization, chart, version)
     else:
         print("Report does not exist: ", report)
         report_path = generate_and_verify_report(category, organization, chart, version)
