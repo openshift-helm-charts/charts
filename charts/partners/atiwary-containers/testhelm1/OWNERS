@@ -1,8 +1,24 @@
 chart:
   name: testhelm1
   shortDescription: unknown
-publicPgpKey: unknown
-users: []
+publicPgpKey: '-----BEGIN PGP PUBLIC KEY BLOCK----- Version: Keybase OpenPGP v1.0.0
+  Comment: https://keybase.io/crypto xo0EYIHSmQEEAO5lSGX2Yi5QCwauTg0jzT5j24Wp+f/9UtVJIxFq/qfSrHclC9GG
+  wF+dcEI8xVhpU8Ab4BlGHUAMroBjE4QwCIqzuVzUYtibpYsWKb1d0fBCOojYslU8 NOBVGltMwT2z+IUzqb5g5oREMtCkv3RKl+KKpju8FbbDAsdOqwc8/Y4BABEBAAHN
+  F3Rlc3QgPHRldHNAZ3NmZ2RmZC5jb20+wq0EEwEKABcFAmCB0pkCGy8DCwkHAxUK CAIeAQIXgAAKCRCvXCURydPWbJzBA/0TU0t632kSN1G16vAYFXabuOqPaQpQmEjj
+  i0LQZ+kca21oRVLgThgRW7PLyKoTPKB1zYETyNthrhrRMary/YHdt4G+ibb4gEQa ZQnk75BX5Rn/k4jwrEBwN/D+V3AGGF+WKcYUEQvATCg3K76kwsQOe1lzuraTNjMj
+  xVnsR2ptT86NBGCB0pkBBADSdXWANINlB8hGT7nZRKZgjqLvAUbFD4GtYgT941iY MjdP06qEMkll8H29sOG2XEUyNMDReDlgxHYS8VRDuj3b3nCyjjjQTJ5aCT2voCgg
+  253/3+A689MxZBdTgnG2eOp1Up3Ujh0z1jr4j5xSOZGSvqwo+4pV8/wnNNUbknJd zQARAQABwsCDBBgBCgAPBQJggdKZBQkPCZwAAhsuAKgJEK9cJRHJ09ZsnSAEGQEK
+  AAYFAmCB0pkACgkQmk5SGtysvl5sRAP/W9a180Z9WOkukYAiNspxz1UEZFmAdKYi hqwF1z7wJ6RzkeIbbbMGl+iE5dPOOPsCLNfJOjnawdCsNuLuyNwu0+6FtQR8UjCV
+  BBqpAGcMrdo8LkvYz78pD7nVXb0+P9hPAlmhuguhF+Ky2iLVeWxfazRV47u0Phom Dd+hKMm6GvkZ0wQAteE+HPiPPGhl98ugoSZnuhc1k75FkpTk5PgLqTxxUcT3DxtO
+  mhIcfuklUSLBQPuyWicse8tVdAzujllwTTaWs4BSJf6zfS4vK0BGbAhCo2JUATGN ky/sl9iY5fhWxVpnhZ6tRTs8J/2sh6CPC65ERpGSpJk1UYUwMkUa2wI/9snOjQRg
+  gdKZAQQAs9ODxjYW7eM/S1oKvsMTtqE+riO3lNt8HAiVLoATreu9gigBnLL2fUm8 oJluU+G9J8pLNsNZyhQSSud+bBzatZBaCWi73rqcGQRkUkKjGayswMZM+zKGHTBU
+  OdLr6R+ZdvOcXILbRhVIpBxEZWDFywdTmYPJ2Cnl9ZRXRIONAIMAEQEAAcLAggQY AQoADwUCYIHSmQUJDwmcAAIbLgCoCRCvXCURydPWbJ0gBBkBCgAGBQJggdKZAAoJ
+  EN7NlyS2osfu5hgEAKgmSaQfnkAirku/6rUIxtQO86CJU2pSEfjvIfZ4I5cYh8d6 dvEKthxOzqqsaAZ2ymGJClrqbfCKcMZuPbgTXGiBy+zveVzhvTxip0VO54OzMWvx
+  TiGKxWkIZkO+FDgKPNd3LRkyT9je9bbrxE8FzouRvwJ3u3Gv/MdCvXMstMdsjf8D 91z6QWecuQdz3+bULPImtmjUXpX6kux9BYyT5uhsAapsV91eMrPYVLazUOesNYqU
+  qEXqx2bi6SVNZ0GMKtZAgWLpXDSUt8adKGk+4BwmAZ23z+0hQaEMoiQgoNk+BVqT +HsC43HKdq+6Epu7AsA5LOG4rlvaPHyrGq76CDVwLDE=
+  =y53e -----END PGP PUBLIC KEY BLOCK-----'
+users:
+- githubUsername: gautamkrishnar
 vendor:
   label: atiwary-containers
   name: Red Hat
