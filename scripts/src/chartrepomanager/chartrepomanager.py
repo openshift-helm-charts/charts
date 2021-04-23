@@ -68,7 +68,7 @@ def prepare_chart_source_for_release(category, organization, chart, version):
         os.remove(os.path.join(".cr-release-packages", chart_file_name))
     except FileNotFoundError:
         pass
-    shutil.move(chart_file_name, ".cr-release-packages")
+    shutil.copy(chart_file_name, ".cr-release-packages")
 
 def prepare_chart_tarball_for_release(category, organization, chart, version):
     chart_file_name = f"{chart}-{version}.tgz"
@@ -162,7 +162,7 @@ def update_chart_annotation(chart_file_name, chart, report_path):
     dr = tempfile.mkdtemp(prefix="annotations-")
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
-    print(r)
+    print("annotation",r)
     annotations = json.loads(r)
     err = out.stderr.decode("utf-8")
     if err.strip():
