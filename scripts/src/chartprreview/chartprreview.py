@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 import subprocess
+import json
 
 import requests
 import yaml
@@ -67,6 +68,8 @@ def verify_signature(category, organization, chart, version):
 
 def check_report_success(report_path):
     data = open(report_path).read()
+    print("Full report: ")
+    print(data)
     try:
         out = yaml.load(data, Loader=Loader)
     except yaml.scanner.ScannerError as err:
@@ -76,8 +79,23 @@ def check_report_success(report_path):
         print("Unexpected error:", sys.exc_info()[0])
         sys.exit(1)
 
-    if not out['ok']:
-        print("Report is not successful")
+    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path], capture_output=True)
+    r = out.stdout.decode("utf-8")
+    print(r)
+    report = json.loads(r)
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Error analysing the report:", err)
+        sys.exit(1)
+
+    failed = report["failed"]
+    passed = report["passed"]
+    if failed > 0:
+        print("Report has failed.")
+        print(f"Number of checks passed: {passed}\nNUmber of checks failed: {failed}")
+        print("Error message:")
+        for m in report["message"]:
+            print(m)
         sys.exit(1)
 
 def generate_and_verify_report(category, organization, chart, version):
