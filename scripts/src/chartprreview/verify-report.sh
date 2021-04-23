@@ -122,7 +122,11 @@ getFails () {
         addComma=true
       done
   fi
-  output+="]}"
+  if [ ${#fails[@]} -gt 0 ]; then
+    output+="]}"
+  else
+    output+="}"
+  fi
   echo $output
 
 }
