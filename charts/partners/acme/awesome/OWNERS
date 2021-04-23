@@ -46,6 +46,7 @@ publicPgpKey: |
     -----END PGP PUBLIC KEY BLOCK-----
 users:
 - githubUsername: mmulholla
+- githubUsername: baijum
 vendor:
   label: acme
   name: acme inc
