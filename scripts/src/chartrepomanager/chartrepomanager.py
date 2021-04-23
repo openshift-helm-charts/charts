@@ -33,24 +33,59 @@ def get_modified_charts():
     print("No modified files found.")
     sys.exit(0)
 
-def prepare_chart_for_release(category, organization, chart, version):
+def check_chart_source_or_tarball_exists(category, organization, chart, version):
+    src = os.path.join("charts", category, organization, chart, version, "src")
+    if os.path.exists(src):
+        return True, False
+
+    tarball = os.path.join("charts", category, organization, chart, version, f"{chart}-{version}.tgz")
+    if os.path.exists(tarball):
+        return False, True
+
+    return False, False
+
+def check_report_exists(category, organization, chart, version):
+    report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
+    return os.path.exists(report_path), report_path
+
+def generate_report(chart_file_name):
+    cwd = os.getcwd()
+    out = subprocess.run(["docker", "run", "-v", cwd+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts", chart_file_name)], capture_output=True)
+    stderr = out.stderr.decode("utf-8")
+    report_path = os.path.join(cwd, "report.yaml")
+    with open(report_path, "w") as fd:
+        fd.write(stderr)
+    return report_path
+
+def prepare_chart_source_for_release(category, organization, chart, version):
     path = os.path.join("charts", category, organization, chart, version, "src")
     out = subprocess.run(["helm", "package", path], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
-    p = out.stdout.decode("utf-8").strip().split(":")[1].strip()
-    chartname = os.path.basename(p)
+    chart_file_name = f"{chart}-{version}.tgz"
     try:
-        os.remove(os.path.join(os.path.dirname(p), ".cr-release-packages", chartname))
+        os.remove(os.path.join(".cr-release-packages", chart_file_name))
     except FileNotFoundError:
         pass
-    shutil.move(p, ".cr-release-packages")
-    return chartname
+    shutil.move(chart_file_name, ".cr-release-packages")
 
-def push_chart_release():
+def prepare_chart_tarball_for_release(category, organization, chart, version):
+    chart_file_name = f"{chart}-{version}.tgz"
+    path = os.path.join("charts", category, organization, chart, version, chart_file_name)
+    try:
+        os.remove(os.path.join(".cr-release-packages", chart_file_name))
+    except FileNotFoundError:
+        pass
+    shutil.copy(path, ".cr-release-packages")
+
+def push_chart_release(branch):
     token = os.environ.get("GITHUB_TOKEN")
+    gitrepo = "repo"
+    if branch != "main":
+        # Releases publshed here: https://github.com/openshift-helm-charts/demo-or-test-chart-releases
+        gitrepo = "demo-or-test-chart-releases"
     if token:
-        out = subprocess.run(["cr", "upload", "-o", "openshift-helm-charts", "-r", "repo", "-t", token], capture_output=True)
+        out = subprocess.run(["cr", "upload", "-o", "openshift-helm-charts", "-r", gitrepo, "-t", token], capture_output=True)
         print(out.stdout.decode("utf-8"))
         print(out.stderr.decode("utf-8"))
 
@@ -75,20 +110,23 @@ def create_index(indexdir, branch, chartname, category, organization, chart, ver
             "generated": datetime.now(timezone.utc).astimezone().isoformat(),
             "entries": {}}
     if os.path.exists(os.path.join(path, "src")):
-        out = subprocess.run(["helm", "show", "chart", os.path.join(path, "src")], capture_output=True)
+        chart_file_name = f"{chart}-{version}.tgz"
+        out = subprocess.run(["helm", "show", "chart", os.path.join(".cr-release-packages", chart_file_name)], capture_output=True)
         p = out.stdout.decode("utf-8")
         print(p)
         print(out.stderr.decode("utf-8"))
         crt = yaml.load(p, Loader=Loader)
 
     crtentries = []
-    for v in data["entries"].get(chart, []):
+    entry_name = f"{organization}-{chart}"
+    d = data["entries"].get(entry_name, [])
+    for v in d:
         if v["version"] == version:
             continue
         crtentries.append(v)
 
     crtentries.append(crt)
-    data["entries"][chart] = crtentries
+    data["entries"][entry_name] = crtentries
 
     out = yaml.dump(data, Dumper=Dumper)
     with open(os.path.join(indexdir, "index.yaml"), "w") as fd:
@@ -116,10 +154,34 @@ def create_index(indexdir, branch, chartname, category, organization, chart, ver
         print("index.html not updated. Push failed.", "index directory", indexdir, "branch", branch)
         sys.exit(1)
 
-def update_chart_annotation(chartname):
-    out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", chartname)], capture_output=True)
+def update_chart_annotation(chart_file_name, chart, report_path):
+    dr = tempfile.mkdtemp(prefix="annotations-")
+    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
+    r = out.stdout.decode("utf-8")
+    print(r)
+    annotations = json.loads(r)
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Error extracting annotations from the report:", err)
+        sys.exit(1)
+
+    out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", chart_file_name), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
+
+    fd = open(os.path.join(dr, chart, "Chart.yaml"))
+    data = yaml.load(fd, Loader=Loader)
+    dara["annotations"] = annotations
+    out = yaml.dump(data, Dumper=Dumper)
+    with open(os.path.join(dr, chart, "Chart.yaml"), "w") as fd:
+        fd.write(out)
+
+    out = subprocess.run(["helm", "package", os.path.join(dr, chart)], capture_output=True)
+    print(out.stdout.decode("utf-8"))
+    print(out.stderr.decode("utf-8"))
+
+    shutil.move(chart_file_name, ".cr-release-packages")
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -128,8 +190,22 @@ def main():
     args = parser.parse_args()
     branch = args.branch.split("/")[-1]
     category, organization, chart, version = get_modified_charts()
-    chartname = prepare_chart_for_release(category, organization, chart, version )
-    #push_chart_release()
-    #update_chart_annotation(chartname)
+    chart_source_exists, chart_tarball_exists = check_chart_source_or_tarball_exists(category, organization, chart, version)
+    if chart_source_exists or chart_tarball_exists:
+        if chart_source_exists:
+            prepare_chart_source_for_release(category, organization, chart, version)
+        if chart_tarball_exists:
+            prepare_chart_tarball_for_release(category, organization, chart, version)
+
+        push_chart_release(branch)
+
+        report_exists, report_path = check_report_exists(category, organization, chart, version)
+        if not report_exists:
+            chart_file_name = f"{chart}-{version}.tgz"
+            report_path = generate_report(chart_file_name)
+
+        update_chart_annotation(chart_file_name, chart, report_path)
+    else:
+        pass
     indexdir = create_worktree_for_index(branch)
     create_index(indexdir, branch, chartname, category, organization, chart, version)
