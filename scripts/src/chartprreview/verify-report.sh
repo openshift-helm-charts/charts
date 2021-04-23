@@ -1,5 +1,65 @@
 #!/bin/bash
 
+getMetadata() {
+
+  report=$1
+
+  metadatas=()
+
+  metadata=false
+  tool=false
+  chart=false
+  chartannotations=false
+
+
+  while IFS= read -r line; do
+    line=`echo $line | xargs`
+    if [[ $line == "metadata:"* ]]; then
+      metadata=true
+    elif [[ $line == "results:"* ]]; then
+      metadata=false
+    elif [ "$metadata" = true ]; then
+      if [[ $line == *"tool:" ]]; then
+          tool=true
+          chart=false
+      elif [[ $line == *"chart:" ]]; then
+          tool=false
+          chart=true
+      elif [ "$tool" = true ]; then
+        if [[ $line == "chart-uri:"* ]]; then
+          name=`echo $line | cut -d: -f1 | xargs`
+          value=`echo "$line" | sed "s#$name:##" | xargs`
+          metadatas+=("\"$name\":\"$value\"")
+        fi
+      elif [ "$chart" = true ]; then
+        if [[ $line == "name:"* ]]; then
+             name=`echo $line | cut -d: -f1 | xargs`
+             value=`echo "$line" | sed "s#$name:##" | xargs`
+             metadatas+=("\"$name\":\"$value\"")
+        elif [[ $line == "version:"* ]]; then
+             name=`echo $line | cut -d: -f1 | xargs`
+             value=`echo "$line" | sed "s#$name:##" | xargs`
+             metadatas+=("\"$name\":\"$value\"")
+        fi
+      fi
+    fi
+
+  done < $report
+
+  output="{"
+  addComma=false
+  for data in "${metadatas[@]}"; do
+    if [ "$addComma" = true ]; then
+      output+=", "
+    fi
+    output+="$data"
+    addComma=true
+  done
+  output+="}"
+
+  echo $output
+}
+
 getAnnotations() {
 
   report=$1
@@ -96,7 +156,9 @@ getFails () {
              reason=""
            fi
         elif [ "$multireason" = true ]; then
-           reason=`echo $line | xargs`
+          if [[ $line == *"Image is not Red Hat certified"* ]]; then
+            reason=`echo $line | xargs`
+          fi
         fi
 
         if [ -n "$check" ] && [ -n "$type" ] && [ -n "$outcome" ] && [ -n "$reason" ]; then
@@ -121,12 +183,9 @@ getFails () {
         output+="\"$fail\""
         addComma=true
       done
+      output+="]"
   fi
-  if [ ${#fails[@]} -gt 0 ]; then
-    output+="]}"
-  else
-    output+="}"
-  fi
+  output+="}"
   echo $output
 
 }
@@ -150,6 +209,8 @@ if [ $command == "results" ]; then
   getFails "$report"
 elif  [ $command == "annotations" ]; then
   getAnnotations "$report"
+elif  [ $command == "metadata" ]; then
+  getMetadata "$report"
 else
   echo "{\"error\": \"$command is not a valid command\"}"
 fi
