@@ -24,7 +24,7 @@ jobs:
           docker pull quay.io/redhat-certification/chart-verifier:latest
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-          ve1/bin/chart-pr-review --verify-user=${{ github.actor }} --pr-number=${{ github.event.number }}
+          ve1/bin/chart-pr-review --verify-user=${{ github.event.pull_request.user.login }} --pr-number=${{ github.event.number }}
 
       - name: Save PR artifact
         if: always()
