@@ -77,7 +77,7 @@ jobs:
             var issue_number = fs.readFileSync('./NR');
             var vendor_label = fs.readFileSync('./vendor');
             var chart_name = fs.readFileSync('./chart');
-            if (vendor_label !== "" && chart_name !== "") {
+            if (vendor_label.toString() !== "" && chart_name.toString() !== "") {
               github.issues.addLabels({
                 issue_number: Number(issue_number),
                 owner: context.repo.owner,
