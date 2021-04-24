@@ -64,26 +64,28 @@ def prepare_chart_source_for_release(category, organization, chart, version):
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
     chart_file_name = f"{chart}-{version}.tgz"
+    new_chart_file_name = f"{organization}-{chart}-{version}.tgz"
     try:
-        os.remove(os.path.join(".cr-release-packages", chart_file_name))
+        os.remove(os.path.join(".cr-release-packages", new_chart_file_name))
     except FileNotFoundError:
         pass
-    shutil.copy(chart_file_name, ".cr-release-packages")
+    shutil.copy(f"{chart}-{version}.tgz" , f".cr-release-packages/{new_chart_file_name}")
 
 def prepare_chart_tarball_for_release(category, organization, chart, version):
     chart_file_name = f"{chart}-{version}.tgz"
+    new_chart_file_name = f"{organization}-{chart}-{version}.tgz"
     path = os.path.join("charts", category, organization, chart, version, chart_file_name)
     try:
-        os.remove(os.path.join(".cr-release-packages", chart_file_name))
+        os.remove(os.path.join(".cr-release-packages", new_chart_file_name))
     except FileNotFoundError:
         pass
-    shutil.copy(path, ".cr-release-packages")
+    shutil.copy(path, f".cr-release-packages/{new_chart_file_name}")
 
-def push_chart_release(repository, branch):
+def push_chart_release(repository, organization, branch):
     org, repo = repository.split("/")
     token = os.environ.get("GITHUB_TOKEN")
     print("[INFO] Upload chart using the chart-releaser")
-    out = subprocess.run(["cr", "upload", "-o", org, "-r", repo, "-t", token], capture_output=True)
+    out = subprocess.run(["cr", "upload", "-o", org, "-r", repo, "--release-name-template", f"{organization}-"+"{{ .Name }}-{{ .Version }}", "-t", token], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
 
@@ -160,7 +162,7 @@ def create_index(indexdir, repository, branch, category, organization, chart, ve
         print("index.html not updated. Push failed.", "index directory", indexdir, "branch", branch)
         sys.exit(1)
 
-def update_chart_annotation(chart_file_name, chart, report_path):
+def update_chart_annotation(organization, chart_file_name, chart, report_path):
     dr = tempfile.mkdtemp(prefix="annotations-")
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
@@ -171,7 +173,7 @@ def update_chart_annotation(chart_file_name, chart, report_path):
         print("Error extracting annotations from the report:", err)
         sys.exit(1)
 
-    out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", chart_file_name), "-C", dr], capture_output=True)
+    out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
 
@@ -211,7 +213,7 @@ def main():
             prepare_chart_tarball_for_release(category, organization, chart, version)
 
         print("[INFO] Publish chart release to GitHub")
-        push_chart_release(args.repository, branch)
+        push_chart_release(args.repository, organization, branch)
 
         print("[INFO] Check if report exist as part of the commit")
         report_exists, report_path = check_report_exists(category, organization, chart, version)
@@ -221,8 +223,8 @@ def main():
             report_path = generate_report(chart_file_name)
 
         print("[INFO] Updating chart annotation")
-        update_chart_annotation(chart_file_name, chart, report_path)
-        chart_url = f"https://github.com/{args.repository}/releases/download/{chart}-{version}/{chart}-{version}.tgz"
+        update_chart_annotation(organization, chart_file_name, chart, report_path)
+        chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}/{organization}-{chart}-{version}.tgz"
     else:
         # TODO: The URL should be extracted from the report
         chart_url = f"https://example.com/chart.tgz"
