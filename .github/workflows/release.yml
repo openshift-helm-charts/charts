@@ -3,7 +3,7 @@ name: Release Charts
 on:
   push: {}
 
-concurrency: chart_index
+concurrency: chart_index-${{ github.ref }}
 
 jobs:
   release-charts:
