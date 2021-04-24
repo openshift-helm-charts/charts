@@ -100,21 +100,37 @@ def check_report_success(report_path):
 
 def generate_and_verify_report(category, organization, chart, version):
     src = os.path.join("charts", category, organization, chart, version, "src")
-    out = subprocess.run(["helm", "package", src], capture_output=True)
-    stdout = out.stdout.decode("utf-8")
-    print(stdout)
-    print(out.stderr.decode("utf-8"))
-    dn = os.path.dirname(stdout.split(":")[1].strip())
-    fn = os.path.basename(stdout.split(":")[1].strip())
-    out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts", fn)], capture_output=True)
-    stdout = out.stdout.decode("utf-8")
-    stderr = out.stderr.decode("utf-8")
-    report_path = os.path.join(dn, "report.yaml")
-    fd = open(report_path, "w")
-    fd.write(stderr)
-    fd.close()
+    src_exists = False
+    tar_exists = False
+    if os.path.exists(src):
+        src_exists = True
+    tar = os.path.join("charts", category, organization, chart, version, f"{chart}-{version}.tgz")
+    if os.path.exists(tar):
+        tar_exists = True
+    if src_exists and tar_exists:
+        print("Both chart source and tar ball should not exist.")
+        sys.exit(1)
+    if not src_exists and not tar_exists:
+        print("Either chart source or tar ball should exist.")
+        sys.exit(1)
+    if src_exists:
+        out = subprocess.run(["helm", "package", src], capture_output=True)
+        stdout = out.stdout.decode("utf-8")
+        print(stdout)
+        print(out.stderr.decode("utf-8"))
+        dn = os.path.dirname(stdout.split(":")[1].strip())
+        fn = os.path.basename(stdout.split(":")[1].strip())
+        out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts/", fn)], capture_output=True)
+    else:
+        dn = os.path.join(os.getcwd(), "charts", category, organization, chart, version)
+        out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", f"/charts/{chart}-{version}.tgz"], capture_output=True)
 
-    data = open(report_path).read()
+    stderr = out.stderr.decode("utf-8")
+    report_path = "report.yaml"
+    print("report:", stderr)
+    with open(report_path, "w") as fd:
+        fd.write(stderr)
+
     return report_path
 
 def main():
