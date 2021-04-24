@@ -23,7 +23,7 @@ jobs:
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-          ./ve1/bin/sanity-check-pr --pr-number=${{ github.event.number }}
+          ./ve1/bin/sanity-check-pr --api-url=${{ github.event.pull_request._links.self.href }}
 
       - uses: actions/github-script@v3
         if: ${{ steps.sanity_check_pr_content.outcome == 'success'}}

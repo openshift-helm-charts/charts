@@ -13,10 +13,10 @@ except ImportError:
     from yaml import Loader, Dumper
 
 
-def get_modified_charts(number):
-    url = f'https://api.github.com/repos/openshift-helm-charts/repo/pulls/{number}/files'
+def get_modified_charts(api_url):
+    files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
-    r = requests.get(url, headers=headers)
+    r = requests.get(files_api_url, headers=headers)
     pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
     count = 0
     for f in r.json():
@@ -119,12 +119,12 @@ def generate_and_verify_report(category, organization, chart, version):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-u", "--verify-user", dest="username", type=str, required=True,
+    parser.add_argument("-n", "--verify-user", dest="username", type=str, required=True,
                                         help="check if the user can update the chart")
-    parser.add_argument("-n", "--pr-number", dest="number", type=str, required=True,
-                                        help="current pull request number")
+    parser.add_argument("-u", "--api-url", dest="api_url", type=str, required=True,
+                                        help="API URL for the pull request")
     args = parser.parse_args()
-    category, organization, chart, version = get_modified_charts(args.number)
+    category, organization, chart, version = get_modified_charts(args.api_url)
     verify_user(args.username, category, organization, chart)
     check_owners_file_against_directory_structure(args.username, category, organization, chart)
     report = os.path.join("charts", category, organization, chart, version, "report.yaml")
