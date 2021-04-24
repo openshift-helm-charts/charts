@@ -96,7 +96,7 @@ def create_worktree_for_index(branch):
         print("Creating worktree failed:", err, "branch", branch, "directory", dr)
     return dr
 
-def create_index(indexdir, repository, branch, category, organization, chart, version):
+def create_index(indexdir, repository, branch, category, organization, chart, version, chart_url):
     path = os.path.join("charts", category, organization, chart, version)
     token = os.environ.get("GITHUB_TOKEN")
     print("Downloading index.yaml")
@@ -129,6 +129,7 @@ def create_index(indexdir, repository, branch, category, organization, chart, ve
             continue
         crtentries.append(v)
 
+    crt["urls"] = [chart_url]
     crtentries.append(crt)
     data["entries"][entry_name] = crtentries
 
@@ -221,9 +222,12 @@ def main():
 
         print("[INFO] Updating chart annotation")
         update_chart_annotation(chart_file_name, chart, report_path)
+        chart_url = f"https://github.com/{args.repository}/releases/download/{chart}-{version}/{chart}-{version}.tgz"
     else:
-        pass
+        # TODO: The URL should be extracted from the report
+        chart_url = f"https://example.com/chart.tgz"
+
     print("[INFO] Creating Git worktree for index branch")
     indexdir = create_worktree_for_index(branch)
     print("[INFO] Creating index")
-    create_index(indexdir, args.repository, branch, category, organization, chart, version)
+    create_index(indexdir, args.repository, branch, category, organization, chart, version, chart_url)
