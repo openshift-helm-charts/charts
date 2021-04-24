@@ -79,10 +79,11 @@ def prepare_chart_tarball_for_release(category, organization, chart, version):
         pass
     shutil.copy(path, ".cr-release-packages")
 
-def push_chart_release(branch):
+def push_chart_release(repository, branch):
+    org, repo = repository.split("/")
     token = os.environ.get("GITHUB_TOKEN")
     print("[INFO] Upload chart using the chart-releaser")
-    out = subprocess.run(["cr", "upload", "-o", "openshift-helm-charts", "-r", "repo", "-t", token], capture_output=True)
+    out = subprocess.run(["cr", "upload", "-o", org, "-r", repo, "-t", token], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
 
@@ -95,11 +96,11 @@ def create_worktree_for_index(branch):
         print("Creating worktree failed:", err, "branch", branch, "directory", dr)
     return dr
 
-def create_index(indexdir, branch, category, organization, chart, version):
+def create_index(indexdir, repository, branch, category, organization, chart, version):
     path = os.path.join("charts", category, organization, chart, version)
     token = os.environ.get("GITHUB_TOKEN")
     print("Downloading index.yaml")
-    r = requests.get(f'https://raw.githubusercontent.com/openshift-helm-charts/repo/{branch}/index.yaml')
+    r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
     original_etag = r.headers.get('etag')
     if r.status_code == 200:
         data = yaml.load(r.text, Loader=Loader)
@@ -145,12 +146,12 @@ def create_index(indexdir, branch, category, organization, chart, version):
     err = out.stderr.decode("utf-8")
     if err.strip():
         print("Error committing index.yaml", "index directory", indexdir, "branch", branch)
-    r = requests.head(f'https://raw.githubusercontent.com/openshift-helm-charts/repo/{branch}/index.yaml')
+    r = requests.head(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
     etag = r.headers.get('etag')
     if original_etag and etag and (original_etag != etag):
         print("index.html not updated. ETag mismatch.", "original ETag", original_etag, "new ETag", etag, "index directory", indexdir, "branch", branch)
         sys.exit(1)
-    out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/openshift-helm-charts/repo", f"HEAD:refs/heads/{branch}", "-f"], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/{repository}", f"HEAD:refs/heads/{branch}", "-f"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     print("error:", err)
@@ -196,6 +197,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-b", "--index-branch", dest="branch", type=str, required=True,
                                         help="index branch")
+    parser.add_argument("-r", "--repository", dest="repository", type=str, required=True,
+                                        help="Git Repository")
     args = parser.parse_args()
     branch = args.branch.split("/")[-1]
     category, organization, chart, version = get_modified_charts()
@@ -207,7 +210,7 @@ def main():
             prepare_chart_tarball_for_release(category, organization, chart, version)
 
         print("[INFO] Publish chart release to GitHub")
-        push_chart_release(branch)
+        push_chart_release(args.repository, branch)
 
         print("[INFO] Check if report exist as part of the commit")
         report_exists, report_path = check_report_exists(category, organization, chart, version)
@@ -223,4 +226,4 @@ def main():
     print("[INFO] Creating Git worktree for index branch")
     indexdir = create_worktree_for_index(branch)
     print("[INFO] Creating index")
-    create_index(indexdir, branch, category, organization, chart, version)
+    create_index(indexdir, args.repository, branch, category, organization, chart, version)
