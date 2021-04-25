@@ -66,7 +66,7 @@ def verify_signature(category, organization, chart, version):
     print(out.stderr.decode("utf-8"))
     return report
 
-def check_report_success(report_path):
+def check_report_success(report_path, version):
     data = open(report_path).read()
     print("Full report: ")
     print(data)
@@ -77,6 +77,11 @@ def check_report_success(report_path):
         sys.exit(1)
     except:
         print("Unexpected error:", sys.exc_info()[0])
+        sys.exit(1)
+
+    report_version = out["metadata"]["chart"]["version"]
+    if report_version != version:
+        print(f"Chart Version '{report_version}' doesn't match the version in the directory path: '{version}'")
         sys.exit(1)
 
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path], capture_output=True)
@@ -151,4 +156,4 @@ def main():
         print("Report does not exist: ", report)
         report_path = generate_and_verify_report(category, organization, chart, version)
 
-    check_report_success(report_path)
+    check_report_success(report_path, version)
