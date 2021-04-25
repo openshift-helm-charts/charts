@@ -58,6 +58,7 @@ publicPgpKey: |
 users:
   - githubUsername: mmulholla
   - githubUsername: baijum
+  - githubUsername: mbaiju
 vendor:
   label: test-org1
   name: Test Organization 1
