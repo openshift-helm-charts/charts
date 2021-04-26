@@ -1,6 +1,6 @@
 chart:
   name: distribution
-  shortDescription: Short Description
+  shortDescription: null
 publicPgpKey: null
 users:
 - githubUsername: dpandey
