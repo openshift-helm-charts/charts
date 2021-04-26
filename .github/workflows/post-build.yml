@@ -71,7 +71,7 @@ jobs:
       - name: 'Add label to PR'
         uses: actions/github-script@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.BOT_TOKEN }}
           script: |
             var fs = require('fs');
             var issue_number = fs.readFileSync('./NR');
@@ -149,7 +149,7 @@ jobs:
       - name: 'Add label to PR'
         uses: actions/github-script@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.BOT_TOKEN }}
           script: |
             var fs = require('fs');
             var issue_number = fs.readFileSync('./NR');
