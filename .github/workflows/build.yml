@@ -1,0 +1,37 @@
+name: Build and Verify
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Verify PR
+        run: |
+          gpg --version
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          docker pull quay.io/redhat-certification/chart-verifier:latest
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          ve1/bin/chart-pr-review --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+
+      - name: Save PR artifact
+        if: always()
+        run: |
+          ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: pr
+          path: pr/
