@@ -64,7 +64,25 @@ def verify_signature(category, organization, chart, version):
     out = subprocess.run(["gpg", "--verify", sign, report], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
-    return report
+
+def check_url(report_path):
+    report = yaml.load(open(report_path), Loader=Loader)
+    chart_url = report["metadata"]["tool"]['chart-uri']
+
+    try:
+        requests.head(chart_url)
+    except requests.exceptions.InvalidSchema as err:
+        print("Invalid schema:", chart_url)
+        print(err)
+        sys.exit(1)
+    except requests.exceptions.InvalidURL as err:
+        print("Invalid URL:", chart_url)
+        print(err)
+        sys.exit(1)
+    except requests.exceptions.MissingSchema as err:
+        print("Missing schema in URL:", chart_url)
+        print(err)
+        sys.exit(1)
 
 def check_report_success(report_path, version):
     data = open(report_path).read()
@@ -148,12 +166,13 @@ def main():
     category, organization, chart, version = get_modified_charts(args.api_url)
     verify_user(args.username, category, organization, chart)
     check_owners_file_against_directory_structure(args.username, category, organization, chart)
-    report = os.path.join("charts", category, organization, chart, version, "report.yaml")
-    if os.path.exists(report):
-        print("Report exists: ", report)
-        report_path = verify_signature(category, organization, chart, version)
+    report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
+    if os.path.exists(report_path):
+        print("Report exists: ", report_path)
+        verify_signature(category, organization, chart, version)
+        check_url(report_path)
     else:
-        print("Report does not exist: ", report)
+        print("Report does not exist: ", report_path)
         report_path = generate_and_verify_report(category, organization, chart, version)
 
     check_report_success(report_path, version)
