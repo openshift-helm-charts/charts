@@ -1,6 +1,6 @@
 chart:
   name: ted
-  shortDescription: kkatare,test,mon,gff,fgfsss,gssdhgskdjhgksdj,ghsjhsdhkshks,fhdjhkshg,ghjshgkhkgh,ghdkghkshgkdhsk,hfshkdhkshg,hksdhgkshgkd
+  shortDescription: null
 publicPgpKey: null
 users:
 - githubUsername: test
