@@ -1,8 +1,9 @@
 chart:
   name: distribution
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: dpandey
 vendor:
   label: atiwary-containers
   name: Red Hat
