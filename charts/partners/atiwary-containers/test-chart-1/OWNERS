@@ -28,6 +28,8 @@ publicPgpKey: '-----BEGIN PGP PUBLIC KEY BLOCK-----  mQINBFyspkwBEACp7SfEc8EvOwZ
   sLflInhgIsCKWNu7wHhBqQlhQeFr1A== =sVL0 -----END PGP PUBLIC KEY BLOCK-----'
 users:
 - githubUsername: kkatare
+- githubUsername: test
+- githubUsername: mon
 vendor:
   label: atiwary-containers
   name: Red Hat
