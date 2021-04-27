@@ -1,8 +1,9 @@
 chart:
   name: aish-123
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: a
+publicPgpKey: null
+users:
+- githubUsername: a
 vendor:
   label: atiwary-containers
   name: Red Hat
