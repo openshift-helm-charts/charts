@@ -1,7 +1,7 @@
 chart:
   name: test
-  shortDescription: null
-publicPgpKey: null
+  shortDescription: test
+publicPgpKey: test
 users:
 - githubUsername: ansrivas
 vendor:
