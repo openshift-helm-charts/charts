@@ -138,11 +138,13 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print("Downloading index.yaml")
     r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
     original_etag = r.headers.get('etag')
+    now = datetime.now(timezone.utc).astimezone().isoformat()
     if r.status_code == 200:
         data = yaml.load(r.text, Loader=Loader)
+        data["generated"] = now
     else:
         data = {"apiVersion": "v1",
-            "generated": datetime.now(timezone.utc).astimezone().isoformat(),
+            "generated": now,
             "entries": {}}
 
     print("[INFO] Updating the chart entry with new version")
@@ -155,6 +157,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
         crtentries.append(v)
 
     chart_entry["urls"] = [chart_url]
+    chart_entry["annotations"]["helm-chart.openshift.io/submissionTimestamp"] = now
     crtentries.append(chart_entry)
     data["entries"][entry_name] = crtentries
 
