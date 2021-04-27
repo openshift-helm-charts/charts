@@ -53,7 +53,9 @@ def check_owners_file_against_directory_structure(username, category, organizati
 def verify_signature(category, organization, chart, version):
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
-    publickey = out['publicPgpKey']
+    publickey = out.get('publicPgpKey')
+    if not publickey:
+        return
     with open("public.key", "w") as fd:
         fd.write(publickey)
     out = subprocess.run(["gpg", "--import", "public.key"], capture_output=True)
