@@ -109,9 +109,7 @@ def create_index_from_chart(indexdir, repository, branch, category, organization
     crt = yaml.load(p, Loader=Loader)
     return crt
 
-def create_index_from_report(indexdir, repository, branch, category, organization, chart, version):
-    path = os.path.join("charts", category, organization, chart, version)
-    report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
+def create_index_from_report(category, report_path):
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
     print("annotation",r)
@@ -254,8 +252,11 @@ def main():
 
         print("[INFO] Check if report exist as part of the commit")
         report_exists, report_path = check_report_exists(category, organization, chart, version)
-        if not report_exists:
-            chart_file_name = f"{chart}-{version}.tgz"
+        chart_file_name = f"{chart}-{version}.tgz"
+        if report_exists:
+            shutil.copy(report_path, "report.yaml")
+        else:
+            print(f"::set-output name=tag::{organization}-{chart}-{version}")
             print("[INFO] Genereate report")
             report_path = generate_report(chart_file_name)
 
@@ -266,7 +267,8 @@ def main():
         print("[INFO] Creating index from chart")
         chart_entry = create_index_from_chart(indexdir, args.repository, branch, category, organization, chart, version, chart_url)
     else:
+        report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
         print("[INFO] Creating index from report")
-        chart_entry, chart_url = create_index_from_report(indexdir, args.repository, branch, category, organization, chart, version)
+        chart_entry, chart_url = create_index_from_report(category, report_path)
 
     update_index_and_push(indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry)
