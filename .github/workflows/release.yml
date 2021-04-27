@@ -28,6 +28,7 @@ jobs:
         env:
           GITHUB_REF: ${{ github.ref }}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        id: release-charts
         run: |
           curl -L -o cr.tar.gz https://github.com/helm/chart-releaser/releases/download/v1.2.0/chart-releaser_1.2.0_linux_amd64.tar.gz
           tar zxvf cr.tar.gz
@@ -39,3 +40,13 @@ jobs:
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
           ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH}
+
+      - name: Release
+        uses: softprops/action-gh-release@master
+        continue-on-error: true
+        with:
+          tag_name: ${{ steps.release-charts.outputs.tag }}
+          files: report.yaml
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

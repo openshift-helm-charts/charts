@@ -109,9 +109,7 @@ def create_index_from_chart(indexdir, repository, branch, category, organization
     crt = yaml.load(p, Loader=Loader)
     return crt
 
-def create_index_from_report(indexdir, repository, branch, category, organization, chart, version):
-    path = os.path.join("charts", category, organization, chart, version)
-    report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
+def create_index_from_report(category, report_path):
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
     print("annotation",r)
@@ -120,6 +118,12 @@ def create_index_from_report(indexdir, repository, branch, category, organizatio
     if err.strip():
         print("Error extracting annotations from the report:", err)
         sys.exit(1)
+
+    print("category:", category)
+    if category == "partners":
+        annotations["helm-chart.openshift.io/providerType"] = "partner"
+    else:
+        annotations["helm-chart.openshift.io/providerType"] = category
 
     report = yaml.load(open(report_path), Loader=Loader)
     chart_url = report["metadata"]["tool"]['chart-uri']
@@ -132,11 +136,13 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print("Downloading index.yaml")
     r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
     original_etag = r.headers.get('etag')
+    now = datetime.now(timezone.utc).astimezone().isoformat()
     if r.status_code == 200:
         data = yaml.load(r.text, Loader=Loader)
+        data["generated"] = now
     else:
         data = {"apiVersion": "v1",
-            "generated": datetime.now(timezone.utc).astimezone().isoformat(),
+            "generated": now,
             "entries": {}}
 
     print("[INFO] Updating the chart entry with new version")
@@ -149,6 +155,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
         crtentries.append(v)
 
     chart_entry["urls"] = [chart_url]
+    chart_entry["annotations"]["helm-chart.openshift.io/submissionTimestamp"] = now
     crtentries.append(chart_entry)
     data["entries"][entry_name] = crtentries
 
@@ -180,7 +187,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
         sys.exit(1)
 
 
-def update_chart_annotation(organization, chart_file_name, chart, report_path):
+def update_chart_annotation(category, organization, chart_file_name, chart, report_path):
     dr = tempfile.mkdtemp(prefix="annotations-")
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
@@ -190,6 +197,12 @@ def update_chart_annotation(organization, chart_file_name, chart, report_path):
     if err.strip():
         print("Error extracting annotations from the report:", err)
         sys.exit(1)
+
+    print("category:", category)
+    if category == "partners":
+        annotations["helm-chart.openshift.io/providerType"] = "partner"
+    else:
+        annotations["helm-chart.openshift.io/providerType"] = category
 
     out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
@@ -239,19 +252,23 @@ def main():
 
         print("[INFO] Check if report exist as part of the commit")
         report_exists, report_path = check_report_exists(category, organization, chart, version)
-        if not report_exists:
-            chart_file_name = f"{chart}-{version}.tgz"
+        chart_file_name = f"{chart}-{version}.tgz"
+        if report_exists:
+            shutil.copy(report_path, "report.yaml")
+        else:
+            print(f"::set-output name=tag::{organization}-{chart}-{version}")
             print("[INFO] Genereate report")
             report_path = generate_report(chart_file_name)
 
         print("[INFO] Updating chart annotation")
-        update_chart_annotation(organization, chart_file_name, chart, report_path)
+        update_chart_annotation(category, organization, chart_file_name, chart, report_path)
         chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}/{organization}-{chart}-{version}.tgz"
 
         print("[INFO] Creating index from chart")
         chart_entry = create_index_from_chart(indexdir, args.repository, branch, category, organization, chart, version, chart_url)
     else:
+        report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
         print("[INFO] Creating index from report")
-        chart_entry, chart_url = create_index_from_report(indexdir, args.repository, branch, category, organization, chart, version)
+        chart_entry, chart_url = create_index_from_report(category, report_path)
 
     update_index_and_push(indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry)
