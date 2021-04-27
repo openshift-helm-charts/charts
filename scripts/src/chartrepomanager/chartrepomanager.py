@@ -121,6 +121,12 @@ def create_index_from_report(indexdir, repository, branch, category, organizatio
         print("Error extracting annotations from the report:", err)
         sys.exit(1)
 
+    print("category:", category)
+    if category == "partners":
+        annotations["helm-chart.openshift.io/providerType"] = "partner"
+    else:
+        annotations["helm-chart.openshift.io/providerType"] = category
+
     report = yaml.load(open(report_path), Loader=Loader)
     chart_url = report["metadata"]["tool"]['chart-uri']
     chart_entry = report["metadata"]["chart"]
@@ -180,7 +186,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
         sys.exit(1)
 
 
-def update_chart_annotation(organization, chart_file_name, chart, report_path):
+def update_chart_annotation(category, organization, chart_file_name, chart, report_path):
     dr = tempfile.mkdtemp(prefix="annotations-")
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
@@ -190,6 +196,12 @@ def update_chart_annotation(organization, chart_file_name, chart, report_path):
     if err.strip():
         print("Error extracting annotations from the report:", err)
         sys.exit(1)
+
+    print("category:", category)
+    if category == "partners":
+        annotations["helm-chart.openshift.io/providerType"] = "partner"
+    else:
+        annotations["helm-chart.openshift.io/providerType"] = category
 
     out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
@@ -245,7 +257,7 @@ def main():
             report_path = generate_report(chart_file_name)
 
         print("[INFO] Updating chart annotation")
-        update_chart_annotation(organization, chart_file_name, chart, report_path)
+        update_chart_annotation(category, organization, chart_file_name, chart, report_path)
         chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}/{organization}-{chart}-{version}.tgz"
 
         print("[INFO] Creating index from chart")
