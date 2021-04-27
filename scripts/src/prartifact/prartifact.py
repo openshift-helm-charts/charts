@@ -2,6 +2,8 @@ import re
 import os
 import sys
 import argparse
+import shutil
+import pathlib
 
 import requests
 
@@ -30,6 +32,11 @@ def save_metadata(directory, vendor_label, chart, number):
 
     with open(os.path.join(directory, "NR"), "w") as fd:
         fd.write(number)
+
+    if os.path.exists("report.yaml"):
+        shutil.copy("report.yaml", directory)
+    else:
+        pathlib.Path(os.path.join(directory, "report.yaml")).touch()
 
 def main():
     parser = argparse.ArgumentParser()
