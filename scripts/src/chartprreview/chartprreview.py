@@ -218,7 +218,7 @@ def main():
         if not os.path.exists("report.yaml"):
             check_url(report_path)
     else:
-        print("Report does not exist: ", report_path)
+        print("Report does not exist: ", submitted_report_path)
         generate_verify_report(category, organization, chart, version)
         report_path = "report.yaml"
 
