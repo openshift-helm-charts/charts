@@ -165,6 +165,7 @@ def check_report_success(report_path, version):
 
 def generate_verify_report(category, organization, chart, version):
     src = os.path.join("charts", category, organization, chart, version, "src")
+    report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     src_exists = False
     tar_exists = False
     if os.path.exists(src):
@@ -175,9 +176,10 @@ def generate_verify_report(category, organization, chart, version):
     if src_exists and tar_exists:
         print("Both chart source and tar ball should not exist.")
         sys.exit(1)
-    if not src_exists and not tar_exists:
-        print("Either chart source or tar ball should exist.")
-        sys.exit(1)
+    if not os.path.exists(report_path):
+        if not src_exists and not tar_exists:
+            print("Either chart source or tar ball should exist.")
+            sys.exit(1)
     if src_exists:
         out = subprocess.run(["helm", "package", src], capture_output=True)
         stdout = out.stdout.decode("utf-8")
@@ -219,7 +221,6 @@ def main():
             check_url(report_path)
     else:
         print("Report does not exist: ", submitted_report_path)
-        generate_verify_report(category, organization, chart, version)
         report_path = "report.yaml"
 
     match_name_and_version(category, organization, chart, version)
