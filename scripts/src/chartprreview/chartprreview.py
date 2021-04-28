@@ -4,6 +4,8 @@ import sys
 import argparse
 import subprocess
 import json
+import hashlib
+import tempfile
 
 import requests
 import yaml
@@ -66,6 +68,19 @@ def verify_signature(category, organization, chart, version):
     out = subprocess.run(["gpg", "--verify", sign, report], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
+
+def match_checksum(category, organization, chart, version):
+    submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
+    submitted_report = yaml.load(open(submitted_report_path), Loader=Loader)
+    submitted_digest = submitted_report["metadata"]["tool"]["digest"]
+
+    generated_report_path = "report.yaml"
+    generated_report = yaml.load(open(generated_report_path), Loader=Loader)
+    generated_digest = generated_report["metadata"]["tool"]["digest"]
+
+    if  submitted_digest != generated_digest:
+        print("Digest is not matching:", submitted_digest, generated_digest)
+        sys.exit(1)
 
 def check_url(report_path):
     report = yaml.load(open(report_path), Loader=Loader)
@@ -164,7 +179,7 @@ def check_report_success(report_path, version):
         sys.exit(1)
 
 def generate_verify_report(category, organization, chart, version):
-    src = os.path.join("charts", category, organization, chart, version, "src")
+    src = os.path.join(os.getcwd(), "charts", category, organization, chart, version, "src")
     report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     src_exists = False
     tar_exists = False
@@ -181,16 +196,16 @@ def generate_verify_report(category, organization, chart, version):
             print("Either chart source or tar ball should exist.")
             sys.exit(1)
     if src_exists:
-        out = subprocess.run(["helm", "package", src], capture_output=True)
-        stdout = out.stdout.decode("utf-8")
-        print(stdout)
-        print(out.stderr.decode("utf-8"))
-        dn = os.path.dirname(stdout.split(":")[1].strip())
-        fn = os.path.basename(stdout.split(":")[1].strip())
-        out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts/", fn)], capture_output=True)
+        if os.path.exists(report_path):
+            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", "/charts"], capture_output=True)
+        else:
+            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "/charts"], capture_output=True)
     elif tar_exists:
         dn = os.path.join(os.getcwd(), "charts", category, organization, chart, version)
-        out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+        if os.path.exists(report_path):
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+        else:
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", f"/charts/{chart}-{version}.tgz"], capture_output=True)
     else:
         return
 
@@ -217,7 +232,9 @@ def main():
         print("Report exists: ", submitted_report_path)
         verify_signature(category, organization, chart, version)
         report_path = submitted_report_path
-        if not os.path.exists("report.yaml"):
+        if os.path.exists("report.yaml"):
+            match_checksum(category, organization, chart, version)
+        else:
             check_url(report_path)
     else:
         print("Report does not exist: ", submitted_report_path)
