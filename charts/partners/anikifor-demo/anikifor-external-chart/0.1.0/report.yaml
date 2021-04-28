@@ -2,7 +2,7 @@ apiversion: v1
 kind: verify-report
 metadata:
   tool:
-    verifier-version: 1.0.0
+    verifier-version: 0.1.0
     chart-uri: http://charts.com
     digest: sha256:28801d8d72d838da1ee05f0809fcc5a2d2b9c6cd27ba3e84c477e76f8916aaa1
     lastCertifiedTime: 2021-04-22 10:49:29.714918174 +0000 UTC m=+1.932279870
