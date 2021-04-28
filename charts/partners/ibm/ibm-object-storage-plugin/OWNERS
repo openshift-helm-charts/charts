@@ -1,0 +1,10 @@
+---
+chart:
+  name: ibm-object-storage-plugin
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: morstad
+vendor:
+  label: ibm
+  name: IBM inc.
