@@ -86,6 +86,46 @@ def check_url(report_path):
         print(err)
         sys.exit(1)
 
+def match_name_and_version(category, organization, chart, version):
+    submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
+    if os.path.exists(submitted_report_path):
+        submitted_report = yaml.load(open(submitted_report_path), Loader=Loader)
+        submitted_report_chart_name = submitted_report["metadata"]["chart"]["name"]
+        submitted_report_chart_version = submitted_report["metadata"]["chart"]["version"]
+
+        if submitted_report_chart_name != chart:
+            print("Chart name is not matching against the value in the directory structure:", submitted_report_chart_name, "vs.", chart)
+            sys.exit(1)
+
+        if submitted_report_chart_version != version:
+            print("Chart version is not matching against the value in the directory structure:", submitted_report_chart_version, "vs.", version)
+            sys.exit(1)
+
+        if os.path.exists("report.yaml"):
+            report = yaml.load(open("report.yaml"), Loader=Loader)
+            report_chart_name = report["metadata"]["chart"]["name"]
+            report_chart_version = report["metadata"]["chart"]["version"]
+
+            if submitted_report_chart_name != report_chart_name:
+                print("Chart name is not matching against the value in the submitted report:", submitted_report_chart_name, "vs.", report_chart_name)
+                sys.exit(1)
+
+            if submitted_report_chart_version != report_chart_version:
+                print("Chart version is not matching against the value in the submitted report:", submitted_report_chart_version, "vs.", report_chart_version)
+                sys.exit(1)
+    else:
+        report = yaml.load(open(report_path), Loader=Loader)
+        report_chart_name = report["metadata"]["chart"]["name"]
+        report_chart_version = report["metadata"]["chart"]["version"]
+
+        if report_chart_name != chart:
+            print("Chart name is not matching against the value in the directory structure:", report_chart_name, "vs.", chart)
+            sys.exit(1)
+
+        if report_chart_version != version:
+            print("Chart version is not matching against the value in the directory structure:", report_chart_version, "vs.", version)
+            sys.exit(1)
+
 def check_report_success(report_path, version):
     data = open(report_path).read()
     print("Full report: ")
@@ -123,7 +163,7 @@ def check_report_success(report_path, version):
             print(m)
         sys.exit(1)
 
-def generate_and_verify_report(category, organization, chart, version):
+def generate_verify_report(category, organization, chart, version):
     src = os.path.join("charts", category, organization, chart, version, "src")
     src_exists = False
     tar_exists = False
@@ -146,9 +186,11 @@ def generate_and_verify_report(category, organization, chart, version):
         dn = os.path.dirname(stdout.split(":")[1].strip())
         fn = os.path.basename(stdout.split(":")[1].strip())
         out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts/", fn)], capture_output=True)
-    else:
+    elif tar_exists:
         dn = os.path.join(os.getcwd(), "charts", category, organization, chart, version)
         out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+    else:
+        return
 
     stderr = out.stderr.decode("utf-8")
     report_path = "report.yaml"
@@ -156,7 +198,6 @@ def generate_and_verify_report(category, organization, chart, version):
     with open(report_path, "w") as fd:
         fd.write(stderr)
 
-    return report_path
 
 def main():
     parser = argparse.ArgumentParser()
@@ -168,13 +209,18 @@ def main():
     category, organization, chart, version = get_modified_charts(args.api_url)
     verify_user(args.username, category, organization, chart)
     check_owners_file_against_directory_structure(args.username, category, organization, chart)
-    report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
-    if os.path.exists(report_path):
-        print("Report exists: ", report_path)
+    submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
+    generate_verify_report(category, organization, chart, version)
+    if os.path.exists(submitted_report_path):
+        print("Report exists: ", submitted_report_path)
         verify_signature(category, organization, chart, version)
-        check_url(report_path)
+        report_path = submitted_report_path
+        if not os.path.exists("report.yaml"):
+            check_url(report_path)
     else:
         print("Report does not exist: ", report_path)
-        report_path = generate_and_verify_report(category, organization, chart, version)
+        generate_verify_report(category, organization, chart, version)
+        report_path = "report.yaml"
 
+    match_name_and_version(category, organization, chart, version)
     check_report_success(report_path, version)
