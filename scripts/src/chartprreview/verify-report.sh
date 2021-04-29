@@ -29,9 +29,12 @@ getAnnotations() {
         if [[ $line == "digest:"* ]]; then
             digest=`echo "$line" | sed 's/digest://' | xargs`
             annotations+=("\"helm-chart.openshift.io/digest\":\"$digest\"")
+        elif [[ $line == "lastCertifiedTimestamp:"* ]]; then
+            certtime=`echo "$line" | sed 's/lastCertifiedTimestamp://' | xargs`
+            annotations+=("\"helm-chart.openshift.io/lastCertifiedTimestamp\":\"$certtime\"")
         elif [[ $line == "lastCertifiedTime:"* ]]; then
             certtime=`echo "$line" | sed 's/lastCertifiedTime://' | xargs`
-            annotations+=("\"helm-chart.openshift.io/lastCertifiedTime\":\"$certtime\"")
+            annotations+=("\"helm-chart.openshift.io/lastCertifiedTimestamp\":\"$certtime\"")
         fi
       elif [ "$chart" = true ]; then
         if [[ $line == "annotations:"* ]]; then
