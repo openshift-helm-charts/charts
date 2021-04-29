@@ -72,41 +72,15 @@ def verify_signature(category, organization, chart, version):
 def match_checksum(category, organization, chart, version):
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     submitted_report = yaml.load(open(submitted_report_path), Loader=Loader)
-    digest = submitted_report["metadata"]["tool"]["digest"]
+    submitted_digest = submitted_report["metadata"]["tool"]["digest"]
 
-    src = os.path.join("charts", category, organization, chart, version, "src")
-    tar = os.path.join("charts", category, organization, chart, version, f"{chart}-{version}.tgz")
+    generated_report_path = "report.yaml"
+    generated_report = yaml.load(open(generated_report_path), Loader=Loader)
+    generated_digest = generated_report["metadata"]["tool"]["digest"]
 
-    if os.path.exists(src):
-        files = [os.path.join(path, name) for path, subdirs, files in os.walk(src) for name in files]
-        files.sort()
-        sha256 = hashlib.sha256()
-        for file in files:
-            if os.path.isfile(file):
-                sha256.update(open(file).read().encode("utf-8"))
-
-        calculated_digest = "sha256:"+sha256.hexdigest()
-        if calculated_digest != digest:
-            print("Digest is not matching:", digest, calculated_digest)
-            sys.exit(1)
-
-    elif os.path.exists(tar):
-        dr = tempfile.mkdtemp(prefix="crt-")
-        print("Extracting tarball:", tar, "directory:", dr)
-        out = subprocess.run(["tar", "zxvf", tar, "-C", dr], capture_output=True)
-        print(out.stdout.decode("utf-8"))
-        print(out.stderr.decode("utf-8"))
-        files = [os.path.join(path, name) for path, subdirs, files in os.walk(dr) for name in files]
-        files.sort()
-        sha256 = hashlib.sha256()
-        for file in files:
-            if os.path.isfile(file):
-                sha256.update(open(file).read().encode("utf-8"))
-
-        calculated_digest = "sha256:"+sha256.hexdigest()
-        if calculated_digest != digest:
-            print("Digest is not matching:", digest, calculated_digest)
-            sys.exit(1)
+    if  submitted_digest != generated_digest:
+        print("Digest is not matching:", submitted_digest, generated_digest)
+        sys.exit(1)
 
 def check_url(report_path):
     report = yaml.load(open(report_path), Loader=Loader)
