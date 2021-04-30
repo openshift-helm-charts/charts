@@ -1,8 +1,9 @@
 chart:
   name: araszka-project-2
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: araszka
 vendor:
   label: anikifor-demo
   name: login-test-login
