@@ -1,5 +1,73 @@
 #!/bin/bash
 
+mandatoryChecks=( "contains-test"
+            "contains-values"
+            "contains-values-schema"
+            "has-minkubeversion"
+            "has-readme"
+            "helm-lint"
+            "images-are-certified"
+            "is-helm-v3"
+            "not-contain-csi-objects"
+            "not-contains-crds" )
+
+
+getDigest() {
+
+  report=$1
+
+  metadata=false
+  tool=false
+
+  digestValue="Not Found"
+
+  while IFS= read -r line; do
+    line=`echo $line | xargs`
+    if [[ $line == "metadata:"* ]]; then
+      metadata=true
+    elif [[ $line == "results:"* ]]; then
+      metadata=false
+    elif [ "$metadata" = true ]; then
+      if [[ $line == *"tool:" ]]; then
+          tool=true
+      elif [[ $line == *"chart:" ]]; then
+          tool=false
+      elif [ "$tool" = true ]; then
+        if [[ $line == "digest:"* ]]; then
+          name=`echo $line | cut -d: -f1 | xargs`
+          digestValue=`echo "$line" | sed "s#$name:##" | xargs`
+          break;
+        fi
+      fi
+    fi
+
+  done < $report
+
+  echo "$digestValue"
+
+}
+
+checkDigest() {
+
+    sha1=$(getDigest "$1")
+
+    chart=$2
+
+    tempReport="tempReport.yaml"
+
+    docker run -v $(pwd):/charts --rm quay.io/redhat-certification/chart-verifier:latest verify -e has-readme /charts/$chart 2> $tempReport
+
+    sha2=$(getDigest "$tempReport")
+
+    rm $tempReport
+
+    if [ "$sha1" == "$sha2" ]; then
+      echo "{\"result\": \"pass\" , \"message\": \"digests match\"}"
+    else
+      echo "{\"result\": \"fail\" , \"message\": \"digests do not match\"}"
+    fi
+}
+
 getMetadata() {
 
   report=$1
@@ -122,7 +190,7 @@ getAnnotations() {
   echo $output
 }
 
-getFails () {
+getFails() {
 
   report=$1
 
@@ -156,8 +224,11 @@ getFails () {
              reason=""
            fi
         elif [ "$multireason" = true ]; then
-          if [[ $line == *"Image is not Red Hat certified"* ]]; then
-            reason=`echo $line | xargs`
+          reason=`echo $line | xargs`
+          if [[ $line == *"Image is Red Hat certified"* ]]; then
+            outcome="PASS"
+          else
+            outcome="FAIL"
           fi
         fi
 
@@ -167,10 +238,18 @@ getFails () {
           else
             passed=$((passed+1))
           fi
+          mandatoryChecks=("${mandatoryChecks[@]/$check}")
         fi
       fi
     fi
   done < $report
+
+  for mandatoryCheck in "${mandatoryChecks[@]}"; do
+    if [ ! -z "$checkA" ]; then
+      fails+=("Missing mandatory check : $mandatoryCheck")
+    fi
+  done
+
 
   output="{\"passed\": $passed, \"failed\": ${#fails[@]}"
   if [ ${#fails[@]} -gt 0 ]; then
@@ -211,6 +290,8 @@ elif  [ $command == "annotations" ]; then
   getAnnotations "$report"
 elif  [ $command == "metadata" ]; then
   getMetadata "$report"
+elif  [ $command == "checkdigest" ]; then
+  checkDigest "$report" "$chart"
 else
   echo "{\"error\": \"$command is not a valid command\"}"
 fi
