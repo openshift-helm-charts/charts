@@ -1,0 +1,8 @@
+chart:
+  name: helm-chart-2-test
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: swatsolutions
+  name: SWAT Solutions
