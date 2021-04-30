@@ -68,7 +68,6 @@ checkDigest() {
     fi
 }
 
-
 getMetadata() {
 
   report=$1
