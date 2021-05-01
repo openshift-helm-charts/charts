@@ -1,0 +1,40 @@
+name: Notify Awaiting PR Approvals
+
+on:
+  schedule:
+    - cron: '14 * * * 1-5'
+
+  workflow_dispatch:
+
+jobs:
+  notify-awaiting-pr-approvals:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Prepare Mail Content
+        id: prepare-mail-content
+        run: |
+          python3 scripts/awaiting_approvals.py ${{ github.repository }}
+
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        if: ${{ steps.prepare-mail-content.outputs.mail }} == 'true'
+        continue-on-error: true
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD}}
+          subject: PRs awaiting approvals (${{ steps.prepare-mail-content.outputs.pull_requests }})
+          convert_markdown: true
+          body: file://mail-content.md
+          to: bmuthuka@redhat.com,${{ secrets.MAIL_TO_ADDRESS}}
+          from: github-actions
