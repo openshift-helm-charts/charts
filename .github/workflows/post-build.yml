@@ -35,7 +35,7 @@ jobs:
             });
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
-      - run: unzip pr.zip
+      - run: unzip -d pr pr.zip
 
       - name: 'Remove label from PR'
         uses: actions/github-script@v3
@@ -44,7 +44,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = fs.readFileSync('./NR');
+            var issue_number = fs.readFileSync('./pr/NR');
             github.issues.removeLabel({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -52,20 +52,23 @@ jobs:
               name: 'authorized-request'
             })
 
+      - name: 'Prepare PR comment'
+        run: |
+          python3 scripts/prepare_pr_comment.py failure
+
       - name: 'Comment on PR'
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = fs.readFileSync('./NR');
-            var vendor_label = fs.readFileSync('./vendor');
-            var chart_name = fs.readFileSync('./chart');
+            var issue_number = fs.readFileSync('./pr/NR');
+            var comment = fs.readFileSync('./pr/comment', {encoding:'utf8', flag:'r'});
             github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: Number(issue_number),
-              body: 'Thank you for the PR #'+issue_number+'!\nThere are some error. Please check the log.\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
+              body: comment
             });
 
       - name: 'Add label to PR'
@@ -74,9 +77,9 @@ jobs:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = fs.readFileSync('./NR');
-            var vendor_label = fs.readFileSync('./vendor');
-            var chart_name = fs.readFileSync('./chart');
+            var issue_number = fs.readFileSync('./pr/NR');
+            var vendor_label = fs.readFileSync('./pr/vendor');
+            var chart_name = fs.readFileSync('./pr/chart');
             if (vendor_label.toString() !== "" && chart_name.toString() !== "") {
               github.issues.addLabels({
                 issue_number: Number(issue_number),
@@ -113,7 +116,7 @@ jobs:
             });
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
-      - run: unzip pr.zip
+      - run: unzip -d pr pr.zip
 
       - name: 'Remove label from PR'
         uses: actions/github-script@v3
@@ -122,7 +125,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = fs.readFileSync('./NR');
+            var issue_number = fs.readFileSync('./pr/NR');
             github.issues.removeLabel({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -130,20 +133,23 @@ jobs:
               name: 'authorized-request'
             })
 
+      - name: 'Prepare PR comment'
+        run: |
+          python3 scripts/prepare_pr_comment.py success
+
       - name: 'Comment on PR'
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = fs.readFileSync('./NR');
-            var vendor_label = fs.readFileSync('./vendor');
-            var chart_name = fs.readFileSync('./chart');
+            var issue_number = fs.readFileSync('./pr/NR');
+            var comment = fs.readFileSync('./pr/comment', {encoding:'utf8', flag:'r'});
             github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: Number(issue_number),
-              body: 'Thank you for the PR #'+issue_number+'!\n/metadata {"vendor_label": "'+vendor_label+'", "chart_name": "'+chart_name+'"}\n'
+              body: comment
             });
 
       - name: 'Add label to PR'
@@ -152,10 +158,10 @@ jobs:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = fs.readFileSync('./NR');
-            var vendor_label = fs.readFileSync('./vendor');
-            var chart_name = fs.readFileSync('./chart');
-            if (vendor_label !== "" && chart_name !== "") {
+            var issue_number = fs.readFileSync('./pr/NR');
+            var vendor_label = fs.readFileSync('./pr/vendor');
+            var chart_name = fs.readFileSync('./pr/chart');
+            if (vendor_label.toString() !== "" && chart_name.toString() !== "") {
               github.issues.addLabels({
                 issue_number: Number(issue_number),
                 owner: context.repo.owner,
