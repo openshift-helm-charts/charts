@@ -14,27 +14,34 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+def write_error_log(directory, *msg):
+    with open(os.path.join(directory, "errors"), "w") as fd:
+        for line in msg:
+            print(line)
+            fd.write(line)
+            fd.write("\n")
 
-def get_modified_charts(api_url):
+def get_modified_charts(directory, api_url):
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(files_api_url, headers=headers)
     pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
-    count = 0
     for f in r.json():
         m = pattern.match(f["filename"])
         if m:
             category, organization, chart, version = m.groups()
             return category, organization, chart, version
 
-    return "", "", "", ""
+    msg = "[ERROR] The files modified are not part of any chart"
+    write_error_log(directory, msg)
+    sys.exit(1)
 
-
-def verify_user(username, category, organization, chart):
+def verify_user(directory, username, category, organization, chart):
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
     if username not in [x['githubUsername'] for x in out['users']]:
-        print("User doesn't exist in list of owners:", username)
+        msg = f"[ERROR] User doesn't exist in list of owners: {username}"
+        write_error_log(directory, msg)
         sys.exit(1)
 
 def check_owners_file_against_directory_structure(username, category, organization, chart):
@@ -43,16 +50,18 @@ def check_owners_file_against_directory_structure(username, category, organizati
     vendor_label = out["vendor"]["label"]
     chart_name = out["chart"]["name"]
     error_exit = False
+    msgs = []
     if organization != vendor_label:
         error_exit = True
-        print("vendor/label in OWNERS file doesn't match the directory structure.")
+        msg.append("[ERROR] vendor/label in OWNERS file doesn't match the directory structure")
     if chart != chart_name:
-        print("chart/name in OWNERS file doesn't match the directory structure.")
+        msg.append("[ERROR] chart/name in OWNERS file doesn't match the directory structure")
         error_exit = True
     if error_exit:
+        write_error_log(directory, *msgs)
         sys.exit(1)
 
-def verify_signature(category, organization, chart, version):
+def verify_signature(directory, category, organization, chart, version):
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
     publickey = out.get('publicPgpKey')
@@ -61,15 +70,15 @@ def verify_signature(category, organization, chart, version):
     with open("public.key", "w") as fd:
         fd.write(publickey)
     out = subprocess.run(["gpg", "--import", "public.key"], capture_output=True)
-    print(out.stdout.decode("utf-8"))
-    print(out.stderr.decode("utf-8"))
+    print("[INFO]", out.stdout.decode("utf-8"))
+    print("[WARNING]", out.stderr.decode("utf-8"))
     report = os.path.join("charts", category, organization, chart, version, "report.yaml")
     sign = os.path.join("charts", category, organization, chart, version, "report.yaml.asc")
     out = subprocess.run(["gpg", "--verify", sign, report], capture_output=True)
-    print(out.stdout.decode("utf-8"))
-    print(out.stderr.decode("utf-8"))
+    print("[INFO]", out.stdout.decode("utf-8"))
+    print("[WARNING]", out.stderr.decode("utf-8"))
 
-def match_checksum(category, organization, chart, version):
+def match_checksum(directory, category, organization, chart, version):
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     submitted_report = yaml.load(open(submitted_report_path), Loader=Loader)
     submitted_digest = submitted_report["metadata"]["tool"]["digest"]
@@ -79,29 +88,36 @@ def match_checksum(category, organization, chart, version):
     generated_digest = generated_report["metadata"]["tool"]["digest"]
 
     if  submitted_digest != generated_digest:
-        print("Digest is not matching:", submitted_digest, generated_digest)
+        msg = f"Digest is not matching: {submitted_digest}, {generated_digest}"
+        write_error_log(directory, msg)
         sys.exit(1)
 
-def check_url(report_path):
+def check_url(directory, report_path):
     report = yaml.load(open(report_path), Loader=Loader)
     chart_url = report["metadata"]["tool"]['chart-uri']
 
     try:
         requests.head(chart_url)
     except requests.exceptions.InvalidSchema as err:
-        print("Invalid schema:", chart_url)
-        print(err)
+        msgs = []
+        msgs.append(f"Invalid schema: {chart_url}")
+        msgs.append(str(err))
+        write_error_log(directory, *msgs)
         sys.exit(1)
     except requests.exceptions.InvalidURL as err:
-        print("Invalid URL:", chart_url)
-        print(err)
+        msgs = []
+        msgs.append(f"Invalid URL: {chart_url}")
+        msgs.append(str(err))
+        write_error_log(directory, *msgs)
         sys.exit(1)
     except requests.exceptions.MissingSchema as err:
-        print("Missing schema in URL:", chart_url)
-        print(err)
+        msgs = []
+        msgs.append(f"Missing schema in URL: {chart_url}")
+        msgs.append(str(err))
+        write_error_log(directory, *msgs)
         sys.exit(1)
 
-def match_name_and_version(category, organization, chart, version):
+def match_name_and_version(directory, category, organization, chart, version):
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     if os.path.exists(submitted_report_path):
         submitted_report = yaml.load(open(submitted_report_path), Loader=Loader)
@@ -109,11 +125,13 @@ def match_name_and_version(category, organization, chart, version):
         submitted_report_chart_version = submitted_report["metadata"]["chart"]["version"]
 
         if submitted_report_chart_name != chart:
-            print("Chart name is not matching against the value in the directory structure:", submitted_report_chart_name, "vs.", chart)
+            msg = f"[ERROR] Chart name is not matching against the value in the directory structure: {submitted_report_chart_name} vs. {chart}"
+            write_error_log(directory, msg)
             sys.exit(1)
 
         if submitted_report_chart_version != version:
-            print("Chart version is not matching against the value in the directory structure:", submitted_report_chart_version, "vs.", version)
+            msg = f"[ERROR] Chart version is not matching against the value in the directory structure: {submitted_report_chart_version} vs. {version}"
+            write_error_log(directory, msg)
             sys.exit(1)
 
         if os.path.exists("report.yaml"):
@@ -122,11 +140,13 @@ def match_name_and_version(category, organization, chart, version):
             report_chart_version = report["metadata"]["chart"]["version"]
 
             if submitted_report_chart_name != report_chart_name:
-                print("Chart name is not matching against the value in the submitted report:", submitted_report_chart_name, "vs.", report_chart_name)
+                msg = f"[ERROR] Chart name is not matching against the value in the submitted report: {submitted_report_chart_name} vs {report_chart_name}"
+                write_error_log(directory, msg)
                 sys.exit(1)
 
             if submitted_report_chart_version != report_chart_version:
-                print("Chart version is not matching against the value in the submitted report:", submitted_report_chart_version, "vs.", report_chart_version)
+                msg = f"[ERROR] Chart version is not matching against the value in the submitted report: {submitted_report_chart_version} vs. {report_chart_version}"
+                write_error_log(directory, msg)
                 sys.exit(1)
     else:
         report = yaml.load(open("report.yaml"), Loader=Loader)
@@ -134,51 +154,60 @@ def match_name_and_version(category, organization, chart, version):
         report_chart_version = report["metadata"]["chart"]["version"]
 
         if report_chart_name != chart:
-            print("Chart name is not matching against the value in the directory structure:", report_chart_name, "vs.", chart)
+            msg = f"[ERROR] Chart name is not matching against the value in the directory structure: {report_chart_name} vs. {chart}"
+            write_error_log(directory, msg)
             sys.exit(1)
 
         if report_chart_version != version:
-            print("Chart version is not matching against the value in the directory structure:", report_chart_version, "vs.", version)
+            msg = f"[ERROR] Chart version is not matching against the value in the directory structure: {report_chart_version} vs. {version}"
+            write_error_log(directory, msg)
             sys.exit(1)
 
-def check_report_success(report_path, version):
+def check_report_success(directory, report_path, version):
     data = open(report_path).read()
-    print("Full report: ")
+    print("[INFO] Full report: ")
     print(data)
     try:
         out = yaml.load(data, Loader=Loader)
     except yaml.scanner.ScannerError as err:
-        print("YAML error: {0}".format(err))
+        msg = "YAML error: {0}".format(err)
+        write_error_log(directory, msg)
         sys.exit(1)
     except:
-        print("Unexpected error:", sys.exc_info()[0])
+        msg = "Unexpected error:", sys.exc_info()[0]
+        write_error_log(directory, msg)
         sys.exit(1)
 
     report_version = out["metadata"]["chart"]["version"]
     if report_version != version:
-        print(f"Chart Version '{report_version}' doesn't match the version in the directory path: '{version}'")
+        msg = f"[ERROR] Chart Version '{report_version}' doesn't match the version in the directory path: '{version}'"
+        write_error_log(directory, msg)
         sys.exit(1)
 
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
-    print(r)
+    print("[INFO] results:", r)
     report = json.loads(r)
     err = out.stderr.decode("utf-8")
     if err.strip():
-        print("Error analysing the report:", err)
+        msg = f"[ERROR] Error analysing the report: {err}"
+        write_error_log(directory, msg)
         sys.exit(1)
 
     failed = report["failed"]
     passed = report["passed"]
     if failed > 0:
-        print("Report has failed.")
-        print(f"Number of checks passed: {passed}\nNUmber of checks failed: {failed}")
-        print("Error message:")
+        msgs = []
+        msgs.append("[ERROR] Report has failed.")
+        msgs.append(f"Number of checks passed: {passed}")
+        msgs.append(f"Number of checks failed: {failed}")
+        msgs.append("Error message:")
         for m in report["message"]:
-            print(m)
+            msgs.append(m)
+        write_error_log(directory, *msgs)
         sys.exit(1)
 
-def generate_verify_report(category, organization, chart, version):
+def generate_verify_report(directory, category, organization, chart, version):
     src = os.path.join(os.getcwd(), "charts", category, organization, chart, version, "src")
     report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     src_exists = False
@@ -189,11 +218,13 @@ def generate_verify_report(category, organization, chart, version):
     if os.path.exists(tar):
         tar_exists = True
     if src_exists and tar_exists:
-        print("Both chart source and tar ball should not exist.")
+        msg = "[ERROR] Both chart source directory and tarball should not exist"
+        write_error_log(directory, msg)
         sys.exit(1)
     if not os.path.exists(report_path):
         if not src_exists and not tar_exists:
-            print("Either chart source or tar ball should exist.")
+            msg = "[ERROR] One of these must be modifed: report, chart source, or tarball"
+            write_error_log(directory, msg)
             sys.exit(1)
     if src_exists:
         if os.path.exists(report_path):
@@ -211,34 +242,37 @@ def generate_verify_report(category, organization, chart, version):
 
     stderr = out.stderr.decode("utf-8")
     report_path = "report.yaml"
-    print("report:", stderr)
+    print("[INFO] report:\n", stderr)
     with open(report_path, "w") as fd:
         fd.write(stderr)
 
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--directory", dest="directory", type=str, required=True,
+                                        help="artifact directory for archival")
     parser.add_argument("-n", "--verify-user", dest="username", type=str, required=True,
                                         help="check if the user can update the chart")
     parser.add_argument("-u", "--api-url", dest="api_url", type=str, required=True,
                                         help="API URL for the pull request")
     args = parser.parse_args()
-    category, organization, chart, version = get_modified_charts(args.api_url)
-    verify_user(args.username, category, organization, chart)
+    os.makedirs(args.directory, exist_ok=True)
+    category, organization, chart, version = get_modified_charts(args.directory, args.api_url)
+    verify_user(args.directory, args.username, category, organization, chart)
     check_owners_file_against_directory_structure(args.username, category, organization, chart)
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
-    generate_verify_report(category, organization, chart, version)
+    generate_verify_report(args.directory, category, organization, chart, version)
     if os.path.exists(submitted_report_path):
-        print("Report exists: ", submitted_report_path)
-        verify_signature(category, organization, chart, version)
+        print("[INFO] Report exists: ", submitted_report_path)
+        verify_signature(args.directory, category, organization, chart, version)
         report_path = submitted_report_path
         if os.path.exists("report.yaml"):
-            match_checksum(category, organization, chart, version)
+            match_checksum(args.directory, category, organization, chart, version)
         else:
-            check_url(report_path)
+            check_url(args.directory, report_path)
     else:
-        print("Report does not exist: ", submitted_report_path)
+        print("[INFO] Report does not exist: ", submitted_report_path)
         report_path = "report.yaml"
 
-    match_name_and_version(category, organization, chart, version)
-    check_report_success(report_path, version)
+    match_name_and_version(args.directory, category, organization, chart, version)
+    check_report_success(args.directory, report_path, version)
