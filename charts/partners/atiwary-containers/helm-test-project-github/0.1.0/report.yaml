@@ -1,36 +1,32 @@
 apiversion: v1
 kind: verify-report
 metadata:
-  tool:
-    verifier-version: 1.0.0
-    chart-uri: http://charts.com
-    digest: sha256:48ff99db13610af7abfa179673335678872d8c91c144cfda47c83b2585794f70
-    lastCertifiedTime: 2021-04-22 10:49:29.714918174 +0000 UTC m=+1.932279870
-    certifiedOpenShiftVersions: ""
-  chart:
-    name: helm-test-project-github
-    home: ""
-    sources: []
-    version: 0.1.0
-    description: A Helm chart for Kubernetes
-    keywords: []
-    maintainers: []
-    icon: https://www.example.com/chart-icon.png
-    apiversion: v2
-    condition: ""
-    tags: ""
-    appversion: 1.16.0
-    deprecated: false
-    annotations: {}
-    kubeversion: 1.20.0
-    dependencies: []
-    type: application
-  overrides: ""
+    tool:
+        verifier-version: 1.0.0
+        chart-uri: /charts
+        digest: sha256:103755a063988ec008d7ac05ff3ef3063f68abe6f27b52ee3f43a8d56c6bb592
+        lastCertifiedTimestamp: "2021-05-03T12:09:03.514811+00:00"
+        certifiedOpenShiftVersions: ""
+    chart:
+        name: helm-test-project-github
+        home: ""
+        sources: []
+        version: 0.1.0
+        description: A Helm chart for Kubernetes
+        keywords: []
+        maintainers: []
+        icon: https://www.example.com/chart-icon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.16.0
+        deprecated: false
+        annotations: {}
+        kubeversion: 1.20.0
+        dependencies: []
+        type: application
+    overrides: ""
 results:
-  - check: is-helm-v3
-    type: Mandatory
-    outcome: PASS
-    reason: API version is V2, used in Helm 3
   - check: contains-test
     type: Mandatory
     outcome: PASS
@@ -39,14 +35,20 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Values file exist
-  - check: helm-lint
+  - check: images-are-certified
     type: Mandatory
-    outcome: PASS
-    reason: Helm lint successful
+    outcome: FAIL
+    reason: |-
+        Image is not Red Hat certified : nginx:1.16.0 : Version 1.16.0 not found. Found : latest
+        Image is not Red Hat certified : busybox : Respository not found: busybox
   - check: has-readme
     type: Mandatory
     outcome: PASS
     reason: Chart has a README
+  - check: is-helm-v3
+    type: Mandatory
+    outcome: PASS
+    reason: API version is V2, used in Helm 3
   - check: contains-values-schema
     type: Mandatory
     outcome: PASS
@@ -59,12 +61,12 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Chart does not contain CRDs
+  - check: helm-lint
+    type: Mandatory
+    outcome: PASS
+    reason: Helm lint successful
   - check: not-contain-csi-objects
     type: Mandatory
     outcome: PASS
     reason: CSI objects do not exist
-  - check: images-are-certified
-    type: Mandatory
-    outcome: PASS
-    reason: Certified
 
