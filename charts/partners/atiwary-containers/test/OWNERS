@@ -1,7 +1,7 @@
 chart:
   name: test
-  shortDescription: test
-publicPgpKey: test
+  shortDescription: helm chart that works
+publicPgpKey: null
 users:
 - githubUsername: ansrivas
 vendor:
