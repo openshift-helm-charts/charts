@@ -1,6 +1,6 @@
 chart:
-  name: d
-  shortDescription: null
+  name: helm-test-project-github
+  shortDescription: helm-test-project-githubhelm-test-project-github
 publicPgpKey: null
 users:
 - githubUsername: kanchan04katare
