@@ -1,0 +1,10 @@
+chart:
+  name: helm-demo-chart
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: lina-is-here
+- githubUsername: araszka
+vendor:
+  label: anikifor-demo
+  name: login-test-login

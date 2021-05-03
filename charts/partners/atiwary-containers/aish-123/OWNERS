@@ -1,0 +1,9 @@
+chart:
+  name: aish-123
+  shortDescription: a
+publicPgpKey: null
+users:
+- githubUsername: a
+vendor:
+  label: atiwary-containers
+  name: Red Hat
