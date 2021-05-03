@@ -32,7 +32,7 @@ def get_modified_charts(directory, api_url):
             category, organization, chart, version = m.groups()
             return category, organization, chart, version
 
-    msg = "[ERROR] The files modified are not part of any chart"
+    msg = "[ERROR] One or more files included in the pull request are not part of the chart"
     write_error_log(directory, msg)
     sys.exit(1)
 
@@ -40,7 +40,7 @@ def verify_user(directory, username, category, organization, chart):
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
     if username not in [x['githubUsername'] for x in out['users']]:
-        msg = f"[ERROR] User doesn't exist in list of owners: {username}"
+        msg = f"[ERROR] {usernmae} is not allowed to submit the chart on behalf of {organization}"
         write_error_log(directory, msg)
         sys.exit(1)
 
@@ -53,9 +53,9 @@ def check_owners_file_against_directory_structure(username, category, organizati
     msgs = []
     if organization != vendor_label:
         error_exit = True
-        msg.append("[ERROR] vendor/label in OWNERS file doesn't match the directory structure")
+        msg.append(f"[ERROR] vendor/label in OWNERS file ({vendor_label}) doesn't match the directory structure (charts/{category}/{organization}/{chart}))")
     if chart != chart_name:
-        msg.append("[ERROR] chart/name in OWNERS file doesn't match the directory structure")
+        msg.append(f"[ERROR] chart/name in OWNERS file ({chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}))")
         error_exit = True
     if error_exit:
         write_error_log(directory, *msgs)
@@ -125,12 +125,12 @@ def match_name_and_version(directory, category, organization, chart, version):
         submitted_report_chart_version = submitted_report["metadata"]["chart"]["version"]
 
         if submitted_report_chart_name != chart:
-            msg = f"[ERROR] Chart name is not matching against the value in the directory structure: {submitted_report_chart_name} vs. {chart}"
+            msg = f"[ERROR] Chart name ({submitted_report_chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version}))"
             write_error_log(directory, msg)
             sys.exit(1)
 
         if submitted_report_chart_version != version:
-            msg = f"[ERROR] Chart version is not matching against the value in the directory structure: {submitted_report_chart_version} vs. {version}"
+            msg = f"[ERROR] Chart version ({submitted_report_chart_version}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version}))"
             write_error_log(directory, msg)
             sys.exit(1)
 
@@ -140,12 +140,12 @@ def match_name_and_version(directory, category, organization, chart, version):
             report_chart_version = report["metadata"]["chart"]["version"]
 
             if submitted_report_chart_name != report_chart_name:
-                msg = f"[ERROR] Chart name is not matching against the value in the submitted report: {submitted_report_chart_name} vs {report_chart_name}"
+                msg = f"[ERROR] Chart name in the chart is not matching against the value in the report: {submitted_report_chart_name} vs {report_chart_name}"
                 write_error_log(directory, msg)
                 sys.exit(1)
 
             if submitted_report_chart_version != report_chart_version:
-                msg = f"[ERROR] Chart version is not matching against the value in the submitted report: {submitted_report_chart_version} vs. {report_chart_version}"
+                msg = f"[ERROR] Chart version in the chart is not matching against the value in the report: {submitted_report_chart_version} vs. {report_chart_version}"
                 write_error_log(directory, msg)
                 sys.exit(1)
     else:
@@ -154,12 +154,12 @@ def match_name_and_version(directory, category, organization, chart, version):
         report_chart_version = report["metadata"]["chart"]["version"]
 
         if report_chart_name != chart:
-            msg = f"[ERROR] Chart name is not matching against the value in the directory structure: {report_chart_name} vs. {chart}"
+            msg = f"[ERROR] Chart name ({report_chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version}))"
             write_error_log(directory, msg)
             sys.exit(1)
 
         if report_chart_version != version:
-            msg = f"[ERROR] Chart version is not matching against the value in the directory structure: {report_chart_version} vs. {version}"
+            msg = f"[ERROR] Chart version ({report_chart_version}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version}))"
             write_error_log(directory, msg)
             sys.exit(1)
 
