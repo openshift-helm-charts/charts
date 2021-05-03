@@ -129,7 +129,7 @@ def match_name_and_version(category, organization, chart, version):
                 print("Chart version is not matching against the value in the submitted report:", submitted_report_chart_version, "vs.", report_chart_version)
                 sys.exit(1)
     else:
-        report = yaml.load(open(report_path), Loader=Loader)
+        report = yaml.load(open("report.yaml"), Loader=Loader)
         report_chart_name = report["metadata"]["chart"]["name"]
         report_chart_version = report["metadata"]["chart"]["version"]
 
