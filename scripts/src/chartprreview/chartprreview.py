@@ -184,6 +184,27 @@ def check_report_success(directory, report_path, version):
         write_error_log(directory, msg)
         sys.exit(1)
 
+    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
+    r = out.stdout.decode("utf-8")
+    print("[INFO] Annotations:", r)
+    annotations = json.loads(r)
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("[ERROR] Error extracting annotations from the report:", err)
+        sys.exit(1)
+
+    required_annotations = {"helm-chart.openshift.io/lastCertifiedTimestamp",
+                            #TODO: Enable this after OpenShift CI working: "helm-chart.openshift.io/certifiedOpenShiftVersions",
+                            "helm-chart.openshift.io/digest"}
+
+    available_annotations = set(annotations.keys())
+
+    missing_annotations = required_annotations - available_annotations
+    if annotation in missing_annotations:
+        msg = f"[ERROR] Missing annotation in chart/report: {annotation}")
+        write_error_log(directory, msg)
+        sys.exit(1)
+
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
     print("[INFO] results:", r)
