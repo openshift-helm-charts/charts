@@ -88,7 +88,7 @@ def match_checksum(directory, category, organization, chart, version):
     generated_digest = generated_report["metadata"]["tool"]["digest"]
 
     if  submitted_digest != generated_digest:
-        msg = f"Digest is not matching: {submitted_digest}, {generated_digest}"
+        msg = f"[ERROR] Digest is not matching: {submitted_digest}, {generated_digest}"
         write_error_log(directory, msg)
         sys.exit(1)
 
@@ -170,11 +170,11 @@ def check_report_success(directory, report_path, version):
     try:
         out = yaml.load(data, Loader=Loader)
     except yaml.scanner.ScannerError as err:
-        msg = "YAML error: {0}".format(err)
+        msg = "[ERROR] YAML error: {0}".format(err)
         write_error_log(directory, msg)
         sys.exit(1)
     except:
-        msg = "Unexpected error:", sys.exc_info()[0]
+        msg = "[ERROR] Unexpected error:", sys.exc_info()[0]
         write_error_log(directory, msg)
         sys.exit(1)
 
