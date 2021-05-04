@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: alexwilson/enable-github-automerge-action@1.0.0
       with:
-        github-token: ${{ secrets.BOT_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         merge-method: "SQUASH"
 
     - uses: hmarr/auto-approve-action@v2
