@@ -201,7 +201,7 @@ def check_report_success(directory, report_path, version):
 
     missing_annotations = required_annotations - available_annotations
     if annotation in missing_annotations:
-        msg = f"[ERROR] Missing annotation in chart/report: {annotation}")
+        msg = f"[ERROR] Missing annotation in chart/report: {annotation}"
         write_error_log(directory, msg)
         sys.exit(1)
 
