@@ -141,7 +141,7 @@ getAnnotations() {
 
 
   while IFS= read -r line; do
-    line=`echo $line | xargs`
+    line="$(echo -e "${line}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
     if [[ $line == "metadata:"* ]]; then
       metadata=true
     elif [[ $line == "results:"* ]]; then
