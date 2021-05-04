@@ -53,9 +53,9 @@ def check_owners_file_against_directory_structure(username, category, organizati
     msgs = []
     if organization != vendor_label:
         error_exit = True
-        msg.append(f"[ERROR] vendor/label in OWNERS file ({vendor_label}) doesn't match the directory structure (charts/{category}/{organization}/{chart}))")
+        msg.append(f"[ERROR] vendor/label in OWNERS file ({vendor_label}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
     if chart != chart_name:
-        msg.append(f"[ERROR] chart/name in OWNERS file ({chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}))")
+        msg.append(f"[ERROR] chart/name in OWNERS file ({chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
         error_exit = True
     if error_exit:
         write_error_log(directory, *msgs)
@@ -125,12 +125,12 @@ def match_name_and_version(directory, category, organization, chart, version):
         submitted_report_chart_version = submitted_report["metadata"]["chart"]["version"]
 
         if submitted_report_chart_name != chart:
-            msg = f"[ERROR] Chart name ({submitted_report_chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version}))"
+            msg = f"[ERROR] Chart name ({submitted_report_chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version})"
             write_error_log(directory, msg)
             sys.exit(1)
 
         if submitted_report_chart_version != version:
-            msg = f"[ERROR] Chart version ({submitted_report_chart_version}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version}))"
+            msg = f"[ERROR] Chart version ({submitted_report_chart_version}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version})"
             write_error_log(directory, msg)
             sys.exit(1)
 
@@ -154,12 +154,12 @@ def match_name_and_version(directory, category, organization, chart, version):
         report_chart_version = report["metadata"]["chart"]["version"]
 
         if report_chart_name != chart:
-            msg = f"[ERROR] Chart name ({report_chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version}))"
+            msg = f"[ERROR] Chart name ({report_chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version})"
             write_error_log(directory, msg)
             sys.exit(1)
 
         if report_chart_version != version:
-            msg = f"[ERROR] Chart version ({report_chart_version}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version}))"
+            msg = f"[ERROR] Chart version ({report_chart_version}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version})"
             write_error_log(directory, msg)
             sys.exit(1)
 
