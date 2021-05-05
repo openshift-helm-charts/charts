@@ -97,7 +97,7 @@ def check_url(directory, report_path):
     chart_url = report["metadata"]["tool"]['chart-uri']
 
     try:
-        requests.head(chart_url)
+        r = requests.head(chart_url)
     except requests.exceptions.InvalidSchema as err:
         msgs = []
         msgs.append(f"Invalid schema: {chart_url}")
@@ -116,6 +116,14 @@ def check_url(directory, report_path):
         msgs.append(str(err))
         write_error_log(directory, *msgs)
         sys.exit(1)
+
+    try:
+        r.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        msgs = []
+        msgs.append("[WARNING] URL is not accessible: {chart_url} ")
+        msgs.append(str(err))
+        write_error_log(directory, *msgs)
 
 def match_name_and_version(directory, category, organization, chart, version):
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
