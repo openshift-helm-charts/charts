@@ -41,13 +41,13 @@ def save_metadata(directory, vendor_label, chart, number):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--directory", dest="directory", type=str, required=True,
-                                        help="current working directory")
+                                        help="artifact directory for archival")
     parser.add_argument("-n", "--pr-number", dest="number", type=str, required=True,
                                         help="current pull request number")
     parser.add_argument("-u", "--api-url", dest="api_url", type=str, required=True,
                                         help="API URL for the pull request")
     args = parser.parse_args()
-    os.mkdir(args.directory)
+    os.makedirs(args.directory, exist_ok=True)
     category, organization, chart, version = get_modified_charts(args.api_url)
     save_metadata(args.directory, organization, chart, args.number)
 
