@@ -1,8 +1,9 @@
 chart:
   name: fghfhf
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: kanchan04katare
 vendor:
   label: atiwary-containers
   name: Red Hat
