@@ -2,21 +2,49 @@
 
 OpenShift Helm Charts is a repository hosting [Helm Charts](https://github.com/helm/helm) available by default with [OpenShift](https://www.openshift.com/). It contains popular technologies, tools and services. Helm Charts on this repository can be provided by the community, by partners or Red Hat. 
 
-Charts optionaly go through an automated RedHat OpenShift certification workflow, which garanties security compliances and 
+Charts optionaly go through an automated RedHat OpenShift certification workflow, which garanties security compliance as well as best integration and experience with the platform.
 
 ## Structure of the repository
 
 ```
-|-
-|- 
-|-
+.
+└── community
+└── partners
+    └── <entity>
+        └── <chart-name>
+            └── <version>
+                └── src
+                    ├── Chart.yaml
+                    ├── README.md
+                    ├── templates
+                    │   ├── deployment.yaml
+                    │   ├── _helpers.tpl
+                    │   ├── hpa.yaml
+                    │   ├── ingress.yaml
+                    │   ├── NOTES.txt
+                    │   ├── serviceaccount.yaml
+                    │   ├── service.yaml
+                    │   └── tests
+                    │       └── test-connection.yaml
+                    ├── values.schema.json
+                    └── values.yaml
 ```
+
+Where entity is the name of the company, chart-name a unique name for the chart in this repo, and version the current version of the chart. The chart can also be packaged using the following command:
+
+```bash
+$ helm package ./<chart-name>
+```
+
+Package can then be placed directly under `./partners/<entity>/<chart-name>/<version>` for example: `./partners/redhat/my-awsome-chart/0.1.2/my-awsome-chart-0.1.2.tgz`. If not interested in the certification workflow the chart can be placed under the community path `./community/<entity>/<chart-name>/<version>`.
 
 ## OpenShift Certification Program
 
-Provide Certification Content here
+The certification program is a great opportunity to not only double check the integrity of the charts but also use some additional testing resources. Static verification logic will run first and then actual chart testing can be run against real OpenShift clusters. If partners prefer to run the test on their own clusters, the certification program allows for that via a test report submission. 
 
-Interested in getting your helm charts RedHat Openshift certified? read the [certification documention](https://github.com/openshift-helm-charts/charts/blob/main/README.md)
+### Contributing Helm Charts 
+
+Interested in getting your helm charts RedHat Openshift certified? read the [certification documention](https://github.com/openshift-helm-charts/charts/tree/main/docs)
 
 ## Installation
 
@@ -35,6 +63,3 @@ Helm is also integrated in the Web Terminal: https://docs.openshift.com/containe
 Once this repository is available and configured, Helm Charts will be available in the [OpenShift Developer Perspective](https://docs.openshift.com/container-platform/4.7/applications/application_life_cycle_management/odc-working-with-helm-charts-using-developer-perspective.html)
 
 You can also use Helm CLI commands, please refere to (Using Helm Guide)[https://helm.sh/docs/intro/using_helm/] for detailed instructions on how to use the Helm client.
-
-# License
-
