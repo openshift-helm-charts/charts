@@ -1,7 +1,7 @@
 import os
 import sys
 
-def prepare_failure_commet(repository, issue_number, vendor_label, chart_name):
+def prepare_failure_comment(repository, issue_number, vendor_label, chart_name):
     msg = f"Thank you for the PR #{issue_number}!\n\n"
     runid = open("./pr/build-verify-check-run-id").read()
     run_url = f"https://github.com/{repository}/pull/{issue_number}/checks?check_run_id={runid}".strip()
@@ -17,7 +17,7 @@ def prepare_failure_commet(repository, issue_number, vendor_label, chart_name):
     msg += f"Partner Support URL: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/managing-your-account/getting-help/technology-partner-success-desk\n"
     return msg
 
-def prepare_success_commet(issue_number, vendor_label, chart_name):
+def prepare_success_comment(issue_number, vendor_label, chart_name):
     msg = f"Thank you for the PR #{issue_number}!\n\n"
     msg += f'/metadata {{"vendor_label": "{vendor_label}", "chart_name": "{chart_name}"}}\n\n'
     return msg
@@ -29,9 +29,9 @@ def main():
     vendor_label = open("./pr/vendor").read().strip()
     chart_name = open("./pr/chart").read().strip()
     if result == "failure":
-        msg = prepare_failure_commet(repository, issue_number, vendor_label, chart_name)
+        msg = prepare_failure_comment(repository, issue_number, vendor_label, chart_name)
     else:
-        msg = prepare_success_commet(issue_number, vendor_label, chart_name)
+        msg = prepare_success_comment(issue_number, vendor_label, chart_name)
 
     with open("./pr/comment", "w") as fd:
         fd.write(msg)
