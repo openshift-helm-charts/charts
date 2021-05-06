@@ -2,19 +2,30 @@ import os
 import sys
 
 def prepare_failure_comment(repository, issue_number, vendor_label, chart_name):
-    msg = f"Thank you for the PR #{issue_number}!\n\n"
     runid = open("./pr/build-verify-check-run-id").read()
     run_url = f"https://github.com/{repository}/pull/{issue_number}/checks?check_run_id={runid}".strip()
-    msg += f'There are some errors while building and validating your PR.'
-    msg += 'Please check the log for more details:\n'
-    msg += run_url
-    msg += '\n(Please open this link in another tab/window)\n\n'
+    msg = f"""\
+Thank you for the pull request #{issue_number}!
+
+There are few errors while building and verifying your pull request.
+Please check the error log for more details:
+{run_url}
+(open this link in a new tab/window)
+"""
     if os.path.exists("./pr/errors"):
-        msg += f"These are the critical issues:\n\n"
-        msg += open("./pr/errors").read()
-    msg += "\n---\n"
-    msg += f'/metadata {{"vendor_label": "{vendor_label}", "chart_name": "{chart_name}"}}\n\n'
-    msg += f"Partner Support URL: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/managing-your-account/getting-help/technology-partner-success-desk\n"
+        errors = open("./pr/errors").read()
+        msg += f"""
+The following issues require changes in the pull request:
+
+{errors}
+"""
+
+    msg += f"""
+---
+/metadata {{"vendor_label": "{vendor_label}", "chart_name": "{chart_name}"}}
+
+Partner Support: http://bit.ly/technology-partner-success-desk
+"""
     return msg
 
 def prepare_success_comment(issue_number, vendor_label, chart_name):
