@@ -2,14 +2,13 @@
 
 OpenShift Helm Charts is a repository hosting [Helm Charts](https://github.com/helm/helm) available by default with [OpenShift](https://www.openshift.com/). It contains popular technologies, tools and services. Helm Charts on this repository can be provided by the community, by partners or Red Hat. 
 
-Charts optionaly go through an automated RedHat OpenShift certification workflow, which garanties security compliance as well as best integration and experience with the platform.
+Charts go through an automated RedHat OpenShift certification workflow, which garanties security compliance as well as best integration and experience with the platform.
 
 ## Structure of the repository
 
 ```
 .
 └── charts
-    └── community
     └── partners
         └── <entity>
             └── <chart-name>
@@ -37,7 +36,7 @@ Where entity is the name of the company, chart-name a unique name for the chart 
 $ helm package ./<chart-name>
 ```
 
-Package can then be placed directly under `./partners/<entity>/<chart-name>/<version>` for example: `./partners/redhat/my-awsome-chart/0.1.2/my-awsome-chart-0.1.2.tgz`. If not interested in the certification workflow the chart can be placed under the community path `./community/<entity>/<chart-name>/<version>`.
+Package can then be placed directly under `./charts/partners/<entity>/<chart-name>/<version>` for example: `./charts/partners/redhat/my-awsome-chart/0.1.2/my-awsome-chart-0.1.2.tgz`.
 
 ## OpenShift Certification Program
 
