@@ -1,0 +1,12 @@
+---
+chart:
+  name: wordpress
+  shortDescription: A Helm chart for Wordpress
+publicPgpKey:
+users:
+- githubUsername: mmulholla
+- githubUsername: baijum
+- githubUsername: isutton
+vendor:
+  label: demo-partner
+  name: demo-partner inc.
