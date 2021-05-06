@@ -25,7 +25,6 @@ def get_modified_charts():
     print(files.stdout.decode("utf-8"))
     print(files.stderr.decode("utf-8"))
     pattern = re.compile("charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
-    count = 0
     for line in files.stdout.decode("utf-8").split('\n'):
         m = pattern.match(line)
         if m:

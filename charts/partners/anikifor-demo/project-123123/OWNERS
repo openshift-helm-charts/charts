@@ -1,0 +1,9 @@
+chart:
+  name: project-123123
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: qwe
+vendor:
+  label: anikifor-demo
+  name: login-test-login
