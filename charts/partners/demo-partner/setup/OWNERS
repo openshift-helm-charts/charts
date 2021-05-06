@@ -1,0 +1,12 @@
+---
+chart:
+  name: setup
+  shortDescription: Not part of demo, useful for demo testing
+publicPgpKey:
+users:
+- githubUsername: mmulholla
+- githubUsername: baijum
+- githubUsername: isutton
+vendor:
+  label: demo-partner
+  name: demo-partner inc.
