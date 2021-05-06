@@ -48,18 +48,21 @@ Interested in getting your helm charts RedHat Openshift certified? read the [cer
 
 ## Installation
 
-This repository comes configured by default starting with OpenShift 4.8. For earlier version of OpenShift or other Kubernetes distributions, the following command allows you to download and install all the charts from this repository:
+This repository comes configured by default starting with OpenShift 4.8. For earlier version of OpenShift or other Kubernetes distributions, the following command allows you to download and install all the charts from this repository via helm CLI:
 
 ```bash
 $ helm repo add openshift-helm-charts http://helm-charts.openshift.io/
 ```
 
+Helm is also integrated in the [odc web terminal](https://docs.openshift.com/container-platform/4.7/web_console/odc-about-web-terminal.html), you can use the helm CLI directly from there if you installed it.
 
-Configure custom Helm Chart repositories: https://docs.openshift.com/container-platform/4.7/cli_reference/helm_cli/configuring-custom-helm-chart-repositories.html
-Helm is also integrated in the Web Terminal: https://docs.openshift.com/container-platform/4.7/web_console/odc-about-web-terminal.html so you can use the helm CLI directly from the Web Terminal if you installed it.
+To install the repo to be used from the OpenShift console run the following command as and OpenShift admin:
+```bash
+$ oc apply -f https://helm-charts.openshift.io/openshift-charts-repo.yaml
+```
 
 ## Using Helm
 
 Once this repository is available and configured, Helm Charts will be available in the [OpenShift Developer Perspective](https://docs.openshift.com/container-platform/4.7/applications/application_life_cycle_management/odc-working-with-helm-charts-using-developer-perspective.html)
 
-You can also use Helm CLI commands, please refere to (Using Helm Guide)[https://helm.sh/docs/intro/using_helm/] for detailed instructions on how to use the Helm client.
+You can also use Helm CLI commands, please refere to [Using Helm Guide](https://helm.sh/docs/intro/using_helm/) for detailed instructions on how to use the Helm client.

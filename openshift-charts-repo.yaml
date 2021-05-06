@@ -1,0 +1,7 @@
+apiVersion: helm.openshift.io/v1beta1
+kind: HelmChartRepository
+metadata:
+  name: openshift-helm-charts
+spec:
+  connectionConfig:
+    url: http://helm-charts.openshift.io/
