@@ -8,26 +8,27 @@ Charts optionaly go through an automated RedHat OpenShift certification workflow
 
 ```
 .
-└── community
-└── partners
-    └── <entity>
-        └── <chart-name>
-            └── <version>
-                └── src
-                    ├── Chart.yaml
-                    ├── README.md
-                    ├── templates
-                    │   ├── deployment.yaml
-                    │   ├── _helpers.tpl
-                    │   ├── hpa.yaml
-                    │   ├── ingress.yaml
-                    │   ├── NOTES.txt
-                    │   ├── serviceaccount.yaml
-                    │   ├── service.yaml
-                    │   └── tests
-                    │       └── test-connection.yaml
-                    ├── values.schema.json
-                    └── values.yaml
+└── charts
+    └── community
+    └── partners
+        └── <entity>
+            └── <chart-name>
+                └── <version>
+                    └── src
+                        ├── Chart.yaml
+                        ├── README.md
+                        ├── templates
+                        │   ├── deployment.yaml
+                        │   ├── _helpers.tpl
+                        │   ├── hpa.yaml
+                        │   ├── ingress.yaml
+                        │   ├── NOTES.txt
+                        │   ├── serviceaccount.yaml
+                        │   ├── service.yaml
+                        │   └── tests
+                        │       └── test-connection.yaml
+                        ├── values.schema.json
+                        └── values.yaml
 ```
 
 Where entity is the name of the company, chart-name a unique name for the chart in this repo, and version the current version of the chart. The chart can also be packaged using the following command:
