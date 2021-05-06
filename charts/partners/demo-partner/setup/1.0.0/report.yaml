@@ -1,0 +1,76 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.0.0
+        chart-uri: /charts/setup-1.0.0.tgz
+        digest: sha256:249102a2dc01371cb25d0cced0bf49c2e6e7fa85ac65142fc25bdbedcf01e757
+        lastCertifiedTimestamp: "2021-05-06T20:55:20.183383+00:00"
+        certifiedOpenShiftVersions: ""
+    chart:
+        name: setup
+        home: ""
+        sources: []
+        version: 1.0.0
+        description: A Helm chart for getting ready
+        keywords: []
+        maintainers: []
+        icon: https://www.example.com/chart-icon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.16.0
+        deprecated: false
+        annotations:
+            helm-chart.openshift.io/archs: all
+            helm-chart.openshift.io/name: get your setups here
+            helm-chart.openshift.io/provider: demo-partner
+            helm-chart.openshift.io/supportURL: http://demo-partner-help-is-here.com/
+        kubeversion: 1.20.0
+        dependencies: []
+        type: application
+    overrides: ""
+results:
+  - check: contains-test
+    type: Mandatory
+    outcome: PASS
+    reason: Chart test files exist
+  - check: contains-values-schema
+    type: Mandatory
+    outcome: PASS
+    reason: Values schema file exist
+  - check: not-contains-crds
+    type: Mandatory
+    outcome: PASS
+    reason: Chart does not contain CRDs
+  - check: helm-lint
+    type: Mandatory
+    outcome: PASS
+    reason: Helm lint successful
+  - check: images-are-certified
+    type: Mandatory
+    outcome: PASS
+    reason: |-
+        Image is Red Hat certified : nginx:latest
+        Image is Red Hat certified : snyk/kubernetes-operator
+  - check: has-readme
+    type: Mandatory
+    outcome: PASS
+    reason: Chart has a README
+  - check: is-helm-v3
+    type: Mandatory
+    outcome: PASS
+    reason: API version is V2, used in Helm 3
+  - check: not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
+  - check: contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
+  - check: has-minkubeversion
+    type: Mandatory
+    outcome: PASS
+    reason: Minimum Kubernetes version specified
+
