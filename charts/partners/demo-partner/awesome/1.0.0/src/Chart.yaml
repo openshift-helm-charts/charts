@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: 1.16.0
+description: A Helm chart for Awesomeness
+icon: https://www.example.com/chart-icon.png
+name: awesome
+type: application
+version: 1.0.0
+annotations:
+  helm-chart.openshift.io/provider: acme
+  helm-chart.openshift.io/name: get your awesomeness here
+  helm-chart.openshift.io/supportURL: http://acme-help-is-here.com/
+  helm-chart.openshift.io/archs: all
