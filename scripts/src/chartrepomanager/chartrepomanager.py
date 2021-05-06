@@ -203,6 +203,12 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
     else:
         annotations["helm-chart.openshift.io/providerType"] = category
 
+    if "helm-chart.openshift.io/provider" not in annotations:
+        data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
+        out = yaml.load(data, Loader=Loader)
+        vendor_name = out["vendor"]["name"]
+        annotations["helm-chart.openshift.io/provider"] = vendor_name
+
     out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
