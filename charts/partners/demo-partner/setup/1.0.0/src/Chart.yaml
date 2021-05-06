@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: 1.16.0
+description: A chart for demo testing
+icon: https://www.example.com/chart-icon.png
+kubeVersion: 1.20.0
+name: setup
+type: application
+version: 1.0.0
+annotations:
+  helm-chart.openshift.io/provider: demo-partner
+  helm-chart.openshift.io/name: get thos demos working smoothly
+  helm-chart.openshift.io/supportURL: http://demo-partner-help-is-here.com/
+  helm-chart.openshift.io/archs: all
