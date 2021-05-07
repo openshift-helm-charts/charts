@@ -6,12 +6,21 @@ Chart:
   version: 5.7.1
 ok: false
 
+contains-values-schema:
+	ok: true
+	reason: Values schema file exist
 helm-lint:
 	ok: true
 	reason: Helm lint successful
-not-contain-csi-objects:
+is-helm-v3:
 	ok: true
-	reason: CSI objects do not exist
+	reason: API version is V2, used in Helm 3
+contains-values:
+	ok: true
+	reason: Values file exist
+not-contains-crds:
+	ok: true
+	reason: Chart does not contain CRDs
 images-are-certified:
 	ok: false
 	reason: Image is Red Hat certified : docker.io/bitnami/wordpress:5.7.1-debian-10-r19 
@@ -22,21 +31,12 @@ chart-testing:
 contains-test:
 	ok: true
 	reason: Chart test files exist
-contains-values-schema:
+not-contain-csi-objects:
 	ok: true
-	reason: Values schema file exist
-is-helm-v3:
-	ok: true
-	reason: API version is V2, used in Helm 3
-contains-values:
-	ok: true
-	reason: Values file exist
-has-minkubeversion:
-	ok: false
-	reason: Minimum Kubernetes version is not specified
-not-contains-crds:
-	ok: true
-	reason: Chart does not contain CRDs
+	reason: CSI objects do not exist
 has-readme:
 	ok: true
 	reason: Chart has a README
+has-minkubeversion:
+	ok: false
+	reason: Minimum Kubernetes version is not specified
