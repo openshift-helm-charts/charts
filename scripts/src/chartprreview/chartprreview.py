@@ -37,7 +37,13 @@ def get_modified_charts(directory, api_url):
     sys.exit(1)
 
 def verify_user(directory, username, category, organization, chart):
-    data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
+    owners_path = os.path.join("charts", category, organization, chart, "OWNERS")
+    if not os.path.exists(owners_path):
+        msg = f"[ERROR] {owners_path} file does not exist."
+        write_error_log(directory, msg)
+        sys.exit(1)
+
+    data = open(owners_path).read()
     out = yaml.load(data, Loader=Loader)
     if username not in [x['githubUsername'] for x in out['users']]:
         msg = f"[ERROR] {usernmae} is not allowed to submit the chart on behalf of {organization}"
