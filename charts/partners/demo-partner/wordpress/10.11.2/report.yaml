@@ -1,0 +1,42 @@
+Tool:
+  verifier-version: 1.0.0
+  chart-uri: https://charts.bitnami.com/bitnami/wordpress-10.11.2.tgz
+Chart:
+  Name: wordpress
+  version: 5.7.1
+ok: false
+
+contains-test:
+	ok: true
+	reason: Chart test files exist
+images-are-certified:
+	ok: false
+	reason: Image is Red Hat certified : docker.io/bitnami/mariadb:10.5.9-debian-10-r56 
+		Image is Red Hat certified : docker.io/bitnami/wordpress:5.7.1-debian-10-r19 
+chart-testing:
+	ok: true
+	reason: Chart tests have passed
+is-helm-v3:
+	ok: true
+	reason: API version is V2, used in Helm 3
+has-minkubeversion:
+	ok: false
+	reason: Minimum Kubernetes version is not specified
+not-contains-crds:
+	ok: true
+	reason: Chart does not contain CRDs
+helm-lint:
+	ok: true
+	reason: Helm lint successful
+not-contain-csi-objects:
+	ok: true
+	reason: CSI objects do not exist
+has-readme:
+	ok: true
+	reason: Chart has a README
+contains-values:
+	ok: true
+	reason: Values file exist
+contains-values-schema:
+	ok: true
+	reason: Values schema file exist
