@@ -1,15 +1,16 @@
 #!/bin/bash
 
-mandatoryChecks=( "contains-test"
-            "contains-values"
-            "contains-values-schema"
-            "has-minkubeversion"
-            "has-readme"
-            "helm-lint"
-            "images-are-certified"
-            "is-helm-v3"
-            "not-contain-csi-objects"
-            "not-contains-crds" )
+delim=G
+mandatoryChecks=( "${delim}contains-test${delim}"
+            "${delim}contains-values${delim}"
+            "${delim}contains-values-schema${delim}"
+            "${delim}has-kubeversion${delim}"
+            "${delim}has-readme${delim}"
+            "${delim}helm-lint${delim}"
+            "${delim}images-are-certified${delim}"
+            "${delim}is-helm-v3${delim}"
+            "${delim}not-contain-csi-objects${delim}"
+            "${delim}not-contains-crds${delim}" )
 
 
 getDigest() {
@@ -241,15 +242,22 @@ getFails() {
           else
             passed=$((passed+1))
           fi
-          mandatoryChecks=("${mandatoryChecks[@]/$check}")
+
+          if [ $check == "has-minkubeversion" ]; then
+            check="has-kubeversion"
+          fi
+          remove="$delim$check$delim"
+          mandatoryChecks=("${mandatoryChecks[@]/$remove}")
         fi
       fi
     fi
   done < $report
 
   for mandatoryCheck in "${mandatoryChecks[@]}"; do
-    if [ ! -z "$checkA" ]; then
-      fails+=("Missing mandatory check : $mandatoryCheck")
+    if [ ! -z "$mandatoryCheck" ]; then
+      missingcheck="${mandatoryCheck%$delim}"
+      missingcheck="${missingcheck#$delim}"
+      fails+=("Missing mundatory check : $missingcheck")
     fi
   done
 
