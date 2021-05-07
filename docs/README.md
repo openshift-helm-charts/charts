@@ -69,6 +69,10 @@ You can submit chart related changes in three methods:
 2. Submit a Chart Verification Report without the Chart
 3. Submit a Chart Verification Report with the Chart
 
+Making changes to a published chart version is not allowed.  If you notice any
+issue with the released version, you can create a new bugfix version and submit
+it.
+
 The following sections explains about the process for submission.
 
 ### Preparation
