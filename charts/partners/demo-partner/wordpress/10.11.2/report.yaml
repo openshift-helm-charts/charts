@@ -1,3 +1,128 @@
+Installing chart 'wordpress => (version: "10.11.2", path: "/home/isuttonl/.cache/chart-verifier/https___charts_bitnami_com_bitnami_wordpress_10_11_2_tgz/wordpress")'...
+
+Installing chart with values file '/home/isuttonl/.cache/chart-verifier/https___charts_bitnami_com_bitnami_wordpress_10_11_2_tgz/wordpress/ci/ct-values.yaml'...
+
+NAME: wordpress-2zugjsbmg4
+LAST DEPLOYED: Fri May  7 15:34:01 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+** Please be patient while the chart is being deployed **
+
+Your WordPress site can be accessed through the following DNS name from within your cluster:
+
+    wordpress-2zugjsbmg4.default.svc.cluster.local (port 80)
+
+To access your WordPress site from outside the cluster follow the steps below:
+
+1. Get the WordPress URL by running these commands:
+
+   kubectl port-forward --namespace default svc/wordpress-2zugjsbmg4 80:80 &
+   echo "WordPress URL: http://127.0.0.1//"
+   echo "WordPress Admin URL: http://127.0.0.1//admin"
+
+2. Open a browser and access WordPress using the obtained URL.
+
+3. Login with the following credentials below to see your blog:
+
+  echo Username: user
+  echo Password: $(kubectl get secret --namespace default wordpress-2zugjsbmg4 -o jsonpath="{.data.wordpress-password}" | base64 --decode)
+deployment "wordpress-2zugjsbmg4" successfully rolled out
+NAME: wordpress-2zugjsbmg4
+LAST DEPLOYED: Fri May  7 15:34:01 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE:     wordpress-2zugjsbmg4-credentials-test
+Last Started:   Fri May  7 15:35:12 2021
+Last Completed: Fri May  7 15:35:15 2021
+Phase:          Succeeded
+NOTES:
+** Please be patient while the chart is being deployed **
+
+Your WordPress site can be accessed through the following DNS name from within your cluster:
+
+    wordpress-2zugjsbmg4.default.svc.cluster.local (port 80)
+
+To access your WordPress site from outside the cluster follow the steps below:
+
+1. Get the WordPress URL by running these commands:
+
+   kubectl port-forward --namespace default svc/wordpress-2zugjsbmg4 80:80 &
+   echo "WordPress URL: http://127.0.0.1//"
+   echo "WordPress Admin URL: http://127.0.0.1//admin"
+
+2. Open a browser and access WordPress using the obtained URL.
+
+3. Login with the following credentials below to see your blog:
+
+  echo Username: user
+  echo Password: $(kubectl get secret --namespace default wordpress-2zugjsbmg4 -o jsonpath="{.data.wordpress-password}" | base64 --decode)
+Deleting release 'wordpress-2zugjsbmg4'...
+release "wordpress-2zugjsbmg4" uninstalled
+
+Installing chart with values file '/home/isuttonl/.cache/chart-verifier/https___charts_bitnami_com_bitnami_wordpress_10_11_2_tgz/wordpress/ci/ingress-wildcard-values.yaml'...
+
+NAME: wordpress-sbwl4pr20u
+LAST DEPLOYED: Fri May  7 15:35:16 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+** Please be patient while the chart is being deployed **
+
+Your WordPress site can be accessed through the following DNS name from within your cluster:
+
+    wordpress-sbwl4pr20u.default.svc.cluster.local (port 80)
+
+To access your WordPress site from outside the cluster follow the steps below:
+
+1. Get the WordPress URL and associate WordPress hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "WordPress URL: https://wordpress.local/"
+   echo "$CLUSTER_IP  wordpress.local" | sudo tee -a /etc/hosts
+
+2. Open a browser and access WordPress using the obtained URL.
+
+3. Login with the following credentials below to see your blog:
+
+  echo Username: user
+  echo Password: $(kubectl get secret --namespace default wordpress-sbwl4pr20u -o jsonpath="{.data.wordpress-password}" | base64 --decode)
+deployment "wordpress-sbwl4pr20u" successfully rolled out
+NAME: wordpress-sbwl4pr20u
+LAST DEPLOYED: Fri May  7 15:35:16 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE:     wordpress-sbwl4pr20u-credentials-test
+Last Started:   Fri May  7 15:36:24 2021
+Last Completed: Fri May  7 15:36:28 2021
+Phase:          Succeeded
+NOTES:
+** Please be patient while the chart is being deployed **
+
+Your WordPress site can be accessed through the following DNS name from within your cluster:
+
+    wordpress-sbwl4pr20u.default.svc.cluster.local (port 80)
+
+To access your WordPress site from outside the cluster follow the steps below:
+
+1. Get the WordPress URL and associate WordPress hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "WordPress URL: https://wordpress.local/"
+   echo "$CLUSTER_IP  wordpress.local" | sudo tee -a /etc/hosts
+
+2. Open a browser and access WordPress using the obtained URL.
+
+3. Login with the following credentials below to see your blog:
+
+  echo Username: user
+  echo Password: $(kubectl get secret --namespace default wordpress-sbwl4pr20u -o jsonpath="{.data.wordpress-password}" | base64 --decode)
+Deleting release 'wordpress-sbwl4pr20u'...
+release "wordpress-sbwl4pr20u" uninstalled
 apiversion: v1
 kind: verify-report
 metadata:
@@ -5,7 +130,7 @@ metadata:
         verifier-version: 1.0.0
         chart-uri: https://charts.bitnami.com/bitnami/wordpress-10.11.2.tgz
         digest: sha256:ee20c610b3fc5aa9f26d2c120412a254694217225d34ef3bd664344772639e56
-        lastCertifiedTimestamp: "2021-05-07T15:25:55.034943+02:00"
+        lastCertifiedTimestamp: "2021-05-07T15:36:30.535396+02:00"
         certifiedOpenShiftVersions: ""
     chart:
         name: wordpress
@@ -65,24 +190,14 @@ metadata:
         type: ""
     overrides: ""
 results:
-  - check: chart-testing
-    type: Mandatory
-    outcome: FAIL
-    reason: |-
-        Image is not Red Hat certified : docker.io/bitnami/wordpress:5.7.1-debian-10-r19 : No images found for Registry/Repository: docker.io/bitnami/wordpress
-        Image is not Red Hat certified : docker.io/bitnami/mariadb:10.5.9-debian-10-r56 : No images found for Registry/Repository: docker.io/bitnami/mariadb
-  - check: is-helm-v3
+  - check: has-readme
     type: Mandatory
     outcome: PASS
-    reason: API version is V2, used in Helm 3
-  - check: contains-values
+    reason: Chart has a README
+  - check: contains-values-schema
     type: Mandatory
     outcome: PASS
-    reason: Values file exist
-  - check: helm-lint
-    type: Mandatory
-    outcome: PASS
-    reason: Helm lint successful
+    reason: Values schema file exist
   - check: has-minkubeversion
     type: Mandatory
     outcome: FAIL
@@ -95,22 +210,30 @@ results:
     type: Mandatory
     outcome: PASS
     reason: CSI objects do not exist
+  - check: chart-testing
+    type: Mandatory
+    outcome: PASS
+    reason: Chart tests have passed
+  - check: is-helm-v3
+    type: Mandatory
+    outcome: PASS
+    reason: API version is V2, used in Helm 3
+  - check: contains-test
+    type: Mandatory
+    outcome: PASS
+    reason: Chart test files exist
+  - check: contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
+  - check: helm-lint
+    type: Mandatory
+    outcome: PASS
+    reason: Helm lint successful
   - check: images-are-certified
     type: Mandatory
     outcome: FAIL
     reason: |-
         Image is not Red Hat certified : docker.io/bitnami/wordpress:5.7.1-debian-10-r19 : No images found for Registry/Repository: docker.io/bitnami/wordpress
         Image is not Red Hat certified : docker.io/bitnami/mariadb:10.5.9-debian-10-r56 : No images found for Registry/Repository: docker.io/bitnami/mariadb
-  - check: has-readme
-    type: Mandatory
-    outcome: PASS
-    reason: Chart has a README
-  - check: contains-test
-    type: Mandatory
-    outcome: PASS
-    reason: Chart test files exist
-  - check: contains-values-schema
-    type: Mandatory
-    outcome: PASS
-    reason: Values schema file exist
 
