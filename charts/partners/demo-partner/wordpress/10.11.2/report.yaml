@@ -1,42 +1,116 @@
-Tool:
-  verifier-version: 1.0.0
-  chart-uri: https://charts.bitnami.com/bitnami/wordpress-10.11.2.tgz
-Chart:
-  Name: wordpress
-  version: 5.7.1
-ok: false
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.0.0
+        chart-uri: https://charts.bitnami.com/bitnami/wordpress-10.11.2.tgz
+        digest: sha256:ee20c610b3fc5aa9f26d2c120412a254694217225d34ef3bd664344772639e56
+        lastCertifiedTimestamp: "2021-05-07T15:22:15.560053+02:00"
+        certifiedOpenShiftVersions: ""
+    chart:
+        name: wordpress
+        home: https://github.com/bitnami/charts/tree/master/bitnami/wordpress
+        sources:
+          - https://github.com/bitnami/bitnami-docker-wordpress
+          - https://wordpress.org/
+        version: 10.11.2
+        description: Web publishing platform for building blogs and websites.
+        keywords:
+          - application
+          - blog
+          - cms
+          - http
+          - php
+          - web
+          - wordpress
+        maintainers:
+          - name: Bitnami
+            email: containers@bitnami.com
+            url: ""
+        icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 5.7.1
+        deprecated: false
+        annotations:
+            category: CMS
+        kubeversion: ""
+        dependencies:
+          - name: mariadb
+            version: 9.x.x
+            repository: https://charts.bitnami.com/bitnami
+            condition: mariadb.enabled
+            tags: []
+            enabled: false
+            importvalues: []
+            alias: ""
+          - name: memcached
+            version: 5.x.x
+            repository: https://charts.bitnami.com/bitnami
+            condition: memcached.enabled
+            tags: []
+            enabled: false
+            importvalues: []
+            alias: ""
+          - name: common
+            version: 1.x.x
+            repository: https://charts.bitnami.com/bitnami
+            condition: ""
+            tags:
+              - bitnami-common
+            enabled: false
+            importvalues: []
+            alias: ""
+        type: ""
+    overrides: ""
+results:
+  - check: is-helm-v3
+    type: Mandatory
+    outcome: PASS
+    reason: API version is V2, used in Helm 3
+  - check: contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
+  - check: has-minkubeversion
+    type: Mandatory
+    outcome: FAIL
+    reason: Minimum Kubernetes version is not specified
+  - check: not-contains-crds
+    type: Mandatory
+    outcome: PASS
+    reason: Chart does not contain CRDs
+  - check: helm-lint
+    type: Mandatory
+    outcome: PASS
+    reason: Helm lint successful
+  - check: not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
+  - check: images-are-certified
+    type: Mandatory
+    outcome: FAIL
+    reason: |-
+        Image is Red Hat certified : docker.io/bitnami/wordpress:5.7.1-debian-10-r19 : No images found for Registry/Repository: docker.io/bitnami/wordpress
+        Image is Red Hat certified : docker.io/bitnami/mariadb:10.5.9-debian-10-r56 : No images found for Registry/Repository: docker.io/bitnami/mariadb
+  - check: has-readme
+    type: Mandatory
+    outcome: PASS
+    reason: Chart has a README
+  - check: chart-testing
+    type: Mandatory
+    outcome: FAIL
+    reason: |-
+        Image is Red Hat certified : docker.io/bitnami/wordpress:5.7.1-debian-10-r19 : No images found for Registry/Repository: docker.io/bitnami/wordpress
+        Image is Red Hat certified : docker.io/bitnami/mariadb:10.5.9-debian-10-r56 : No images found for Registry/Repository: docker.io/bitnami/mariadb
+  - check: contains-values-schema
+    type: Mandatory
+    outcome: PASS
+    reason: Values schema file exist
+  - check: contains-test
+    type: Mandatory
+    outcome: PASS
+    reason: Chart test files exist
 
-has-readme:
-	ok: true
-	reason: Chart has a README
-contains-values:
-	ok: true
-	reason: Values file exist
-has-minkubeversion:
-	ok: false
-	reason: Minimum Kubernetes version is not specified
-not-contain-csi-objects:
-	ok: true
-	reason: CSI objects do not exist
-chart-testing:
-	ok: false
-	reason: Error waiting for process: exit status 1
-helm-lint:
-	ok: true
-	reason: Helm lint successful
-contains-values-schema:
-	ok: true
-	reason: Values schema file exist
-images-are-certified:
-	ok: false
-	reason: Image is Red Hat certified : docker.io/bitnami/wordpress:5.7.1-debian-10-r19 
-		Image is Red Hat certified : docker.io/bitnami/mariadb:10.5.9-debian-10-r56 
-is-helm-v3:
-	ok: true
-	reason: API version is V2, used in Helm 3
-contains-test:
-	ok: true
-	reason: Chart test files exist
-not-contains-crds:
-	ok: true
-	reason: Chart does not contain CRDs
