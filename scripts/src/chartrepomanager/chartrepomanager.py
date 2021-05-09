@@ -31,6 +31,17 @@ def get_modified_charts(api_url):
     print("No modified files found.")
     sys.exit(0)
 
+def get_current_commit_sha():
+    cwd = os.getcwd()
+    os.chdir("..")
+    subprocess.run(["git", "pull", "--all", "--force"], capture_output=True)
+    commit = subprocess.run(["git", "rev-parse", "--verify", "HEAD"], capture_output=True)
+    print(commit.stdout.decode("utf-8"))
+    print(commit.stderr.decode("utf-8"))
+    commit_hash = commit.stdout.strip()
+    print("Cuurent commit sha:", commit_hash)
+    os.chdir(cwd)
+    return commit_hash
 
 def check_chart_source_or_tarball_exists(category, organization, chart, version):
     src = os.path.join("charts", category, organization, chart, version, "src")
@@ -81,11 +92,11 @@ def prepare_chart_tarball_for_release(category, organization, chart, version):
     shutil.copy(path, f".cr-release-packages/{new_chart_file_name}")
     shutil.copy(path, chart_file_name)
 
-def push_chart_release(repository, organization, branch):
+def push_chart_release(repository, organization, branch, commit_hash):
     org, repo = repository.split("/")
     token = os.environ.get("GITHUB_TOKEN")
     print("[INFO] Upload chart using the chart-releaser")
-    out = subprocess.run(["cr", "upload", "-o", org, "-r", repo, "--release-name-template", f"{organization}-"+"{{ .Name }}-{{ .Version }}", "-t", token], capture_output=True)
+    out = subprocess.run(["cr", "upload", "-c", commit_hash, "-o", org, "-r", repo, "--release-name-template", f"{organization}-"+"{{ .Name }}-{{ .Version }}", "-t", token], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
 
@@ -281,8 +292,9 @@ def main():
         if chart_tarball_exists:
             prepare_chart_tarball_for_release(category, organization, chart, version)
 
+        commit_hash = get_current_commit_sha()
         print("[INFO] Publish chart release to GitHub")
-        push_chart_release(args.repository, organization, branch)
+        push_chart_release(args.repository, organization, branch, commit_hash)
 
         print("[INFO] Check if report exist as part of the commit")
         report_exists, report_path = check_report_exists(category, organization, chart, version)
