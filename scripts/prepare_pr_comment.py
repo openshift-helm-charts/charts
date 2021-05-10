@@ -17,7 +17,7 @@ link next to "Build and Verify" job status towards the end of this page.
 {errors}
 
 Please run the [chart-verifier](https://github.com/redhat-certification/chart-verifier) \
-and ensure all checks pass.
+and ensure all mandatory checks pass.
 """
 
     msg += f"""
