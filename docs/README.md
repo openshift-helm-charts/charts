@@ -220,9 +220,8 @@ In the above example, the name of the partner is `acme`, the chart name is
 ### Missing OWNERS file in the chart directory
 
 The `OWNERS` file is created through the Red Hat [partner connect
-program][partners].  That file must be existing as a prerequisite before
-submitting a chart.  If the file is no existing, you will see an error like
-this:
+program][partners] and is a prerequisite for submitting a chart.  If it does not
+exist for a submitted chart you will see an error:
 
 ```
 [ERROR] .../OWNERS file does not exist.
