@@ -108,13 +108,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
-      - name: Save check run id
-        run: |
-          CHECK_SUITE_URL=$(curl -s -H "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} | jq -r '.check_suite_url')
-          CHECK_RUN_ID=$(curl -s -H "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.antiope-preview+json" $CHECK_SUITE_URL/check-runs | jq '.check_runs[] | select(.name=="build-and-verify") | .id ')
-          mkdir -p ./pr
-          echo $CHECK_RUN_ID > ./pr/build-verify-check-run-id
-
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
         with:
@@ -153,13 +146,12 @@ jobs:
           python3 scripts/prepare_pr_comment.py success ${{ github.repository }}
 
       - name: 'Comment on PR'
-        if: always()
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = fs.readFileSync('./pr/NR');
+            var issue_number = ${{ github.event.number }};
             var comment = fs.readFileSync('./pr/comment', {encoding:'utf8', flag:'r'});
             github.issues.createComment({
               owner: context.repo.owner,
@@ -169,13 +161,12 @@ jobs:
             });
 
       - name: 'Add label to PR'
-        if: always()
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            var issue_number = fs.readFileSync('./pr/NR');
+            var issue_number = ${{ github.event.number }};
             var vendor_label = fs.readFileSync('./pr/vendor');
             var chart_name = fs.readFileSync('./pr/chart');
             if (vendor_label.toString() !== "" && chart_name.toString() !== "") {
