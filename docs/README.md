@@ -159,12 +159,32 @@ The file structure looks like this:
 [Generate the report][chart-verifier] and save it under `0.1.0` with a given
 file name as `report.yaml`.
 
+When you follow the [partner connect documentation][partners], you could see
+details about adding a PGP public key.  Adding PGP public key is optional.  But
+if you have added that, you should see your public key in the _OWNERS_ file under
+your chart directory within your organization directory.
+
+When submitting a chart verification report without the chart, you can sign your
+report and save the signature in ASCII armor format.
+
+```
+gpg --sign --armor --detach-sign --output report.yaml.asc report.yaml
+```
+
+There will be `[WARNING]` message in the console if the signature verification
+fails.
+
 ### Submitting a Chart Verification Report with the Chart
 
-You can also submit a chart and the report together.  As mentioned in the "Chart
-Source" section, place the source or tarball under the version numbered
-directory.  Similarly, as mentioned in the "Chart Verification Report" section,
-place `report.yaml` also under the save under the version numbered directory.
+You can also submit a chart and the report together.  As mentioned in the
+"Submitting a Chart without Chart Verification Report" section, place the source
+or tarball under the version numbered directory.  Similarly, as mentioned in the
+"Submitting a Chart Verification Report without the Chart" section, place
+`report.yaml` also under the save under the version numbered directory.
+
+As mentioned in the previous section, optionally, you can sign the report.
+There will be `[WARNING]` message in the console if the signature verification
+fails.
 
 ## Troubleshooting Pull Request Failures
 
