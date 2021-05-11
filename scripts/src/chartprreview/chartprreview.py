@@ -59,9 +59,9 @@ def check_owners_file_against_directory_structure(username, category, organizati
     msgs = []
     if organization != vendor_label:
         error_exit = True
-        msg.append(f"[ERROR] vendor/label in OWNERS file ({vendor_label}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
+        msgs.append(f"[ERROR] vendor/label in OWNERS file ({vendor_label}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
     if chart != chart_name:
-        msg.append(f"[ERROR] chart/name in OWNERS file ({chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
+        msgs.append(f"[ERROR] chart/name in OWNERS file ({chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
         error_exit = True
     if error_exit:
         write_error_log(directory, *msgs)
@@ -181,6 +181,7 @@ def check_report_success(directory, report_path, version):
     data = open(report_path).read()
     print("[INFO] Full report: ")
     print(data)
+    print(f"::set-output name=report-content::{data}")
     try:
         out = yaml.load(data, Loader=Loader)
     except yaml.scanner.ScannerError as err:
@@ -199,8 +200,9 @@ def check_report_success(directory, report_path, version):
         sys.exit(1)
 
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
+    print("[INFO] annotations: ",out)
+    print(out)
     r = out.stdout.decode("utf-8")
-    print("[INFO] Annotations:", r)
     annotations = json.loads(r)
     err = out.stderr.decode("utf-8")
     if err.strip():
@@ -258,7 +260,7 @@ def generate_verify_report(directory, category, organization, chart, version):
         sys.exit(1)
     if not os.path.exists(report_path):
         if not src_exists and not tar_exists:
-            msg = "[ERROR] One of these must be modifed: report, chart source, or tarball"
+            msg = "[ERROR] One of these must be modified: report, chart source, or tarball"
             write_error_log(directory, msg)
             sys.exit(1)
     if src_exists:
