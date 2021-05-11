@@ -237,6 +237,19 @@ charts/partners/acme/awesome/0.1.0
 In the above example, the name of the partner is `acme`, the chart name is
 `awesome`, and version number is `0.1.0`.
 
+### Missing OWNERS file in the chart directory
+
+The `OWNERS` file is created through the Red Hat [partner connect
+program][partners] and is a prerequisite for submitting a chart.  If it does not
+exist for a submitted chart you will see an error:
+
+```
+[ERROR] .../OWNERS file does not exist.
+```
+
+You can follow the [partner connect documentation][partners] to create the
+`OWNERS` file.
+
 ### Pull request author is not part of OWNERS file
 
 Every chart directory has an `OWNERS` file.  The process to create that file is
