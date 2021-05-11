@@ -91,7 +91,18 @@ def push_chart_release(repository, organization, branch):
 
 def create_worktree_for_index(branch):
     dr = tempfile.mkdtemp(prefix="crm-")
-    out = subprocess.run(["git", "worktree", "add", "--detach", dr, f"origin/{branch}"], capture_output=True)
+    upstream = os.environ["GITHUB_SERVER_URL"] + "/" + os.environ["GITHUB_REPOSITORY"]
+    out = subprocess.run(["git", "remote", "add", "upstream", upstream], capture_output=True)
+    print(out.stdout.decode("utf-8"))
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Adding upstream remote failed:", err, "branch", branch, "upstream", upstream)
+    out = subprocess.run(["git", "fetch", "upstream"], capture_output=True)
+    print(out.stdout.decode("utf-8"))
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Fetching upstream remote failed:", err, "branch", branch, "upstream", upstream)
+    out = subprocess.run(["git", "worktree", "add", "--detach", dr, f"upstream/{branch}"], capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():

@@ -1,15 +1,114 @@
-name: Build and Verify
+name: CI
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+"on":
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+
+concurrency: chart_index-${{ github.ref }}
 
 jobs:
-  build-and-verify:
+  sanity-check:
+    name: Sanity Check
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Sanity Check PR Content
+        id: sanity_check_pr_content
+        continue-on-error: true
+        run: |
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          ./ve1/bin/sanity-check-pr --api-url=${{ github.event.pull_request._links.self.href }}
+
+      - uses: actions/github-script@v3
+        if: ${{ steps.sanity_check_pr_content.outcome == 'success'}}
+        continue-on-error: true
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['sanity-ok']
+            })
+
+      - uses: actions/github-script@v3
+        if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
+        continue-on-error: true
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'sanity-ok'
+            })
+
+      - uses: actions/github-script@v3
+        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success'}}
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for the PR!  The sanity check has been a success. Please wait for the test result.'
+            })
+
+      - uses: actions/github-script@v3
+        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'failure'}}
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for the PR!  The sanity check has been a failure. Please ensure only chart related files have been modified.'
+            })
+
+      - name: Reflect on Sanity Check PR Content
+        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'failure'}}
+        run: |
+          echo "The 'Sanity Check PR Content' step has failed."
+          exit 1
+
+  build-and-verify:
+    name: Build and Verify
+    needs:
+      - sanity-check
+    runs-on: ubuntu-20.04
+    steps:
+      - name: 'Remove label from PR'
+        uses: actions/github-script@v3
+        continue-on-error: true
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var issue_number = ${{ github.event.number }};
+            github.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(issue_number),
+              name: 'authorized-request'
+            })
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Save check run id
         run: |
@@ -24,6 +123,7 @@ jobs:
           python-version: '3.9'
 
       - name: Verify PR
+        id: verify_pr
         run: |
           gpg --version
           python3 -m venv ve1
@@ -37,8 +137,119 @@ jobs:
         if: always()
         run: |
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
+
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: pr
           path: pr/
+
+      - name: 'Prepare PR failure comment'
+        if: ${{ steps.verify_pr.conclusion == 'failure' }}
+        run: |
+          python3 scripts/prepare_pr_comment.py failure ${{ github.repository }}
+
+      - name: 'Prepare PR success comment'
+        if: ${{ steps.verify_pr.conclusion == 'success' }}
+        run: |
+          python3 scripts/prepare_pr_comment.py success ${{ github.repository }}
+
+      - name: 'Comment on PR'
+        if: always()
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = fs.readFileSync('./pr/NR');
+            var comment = fs.readFileSync('./pr/comment', {encoding:'utf8', flag:'r'});
+            github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(issue_number),
+              body: comment
+            });
+
+      - name: 'Add label to PR'
+        if: always()
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = fs.readFileSync('./pr/NR');
+            var vendor_label = fs.readFileSync('./pr/vendor');
+            var chart_name = fs.readFileSync('./pr/chart');
+            if (vendor_label.toString() !== "" && chart_name.toString() !== "") {
+              github.issues.addLabels({
+                issue_number: Number(issue_number),
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['authorized-request']
+            })};
+
+  approve-and-merge-pr:
+    needs:
+      - build-and-verify
+    runs-on: ubuntu-latest
+    name: Approve and Merge PR
+    steps:
+
+    - uses: hmarr/auto-approve-action@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - uses: pascalgn/automerge-action@v0.13.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MERGE_METHOD: squash
+        MERGE_LABELS: ""
+
+  release-charts:
+    needs:
+      - approve-and-merge-pr
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Release Charts
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        id: release-charts
+        run: |
+          curl -L -o cr.tar.gz https://github.com/helm/chart-releaser/releases/download/v1.2.0/chart-releaser_1.2.0_linux_amd64.tar.gz
+          tar zxvf cr.tar.gz
+          sudo cp -f cr /usr/local/bin/cr
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          docker pull quay.io/redhat-certification/chart-verifier:latest
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
+          ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH}
+
+      - name: Release
+        uses: softprops/action-gh-release@master
+        continue-on-error: true
+        with:
+          tag_name: ${{ steps.release-charts.outputs.tag }}
+          files: report.yaml
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
