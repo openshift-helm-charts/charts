@@ -1,0 +1,11 @@
+---
+chart:
+  name: ssm-service
+  shortDescription: DP's ssm-service
+users:
+- githubUsername: mmulholla
+- githubUsername: baijum
+- githubUsername: dperaza4dustbit
+vendor:
+  label: demo-partner
+  name: demo-partner inc.
