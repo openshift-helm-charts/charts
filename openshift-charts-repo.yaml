@@ -4,4 +4,4 @@ metadata:
   name: OpenShift Helm Charts
 spec:
   connectionConfig:
-    url: https://helm-charts.openshift.io/
+    url: https://charts.openshift.io/
