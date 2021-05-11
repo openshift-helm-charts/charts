@@ -47,6 +47,6 @@ jobs:
         with:
           tag_name: ${{ steps.release-charts.outputs.tag }}
           files: report.yaml
-          fail_on_unmatched_files: true
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

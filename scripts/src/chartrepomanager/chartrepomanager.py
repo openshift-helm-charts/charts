@@ -179,8 +179,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
         sys.exit(1)
     out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/{repository}", f"HEAD:refs/heads/{branch}", "-f"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
-    err = out.stderr.decode("utf-8")
-    print("error:", err)
+    print(out.stderr.decode("utf-8"))
     if out.returncode:
         print("index.html not updated. Push failed.", "index directory", indexdir, "branch", branch)
         sys.exit(1)
