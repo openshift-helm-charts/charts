@@ -4,8 +4,6 @@ name: CI
   pull_request_target:
     types: [opened, synchronize, reopened, edited, ready_for_review]
 
-concurrency: chart_index-${{ github.ref }}
-
 jobs:
   sanity-check:
     name: Sanity Check
@@ -210,6 +208,10 @@ jobs:
       - approve-and-merge-pr
     runs-on: ubuntu-20.04
     steps:
+      - name: Block until there is no running workflow
+        uses: softprops/turnstyle@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v2
         with:
