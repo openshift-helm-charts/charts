@@ -1,0 +1,8 @@
+chart:
+  name: pgp-helm-test-project
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: atiwary-containers
+  name: Red Hat
