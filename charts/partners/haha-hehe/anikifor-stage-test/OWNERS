@@ -1,8 +1,9 @@
 chart:
   name: anikifor-stage-test
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: user123
 vendor:
   label: haha-hehe
   name: login-test-login
