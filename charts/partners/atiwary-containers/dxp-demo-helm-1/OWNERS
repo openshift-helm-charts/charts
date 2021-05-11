@@ -1,8 +1,9 @@
 chart:
   name: dxp-demo-helm-1
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: test dxp test
+publicPgpKey: null
+users:
+- githubUsername: gautamkrishnar
 vendor:
   label: atiwary-containers
   name: Red Hat
