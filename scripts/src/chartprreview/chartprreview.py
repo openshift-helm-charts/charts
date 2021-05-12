@@ -262,17 +262,22 @@ def generate_verify_report(directory, category, organization, chart, version):
             msg = "[ERROR] One of these must be modified: report, chart source, or tarball"
             write_error_log(directory, msg)
             sys.exit(1)
+    kubeconfig = os.environ.get("KUBECONFIG")
+    if not kubeconfig:
+        msg = "[ERROR] missing 'KUBECONFIG' environment variabl"
+        write_error_log(directory, msg)
+        sys.exit(1)
     if src_exists:
         if os.path.exists(report_path):
-            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", "/charts"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", "/charts"], capture_output=True)
         else:
-            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "/charts"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "/charts"], capture_output=True)
     elif tar_exists:
         dn = os.path.join(os.getcwd(), "charts", category, organization, chart, version)
         if os.path.exists(report_path):
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
         else:
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", f"/charts/{chart}-{version}.tgz"], capture_output=True)
     else:
         return
 
