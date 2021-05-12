@@ -181,7 +181,7 @@ def check_report_success(directory, report_path, version):
     data = open(report_path).read()
     print("[INFO] Full report: ")
     print(data)
-    print(f"::set-output name=report-content::{data}")
+    print(f"::set-output name=report_content::{data}")
     try:
         out = yaml.load(data, Loader=Loader)
     except yaml.scanner.ScannerError as err:

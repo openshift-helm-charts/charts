@@ -202,10 +202,10 @@ jobs:
         env:
           GITHUB_REF: ${{ github.ref }}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          REPORT_CONTENT: ${{steps.verify_pr.outputs.report-content}}
+          REPORT_CONTENT: ${{steps.verify_pr.outputs.report_content}}
         id: release-charts
         run: |
-          echo ${{steps.verify_pr.outputs.report-content}}
+          echo ${{steps.verify_pr.outputs.report_content}}
           curl -L -o cr.tar.gz https://github.com/helm/chart-releaser/releases/download/v1.2.0/chart-releaser_1.2.0_linux_amd64.tar.gz
           tar zxvf cr.tar.gz
           sudo cp -f cr /usr/local/bin/cr
