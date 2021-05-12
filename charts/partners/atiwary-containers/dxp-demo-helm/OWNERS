@@ -4,7 +4,6 @@ chart:
 publicPgpKey: null
 users:
 - githubUsername: gautamkrishnar
-- githubUsername: test123
 vendor:
   label: atiwary-containers
   name: Red Hat
