@@ -1,0 +1,47 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: prod-chart-verifier-admin
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - 'namespaces'
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - 'serviceaccounts'
+    verbs:
+      - '*'
+  - apiGroups:
+      - "rbac.authorization.k8s.io"
+    resources:
+      - 'clusterroles'
+    verbs:
+      - '*'
+  - apiGroups:
+      - "rbac.authorization.k8s.io"
+    resources:
+      - 'clusterrolebindings'
+    verbs:
+      - '*'
+  - apiGroups:
+      - "*"
+    resources:
+      - 'roles'
+    verbs:
+      - '*'
+  - apiGroups:
+      - "*"
+    resources:
+      - 'rolebindings'
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - 'secrets'
+    verbs:
+      - '*'
