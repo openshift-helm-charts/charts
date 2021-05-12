@@ -6,6 +6,7 @@ import subprocess
 import json
 import hashlib
 import tempfile
+import urllib.parse
 
 import requests
 import yaml
@@ -181,7 +182,8 @@ def check_report_success(directory, report_path, version):
     data = open(report_path).read()
     print("[INFO] Full report: ")
     print(data)
-    print(f"::set-output name=report_content::{data}")
+    quoted_data = urllib.parse.quote(data)
+    print(f"::set-output name=report_content::{quoted_data}")
     try:
         out = yaml.load(data, Loader=Loader)
     except yaml.scanner.ScannerError as err:

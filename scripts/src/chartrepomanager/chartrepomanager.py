@@ -8,6 +8,7 @@ import datetime
 import tempfile
 from datetime import datetime, timezone
 import json
+import urllib.parse
 
 import requests
 import yaml
@@ -48,7 +49,7 @@ def check_report_exists(category, organization, chart, version):
 
 def generate_report(chart_file_name):
     cwd = os.getcwd()
-    report_content = os.environ.get("REPORT_CONTENT")
+    report_content = urllib.parse.unquote(os.environ.get("REPORT_CONTENT"))
     print("[INFO] Report content:")
     print(report_content)
     report_path = os.path.join(cwd, "report.yaml")
