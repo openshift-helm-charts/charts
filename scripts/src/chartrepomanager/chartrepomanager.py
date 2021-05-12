@@ -174,6 +174,8 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print("index.yaml content:\n", out)
     with open(os.path.join(indexdir, "index.yaml"), "w") as fd:
         fd.write(out)
+    old_cwd = os.getcwd()
+    os.chdir(indexdir)
     out = subprocess.run(["git", "status"], cwd=indexdir, capture_output=True)
     print("Git status:")
     print(out.stdout.decode("utf-8"))
@@ -187,7 +189,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print("Git status:")
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
-    out = subprocess.run(["git", "commit", "-m", "Update index.html"], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "commit",  "-m", "Update index.html"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
@@ -207,6 +209,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     if out.returncode:
         print("index.html not updated. Push failed.", "index directory", indexdir, "branch", branch)
         sys.exit(1)
+    os.chdir(old_cwd)
 
 
 def update_chart_annotation(category, organization, chart_file_name, chart, report_path):
