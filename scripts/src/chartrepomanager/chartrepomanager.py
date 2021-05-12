@@ -193,7 +193,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
-        print("Error committing index.yaml", "index directory", indexdir, "branch", branch)
+        print("Error committing index.yaml", "index directory", indexdir, "branch", branch, "error:", err)
     r = requests.head(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
     etag = r.headers.get('etag')
     if original_etag and etag and (original_etag != etag):
