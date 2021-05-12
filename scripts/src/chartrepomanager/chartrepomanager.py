@@ -48,12 +48,12 @@ def check_report_exists(category, organization, chart, version):
 
 def generate_report(chart_file_name):
     cwd = os.getcwd()
-    out = os.environ.get("REPORT_CONTENT")
-    #out = subprocess.run(["docker", "run", "-v", cwd+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts", chart_file_name)], capture_output=True)
-    stderr = out.stderr.decode("utf-8")
+    report_content = os.environ.get("REPORT_CONTENT")
+    print("[INFO] Reprt content:")
+    print(report_content)
     report_path = os.path.join(cwd, "report.yaml")
     with open(report_path, "w") as fd:
-        fd.write(stderr)
+        fd.write(report_content)
     return report_path
 
 def prepare_chart_source_for_release(category, organization, chart, version):
