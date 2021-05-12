@@ -214,7 +214,7 @@ jobs:
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
-          ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH}
+          ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Release
         uses: softprops/action-gh-release@master

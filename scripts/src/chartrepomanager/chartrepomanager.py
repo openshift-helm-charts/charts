@@ -16,22 +16,20 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-def get_modified_charts():
-    commit = subprocess.run(["git", "rev-parse", "--verify", "HEAD"], capture_output=True)
-    print(commit.stdout.decode("utf-8"))
-    print(commit.stderr.decode("utf-8"))
-    commit_hash = commit.stdout.strip()
-    files = subprocess.run(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", commit_hash], capture_output=True)
-    print(files.stdout.decode("utf-8"))
-    print(files.stderr.decode("utf-8"))
-    pattern = re.compile("charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
-    for line in files.stdout.decode("utf-8").split('\n'):
-        m = pattern.match(line)
+def get_modified_charts(api_url):
+    files_api_url = f'{api_url}/files'
+    headers = {'Accept': 'application/vnd.github.v3+json'}
+    r = requests.get(files_api_url, headers=headers)
+    pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
+    for f in r.json():
+        m = pattern.match(f["filename"])
         if m:
             category, organization, chart, version = m.groups()
             return category, organization, chart, version
+
     print("No modified files found.")
     sys.exit(0)
+
 
 def check_chart_source_or_tarball_exists(category, organization, chart, version):
     src = os.path.join("charts", category, organization, chart, version, "src")
@@ -249,9 +247,11 @@ def main():
                                         help="index branch")
     parser.add_argument("-r", "--repository", dest="repository", type=str, required=True,
                                         help="Git Repository")
+    parser.add_argument("-u", "--api-url", dest="api_url", type=str, required=True,
+                                        help="API URL for the pull request")
     args = parser.parse_args()
     branch = args.branch.split("/")[-1]
-    category, organization, chart, version = get_modified_charts()
+    category, organization, chart, version = get_modified_charts(args.api_url)
     chart_source_exists, chart_tarball_exists = check_chart_source_or_tarball_exists(category, organization, chart, version)
 
     print("[INFO] Creating Git worktree for index branch")
