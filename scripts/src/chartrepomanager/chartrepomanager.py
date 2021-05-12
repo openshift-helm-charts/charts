@@ -8,6 +8,7 @@ import datetime
 import tempfile
 from datetime import datetime, timezone
 import json
+import urllib.parse
 
 import requests
 import yaml
@@ -16,22 +17,20 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-def get_modified_charts():
-    commit = subprocess.run(["git", "rev-parse", "--verify", "HEAD"], capture_output=True)
-    print(commit.stdout.decode("utf-8"))
-    print(commit.stderr.decode("utf-8"))
-    commit_hash = commit.stdout.strip()
-    files = subprocess.run(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", commit_hash], capture_output=True)
-    print(files.stdout.decode("utf-8"))
-    print(files.stderr.decode("utf-8"))
-    pattern = re.compile("charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
-    for line in files.stdout.decode("utf-8").split('\n'):
-        m = pattern.match(line)
+def get_modified_charts(api_url):
+    files_api_url = f'{api_url}/files'
+    headers = {'Accept': 'application/vnd.github.v3+json'}
+    r = requests.get(files_api_url, headers=headers)
+    pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
+    for f in r.json():
+        m = pattern.match(f["filename"])
         if m:
             category, organization, chart, version = m.groups()
             return category, organization, chart, version
+
     print("No modified files found.")
     sys.exit(0)
+
 
 def check_chart_source_or_tarball_exists(category, organization, chart, version):
     src = os.path.join("charts", category, organization, chart, version, "src")
@@ -50,11 +49,12 @@ def check_report_exists(category, organization, chart, version):
 
 def generate_report(chart_file_name):
     cwd = os.getcwd()
-    out = subprocess.run(["docker", "run", "-v", cwd+":/charts:z", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", os.path.join("/charts", chart_file_name)], capture_output=True)
-    stderr = out.stderr.decode("utf-8")
+    report_content = urllib.parse.unquote(os.environ.get("REPORT_CONTENT"))
+    print("[INFO] Report content:")
+    print(report_content)
     report_path = os.path.join(cwd, "report.yaml")
     with open(report_path, "w") as fd:
-        fd.write(stderr)
+        fd.write(report_content)
     return report_path
 
 def prepare_chart_source_for_release(category, organization, chart, version):
@@ -91,7 +91,18 @@ def push_chart_release(repository, organization, branch):
 
 def create_worktree_for_index(branch):
     dr = tempfile.mkdtemp(prefix="crm-")
-    out = subprocess.run(["git", "worktree", "add", "--detach", dr, f"origin/{branch}"], capture_output=True)
+    upstream = os.environ["GITHUB_SERVER_URL"] + "/" + os.environ["GITHUB_REPOSITORY"]
+    out = subprocess.run(["git", "remote", "add", "upstream", upstream], capture_output=True)
+    print(out.stdout.decode("utf-8"))
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Adding upstream remote failed:", err, "branch", branch, "upstream", upstream)
+    out = subprocess.run(["git", "fetch", "upstream"], capture_output=True)
+    print(out.stdout.decode("utf-8"))
+    err = out.stderr.decode("utf-8")
+    if err.strip():
+        print("Fetching upstream remote failed:", err, "branch", branch, "upstream", upstream)
+    out = subprocess.run(["git", "worktree", "add", "--detach", dr, f"upstream/{branch}"], capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
@@ -160,29 +171,45 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
 
     print("[INFO] Add and commit changes to git")
     out = yaml.dump(data, Dumper=Dumper)
+    print("index.yaml content:\n", out)
     with open(os.path.join(indexdir, "index.yaml"), "w") as fd:
         fd.write(out)
+    old_cwd = os.getcwd()
+    os.chdir(indexdir)
+    out = subprocess.run(["git", "status"], cwd=indexdir, capture_output=True)
+    print("Git status:")
+    print(out.stdout.decode("utf-8"))
+    print(out.stderr.decode("utf-8"))
     out = subprocess.run(["git", "add", os.path.join(indexdir, "index.yaml")], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
         print("Error adding index.yaml to git staging area", "index directory", indexdir, "branch", branch)
-    out = subprocess.run(["git", "commit", indexdir, "-m", "Update index.html"], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "status"], cwd=indexdir, capture_output=True)
+    print("Git status:")
+    print(out.stdout.decode("utf-8"))
+    print(out.stderr.decode("utf-8"))
+    out = subprocess.run(["git", "commit",  "-m", "Update index.html"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
-        print("Error committing index.yaml", "index directory", indexdir, "branch", branch)
+        print("Error committing index.yaml", "index directory", indexdir, "branch", branch, "error:", err)
     r = requests.head(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
     etag = r.headers.get('etag')
     if original_etag and etag and (original_etag != etag):
         print("index.html not updated. ETag mismatch.", "original ETag", original_etag, "new ETag", etag, "index directory", indexdir, "branch", branch)
         sys.exit(1)
+    out = subprocess.run(["git", "status"], cwd=indexdir, capture_output=True)
+    print("Git status:")
+    print(out.stdout.decode("utf-8"))
+    print(out.stderr.decode("utf-8"))
     out = subprocess.run(["git", "push", f"https://x-access-token:{token}@github.com/{repository}", f"HEAD:refs/heads/{branch}", "-f"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
     if out.returncode:
         print("index.html not updated. Push failed.", "index directory", indexdir, "branch", branch)
         sys.exit(1)
+    os.chdir(old_cwd)
 
 
 def update_chart_annotation(category, organization, chart_file_name, chart, report_path):
@@ -237,14 +264,17 @@ def main():
                                         help="index branch")
     parser.add_argument("-r", "--repository", dest="repository", type=str, required=True,
                                         help="Git Repository")
+    parser.add_argument("-u", "--api-url", dest="api_url", type=str, required=True,
+                                        help="API URL for the pull request")
     args = parser.parse_args()
     branch = args.branch.split("/")[-1]
-    category, organization, chart, version = get_modified_charts()
+    category, organization, chart, version = get_modified_charts(args.api_url)
     chart_source_exists, chart_tarball_exists = check_chart_source_or_tarball_exists(category, organization, chart, version)
 
     print("[INFO] Creating Git worktree for index branch")
     indexdir = create_worktree_for_index(branch)
 
+    print("[INFO] Report Content : ", os.environ.get("REPORT_CONTENT"))
     if chart_source_exists or chart_tarball_exists:
         if chart_source_exists:
             prepare_chart_source_for_release(category, organization, chart, version)

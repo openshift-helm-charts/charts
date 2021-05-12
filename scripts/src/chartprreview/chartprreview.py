@@ -46,11 +46,11 @@ def verify_user(directory, username, category, organization, chart):
     data = open(owners_path).read()
     out = yaml.load(data, Loader=Loader)
     if username not in [x['githubUsername'] for x in out['users']]:
-        msg = f"[ERROR] {usernmae} is not allowed to submit the chart on behalf of {organization}"
+        msg = f"[ERROR] {username} is not allowed to submit the chart on behalf of {organization}"
         write_error_log(directory, msg)
         sys.exit(1)
 
-def check_owners_file_against_directory_structure(username, category, organization, chart):
+def check_owners_file_against_directory_structure(directory,username, category, organization, chart):
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
     vendor_label = out["vendor"]["label"]
@@ -59,9 +59,9 @@ def check_owners_file_against_directory_structure(username, category, organizati
     msgs = []
     if organization != vendor_label:
         error_exit = True
-        msg.append(f"[ERROR] vendor/label in OWNERS file ({vendor_label}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
+        msgs.append(f"[ERROR] vendor/label in OWNERS file ({vendor_label}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
     if chart != chart_name:
-        msg.append(f"[ERROR] chart/name in OWNERS file ({chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
+        msgs.append(f"[ERROR] chart/name in OWNERS file ({chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart})")
         error_exit = True
     if error_exit:
         write_error_log(directory, *msgs)
@@ -181,6 +181,8 @@ def check_report_success(directory, report_path, version):
     data = open(report_path).read()
     print("[INFO] Full report: ")
     print(data)
+    quoted_data = data.replace("%", "%25").replace("\n", "%0A").replace("\r", "%0D")
+    print(f"::set-output name=report_content::{quoted_data}")
     try:
         out = yaml.load(data, Loader=Loader)
     except yaml.scanner.ScannerError as err:
@@ -227,7 +229,6 @@ def check_report_success(directory, report_path, version):
     if err.strip():
         msg = f"[ERROR] Error analysing the report: {err}"
         write_error_log(directory, msg)
-        sys.exit(1)
 
     failed = report["failed"]
     passed = report["passed"]
@@ -258,7 +259,7 @@ def generate_verify_report(directory, category, organization, chart, version):
         sys.exit(1)
     if not os.path.exists(report_path):
         if not src_exists and not tar_exists:
-            msg = "[ERROR] One of these must be modifed: report, chart source, or tarball"
+            msg = "[ERROR] One of these must be modified: report, chart source, or tarball"
             write_error_log(directory, msg)
             sys.exit(1)
     if src_exists:
@@ -294,7 +295,7 @@ def main():
     os.makedirs(args.directory, exist_ok=True)
     category, organization, chart, version = get_modified_charts(args.directory, args.api_url)
     verify_user(args.directory, args.username, category, organization, chart)
-    check_owners_file_against_directory_structure(args.username, category, organization, chart)
+    check_owners_file_against_directory_structure(args.directory, args.username, category, organization, chart)
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     generate_verify_report(args.directory, category, organization, chart, version)
     if os.path.exists(submitted_report_path):
