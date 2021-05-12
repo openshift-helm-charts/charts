@@ -51,14 +51,14 @@ Interested in getting your helm charts RedHat OpenShift certified? read the [cer
 This repository comes configured by default starting with OpenShift 4.8. For earlier version of OpenShift or other Kubernetes distributions, the following command allows you to download and install all the charts from this repository via helm CLI:
 
 ```bash
-$ helm repo add openshift-helm-charts https://helm-charts.openshift.io/
+$ helm repo add openshift-helm-charts https://charts.openshift.io/
 ```
 
 Helm is also integrated in the [odc web terminal](https://docs.openshift.com/container-platform/latest/web_console/odc-about-web-terminal.html), you can use the helm CLI directly from there if you installed it.
 
 To install the repo to be used from the OpenShift console run the following command as and OpenShift admin:
 ```bash
-$ oc apply -f https://helm-charts.openshift.io/openshift-charts-repo.yaml
+$ oc apply -f https://charts.openshift.io/openshift-charts-repo.yaml
 ```
 
 ## Using Helm
