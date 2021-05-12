@@ -171,6 +171,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
 
     print("[INFO] Add and commit changes to git")
     out = yaml.dump(data, Dumper=Dumper)
+    print("index.yaml content:\n", out)
     with open(os.path.join(indexdir, "index.yaml"), "w") as fd:
         fd.write(out)
     out = subprocess.run(["git", "add", os.path.join(indexdir, "index.yaml")], cwd=indexdir, capture_output=True)
