@@ -105,30 +105,33 @@ jobs:
 
       - name: Get Date
         id: get-date
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }}
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
 
       - uses: actions/cache@v2
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }}
         id: cache
         with:
           path: oc
           key: ${{ steps.get-date.outputs.date }}
 
       - name: Install oc
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }} && steps.cache.outputs.cache-hit != 'true'
         run: |
           curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
           tar zxvf openshift-client-linux.tar.gz oc
 
       - name: Get Repository
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }}
         id: get-repository
         run: |
           REPO=$(echo ${{ github.repository }} | tr '\/' '-')
           echo "::set-output name=repository::${REPO}"
         shell: bash
 
-      - name: 'Verify PR'
+      - name: 'Verify PR - generate report'
         id: verify_pr
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
@@ -136,15 +139,19 @@ jobs:
           gpg --version
           docker pull quay.io/redhat-certification/chart-verifier:latest
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-          ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
-          ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt
-          ./oc login --token=$(cat token.txt) --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
+          if [ "${{steps.verify_pr.outputs.report-exists}}" != "true"]; then
+            echo "oc login"
+            ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
+            ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt
+            ./oc login --token=$(cat token.txt) --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
+          fi
           cd pr-branch
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
 
+
       - name: Delete Namespace
-        if: always()
+        if: always() && steps.sanity_check_pr_content.outputs.report-exists != 'true'
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
