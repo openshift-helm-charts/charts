@@ -209,9 +209,9 @@ def check_report_success(directory, report_path, version):
         print("[ERROR] Error extracting annotations from the report:", err)
         sys.exit(1)
 
-    required_annotations = {"helm-chart.openshift.io/lastCertifiedTimestamp",
-                            #TODO: Enable this after OpenShift CI working: "helm-chart.openshift.io/certifiedOpenShiftVersions",
-                            "helm-chart.openshift.io/digest"}
+    required_annotations = {"charts.openshift.io/lastCertifiedTimestamp",
+                            "charts.openshift.io/certifiedOpenShiftVersions",
+                            "charts.openshift.io/digest"}
 
     available_annotations = set(annotations.keys())
 

@@ -131,9 +131,9 @@ def create_index_from_report(category, report_path):
 
     print("category:", category)
     if category == "partners":
-        annotations["helm-chart.openshift.io/providerType"] = "partner"
+        annotations["charts.openshift.io/providerType"] = "partner"
     else:
-        annotations["helm-chart.openshift.io/providerType"] = category
+        annotations["charts.openshift.io/providerType"] = category
 
     report = yaml.load(open(report_path), Loader=Loader)
     chart_url = report["metadata"]["tool"]['chart-uri']
@@ -165,7 +165,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
         crtentries.append(v)
 
     chart_entry["urls"] = [chart_url]
-    chart_entry["annotations"]["helm-chart.openshift.io/submissionTimestamp"] = now
+    chart_entry["annotations"]["charts.openshift.io/submissionTimestamp"] = now
     crtentries.append(chart_entry)
     data["entries"][entry_name] = crtentries
 
@@ -225,15 +225,15 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
 
     print("category:", category)
     if category == "partners":
-        annotations["helm-chart.openshift.io/providerType"] = "partner"
+        annotations["charts.openshift.io/providerType"] = "partner"
     else:
-        annotations["helm-chart.openshift.io/providerType"] = category
+        annotations["charts.openshift.io/providerType"] = category
 
-    if "helm-chart.openshift.io/provider" not in annotations:
+    if "charts.openshift.io/provider" not in annotations:
         data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
         out = yaml.load(data, Loader=Loader)
         vendor_name = out["vendor"]["name"]
-        annotations["helm-chart.openshift.io/provider"] = vendor_name
+        annotations["charts.openshift.io/provider"] = vendor_name
 
     out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
