@@ -118,10 +118,12 @@ jobs:
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: 'Prepare PR comment'
+        if: always()
         run: |
           python3 scripts/prepare_pr_comment.py ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 
       - name: 'Comment on PR'
+        if: always()
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
