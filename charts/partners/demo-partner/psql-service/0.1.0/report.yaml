@@ -3,9 +3,9 @@ kind: verify-report
 metadata:
     tool:
         verifier-version: 1.0.0
-        chart-uri: ./psql-service
-        digest: sha256:8b2c62a1539f1c3e1b9224afc28a0989f7f5239654e9bac06181c642fbf9078d
-        lastCertifiedTimestamp: "2021-05-13T09:06:22.651861-04:00"
+        chart-uri: psql-service-0.1.0.tgz
+        digest: sha256:71210d98ace408df3012bd66a4ea6279a7420f5444f2d655e7436054ab416fb8
+        lastCertifiedTimestamp: "2021-05-13T09:46:17.249848-04:00"
         certifiedOpenShiftVersions: 4.7.5
     chart:
         name: psql-service
@@ -27,14 +27,30 @@ metadata:
         type: application
     overrides: ""
 results:
-  - check: has-readme
-    type: Mandatory
-    outcome: PASS
-    reason: Chart has a README
   - check: is-helm-v3
     type: Mandatory
     outcome: PASS
     reason: API version is V2, used in Helm 3
+  - check: helm-lint
+    type: Mandatory
+    outcome: PASS
+    reason: Helm lint successful
+  - check: not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
+  - check: images-are-certified
+    type: Mandatory
+    outcome: PASS
+    reason: 'Image is Red Hat certified : registry.access.redhat.com/rhscl/postgresql-10-rhel7:latest'
+  - check: has-readme
+    type: Mandatory
+    outcome: PASS
+    reason: Chart has a README
+  - check: contains-test
+    type: Mandatory
+    outcome: PASS
+    reason: Chart test files exist
   - check: contains-values
     type: Mandatory
     outcome: PASS
@@ -47,27 +63,11 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Kubernetes version specified
-  - check: helm-lint
-    type: Mandatory
-    outcome: PASS
-    reason: Helm lint successful
-  - check: chart-testing
-    type: Mandatory
-    outcome: PASS
-    reason: Chart tests have passed
-  - check: contains-test
-    type: Mandatory
-    outcome: PASS
-    reason: Chart test files exist
   - check: not-contains-crds
     type: Mandatory
     outcome: PASS
     reason: Chart does not contain CRDs
-  - check: not-contain-csi-objects
+  - check: chart-testing
     type: Mandatory
     outcome: PASS
-    reason: CSI objects do not exist
-  - check: images-are-certified
-    type: Mandatory
-    outcome: PASS
-    reason: 'Image is Red Hat certified : registry.access.redhat.com/rhscl/postgresql-10-rhel7:latest'
+    reason: Chart tests have passed
