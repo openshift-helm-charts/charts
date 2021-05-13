@@ -114,6 +114,7 @@ jobs:
           cd ..
 
       - name: Save PR artifact
+        if: always()
         run: |
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
 
