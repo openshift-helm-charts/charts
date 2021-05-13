@@ -1,0 +1,64 @@
+---
+chart:
+  name: psql-service
+  shortDescription: A Helm chart for psql-service
+publicPgpKey: |
+    -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+    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
+    WhdA6TU=
+    =f4ai
+    -----END PGP PUBLIC KEY BLOCK-----
+users:
+  - githubUsername: mmulholla
+  - githubUsername: baijum
+  - githubUsername: dperaza4dustbit
+vendor:
+  label: test-org1
+  name: Test Organization 1
