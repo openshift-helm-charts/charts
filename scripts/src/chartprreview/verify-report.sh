@@ -275,6 +275,7 @@ getFails() {
         if [ "$addComma" = true ]; then
           output+=","
         fi
+        fail="$(echo "${fail}up" | sed 's#/"#///"#')"
         output+="\"$fail\""
         addComma=true
       done
