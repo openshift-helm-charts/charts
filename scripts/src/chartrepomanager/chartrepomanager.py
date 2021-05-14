@@ -200,7 +200,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print("Git status:")
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
-    out = subprocess.run(["git", "commit",  "-m", "Update index.html"], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "commit",  "-m", f"{organization}-{chart}-{version} Index.yaml"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
