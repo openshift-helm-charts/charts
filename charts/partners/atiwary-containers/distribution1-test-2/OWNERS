@@ -1,0 +1,9 @@
+chart:
+  name: distribution1-test-2
+  shortDescription: testss
+publicPgpKey: null
+users:
+- githubUsername: kan
+vendor:
+  label: atiwary-containers
+  name: Red Hat

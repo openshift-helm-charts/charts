@@ -1,0 +1,4 @@
+allow/chart-changes:
+  - any: ['charts/partners/**/**/*', '!charts/partners/**/**/OWNERS']
+  - any: ['charts/redhat/**/**/*', '!charts/partners/**/**/OWNERS']
+  - any: ['charts/community/**/**/*', '!charts/partners/**/**/OWNERS']

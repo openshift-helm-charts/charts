@@ -1,0 +1,9 @@
+chart:
+  name: test-gautam-helm-external
+  shortDescription: test gautam helm internal
+publicPgpKey: null
+users:
+- githubUsername: gakrishn
+vendor:
+  label: atiwary-containers
+  name: Red Hat

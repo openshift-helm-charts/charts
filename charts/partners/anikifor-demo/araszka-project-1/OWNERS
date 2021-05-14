@@ -1,0 +1,9 @@
+chart:
+  name: araszka-project-1
+  shortDescription: Short
+publicPgpKey: null
+users:
+- githubUsername: alllda
+vendor:
+  label: anikifor-demo
+  name: login-test-login
