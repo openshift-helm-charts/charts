@@ -52,30 +52,6 @@ jobs:
               name: 'sanity-ok'
             })
 
-      - uses: actions/github-script@v3
-        if: ${{ steps.sanity_check_pr_content.outcome == 'success'}}
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '👋 Thanks for the PR!  The sanity check has been a success. Please wait for the test result.'
-            })
-
-      - uses: actions/github-script@v3
-        if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '👋 Thanks for the PR!  The sanity check has been a failure. Please ensure only chart related files have been modified.'
-            })
-
       - name: Reflect on Sanity Check PR Content
         if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
         run: |
@@ -166,7 +142,7 @@ jobs:
       - name: 'Prepare PR comment'
         if: always()
         run: |
-          python3 scripts/prepare_pr_comment.py ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
+          python3 scripts/prepare_pr_comment.py ${{ steps.sanity_check_pr_content.outcome }} ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 
       - name: 'Comment on PR'
         if: always()
