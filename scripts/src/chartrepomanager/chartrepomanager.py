@@ -39,7 +39,7 @@ def get_current_commit_sha():
     print(commit.stdout.decode("utf-8"))
     print(commit.stderr.decode("utf-8"))
     commit_hash = commit.stdout.strip()
-    print("Cuurent commit sha:", commit_hash)
+    print("Current commit sha:", commit_hash)
     os.chdir(cwd)
     return commit_hash
 
@@ -92,7 +92,7 @@ def prepare_chart_tarball_for_release(category, organization, chart, version):
     shutil.copy(path, f".cr-release-packages/{new_chart_file_name}")
     shutil.copy(path, chart_file_name)
 
-def push_chart_release(repository, organization, branch, commit_hash):
+def push_chart_release(repository, organization, commit_hash):
     org, repo = repository.split("/")
     token = os.environ.get("GITHUB_TOKEN")
     print("[INFO] Upload chart using the chart-releaser")
@@ -294,7 +294,7 @@ def main():
 
         commit_hash = get_current_commit_sha()
         print("[INFO] Publish chart release to GitHub")
-        push_chart_release(args.repository, organization, branch, commit_hash)
+        push_chart_release(args.repository, organization, commit_hash)
 
         print("[INFO] Check if report exist as part of the commit")
         report_exists, report_path = check_report_exists(category, organization, chart, version)
