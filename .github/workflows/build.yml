@@ -143,6 +143,7 @@ jobs:
             echo "oc login"
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
             ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt
+            sleep 10s
             ./oc login --token=$(cat token.txt) --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
           fi
           cd pr-branch
