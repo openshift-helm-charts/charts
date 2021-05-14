@@ -1,0 +1,9 @@
+chart:
+  name: testhelm12454
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: gautamkrishnar
+vendor:
+  label: atiwary-containers
+  name: Red Hat
