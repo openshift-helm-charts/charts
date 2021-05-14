@@ -139,7 +139,7 @@ jobs:
           gpg --version
           docker pull quay.io/redhat-certification/chart-verifier:latest
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-          if [ "${{steps.verify_pr.outputs.report-exists}}" != "true"]; then
+          if [ "${{steps.verify_pr.outputs.report-exists}}" != "true" ]; then
             echo "oc login"
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
             ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt
@@ -245,7 +245,7 @@ jobs:
         continue-on-error: true
         with:
           tag_name: ${{ steps.release-charts.outputs.tag }}
-          files: report.yaml
+          files: pr-branch/report.yaml
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
