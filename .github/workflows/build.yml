@@ -52,8 +52,29 @@ jobs:
               name: 'sanity-ok'
             })
 
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: "pr-branch"
+
+      - name: Test CI Workflow
+        id: test_ci_workflow
+        if: steps.sanity_check_pr_content.outcome == 'failure' && contains(github.event.pull_request.labels.*.name, 'allow/ci-changes')
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+          TEST_REPO: ${{ secrets.TEST_REPO }}
+          FORK_REPO: ${{ secrets.FORK_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd pr-branch
+          ../ve1/bin/pytest tests/ -s -vvv
+          cd ..
+
       - name: Reflect on Sanity Check PR Content
-        if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
+        if: steps.sanity_check_pr_content.outcome == 'failure' && steps.test_ci_workflow.outcome == 'failure'
         run: |
           echo "The 'Sanity Check PR Content' step has failed."
           exit 1
@@ -71,13 +92,6 @@ jobs:
               issue_number: Number(issue_number),
               name: 'authorized-request'
             })
-
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          path: "pr-branch"
 
       - name: Get Date
         id: get-date
@@ -109,6 +123,7 @@ jobs:
 
       - name: 'Verify PR - generate report'
         id: verify_pr
+        if: steps.sanity_check_pr_content.outcome == 'success'
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
@@ -178,14 +193,14 @@ jobs:
 
       - name: 'Approve PR'
         id: approve_pr
-        if: ${{ steps.verify_pr.conclusion == 'success' }}
+        if: steps.verify_pr.conclusion == 'success' && steps.sanity_check_pr_content.outcome == 'success'
         uses: hmarr/auto-approve-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Merge PR'
         id: merge_pr
-        if: ${{ steps.approve_pr.conclusion == 'success' }}
+        if: steps.verify_pr.conclusion == 'success' && steps.sanity_check_pr_content.outcome == 'success'
         uses: pascalgn/automerge-action@v0.13.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -203,6 +218,7 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Release Charts
+        if: steps.verify_pr.conclusion == 'success' && steps.sanity_check_pr_content.outcome == 'success'
         env:
           GITHUB_REF: ${{ github.ref }}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -217,6 +233,7 @@ jobs:
           ../ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH} --api-url=${{ github.event.pull_request._links.self.href }} --pr-number=${{ github.event.number }}
 
       - name: Release
+        if: steps.verify_pr.conclusion == 'success' && steps.sanity_check_pr_content.outcome == 'success'
         uses: softprops/action-gh-release@master
         continue-on-error: true
         with:

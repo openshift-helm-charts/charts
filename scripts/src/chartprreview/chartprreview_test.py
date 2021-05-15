@@ -4,9 +4,11 @@ from chartprreview.chartprreview import verify_user
 from chartprreview.chartprreview import check_owners_file_against_directory_structure
 from chartprreview.chartprreview import write_error_log
 
-def test_verify_user():
+def test_verify_user(tmpdir):
+    tmpdir.mkdir("charts").mkdir("partners").mkdir("test-org").mkdir("test-chart")
+    os.chdir(tmpdir)
     with pytest.raises(SystemExit):
-        verify_user("mbaiju", "partners", "test-org1", "test-chart")
+        verify_user(tmpdir, "mbaiju", "partners", "test-org1", "test-chart")
 
 owners_with_wrong_vendor_label = """\
 ---
@@ -55,17 +57,18 @@ vendor:
 def test_check_owners_file_against_directory_structure(tmpdir):
     original_cwd = os.getcwd()
     p = tmpdir.mkdir("charts").mkdir("partners").mkdir("test-org").mkdir("test-chart").join("OWNERS")
+    tmpdir.mkdir("pr")
     p.write(owners_with_wrong_vendor_label)
     os.chdir(tmpdir)
     new_cwd = os.getcwd()
     print("new_cwd", new_cwd)
     with pytest.raises(SystemExit):
-        check_owners_file_against_directory_structure("baijum", "partners", "test-org", "test-chart")
+        check_owners_file_against_directory_structure(tmpdir, "baijum", "partners", "test-org", "test-chart")
     p.write(owners_with_wrong_chart_name)
     with pytest.raises(SystemExit):
-        check_owners_file_against_directory_structure("baijum", "partners", "test-org", "test-chart")
+        check_owners_file_against_directory_structure(tmpdir, "baijum", "partners", "test-org", "test-chart")
     p.write(owners_with_correct_values)
-    check_owners_file_against_directory_structure("baijum", "partners", "test-org", "test-chart")
+    check_owners_file_against_directory_structure(tmpdir, "baijum", "partners", "test-org", "test-chart")
 
 def test_write_error_log(tmpdir):
     write_error_log(tmpdir, "First message")

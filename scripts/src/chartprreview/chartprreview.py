@@ -51,7 +51,7 @@ def verify_user(directory, username, category, organization, chart):
         write_error_log(directory, msg)
         sys.exit(1)
 
-def check_owners_file_against_directory_structure(directory,username, category, organization, chart):
+def check_owners_file_against_directory_structure(directory, username, category, organization, chart):
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
     vendor_label = out["vendor"]["label"]

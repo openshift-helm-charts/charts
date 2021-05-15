@@ -1,7 +1,15 @@
+attrs==21.2.0
 certifi==2020.12.5
 chardet==4.0.0
 idna==2.10
+iniconfig==1.1.1
+packaging==20.9
+pluggy==1.0.0.dev0
+py==1.10.0
+pyparsing==3.0.0b2
+pytest==6.2.4
 PyYAML==5.4.1
 requests==2.25.1
-semver==2.13.0
+semver==3.0.0.dev2
+toml==0.10.2
 urllib3==1.26.4
