@@ -7,6 +7,7 @@ import json
 import hashlib
 import tempfile
 
+import semver
 import requests
 import yaml
 try:
@@ -220,6 +221,13 @@ def check_report_success(directory, report_path, version):
         msg = f"[ERROR] Missing annotation in chart/report: {annotation}"
         write_error_log(directory, msg)
         sys.exit(1)
+
+    if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
+        full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
+        if not semver.VersionInfo.isvalid(full_version):
+            msg = f"[ERROR] OpenShift version not conforming to SemVer spec: {full_version}"
+            write_error_log(directory, msg)
+            sys.exit(1)
 
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
