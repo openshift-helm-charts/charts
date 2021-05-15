@@ -234,14 +234,16 @@ def check_report_success(directory, report_path, version):
     passed = report["passed"]
     if failed > 0:
         msgs = []
-        msgs.append("[ERROR] Report has failed.")
-        msgs.append(f"Number of checks passed: {passed}")
-        msgs.append(f"Number of checks failed: {failed}")
-        msgs.append("Error message:")
+        msgs.append("[ERROR] Chart verifier report includes failures:")
+        msgs.append(f"- Number of checks passed: {passed}")
+        msgs.append(f"- Number of checks failed: {failed}")
+        msgs.append(f"- Error message(s):")
         for m in report["message"]:
-            msgs.append(m)
+            msgs.append(f"  - {m}")
         write_error_log(directory, *msgs)
         sys.exit(1)
+
+
 
 def generate_verify_report(directory, category, organization, chart, version):
     src = os.path.join(os.getcwd(), "charts", category, organization, chart, version, "src")
