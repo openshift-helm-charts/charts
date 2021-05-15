@@ -94,7 +94,7 @@ jobs:
           key: ${{ steps.get-date.outputs.date }}
 
       - name: Install oc
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }} && steps.cache.outputs.cache-hit != 'true'
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.cache.outputs.cache-hit != 'true' }}
         run: |
           curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
           tar zxvf openshift-client-linux.tar.gz oc
