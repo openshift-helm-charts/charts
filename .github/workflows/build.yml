@@ -161,6 +161,7 @@ jobs:
             });
 
       - name: 'Add label to PR'
+        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success'}}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
