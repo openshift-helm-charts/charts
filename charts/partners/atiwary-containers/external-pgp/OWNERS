@@ -1,6 +1,6 @@
 chart:
   name: external-pgp
-  shortDescription: null
+  shortDescription: short
 publicPgpKey: ZmRz
 users:
 - githubUsername: kanchan04katare
