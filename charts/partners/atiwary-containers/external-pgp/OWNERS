@@ -1,8 +1,9 @@
 chart:
   name: external-pgp
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: ZmRz
+users:
+- githubUsername: kanchan04katare
 vendor:
   label: atiwary-containers
   name: Red Hat
