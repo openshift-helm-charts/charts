@@ -6,7 +6,7 @@ metadata:
     chart-uri: http://charts.com
     digest: sha256:5fdb39e7567267b042f96ba80cea9f2b1b99c5d88fa568118da54a7a891cdb0b
     lastCertifiedTime: 2021-04-22 10:49:29.714918174 +0000 UTC m=+1.932279870
-    certifiedOpenShiftVersions: ""
+    certifiedOpenShiftVersions: "sha256:5fdb39e7567267b042f96ba80cea9f2b1b99c5d88fa568118da54a7a891cdb0b"
   chart:
     name: qa-pgp
     home: ""
