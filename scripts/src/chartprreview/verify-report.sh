@@ -246,7 +246,7 @@ getFails() {
 
         if [ -n "$check" ] && [ -n "$type" ] && [ -n "$outcome" ] && [ -n "$reason" ]; then
           if [[ $outcome != "PASS" ]] && [[ $type == "Mandatory" ]]; then
-              fails+=("$reason")
+              fails+=("$check : $reason")
           else
             passed=$((passed+1))
           fi

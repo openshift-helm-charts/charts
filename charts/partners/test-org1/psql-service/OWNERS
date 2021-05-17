@@ -1,0 +1,11 @@
+---
+chart:
+  name: psql-service
+  shortDescription: DP's ssm-service
+users:
+- githubUsername: mmulholla
+- githubUsername: baijum
+- githubUsername: dperaza4dustbit
+vendor:
+  label: test-org1
+  name: test-org1 inc.

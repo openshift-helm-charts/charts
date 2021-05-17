@@ -52,30 +52,6 @@ jobs:
               name: 'sanity-ok'
             })
 
-      - uses: actions/github-script@v3
-        if: ${{ steps.sanity_check_pr_content.outcome == 'success'}}
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '👋 Thanks for the PR!  The sanity check has been a success. Please wait for the test result.'
-            })
-
-      - uses: actions/github-script@v3
-        if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '👋 Thanks for the PR!  The sanity check has been a failure. Please ensure only chart related files have been modified.'
-            })
-
       - name: Reflect on Sanity Check PR Content
         if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
         run: |
@@ -118,7 +94,7 @@ jobs:
           key: ${{ steps.get-date.outputs.date }}
 
       - name: Install oc
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }} && steps.cache.outputs.cache-hit != 'true'
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.cache.outputs.cache-hit != 'true' }}
         run: |
           curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
           tar zxvf openshift-client-linux.tar.gz oc
@@ -139,10 +115,11 @@ jobs:
           gpg --version
           docker pull quay.io/redhat-certification/chart-verifier:latest
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-          if [ "${{steps.verify_pr.outputs.report-exists}}" != "true" ]; then
+          if [ "${{steps.sanity_check_pr_content.outputs.report-exists}}" != "true" ]; then
             echo "oc login"
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
             ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt
+            sleep 10s
             ./oc login --token=$(cat token.txt) --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
           fi
           cd pr-branch
@@ -165,7 +142,7 @@ jobs:
       - name: 'Prepare PR comment'
         if: always()
         run: |
-          python3 scripts/prepare_pr_comment.py ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
+          python3 scripts/prepare_pr_comment.py ${{ steps.sanity_check_pr_content.outcome }} ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 
       - name: 'Comment on PR'
         if: always()
@@ -184,6 +161,7 @@ jobs:
             });
 
       - name: 'Add label to PR'
+        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success'}}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -238,7 +216,7 @@ jobs:
           sudo cp -f cr /usr/local/bin/cr
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
           cd pr-branch
-          ../ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH} --api-url=${{ github.event.pull_request._links.self.href }}
+          ../ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH} --api-url=${{ github.event.pull_request._links.self.href }} --pr-number=${{ github.event.number }}
 
       - name: Release
         uses: softprops/action-gh-release@master
