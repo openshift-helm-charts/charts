@@ -152,7 +152,7 @@ def create_index_from_report(category, report_path):
     chart_entry["annotations"] = chart_entry["annotations"] | annotations
     return chart_entry, chart_url
 
-def update_index_and_push(indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry):
+def update_index_and_push(indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number):
     token = os.environ.get("GITHUB_TOKEN")
     print("Downloading index.yaml")
     r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
@@ -200,7 +200,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print("Git status:")
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
-    out = subprocess.run(["git", "commit",  "-m", "Update index.html"], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "commit",  "-m", f"{organization}-{chart}-{version} index.yaml (#{pr_number})"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
@@ -277,6 +277,8 @@ def main():
                                         help="Git Repository")
     parser.add_argument("-u", "--api-url", dest="api_url", type=str, required=True,
                                         help="API URL for the pull request")
+    parser.add_argument("-n", "--pr-number", dest="pr_number", type=str, required=True,
+                                        help="current pull request number")
     args = parser.parse_args()
     branch = args.branch.split("/")[-1]
     category, organization, chart, version = get_modified_charts(args.api_url)
@@ -317,4 +319,4 @@ def main():
         print("[INFO] Creating index from report")
         chart_entry, chart_url = create_index_from_report(category, report_path)
 
-    update_index_and_push(indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry)
+    update_index_and_push(indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number)
