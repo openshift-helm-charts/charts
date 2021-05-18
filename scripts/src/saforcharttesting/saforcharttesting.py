@@ -1,4 +1,5 @@
 import sys
+import time
 import os
 import base64
 import json
@@ -22,7 +23,7 @@ metadata:
   namespace: ${name}
 """
 
-role_template = """
+role_template = """\
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -37,7 +38,7 @@ rules:
       - '*'
 """
 
-rolebinding_template = """
+rolebinding_template = """\
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -50,6 +51,35 @@ subjects:
 roleRef:
   kind: Role
   name: ${name}
+"""
+
+clusterrole_template = """\
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ${name}
+rules:
+  - apiGroups:
+      - "config.openshift.io"
+    resources:
+      - 'clusteroperators'
+    verbs:
+      - 'get'
+"""
+
+clusterrolebinding_template = """\
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ${name}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ${name}
+subjects:
+  - kind: ServiceAccount
+    name: ${name}
+    namespace: ${name}
 """
 
 def apply_config(tmpl, **values):
@@ -110,6 +140,19 @@ def create_rolebinding(namespace):
     if stderr.strip():
         print("[ERROR] creating RoleBinding:", stderr)
 
+def create_clusterrole(namespace):
+    print("creating ClusterRole:", namespace)
+    stdout, stderr = apply_config(clusterrole_template, name=namespace)
+    print("stdout:\n", stdout, sep="")
+    if stderr.strip():
+        print("[ERROR] creating ClusterRole:", stderr)
+
+def create_clusterrolebinding(namespace):
+    print("creating ClusterRoleBinding:", namespace)
+    stdout, stderr = apply_config(clusterrolebinding_template, name=namespace)
+    print("stdout:\n", stdout, sep="")
+    if stderr.strip():
+        print("[ERROR] creating ClusterRoleBinding:", stderr)
 
 def delete_namespace(namespace):
     print("deleting Namespace:", namespace)
@@ -117,6 +160,22 @@ def delete_namespace(namespace):
     print("stdout:\n", stdout, sep="")
     if stderr.strip():
         print("[ERROR] deleting Namespace:", namespace, stderr)
+        sys.exit(1)
+
+def delete_clusterrole(name):
+    print("deleting ClusterRole:", name)
+    stdout, stderr = delete_config(clusterrole_template, name=name)
+    print("stdout:\n", stdout, sep="")
+    if stderr.strip():
+        print("[ERROR] deleting ClusterRole:", name, stderr)
+        sys.exit(1)
+
+def delete_clusterrolebinding(name):
+    print("deleting ClusterRoleBinding:", name)
+    stdout, stderr = delete_config(clusterrolebinding_template, name=name)
+    print("stdout:\n", stdout, sep="")
+    if stderr.strip():
+        print("[ERROR] deleting ClusterRoleBinding:", name, stderr)
         sys.exit(1)
 
 def write_sa_token(namespace, token):
@@ -140,7 +199,6 @@ def write_sa_token(namespace, token):
         print("[ERROR] retrieving ServiceAccount:", namespace, stderr)
         sys.exit(1)
 
-    secret_found = False
     for secret in sa["secrets"]:
         out = subprocess.run(["./oc", "get", "secret", secret["name"], "-n", namespace, "-o", "json"], capture_output=True)
         stdout = out.stdout.decode("utf-8")
@@ -171,8 +229,12 @@ def main():
         create_serviceaccount(args.create)
         create_role(args.create)
         create_rolebinding(args.create)
+        create_clusterrole(args.create)
+        create_clusterrolebinding(args.create)
         write_sa_token(args.create, args.token)
     elif args.delete:
+        delete_clusterrolebinding(args.delete)
+        delete_clusterrole(args.delete)
         delete_namespace(args.delete)
     else:
         parser.print_help()
