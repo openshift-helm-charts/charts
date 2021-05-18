@@ -214,6 +214,27 @@ def write_sa_token(namespace, token):
                 with open(token, "w") as fd:
                     fd.write(base64.b64decode(content).decode("utf-8"))
 
+def switch_project_context(namespace, token):
+    tkn = open(token).read()
+    for i in range(7):
+        out = subprocess.run(["./oc", "login", "--token", tkn, "--server", "https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443"], capture_output=True)
+        stdout = out.stdout.decode("utf-8")
+        print(stdout)
+        out = subprocess.run(["./oc", "project", namespace], capture_output=True)
+        stdout = out.stdout.decode("utf-8")
+        print(stdout)
+        out = subprocess.run(["./oc", "config", "current-context"], capture_output=True)
+        stdout = out.stdout.decode("utf-8").strip()
+        print(stdout)
+        if stdout.endswith(":".join((namespace, namespace))):
+            print("current-context:", stdout)
+            return
+        time.sleep(10)
+
+    # This exit will happen if there is an infra failure
+    print("""[ERROR] There is an error creating the namespace and service account. It happens due to some infrastructure failure.  It is not directly related to the changes in the pull request. You can wait for some time and try to re-run the job.  To re-run the job change the PR into a draft and remove the draft state.""")
+    sys.exit(1)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--create", dest="create", type=str, required=False,
@@ -232,6 +253,7 @@ def main():
         create_clusterrole(args.create)
         create_clusterrolebinding(args.create)
         write_sa_token(args.create, args.token)
+        switch_project_context(args.create, args.token)
     elif args.delete:
         delete_clusterrolebinding(args.delete)
         delete_clusterrole(args.delete)
