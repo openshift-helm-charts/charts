@@ -8,6 +8,6 @@ type: application
 version: 0.1.0
 annotations:
   charts.openshift.io/provider: test-org1
-  charts.openshift.io/name: get your awesomeness here
+  charts.openshift.io/name: get your awesomenessness here
   charts.openshift.io/supportURL: http://acme-help-is-here.com/
   charts.openshift.io/archs: all
