@@ -1,9 +1,10 @@
 chart:
   name: testchart180520211929
-  shortDescription: Short Description
+  shortDescription: Short Description1
 publicPgpKey: null
 users:
 - githubUsername: diwanshi
+- githubUsername: gakrishna
 vendor:
   label: atiwary-containers
   name: Red Hat
