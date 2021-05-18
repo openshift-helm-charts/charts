@@ -1,8 +1,11 @@
 chart:
   name: helm-internal
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: kanchan04katare
+- githubUsername: diwanshi
+- githubUsername: gautam
 vendor:
   label: ibm
   name: IBM
