@@ -118,8 +118,6 @@ jobs:
           if [ "${{steps.sanity_check_pr_content.outputs.report-exists}}" != "true" ]; then
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
             ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt
-            sleep 10s
-            ./oc login --token=$(cat token.txt) --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
           fi
           cd pr-branch
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
