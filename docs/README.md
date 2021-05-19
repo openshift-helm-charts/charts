@@ -433,4 +433,4 @@ documentation][partner-success-desk].
 [partner-success-desk]: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/managing-your-account/getting-help/technology-partner-success-desk
 [new-issue]: https://github.com/openshift-helm-charts/repo/issues/new/choose
 [unprivileged-environment]: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
-[ascii-armor]: https://datatracker.ietf.org/doc/html/rfc4880#section-6.2
+[ascii-armor]: https://www.redhat.com/sysadmin/creating-gpg-keypairs
