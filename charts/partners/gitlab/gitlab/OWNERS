@@ -1,8 +1,9 @@
 chart:
   name: gitlab
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: hickey
 vendor:
   label: gitlab
   name: GitLab
