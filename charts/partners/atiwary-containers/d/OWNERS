@@ -1,9 +1,0 @@
-chart:
-  name: d
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: kanchan04katare
-vendor:
-  label: atiwary-containers
-  name: Red Hat

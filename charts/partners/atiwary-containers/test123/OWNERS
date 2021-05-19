@@ -1,8 +1,0 @@
-chart:
-  name: test123
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: atiwary-containers
-  name: Red Hat
