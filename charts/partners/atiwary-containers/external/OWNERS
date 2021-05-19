@@ -1,8 +1,0 @@
-chart:
-  name: external
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: atiwary-containers
-  name: Red Hat

@@ -1,9 +1,0 @@
-chart:
-  name: testchart-prod
-  shortDescription: Short Description
-publicPgpKey: null
-users:
-- githubUsername: diwanshi
-vendor:
-  label: redhat-sp
-  name: Red Hat INC
