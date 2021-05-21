@@ -28,7 +28,7 @@ jobs:
           ./ve1/bin/sanity-check-pr --api-url=${{ github.event.pull_request._links.self.href }}
 
       - uses: actions/github-script@v3
-        if: ${{ steps.sanity_check_pr_content.outcome == 'success' }}
+        if: ${{ steps.sanity_check_pr_content.outcome == 'success'}}
         continue-on-error: true
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -41,7 +41,7 @@ jobs:
             })
 
       - uses: actions/github-script@v3
-        if: ${{ steps.sanity_check_pr_content.outcome == 'failure' }}
+        if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
         continue-on-error: true
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -54,7 +54,7 @@ jobs:
             })
 
       - name: Reflect on Sanity Check PR Content
-        if: ${{ steps.sanity_check_pr_content.outcome == 'failure' }}
+        if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
         run: |
           echo "The 'Sanity Check PR Content' step has failed."
           exit 1
@@ -160,7 +160,7 @@ jobs:
             });
 
       - name: 'Add label to PR'
-        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success' }}
+        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success'}}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -174,8 +174,13 @@ jobs:
                 issue_number: Number(issue_number),
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                labels: ['authorized-request', 'automerge']
+                labels: ['authorized-request']
             })};
+
+      - name: Fail the job if Verify PR step fails
+        if: ${{ steps.verify_pr.conclusion == 'failure' }}
+        run: |
+           exit 1
 
       - name: 'Approve PR'
         id: approve_pr
@@ -191,8 +196,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_METHOD: squash
-          MERGE_LABELS: "automerge,!hold"
-          MERGE_REMOVE_LABELS: "automerge"
+          MERGE_LABELS: ""
 
       - name: Block until there is no running workflow
         uses: softprops/turnstyle@v1
@@ -203,10 +207,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Check for automerge
-        run: |
-          ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Release Charts
         env:
