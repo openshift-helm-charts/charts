@@ -29,8 +29,10 @@ submit a chart and the report together.
       * [Submitting a Chart without Chart Verification Report](#submitting-a-chart-without-chart-verification-report)
       * [Submitting a Chart Verification Report without the Chart](#submitting-a-chart-verification-report-without-the-chart)
       * [Submitting a Chart Verification Report with the Chart](#submitting-a-chart-verification-report-with-the-chart)
+   * [Post Submission Manual Review](#post-submission-manual-review)
    * [Troubleshooting Pull Request Failures](#troubleshooting-pull-request-failures)
       * [Error when submitting files not part of any chart](#error-when-submitting-files-not-part-of-any-chart)
+      * [Missing OWNERS file in the chart directory](#missing-owners-file-in-the-chart-directory)
       * [Pull request author is not part of OWNERS file](#pull-request-author-is-not-part-of-owners-file)
       * [Vendor label mismatch with the directory structure](#vendor-label-mismatch-with-the-directory-structure)
       * [Chart name mismatch with the directory structure](#chart-name-mismatch-with-the-directory-structure)
@@ -187,6 +189,33 @@ or tarball under the version numbered directory.  Similarly, as mentioned in the
 As mentioned in the previous section, optionally, you can sign the report.
 There will be `[WARNING]` message in the console if the signature verification
 fails.
+
+## Post Submission Manual Review
+
+After submitting the pull request, it will take a few minutes to run all the
+checks and merge the PR automatically.  These are the manual review steps you
+can perform after creating the pull request.
+
+1. Watch the newly opened pull request for any messages.
+2. If there is a message with errors, you can go to the next section,
+   [Troubleshooting Pull Request
+   Failures](#troubleshooting-pull-request-failures), to get more details.  Once
+   you identify the problem, you can update the pull request with the necessary
+   changes.
+2. If there is a success message that indicates the chart repository index has
+   been updated successfully.  You can verify it by checking the latest commit
+   in the `gh-pages` branch.  The commit message will be in this format:
+   `<partner-label>-<chart-name>-<version-number> index.yaml (#<PR-number>)`
+   (e.g, `acme-psql-service-0.1.1 index.yaml (#7)`).  Your chart-related changes
+   must be reflected in the `index.yaml` file.
+3. If you have submitted a chart source, a GitHub release with the chart and
+   corresponding report will be made available in the [GitHub releases
+   page](https://github.com/openshift-helm-charts/charts/releases).  The release
+   tag will be in this format: `<partner-label>-<chart-name>-<version-number>`
+   (e.g., `acme-psql-service-0.1.1`).
+4. The chart must be available through the official repository URL:
+   https://charts.openshift.io .  You can follow the instruction given there to
+   install it in your OpenShift cluster.
 
 ## Troubleshooting Pull Request Failures
 
@@ -391,7 +420,7 @@ Number of checks failed:
 Error message: ..
 ```
 
-To fix the above failure, you need to modify the report as per the failure
+To fix the above failure, you need to modify the chart as per the failure
 messages.
 
 ## Frequently Asked Questions
