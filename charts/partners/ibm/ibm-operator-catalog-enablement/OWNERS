@@ -1,0 +1,10 @@
+chart:
+  name: ibm-operator-catalog-enablement
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: morstad
+- githubUsername: rondamus
+vendor:
+  label: ibm
+  name: IBM
