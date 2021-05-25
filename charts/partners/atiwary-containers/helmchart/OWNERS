@@ -1,8 +1,9 @@
 chart:
   name: helmchart
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: VGVzdA==
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: atiwary-containers
   name: Red Hat
