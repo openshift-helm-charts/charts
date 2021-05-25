@@ -1,8 +1,10 @@
 chart:
   name: test007
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: aish
+- githubUsername: test
 vendor:
   label: atiwary-containers
   name: Red Hat
