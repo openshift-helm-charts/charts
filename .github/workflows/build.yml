@@ -192,6 +192,10 @@ jobs:
           MERGE_METHOD: squash
           MERGE_LABELS: ""
 
+      - name: Check for PR merge
+        run: |
+          ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
+
       - name: Block until there is no running workflow
         uses: softprops/turnstyle@v1
         env:
@@ -201,10 +205,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Check for PR merge
-        run: |
-          ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Release Charts
         env:
