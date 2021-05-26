@@ -1,9 +1,0 @@
-chart:
-  name: pgp-helm-test-project
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: gautamkrishnar
-vendor:
-  label: atiwary-containers
-  name: Red Hat

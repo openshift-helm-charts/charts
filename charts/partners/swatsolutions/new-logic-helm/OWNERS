@@ -1,9 +1,0 @@
-chart:
-  name: new-logic-helm
-  shortDescription: short
-publicPgpKey: June@2018
-users:
-- githubUsername: draval
-vendor:
-  label: swatsolutions
-  name: SWAT Solutions

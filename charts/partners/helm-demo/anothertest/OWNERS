@@ -1,8 +1,0 @@
-chart:
-  name: anothertest
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: helm-demo
-  name: login-test-login2

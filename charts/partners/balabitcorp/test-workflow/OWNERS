@@ -1,9 +1,0 @@
-chart:
-  name: test-workflow
-  shortDescription: Short desription
-publicPgpKey: unknown
-users:
-- githubUsername: araszka
-vendor:
-  label: balabitcorp
-  name: Balabit

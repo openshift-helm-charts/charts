@@ -1,9 +1,0 @@
-chart:
-  name: test-dev-bot-admin
-  shortDescription: helm chart that works
-publicPgpKey: unknown
-users:
-- githubUsername: lina-is-here
-vendor:
-  label: redhat
-  name: REDHAT

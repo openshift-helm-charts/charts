@@ -161,11 +161,13 @@ file name as `report.yaml`.
 
 When you follow the [partner connect documentation][partners], you could see
 details about adding a PGP public key.  Adding PGP public key is optional.  But
-if you have added that, you should see your public key in the _OWNERS_ file under
-your chart directory within your organization directory.
+if you have added that, you should see your public key in the _OWNERS_ file
+under your chart directory within your organization directory.  The PGP public
+key is available in the `publicPgpKey` attribute.  The value of that attribute
+must be conforming to [ASCII armor format][ascii-armor].
 
 When submitting a chart verification report without the chart, you can sign your
-report and save the signature in ASCII armor format.
+report and save the signature in [ASCII armor format][ascii-armor].
 
 ```
 gpg --sign --armor --detach-sign --output report.yaml.asc report.yaml
@@ -431,3 +433,4 @@ documentation][partner-success-desk].
 [partner-success-desk]: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/managing-your-account/getting-help/technology-partner-success-desk
 [new-issue]: https://github.com/openshift-helm-charts/repo/issues/new/choose
 [unprivileged-environment]: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+[ascii-armor]: https://www.redhat.com/sysadmin/creating-gpg-keypairs
