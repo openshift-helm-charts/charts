@@ -1,9 +1,0 @@
-chart:
-  name: distribution
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: dpandey
-vendor:
-  label: atiwary-containers
-  name: Red Hat

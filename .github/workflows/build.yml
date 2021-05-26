@@ -8,6 +8,7 @@ jobs:
   chart-certification:
     name: Chart Certification
     runs-on: ubuntu-20.04
+    if: ${{ github.event.pull_request.draft == false }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -191,6 +192,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_METHOD: squash
           MERGE_LABELS: ""
+
+      - name: Check for PR merge
+        run: |
+          ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Block until there is no running workflow
         uses: softprops/turnstyle@v1

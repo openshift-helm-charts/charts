@@ -1,9 +1,0 @@
-chart:
-  name: the-test-chart
-  shortDescription: test helm chart project
-publicPgpKey: unknown
-users:
-- githubUsername: lina-is-here
-vendor:
-  label: balabitcorp
-  name: Balabit

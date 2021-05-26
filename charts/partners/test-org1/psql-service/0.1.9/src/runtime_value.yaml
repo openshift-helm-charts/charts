@@ -1,5 +1,0 @@
-serviceAccount:
-  enabled: true
-  name: sa-with-anyuid
-
-postgresqlPassword: quebolasere

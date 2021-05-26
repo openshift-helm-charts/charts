@@ -1,8 +1,0 @@
-chart:
-  name: helm-sync
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: swatsolutions
-  name: SWAT Solutions
