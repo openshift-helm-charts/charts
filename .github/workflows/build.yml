@@ -193,6 +193,10 @@ jobs:
           MERGE_METHOD: squash
           MERGE_LABELS: ""
 
+      - name: Check for PR merge
+        run: |
+          ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
+
       - name: Block until there is no running workflow
         uses: softprops/turnstyle@v1
         env:
