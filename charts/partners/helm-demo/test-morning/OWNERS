@@ -1,0 +1,9 @@
+chart:
+  name: test-morning
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: lina-is-here
+vendor:
+  label: helm-demo
+  name: login-test-login2
