@@ -2,7 +2,7 @@
 
 OpenShift Helm Charts is a repository hosting [Helm Charts](https://github.com/helm/helm) available by default with [OpenShift](https://www.openshift.com/). It contains popular technologies, tools and services. Helm Charts on this repository can be provided by the community, by partners or Red Hat. 
 
-Charts go through an automated RedHat OpenShift certification workflow, which guarantees security compliance as well as best integration and experience with the platform.
+Charts go through an automated Red Hat OpenShift certification workflow, which guarantees security compliance as well as best integration and experience with the platform.
 
 ## Structure of the repository
 
@@ -44,7 +44,7 @@ The certification program is a great opportunity to not only double check the in
 
 ### Contributing Helm Charts 
 
-Interested in getting your helm charts RedHat OpenShift certified? read the [certification documention](https://github.com/openshift-helm-charts/charts/tree/main/docs)
+Interested in getting your helm charts Red Hat OpenShift certified? read the [certification documention](https://github.com/openshift-helm-charts/charts/tree/main/docs)
 
 ## Installation
 
