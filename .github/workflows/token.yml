@@ -35,7 +35,9 @@ jobs:
           tar zxvf openshift-client-linux.tar.gz oc
 
       - name: Create token
+        shell: bash
         run: |
+          [[ ! ' ("baijum", "mmulholla", "dperaza4dustbit", "pedjak") ' =~ "${GITHUB_ACTOR}" ]] && exit 1
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install coolname && cd ..
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
