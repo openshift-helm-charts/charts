@@ -1,8 +1,11 @@
 chart:
   name: ibm-object-storage-plugin
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: ambiknai@in.ibm.com
+- githubUsername: nkashyap@in.ibm.com
+- githubUsername: bhagyak1@in.ibm.com
 vendor:
   label: ibm
   name: IBM
