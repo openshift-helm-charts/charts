@@ -1,0 +1,48 @@
+name: Generate Token
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  token-for-testing:
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: oc
+          key: ${{ steps.get-date.outputs.date }}
+
+      - name: Install oc
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        run: |
+          curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+          tar zxvf openshift-client-linux.tar.gz oc
+
+      - name: Create token
+        shell: bash
+        run: |
+          [[ ! ' ("baijum", "mmulholla", "dperaza4dustbit", "pedjak") ' =~ "${GITHUB_ACTOR}" ]] && exit 1
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install coolname && cd ..
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
+          ve1/bin/sa-for-chart-testing --create cv-team-${GITHUB_ACTOR}-$(ve1/bin/python3 -c "print(__import__('coolname').generate_slug(), end='')") --token token.txt
+          curl -d private=1 -d expire=burn --data-urlencode text@token.txt https://paste.centos.org/api/create?apikey=5uZ30dTZE1a5V0WYhNwcMddBRDpk6UzuzMu-APKM38iMHacxdA0n4vCqA34avNyt
+          rm -f token.txt
