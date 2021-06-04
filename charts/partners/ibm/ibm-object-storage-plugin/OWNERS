@@ -3,9 +3,9 @@ chart:
   shortDescription: null
 publicPgpKey: null
 users:
-- githubUsername: ambiknai@in.ibm.com
-- githubUsername: nkashyap@in.ibm.com
-- githubUsername: bhagyak1@in.ibm.com
+- githubUsername: ambiknai
+- githubUsername: nkkashyap
+- githubUsername: Bhagyashreek8
 vendor:
   label: ibm
   name: IBM
