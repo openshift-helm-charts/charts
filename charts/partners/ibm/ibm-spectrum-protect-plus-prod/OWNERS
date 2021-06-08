@@ -3,7 +3,7 @@ chart:
   shortDescription: null
 publicPgpKey: null
 users:
-- githubUsername: emcollin@us.ibm.com
+- githubUsername: emcollin
 vendor:
   label: ibm
   name: IBM
