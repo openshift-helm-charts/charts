@@ -168,7 +168,10 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
 
     print("[INFO] Updating the chart entry with new version")
     crtentries = []
-    entry_name = f"{organization}-{chart}"
+    entry_name = os.environ.get("CHART_ENTRY_NAME")
+    if not entry_name:
+        print("[ERROR] Internal error: missing chart entry name")
+        sys.exit(1)
     d = data["entries"].get(entry_name, [])
     for v in d:
         if v["version"] == version:
@@ -309,7 +312,11 @@ def main():
         if report_exists:
             shutil.copy(report_path, "report.yaml")
         else:
-            print(f"::set-output name=tag::{organization}-{chart}-{version}")
+            tag = os.environ.get("CHART_NAME_WITH_VERSION")
+            if not tag:
+                print("[ERROR] Internal error: missing chart name with version (tag)")
+                sys.exit(1)
+            print(f"::set-output name=tag::{tag}")
             print("[INFO] Genereate report")
             report_path = generate_report(chart_file_name)
 

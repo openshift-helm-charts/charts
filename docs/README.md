@@ -225,23 +225,24 @@ be merged automatically.
 
 If there is an issue, a comment with details will appear in the pull request.
 At the bottom of the page, you will also see a box with a heading like this:
-"Some checks were not successful".  And below that, two checks are marked with
-the "required" label to merge the PR automatically:
+"Some checks were not successful" or "All checks have failed".  And below that,
+checks are marked with the "required" label to merge the PR automatically:
 
-1. Sanity Check / sanity-check (pull_request_target)
-2. Build and Verify / build-and-verify (pull_request)
+> CI / Chart Certification (pull_request_target)            [Details](#)
 
-The first one, Sanity Check, fails if the pull request contains changes not
-related to any chart.  This check performs using the script already part of the
-upstream repository.  That way, it will ensure the pull request author is not
-modifying the verification scripts themselves.
+The first part of Chart Certification (Sanity Check) fails if the pull request
+contains changes not related to any chart.  This check performs using the script
+already part of the upstream repository.  That way, it will ensure the pull
+request author is not modifying the verification scripts themselves.  Sanity
+check also ensures the chart version submitted is not already released
+earlier. The job will fail if any sanity checks fail.
 
-The second job, Build and Verify, runs within an unprivileged environment (for
-[security reasons][unprivileged-environment]) and performs all the necessary
+The second part of Chart Certification (Verify PR) performs all the necessary
 checks to merge the pull request.  The following sections explain various errors
-produced by the Build and Verify job.
+produced by the Verify PR.
 
-*Note*: Please ignore other infra jobs like Enable Auto Merge, Check labels, etc.
+The third part of Chart Certification makes the chart release and update
+`index.yaml` in the repository.
 
 ### Error when submitting files not part of any chart
 
@@ -461,5 +462,4 @@ documentation][partner-success-desk].
 [gh-cli-pr]: https://cli.github.com/manual/gh_pr_create
 [partner-success-desk]: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/managing-your-account/getting-help/technology-partner-success-desk
 [new-issue]: https://github.com/openshift-helm-charts/repo/issues/new/choose
-[unprivileged-environment]: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 [ascii-armor]: https://www.redhat.com/sysadmin/creating-gpg-keypairs
