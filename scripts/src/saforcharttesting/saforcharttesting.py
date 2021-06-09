@@ -214,10 +214,10 @@ def write_sa_token(namespace, token):
                 with open(token, "w") as fd:
                     fd.write(base64.b64decode(content).decode("utf-8"))
 
-def switch_project_context(namespace, token):
+def switch_project_context(namespace, token, api_server):
     tkn = open(token).read()
     for i in range(7):
-        out = subprocess.run(["./oc", "login", "--token", tkn, "--server", "https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443"], capture_output=True)
+        out = subprocess.run(["./oc", "login", "--token", tkn, "--server", api_server], capture_output=True)
         stdout = out.stdout.decode("utf-8")
         print(stdout)
         out = subprocess.run(["./oc", "project", namespace], capture_output=True)
@@ -243,6 +243,8 @@ def main():
                                         help="service account token for chart testing")
     parser.add_argument("-d", "--delete", dest="delete", type=str, required=False,
                                         help="delete service account and namespace used for chart testing")
+    parser.add_argument("-s", "--server", dest="server", type=str, required=False,
+                                        help="API server URL")
     args = parser.parse_args()
 
     if args.create:
@@ -253,7 +255,7 @@ def main():
         create_clusterrole(args.create)
         create_clusterrolebinding(args.create)
         write_sa_token(args.create, args.token)
-        switch_project_context(args.create, args.token)
+        switch_project_context(args.create, args.token, args.server)
     elif args.delete:
         delete_clusterrolebinding(args.delete)
         delete_clusterrole(args.delete)
