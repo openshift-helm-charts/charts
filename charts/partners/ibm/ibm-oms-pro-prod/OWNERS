@@ -1,0 +1,9 @@
+chart:
+  name: ibm-oms-pro-prod
+  shortDescription: IBM Order management Software Professional Edition v10 provides cross-channel order orchestration capabilities to enable intelligent brokering of orders across many disparate systems. It also provides a global view of inventory across the supply chain and enables business users to make changes to order process.
+publicPgpKey: null
+users:
+- githubUsername: ntinvo
+vendor:
+  label: ibm
+  name: IBM
