@@ -1,8 +1,9 @@
 chart:
   name: csi-nebulon
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: arun@nebulon.com
 vendor:
   label: nebulon
   name: Nebulon Inc.
