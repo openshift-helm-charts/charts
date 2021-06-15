@@ -1,8 +1,13 @@
 chart:
   name: vault
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: The official HashiCorp Helm chart for installing and configuring
+    Vault on OpenShift.
+publicPgpKey: null
+users:
+- githubUsername: tvoran
+- githubUsername: jasonodonnell
+- githubUsername: tomhjp
+- githubUsername: calvn
 vendor:
   label: hashicorp
   name: HashiCorp
