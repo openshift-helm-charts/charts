@@ -456,7 +456,7 @@ documentation][partner-success-desk].
 
 [partners]: https://redhat-connect.gitbook.io/certification-guides/
 [chart-verifier]: https://github.com/redhat-certification/chart-verifier
-[index-url]: http://helm-charts.openshift.io/
+[index-url]: https://charts.openshift.io
 [pat]: https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 [encyrpted-secret]: https://docs.github.com/en/actions/reference/encrypted-secrets
 [gh-cli-pr]: https://cli.github.com/manual/gh_pr_create
