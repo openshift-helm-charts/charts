@@ -65,6 +65,36 @@ rules:
       - 'clusteroperators'
     verbs:
       - 'get'
+  - apiGroups:
+      - "rbac.authorization.k8s.io"
+    resources:
+      - 'clusterrolebindings'
+      - 'clusterroles'
+    verbs:
+      - 'get'
+      - 'create'
+  - apiGroups:
+      - "admissionregistration.k8s.io"
+    resources:
+      - 'mutatingwebhookconfigurations'
+    verbs:
+      - 'get'
+      - 'create'
+      - 'list'
+      - 'watch'
+      - 'patch'
+  - apiGroups:
+      - "authentication.k8s.io"
+    resources:
+      - 'tokenreviews'
+    verbs:
+      - 'create'
+  - apiGroups:
+      - "authorization.k8s.io"
+    resources:
+      - 'subjectaccessreviews'
+    verbs:
+      - 'create'
 """
 
 clusterrolebinding_template = """\
