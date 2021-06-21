@@ -116,12 +116,13 @@ jobs:
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
+          API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
           docker pull quay.io/redhat-certification/chart-verifier:latest
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{steps.sanity_check_pr_content.outputs.report-exists}}" != "true" ]; then
-            ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
-            ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt
+            ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
+            ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt --server ${API_SERVER}
           fi
           cd pr-branch
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
@@ -133,7 +134,8 @@ jobs:
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
-          ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
+          API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
+          ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
           ve1/bin/sa-for-chart-testing --delete chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }}
 
       - name: Save PR artifact
