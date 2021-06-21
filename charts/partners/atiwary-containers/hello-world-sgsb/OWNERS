@@ -1,8 +1,9 @@
 chart:
   name: hello-world-sgsb
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: test
+publicPgpKey: dHJldGV0ZXQ=
+users:
+- githubUsername: gautamkrishnar
 vendor:
   label: atiwary-containers
   name: Red Hat
