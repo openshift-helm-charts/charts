@@ -38,7 +38,7 @@ secrets:
 Now you can extract the token with this command:
 
 ```
-oc get secret chart-verifier-admin-token-t9sjg -n prod-chart-verifier-infra -o yaml | yq e '.data.token' - | base64 -d -
+oc get secret chart-verifier-admin-token-t9sjg -n prod-chart-verifier-infra -o yaml | yq e '.data.token' -
 ```
 
 You can store the returned value in the GitHub secrets with key as
