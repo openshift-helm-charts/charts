@@ -1,0 +1,10 @@
+chart:
+  name: tst-009
+  shortDescription: null
+publicPgpKey: aGpnc3VndTg3NDMy
+users:
+- githubUsername: aish
+- githubUsername: kanchan
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
