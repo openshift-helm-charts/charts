@@ -61,4 +61,50 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/hashicorp-vault-0.13.0/hashicorp-vault-0.13.0.tgz
     version: 0.13.0
-generated: '2021-06-22T22:38:35.745947+00:00'
+  ibm-ibm-object-storage-plugin:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
+      charts.openshift.io/digest: sha256:3cda4165a30e77372332c6da2fb81f33ddfd83e1b9294090063c90f712b49ca1
+      charts.openshift.io/lastCertifiedTimestamp: '2021-06-23T16:56:38.235364+00:00'
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2021-06-23T17:05:06.186367+00:00'
+    apiversion: v2
+    appversion: 2.1.2
+    condition: ''
+    dependencies: []
+    deprecated: false
+    description: 'Chart for deploying ibmcloud object storage plugin.
+
+      IBM Cloud Object Storage is persistent, highly available storage
+
+      that you can mount to apps that run in a Kubernetes cluster by using
+
+      the IBM Cloud Object Storage plug-in. The plug-in is a Kubernetes Flex-Volume
+      plug-in
+
+      that connects Cloud Object Storage buckets to pods in your cluster.
+
+      '
+    home: ''
+    icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
+    keywords:
+    - IKS
+    - amd64
+    - Storage
+    - Commercial
+    - Limited
+    - Other
+    - ROKS
+    kubeversion: '>=1.10.1-0'
+    maintainers:
+    - email: contsto2@in.ibm.com
+      name: IBM
+      url: ''
+    name: ibm-object-storage-plugin
+    sources: []
+    tags: ''
+    type: ''
+    urls:
+    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.2.tgz?raw=true
+    version: 2.1.2
+generated: '2021-06-23T17:05:06.186367+00:00'
