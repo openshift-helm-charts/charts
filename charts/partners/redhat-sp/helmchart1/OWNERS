@@ -1,0 +1,9 @@
+chart:
+  name: helmchart1
+  shortDescription: regression check
+publicPgpKey: cXdlcnR5
+users:
+- githubUsername: sawalgiriraj95
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
