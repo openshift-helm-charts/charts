@@ -35,10 +35,10 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
             print(msg)
             print(f"::set-output name=sanity-error-message::{msg}")
             sys.exit(1)
-        elif reportpattern.match(filename):
-            print("[INFO] Report found")
-            print("::set-output name=report-exists::true")
         else:
+            if reportpattern.match(filename):
+                print("[INFO] Report found")
+                print("::set-output name=report-exists::true")
             if not match_found:
                 pattern_match = match
                 match_found = True
