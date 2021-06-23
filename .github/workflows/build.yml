@@ -233,6 +233,7 @@ jobs:
           cd ${CWD}
 
       - name: Release
+        if: ${{ steps.release-charts.outputs.tag != '' }}
         uses: softprops/action-gh-release@master
         continue-on-error: true
         with:
