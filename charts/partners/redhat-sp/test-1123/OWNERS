@@ -1,0 +1,10 @@
+chart:
+  name: test-1123
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: aish
+- githubUsername: kanchan
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
