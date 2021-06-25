@@ -1,8 +1,9 @@
 chart:
   name: helm-stage1
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: https://connect.qa.redhat.com/manage/projects?project_status=archived
+publicPgpKey: null
+users:
+- githubUsername: khatare
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
