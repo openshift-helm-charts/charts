@@ -1,8 +1,9 @@
 chart:
   name: helo
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: test
+publicPgpKey: null
+users:
+- githubUsername: khatare
 vendor:
   label: atiwary-containers
   name: Red Hat
