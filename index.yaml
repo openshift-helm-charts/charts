@@ -11,6 +11,7 @@ entries:
     apiVersion: v2
     appVersion: 1.7.2
     description: Official HashiCorp Vault Chart
+    digest: b07be2a554ecbe6a6dd48ea763ed568de317d17cf1a19fb11ddb562983286555
     home: https://www.vaultproject.io
     icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
     keywords:
@@ -41,6 +42,7 @@ entries:
     apiVersion: v2
     appVersion: 1.7.3
     description: Official HashiCorp Vault Chart
+    digest: 97e274069d9d3d028903610a3f9fca892b2620f0a334de6215ec5f962328586f
     home: https://www.vaultproject.io
     icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
     keywords:
@@ -85,6 +87,7 @@ entries:
       that connects Cloud Object Storage buckets to pods in your cluster.
 
       '
+    digest: 06efa1e26f8a7ba93a6e6136650b0624af2558cc44a4588198fca322f9219e32
     home: ''
     icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
     keywords:
