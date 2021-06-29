@@ -1,0 +1,9 @@
+chart:
+  name: test-project-chart
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: sawalgiriraj95
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
