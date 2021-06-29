@@ -1,0 +1,9 @@
+chart:
+  name: chart-name
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: kanchan04katare
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
