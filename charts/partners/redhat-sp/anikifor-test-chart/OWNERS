@@ -1,0 +1,9 @@
+chart:
+  name: anikifor-test-chart
+  shortDescription: short
+publicPgpKey: aajh
+users:
+- githubUsername: lina-is-here
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
