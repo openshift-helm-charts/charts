@@ -1,0 +1,9 @@
+chart:
+  name: dxp-demo-helm-2
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: gautamkrishnar
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
