@@ -1,8 +1,11 @@
 chart:
   name: testhelm-sync
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Test repo for testing
+publicPgpKey: null
+users:
+- githubUsername: draval
+- githubUsername: aysharma
+- githubUsername: lchib
 vendor:
   label: swatsolutions
   name: SWAT Solutions
