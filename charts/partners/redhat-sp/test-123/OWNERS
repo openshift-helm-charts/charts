@@ -1,0 +1,11 @@
+chart:
+  name: test-123
+  shortDescription: testAishThis text is displayed on card previews in the Ecosystem
+    catalog
+publicPgpKey: MTEyMzQ=
+users:
+- githubUsername: aish11
+- githubUsername: kanchan
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
