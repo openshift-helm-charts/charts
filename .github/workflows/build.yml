@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened, edited, ready_for_review]
+    types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
 
 jobs:
   chart-certification:
@@ -115,10 +115,11 @@ jobs:
         id: verify_pr
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
+          VENDOR_TYPE: ${{ steps.sanity_check_pr_content.outputs.category }}
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
-          docker pull quay.io/redhat-certification/chart-verifier:latest
+          docker pull quay.io/redhat-certification/chart-verifier:main
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{steps.sanity_check_pr_content.outputs.report-exists}}" != "true" ]; then
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
@@ -221,6 +222,7 @@ jobs:
           REPORT_CONTENT: ${{steps.verify_pr.outputs.report_content}}
           CHART_ENTRY_NAME: ${{ steps.sanity_check_pr_content.outputs.chart-entry-name }}
           CHART_NAME_WITH_VERSION: ${{ steps.sanity_check_pr_content.outputs.chart-name-with-version }}
+          REDHAT_TO_COMMUNITY: ${{ steps.verify_pr.outputs.redhat_to_community }}
         id: release-charts
         run: |
           curl -L -o cr.tar.gz https://github.com/helm/chart-releaser/releases/download/v1.2.0/chart-releaser_1.2.0_linux_amd64.tar.gz
