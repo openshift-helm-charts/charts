@@ -6,6 +6,7 @@ import re
 import subprocess
 import tempfile
 from datetime import datetime, timezone
+import hashlib
 import json
 import urllib.parse
 
@@ -152,6 +153,37 @@ def create_index_from_report(category, report_path):
     chart_entry["annotations"] = chart_entry["annotations"] | annotations
     return chart_entry, chart_url
 
+
+def set_package_digest(chart_entry):
+    url = chart_entry["urls"][0]
+    annotations = chart_entry["annotations"]
+    pkg_digest = ""
+    if "charts.openshift.io/digests" in annotations:
+        digest = annotations["charts.openshift.io/digests"]
+        if isinstance(digest, dict) and "package" in digest:
+            pkg_digest = digest["package"]
+    head = requests.head(url, allow_redirects=True)
+    target_digest = ""
+    if head.status_code == 200:
+        response = requests.get(url, allow_redirects=True)
+        target_digest = hashlib.sha256(response.content).hexdigest()
+    
+    if not pkg_digest and target_digest:
+        # Digest was computed but not passed
+        chart_entry["digest"] = target_digest
+    elif pkg_digest and not target_digest:
+        # Digest was passed but not computed
+        chart_entry["digest"] =  pkg_digest
+    elif not pkg_digest and not target_digest:
+        # Digest was not passed and could not be computed
+        raise Exception("Was unable to compute SHA256 digest, please ensure chart url points to a chart package.")
+    else:
+        # Digest was passed and computed
+        if pkg_digest != target_digest:
+            raise Exception("Found an integrity issue. SHA256 digest passed does not match SHA256 digest computed.")
+        chart_entry["digest"] = target_digest
+
+
 def update_index_and_push(indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number):
     token = os.environ.get("GITHUB_TOKEN")
     print("Downloading index.yaml")
@@ -179,6 +211,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
         crtentries.append(v)
 
     chart_entry["urls"] = [chart_url]
+    set_package_digest(chart_entry)
     chart_entry["annotations"]["charts.openshift.io/submissionTimestamp"] = now
     crtentries.append(chart_entry)
     data["entries"][entry_name] = crtentries
