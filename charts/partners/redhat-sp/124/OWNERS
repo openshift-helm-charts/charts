@@ -1,7 +1,7 @@
 chart:
   name: '124'
   shortDescription: null
-publicPgpKey: fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5gYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYCMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjI0A=
+publicPgpKey: Z2lyaXJhag==
 users:
 - githubUsername: sawalgiriraj
 vendor:
