@@ -2,12 +2,15 @@ name: CI
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened, edited, ready_for_review]
+    types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
 
 jobs:
   triage:
     name: Triage
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    if: |
+      github.event.action != 'labeled' ||
+      github.event.label.name == 'publish'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -28,18 +31,53 @@ jobs:
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
           ./ve1/bin/sanity-check-pr --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
+
+      - uses: actions/github-script@v3
+        if: ${{ steps.sanity_check_pr_content.outcome == 'success'}}
+        continue-on-error: true
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['sanity-ok']
+            })
+
+      - uses: actions/github-script@v3
+        if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
+        continue-on-error: true
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'sanity-ok'
+            })
+
+      - name: Reflect on Sanity Check PR Content
+        if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
+        run: |
+          echo "The 'Sanity Check PR Content' step has failed."
+          exit 1
+
     outputs:
       sanity-error-message: ${{ steps.sanity_check_pr_content.outputs.sanity-error-message }}
       report-exists: ${{ steps.sanity_check_pr_content.outputs.report-exists }}
       category: ${{ steps.sanity_check_pr_content.outputs.category }}
       chart-entry-name: ${{ steps.sanity_check_pr_content.outputs.chart-entry-name }}
       chart-name-with-version: ${{ steps.sanity_check_pr_content.outputs.chart-name-with-version }}
-      outcome: steps.sanity_check_pr_content.outcome
+      outcome: ${{ steps.sanity_check_pr_content.outcome }}
   chart-certification-partner:
     name: Chart Certification - Partner
     needs: triage
     runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request.draft == false && needs.triage.outputs.category == 'partner' }}
+    if: |
+      github.event.pull_request.draft == false &&
+      needs.triage.outputs.category == 'partner'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -57,38 +95,6 @@ jobs:
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-
-      - uses: actions/github-script@v3
-        if: ${{ needs.triage.outputs.outcome == 'success'}}
-        continue-on-error: true
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['sanity-ok']
-            })
-
-      - uses: actions/github-script@v3
-        if: ${{ needs.triage.outputs.outcome == 'failure'}}
-        continue-on-error: true
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.removeLabel({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'sanity-ok'
-            })
-
-      - name: Reflect on Sanity Check PR Content
-        if: ${{ needs.triage.outputs.outcome == 'failure'}}
-        run: |
-          echo "The 'Sanity Check PR Content' step has failed."
-          exit 1
 
       - name: 'Remove label from PR'
         uses: actions/github-script@v3
@@ -155,6 +161,20 @@ jobs:
           cd pr-branch
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
+
+      - name: Store Report Content to File
+        if: always()
+        shell: bash
+        run: |
+          # NOTE: chart-pr-review creates a report.yaml inside pr-branch but only the report from outputs are used in the merge step
+          echo "${{ steps.verify_pr.outputs.report_content }}" > pr/report.yaml
+
+      - name: Upload Report Content
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: report_content
+          path: pr/report.yaml
 
       - name: Delete Namespace
         if: always() && needs.triage.outputs.report-exists != 'true'
@@ -274,7 +294,9 @@ jobs:
     name: Chart Certification - Red Hat
     needs: triage
     runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request.draft == false && needs.triage.outputs.category == 'redhat' }}
+    if: |
+      github.event.pull_request.draft == false &&
+      needs.triage.outputs.category == 'redhat'
     outputs:
       verify-pr-outcome: ${{ steps.verify_pr.outcome }}
       sanity-error-message: ${{ needs.triage.outputs.sanity-error-message }}
@@ -300,38 +322,6 @@ jobs:
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-
-      - uses: actions/github-script@v3
-        if: ${{ needs.triage.outputs.outcome == 'success'}}
-        continue-on-error: true
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['sanity-ok']
-            })
-
-      - uses: actions/github-script@v3
-        if: ${{ needs.triage.outputs.outcome == 'failure'}}
-        continue-on-error: true
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.removeLabel({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'sanity-ok'
-            })
-
-      - name: Reflect on Sanity Check PR Content
-        if: ${{ needs.triage.outputs.outcome == 'failure'}}
-        run: |
-          echo "The 'Sanity Check PR Content' step has failed."
-          exit 1
 
       - name: 'Remove label from PR'
         uses: actions/github-script@v3
@@ -398,6 +388,20 @@ jobs:
           cd pr-branch
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
+
+      - name: Store Report Content to File
+        if: always()
+        shell: bash
+        run: |
+          # NOTE: chart-pr-review creates a report.yaml inside pr-branch but only the report from outputs are used in the merge step
+          echo "${{ steps.verify_pr.outputs.report_content }}" > pr/report.yaml
+
+      - name: Upload Report Content
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: report_content
+          path: pr/report.yaml
 
       - name: Delete Namespace
         if: always() && needs.triage.outputs.report-exists != 'true'
@@ -517,7 +521,9 @@ jobs:
     name: Chart Certification - Community (Red Hat)
     needs: chart-certification-redhat
     runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request.draft == false && needs.chart-certification-redhat.outputs.verify-pr-outcome == 'failure' }}
+    if: |
+      github.event.pull_request.draft == false &&
+      needs.chart-certification-redhat.outputs.verify-pr-outcome == 'failure'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -535,38 +541,6 @@ jobs:
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-
-      - uses: actions/github-script@v3
-        if: ${{ needs.chart-certification-redhat.outputs.outcome == 'success' }}
-        continue-on-error: true
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN }}
-          script: |
-            github.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['sanity-ok']
-            })
-
-      - uses: actions/github-script@v3
-        if: ${{ needs.chart-certification-redhat.outputs.outcome == 'failure' }}
-        continue-on-error: true
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.removeLabel({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'sanity-ok'
-            })
-
-      - name: Reflect on Sanity Check PR Content
-        if: ${{ needs.chart-certification-redhat.outputs.outcome == 'failure' }}
-        run: |
-          echo "The 'Sanity Check PR Content' step has failed."
-          exit 1
 
       - name: 'Remove label from PR'
         uses: actions/github-script@v3
@@ -634,6 +608,20 @@ jobs:
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
 
+      - name: Store Report Content to File
+        if: always()
+        shell: bash
+        run: |
+          # NOTE: chart-pr-review creates a report.yaml inside pr-branch but only the report from outputs are used in the merge step
+          echo "${{ steps.verify_pr.outputs.report_content }}" > pr/report.yaml
+
+      - name: Upload Report Content
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: report_content
+          path: pr/report.yaml
+
       - name: Delete Namespace
         if: always() && needs.chart-certification-redhat.outputs.report-exists != 'true'
         env:
@@ -700,7 +688,9 @@ jobs:
     name: Chart Certification - Community
     needs: triage
     runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request.draft == false && needs.triage.outputs.category == 'community' }}
+    if: |
+      github.event.pull_request.draft == false &&
+      needs.triage.outputs.category == 'community'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -718,38 +708,6 @@ jobs:
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-
-      - uses: actions/github-script@v3
-        if: ${{ needs.triage.outputs.outcome == 'success' }}
-        continue-on-error: true
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN }}
-          script: |
-            github.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['sanity-ok']
-            })
-
-      - uses: actions/github-script@v3
-        if: ${{ needs.triage.outputs.outcome == 'failure' }}
-        continue-on-error: true
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.removeLabel({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'sanity-ok'
-            })
-
-      - name: Reflect on Sanity Check PR Content
-        if: ${{ needs.triage.outputs.outcome == 'failure' }}
-        run: |
-          echo "The 'Sanity Check PR Content' step has failed."
-          exit 1
 
       - name: 'Remove label from PR'
         uses: actions/github-script@v3
@@ -817,6 +775,20 @@ jobs:
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
 
+      - name: Store Report Content to File
+        if: always()
+        shell: bash
+        run: |
+          # NOTE: chart-pr-review creates a report.yaml inside pr-branch but only the report from outputs are used in the merge step
+          echo "${{ steps.verify_pr.outputs.report_content }}" > pr/report.yaml
+
+      - name: Upload Report Content
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: report_content
+          path: pr/report.yaml
+
       - name: Delete Namespace
         if: always() && needs.triage.outputs.report-exists != 'true'
         env:
@@ -878,3 +850,96 @@ jobs:
         uses: hmarr/auto-approve-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    name: Publish (Merge and Release)
+    needs: [triage, chart-certification-partner, chart-certification-redhat, chart-certification-redhat-community, chart-certification-community]
+    runs-on: ubuntu-20.04
+    if: |
+      always() &&
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'publish' &&
+      github.event.pull_request.draft == false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install Scripts
+        continue-on-error: true
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: Download Report Content
+        id: download_report
+        uses: actions/download-artifact@v2
+        with:
+          name: report_content
+          path: pr
+
+      - name: Set Report Content as Environment Variable
+        id: set_report_env
+        shell: bash
+        run: |
+          echo '::set-output name=report_content::$(cat pr/report.yaml)'
+
+      - name: 'Merge PR'
+        id: merge_pr
+        if: |
+          steps.download_report.outcome == 'success'
+        uses: pascalgn/automerge-action@v0.13.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash
+          MERGE_LABELS: "publish"
+
+      - name: Check for PR merge
+        run: |
+          ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
+
+      - name: Block until there is no running workflow
+        uses: softprops/turnstyle@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Release Charts
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          REPORT_CONTENT: ${{steps.set_report_env.outputs.report_content}}
+          CHART_ENTRY_NAME: ${{ needs.triage.outputs.chart-entry-name }}
+          CHART_NAME_WITH_VERSION: ${{ needs.triage.outputs.chart-name-with-version }}
+        id: release-charts
+        run: |
+          curl -L -o cr.tar.gz https://github.com/helm/chart-releaser/releases/download/v1.2.0/chart-releaser_1.2.0_linux_amd64.tar.gz
+          tar zxvf cr.tar.gz
+          sudo cp -f cr /usr/local/bin/cr
+          INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
+          CWD=`pwd`
+          cd pr-branch
+          ../ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH} --api-url=${{ github.event.pull_request._links.self.href }} --pr-number=${{ github.event.number }}
+          cd ${CWD}
+
+      - name: Release
+        if: ${{ steps.release-charts.outputs.tag != '' }}
+        uses: softprops/action-gh-release@master
+        continue-on-error: true
+        with:
+          tag_name: ${{ steps.release-charts.outputs.tag }}
+          files: pr-branch/report.yaml
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
