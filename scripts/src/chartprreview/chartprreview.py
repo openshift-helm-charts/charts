@@ -46,7 +46,7 @@ def verify_user(directory, username, category, organization, chart):
 
     data = open(owners_path).read()
     out = yaml.load(data, Loader=Loader)
-    if username not in [x['githubUsername'] for x in out['users']]:
+    if username.strip() not in [x['githubUsername'] for x in out['users']]:
         msg = f"[ERROR] {username} is not allowed to submit the chart on behalf of {organization}"
         write_error_log(directory, msg)
         sys.exit(1)
