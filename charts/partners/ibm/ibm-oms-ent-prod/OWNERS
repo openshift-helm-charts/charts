@@ -1,0 +1,8 @@
+chart:
+  name: ibm-oms-ent-prod
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: ibm
+  name: IBM
