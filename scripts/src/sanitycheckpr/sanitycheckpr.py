@@ -42,6 +42,12 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
             if not match_found:
                 pattern_match = match
                 match_found = True
+            elif pattern_match.groups() != match.groups():
+                msg = f"[ERROR] PR must only include one chart"
+                print(msg)
+                print(f"::set-output name=sanity-error-message::{msg}")
+                sys.exit(1)
+
 
 
     if match_found:
