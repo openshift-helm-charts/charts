@@ -229,7 +229,13 @@ def check_report_success(directory, report_path, version):
             write_error_log(directory, msg)
             sys.exit(1)
 
-    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path], capture_output=True)
+    vendor_type = os.environ.get("VENDOR_TYPE")
+    if not vendor_type:
+        msg = "[ERROR] missing 'VENDOR_TYPE' environment variable"
+        write_error_log(directory, msg)
+        sys.exit(1)
+
+    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path, vendor_type], capture_output=True)
     r = out.stdout.decode("utf-8")
     print("[INFO] results:", r)
     report = json.loads(r)
@@ -274,20 +280,30 @@ def generate_verify_report(directory, category, organization, chart, version):
             sys.exit(1)
     kubeconfig = os.environ.get("KUBECONFIG")
     if not kubeconfig:
-        msg = "[ERROR] missing 'KUBECONFIG' environment variabl"
+        msg = "[ERROR] missing 'KUBECONFIG' environment variable"
+        write_error_log(directory, msg)
+        sys.exit(1)
+    vendor_type = os.environ.get("VENDOR_TYPE")
+    if not vendor_type:
+        msg = "[ERROR] missing 'VENDOR_TYPE' environment variable"
         write_error_log(directory, msg)
         sys.exit(1)
     if src_exists:
         if os.path.exists(report_path):
-            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", "/charts"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
+                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", "/charts"], capture_output=True)
         else:
-            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "/charts"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
+                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", "/charts"], capture_output=True)
     elif tar_exists:
-        dn = os.path.join(os.getcwd(), "charts", category, organization, chart, version)
+        dn = os.path.join(os.getcwd(), "charts", category,
+                          organization, chart, version)
         if os.path.exists(report_path):
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:main",
+                                 "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
         else:
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
+                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
     else:
         return
 

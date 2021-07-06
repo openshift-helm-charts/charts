@@ -149,10 +149,11 @@ jobs:
         id: verify_pr
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
+          VENDOR_TYPE: ${{ needs.triage.outputs.category }}
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
-          docker pull quay.io/redhat-certification/chart-verifier:latest
+          docker pull quay.io/redhat-certification/chart-verifier:main
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{needs.triage.outputs.report-exists}}" != "true" ]; then
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
@@ -376,10 +377,11 @@ jobs:
         id: verify_pr
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
+          VENDOR_TYPE: ${{ needs.triage.outputs.category }}
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
-          docker pull quay.io/redhat-certification/chart-verifier:latest
+          docker pull quay.io/redhat-certification/chart-verifier:main
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{needs.triage.outputs.report-exists}}" != "true" ]; then
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
@@ -595,10 +597,11 @@ jobs:
         id: verify_pr
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
+          VENDOR_TYPE: ${{ needs.chart-certification-redhat.outputs.category }}
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
-          docker pull quay.io/redhat-certification/chart-verifier:latest
+          docker pull quay.io/redhat-certification/chart-verifier:main
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{needs.chart-certification-redhat.outputs.report-exists}}" != "true" ]; then
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
@@ -762,10 +765,11 @@ jobs:
         id: verify_pr
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
+          VENDOR_TYPE: ${{ needs.triage.outputs.category }}
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
-          docker pull quay.io/redhat-certification/chart-verifier:latest
+          docker pull quay.io/redhat-certification/chart-verifier:main
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{needs.triage.outputs.report-exists}}" != "true" ]; then
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
