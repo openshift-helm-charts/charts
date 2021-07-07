@@ -598,6 +598,7 @@ jobs:
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
           VENDOR_TYPE: ${{ needs.chart-certification-redhat.outputs.category }}
+          REDHAT_RESULT: ${{ needs.chart-certification-redhat.result }}
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version

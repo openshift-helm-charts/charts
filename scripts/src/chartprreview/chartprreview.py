@@ -180,10 +180,6 @@ def match_name_and_version(directory, category, organization, chart, version):
 
 def check_report_success(directory, report_path, version):
     data = open(report_path).read()
-    print("[INFO] Full report: ")
-    print(data)
-    quoted_data = data.replace("%", "%25").replace("\n", "%0A").replace("\r", "%0D")
-    print(f"::set-output name=report_content::{quoted_data}")
     try:
         out = yaml.load(data, Loader=Loader)
     except yaml.scanner.ScannerError as err:
@@ -200,6 +196,18 @@ def check_report_success(directory, report_path, version):
         msg = f"[ERROR] Chart Version '{report_version}' doesn't match the version in the directory path: '{version}'"
         write_error_log(directory, msg)
         sys.exit(1)
+
+    redhat_result = os.environ.get("REDHAT_RESULT")
+    if redhat_result == 'failure':
+        out["metadata"]["tool"]["profile"]["VendorType"] = 'community'
+        with open(report_path, "w") as f:
+            yaml.dump(out, f)
+            data = open(report_path).read()
+
+    print("[INFO] Full report: ")
+    print(data)
+    quoted_data = data.replace("%", "%25").replace("\n", "%0A").replace("\r", "%0D")
+    print(f"::set-output name=report_content::{quoted_data}")
 
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
     r = out.stdout.decode("utf-8")
@@ -234,6 +242,9 @@ def check_report_success(directory, report_path, version):
         msg = "[ERROR] missing 'VENDOR_TYPE' environment variable"
         write_error_log(directory, msg)
         sys.exit(1)
+    redhat_result = os.environ.get("REDHAT_RESULT")
+    if redhat_result == 'failure':
+        vendor_type = "community"
 
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path, vendor_type], capture_output=True)
     r = out.stdout.decode("utf-8")
