@@ -1,8 +1,9 @@
 chart:
   name: chart-internal-regression
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: '@'
+publicPgpKey: QA==
+users:
+- githubUsername: '@'
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
