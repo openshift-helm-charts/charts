@@ -80,6 +80,8 @@ your local system.  If you had followed the [partner connect
 documentation][partners], you should see an _OWNERS_ file under your chart
 directory within your organization directory.
 
+For Red Hat and Community charts, first submit a PR towards `main` branch with an _OWNERS_ file under your chart directory within your orgranization directory.
+
 You should see the `OWNERS` file at:
 
 ```
@@ -443,6 +445,8 @@ Yes, you can use the [GitHub CLI to create pull request][gh-cli-pr].
 ### How to update OWNERS file?
 
 Partners can refer to the [partner documentation][partners].
+
+For Red Hat and Community charts, submit a PR towards `main` branch with an _OWNERS_ file under your chart directory within your orgranization directory.
 
 ## Support
 
