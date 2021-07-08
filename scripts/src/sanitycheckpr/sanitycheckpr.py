@@ -12,6 +12,8 @@ except ImportError:
 
 
 ALLOW_CI_CHANGES = "allow/ci-changes"
+SEMVER_MATCH_EXPRESSION = "(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?"
+TYPE_MATCH_EXPRESSION = "(partners|redhat|community)"
 
 def ensure_only_chart_is_modified(api_url, repository, branch):
     # api_url https://api.github.com/repos/<organization-name>/<repository-name>/pulls/1
@@ -23,8 +25,8 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(files_api_url, headers=headers)
-    pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/(.+?(?=\/))/.*")
-    reportpattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/report.yaml")
+    pattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/"+SEMVER_MATCH_EXPRESSION+"/.*")
+    reportpattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/"+SEMVER_MATCH_EXPRESSION+"/report.yaml")
     count = 0
     match_found = False
     for f in r.json():
