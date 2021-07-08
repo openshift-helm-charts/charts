@@ -1,8 +1,9 @@
 chart:
   name: mychart
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: test only - short
+publicPgpKey: null
+users:
+- githubUsername: rhrivero
 vendor:
   label: '[company-1585791067-9753-empty-value]'
   name: Hugo Rivero Test
