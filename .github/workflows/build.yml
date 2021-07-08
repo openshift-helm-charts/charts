@@ -8,7 +8,9 @@ jobs:
   chart-certification:
     name: Chart Certification
     runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request.draft == false }}
+    if: |
+      github.event.pull_request.draft == false &&
+      (github.event.action != 'labeled' || github.event.label.name == 'force-publish')
     steps:
       - name: Checkout
         uses: actions/checkout@v2

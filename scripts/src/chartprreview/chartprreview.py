@@ -22,6 +22,14 @@ def write_error_log(directory, *msg):
             fd.write(line)
             fd.write("\n")
 
+def get_vendor_type(directory, msg):
+    vendor_type = os.environ.get("VENDOR_TYPE")
+    if not vendor_type or vendor_type not in {"partner", "redhat", "community"}:
+        msg = "[ERROR] Chart files need to be under one of charts/partners, charts/redhat, or charts/community"
+        write_error_log(directory, msg)
+        sys.exit(1)
+    return vendor_type
+
 def get_labels(api_url):
     # api_url https://api.github.com/repos/<organization-name>/<repository-name>/pulls/1
     headers = {'Accept': 'application/vnd.github.v3+json'}
@@ -235,12 +243,7 @@ def check_report_success(directory, api_url, report_path, version):
             write_error_log(directory, msg)
             sys.exit(1)
 
-    vendor_type = os.environ.get("VENDOR_TYPE")
-    if not vendor_type:
-        msg = "[ERROR] Chart files need to be under one of charts/partners, charts/redhat, or charts/community"
-        write_error_log(directory, msg)
-        sys.exit(1)
-
+    vendor_type = get_vendor_type(directory, msg)
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path, vendor_type], capture_output=True)
     r = out.stdout.decode("utf-8")
     print("[INFO] results:", r)
@@ -266,11 +269,11 @@ def check_report_success(directory, api_url, report_path, version):
         write_error_log(directory, *msgs)
         if vendor_type == "redhat":
             print(f"::set-output name=redhat_to_community::True")
-        if "force-publish" not in label_names and vendor_type != "redhat":
+        if vendor_type != "redhat" and "force-publish" not in label_names:
             sys.exit(1)
     if vendor_type == "community" and "force-publish" not in label_names:
         # requires manual review and approval
-        msg = "[INFO] Require manual review and approval from maintainers"
+        msg = "[INFO] Community charts require manual review and approval from maintainers"
         write_error_log(directory, msg)
         sys.exit(1)
 
@@ -300,11 +303,7 @@ def generate_verify_report(directory, category, organization, chart, version):
         msg = "[ERROR] missing 'KUBECONFIG' environment variable"
         write_error_log(directory, msg)
         sys.exit(1)
-    vendor_type = os.environ.get("VENDOR_TYPE")
-    if not vendor_type:
-        msg = "[ERROR] Chart files need to be under one of charts/partners, charts/redhat, or charts/community"
-        write_error_log(directory, msg)
-        sys.exit(1)
+    vendor_type = get_vendor_type(directory, msg)
     if src_exists:
         if os.path.exists(report_path):
             out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
