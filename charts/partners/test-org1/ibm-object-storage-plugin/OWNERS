@@ -1,0 +1,9 @@
+chart:
+  name: ibm-object-storage-plugin
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: mmulholla
+vendor:
+  label: test-org1
+  name: IBM
