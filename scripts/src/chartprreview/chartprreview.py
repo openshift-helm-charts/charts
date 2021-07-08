@@ -22,7 +22,7 @@ def write_error_log(directory, *msg):
             fd.write(line)
             fd.write("\n")
 
-def get_vendor_type(directory, msg):
+def get_vendor_type(directory):
     vendor_type = os.environ.get("VENDOR_TYPE")
     if not vendor_type or vendor_type not in {"partner", "redhat", "community"}:
         msg = "[ERROR] Chart files need to be under one of charts/partners, charts/redhat, or charts/community"
@@ -243,7 +243,7 @@ def check_report_success(directory, api_url, report_path, version):
             write_error_log(directory, msg)
             sys.exit(1)
 
-    vendor_type = get_vendor_type(directory, msg)
+    vendor_type = get_vendor_type(directory)
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path, vendor_type], capture_output=True)
     r = out.stdout.decode("utf-8")
     print("[INFO] results:", r)
@@ -303,7 +303,7 @@ def generate_verify_report(directory, category, organization, chart, version):
         msg = "[ERROR] missing 'KUBECONFIG' environment variable"
         write_error_log(directory, msg)
         sys.exit(1)
-    vendor_type = get_vendor_type(directory, msg)
+    vendor_type = get_vendor_type(directory)
     if src_exists:
         if os.path.exists(report_path):
             out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
