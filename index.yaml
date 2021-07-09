@@ -278,4 +278,22 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-operator-catalog-enablement-1.2.1.tgz?raw=true
     version: 1.2.1
-generated: '2021-07-09T21:30:28.319486+00:00'
+  redhat-quarkus:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: '4.7'
+      charts.openshift.io/digest: sha256:fc2516e2e7350d9edc2dd491348ded34ee97085269b303f26b68eb2a8ec0ef88
+      charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T21:36:27.096408+00:00'
+      charts.openshift.io/provider: Quarkus chart
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-07-09T21:42:40.467265+00:00'
+    apiVersion: v2
+    description: A Helm chart to build and deploy Quarkus applications
+    digest: 6d8f1b945c037f1f252e532430c21ef723bc11fab369ef26d316fff69c4ffade
+    keywords:
+    - runtimes
+    - quarkus
+    name: quarkus
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
+    version: 0.0.3
+generated: '2021-07-09T21:42:40.467265+00:00'
