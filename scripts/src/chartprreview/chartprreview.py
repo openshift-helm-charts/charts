@@ -22,11 +22,25 @@ def write_error_log(directory, *msg):
             fd.write(line)
             fd.write("\n")
 
+def get_vendor_type(directory):
+    vendor_type = os.environ.get("VENDOR_TYPE")
+    if not vendor_type or vendor_type not in {"partner", "redhat", "community"}:
+        msg = "[ERROR] Chart files need to be under one of charts/partners, charts/redhat, or charts/community"
+        write_error_log(directory, msg)
+        sys.exit(1)
+    return vendor_type
+
+def get_labels(api_url):
+    # api_url https://api.github.com/repos/<organization-name>/<repository-name>/pulls/1
+    headers = {'Accept': 'application/vnd.github.v3+json'}
+    r = requests.get(api_url, headers=headers)
+    return r.json()["labels"]
+
 def get_modified_charts(directory, api_url):
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(files_api_url, headers=headers)
-    pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
+    pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
     for f in r.json():
         m = pattern.match(f["filename"])
         if m:
@@ -178,7 +192,7 @@ def match_name_and_version(directory, category, organization, chart, version):
             write_error_log(directory, msg)
             sys.exit(1)
 
-def check_report_success(directory, report_path, version):
+def check_report_success(directory, api_url, report_path, version):
     data = open(report_path).read()
     print("[INFO] Full report: ")
     print(data)
@@ -222,14 +236,8 @@ def check_report_success(directory, report_path, version):
         write_error_log(directory, msg)
         sys.exit(1)
 
-    if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
-        full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
-        if not semver.VersionInfo.isvalid(full_version):
-            msg = f"[ERROR] OpenShift version not conforming to SemVer spec: {full_version}"
-            write_error_log(directory, msg)
-            sys.exit(1)
-
-    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path], capture_output=True)
+    vendor_type = get_vendor_type(directory)
+    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path, vendor_type], capture_output=True)
     r = out.stdout.decode("utf-8")
     print("[INFO] results:", r)
     report = json.loads(r)
@@ -237,6 +245,9 @@ def check_report_success(directory, report_path, version):
     if err.strip():
         msg = f"[ERROR] Error analysing the report: {err}"
         write_error_log(directory, msg)
+
+    labels = get_labels(api_url)
+    label_names = [l["name"] for l in labels]
 
     failed = report["failed"]
     passed = report["passed"]
@@ -249,8 +260,22 @@ def check_report_success(directory, report_path, version):
         for m in report["message"]:
             msgs.append(f"  - {m}")
         write_error_log(directory, *msgs)
+        if vendor_type == "redhat":
+            print(f"::set-output name=redhat_to_community::True")
+        if vendor_type != "redhat" and "force-publish" not in label_names:
+            sys.exit(1)
+    if vendor_type == "community" and "force-publish" not in label_names:
+        # requires manual review and approval
+        msg = "[INFO] Community charts require manual review and approval from maintainers"
+        write_error_log(directory, msg)
         sys.exit(1)
 
+    if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
+        full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
+        if not semver.VersionInfo.isvalid(full_version):
+            msg = f"[ERROR] OpenShift version not conforming to SemVer spec: {full_version}"
+            write_error_log(directory, msg)
+            sys.exit(1)
 
 
 def generate_verify_report(directory, category, organization, chart, version):
@@ -274,20 +299,26 @@ def generate_verify_report(directory, category, organization, chart, version):
             sys.exit(1)
     kubeconfig = os.environ.get("KUBECONFIG")
     if not kubeconfig:
-        msg = "[ERROR] missing 'KUBECONFIG' environment variabl"
+        msg = "[ERROR] missing 'KUBECONFIG' environment variable"
         write_error_log(directory, msg)
         sys.exit(1)
+    vendor_type = get_vendor_type(directory)
     if src_exists:
         if os.path.exists(report_path):
-            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", "/charts"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
+                                 "quay.io/redhat-certification/chart-verifier:latest", "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", "/charts"], capture_output=True)
         else:
-            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "/charts"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
+                                 "quay.io/redhat-certification/chart-verifier:latest", "verify", "--set", f"profile.vendortype={vendor_type}", "/charts"], capture_output=True)
     elif tar_exists:
-        dn = os.path.join(os.getcwd(), "charts", category, organization, chart, version)
+        dn = os.path.join(os.getcwd(), "charts", category,
+                          organization, chart, version)
         if os.path.exists(report_path):
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest",
+                                 "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
         else:
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest", "verify", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
+                                 "quay.io/redhat-certification/chart-verifier:latest", "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
     else:
         return
 
@@ -326,4 +357,4 @@ def main():
         report_path = "report.yaml"
 
     match_name_and_version(args.directory, category, organization, chart, version)
-    check_report_success(args.directory, report_path, version)
+    check_report_success(args.directory, args.api_url, report_path, version)
