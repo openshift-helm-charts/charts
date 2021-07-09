@@ -236,13 +236,6 @@ def check_report_success(directory, api_url, report_path, version):
         write_error_log(directory, msg)
         sys.exit(1)
 
-    if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
-        full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
-        if not semver.VersionInfo.isvalid(full_version):
-            msg = f"[ERROR] OpenShift version not conforming to SemVer spec: {full_version}"
-            write_error_log(directory, msg)
-            sys.exit(1)
-
     vendor_type = get_vendor_type(directory)
     out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path, vendor_type], capture_output=True)
     r = out.stdout.decode("utf-8")
@@ -277,6 +270,12 @@ def check_report_success(directory, api_url, report_path, version):
         write_error_log(directory, msg)
         sys.exit(1)
 
+    if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
+        full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
+        if not semver.VersionInfo.isvalid(full_version):
+            msg = f"[ERROR] OpenShift version not conforming to SemVer spec: {full_version}"
+            write_error_log(directory, msg)
+            sys.exit(1)
 
 
 def generate_verify_report(directory, category, organization, chart, version):
