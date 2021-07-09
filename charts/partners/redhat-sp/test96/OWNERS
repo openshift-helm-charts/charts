@@ -3,7 +3,7 @@ chart:
   shortDescription: null
 publicPgpKey: Li4uLi4uLi4v
 users:
-- githubUsername: https://github.com/brianwcook/happywebserver.git
+- githubUsername: avc;
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
