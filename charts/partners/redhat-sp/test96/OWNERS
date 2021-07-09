@@ -1,7 +1,7 @@
 chart:
   name: test96
   shortDescription: null
-publicPgpKey: null
+publicPgpKey: Li4uLi4uLi4v
 users:
 - githubUsername: https://github.com/brianwcook/happywebserver.git
 vendor:
