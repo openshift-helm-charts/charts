@@ -306,19 +306,19 @@ def generate_verify_report(directory, category, organization, chart, version):
     if src_exists:
         if os.path.exists(report_path):
             out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
-                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", "/charts"], capture_output=True)
+                                 "quay.io/redhat-certification/chart-verifier:latest", "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", "/charts"], capture_output=True)
         else:
             out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
-                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", "/charts"], capture_output=True)
+                                 "quay.io/redhat-certification/chart-verifier:latest", "verify", "--set", f"profile.vendortype={vendor_type}", "/charts"], capture_output=True)
     elif tar_exists:
         dn = os.path.join(os.getcwd(), "charts", category,
                           organization, chart, version)
         if os.path.exists(report_path):
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:main",
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:latest",
                                  "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
         else:
             out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
-                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+                                 "quay.io/redhat-certification/chart-verifier:latest", "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
     else:
         return
 
