@@ -4,9 +4,6 @@ chart:
 publicPgpKey: null
 users:
 - githubUsername: ''
-- githubUsername: ''
-- githubUsername: ''
-- githubUsername: ''
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
