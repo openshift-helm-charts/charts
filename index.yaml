@@ -278,6 +278,24 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-operator-catalog-enablement-1.2.1.tgz?raw=true
     version: 1.2.1
+  redhat-dotnet:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: '4.7'
+      charts.openshift.io/digest: sha256:483cb0144a3e7838e95da3a04a3df4178dc06b40fb4b3276e7c1c2a3b65555ff
+      charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T21:58:18.976945+00:00'
+      charts.openshift.io/provider: DotNet Chart
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-07-09T22:02:05.171415+00:00'
+    apiVersion: v2
+    description: A Helm chart to build and deploy .NET applications
+    digest: cd6f9d75d35e8a4f09695047aec97548a5404a1fb392ac9ad9f7e94194d1db34
+    keywords:
+    - runtimes
+    - dotnet
+    name: dotnet
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-dotnet-0.0.1/redhat-dotnet-0.0.1.tgz
+    version: 0.0.1
   redhat-quarkus:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -296,4 +314,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
     version: 0.0.3
-generated: '2021-07-09T21:42:40.467265+00:00'
+generated: '2021-07-09T22:02:05.171415+00:00'
