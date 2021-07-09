@@ -1,8 +1,9 @@
 chart:
   name: chart3
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: test
+publicPgpKey: null
+users:
+- githubUsername: https://github.com/brianwcook/happywebserver.git
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
