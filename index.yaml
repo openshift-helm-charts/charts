@@ -314,6 +314,23 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nodejs-0.0.1/redhat-nodejs-0.0.1.tgz
     version: 0.0.1
+  redhat-nodejs-ex-k:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: '4.7'
+      charts.openshift.io/digest: sha256:ee5c3d26bfc17ce6333678c1279dbed06a2c7d3cd0bd8f2b4128a1a7a7cf8acf
+      charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T23:02:59.065099+00:00'
+      charts.openshift.io/provider: NodeJs EX K chart
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-07-09T23:07:09.654333+00:00'
+    apiVersion: v2
+    appVersion: 1.16.0
+    description: A Helm chart for Kubernetes
+    digest: 4340070f6b0d04ebb2ea4a10046b89c9f1706c62ae67bdc247ff6a59b9d035ec
+    name: nodejs-ex-k
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nodejs-ex-k-0.2.1/redhat-nodejs-ex-k-0.2.1.tgz
+    version: 0.2.1
   redhat-quarkus:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -332,4 +349,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
     version: 0.0.3
-generated: '2021-07-09T22:52:51.435018+00:00'
+generated: '2021-07-09T23:07:09.654333+00:00'
