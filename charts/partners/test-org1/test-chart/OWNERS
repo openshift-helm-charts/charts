@@ -1,0 +1,10 @@
+---
+chart:
+  name: test-chart
+  shortDescription: Lorem ipsum
+publicPgpKey: 
+users:
+  - githubUsername: mmulholl
+vendor:
+  label: test-org1
+  name: Balabit

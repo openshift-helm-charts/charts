@@ -1,0 +1,10 @@
+chart:
+  name: vault
+  shortDescription: The official HashiCorp Helm chart for installing and configuring
+    Vault on OpenShift.
+publicPgpKey: null
+users:
+- githubUsername: mmulholla
+vendor:
+  label: test-org1
+  name: HashiCorp
