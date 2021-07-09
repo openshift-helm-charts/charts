@@ -124,7 +124,7 @@ entries:
     - alias: sch
       condition: ''
       enabled: false
-      importvalues: []
+      import-values: []
       name: ibm-sch
       repository: '@sch'
       tags: []
@@ -185,7 +185,7 @@ entries:
     - alias: sch
       condition: ''
       enabled: false
-      importvalues: []
+      import-values: []
       name: ibm-sch
       repository: '@sch'
       tags: []
