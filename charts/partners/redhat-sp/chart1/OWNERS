@@ -1,8 +1,12 @@
 chart:
   name: chart1
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: ''
+- githubUsername: ''
+- githubUsername: ''
+- githubUsername: ''
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
