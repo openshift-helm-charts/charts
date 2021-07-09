@@ -1,0 +1,9 @@
+chart:
+  name: nodejs
+  shortDescription: This is the Red Hat NodeJs chart
+publicPgpKey: null
+users:
+- githubUsername: dperaza4dustbit
+vendor:
+  label: redhat
+  name: NodeJs chart
