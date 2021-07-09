@@ -1,0 +1,9 @@
+chart:
+  name: wildfly
+  shortDescription: This is the Red Hat Wildfly chart
+publicPgpKey: null
+users:
+- githubUsername: dperaza4dustbit
+vendor:
+  label: redhat
+  name: Wildfly
