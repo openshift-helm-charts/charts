@@ -1,0 +1,8 @@
+chart:
+  name: chart-external-final-1
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
