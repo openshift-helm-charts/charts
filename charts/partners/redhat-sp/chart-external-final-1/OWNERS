@@ -1,8 +1,9 @@
 chart:
   name: chart-external-final-1
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: '@'
+publicPgpKey: YQ==
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
