@@ -1,8 +1,9 @@
 chart:
   name: chart-internal-prod
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: bpm-test-registry-namespace
   name: BPM Test Company
