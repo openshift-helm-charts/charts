@@ -1,0 +1,10 @@
+chart:
+  name: test-final-helm8798-yugedusg
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: test-aish
+- githubUsername: test-kanchan
+vendor:
+  label: test-389
+  name: IBM
