@@ -1,0 +1,74 @@
+name: Test Charts (Schedule)
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 0 * * *'
+
+jobs:
+  test-charts:
+    name: Test Charts on OpenShift / Verifier Update
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: oc
+          key: ${{ steps.get-date.outputs.date }}
+
+      - name: Install oc
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        run: |
+          curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+          tar zxvf openshift-client-linux.tar.gz oc
+
+      - name: Get Repository
+        id: get-repository
+        run: |
+          REPO=$(echo ${{ github.repository }} | tr '\/' '-')
+          echo "::set-output name=repository::${REPO}"
+        shell: bash
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: "pr-branch"
+
+      - name: Test CI Workflow
+        id: test_ci_workflow
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+          TEST_REPO: ${{ secrets.TEST_REPO }}
+          FORK_REPO: ${{ secrets.FORK_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd pr-branch
+          ../ve1/bin/pytest tests/ -s -vvv
+          cd ..
+
+      - name: Delete Namespace
+        if: always() && steps.sanity_check_pr_content.outputs.report-exists != 'true'
+        env:
+          KUBECONFIG: /tmp/ci-kubeconfig
+        run: |
+          API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
+          ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
+          ve1/bin/sa-for-chart-testing --delete chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }}
