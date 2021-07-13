@@ -1,0 +1,60 @@
+# Default values for zbs-operator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# override chart name
+nameOverride: ""
+# override release name
+fullnameOverride: ""
+
+# Operator replicas conunt.
+# Recommand 3 in production environment
+replicaCount: 3
+create: true
+
+# Image config for IOMesh Operator
+image:
+  # Default repository of the IOMesh Operator image. You using your private registry.
+  repository: iomesh/operator
+  # The image tag. Default tag is `.Chart.AppVersion`
+  tag: ""
+  pullPolicy: IfNotPresent
+  # If your private registry have a pull secret.
+  # You should create a Secret helding the pull auth info and put the Secret name here.
+  pullSecrets: []
+
+serviceAccount:
+  # Create a ServiceAccount for IOMesh Operator. If create is false will use `default` ServiceAccount.
+  create: true
+  # Override ServiceAccount name
+  name: ""
+  # Annotation for the ServiceAccount
+  annotations: {}
+
+# Pod schedule tolerantions for IOMesh Operator Pods.
+# More info: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+tolerations: []
+# - key: "node-role.kubernetes.io/master"
+#   operator: "Exists"
+#   effect: "NoSchedule"
+
+# Pod schedule affinity for IOMesh OPerator Pods.
+# More info: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+  # requiredDuringSchedulingIgnoredDuringExecution:
+  #   nodeSelectorTerms:
+  #   - matchExpressions:
+  #     - key: "node-role.kubernetes.io/master"
+  #       operator: "Exists"
+
+# Config for OpenEBS/NodeDiskManager
+nodeDiskManager:
+  create: true
+
+# Config for Hostpath Provisioner
+hostpath-provisioner:
+  pvDir: /opt/iomesh/hostpath
+  storageClass:
+    create: true
+    defaultClass: false
+    name: hostpath

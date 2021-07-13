@@ -1,0 +1,13 @@
+apiVersion: v2
+name: operator
+description: IOMesh Operator helping IOMesh cluster management
+type: application
+version: v0.10.1
+appVersion: v0.10.1
+dependencies:
+- name: zookeeper-operator
+  version: 0.2.8
+  repository: https://charts.pravega.io
+- name: hostpath-provisioner
+  version: 0.5.1
+  repository: http://iomesh.com/charts

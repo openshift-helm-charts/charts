@@ -1,0 +1,78 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: iomesh:blockdevice:editor
+rules:
+- apiGroups:
+  - openebs.io
+  resources:
+  - "*"
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: iomesh:manager
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - endpoints
+  - events
+  - pods
+  - services
+  - serviceaccounts
+  - persistentvolumeclaims
+  verbs: ["*"]
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  - statefulsets
+  verbs: ["*"]
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - clusterrolebindings
+  verbs: ["*"]
+- apiGroups:
+  - openebs.io
+  resources:
+  - "*"
+  verbs: ["*"]
+- apiGroups:
+  - iomesh.com
+  resources:
+  - "*"
+  verbs: ["*"]
+- apiGroups:
+  - zookeeper.pravega.io
+  resources:
+  - "*"
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: iomesh:chunk
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs:     ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs:     ["get", "list", "watch"]
+- apiGroups: ["openebs.io"]
+  resources: ["*"]
+  verbs:     ["*"]
+- apiGroups: ["iomesh.com"]
+  resources: ["*"]
+  verbs:     ["*"]

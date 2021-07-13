@@ -1,0 +1,9 @@
+dependencies:
+- name: zookeeper-operator
+  repository: https://charts.pravega.io
+  version: 0.2.8
+- name: hostpath-provisioner
+  repository: http://iomesh.com/charts
+  version: 0.5.1
+digest: sha256:4b44a9afe57fe22f578e38ab9c5f1aae973a51f72c72a8f92fc45ffb110a86ed
+generated: "2020-12-23T11:33:14.75966992+08:00"
