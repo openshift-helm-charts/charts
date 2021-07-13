@@ -1,0 +1,15 @@
+apiVersion: v2
+dependencies:
+- name: gloo-mesh-crds
+  repository: https://storage.googleapis.com/gloo-mesh/gloo-mesh-crds
+  version: 1.0.9
+- name: agent-crds
+  repository: https://storage.googleapis.com/gloo-mesh/agent-crds
+  version: 1.0.9
+- condition: metricsBackend.prometheus.enabled
+  name: prometheus
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 13.5.0
+description: Helm chart for Gloo Mesh Enterprise Networking.
+name: enterprise-networking
+version: 1.0.14

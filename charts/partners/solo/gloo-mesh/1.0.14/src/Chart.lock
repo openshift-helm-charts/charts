@@ -1,0 +1,12 @@
+dependencies:
+- name: gloo-mesh-crds
+  repository: https://storage.googleapis.com/gloo-mesh/gloo-mesh-crds
+  version: 1.0.9
+- name: agent-crds
+  repository: https://storage.googleapis.com/gloo-mesh/agent-crds
+  version: 1.0.9
+- name: prometheus
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 13.5.0
+digest: sha256:1e3404e800289e3d409392bcfd45564ac474b92734f630a75ea83c8fa7df8a7e
+generated: "2021-06-16T12:21:39.027051629Z"

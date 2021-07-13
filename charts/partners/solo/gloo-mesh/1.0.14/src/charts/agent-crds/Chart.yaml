@@ -1,0 +1,4 @@
+apiVersion: v1
+description: CRDs required by Gloo Mesh remote agents (i.e. cert-agent and enterprise-agent).
+name: agent-crds
+version: 1.0.9

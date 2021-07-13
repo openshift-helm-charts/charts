@@ -1,0 +1,94 @@
+{{ if .Values.selfSigned }}
+
+{{- $certVal := "" }}
+{{- $certKey := "" }}
+{{- $token := "" }}
+
+# Check if the root cert exists already (e.g. helm upgrade)
+{{- $existingCA := lookup "v1" "Secret" .Release.Namespace "relay-root-tls-secret" }}
+
+# Declare variable to store CA object, whether it's generated anew or built from existing values
+{{- $ca := ""}}
+
+{{- if not $existingCA }}
+# Root CA Cert doesn't exist on cluster, generate a new one
+{{- $ca = genCA "enterprise-networking-ca" 365 }}
+{{- else }}
+# Root CA Cert does exist on cluster, build an object with the existing values
+{{ $existingCACert := index $existingCA.data "ca.crt" }}
+{{ $existingCAKey := index $existingCA.data "tls.key" }}
+{{- $ca = buildCustomCert $existingCACert $existingCAKey }}
+{{- end }}
+
+# Check if the server cert already exists
+{{- $existingCert := lookup "v1" "Secret" .Release.Namespace "relay-server-tls-secret" }}
+
+{{- if not $existingCert }}
+# Server cert doesn't exist, generate a new one
+{{ $subAltName1 := (printf "%v.%v" "enterprise-networking" .Release.Namespace ) }}
+{{ $subAltName2 := (printf "%v.svc" $subAltName1 ) }}
+
+{{- $cert := genSignedCert "enterprise-networking" nil (list $subAltName1 $subAltName2 ) 365 $ca }}
+{{- $certVal = $cert.Cert | b64enc }}
+{{- $certKey = $cert.Key | b64enc }}
+
+{{ else }}
+# Server cert does exist, pull values from the existing secret
+{{- $certVal = index $existingCert.data "tls.crt" }}
+{{- $certKey = index $existingCert.data "tls.key" }}
+
+{{ end }}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: relay-root-tls-secret
+  namespace: {{ .Release.Namespace }}
+data:
+  ca.crt: {{ $ca.Cert | b64enc }}
+  tls.key: {{ $ca.Key | b64enc }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: relay-server-tls-secret
+  namespace: {{ .Release.Namespace }}
+type: kubernetes.io/tls
+data:
+  ca.crt: {{ $ca.Cert | b64enc }}
+  tls.crt: {{ $certVal }}
+  tls.key: {{ $certKey }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: relay-tls-signing-secret
+  namespace: {{ .Release.Namespace }}
+type: kubernetes.io/tls
+data:
+  ca.crt: {{ $ca.Cert | b64enc }}
+  tls.crt: {{ $ca.Cert | b64enc }}
+  tls.key: {{ $ca.Key | b64enc }}
+---
+
+{{- $existingToken := lookup "v1" "Secret" .Release.Namespace "relay-identity-token-secret" }}  
+
+{{- if or .Release.IsInstall (not $existingToken) }}
+
+{{- $token = randAlphaNum 16 | b64enc }}
+
+{{ else }}
+
+{{- $token = index $existingToken.data "token" }}
+
+{{ end }}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: relay-identity-token-secret
+  namespace: {{ .Release.Namespace }}
+data:
+  {{ $.Values.tokenSecret.key }}: {{ $token }}
+
+{{ end }}

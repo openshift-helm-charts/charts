@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: enterprise-networking
+  name: enterprise-networking-admin
+  namespace: {{ $.Release.Namespace }}
+spec:
+  selector:
+    app: enterprise-networking
+  type: ClusterIP
+  ports:
+    - name: {{ .Values.admin.port.name }}
+      port: {{ .Values.admin.port.port }}
