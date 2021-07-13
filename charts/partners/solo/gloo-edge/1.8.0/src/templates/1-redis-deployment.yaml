@@ -1,0 +1,82 @@
+{{- define "redis.deploymentSpec" -}}
+{{- $name := (index . 1) }}
+{{- with (first .) }}
+{{- $image := merge .Values.redis.deployment.image .Values.global.image }}
+{{- $redisName := .Values.redis.deployment.name }}
+{{- if .Values.global.extensions.dataplanePerProxy }}
+{{- $redisName = printf "%s-%s" $redisName ($name | kebabcase) }}
+{{- end }} {{/* .Values.global.extensions.dataplanePerProxy */}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gloo
+    gloo: {{ $redisName }}
+  name: {{ $redisName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+{{- if not (kindIs "invalid" .Values.redis.deployment.replicas) }}
+  replicas: {{ .Values.redis.deployment.replicas }}
+{{- end }}
+  selector:
+    matchLabels:
+      gloo: {{ $redisName }}
+  template:
+    metadata:
+      labels:
+        gloo: {{ $redisName }}
+        {{- if .Values.redis.deployment.extraRedisLabels }}
+        {{- range $key, $value := .Values.redis.deployment.extraRedisLabels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      {{- if .Values.global.istioIntegration.disableAutoinjection }}
+      annotations:
+        sidecar.istio.io/inject: "false"
+      {{- end }}
+    spec:
+      {{- include "gloo.podSpecStandardFields" .Values.redis.deployment | nindent 6 -}}
+      containers:
+        - image: {{template "glooe.imagenonextended" $image}}
+          imagePullPolicy:  {{ $image.pullPolicy }}
+          name: redis
+          ports:
+            - containerPort: {{ .Values.redis.deployment.staticPort }}
+          env:
+            - name: MASTER
+              value: "true"
+          volumeMounts:
+            - mountPath: /redis-master-data
+              name: data
+          {{- if .Values.redis.deployment.resources }}
+          resources:
+{{ toYaml .Values.redis.deployment.resources | indent 12}}
+          {{- end}}
+      {{- if .Values.redis.deployment.enablePodSecurityContext }}
+      securityContext:
+        runAsNonRoot: true
+        runAsGroup: {{ printf "%.0f" (float64 .Values.redis.deployment.runAsGroup) }}
+        fsGroup: {{ printf "%.0f" (float64 .Values.redis.deployment.fsGroup) }}
+        {{- if not .Values.redis.deployment.floatingUserId }}
+        runAsUser: {{ printf "%.0f" (float64 .Values.redis.deployment.runAsUser) -}}
+        {{- end }}
+      {{- end }}
+      volumes:
+        - name: data
+          emptyDir: {}
+{{- include "gloo.pullSecret" $image | nindent 6}}
+
+---
+{{- end }}{{/* with (first .) */}}
+{{- end }}{{/* define "redis.deploymentSpec" */}}
+
+{{- if .Values.global.extensions.rateLimit.enabled }}
+{{- include "gloo.dataplaneperproxyhelper" $ }}
+{{- $override := .Values.redis.deployment.kubeResourceOverride}}
+{{- range $name, $spec := $.ProxiesToCreateDataplaneFor }}
+{{- if not $spec.disabled }}
+{{- $ctx := (list $ $name $spec)}}
+{{- include "gloo.util.merge" (list $ctx $override "redis.deploymentSpec") -}}
+{{- end }} {{/* if not $spec.disabled */}}
+{{- end }} {{/* range $name, $spec := $.ProxiesToCreateDataplaneFor */}}
+{{- end }} {{/* .Values.global.extensions.rateLimit.enabled */}}

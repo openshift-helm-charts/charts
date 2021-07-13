@@ -1,0 +1,37 @@
+{{- if .Values.global.glooRbac.create }}
+{{- if .Values.observability.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ include "gloo.roleKind" . }}
+metadata:
+  {{- if .Values.global.glooRbac.namespaced }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  name: observability-upstream-role{{ include "gloo.rbacNameSuffix" . }}
+  labels:
+    app: gloo
+    gloo: observability
+rules:
+  - apiGroups: ["gloo.solo.io"]
+    resources: ["upstreams"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ include "gloo.roleKind" . }}Binding
+metadata:
+  {{- if .Values.global.glooRbac.namespaced }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  name: observability-upstream-rolebinding{{ include "gloo.rbacNameSuffix" . }}
+  labels:
+    app: gloo
+    gloo: observability
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: {{ include "gloo.roleKind" . }}
+  name: observability-upstream-role{{ include "gloo.rbacNameSuffix" . }}
+subjects:
+  - kind: ServiceAccount
+    name: observability
+    namespace: {{ .Release.Namespace }}
+{{- end }} {{/* observability enabled */}}
+{{- end }} {{/* glooRbac.create */}}

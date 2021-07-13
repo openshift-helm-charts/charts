@@ -1,0 +1,42 @@
+{{- define "extauth.serviceSpec" -}}
+{{- $name := (index . 1) }}
+{{- with (first .) }}
+{{- $extAuth := .Values.global.extensions.extAuth }}
+{{- $extAuthName := $extAuth.service.name }}
+{{- if .Values.global.extensions.dataplanePerProxy }}
+{{- $extAuthName = printf "%s-%s" $extAuthName ($name | kebabcase) }}
+{{- end }} {{/* .Values.global.extensions.dataplanePerProxy */}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gloo
+    gloo: {{ $extAuthName }}
+  name: {{ $extAuthName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: grpc
+    port: {{ $extAuth.service.port }}
+    protocol: TCP
+  selector:
+    gloo: {{ $extAuthName }}
+---
+{{- end }} {{/* with */}}
+{{- end }} {{/* define extauth.serviceSpec */}}
+
+{{- if .Values.global.extensions.extAuth.enabled }}
+{{- if .Values.global.extensions.extAuth.standaloneDeployment }}
+{{- include "gloo.dataplaneperproxyhelper" $ }}
+{{- $override := dict -}}
+{{- if .Values.global.extensions.extAuth.deployment }}
+{{- $override = .Values.global.extensions.extAuth.service.kubeResourceOverride}}
+{{- end }}{{/* if .Values.extauth.deployment */}}
+{{- range $name, $spec := $.ProxiesToCreateDataplaneFor }}
+{{- if not $spec.disabled}}
+{{- $ctx := (list $ $name $spec)}}
+{{- include "gloo.util.merge" (list $ctx $override "extauth.serviceSpec") -}}
+{{- end }} {{/* if not $spec.disabled */}}
+{{- end }} {{/* range $name, $spec := $.ProxiesToCreateDataplaneFor */}}
+{{- end }}{{/* .Values.global.extensions.extAuth.standaloneDeployment */}}
+{{- end }} {{/* enabled */}}

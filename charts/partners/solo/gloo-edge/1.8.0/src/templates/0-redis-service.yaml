@@ -1,0 +1,39 @@
+{{- define "redis.serviceSpec" -}}
+{{- $name := (index . 1) }}
+{{- with (first .) }}
+{{- $redisName := .Values.redis.service.name }}
+{{- if .Values.global.extensions.dataplanePerProxy }}
+{{- $redisName = printf "%s-%s" $redisName ($name | kebabcase) }}
+{{- end }} {{/* .Values.global.extensions.dataplanePerProxy */}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gloo
+    gloo: {{ $redisName }}
+  name: {{ $redisName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - name: redis
+      port: {{ .Values.redis.service.port }}
+      protocol: TCP
+  selector:
+    gloo: {{ $redisName }}
+  {{- if .Values.redis.clientSideShardingEnabled }}
+  clusterIP: "None" {{/* Headless Service so Envoy can LB between Redis instances */}}
+  {{- end }}
+---
+{{- end }} {{/* with (first .) */}}
+{{- end }}{{/* define "redis.serviceSpec" */}}
+
+{{- if .Values.global.extensions.rateLimit.enabled }}
+{{- include "gloo.dataplaneperproxyhelper" $ }}
+{{- $override := .Values.redis.service.kubeResourceOverride}}
+{{- range $name, $spec := $.ProxiesToCreateDataplaneFor }}
+{{- if not $spec.disabled }}
+{{- $ctx := (list $ $name $spec)}}
+{{- include "gloo.util.merge" (list $ctx $override "redis.serviceSpec") -}}
+{{- end }} {{/* if not $spec.disabled */}}
+{{- end }} {{/* range $name, $spec := $.ProxiesToCreateDataplaneFor */}}
+{{- end }} {{/* .Values.global.extensions.rateLimit.enabled */}}
