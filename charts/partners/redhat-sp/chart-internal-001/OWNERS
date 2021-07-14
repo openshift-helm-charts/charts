@@ -1,8 +1,9 @@
 chart:
   name: chart-internal-001
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: test repo
+publicPgpKey: dGVzdA==
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
