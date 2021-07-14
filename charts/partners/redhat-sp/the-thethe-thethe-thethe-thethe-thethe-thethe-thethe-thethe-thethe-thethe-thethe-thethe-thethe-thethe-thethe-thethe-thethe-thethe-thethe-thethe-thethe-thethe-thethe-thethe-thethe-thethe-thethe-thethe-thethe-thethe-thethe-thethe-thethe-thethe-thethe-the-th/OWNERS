@@ -1,8 +1,9 @@
 chart:
   name: the-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-thethe-the-th
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Short repository description
+publicPgpKey: null
+users:
+- githubUsername: kkatare
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
