@@ -167,7 +167,7 @@ def set_package_digest(chart_entry):
         target_digest = hashlib.sha256(response.content).hexdigest()
     
     if target_digest:
-        if not chart_entry["digest"]
+        if not chart_entry["digest"]:
             # Digest was computed but not passed
             chart_entry["digest"] = target_digest
         elif chart_entry["digest"] != target_digest:
