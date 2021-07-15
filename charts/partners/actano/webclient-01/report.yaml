@@ -13,7 +13,7 @@ metadata:
         lastCertifiedTimestamp: "2021-07-15T07:53:06.570102+00:00"
         certifiedOpenShiftVersions: N/A
     chart:
-        name: rplan-webclient
+        name: webclient-01
         home: ""
         sources: []
         version: 0.1.0

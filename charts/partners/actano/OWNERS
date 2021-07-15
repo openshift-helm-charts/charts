@@ -1,5 +1,5 @@
 chart:
-  name: rplan-webclient
+  name: webclient-01
   shortDescription: Actano private github repo for helm charts
 publicPgpKey: null
 users:
