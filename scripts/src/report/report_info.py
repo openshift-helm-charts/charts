@@ -46,7 +46,8 @@ def getReportInfo(report_path,info_type,profile_type,profile_version):
         docker_command += " --set " + set_values
 
     client = docker.from_env()
-    output = client.containers.run(os.environ.get("VERIFIER_IMAGE"),docker_command,stdin_open=True,tty=True,stderr=True,volumes={os.path.dirname(report_path): {'bind': '/charts/', 'mode': 'rw'}})
+    report_directory = os.path.dirname(os.path.abspath(report_path))
+    output = client.containers.run(os.environ.get("VERIFIER_IMAGE"),docker_command,stdin_open=True,tty=True,stderr=True,volumes={report_directory: {'bind': '/charts/', 'mode': 'rw'}})
     report_out = json.loads(output)
 
     print(f"[INFO] report {info_type} :",report_out)
