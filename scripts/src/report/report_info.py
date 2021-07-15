@@ -71,8 +71,11 @@ def getReportAnnotations(report_path):
     return getReportInfo(report_path,REPORT_ANNOTATIONS,"","")
 
 def getReportResults(report_path,profile_type,profile_version):
-    return getReportInfo(report_path,REPORT_RESULTS,profile_type,profile_version)
-
+    results = getReportInfo(report_path,REPORT_RESULTS,profile_type,profile_version)
+    results["failed"] = int(results["failed"])
+    results["passed"] = int(results["passed"])
+    return results
+    
 def getReportDigests(report_path):
     return getReportInfo(report_path,REPORT_DIGESTS,"","")
 
