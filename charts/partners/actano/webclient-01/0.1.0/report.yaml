@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.0
-        chart-uri: /charts/webclient-01
+        chart-uri: https://github.com/actano/charts-2/tree/main/charts/partners/actano/webclient-01/0.1.0/charts
         digest: sha256:6ec4e12bd2dc56a43fc618f228219cc3227065a5881d186776076091d08e1b5a
         digests:
             chart: sha256:6ec4e12bd2dc56a43fc618f228219cc3227065a5881d186776076091d08e1b5a
