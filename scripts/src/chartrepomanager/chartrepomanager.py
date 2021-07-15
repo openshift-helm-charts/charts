@@ -18,6 +18,9 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+sys.path.append('../')
+from report import report_info
+
 def get_modified_charts(api_url):
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
@@ -132,14 +135,8 @@ def create_index_from_chart(indexdir, repository, branch, category, organization
     return crt
 
 def create_index_from_report(category, report_path):
-    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
-    r = out.stdout.decode("utf-8")
-    print("annotation",r)
-    annotations = json.loads(r)
-    err = out.stderr.decode("utf-8")
-    if err.strip():
-        print("Error extracting annotations from the report:", err)
-        sys.exit(1)
+
+    annotations = report_info.getAnnotations(report_path)
 
     print("category:", category)
     redhat_to_community = bool(os.environ.get("REDHAT_TO_COMMUNITY"))
@@ -150,41 +147,36 @@ def create_index_from_report(category, report_path):
     else:
         annotations["charts.openshift.io/providerType"] = category
 
-    report = yaml.load(open(report_path), Loader=Loader)
-    chart_url = report["metadata"]["tool"]['chart-uri']
-    chart_entry = report["metadata"]["chart"]
+    chart_url = report_info.getChartUrl(report_path)
+    chart_entry = report_info.getChart(report_path)
     chart_entry["annotations"] = chart_entry["annotations"] | annotations
+
+    digests = report_info.getReportDigests(report_path)
+    chart_entry["digest"] = digests["digests"]["package"]
+
     return chart_entry, chart_url
 
 
 def set_package_digest(chart_entry):
+
     url = chart_entry["urls"][0]
-    annotations = chart_entry["annotations"]
-    pkg_digest = ""
-    if "charts.openshift.io/digests" in annotations:
-        digest = annotations["charts.openshift.io/digests"]
-        if isinstance(digest, dict) and "package" in digest:
-            pkg_digest = digest["package"]
     head = requests.head(url, allow_redirects=True)
     target_digest = ""
     if head.status_code == 200:
         response = requests.get(url, allow_redirects=True)
         target_digest = hashlib.sha256(response.content).hexdigest()
     
-    if not pkg_digest and target_digest:
-        # Digest was computed but not passed
-        chart_entry["digest"] = target_digest
-    elif pkg_digest and not target_digest:
-        # Digest was passed but not computed
-        chart_entry["digest"] =  pkg_digest
-    elif not pkg_digest and not target_digest:
+    if target_digest:
+        if not chart_entry["digest"]
+            # Digest was computed but not passed
+            chart_entry["digest"] = target_digest
+        elif chart_entry["digest"] != target_digest:
+            # Digest was passed and computed but differ
+            raise Exception("Found an integrity issue. SHA256 digest passed does not match SHA256 digest computed.")
+    elif not chart_entry["digest"]:
         # Digest was not passed and could not be computed
         raise Exception("Was unable to compute SHA256 digest, please ensure chart url points to a chart package.")
-    else:
-        # Digest was passed and computed
-        if pkg_digest != target_digest:
-            raise Exception("Found an integrity issue. SHA256 digest passed does not match SHA256 digest computed.")
-        chart_entry["digest"] = target_digest
+
 
 
 def update_index_and_push(indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number):
@@ -264,14 +256,8 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
 
 def update_chart_annotation(category, organization, chart_file_name, chart, report_path):
     dr = tempfile.mkdtemp(prefix="annotations-")
-    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
-    r = out.stdout.decode("utf-8")
-    print("annotation",r)
-    annotations = json.loads(r)
-    err = out.stderr.decode("utf-8")
-    if err.strip():
-        print("Error extracting annotations from the report:", err)
-        sys.exit(1)
+
+    annotations = report_info.getAnnotations(report_path)
 
     print("category:", category)
     redhat_to_community = bool(os.environ.get("REDHAT_TO_COMMUNITY"))

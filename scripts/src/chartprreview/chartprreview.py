@@ -15,6 +15,9 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+sys.path.append('../')
+from report import report_info
+
 def write_error_log(directory, *msg):
     with open(os.path.join(directory, "errors"), "w") as fd:
         for line in msg:
@@ -101,12 +104,12 @@ def verify_signature(directory, category, organization, chart, version):
 
 def match_checksum(directory, category, organization, chart, version):
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
-    submitted_report = yaml.load(open(submitted_report_path), Loader=Loader)
-    submitted_digest = submitted_report["metadata"]["tool"]["digest"]
+    submitted_digests = report_info.getReportDigests(submitted_report_path)
+    submitted_digest = submitted_digests["chart"]
 
     generated_report_path = "report.yaml"
-    generated_report = yaml.load(open(generated_report_path), Loader=Loader)
-    generated_digest = generated_report["metadata"]["tool"]["digest"]
+    generated_digests = report_info.getReportDigests(generated_report_path)
+    generated_digest = generated_digests]["chart"]
 
     if  submitted_digest != generated_digest:
         msg = f"[ERROR] Digest is not matching: {submitted_digest}, {generated_digest}"
@@ -114,8 +117,7 @@ def match_checksum(directory, category, organization, chart, version):
         sys.exit(1)
 
 def check_url(directory, report_path):
-    report = yaml.load(open(report_path), Loader=Loader)
-    chart_url = report["metadata"]["tool"]['chart-uri']
+    chart_url = report_info.getReportChartUrl(report_path)
 
     try:
         r = requests.head(chart_url)
@@ -149,9 +151,9 @@ def check_url(directory, report_path):
 def match_name_and_version(directory, category, organization, chart, version):
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     if os.path.exists(submitted_report_path):
-        submitted_report = yaml.load(open(submitted_report_path), Loader=Loader)
-        submitted_report_chart_name = submitted_report["metadata"]["chart"]["name"]
-        submitted_report_chart_version = submitted_report["metadata"]["chart"]["version"]
+        submitted_report_chart = report_info.getReportChart(submitted_report_path)
+        submitted_report_chart_name = submitted_report_chart["name"]
+        submitted_report_chart_version = submitted_report_chart["version"]
 
         if submitted_report_chart_name != chart:
             msg = f"[ERROR] Chart name ({submitted_report_chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version})"
@@ -164,9 +166,9 @@ def match_name_and_version(directory, category, organization, chart, version):
             sys.exit(1)
 
         if os.path.exists("report.yaml"):
-            report = yaml.load(open("report.yaml"), Loader=Loader)
-            report_chart_name = report["metadata"]["chart"]["name"]
-            report_chart_version = report["metadata"]["chart"]["version"]
+            report_chart = report_info.getReportChart(report_path)
+            report_chart_name = report_chart["name"]
+            report_chart_version = report_chart["version"]
 
             if submitted_report_chart_name != report_chart_name:
                 msg = f"[ERROR] Chart name in the chart is not matching against the value in the report: {submitted_report_chart_name} vs {report_chart_name}"
@@ -178,9 +180,9 @@ def match_name_and_version(directory, category, organization, chart, version):
                 write_error_log(directory, msg)
                 sys.exit(1)
     else:
-        report = yaml.load(open("report.yaml"), Loader=Loader)
-        report_chart_name = report["metadata"]["chart"]["name"]
-        report_chart_version = report["metadata"]["chart"]["version"]
+        report_chart = report_info.getReportChart(report_path)
+        report_chart_name = report_chart["name"]
+        report_chart_version = report_chart["version"]
 
         if report_chart_name != chart:
             msg = f"[ERROR] Chart name ({report_chart_name}) doesn't match the directory structure (charts/{category}/{organization}/{chart}/{version})"
@@ -198,31 +200,15 @@ def check_report_success(directory, api_url, report_path, version):
     print(data)
     quoted_data = data.replace("%", "%25").replace("\n", "%0A").replace("\r", "%0D")
     print(f"::set-output name=report_content::{quoted_data}")
-    try:
-        out = yaml.load(data, Loader=Loader)
-    except yaml.scanner.ScannerError as err:
-        msg = "[ERROR] YAML error: {0}".format(err)
-        write_error_log(directory, msg)
-        sys.exit(1)
-    except:
-        msg = "[ERROR] Unexpected error:", sys.exc_info()[0]
-        write_error_log(directory, msg)
-        sys.exit(1)
 
-    report_version = out["metadata"]["chart"]["version"]
+    chart = report_info.getReportChart(report_path)
+    report_version = chart["version"]
     if report_version != version:
         msg = f"[ERROR] Chart Version '{report_version}' doesn't match the version in the directory path: '{version}'"
         write_error_log(directory, msg)
         sys.exit(1)
 
-    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
-    r = out.stdout.decode("utf-8")
-    print("[INFO] Annotations:", r)
-    annotations = json.loads(r)
-    err = out.stderr.decode("utf-8")
-    if err.strip():
-        print("[ERROR] Error extracting annotations from the report:", err)
-        sys.exit(1)
+    annotations = report_info.getAnnotations(report_path)
 
     required_annotations = {"charts.openshift.io/lastCertifiedTimestamp",
                             "charts.openshift.io/certifiedOpenShiftVersions",
@@ -237,14 +223,7 @@ def check_report_success(directory, api_url, report_path, version):
         sys.exit(1)
 
     vendor_type = get_vendor_type(directory)
-    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "results", report_path, vendor_type], capture_output=True)
-    r = out.stdout.decode("utf-8")
-    print("[INFO] results:", r)
-    report = json.loads(r)
-    err = out.stderr.decode("utf-8")
-    if err.strip():
-        msg = f"[ERROR] Error analysing the report: {err}"
-        write_error_log(directory, msg)
+    report = report_info.getReportResults(report_path,vendor_type,"")
 
     labels = get_labels(api_url)
     label_names = [l["name"] for l in labels]
@@ -306,19 +285,19 @@ def generate_verify_report(directory, category, organization, chart, version):
     if src_exists:
         if os.path.exists(report_path):
             out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
-                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", "/charts"], capture_output=True)
+                                 os.environ.get("VERIFIER_IMAGE"), "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", "/charts"], capture_output=True)
         else:
             out = subprocess.run(["docker", "run", "-v", src+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
-                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", "/charts"], capture_output=True)
+                                 os.environ.get("VERIFIER_IMAGE"), "verify", "--set", f"profile.vendortype={vendor_type}", "/charts"], capture_output=True)
     elif tar_exists:
         dn = os.path.join(os.getcwd(), "charts", category,
                           organization, chart, version)
         if os.path.exists(report_path):
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", "quay.io/redhat-certification/chart-verifier:main",
+            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", os.environ.get("VERIFIER_IMAGE"),
                                  "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
         else:
             out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
-                                 "quay.io/redhat-certification/chart-verifier:main", "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+                                 os.environ.get("VERIFIER_IMAGE"), "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
     else:
         return
 
