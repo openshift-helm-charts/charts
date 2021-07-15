@@ -165,15 +165,19 @@ def set_package_digest(chart_entry):
     if head.status_code == 200:
         response = requests.get(url, allow_redirects=True)
         target_digest = hashlib.sha256(response.content).hexdigest()
+
+    pkg_digest = ""
+    if "digest" in chart_entry:
+        pkg_digest = chart_entry["digest"]
     
     if target_digest:
-        if not chart_entry["digest"]:
+        if not pkg_digest:
             # Digest was computed but not passed
             chart_entry["digest"] = target_digest
-        elif chart_entry["digest"] != target_digest:
+        elif ckg_digest != target_digest:
             # Digest was passed and computed but differ
             raise Exception("Found an integrity issue. SHA256 digest passed does not match SHA256 digest computed.")
-    elif not chart_entry["digest"]:
+    elif not pkg_digest:
         # Digest was not passed and could not be computed
         raise Exception("Was unable to compute SHA256 digest, please ensure chart url points to a chart package.")
 
