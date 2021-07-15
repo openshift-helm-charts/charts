@@ -166,7 +166,7 @@ def match_name_and_version(directory, category, organization, chart, version):
             sys.exit(1)
 
         if os.path.exists("report.yaml"):
-            report_chart = report_info.getReportChart(report_path)
+            report_chart = report_info.getReportChart("report.yaml")
             report_chart_name = report_chart["name"]
             report_chart_version = report_chart["version"]
 
@@ -180,7 +180,7 @@ def match_name_and_version(directory, category, organization, chart, version):
                 write_error_log(directory, msg)
                 sys.exit(1)
     else:
-        report_chart = report_info.getReportChart(report_path)
+        report_chart = report_info.getReportChart("report.yaml")
         report_chart_name = report_chart["name"]
         report_chart_version = report_chart["version"]
 
