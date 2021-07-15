@@ -109,7 +109,7 @@ def match_checksum(directory, category, organization, chart, version):
 
     generated_report_path = "report.yaml"
     generated_digests = report_info.getReportDigests(generated_report_path)
-    generated_digest = generated_digests]["chart"]
+    generated_digest = generated_digests["chart"]
 
     if  submitted_digest != generated_digest:
         msg = f"[ERROR] Digest is not matching: {submitted_digest}, {generated_digest}"
