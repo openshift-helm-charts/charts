@@ -175,7 +175,7 @@ def set_package_digest(chart_entry):
         if not pkg_digest:
             # Digest was computed but not passed
             chart_entry["digest"] = target_digest
-        elif ckg_digest != target_digest:
+        elif pkg_digest != target_digest:
             # Digest was passed and computed but differ
             raise Exception("Found an integrity issue. SHA256 digest passed does not match SHA256 digest computed.")
     elif not pkg_digest:
