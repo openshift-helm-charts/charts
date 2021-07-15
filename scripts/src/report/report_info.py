@@ -28,6 +28,7 @@ def getReport(report_path):
         msg = "[ERROR] Unexpected error:", sys.exc_info()[0]
         write_error_log(directory, msg)
         sys.exit(1)
+    return report
 
 def getReportInfo(report_path,info_type,profile_type,profile_version):
 
