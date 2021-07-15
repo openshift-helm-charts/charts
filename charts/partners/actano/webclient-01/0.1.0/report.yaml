@@ -6,11 +6,11 @@ metadata:
         profile:
             VendorType: partner
             version: v1.0
-        chart-uri: https://github.com/actano/charts-2/tree/main/charts/partners/actano/webclient-01/0.1.0/charts
+        chart-uri: https://github.com/actano/charts-2/tree/main/charts/partners/actano/webclient-01/0.1.0/charts/
         digest: sha256:6ec4e12bd2dc56a43fc618f228219cc3227065a5881d186776076091d08e1b5a
         digests:
             chart: sha256:6ec4e12bd2dc56a43fc618f228219cc3227065a5881d186776076091d08e1b5a
-        lastCertifiedTimestamp: "2021-07-15T08:38:59.697536+00:00"
+        lastCertifiedTimestamp: "2021-07-15T09:47:58.221251+00:00"
         certifiedOpenShiftVersions: N/A
     chart:
         name: webclient-01
@@ -40,26 +40,10 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Chart test files exist
-  - check: v1.0/contains-values
-    type: Mandatory
-    outcome: PASS
-    reason: Values file exist
   - check: v1.0/has-kubeversion
     type: Mandatory
     outcome: PASS
     reason: Kubernetes version specified
-  - check: v1.0/not-contain-csi-objects
-    type: Mandatory
-    outcome: PASS
-    reason: CSI objects do not exist
-  - check: v1.0/has-readme
-    type: Mandatory
-    outcome: PASS
-    reason: Chart has a README
-  - check: v1.0/contains-values-schema
-    type: Mandatory
-    outcome: PASS
-    reason: Values schema file exist
   - check: v1.0/not-contains-crds
     type: Mandatory
     outcome: PASS
@@ -68,17 +52,33 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Helm lint successful
+  - check: v1.0/not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
+  - check: v1.0/chart-testing
+    type: Mandatory
+    outcome: FAIL
+    reason: |-
+        Error running process: executing helm with args "install webclient-01-y0r7rrhk2u /root/.cache/chart-verifier/_charts_/webclient-01 --namespace default --wait --values /tmp/chart-testing-418523480/values.yaml": exit status 1
+        ---
+        Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+  - check: v1.0/has-readme
+    type: Mandatory
+    outcome: PASS
+    reason: Chart has a README
+  - check: v1.0/contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
+  - check: v1.0/contains-values-schema
+    type: Mandatory
+    outcome: PASS
+    reason: Values schema file exist
   - check: v1.0/images-are-certified
     type: Mandatory
     outcome: FAIL
     reason: 'Image is not Red Hat certified : eu.gcr.io/allex-artifacts/ webclient-01-redhat@sha256:459b0b28dd23358c0792df1c56774feb83bafffea010b141961fa7ba7050f7be:latest
         : Bad response code 400 from pyxis request : https://catalog.redhat.com/api/containers/v1/repositories/registry/eu.gcr.io/repository/allex-artifacts/
         webclient-01-redhat/images'
-  - check: v1.0/chart-testing
-    type: Mandatory
-    outcome: FAIL
-    reason: |-
-        Error running process: executing helm with args "install webclient-01-wmw28gzycv /root/.cache/chart-verifier/_charts_/webclient-01 --namespace default --wait --values /tmp/chart-testing-341354012/values.yaml": exit status 1
-        ---
-        Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
 
