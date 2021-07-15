@@ -3,13 +3,8 @@ kind: verify-report
 metadata:
     tool:
         verifier-version: 1.1.0
-        profile:
-            VendorType: partner
-            version: v1.0
         chart-uri: /charts/
         digest: sha256:2a0650d695bc2ef12497d7792ca3fe26fd58e7c6f63bb5e5ba73a845caedb39b
-        digests:
-            chart: sha256:2a0650d695bc2ef12497d7792ca3fe26fd58e7c6f63bb5e5ba73a845caedb39b
         lastCertifiedTimestamp: "2021-07-15T06:52:37.230363+00:00"
         certifiedOpenShiftVersions: N/A
     chart:
