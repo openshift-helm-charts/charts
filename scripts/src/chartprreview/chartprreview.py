@@ -208,7 +208,7 @@ def check_report_success(directory, api_url, report_path, version):
         write_error_log(directory, msg)
         sys.exit(1)
 
-    annotations = report_info.getAnnotations(report_path)
+    annotations = report_info.getReportAnnotations(report_path)
 
     required_annotations = {"charts.openshift.io/lastCertifiedTimestamp",
                             "charts.openshift.io/certifiedOpenShiftVersions",

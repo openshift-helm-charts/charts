@@ -136,7 +136,7 @@ def create_index_from_chart(indexdir, repository, branch, category, organization
 
 def create_index_from_report(category, report_path):
 
-    annotations = report_info.getAnnotations(report_path)
+    annotations = report_info.getReportAnnotations(report_path)
 
     print("category:", category)
     redhat_to_community = bool(os.environ.get("REDHAT_TO_COMMUNITY"))
@@ -147,8 +147,8 @@ def create_index_from_report(category, report_path):
     else:
         annotations["charts.openshift.io/providerType"] = category
 
-    chart_url = report_info.getChartUrl(report_path)
-    chart_entry = report_info.getChart(report_path)
+    chart_url = report_info.getReportChartUrl(report_path)
+    chart_entry = report_info.getReportChart(report_path)
     chart_entry["annotations"] = chart_entry["annotations"] | annotations
 
     digests = report_info.getReportDigests(report_path)
@@ -257,7 +257,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
 def update_chart_annotation(category, organization, chart_file_name, chart, report_path):
     dr = tempfile.mkdtemp(prefix="annotations-")
 
-    annotations = report_info.getAnnotations(report_path)
+    annotations = report_info.getReportAnnotations(report_path)
 
     print("category:", category)
     redhat_to_community = bool(os.environ.get("REDHAT_TO_COMMUNITY"))
