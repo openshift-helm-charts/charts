@@ -149,7 +149,11 @@ def create_index_from_report(category, report_path):
 
     chart_url = report_info.getReportChartUrl(report_path)
     chart_entry = report_info.getReportChart(report_path)
-    chart_entry["annotations"] = chart_entry["annotations"] | annotations
+    if "annotations" in chart_entry:
+        annotations = chart_entry["annotations"] | annotations
+
+    chart_entry["annotations"] = annotations
+
 
     digests = report_info.getReportDigests(report_path)
     if "package" in digests:
