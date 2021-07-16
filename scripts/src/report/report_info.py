@@ -83,12 +83,12 @@ def getReportMetadata(report_path):
     return getReportInfo(report_path,REPORT_METADATA,"","")
 
 def getReportChartUrl(report_path):
-     report = getReport(report_path)
-     return report["metadata"]["tool"]["chart-uri"]
+     metadata = getReportInfo(report_path,REPORT_METADATA,"","")
+     return metadata["chart-uri"]
 
 def getReportChart(report_path):
-     report = getReport(report_path)
-     return report["metadata"]["chart"]
+     metadata = getReportInfo(report_path,REPORT_METADATA,"","")
+     return metadata["chart"]
 
 
 
