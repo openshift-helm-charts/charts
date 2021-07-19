@@ -15,17 +15,6 @@ REPORT_RESULTS = "results"
 REPORT_DIGESTS = "digests"
 REPORT_METADATA= "metadata"
 
-def getReport(report_path):
-    try:
-        report = yaml.load(open(report_path), Loader=Loader)
-    except yaml.scanner.ScannerError as err:
-        print("[ERROR] YAML error loading report:",format(err))
-        sys.exit(1)
-    except:
-        print("[ERROR] Unexpected error loading report:", sys.exc_info()[0])
-        sys.exit(1)
-    return report
-
 def getReportInfo(report_path,info_type,profile_type,profile_version):
 
     docker_command = "report " + info_type + " charts/"+os.path.basename(report_path)
