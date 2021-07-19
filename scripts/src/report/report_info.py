@@ -1,10 +1,8 @@
 
-import re
 import os
 import sys
 import docker
-import argparse
-import subprocess
+import logging
 import json
 import yaml
 try:
@@ -21,12 +19,10 @@ def getReport(report_path):
     try:
         report = yaml.load(open(report_path), Loader=Loader)
     except yaml.scanner.ScannerError as err:
-        msg = "[ERROR] YAML error: {0}".format(err)
-        write_error_log(directory, msg)
+        print("[ERROR] YAML error loading report:",format(err)
         sys.exit(1)
     except:
-        msg = "[ERROR] Unexpected error:", sys.exc_info()[0]
-        write_error_log(directory, msg)
+        print("[ERROR] Unexpected error loading report:", sys.exc_info()[0])
         sys.exit(1)
     return report
 
@@ -52,7 +48,7 @@ def getReportInfo(report_path,info_type,profile_type,profile_version):
 
     print(f"[INFO] report {info_type} :",report_out)
 
-    if not report_out[info_type]:
+    if not info_type in report_out:
         print(f"Error extracting {info_type} from the report:", r.strip())
         sys.exit(1)
 
@@ -63,7 +59,6 @@ def getReportInfo(report_path,info_type,profile_type,profile_version):
 
         return annotations
 
-    #return json.dumps(report_out[info_type])
     return report_out[info_type]
 
 

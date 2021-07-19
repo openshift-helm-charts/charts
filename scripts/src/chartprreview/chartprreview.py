@@ -40,6 +40,7 @@ def get_labels(api_url):
     return r.json()["labels"]
 
 def get_modified_charts(directory, api_url):
+    print("[INFO] Get modified charts.",directory)
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(files_api_url, headers=headers)
@@ -55,6 +56,7 @@ def get_modified_charts(directory, api_url):
     sys.exit(1)
 
 def verify_user(directory, username, category, organization, chart):
+    print("[INFO] Verify user.",username, category, organization, chart)
     owners_path = os.path.join("charts", category, organization, chart, "OWNERS")
     if not os.path.exists(owners_path):
         msg = f"[ERROR] {owners_path} file does not exist."
@@ -69,6 +71,7 @@ def verify_user(directory, username, category, organization, chart):
         sys.exit(1)
 
 def check_owners_file_against_directory_structure(directory,username, category, organization, chart):
+    print("[INFO] Check owners file against directory structure.",category, organization, chart)
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
     vendor_label = out["vendor"]["label"]
@@ -86,6 +89,7 @@ def check_owners_file_against_directory_structure(directory,username, category, 
         sys.exit(1)
 
 def verify_signature(directory, category, organization, chart, version):
+    print("[INFO] Verify signature.",organization, chart, version)
     data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
     out = yaml.load(data, Loader=Loader)
     publickey = out.get('publicPgpKey')
@@ -103,6 +107,7 @@ def verify_signature(directory, category, organization, chart, version):
     print("[WARNING]", out.stderr.decode("utf-8"))
 
 def match_checksum(directory, category, organization, chart, version):
+    print("[INFO] Check digests match.",organization, chart, version)
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     submitted_digests = report_info.getReportDigests(submitted_report_path)
     submitted_digest = submitted_digests["chart"]
@@ -117,6 +122,7 @@ def match_checksum(directory, category, organization, chart, version):
         sys.exit(1)
 
 def check_url(directory, report_path):
+    print("[INFO] Check chart_url is a valid url.",report_path)
     chart_url = report_info.getReportChartUrl(report_path)
 
     try:
@@ -149,6 +155,7 @@ def check_url(directory, report_path):
         write_error_log(directory, *msgs)
 
 def match_name_and_version(directory, category, organization, chart, version):
+    print("[INFO] Check chart has same name and version as directory structure.",organization, chart, version)
     submitted_report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     if os.path.exists(submitted_report_path):
         submitted_report_chart = report_info.getReportChart(submitted_report_path)
@@ -195,6 +202,7 @@ def match_name_and_version(directory, category, organization, chart, version):
             sys.exit(1)
 
 def check_report_success(directory, api_url, report_path, version):
+    print("[INFO] Check report success.",report_path)
     data = open(report_path).read()
     print("[INFO] Full report: ")
     print(data)
@@ -258,6 +266,7 @@ def check_report_success(directory, api_url, report_path, version):
 
 
 def generate_verify_report(directory, category, organization, chart, version):
+    print("[INFO] Generate verify report.",organization,chart,version)
     src = os.path.join(os.getcwd(), "charts", category, organization, chart, version, "src")
     report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
     src_exists = False
