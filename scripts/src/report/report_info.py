@@ -19,7 +19,7 @@ def getReport(report_path):
     try:
         report = yaml.load(open(report_path), Loader=Loader)
     except yaml.scanner.ScannerError as err:
-        print("[ERROR] YAML error loading report:",format(err)
+        print("[ERROR] YAML error loading report:",format(err))
         sys.exit(1)
     except:
         print("[ERROR] Unexpected error loading report:", sys.exc_info()[0])
