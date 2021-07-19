@@ -73,6 +73,7 @@ def generate_report(chart_file_name):
     return report_path
 
 def prepare_chart_source_for_release(category, organization, chart, version):
+    print("[INFO] prepare chart source for release.",category, organization, chart, version)
     path = os.path.join("charts", category, organization, chart, version, "src")
     out = subprocess.run(["helm", "package", path], capture_output=True)
     print(out.stdout.decode("utf-8"))
@@ -86,6 +87,7 @@ def prepare_chart_source_for_release(category, organization, chart, version):
     shutil.copy(f"{chart}-{version}.tgz" , f".cr-release-packages/{new_chart_file_name}")
 
 def prepare_chart_tarball_for_release(category, organization, chart, version):
+    print("[INFO] prepare chart tarball for release.",category, organization, chart, version)
     chart_file_name = f"{chart}-{version}.tgz"
     new_chart_file_name = f"{organization}-{chart}-{version}.tgz"
     path = os.path.join("charts", category, organization, chart, version, chart_file_name)
@@ -97,6 +99,7 @@ def prepare_chart_tarball_for_release(category, organization, chart, version):
     shutil.copy(path, chart_file_name)
 
 def push_chart_release(repository, organization, commit_hash):
+    print("[INFO]push chart release.",repository, organization, commit_hash)
     org, repo = repository.split("/")
     token = os.environ.get("GITHUB_TOKEN")
     print("[INFO] Upload chart using the chart-releaser")
@@ -125,6 +128,7 @@ def create_worktree_for_index(branch):
     return dr
 
 def create_index_from_chart(indexdir, repository, branch, category, organization, chart, version, chart_url):
+    print("[INFO] create index from chart.",category, organization, chart, version, chart_url)
     path = os.path.join("charts", category, organization, chart, version)
     chart_file_name = f"{chart}-{version}.tgz"
     out = subprocess.run(["helm", "show", "chart", os.path.join(".cr-release-packages", chart_file_name)], capture_output=True)
@@ -135,6 +139,7 @@ def create_index_from_chart(indexdir, repository, branch, category, organization
     return crt
 
 def create_index_from_report(category, report_path):
+    print("[INFO] create index from report.",category, report_path)
 
     annotations = report_info.getReportAnnotations(report_path)
 
@@ -163,6 +168,7 @@ def create_index_from_report(category, report_path):
 
 
 def set_package_digest(chart_entry):
+    print("[INFO] set package digests.")
 
     url = chart_entry["urls"][0]
     head = requests.head(url, allow_redirects=True)
@@ -264,6 +270,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
 
 
 def update_chart_annotation(category, organization, chart_file_name, chart, report_path):
+    print("[INFO] Update chart annotation.",category, organization, chart_file_name, chart)
     dr = tempfile.mkdtemp(prefix="annotations-")
 
     annotations = report_info.getReportAnnotations(report_path)

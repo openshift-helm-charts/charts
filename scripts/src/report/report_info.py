@@ -46,8 +46,6 @@ def getReportInfo(report_path,info_type,profile_type,profile_version):
     output = client.containers.run(os.environ.get("VERIFIER_IMAGE"),docker_command,stdin_open=True,tty=True,stderr=True,volumes={report_directory: {'bind': '/charts/', 'mode': 'rw'}})
     report_out = json.loads(output)
 
-    print(f"[INFO] report {info_type} :",report_out)
-
     if not info_type in report_out:
         print(f"Error extracting {info_type} from the report:", r.strip())
         sys.exit(1)
@@ -63,26 +61,35 @@ def getReportInfo(report_path,info_type,profile_type,profile_version):
 
 
 def getReportAnnotations(report_path):
-    return getReportInfo(report_path,REPORT_ANNOTATIONS,"","")
+    annotations = getReportInfo(report_path,REPORT_ANNOTATIONS,"","")
+    print("[INFO] report annotations :",annotations)
+    return annotations
 
 def getReportResults(report_path,profile_type,profile_version):
     results = getReportInfo(report_path,REPORT_RESULTS,profile_type,profile_version)
+    print("[INFO] report results :",results)
     results["failed"] = int(results["failed"])
     results["passed"] = int(results["passed"])
     return results
     
 def getReportDigests(report_path):
-    return getReportInfo(report_path,REPORT_DIGESTS,"","")
+    digests = getReportInfo(report_path,REPORT_DIGESTS,"","")
+    print("[INFO] report digests :",digests)
+    return digests
 
 def getReportMetadata(report_path):
-    return getReportInfo(report_path,REPORT_METADATA,"","")
+    metadata = getReportInfo(report_path,REPORT_METADATA,"","")
+    print("[INFO] report digests :",digests)
+    return metadata
 
 def getReportChartUrl(report_path):
      metadata = getReportInfo(report_path,REPORT_METADATA,"","")
+     print("[INFO] report chart-uri :",metadata["chart-uri"])
      return metadata["chart-uri"]
 
 def getReportChart(report_path):
      metadata = getReportInfo(report_path,REPORT_METADATA,"","")
+     print("[INFO] report chart :",metadata["chart"])
      return metadata["chart"]
 
 
