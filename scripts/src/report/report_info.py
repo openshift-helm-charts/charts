@@ -2,33 +2,28 @@
 import os
 import sys
 import docker
-import logging
 import json
-import yaml
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader, Dumper
 
 REPORT_ANNOTATIONS = "annotations"
 REPORT_RESULTS = "results"
 REPORT_DIGESTS = "digests"
-REPORT_METADATA= "metadata"
+REPORT_METADATA = "metadata"
 
-def getReportInfo(report_path,info_type,profile_type,profile_version):
+def _get_report_info(report_path, info_type, profile_type, profile_version):
 
     docker_command = "report " + info_type + " charts/"+os.path.basename(report_path)
 
     set_values = ""
     if profile_type:
-        set_values = "profile.vendortype="+profile_type
+        set_values = "profile.vendortype=%s" % profile_type
     if profile_version:
         if set_values:
-            set_values = set_values + ","
-        set_values = set_values + "profile.version="+profile_version
+            set_values = "%s,profile.version=%s" % (set_values,profile_version)
+        else:
+            set_values = "profile.version=%s" % profile_version
 
     if set_values:
-        docker_command += " --set " + set_values
+        docker_command = "%s --set %s" % (docker_command, set_values)
 
     client = docker.from_env()
     report_directory = os.path.dirname(os.path.abspath(report_path))
@@ -36,7 +31,7 @@ def getReportInfo(report_path,info_type,profile_type,profile_version):
     report_out = json.loads(output)
 
     if not info_type in report_out:
-        print(f"Error extracting {info_type} from the report:", r.strip())
+        print(f"Error extracting {info_type} from the report:", report_out.strip())
         sys.exit(1)
 
     if info_type == REPORT_ANNOTATIONS:
@@ -49,36 +44,36 @@ def getReportInfo(report_path,info_type,profile_type,profile_version):
     return report_out[info_type]
 
 
-def getReportAnnotations(report_path):
-    annotations = getReportInfo(report_path,REPORT_ANNOTATIONS,"","")
-    print("[INFO] report annotations :",annotations)
+def get_report_annotations(report_path):
+    annotations = _get_report_info(report_path,REPORT_ANNOTATIONS,"","")
+    print("[INFO] report annotations : %s" % annotations)
     return annotations
 
-def getReportResults(report_path,profile_type,profile_version):
-    results = getReportInfo(report_path,REPORT_RESULTS,profile_type,profile_version)
-    print("[INFO] report results :",results)
+def get_report_results(report_path, profile_type, profile_version):
+    results = _get_report_info(report_path,REPORT_RESULTS,profile_type,profile_version)
+    print("[INFO] report results : %s" % results)
     results["failed"] = int(results["failed"])
     results["passed"] = int(results["passed"])
     return results
     
-def getReportDigests(report_path):
-    digests = getReportInfo(report_path,REPORT_DIGESTS,"","")
-    print("[INFO] report digests :",digests)
+def get_report_digests(report_path):
+    digests = _get_report_info(report_path,REPORT_DIGESTS,"","")
+    print("[INFO] report digests : %s" % digests)
     return digests
 
-def getReportMetadata(report_path):
-    metadata = getReportInfo(report_path,REPORT_METADATA,"","")
-    print("[INFO] report digests :",digests)
+def get_report_metadata(report_path):
+    metadata = _get_report_info(report_path,REPORT_METADATA,"","")
+    print("[INFO] report metadata : %s" % metadata)
     return metadata
 
-def getReportChartUrl(report_path):
-     metadata = getReportInfo(report_path,REPORT_METADATA,"","")
-     print("[INFO] report chart-uri :",metadata["chart-uri"])
+def get_report_chart_url(report_path):
+     metadata = _get_report_info(report_path,REPORT_METADATA,"","")
+     print("[INFO] report chart-uri : %s" % metadata["chart-uri"])
      return metadata["chart-uri"]
 
-def getReportChart(report_path):
-     metadata = getReportInfo(report_path,REPORT_METADATA,"","")
-     print("[INFO] report chart :",metadata["chart"])
+def get_report_chart(report_path):
+     metadata = _get_report_info(report_path,REPORT_METADATA,"","")
+     print("[INFO] report chart : %s" % metadata["chart"])
      return metadata["chart"]
 
 
