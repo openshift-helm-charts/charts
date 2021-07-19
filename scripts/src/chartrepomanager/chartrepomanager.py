@@ -138,7 +138,7 @@ def create_index_from_chart(indexdir, repository, branch, category, organization
     return crt
 
 def create_index_from_report(category, report_path):
-    print("[INFO] create index from report. %s, %s, %s" % (category, report_path))
+    print("[INFO] create index from report. %s, %s" % (category, report_path))
 
     annotations = report_info.get_report_annotations(report_path)
 
