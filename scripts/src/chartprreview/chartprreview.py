@@ -251,7 +251,8 @@ def check_report_success(directory, api_url, report_path, version):
 
     failed = report["failed"]
     passed = report["passed"]
-    if failed > 0:
+    failures_in_report = failed > 0
+    if failures_in_report:
         msgs = []
         msgs.append("[ERROR] Chart verifier report includes failures:")
         msgs.append(f"- Number of checks passed: {passed}")
@@ -264,13 +265,14 @@ def check_report_success(directory, api_url, report_path, version):
             print(f"::set-output name=redhat_to_community::True")
         if vendor_type != "redhat" and "force-publish" not in label_names:
             sys.exit(1)
+        
     if vendor_type == "community" and "force-publish" not in label_names:
         # requires manual review and approval
         msg = "[INFO] Community charts require manual review and approval from maintainers"
         write_error_log(directory, msg)
         sys.exit(1)
 
-    if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
+    if not failures_in_report and "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
         full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
         if not semver.VersionInfo.isvalid(full_version):
             msg = f"[ERROR] OpenShift version not conforming to SemVer spec: {full_version}"

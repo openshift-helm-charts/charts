@@ -290,8 +290,11 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
 
     if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
         full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
-        ver = semver.VersionInfo.parse(full_version)
-        annotations["charts.openshift.io/certifiedOpenShiftVersions"] = f"{ver.major}.{ver.minor}"
+        if full_version == "N/A":
+            annotations["charts.openshift.io/certifiedOpenShiftVersions"] = "N/A"
+        else:
+            ver = semver.VersionInfo.parse(full_version)
+            annotations["charts.openshift.io/certifiedOpenShiftVersions"] = f"{ver.major}.{ver.minor}"
 
     out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
@@ -362,7 +365,7 @@ def main():
         print("[INFO] Updating chart annotation")
         update_chart_annotation(category, organization, chart_file_name, chart, report_path)
         chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}/{organization}-{chart}-{version}.tgz"
-
+        print("[INFO] Helm package was released at %s" % chart_url)
         print("[INFO] Creating index from chart")
         chart_entry = create_index_from_chart(indexdir, args.repository, branch, category, organization, chart, version, chart_url)
     else:
