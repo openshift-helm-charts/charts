@@ -1,0 +1,9 @@
+chart:
+  name: gloo-edge
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: djannot
+vendor:
+  label: solo
+  name: Solo.io
