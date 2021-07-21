@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Chart source only submission
+"""Chart tgz only submission
 
 Partners or redhat associates can publish their chart by submitting
-error-free chart in source format without the report.
+error-free chart in tgz format without the report.
 """
 import os
 import tempfile
 import json
 import base64
 import pathlib
-import tarfile
 import logging
+import shutil
 from dataclasses import dataclass
 from string import Template
 
@@ -92,14 +92,14 @@ vendor:
         'delete', f'https://api.github.com/repos/{fork_repo}/git/refs/heads/{fork_branch}', bot_token)
 
 
-@scenario('features/chart_src_without_report.feature', "The partner hashicorp submits a error-free chart source for vault")
-def test_partner_chart_src_submission():
-    """The partner hashicorp submits a error-free chart source for vault."""
+@scenario('features/chart_tar_without_report.feature', "The partner hashicorp submits a error-free chart tgz for vault")
+def test_partner_chart_tgz_submission():
+    """The partner hashicorp submits a error-free chart tgz for vault."""
 
 
-@scenario('features/chart_src_without_report.feature', "A redhat associate submits a error-free chart source for vault")
-def test_redhat_chart_src_submission():
-    """A redhat associate submits a error-free chart source for vault."""
+@scenario('features/chart_tar_without_report.feature', "A redhat associate submits a error-free chart tgz for vault")
+def test_redhat_chart_tgz_submission():
+    """A redhat associate submits a error-free chart tgz for vault."""
 
 
 @given("hashicorp is a valid partner")
@@ -116,10 +116,10 @@ def redhat_associate_is_valid(secrets):
     secrets.vendor = 'redhat'
 
 
-@given("hashicorp has created an error-free chart source for vault")
-@given("the redhat associate has created an error-free chart source for vault")
-def the_user_has_created_a_error_free_chart_src(secrets):
-    """The user has created an error-free chart source."""
+@given("hashicorp has created an error-free chart tgz for vault")
+@given("the redhat associate has created an error-free chart tgz for vault")
+def the_user_has_created_a_error_free_chart_tgz(secrets):
+    """The user has created an error-free chart tgz."""
 
     repo = git.Repo(os.getcwd())
     if os.environ.get('WORKFLOW_DEVELOPMENT'):
@@ -168,16 +168,15 @@ def the_user_has_created_a_error_free_chart_src(secrets):
     repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
                   f'HEAD:refs/heads/{secrets.pr_base_branch}', '-f')
 
-    # Unzip files into temporary directory for PR submission
-    with tarfile.open(secrets.test_chart, 'r') as fd:
-        fd.extractall(f'{chart_dir}/{secrets.chart_version}')
-        os.rename(f'{chart_dir}/{secrets.chart_version}/{secrets.chart_name}',
-                  f'{chart_dir}/{secrets.chart_version}/src')
+    # Copy the chart tgz into temporary directory for PR submission
+    chart_tgz = secrets.test_chart.split('/')[-1]
+    shutil.copyfile(f'{old_cwd}/{secrets.test_chart}',
+                    f'{chart_dir}/{secrets.chart_version}/{chart_tgz}')
 
-    # Push chart src files to fork_repo:fork_branch
+    # Push chart tgz file to fork_repo:fork_branch
     repo.git.add('charts')
     repo.git.commit(
-        '-m', f"Add {secrets.vendor} {secrets.chart_name} {secrets.chart_version} chart source files")
+        '-m', f"Add {secrets.vendor} {secrets.chart_name} {secrets.chart_version} chart tgz file")
 
     repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.fork_repo}',
                   f'HEAD:refs/heads/{secrets.fork_branch}', '-f')
@@ -185,10 +184,10 @@ def the_user_has_created_a_error_free_chart_src(secrets):
     os.chdir(old_cwd)
 
 
-@when("hashicorp sends a pull request with the vault source chart")
-@when("the redhat associate sends a pull request with the vault source chart")
-def the_user_sends_the_pull_request_with_the_chart_src(secrets):
-    """The user sends the pull request with the chart source files."""
+@when("hashicorp sends a pull request with the vault tgz chart")
+@when("the redhat associate sends a pull request with the vault tgz chart")
+def the_user_sends_the_pull_request_with_the_chart_tgz(secrets):
+    """The user sends the pull request with the chart tgz file."""
 
     actions_bot_name = 'github-actions[bot]'
     if secrets.bot_name == actions_bot_name:
@@ -199,7 +198,7 @@ def the_user_sends_the_pull_request_with_the_chart_src(secrets):
             'title': secrets.fork_branch}
 
     logger.info(
-        f"Create PR with chart source files from '{secrets.fork_repo}:{secrets.fork_branch}'")
+        f"Create PR with chart tgz file from '{secrets.fork_repo}:{secrets.fork_branch}'")
     r = github_api(
         'post', f'https://api.github.com/repos/{secrets.test_repo}/pulls', secrets.bot_token, json=data)
     j = json.loads(r.text)

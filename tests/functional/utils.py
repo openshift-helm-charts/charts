@@ -3,10 +3,41 @@
 
 import os
 import tarfile
+import json
 
 import pytest
 import requests
 import yaml
+from retrying import retry
+
+
+@retry(stop_max_delay=30_000)
+def get_run_id(secrets):
+    r = github_api(
+        'post', f'https://api.github.com/repos/{secrets.test_repo}/pulls/{secrets.pr_number}', secrets.bot_token)
+    pr = json.loads(r.text)
+
+    r = github_api(
+        'get', f'https://api.github.com/repos/{secrets.test_repo}/actions/runs', secrets.bot_token)
+    runs = json.loads(r.text)
+
+    for run in runs['workflow_runs']:
+        if run['head_sha'] == pr['head']['sha']:
+            return run['id']
+    else:
+        pytest.fail("Workflow for the submitted PR did not run.")
+
+
+@retry(stop_max_delay=60_000*10)
+def get_run_result(secrets, run_id):
+    r = github_api(
+        'get', f'https://api.github.com/repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
+    run = json.loads(r.text)
+
+    if run['conclusion'] is None:
+        pytest.fail("Workflow is still running.")
+
+    return run['conclusion']
 
 
 def get_name_and_version_from_report(path):
