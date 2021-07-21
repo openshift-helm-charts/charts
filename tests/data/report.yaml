@@ -7,9 +7,9 @@ metadata:
             VendorType: partner
             version: v1.0
         chart-uri: https://github.com/${repository}/raw/${branch}/tests/data/vault-0.13.0.tgz
-        digest: sha256:ec2c09a0e5994ddb5014eea3db3c8bce41166ffa91471a06101890c6b39df36e
+        digest: sha256:2e96d8f78fb494c8a5d6b9e21b677897011a55f8a005253f0e8dcf996c1d4183
         digests:
-            chart: sha256:ec2c09a0e5994ddb5014eea3db3c8bce41166ffa91471a06101890c6b39df36e
+            chart: sha256:2e96d8f78fb494c8a5d6b9e21b677897011a55f8a005253f0e8dcf996c1d4183
         lastCertifiedTimestamp: "2021-07-09T14:48:37.949758+00:00"
         certifiedOpenShiftVersions: 4.7.0
     chart:
@@ -20,7 +20,7 @@ metadata:
           - https://github.com/hashicorp/vault-helm
           - https://github.com/hashicorp/vault-k8s
           - https://github.com/hashicorp/vault-csi-provider
-        version: 0.12.0
+        version: 0.13.0
         description: Official HashiCorp Vault Chart
         keywords:
           - vault

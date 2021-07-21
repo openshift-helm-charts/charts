@@ -277,6 +277,15 @@ def the_release_is_published(secrets):
                 'get', f'https://api.github.com/repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
             asset_list = json.loads(r.text)
             asset_names = [asset['name'] for asset in asset_list]
+
+            logger.info(f"Delete release '{expected_tag}'")
+            r = github_api(
+                'delete', f'https://api.github.com/repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
+
+            logger.info(f"Delete release tag '{expected_tag}'")
+            r = github_api(
+                'delete', f'https://api.github.com/repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
+
             if expected_chart_asset not in asset_names:
                 pytest.fail(f"Missing release asset: {expected_chart_asset}")
 
@@ -285,19 +294,6 @@ def the_release_is_published(secrets):
                 f"Check '{expected_report_asset}' is in release assets")
             if expected_report_asset not in asset_names:
                 pytest.fail(f"Missing release asset: {expected_report_asset}")
-
-            logger.info(f"Delete release '{expected_tag}'")
-            r = github_api(
-                'delete', f'https://api.github.com/repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
-            if r.status_code != 204:
-                pytest.fail(f"Unable to delete the release '{expected_tag}'")
-
-            logger.info(f"Delete release tag '{expected_tag}'")
-            r = github_api(
-                'delete', f'https://api.github.com/repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
-            if r.status_code != 204:
-                pytest.fail(
-                    f"Unable to delete the release tag '{expected_tag}'")
             return
     else:
         pytest.fail(f"'{expected_tag}' not in the release list")

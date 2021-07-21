@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Chart source only submission
+"""Report and chart source submission
 
 Partners or redhat associates can publish their chart by submitting
-error-free chart in source format without the report.
+error-free chart in source format with the report.
 """
 import os
 import tempfile
@@ -24,7 +24,7 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_chart_tar, github_api, get_run_id, get_run_result
+from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -57,8 +57,9 @@ vendor:
   name: ${vendor}
 """
         test_chart: str = 'tests/data/vault-0.13.0.tgz'
-        chart_name, chart_version = get_name_and_version_from_chart_tar(
-            test_chart)
+        test_report: str = 'tests/data/report.yaml'
+        chart_name, chart_version = get_name_and_version_from_report(
+            test_report)
 
     test_repo = os.environ.get("TEST_REPO")
     if not test_repo:
@@ -92,14 +93,14 @@ vendor:
         'delete', f'https://api.github.com/repos/{fork_repo}/git/refs/heads/{fork_branch}', bot_token)
 
 
-@scenario('features/chart_src_without_report.feature', "The partner hashicorp submits a error-free chart source for vault")
+@scenario('features/report_and_chart_src.feature', "The partner hashicorp submits an error-free chart source with report for vault")
 def test_partner_chart_src_submission():
-    """The partner hashicorp submits a error-free chart source for vault."""
+    """The partner hashicorp submits an error-free chart source with report for vault."""
 
 
-@scenario('features/chart_src_without_report.feature', "A redhat associate submits a error-free chart source for vault")
+@scenario('features/report_and_chart_src.feature', "A redhat associate submits an error-free chart source with report for vault")
 def test_redhat_chart_src_submission():
-    """A redhat associate submits a error-free chart source for vault."""
+    """A redhat associate submits an error-free chart source with report for vault."""
 
 
 @given("hashicorp is a valid partner")
@@ -116,8 +117,8 @@ def redhat_associate_is_valid(secrets):
     secrets.vendor = 'redhat'
 
 
-@given("hashicorp has created an error-free chart source for vault")
-@given("the redhat associate has created an error-free chart source for vault")
+@given("hashicorp has created an error-free chart source and report for vault")
+@given("the redhat associate has created an error-free chart source and report for vault")
 def the_user_has_created_a_error_free_chart_src(secrets):
     """The user has created an error-free chart source."""
 
@@ -174,6 +175,15 @@ def the_user_has_created_a_error_free_chart_src(secrets):
         os.rename(f'{chart_dir}/{secrets.chart_version}/{secrets.chart_name}',
                   f'{chart_dir}/{secrets.chart_version}/src')
 
+    # Copy report to temporary location and push to fork_repo:fork_branch
+    logger.info(f"Push report to '{secrets.fork_repo}:{secrets.fork_branch}'")
+    tmpl = open(secrets.test_report).read()
+    values = {'repository': secrets.test_repo,
+              'branch': secrets.pr_base_branch}
+    content = Template(tmpl).substitute(values)
+    with open(f'charts/{secrets.vendor_type}/{secrets.vendor}/{secrets.chart_name}/{secrets.chart_version}/report.yaml', 'w') as fd:
+        fd.write(content)
+
     # Push chart src files to fork_repo:fork_branch
     repo.git.add('charts')
     repo.git.commit(
@@ -185,8 +195,8 @@ def the_user_has_created_a_error_free_chart_src(secrets):
     os.chdir(old_cwd)
 
 
-@when("hashicorp sends a pull request with the vault source chart")
-@when("the redhat associate sends a pull request with the vault source chart")
+@when("hashicorp sends a pull request with the vault source chart and report")
+@when("the redhat associate sends a pull request with the vault source chart and report")
 def the_user_sends_the_pull_request_with_the_chart_src(secrets):
     """The user sends the pull request with the chart source files."""
 
@@ -280,21 +290,15 @@ def the_release_is_published(secrets):
             asset_names = [asset['name'] for asset in asset_list]
 
             logger.info(f"Delete release '{expected_tag}'")
-            r = github_api(
+            github_api(
                 'delete', f'https://api.github.com/repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
 
             logger.info(f"Delete release tag '{expected_tag}'")
-            r = github_api(
+            github_api(
                 'delete', f'https://api.github.com/repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
 
             if expected_chart_asset not in asset_names:
                 pytest.fail(f"Missing release asset: {expected_chart_asset}")
-
-            expected_report_asset = 'report.yaml'
-            logger.info(
-                f"Check '{expected_report_asset}' is in release assets")
-            if expected_report_asset not in asset_names:
-                pytest.fail(f"Missing release asset: {expected_report_asset}")
             return
     else:
         pytest.fail(f"'{expected_tag}' not in the release list")
