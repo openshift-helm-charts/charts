@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Chart tgz only submission
+"""Report and chart tar submission
 
 Partners or redhat associates can publish their chart by submitting
-error-free chart in tgz format without the report.
+error-free chart in tar format with the report.
 """
 import os
 import tempfile
@@ -24,7 +24,7 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_chart_tar, github_api, get_run_id, get_run_result
+from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -57,8 +57,9 @@ vendor:
   name: ${vendor}
 """
         test_chart: str = 'tests/data/vault-0.13.0.tgz'
-        chart_name, chart_version = get_name_and_version_from_chart_tar(
-            test_chart)
+        test_report: str = 'tests/data/report.yaml'
+        chart_name, chart_version = get_name_and_version_from_report(
+            test_report)
 
     test_repo = os.environ.get("TEST_REPO")
     if not test_repo:
@@ -92,14 +93,14 @@ vendor:
         'delete', f'https://api.github.com/repos/{fork_repo}/git/refs/heads/{fork_branch}', bot_token)
 
 
-@scenario('features/chart_tar_without_report.feature', "The partner hashicorp submits a error-free chart tgz for vault")
-def test_partner_chart_tgz_submission():
-    """The partner hashicorp submits a error-free chart tgz for vault."""
+@scenario('features/report_and_chart_tar.feature', "The partner hashicorp submits an error-free chart tar with report for vault")
+def test_partner_chart_tar_with_report_submission():
+    """The partner hashicorp submits an error-free chart tar with report for vault."""
 
 
-@scenario('features/chart_tar_without_report.feature', "A redhat associate submits a error-free chart tgz for vault")
-def test_redhat_chart_tgz_submission():
-    """A redhat associate submits a error-free chart tgz for vault."""
+@scenario('features/report_and_chart_tar.feature', "A redhat associate submits an error-free chart tar with report for vault")
+def test_redhat_chart_tar_with_report_submission():
+    """A redhat associate submits an error-free chart tar with report for vault."""
 
 
 @given("hashicorp is a valid partner")
@@ -116,10 +117,10 @@ def redhat_associate_is_valid(secrets):
     secrets.vendor = 'redhat'
 
 
-@given("hashicorp has created an error-free chart tgz for vault")
-@given("the redhat associate has created an error-free chart tgz for vault")
-def the_user_has_created_a_error_free_chart_tgz(secrets):
-    """The user has created an error-free chart tgz."""
+@given("hashicorp has created an error-free chart tar and report for vault")
+@given("the redhat associate has created an error-free chart tar and report for vault")
+def the_user_has_created_a_error_free_chart_tar_with_report(secrets):
+    """The user has created an error-free chart tar."""
 
     repo = git.Repo(os.getcwd())
     if os.environ.get('WORKFLOW_DEVELOPMENT'):
@@ -168,15 +169,24 @@ def the_user_has_created_a_error_free_chart_tgz(secrets):
     repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
                   f'HEAD:refs/heads/{secrets.pr_base_branch}', '-f')
 
-    # Copy the chart tgz into temporary directory for PR submission
-    chart_tgz = secrets.test_chart.split('/')[-1]
+    # Copy the chart tar into temporary directory for PR submission
+    chart_tar = secrets.test_chart.split('/')[-1]
     shutil.copyfile(f'{old_cwd}/{secrets.test_chart}',
-                    f'{chart_dir}/{secrets.chart_version}/{chart_tgz}')
+                    f'{chart_dir}/{secrets.chart_version}/{chart_tar}')
 
-    # Push chart tgz file to fork_repo:fork_branch
+    # Copy report to temporary location and push to fork_repo:fork_branch
+    logger.info(f"Push report to '{secrets.fork_repo}:{secrets.fork_branch}'")
+    tmpl = open(secrets.test_report).read()
+    values = {'repository': secrets.test_repo,
+              'branch': secrets.pr_base_branch}
+    content = Template(tmpl).substitute(values)
+    with open(f'charts/{secrets.vendor_type}/{secrets.vendor}/{secrets.chart_name}/{secrets.chart_version}/report.yaml', 'w') as fd:
+        fd.write(content)
+
+    # Push chart src files to fork_repo:fork_branch
     repo.git.add('charts')
     repo.git.commit(
-        '-m', f"Add {secrets.vendor} {secrets.chart_name} {secrets.chart_version} chart tgz file")
+        '-m', f"Add {secrets.vendor} {secrets.chart_name} {secrets.chart_version} chart tar files and report")
 
     repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.fork_repo}',
                   f'HEAD:refs/heads/{secrets.fork_branch}', '-f')
@@ -184,10 +194,10 @@ def the_user_has_created_a_error_free_chart_tgz(secrets):
     os.chdir(old_cwd)
 
 
-@when("hashicorp sends a pull request with the vault tgz chart")
-@when("the redhat associate sends a pull request with the vault tgz chart")
-def the_user_sends_the_pull_request_with_the_chart_tgz(secrets):
-    """The user sends the pull request with the chart tgz file."""
+@when("hashicorp sends a pull request with the vault tar chart and report")
+@when("the redhat associate sends a pull request with the vault tar chart and report")
+def the_user_sends_the_pull_request(secrets):
+    """The user sends the pull request with the chart tar files."""
 
     actions_bot_name = 'github-actions[bot]'
     if secrets.bot_name == actions_bot_name:
@@ -198,7 +208,7 @@ def the_user_sends_the_pull_request_with_the_chart_tgz(secrets):
             'title': secrets.fork_branch}
 
     logger.info(
-        f"Create PR with chart tgz file from '{secrets.fork_repo}:{secrets.fork_branch}'")
+        f"Create PR with chart tar files from '{secrets.fork_repo}:{secrets.fork_branch}'")
     r = github_api(
         'post', f'https://api.github.com/repos/{secrets.test_repo}/pulls', secrets.bot_token, json=data)
     j = json.loads(r.text)
@@ -269,8 +279,8 @@ def the_release_is_published(secrets):
         if release['tag_name'] == expected_tag:
             logger.info(f"Released '{expected_tag}' successfully")
 
-            chart_tgz = secrets.test_chart.split('/')[-1]
-            expected_chart_asset = f'{secrets.vendor}-{chart_tgz}'
+            chart_tar = secrets.test_chart.split('/')[-1]
+            expected_chart_asset = f'{secrets.vendor}-{chart_tar}'
             logger.info(f"Check '{expected_chart_asset}' is in release assets")
             release_id = release['id']
             r = github_api(
@@ -279,21 +289,15 @@ def the_release_is_published(secrets):
             asset_names = [asset['name'] for asset in asset_list]
 
             logger.info(f"Delete release '{expected_tag}'")
-            r = github_api(
+            github_api(
                 'delete', f'https://api.github.com/repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
 
             logger.info(f"Delete release tag '{expected_tag}'")
-            r = github_api(
+            github_api(
                 'delete', f'https://api.github.com/repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
 
             if expected_chart_asset not in asset_names:
                 pytest.fail(f"Missing release asset: {expected_chart_asset}")
-
-            expected_report_asset = 'report.yaml'
-            logger.info(
-                f"Check '{expected_report_asset}' is in release assets")
-            if expected_report_asset not in asset_names:
-                pytest.fail(f"Missing release asset: {expected_report_asset}")
             return
     else:
         pytest.fail(f"'{expected_tag}' not in the release list")
