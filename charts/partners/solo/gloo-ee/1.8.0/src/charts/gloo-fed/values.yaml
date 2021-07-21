@@ -1,0 +1,77 @@
+create_license_secret: true
+enableMultiClusterRbac: false
+enabled: true
+global:
+  glooMtls:
+    enabled: false
+  glooStats:
+    enabled: true
+  image:
+    extended: false
+    pullPolicy: IfNotPresent
+    registry: quay.io/solo-io
+  istioIntegration: {}
+  istioSDS: {}
+glooFed:
+  image:
+    pullPolicy: IfNotPresent
+    registry: quay.io/solo-io
+    repository: gloo-fed
+    tag: 1.8.0
+  resources:
+    requests:
+      cpu: 125m
+      memory: 256Mi
+glooFedApiserver:
+  console:
+    image:
+      pullPolicy: IfNotPresent
+      registry: quay.io/solo-io
+      repository: gloo-federation-console
+      tag: 1.8.0
+    port: 8090
+    resources:
+      requests:
+        cpu: 125m
+        memory: 256Mi
+  enable: true
+  envoy:
+    bootstrapConfig:
+      configMapName: gloo-fed-default-apiserver-envoy-config
+    image:
+      pullPolicy: IfNotPresent
+      registry: quay.io/solo-io
+      repository: gloo-fed-apiserver-envoy
+      tag: 1.8.0
+    resources:
+      requests:
+        cpu: 125m
+        memory: 256Mi
+  floatingUserId: false
+  healthCheckPort: 8081
+  image:
+    pullPolicy: IfNotPresent
+    registry: quay.io/solo-io
+    repository: gloo-fed-apiserver
+    tag: 1.8.0
+  port: 10101
+  resources:
+    requests:
+      cpu: 125m
+      memory: 256Mi
+  runAsUser: 101
+  stats: null
+license_key: ""
+license_secret_name: license
+rbac:
+  create: true
+rbacWebhook:
+  image:
+    pullPolicy: IfNotPresent
+    registry: quay.io/solo-io
+    repository: gloo-fed-rbac-validating-webhook
+    tag: 1.8.0
+  resources:
+    requests:
+      cpu: 125m
+      memory: 256Mi

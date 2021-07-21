@@ -1,0 +1,148 @@
+{{- define "extauth.deploymentSpec" -}}
+{{- $name := (index . 1) }}
+{{- with (first .) }}
+{{- $extAuth := .Values.global.extensions.extAuth }}
+{{- $statsConfig := coalesce $extAuth.deployment.stats .Values.global.glooStats -}}
+{{- $image := merge $extAuth.deployment.image .Values.global.image }}
+{{- $extAuthName := $extAuth.deployment.name }}
+{{- if .Values.global.extensions.dataplanePerProxy }}
+{{- $extAuthName = printf "%s-%s" $extAuthName ($name | kebabcase) }}
+{{- end }} {{/* .Values.global.extensions.dataplanePerProxy */}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gloo
+    gloo: {{ $extAuthName }}
+  name: {{ $extAuthName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+{{- if not (kindIs "invalid" $extAuth.deployment.replicas) }}
+  replicas: {{ $extAuth.deployment.replicas }}
+{{- end }}
+  selector:
+    matchLabels:
+      gloo: {{ $extAuthName }}
+  template:
+    metadata:
+      labels:
+        gloo: {{ $extAuthName }}
+        {{- if $extAuth.deployment.extraExtAuthLabels }}
+        {{- range $key, $value := $extAuth.deployment.extraExtAuthLabels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      {{- if or $statsConfig.enabled .Values.global.istioIntegration.disableAutoinjection }}
+      annotations:
+        {{- if $statsConfig.enabled}}
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9091"
+        prometheus.io/scrape: "true"
+        {{- end}}
+        {{- if .Values.global.istioIntegration.disableAutoinjection }}
+        sidecar.istio.io/inject: "false"
+        {{- end }}
+      {{- end }}{{/* $extAuth.deployment.stats */}}
+    spec:
+      serviceAccountName: {{ $extAuth.service.name }}
+      {{- if or $extAuth.deployment.extraVolume (or $extAuth.plugins .Values.global.glooMtls.enabled)}}
+      volumes:
+      {{- if $extAuth.deployment.extraVolume }}
+        {{- toYaml $extAuth.deployment.extraVolume | nindent 6 }}
+      {{- end }}
+      {{- if .Values.global.glooMtls.enabled }}
+      - name: gloo-mtls-certs
+        secret:
+          defaultMode: 420
+          secretName: gloo-mtls-certs
+      - name: extauth-sidecar-config
+        configMap:
+          name: extauth-sidecar-config
+      {{- end }} {{/* .Values.global.glooMtls.enabled */}}
+      {{- if $extAuth.plugins }}
+      {{- include "gloo.extauthpluginvolume" . | nindent 6 }}
+      initContainers:
+      {{- include "gloo.extauthinitcontainers" . | nindent 6 }}
+      {{- end }} {{/* $extAuth.plugins */}}
+      {{- end}}
+      containers:
+      {{- $data := dict "Values" .Values "ExtAuthMode" "standalone" -}}
+      {{- include "gloo.extauthcontainer" $data | nindent 6 }}
+      {{- if .Values.global.glooMtls.enabled }}
+      {{- $sdsImage := merge .Values.global.glooMtls.sds.image .Values.global.image }}
+      {{- $envoyImage := merge .Values.global.glooMtls.envoy.image .Values.global.image}}
+      - name: envoy-sidecar
+        env:
+        - name: ENVOY_SIDECAR
+          value: "true"
+        image: {{ template "gloo.image" $envoyImage }}
+        imagePullPolicy: {{ $envoyImage.pullPolicy }}
+        volumeMounts:
+        - mountPath: /etc/envoy
+          name: extauth-sidecar-config
+        - mountPath: /etc/envoy/ssl
+          name: gloo-mtls-certs
+          readOnly: true
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","while nc -z localhost 8084; do sleep .1; done;"]
+        {{- if .Values.global.glooMtls.envoySidecarResources }}
+        resources:
+{{ toYaml .Values.global.glooMtls.envoySidecarResources | indent 10}}
+        {{- end}}
+      - name: sds
+        image: {{ template "gloo.image" $sdsImage }}
+        imagePullPolicy: {{ $sdsImage.pullPolicy }}
+        env:
+          - name: GLOO_MTLS_SDS_ENABLED
+            value: "true"
+        volumeMounts:
+        - mountPath: /etc/envoy/ssl
+          name: gloo-mtls-certs
+          readOnly: true
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","while nc -z localhost 8084; do sleep .1; done;"]
+        {{- if .Values.global.glooMtls.sdsResources }}
+        resources:
+{{ toYaml .Values.global.glooMtls.sdsResources | indent 10}}
+        {{- end}}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        {{- if not $extAuth.deployment.floatingUserId }}
+        runAsUser: {{ printf "%.0f" (float64 $extAuth.deployment.runAsUser) }}
+        fsGroup: {{ printf "%.0f" (float64 $extAuth.deployment.fsGroup) }}
+        {{- end }}
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    gloo: gateway-proxy
+                topologyKey: kubernetes.io/hostname
+  {{- include "gloo.podSpecStandardFields" $extAuth.deployment | nindent 6 }}
+  {{- include "gloo.pullSecret" $image | nindent 6 }}
+---
+{{- end }} {{/* with */}}
+{{- end }} {{/* define extauth.deploymentSpec */}}
+
+{{- if .Values.global.extensions.extAuth.enabled }}
+{{- if .Values.global.extensions.extAuth.standaloneDeployment }}
+{{- include "gloo.dataplaneperproxyhelper" $ }}
+{{- $override := dict -}}
+{{- if .Values.global.extensions.extAuth.deployment }}
+{{- $override = .Values.global.extensions.extAuth.deployment.kubeResourceOverride}}
+{{- end }}{{/* if .Values.rateLimit.deployment */}}
+{{- range $name, $spec := $.ProxiesToCreateDataplaneFor }}
+{{- if not $spec.disabled}}
+{{- $ctx := (list $ $name $spec)}}
+{{- include "gloo.util.merge" (list $ctx $override "extauth.deploymentSpec") -}}
+{{- end }} {{/* if not $spec.disabled */}}
+{{- end }} {{/* range $name, $spec := $.ProxiesToCreateDataplaneFor */}}
+{{- end }} {{/* .Values.global.extensions.standaloneDeployment */}}
+{{- end }} {{/* enabled */}}

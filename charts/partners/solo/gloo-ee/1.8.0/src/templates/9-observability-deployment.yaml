@@ -1,0 +1,105 @@
+{{- define "observability.deploymentSpec" -}}
+{{- if .Values.observability.enabled }}
+{{- if or .Values.grafana.defaultInstallationEnabled .Values.observability.customGrafana.enabled }}
+{{- $image := .Values.observability.deployment.image }}
+{{- $statsConfig := coalesce .Values.observability.deployment.stats .Values.global.glooStats -}}
+{{- if .Values.global  }}
+{{- $image = merge .Values.observability.deployment.image .Values.global.image }}
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gloo
+    gloo: observability
+  name: observability
+  namespace: {{ .Release.Namespace }}
+spec:
+{{- if not (kindIs "invalid" .Values.observability.deployment.replicas) }}
+  replicas: {{ .Values.observability.deployment.replicas }}
+{{- end }}
+  selector:
+    matchLabels:
+      app: gloo
+      gloo: observability
+  template:
+    metadata:
+      labels:
+        app: gloo
+        gloo: observability
+        {{- if .Values.observability.deployment.extraObservabilityLabels }}
+        {{- range $key, $value := .Values.observability.deployment.extraObservabilityLabels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      {{- if or $statsConfig.enabled .Values.global.istioIntegration.disableAutoinjection }}
+      annotations:
+        {{- if $statsConfig.enabled}}
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9091"
+        prometheus.io/scrape: "true"
+        {{- end}}
+        {{- if .Values.global.istioIntegration.disableAutoinjection }}
+        sidecar.istio.io/inject: "false"
+        {{- end }}
+      {{- end }}
+    spec:
+      serviceAccountName: observability
+      {{- include "gloo.podSpecStandardFields" .Values.observability.deployment | nindent 6 -}}
+      volumes:
+        - name: upstream-dashboard-template
+          configMap:
+            name: {{ .Release.Name }}-observability-config
+            items:
+            - key: DASHBOARD_JSON_TEMPLATE
+              path: dashboard-template.json
+      containers:
+        - image: {{template "gloo.image" $image}}
+          imagePullPolicy: {{$image.pullPolicy}}
+          name: observability
+          volumeMounts:
+            - name: upstream-dashboard-template
+              mountPath: /observability
+              readOnly: true
+          {{- if $.Values.observability.deployment.resources }}
+          resources:
+{{ toYaml $.Values.observability.deployment.resources | indent 12}}
+          {{- end}}
+          env:
+            - name: GLOO_LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.license_secret_name }}
+                  key: license-key
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{- if $statsConfig.enabled }}
+            - name: START_STATS_SERVER
+              value: "true"
+            {{- end}}
+            {{- if .Values.observability.deployment.loglevel}}
+            - name: LOG_LEVEL
+              value: {{ .Values.observability.deployment.loglevel }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{.Release.Name}}-observability-config
+            - secretRef:
+                name: {{.Release.Name}}-observability-secrets
+      securityContext:
+        runAsNonRoot: true
+        {{- if not .Values.observability.deployment.floatingUserId }}
+        runAsUser: {{ printf "%.0f" (float64 .Values.observability.deployment.runAsUser) -}}
+        {{- end }}
+{{- include "gloo.pullSecret" $image | nindent 6 }}
+{{- end }}
+{{- end }}  {{- /* Observability enabled */ -}}
+{{- end }}{{/* define "observability.deploymentSpec */}}
+
+{{- $override := dict }}
+{{- if .Values.observability.deployment -}}
+{{- $override = .Values.observability.deployment.kubeResourceOverride }}
+{{- end -}}{{/* if .Values.observability.deployment */}}
+{{- include "gloo.util.merge" (list $ $override "observability.deploymentSpec") }}
