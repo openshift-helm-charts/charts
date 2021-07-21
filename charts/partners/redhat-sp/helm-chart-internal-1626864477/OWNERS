@@ -1,8 +1,9 @@
 chart:
   name: helm-chart-internal-1626864477
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Test Helm Chart Short DESC
+publicPgpKey: MTIzNDU2Nzg5MA==
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
