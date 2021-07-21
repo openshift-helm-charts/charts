@@ -39,12 +39,14 @@ def get_name_and_version_from_chart_tar(path):
     tar = tarfile.open(path)
     for member in tar.getmembers():
         if member.name.split('/')[-1] == 'Chart.yaml':
-            with open(member.name, 'r') as fd:
+            chart = tar.extractfile(member)
+            if chart is not None:
+                content = chart.read()
                 try:
-                    chart_yaml = yaml.safe_load(fd)
+                    chart_yaml = yaml.safe_load(content)
+                    return chart_yaml['name'], chart_yaml['version']
                 except yaml.YAMLError as err:
                     pytest.fail(f"error parsing '{path}': {err}")
-            return chart_yaml['name'], chart_yaml['version']
     else:
         pytest.fail(f"Chart.yaml not in {path}")
 
