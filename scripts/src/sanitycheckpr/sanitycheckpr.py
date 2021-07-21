@@ -26,29 +26,39 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
     r = requests.get(files_api_url, headers=headers)
     pattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
     reportpattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/report.yaml")
-    count = 0
-    match_found = False
-    for f in r.json():
-        filename = f["filename"]
-        match = pattern.match(filename)
-        if not match:
-            msg = f"[ERROR] PR should only modify chart related files: {filename}"
-            print(msg)
-            print(f"::set-output name=sanity-error-message::{msg}")
-            sys.exit(1)
-        else:
-            if reportpattern.match(filename):
-                print("[INFO] Report found")
-                print("::set-output name=report-exists::true")
-            if not match_found:
-                pattern_match = match
-                match_found = True
-            elif pattern_match.groups() != match.groups():
-                msg = f"[ERROR] PR must only include one chart"
+    page_number = 1
+    max_page_size,page_size = 100,100
+
+    while page_size == max_page_size:
+
+        files_api_query = f'{files_api_url}?per_page={page_size}&page={page_number}'
+        print(f"Query files : {files_api_query}")
+        r = requests.get(files_api_query,headers=headers)
+        files = r.json()
+        page_size = len(files)
+        page_number += 1
+
+        match_found = False
+        for f in files:
+            filename = f["filename"]
+            match = pattern.match(filename)
+            if not match:
+                msg = f"[ERROR] PR should only modify chart related files: {filename}"
                 print(msg)
                 print(f"::set-output name=sanity-error-message::{msg}")
                 sys.exit(1)
-
+            else:
+                if reportpattern.match(filename):
+                    print("[INFO] Report found")
+                    print("::set-output name=report-exists::true")
+                if not match_found:
+                    pattern_match = match
+                    match_found = True
+                elif pattern_match.groups() != match.groups():
+                    msg = f"[ERROR] PR must only include one chart"
+                    print(msg)
+                    print(f"::set-output name=sanity-error-message::{msg}")
+                    sys.exit(1)
 
 
     if match_found:
