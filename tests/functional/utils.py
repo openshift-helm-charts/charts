@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """Common utility functions used by tests"""
 
-import yaml
-import pytest
-import tarfile
 import os
+import tarfile
+
+import pytest
+import requests
+import yaml
 
 
 def get_name_and_version_from_report(path):
@@ -63,3 +65,42 @@ def get_name_and_version_from_chart_src(path):
         except yaml.YAMLError as err:
             pytest.fail(f"error parsing '{path}': {err}")
     return chart_yaml['name'], chart_yaml['version']
+
+
+def github_api_get(endpoint, bot_token, headers={}):
+    if not headers:
+        headers = {'Accept': 'application/vnd.github.v3+json',
+                   'Authorization': f'Bearer {bot_token}'}
+    r = requests.get(endpoint, headers=headers)
+
+    return r
+
+
+def github_api_delete(endpoint, bot_token, headers={}):
+    if not headers:
+        headers = {'Accept': 'application/vnd.github.v3+json',
+                   'Authorization': f'Bearer {bot_token}'}
+    r = requests.delete(endpoint, headers=headers)
+
+    return r
+
+
+def github_api_post(endpoint, bot_token, headers={}, json={}):
+    if not headers:
+        headers = {'Accept': 'application/vnd.github.v3+json',
+                   'Authorization': f'Bearer {bot_token}'}
+    r = requests.post(endpoint, headers=headers, json=json)
+
+    return r
+
+
+def github_api(method, endpoint, bot_token, headers={}, data={}, json={}):
+    if method == 'get':
+        return github_api_get(endpoint, bot_token, headers=headers)
+    elif method == 'post':
+        return github_api_post(endpoint, bot_token, headers=headers, json=json)
+    elif method == 'delete':
+        return github_api_delete(endpoint, bot_token, headers=headers)
+    else:
+        raise ValueError(
+            "Github API method not implemented in helper function")

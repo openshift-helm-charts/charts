@@ -6,14 +6,14 @@ Feature: Chart source only submission
         Given hashicorp is a valid partner
         And hashicorp has created an error-free chart source for vault
         When hashicorp sends a pull request with the vault source chart
-        Then hashicorp should see the pull request getting merged
-        And the index.yaml file is updated with a new entry
+        Then hashicorp sees the pull request is merged
+        And the index.yaml file is updated with an entry for the submitted chart
         And a release for the vault chart is published with corresponding report and chart tarball
 
-    Scenario: The redhat associate submits a error-free report for the vault chart
+    Scenario: A redhat associate submits a error-free chart source for vault
         Given a redhat associate has a valid identity
         And the redhat associate has created an error-free chart source for vault
         When the redhat associate sends a pull request with the vault source chart
-        Then the redhat associate should see the pull request getting merged
-        And the index.yaml file is updated with a new entry
+        Then the redhat associate sees the pull request is merged
+        And the index.yaml file is updated with an entry for the submitted chart
         And a release for the vault chart is published with corresponding report and chart tarball
