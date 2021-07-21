@@ -7,7 +7,6 @@ import subprocess
 import tempfile
 from datetime import datetime, timezone
 import hashlib
-import json
 import urllib.parse
 
 import semver
@@ -17,6 +16,9 @@ try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
+
+sys.path.append('../')
+from report import report_info
 
 def get_modified_charts(api_url):
     files_api_url = f'{api_url}/files'
@@ -70,6 +72,7 @@ def generate_report(chart_file_name):
     return report_path
 
 def prepare_chart_source_for_release(category, organization, chart, version):
+    print("[INFO] prepare chart source for release. %s, %s, %s, %s" % (category, organization, chart, version))
     path = os.path.join("charts", category, organization, chart, version, "src")
     out = subprocess.run(["helm", "package", path], capture_output=True)
     print(out.stdout.decode("utf-8"))
@@ -83,6 +86,7 @@ def prepare_chart_source_for_release(category, organization, chart, version):
     shutil.copy(f"{chart}-{version}.tgz" , f".cr-release-packages/{new_chart_file_name}")
 
 def prepare_chart_tarball_for_release(category, organization, chart, version):
+    print("[INFO] prepare chart tarball for release. %s, %s, %s, %s" % (category, organization, chart, version))
     chart_file_name = f"{chart}-{version}.tgz"
     new_chart_file_name = f"{organization}-{chart}-{version}.tgz"
     path = os.path.join("charts", category, organization, chart, version, chart_file_name)
@@ -94,6 +98,7 @@ def prepare_chart_tarball_for_release(category, organization, chart, version):
     shutil.copy(path, chart_file_name)
 
 def push_chart_release(repository, organization, commit_hash):
+    print("[INFO]push chart release. %s, %s, %s " % (repository, organization, commit_hash))
     org, repo = repository.split("/")
     token = os.environ.get("GITHUB_TOKEN")
     print("[INFO] Upload chart using the chart-releaser")
@@ -122,6 +127,7 @@ def create_worktree_for_index(branch):
     return dr
 
 def create_index_from_chart(indexdir, repository, branch, category, organization, chart, version, chart_url):
+    print("[INFO] create index from chart. %s, %s, %s, %s, %s" % (category, organization, chart, version, chart_url))
     path = os.path.join("charts", category, organization, chart, version)
     chart_file_name = f"{chart}-{version}.tgz"
     out = subprocess.run(["helm", "show", "chart", os.path.join(".cr-release-packages", chart_file_name)], capture_output=True)
@@ -132,14 +138,9 @@ def create_index_from_chart(indexdir, repository, branch, category, organization
     return crt
 
 def create_index_from_report(category, report_path):
-    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
-    r = out.stdout.decode("utf-8")
-    print("annotation",r)
-    annotations = json.loads(r)
-    err = out.stderr.decode("utf-8")
-    if err.strip():
-        print("Error extracting annotations from the report:", err)
-        sys.exit(1)
+    print("[INFO] create index from report. %s, %s" % (category, report_path))
+
+    annotations = report_info.get_report_annotations(report_path)
 
     print("category:", category)
     redhat_to_community = bool(os.environ.get("REDHAT_TO_COMMUNITY"))
@@ -150,41 +151,46 @@ def create_index_from_report(category, report_path):
     else:
         annotations["charts.openshift.io/providerType"] = category
 
-    report = yaml.load(open(report_path), Loader=Loader)
-    chart_url = report["metadata"]["tool"]['chart-uri']
-    chart_entry = report["metadata"]["chart"]
-    chart_entry["annotations"] = chart_entry["annotations"] | annotations
+    chart_url = report_info.get_report_chart_url(report_path)
+    chart_entry = report_info.get_report_chart(report_path)
+    if "annotations" in chart_entry:
+        annotations = chart_entry["annotations"] | annotations
+
+    chart_entry["annotations"] = annotations
+
+
+    digests = report_info.get_report_digests(report_path)
+    if "package" in digests:
+        chart_entry["digest"] = digests["package"]
+
     return chart_entry, chart_url
 
 
 def set_package_digest(chart_entry):
+    print("[INFO] set package digests.")
+
     url = chart_entry["urls"][0]
-    annotations = chart_entry["annotations"]
-    pkg_digest = ""
-    if "charts.openshift.io/digests" in annotations:
-        digest = annotations["charts.openshift.io/digests"]
-        if isinstance(digest, dict) and "package" in digest:
-            pkg_digest = digest["package"]
     head = requests.head(url, allow_redirects=True)
     target_digest = ""
     if head.status_code == 200:
         response = requests.get(url, allow_redirects=True)
         target_digest = hashlib.sha256(response.content).hexdigest()
+
+    pkg_digest = ""
+    if "digest" in chart_entry:
+        pkg_digest = chart_entry["digest"]
     
-    if not pkg_digest and target_digest:
-        # Digest was computed but not passed
-        chart_entry["digest"] = target_digest
-    elif pkg_digest and not target_digest:
-        # Digest was passed but not computed
-        chart_entry["digest"] =  pkg_digest
-    elif not pkg_digest and not target_digest:
+    if target_digest:
+        if not pkg_digest:
+            # Digest was computed but not passed
+            chart_entry["digest"] = target_digest
+        elif pkg_digest != target_digest:
+            # Digest was passed and computed but differ
+            raise Exception("Found an integrity issue. SHA256 digest passed does not match SHA256 digest computed.")
+    elif not pkg_digest:
         # Digest was not passed and could not be computed
         raise Exception("Was unable to compute SHA256 digest, please ensure chart url points to a chart package.")
-    else:
-        # Digest was passed and computed
-        if pkg_digest != target_digest:
-            raise Exception("Found an integrity issue. SHA256 digest passed does not match SHA256 digest computed.")
-        chart_entry["digest"] = target_digest
+
 
 
 def update_index_and_push(indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number):
@@ -263,15 +269,10 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
 
 
 def update_chart_annotation(category, organization, chart_file_name, chart, report_path):
+    print("[INFO] Update chart annotation. %s, %s, %s, %s" % (category, organization, chart_file_name, chart))
     dr = tempfile.mkdtemp(prefix="annotations-")
-    out = subprocess.run(["scripts/src/chartprreview/verify-report.sh", "annotations", report_path], capture_output=True)
-    r = out.stdout.decode("utf-8")
-    print("annotation",r)
-    annotations = json.loads(r)
-    err = out.stderr.decode("utf-8")
-    if err.strip():
-        print("Error extracting annotations from the report:", err)
-        sys.exit(1)
+
+    annotations = report_info.get_report_annotations(report_path)
 
     print("category:", category)
     redhat_to_community = bool(os.environ.get("REDHAT_TO_COMMUNITY"))
@@ -290,8 +291,11 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
 
     if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
         full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
-        ver = semver.VersionInfo.parse(full_version)
-        annotations["charts.openshift.io/certifiedOpenShiftVersions"] = f"{ver.major}.{ver.minor}"
+        if full_version == "N/A":
+            annotations["charts.openshift.io/certifiedOpenShiftVersions"] = "N/A"
+        else:
+            ver = semver.VersionInfo.parse(full_version)
+            annotations["charts.openshift.io/certifiedOpenShiftVersions"] = f"{ver.major}.{ver.minor}"
 
     out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
@@ -362,7 +366,7 @@ def main():
         print("[INFO] Updating chart annotation")
         update_chart_annotation(category, organization, chart_file_name, chart, report_path)
         chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}/{organization}-{chart}-{version}.tgz"
-
+        print("[INFO] Helm package was released at %s" % chart_url)
         print("[INFO] Creating index from chart")
         chart_entry = create_index_from_chart(indexdir, args.repository, branch, category, organization, chart, version, chart_url)
     else:
