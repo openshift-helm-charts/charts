@@ -240,7 +240,7 @@ jobs:
 
       - name: Release
         if: ${{ steps.release-charts.outputs.tag != '' }}
-        uses: softprops/action-gh-release@master
+        uses: softprops/action-gh-release@v0.1.5
         continue-on-error: true
         with:
           tag_name: ${{ steps.release-charts.outputs.tag }}
