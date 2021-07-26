@@ -439,7 +439,7 @@ Yes, you can do it.
 4. Follow the [documentation to create a service account][sa-cluster-token] and
    corresponding token.  The token should be stored as an [encrypted secret in
    GitHub repository settings][encrypted-secret] with the key as
-   `CLUSTER_TOKEN`.
+   `CLUSTER_TOKEN`.  Follow the same document to create `API_SERVER` secret key.
 5. Create a branch, make the required chart changes and send a pull request to
    your fork's `main` branch.  You should see the results in your fork as
    explained in this document.

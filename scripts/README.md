@@ -50,6 +50,13 @@ oc get secret chart-verifier-admin-token-t9sjg -n prod-chart-verifier-infra -o y
 You can store the returned value in the GitHub secrets with key as
 `CLUSTER_TOKEN`.
 
+Store base64 form of API server URL in the GitHub secrets with key as
+`API_SERVER`.  To create base64 value:
+
+```
+echo -n "https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443" | base64
+```
+
 [chart-testing]: https://github.com/helm/chart-testing
 [chart-verifier]: https://github.com/redhat-certification/chart-verifier
 [yq]: https://mikefarah.gitbook.io/yq/
