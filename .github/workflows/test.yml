@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
       inputs:
         vendor-type:
-          description: 'Vendor type {all,partner,redhat,community,partner'
+          description: 'Vendor type {all,partner,redhat,community,partner}'
           required: true
           default: 'all'
 
@@ -42,7 +42,7 @@ jobs:
               ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           else
               echo "[INFO] manual invocation - check if user is authorized"
-              ve1/bin/check-pr-for-ci --verify-user=${{ github.actor.login }}
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.actor }}
           fi
 
       - name: Test CI Workflow
