@@ -32,6 +32,7 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
         run: |
           # set up python and check if workflow testing should run.
+          echo "github actor: ${{ env.GITHUB_ACTOR }}"
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
