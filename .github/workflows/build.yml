@@ -32,12 +32,15 @@ jobs:
       - name: Check for CI changes
         id: check_ci_chnages
         run: |
-          ve1/bin/check-pr-for-ci --verify-user=${{ github.actor }}
+          # check if workflow testing should run.
+          echo "[INFO] check if PR contains only workflow changes and user is authorized"
+          ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Exit if CI tests will run
         id: exit_if_ci
         if: ${{ steps.check_pr_content.outputs.run-tests == 'true'}}
         run: |
+          # exit: workflow testing will run.
           echo "The PR is workflow changes only - do not continue."
           exit
 
