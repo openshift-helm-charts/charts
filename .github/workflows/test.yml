@@ -21,42 +21,44 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.x
+      - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v2
         with:
           python-version: '3.9'
 
-      - name: Check PR Content
-        id: check_pr_content
-        env:
-          GITHUB_REF: ${{ github.ref }}
+      - name: Set up Python 3.x Part 2
         run: |
-          # set up python and check if workflow testing should run.
-          echo "github actor: ${{ env.GITHUB_ACTOR }}"
+          # set up python
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: Check PR Content
+        id: check_pr_content
+        run: |
+          # check if workflow testing should run.
           if [ "${{github.event.inputs.vendor-type}}" == "" ]; then
-            echo "[INFO] check if PR contains only workflow changes and user is authorized"
-            ./ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+              echo "[INFO] check if PR contains only workflow changes and user is authorized"
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           else
-            echo "[INFO] manual invocation - check if user is authorized"
-            ./ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }}
+              echo "[INFO] manual invocation - check if user is authorized"
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.actor.login }}
           fi
 
       - name: Test CI Workflow
         id: test_ci_workflow
-        if: ${{ steps.check_pr_content.outputs.test-type != 'none'}}
+        if: ${{ steps.check_pr_content.outputs.run-tests == 'true'}}
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
           TEST_REPO: ${{ secrets.TEST_REPO }}
           FORK_REPO: ${{ secrets.FORK_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           API_URL: = ${{ github.event.pull_request._links.self.href }}
+          VENFOR_TYPE: = ${{ github.event.inputs.vendor-type }}
         run: |
           # Invoke the wokflow tests
-          if "${{ steps.check_pr_content.outputs.test-type }}" == "auto":
-            print("pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py")
-          else:
-            print("../ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO")
-        shell: python
+          if [ "${{github.event.inputs.vendor-type}}" == "" ]; then
+              echo "pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py"
+          else
+              echo "../ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO"
+          fi
