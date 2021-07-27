@@ -21,10 +21,8 @@ def check_if_ci_only_is_modified(api_url):
     max_page_size,page_size = 100,100
 
     workflow_found = False
-    other_found = False
-    test_config_path = ""
 
-    while (page_size == max_page_size) & (not other_found):
+    while (page_size == max_page_size):
 
         files_api_query = f'{files_api_url}?per_page={page_size}&page={page_number}'
         r = requests.get(files_api_query,headers=headers)
@@ -42,11 +40,8 @@ def check_if_ci_only_is_modified(api_url):
             elif pattern_test.match(filename):
                 workflow_found = True
             else:
-                other_found = True
-                break
+                return False
 
-    if other_found:
-        return False
 
     return workflow_found
 
@@ -75,10 +70,21 @@ def main():
     parser.add_argument("-n", "--verify-user", dest="username", type=str, required=True,
                         help="check if the user can run tests")
     args = parser.parse_args()
-    if verify_user(args.username):
-        if not args.api_url or check_if_ci_only_is_modified(args.api_url):
-            print(f"[INFO] test type: auto")
-            print(f"::set-output name=test-type::auto")
+    if not args.api_url:
+        if verify_user(args.username):
+            print(f"[INFO] User verified for manual invocation - run tests.")
+            print(f"::set-output name=run-tests::true")
+        else:
+            print(f"[INFO] User not verified for manual invocation - do not run tests.")
+    elif check_if_ci_only_is_modified(args.api_url):
+        if verify_user(args.username):
+            print(f"[INFO] PR is workflow changes only and user is verified - run tests.")
+            print(f"::set-output name=run-tests::true")
+        else:
+            print(f"[INFO] PR is workflow changes only but user is not verified - do not run tests.")
+    else:
+        print(f"[INFO] Non workflow changes were found - do not run tests")
+
 
 if __name__ == "__main__":
     main()

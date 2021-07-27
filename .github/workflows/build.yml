@@ -17,10 +17,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.x
+      - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v2
         with:
           python-version: '3.9'
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: Check for CI changes
+        id: check_ci_chnages
+        run: |
+          ve1/bin/check-pr-for-ci --verify-user=${{ github.actor }}
+
+      - name: Exit if CI tests will run
+        id: exit_if_ci
+        if: ${{ steps.check_pr_content.outputs.run-tests == 'true'}}
+        run: |
+          echo "The PR is workflow changes only - do not continue."
+          exit
 
       - name: Sanity Check PR Content
         id: sanity_check_pr_content
@@ -28,10 +47,7 @@ jobs:
         env:
           GITHUB_REF: ${{ github.ref }}
         run: |
-          python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
-          INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
+         INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
           ./ve1/bin/sanity-check-pr --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - uses: actions/github-script@v3
