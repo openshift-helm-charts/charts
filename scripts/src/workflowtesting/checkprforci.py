@@ -77,8 +77,8 @@ def main():
     args = parser.parse_args()
     if verify_user(args.username):
         if not args.api_url or check_if_ci_only_is_modified(args.api_url):
-            print(f"[INFO] test type: auto")
-            print(f"::set-output name=test-type::auto")
+            print(f"[INFO] PR is only workflow changes - run tests")
+            print(f"::set-output name=run-tests::true")
 
 if __name__ == "__main__":
     main()
