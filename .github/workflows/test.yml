@@ -28,7 +28,7 @@ jobs:
 
       - name: Set up Python 3.x Part 2
         run: |
-          # set up python
+          # set up python requirements and scripts
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
@@ -54,7 +54,7 @@ jobs:
           FORK_REPO: ${{ secrets.FORK_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           API_URL: = ${{ github.event.pull_request._links.self.href }}
-          VENFOR_TYPE: = ${{ github.event.inputs.vendor-type }}
+          VENDOR_TYPE: = ${{ github.event.inputs.vendor-type }}
         run: |
           # Invoke the wokflow tests
           if [ "${{github.event.inputs.vendor-type}}" == "" ]; then

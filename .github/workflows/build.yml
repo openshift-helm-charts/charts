@@ -46,7 +46,7 @@ jobs:
 
       - name: Sanity Check PR Content
         id: sanity_check_pr_content
-      ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
+        if: ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
         continue-on-error: true
         env:
           GITHUB_REF: ${{ github.ref }}
@@ -88,7 +88,7 @@ jobs:
 
       - name: 'Remove label from PR'
         uses: actions/github-script@v3
-        ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
+        if: ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
