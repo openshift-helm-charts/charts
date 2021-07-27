@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
       inputs:
         vendor-type:
-          description: 'Vendor type {all,partner,redhat,community,partner}'
+          description: 'Vendor type {all,partner,redhat,community}'
           required: true
           default: 'all'
 
