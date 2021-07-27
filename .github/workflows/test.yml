@@ -1,0 +1,61 @@
+name: Test Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, workflow_dispatch]
+  workflow_dispatch:
+      inputs:
+        vendor-type:
+          description: 'Vendor type {all,partner,redhat,community,partner'
+          required: true
+          default: 'all'
+
+jobs:
+  workflow-test:
+    name: Workflow Test
+    runs-on: ubuntu-20.04
+    if: github.event.pull_request.draft == false
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Check PR Content
+        id: check_pr_content
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          # set up python and check if workflow testing should run.
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          if [ "${{github.event.inputs.vendor-type}}" == "" ]; then
+            echo "[INFO] check if PR contains only workflow changes and user is authorized"
+            ./ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+          else
+            echo "[INFO] manual invocation - check if user is authorized"
+            ./ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }}
+          fi
+
+      - name: Test CI Workflow
+        id: test_ci_workflow
+        if: ${{ steps.check_pr_content.outputs.test-type != 'none'}}
+        env:
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+          TEST_REPO: ${{ secrets.TEST_REPO }}
+          FORK_REPO: ${{ secrets.FORK_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API_URL: = ${{ github.event.pull_request._links.self.href }}
+        run: |
+          # Invoke the wokflow tests
+          if "${{ steps.check_pr_content.outputs.test-type }}" == "auto":
+            print("pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py")
+          else:
+            print("../ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO")
+        shell: python
