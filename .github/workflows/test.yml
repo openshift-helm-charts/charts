@@ -56,7 +56,7 @@ jobs:
           API_URL: = ${{ github.event.pull_request._links.self.href }}
           VENDOR_TYPE: = ${{ github.event.inputs.vendor-type }}
         run: |
-          # Invoke the wokflow tests
+          # Run the wokflow tests
           if [ "${{github.event.inputs.vendor-type}}" == "" ]; then
               echo "../ve1/bin/pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py"
           else
