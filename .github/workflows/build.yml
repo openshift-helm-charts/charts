@@ -46,6 +46,7 @@ jobs:
 
       - name: Sanity Check PR Content
         id: sanity_check_pr_content
+      ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
         continue-on-error: true
         env:
           GITHUB_REF: ${{ github.ref }}
@@ -87,6 +88,7 @@ jobs:
 
       - name: 'Remove label from PR'
         uses: actions/github-script@v3
+        ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -154,7 +156,7 @@ jobs:
 
 
       - name: Delete Namespace
-        if: always() && steps.sanity_check_pr_content.outputs.report-exists != 'true'
+        if: always() && {{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_ci_changes.outputs.run-tests == 'true' }}
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
@@ -163,19 +165,19 @@ jobs:
           ve1/bin/sa-for-chart-testing --delete chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }}
 
       - name: Save PR artifact
-        if: always()
+        if: always() && ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
         run: |
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: 'Prepare PR comment'
-        if: always()
+        if: always() && ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
         env:
           SANITY_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.sanity-error-message }}
         run: |
           python3 scripts/prepare_pr_comment.py ${{ steps.sanity_check_pr_content.outcome }} ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 
       - name: 'Comment on PR'
-        if: always()
+        if: always() && ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -191,7 +193,7 @@ jobs:
             });
 
       - name: 'Add label to PR'
-        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success'}}
+        if: ${{ always() && {{ steps.sanity_check_pr_content.outcome == 'success' && steps.check_ci_changes.outputs.run-tests == 'true' }}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
