@@ -30,7 +30,7 @@ jobs:
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
 
       - name: Check for CI changes
-        id: check_ci_chnages
+        id: check_ci_changes
         run: |
           # check if workflow testing should run.
           echo "[INFO] check if PR contains only workflow changes and user is authorized"
@@ -38,7 +38,7 @@ jobs:
 
       - name: Exit if CI tests will run
         id: exit_if_ci
-        if: ${{ steps.check_pr_content.outputs.run-tests == 'true'}}
+        if: ${{ steps.check_ci_changes.outputs.run-tests == 'true'}}
         run: |
           # exit: workflow testing will run.
           echo "The PR is workflow changes only - do not continue."
