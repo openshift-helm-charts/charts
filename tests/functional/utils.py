@@ -89,12 +89,15 @@ def get_all_charts(charts_path: str, vendor_types: str) -> list:
                     continue
                 chart_versions = [name for name in os.listdir(
                     charts_path_vt_vn_cn) if os.path.isdir(f'{charts_path_vt_vn_cn}/{name}')]
-                for cv in chart_versions:
-                    charts_path_vt_vn_cn_cv = f'{charts_path_vt_vn_cn}/{cv}'
-                    file_names = [name for name in os.listdir(
-                        charts_path_vt_vn_cn_cv)]
-                    if f'{cn}-{cv}.tgz' in file_names or 'src' in file_names:
-                        ret.append((vt, vn, cn, cv))
+                # Only interest in latest chart version
+                if len(chart_versions) == 0:
+                    continue
+                cv = max(chart_versions)
+                charts_path_vt_vn_cn_cv = f'{charts_path_vt_vn_cn}/{cv}'
+                file_names = [name for name in os.listdir(
+                    charts_path_vt_vn_cn_cv)]
+                if f'{cn}-{cv}.tgz' in file_names or 'src' in file_names:
+                    ret.append((vt, vn, cn, cv))
     return ret
 
 

@@ -29,15 +29,21 @@ from pytest_bdd import (
 )
 
 from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_all_charts, get_release_by_tag
+from functional.notifier import create_verification_issue, create_version_change_issue
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+prod_repo = 'openshift-helm-charts/charts'
+prod_base = 'main'
 
 
 @pytest.fixture
 def secrets():
     @dataclass
     class Secret:
+        software_name: str
+        software_version: str
         api_server: str
         cluster_token: str
         test_repo: str
@@ -65,6 +71,14 @@ vendor:
         test_report: str = 'tests/data/report.yaml'
         chart_name, chart_version = get_name_and_version_from_report(
             test_report)
+
+    software_name = os.environ.get("SOFTWARE_NAME")
+    if not software_name:
+        raise Exception("SOFTWARE_NAME environment variable not defined")
+
+    software_version = os.environ.get("SOFTWARE_VERSION")
+    if not software_version:
+        raise Exception("SOFTWARE_VERSION environment variable not defined")
 
     test_repo = os.environ.get("TEST_REPO")
     if not test_repo:
@@ -113,7 +127,7 @@ vendor:
     repo.git.push(f'https://x-access-token:{bot_token}@github.com/{test_repo}',
                   f'HEAD:refs/heads/{pr_base_branch}', '-f')
 
-    secrets = Secret(api_server, cluster_token, test_repo, fork_repo, bot_name,
+    secrets = Secret(software_name, software_version, api_server, cluster_token, test_repo, fork_repo, bot_name,
                      bot_token, vendor_type, pr_base_branch, base_branches, fork_branches)
 
     yield secrets
@@ -157,7 +171,6 @@ def theres_github_workflow_for_testing_charts():
 @when("a new Openshift or chart-verifier version is specified")
 def new_openshift_or_verifier_version_is_specified():
     """a new Openshift or chart-verifier version is specified."""
-    # TODO: specify api-server and openshift cluster token
 
 
 @when("the vendor type is specified, e.g. partner, and/or redhat")
@@ -175,6 +188,7 @@ def submission_tests_run_for_submitted_charts(secrets):
     """submission tests are run for existing charts."""
 
     with TemporaryDirectory(prefix='tci-') as temp_dir:
+        owners_table = dict()
         pr_number_list = []
 
         repo = git.Repo(os.getcwd())
@@ -252,6 +266,19 @@ def submission_tests_run_for_submitted_charts(secrets):
             values = {'bot_name': secrets.bot_name,
                       'vendor': vendor_name, 'chart_name': chart_name}
             content = Template(secrets.owners_file_content).substitute(values)
+            # Use bot account for notifications unless in production
+            if secrets.test_repo == prod_repo and secrets.pr_base_branch == prod_base:
+                with open(f'{chart_dir}/OWNERS', 'r') as fd:
+                    try:
+                        owners = yaml.safe_load(fd)
+                        # Pick owner ids for notification
+                        owners_table[chart_dir] = [
+                            owner.get(['githubUsername'], '') for owner in owners['users']]
+                    except yaml.YAMLError as err:
+                        logger.warning(
+                            f"Error parsing OWNERS of {chart_dir}: {err}")
+            else:
+                owners_table[chart_dir] = [secrets.bot_name]
             with open(f'{chart_dir}/OWNERS', 'w') as fd:
                 fd.write(content)
 
@@ -262,7 +289,7 @@ def submission_tests_run_for_submitted_charts(secrets):
             repo.git.commit(
                 '-m', f"Add {vendor_type} {vendor_name} {chart_name} OWNERS file")
             repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
-                            f'HEAD:refs/heads/{base_branch}', '-f')
+                          f'HEAD:refs/heads/{base_branch}', '-f')
 
             # Push chart files to fork_repo:fork_branch
             repo.git.add(f'{chart_dir}/{chart_version}')
@@ -295,6 +322,21 @@ def submission_tests_run_for_submitted_charts(secrets):
             chart = f'{vendor_type} {vendor_name} {chart_name} {chart_version}'
             run_id = get_run_id(secrets, pr_number)
             conclusion = get_run_result(secrets, run_id)
+
+            # Send notification to owner through GitHub issues
+            r = github_api(
+                'get', f'https://api.github.com/repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
+            run = r.json()
+            run_html_url = run['html_url']
+            chart_dir = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
+            chart_owners = owners_table[chart_dir]
+            pass_verification = conclusion == 'success'
+            os.environ['GITHUB_ORGANIZATION'] = secrets.test_repo.split('/')[0]
+            os.environ['GITHUB_REPO'] = secrets.test_repo.split('/')[1]
+            logger.info(f"Send notification to '{chart_owners}' about verification result of '{chart}'")
+            create_verification_issue(chart_name, chart_owners, run_html_url, secrets.software_name,
+                                      secrets.software_version, pass_verification, secrets.bot_token)
+
             if conclusion == 'success':
                 logger.info(f"Workflow run for {chart} was 'success'")
             else:
