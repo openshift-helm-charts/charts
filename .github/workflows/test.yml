@@ -1,0 +1,77 @@
+name: Test Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, workflow_dispatch]
+  workflow_dispatch:
+      inputs:
+        vendor-type:
+          description: 'Vendor type {all,partner,redhat,community}'
+          required: true
+          default: 'all'
+        notify-id:
+          description: 'Issue notification {OWNERS,none,<github id>}'
+          required: true
+          default: 'none'
+        reason:
+          description: 'Reason for running test to add to Issues'
+          required: false
+
+jobs:
+  workflow-test:
+    name: Workflow Test
+    runs-on: ubuntu-20.04
+    if: github.event.pull_request.draft == false
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.x Part 1
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python requirements and scripts
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: Check Request
+        id: check_request
+        run: |
+          # check if workflow testing should run.
+          echo "Request type: $GITHUB_EVENT_NAME"
+          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+              echo "[INFO] check if PR contains only workflow changes and user is authorized"
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+          else
+              echo "[INFO] manual invocation - check if user is authorized"
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.actor }}
+          fi
+
+      - name: Test CI Workflow
+        id: test_ci_workflow
+        if: ${{ steps.check_request.outputs.run-tests == 'true'}}
+        env:
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+          TEST_REPO: ${{ secrets.TEST_REPO }}
+          FORK_REPO: ${{ secrets.FORK_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API_URL: = ${{ github.event.pull_request._links.self.href }}
+          TEST_VENDOR_TYPE: = ${{ github.event.inputs.vendor-type }}
+          TEST_NOTIFY_ID: = ${{ github.event.inputs.notify-id }}
+          TEST_REASON: = ${{ github.event.inputs.reason }}
+        run: |
+          # Run the wokflow tests
+          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+              echo "../ve1/bin/pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py"
+          else
+              echo "[INFO] Vendor type ${{ env.TEST_VENDOR_TYPE }}"
+              echo "[INFO] Notify ID ${{ env.TEST_NOTIFY_ID }}"
+              echo "[INFO] Reason ${{ env.TEST_REASON }}"
+              echo "../ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO"
+          fi
