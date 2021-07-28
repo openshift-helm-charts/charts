@@ -118,7 +118,7 @@ vendor:
     repo = git.Repo()
     pr_base_branch = repo.active_branch.name
     r = github_api(
-        'get', f'https://api.github.com/repos/{test_repo}/branches', bot_token)
+        'get', f'repos/{test_repo}/branches', bot_token)
     branches = json.loads(r.text)
     branch_names = [branch['name'] for branch in branches]
     if pr_base_branch not in branch_names:
@@ -137,11 +137,11 @@ vendor:
     for base_branch in secrets.base_branches:
         logger.info(f"Delete '{test_repo}:{base_branch}'")
         github_api(
-            'delete', f'https://api.github.com/repos/{test_repo}/git/refs/heads/{base_branch}', bot_token)
+            'delete', f'repos/{test_repo}/git/refs/heads/{base_branch}', bot_token)
 
         logger.info(f"Delete '{test_repo}:{base_branch}-gh-pages'")
         github_api(
-            'delete', f'https://api.github.com/repos/{test_repo}/git/refs/heads/{base_branch}-gh-pages', bot_token)
+            'delete', f'repos/{test_repo}/git/refs/heads/{base_branch}-gh-pages', bot_token)
 
         logger.info(f"Delete local '{base_branch}'")
         try:
@@ -152,7 +152,7 @@ vendor:
     for fork_branch in secrets.fork_branches:
         logger.info(f"Delete '{fork_repo}:{fork_branch}'")
         github_api(
-            'delete', f'https://api.github.com/repos/{fork_repo}/git/refs/heads/{fork_branch}', bot_token)
+            'delete', f'repos/{fork_repo}/git/refs/heads/{fork_branch}', bot_token)
 
     logger.info("Delete local 'tmp' branch")
     repo.git.branch('-D', 'tmp')
@@ -199,7 +199,7 @@ def submission_tests_run_for_submitted_charts(secrets):
 
         # Get SHA from 'pr_base_branch' branch
         r = github_api(
-            'get', f'https://api.github.com/repos/{secrets.test_repo}/git/ref/heads/{secrets.pr_base_branch}', secrets.bot_token)
+            'get', f'repos/{secrets.test_repo}/git/ref/heads/{secrets.pr_base_branch}', secrets.bot_token)
         j = json.loads(r.text)
         pr_base_branch_sha = j['object']['sha']
 
@@ -235,7 +235,7 @@ def submission_tests_run_for_submitted_charts(secrets):
             logger.info(
                 f"Create '{secrets.test_repo}:{base_branch}-gh-pages' from '{secrets.test_repo}:dev-gh-pages'")
             r = github_api(
-                'get', f'https://api.github.com/repos/{secrets.test_repo}/git/ref/heads/dev-gh-pages', secrets.bot_token)
+                'get', f'repos/{secrets.test_repo}/git/ref/heads/dev-gh-pages', secrets.bot_token)
             j = json.loads(r.text)
             dev_gh_pages_sha = j['object']['sha']
 
@@ -243,13 +243,13 @@ def submission_tests_run_for_submitted_charts(secrets):
             data = {'ref': f'refs/heads/{base_branch}-gh-pages',
                     'sha': dev_gh_pages_sha}
             r = github_api(
-                'post', f'https://api.github.com/repos/{secrets.test_repo}/git/refs', secrets.bot_token, json=data)
+                'post', f'repos/{secrets.test_repo}/git/refs', secrets.bot_token, json=data)
 
             # Create a new base branch for testing current chart
             logger.info(
                 f"Create {secrets.test_repo}:{base_branch} for testing")
             r = github_api(
-                'get', f'https://api.github.com/repos/{secrets.test_repo}/branches', secrets.bot_token)
+                'get', f'repos/{secrets.test_repo}/branches', secrets.bot_token)
             branches = json.loads(r.text)
             branch_names = [branch['name'] for branch in branches]
             if base_branch in branch_names:
@@ -260,7 +260,7 @@ def submission_tests_run_for_submitted_charts(secrets):
             data = {'ref': f'refs/heads/{base_branch}',
                     'sha': pr_base_branch_sha}
             r = github_api(
-                'post', f'https://api.github.com/repos/{secrets.test_repo}/git/refs', secrets.bot_token, json=data)
+                'post', f'repos/{secrets.test_repo}/git/refs', secrets.bot_token, json=data)
 
             # Modify the OWNERS file so the bot account can test chart submission flow
             values = {'bot_name': secrets.bot_name,
@@ -310,7 +310,7 @@ def submission_tests_run_for_submitted_charts(secrets):
             logger.info(
                 f"Create PR with chart files from '{secrets.fork_repo}:{fork_branch}' to '{secrets.test_repo}:{base_branch}'")
             r = github_api(
-                'post', f'https://api.github.com/repos/{secrets.test_repo}/pulls', secrets.bot_token, json=data)
+                'post', f'repos/{secrets.test_repo}/pulls', secrets.bot_token, json=data)
             j = json.loads(r.text)
             pr_number_list.append(
                 (vendor_type, vendor_name, chart_name, chart_version, j['number']))
@@ -325,7 +325,7 @@ def submission_tests_run_for_submitted_charts(secrets):
 
             # Send notification to owner through GitHub issues
             r = github_api(
-                'get', f'https://api.github.com/repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
+                'get', f'repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
             run = r.json()
             run_html_url = run['html_url']
             chart_dir = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
@@ -333,6 +333,7 @@ def submission_tests_run_for_submitted_charts(secrets):
             pass_verification = conclusion == 'success'
             os.environ['GITHUB_ORGANIZATION'] = secrets.test_repo.split('/')[0]
             os.environ['GITHUB_REPO'] = secrets.test_repo.split('/')[1]
+            os.environ['GITHUB_AUTH_TOKEN'] = secrets.bot_token
             logger.info(f"Send notification to '{chart_owners}' about verification result of '{chart}'")
             create_verification_issue(chart_name, chart_owners, run_html_url, secrets.software_name,
                                       secrets.software_version, pass_verification, secrets.bot_token)
@@ -345,7 +346,7 @@ def submission_tests_run_for_submitted_charts(secrets):
                 continue
 
             r = github_api(
-                'get', f'https://api.github.com/repos/{secrets.test_repo}/pulls/{pr_number}/merge', secrets.bot_token)
+                'get', f'repos/{secrets.test_repo}/pulls/{pr_number}/merge', secrets.bot_token)
             if r.status_code == 204:
                 logger.info(f"PR for {chart} merged sucessfully")
             else:
@@ -397,17 +398,17 @@ def submission_tests_run_for_submitted_charts(secrets):
                     f"Check '{expected_chart_asset}' is in release assets")
                 release_id = release['id']
                 r = github_api(
-                    'get', f'https://api.github.com/repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
+                    'get', f'repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
                 asset_list = json.loads(r.text)
                 asset_names = [asset['name'] for asset in asset_list]
 
                 logger.info(f"Delete release '{expected_tag}'")
                 github_api(
-                    'delete', f'https://api.github.com/repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
+                    'delete', f'repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
 
                 logger.info(f"Delete release tag '{expected_tag}'")
                 github_api(
-                    'delete', f'https://api.github.com/repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
+                    'delete', f'repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
 
                 if expected_chart_asset not in asset_names:
                     logger.warning(

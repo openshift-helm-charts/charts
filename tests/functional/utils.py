@@ -10,16 +10,18 @@ import requests
 import yaml
 from retrying import retry
 
+GITHUB_BASE_URL = "https://api.github.com"
+
 
 @retry(stop_max_delay=30_000)
 def get_run_id(secrets, pr_number=None):
     pr_number = secrets.pr_number if pr_number is None else pr_number
     r = github_api(
-        'post', f'https://api.github.com/repos/{secrets.test_repo}/pulls/{pr_number}', secrets.bot_token)
+        'post', f'repos/{secrets.test_repo}/pulls/{pr_number}', secrets.bot_token)
     pr = json.loads(r.text)
 
     r = github_api(
-        'get', f'https://api.github.com/repos/{secrets.test_repo}/actions/runs', secrets.bot_token)
+        'get', f'repos/{secrets.test_repo}/actions/runs', secrets.bot_token)
     runs = json.loads(r.text)
 
     for run in runs['workflow_runs']:
@@ -32,7 +34,7 @@ def get_run_id(secrets, pr_number=None):
 @retry(stop_max_delay=60_000*10)
 def get_run_result(secrets, run_id):
     r = github_api(
-        'get', f'https://api.github.com/repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
+        'get', f'repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
     run = json.loads(r.text)
 
     if run['conclusion'] is None:
@@ -44,7 +46,7 @@ def get_run_result(secrets, run_id):
 @retry(stop_max_delay=15_000)
 def get_release_by_tag(secrets, release_tag):
     r = github_api(
-        'get', f'https://api.github.com/repos/{secrets.test_repo}/releases', secrets.bot_token)
+        'get', f'repos/{secrets.test_repo}/releases', secrets.bot_token)
     releases = json.loads(r.text)
     for release in releases:
         if release['tag_name'] == release_tag:
@@ -96,7 +98,7 @@ def get_all_charts(charts_path: str, vendor_types: str) -> list:
                 charts_path_vt_vn_cn_cv = f'{charts_path_vt_vn_cn}/{cv}'
                 file_names = [name for name in os.listdir(
                     charts_path_vt_vn_cn_cv)]
-                if f'{cn}-{cv}.tgz' in file_names or 'src' in file_names:
+                if 'report.yaml' not in file_names and (f'{cn}-{cv}.tgz' in file_names or 'src' in file_names):
                     ret.append((vt, vn, cn, cv))
     return ret
 
@@ -165,7 +167,7 @@ def github_api_get(endpoint, bot_token, headers={}):
     if not headers:
         headers = {'Accept': 'application/vnd.github.v3+json',
                    'Authorization': f'Bearer {bot_token}'}
-    r = requests.get(endpoint, headers=headers)
+    r = requests.get(f'{GITHUB_BASE_URL}/{endpoint}', headers=headers)
 
     return r
 
@@ -174,7 +176,7 @@ def github_api_delete(endpoint, bot_token, headers={}):
     if not headers:
         headers = {'Accept': 'application/vnd.github.v3+json',
                    'Authorization': f'Bearer {bot_token}'}
-    r = requests.delete(endpoint, headers=headers)
+    r = requests.delete(f'{GITHUB_BASE_URL}/{endpoint}', headers=headers)
 
     return r
 
@@ -183,7 +185,8 @@ def github_api_post(endpoint, bot_token, headers={}, json={}):
     if not headers:
         headers = {'Accept': 'application/vnd.github.v3+json',
                    'Authorization': f'Bearer {bot_token}'}
-    r = requests.post(endpoint, headers=headers, json=json)
+    r = requests.post(f'{GITHUB_BASE_URL}/{endpoint}',
+                      headers=headers, json=json)
 
     return r
 

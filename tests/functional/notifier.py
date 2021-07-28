@@ -10,7 +10,8 @@ import time
 
 import requests
 
-GITHUB_BASE_URL = "https://api.github.com/repos"
+from functional.utils import GITHUB_BASE_URL
+
 endpoint_data = {}
 
 
@@ -24,7 +25,7 @@ def _set_endpoint_key(key, env_var):
 
 
 def _set_endpoint():
-    _set_endpoint_key("access_token", "BOT_TOKEN")
+    _set_endpoint_key("access_token", "GITHUB_AUTH_TOKEN")
     _set_endpoint_key("organization", "GITHUB_ORGANIZATION")
     _set_endpoint_key("repo", "GITHUB_REPO")
 
@@ -33,7 +34,7 @@ def _make_gihub_request(method, uri, body=None, params={}, headers={}, verbose=F
     headers.update({"Authorization": f'Bearer {endpoint_data["access_token"]}',
                     "Accept": "application/vnd.github.v3+json"})
 
-    url = f'{GITHUB_BASE_URL}/{endpoint_data["organization"]}/{endpoint_data["repo"]}/{uri}'
+    url = f'{GITHUB_BASE_URL}/repos/{endpoint_data["organization"]}/{endpoint_data["repo"]}/{uri}'
 
     print(f"API url: {url}")
     method_map = {"get": requests.get,

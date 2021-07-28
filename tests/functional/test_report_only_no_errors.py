@@ -79,7 +79,7 @@ vendor:
     repo = git.Repo()
     current_branch = repo.active_branch.name
     r = github_api(
-        'get', f'https://api.github.com/repos/{test_repo}/branches', bot_token)
+        'get', f'repos/{test_repo}/branches', bot_token)
     branches = json.loads(r.text)
     branch_names = [branch['name'] for branch in branches]
     if current_branch not in branch_names:
@@ -101,15 +101,15 @@ vendor:
     repo.git.worktree('prune')
     logger.info(f"Delete '{secrets.test_repo}:{secrets.base_branch}'")
     github_api(
-        'delete', f'https://api.github.com/repos/{secrets.test_repo}/git/refs/heads/{secrets.base_branch}', secrets.bot_token)
+        'delete', f'repos/{secrets.test_repo}/git/refs/heads/{secrets.base_branch}', secrets.bot_token)
 
     logger.info(f"Delete '{secrets.test_repo}:{secrets.base_branch}-gh-pages'")
     github_api(
-        'delete', f'https://api.github.com/repos/{secrets.test_repo}/git/refs/heads/{secrets.base_branch}-gh-pages', secrets.bot_token)
+        'delete', f'repos/{secrets.test_repo}/git/refs/heads/{secrets.base_branch}-gh-pages', secrets.bot_token)
 
     logger.info(f"Delete '{secrets.fork_repo}:{secrets.fork_branch}'")
     github_api(
-        'delete', f'https://api.github.com/repos/{secrets.fork_repo}/git/refs/heads/{secrets.fork_branch}', secrets.bot_token)
+        'delete', f'repos/{secrets.fork_repo}/git/refs/heads/{secrets.fork_branch}', secrets.bot_token)
 
     logger.info(f"Delete local '{secrets.base_branch}'")
     try:
@@ -161,14 +161,14 @@ def the_user_has_created_a_report_without_errors(secrets):
         logger.info(
             f"Create '{secrets.test_repo}:{secrets.base_branch}-gh-pages' from '{secrets.test_repo}:dev-gh-pages'")
         r = github_api(
-            'get', f'https://api.github.com/repos/{secrets.test_repo}/git/ref/heads/dev-gh-pages', secrets.bot_token)
+            'get', f'repos/{secrets.test_repo}/git/ref/heads/dev-gh-pages', secrets.bot_token)
         j = json.loads(r.text)
         sha = j['object']['sha']
 
         # Create a new gh-pages branch for testing
         data = {'ref': f'refs/heads/{secrets.base_branch}-gh-pages', 'sha': sha}
         r = github_api(
-            'post', f'https://api.github.com/repos/{secrets.test_repo}/git/refs', secrets.bot_token, json=data)
+            'post', f'repos/{secrets.test_repo}/git/refs', secrets.bot_token, json=data)
 
         # Make PR's from a temporary directory
         old_cwd = os.getcwd()
@@ -234,7 +234,7 @@ def the_user_sends_the_pull_request_with_the_report(secrets):
     logger.info(
         f"Create PR with report from '{secrets.fork_repo}:{secrets.fork_branch}'")
     r = github_api(
-        'post', f'https://api.github.com/repos/{secrets.test_repo}/pulls', secrets.bot_token, json=data)
+        'post', f'repos/{secrets.test_repo}/pulls', secrets.bot_token, json=data)
     j = json.loads(r.text)
     secrets.pr_number = j['number']
 
@@ -253,7 +253,7 @@ def the_user_should_see_the_pull_request_getting_merged(secrets):
             f"Workflow for the submitted PR did not success, run id: {run_id}")
 
     r = github_api(
-        'get', f'https://api.github.com/repos/{secrets.test_repo}/pulls/{secrets.pr_number}/merge', secrets.bot_token)
+        'get', f'repos/{secrets.test_repo}/pulls/{secrets.pr_number}/merge', secrets.bot_token)
     if r.status_code == 204:
         logger.info("PR merged sucessfully")
     else:
