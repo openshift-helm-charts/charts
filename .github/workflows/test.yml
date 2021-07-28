@@ -13,9 +13,13 @@ on:
           description: 'Issue notification {OWNERS,none,<github id>}'
           required: true
           default: 'none'
-        reason:
-          description: 'Reason for running test to add to Issues'
-          required: false
+        software-name:
+          description: 'Software Name'
+          required: true
+        software-version:
+          description: 'Software Name'
+          required: true
+
 
 jobs:
   workflow-test:
@@ -62,16 +66,17 @@ jobs:
           FORK_REPO: ${{ secrets.FORK_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           API_URL: = ${{ github.event.pull_request._links.self.href }}
-          TEST_VENDOR_TYPE: = ${{ github.event.inputs.vendor-type }}
-          TEST_NOTIFY_ID: = ${{ github.event.inputs.notify-id }}
-          TEST_REASON: = ${{ github.event.inputs.reason }}
+          VENDOR_TYPE: = ${{ github.event.inputs.vendor-type }}
+          NOTIFY_ID: = ${{ github.event.inputs.notify-id }}
+          SOFTWARE_NAME: = ${{ github.event.inputs.software-name }}
+          SOFTWARE_VERSION: = ${{ github.event.inputs.software-version }}
         run: |
           # Run the wokflow tests
           if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
-              echo "../ve1/bin/pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py"
+              echo "pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py"
           else
               echo "[INFO] Vendor type ${{ env.TEST_VENDOR_TYPE }}"
               echo "[INFO] Notify ID ${{ env.TEST_NOTIFY_ID }}"
               echo "[INFO] Reason ${{ env.TEST_REASON }}"
-              echo "../ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO"
+              echo "pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO"
           fi
