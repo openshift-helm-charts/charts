@@ -73,10 +73,10 @@ jobs:
         run: |
           # Run the wokflow tests
           if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
-              echo "pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py"
+              pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py
           else
               echo "[INFO] Vendor type ${{ env.TEST_VENDOR_TYPE }}"
               echo "[INFO] Notify ID ${{ env.TEST_NOTIFY_ID }}"
               echo "[INFO] Reason ${{ env.TEST_REASON }}"
-              echo "pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO"
+              pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO
           fi
