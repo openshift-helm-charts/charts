@@ -17,7 +17,7 @@ on:
           description: 'Software Name'
           required: true
         software-version:
-          description: 'Software Name'
+          description: 'Software Version'
           required: true
 
 
@@ -62,10 +62,7 @@ jobs:
         if: ${{ steps.check_request.outputs.run-tests == 'true'}}
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
-          TEST_REPO: ${{ secrets.TEST_REPO }}
-          FORK_REPO: ${{ secrets.FORK_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          API_URL: = ${{ github.event.pull_request._links.self.href }}
           VENDOR_TYPE: = ${{ github.event.inputs.vendor-type }}
           NOTIFY_ID: = ${{ github.event.inputs.notify-id }}
           SOFTWARE_NAME: = ${{ github.event.inputs.software-name }}
@@ -77,6 +74,7 @@ jobs:
           else
               echo "[INFO] Vendor type ${{ env.TEST_VENDOR_TYPE }}"
               echo "[INFO] Notify ID ${{ env.TEST_NOTIFY_ID }}"
-              echo "[INFO] Reason ${{ env.TEST_REASON }}"
+              echo "[INFO] Software Name ${{ env.SOFTWARE_NAME }}"
+              echo "[INFO] Software Version ${{ env.SOFTWARE_VERSION }}"
               ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO
           fi
