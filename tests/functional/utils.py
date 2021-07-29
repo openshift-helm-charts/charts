@@ -10,10 +10,16 @@ import requests
 import yaml
 from retrying import retry
 
-GITHUB_BASE_URL = "https://api.github.com"
+GITHUB_BASE_URL = 'https://api.github.com'
+# The sandbox repository where we run all our tests on
+TEST_REPO = 'openshift-helm-charts/sandbox'
+# The prod repository where we create notification issues
+PROD_REPO = 'openshift-helm-charts/charts'
+# The prod branch where we store all chart files
+PROD_BRANCH = 'main'
 
 
-@retry(stop_max_delay=30_000)
+@retry(stop_max_delay=30_000, wait_fixed=1000)
 def get_run_id(secrets, pr_number=None):
     pr_number = secrets.pr_number if pr_number is None else pr_number
     r = github_api(
@@ -31,7 +37,7 @@ def get_run_id(secrets, pr_number=None):
         pytest.fail("Workflow for the submitted PR did not run.")
 
 
-@retry(stop_max_delay=60_000*10)
+@retry(stop_max_delay=60_000*10, wait_fixed=2000)
 def get_run_result(secrets, run_id):
     r = github_api(
         'get', f'repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
@@ -43,7 +49,7 @@ def get_run_result(secrets, run_id):
     return run['conclusion']
 
 
-@retry(stop_max_delay=15_000)
+@retry(stop_max_delay=15_000, wait_fixed=1000)
 def get_release_by_tag(secrets, release_tag):
     r = github_api(
         'get', f'repos/{secrets.test_repo}/releases', secrets.bot_token)
