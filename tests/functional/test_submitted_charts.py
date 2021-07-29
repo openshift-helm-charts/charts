@@ -28,14 +28,11 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_all_charts, get_release_by_tag
-from functional.notifier import create_verification_issue, create_version_change_issue
+from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_all_charts, get_release_by_tag, TEST_REPO, PROD_REPO, PROD_BRANCH
+from functional.notifier import create_verification_issue
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-prod_repo = 'openshift-helm-charts/charts'
-prod_base = 'main'
 
 
 @pytest.fixture
@@ -44,16 +41,14 @@ def secrets():
     class Secret:
         software_name: str
         software_version: str
-        api_server: str
-        cluster_token: str
         test_repo: str
-        fork_repo: str
         bot_name: str
         bot_token: str
         vendor_type: str
         pr_base_branch: str
         base_branches: list
-        fork_branches: list
+        pr_branches: list
+        is_prod: bool
 
         submitted_charts: list = None
         owners_file_content: str = """\
@@ -72,6 +67,14 @@ vendor:
         chart_name, chart_version = get_name_and_version_from_report(
             test_report)
 
+    # Accepts 'True' or 'False', depending on whether we want to tag chart owners, or bot for testing
+    is_prod = os.environ.get("IS_PROD")
+    if not is_prod:
+        # Default to False to avoid spamming tags to chart owners
+        is_prod = False
+    else:
+        is_prod = is_prod == 'True'
+
     software_name = os.environ.get("SOFTWARE_NAME")
     if not software_name:
         raise Exception("SOFTWARE_NAME environment variable not defined")
@@ -80,23 +83,7 @@ vendor:
     if not software_version:
         raise Exception("SOFTWARE_VERSION environment variable not defined")
 
-    test_repo = os.environ.get("TEST_REPO")
-    if not test_repo:
-        raise Exception("TEST_REPO environment variable not defined")
-
-    fork_repo = os.environ.get("FORK_REPO")
-    if not fork_repo:
-        raise Exception("FORK_REPO environment variable not defined")
-    bot_name = fork_repo.split("/")[0]
-
-    cluster_token = os.environ.get("CLUSTER_TOKEN")
-    if not cluster_token:
-        raise Exception("CLUSTER_TOKEN environment variable not defined")
-
-    api_server = os.environ.get("API_SERVER")
-    if not api_server:
-        raise Exception("API_SERVER environment variable not defined")
-
+    bot_name = os.environ.get("BOT_NAME")
     bot_token = os.environ.get("BOT_TOKEN")
     if not bot_token:
         bot_name = "github-actions[bot]"
@@ -111,10 +98,9 @@ vendor:
         vendor_type = 'all'
 
     base_branches = []
-    fork_branches = []
-    test_repo = str(base64.b64decode(test_repo), encoding="utf-8")
-    fork_repo = str(base64.b64decode(fork_repo), encoding="utf-8")
+    pr_branches = []
 
+    test_repo = TEST_REPO
     repo = git.Repo()
     pr_base_branch = repo.active_branch.name
     r = github_api(
@@ -127,9 +113,8 @@ vendor:
     repo.git.push(f'https://x-access-token:{bot_token}@github.com/{test_repo}',
                   f'HEAD:refs/heads/{pr_base_branch}', '-f')
 
-    secrets = Secret(software_name, software_version, api_server, cluster_token, test_repo, fork_repo, bot_name,
-                     bot_token, vendor_type, pr_base_branch, base_branches, fork_branches)
-
+    secrets = Secret(software_name, software_version, test_repo, bot_name,
+                     bot_token, vendor_type, pr_base_branch, base_branches, pr_branches, is_prod)
     yield secrets
 
     # Teardown step to cleanup branches
@@ -149,10 +134,10 @@ vendor:
         except git.exc.GitCommandError:
             logger.info(f"Local '{base_branch}' does not exist")
 
-    for fork_branch in secrets.fork_branches:
-        logger.info(f"Delete '{fork_repo}:{fork_branch}'")
+    for pr_branch in secrets.pr_branches:
+        logger.info(f"Delete '{test_repo}:{pr_branch}'")
         github_api(
-            'delete', f'repos/{fork_repo}/git/refs/heads/{fork_branch}', bot_token)
+            'delete', f'repos/{test_repo}/git/refs/heads/{pr_branch}', bot_token)
 
     logger.info("Delete local 'tmp' branch")
     repo.git.branch('-D', 'tmp')
@@ -211,10 +196,9 @@ def submission_tests_run_for_submitted_charts(secrets):
         # Run submission flow test on charts from main branch
         os.chdir(temp_dir)
         repo = git.Repo(temp_dir)
-        prod_branch = 'main'
         repo.git.fetch(
-            f'https://github.com/{secrets.test_repo}.git', f'{prod_branch}:{prod_branch}', '-f')
-        repo.git.checkout(prod_branch, 'charts')
+            f'https://github.com/{secrets.test_repo}.git', f'{PROD_BRANCH}:{PROD_BRANCH}', '-f')
+        repo.git.checkout(PROD_BRANCH, 'charts')
         repo.git.restore('--staged', 'charts')
         secrets.submitted_charts = get_all_charts(
             'charts', secrets.vendor_type)
@@ -225,9 +209,9 @@ def submission_tests_run_for_submitted_charts(secrets):
         for vendor_type, vendor_name, chart_name, chart_version in secrets.submitted_charts:
             chart_dir = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
             base_branch = f'{secrets.pr_base_branch}-{vendor_type}-{vendor_name}-{chart_name}-{chart_version}'
-            fork_branch = f'{secrets.pr_base_branch}-{vendor_type}-{vendor_name}-{chart_name}-{chart_version}-pr'
+            pr_branch = f'{secrets.pr_base_branch}-{vendor_type}-{vendor_name}-{chart_name}-{chart_version}-pr'
             secrets.base_branches.append(base_branch)
-            secrets.fork_branches.append(fork_branch)
+            secrets.pr_branches.append(pr_branch)
             repo.git.checkout('tmp')
             repo.git.checkout('-b', base_branch)
 
@@ -267,7 +251,7 @@ def submission_tests_run_for_submitted_charts(secrets):
                       'vendor': vendor_name, 'chart_name': chart_name}
             content = Template(secrets.owners_file_content).substitute(values)
             # Use bot account for notifications unless in production
-            if secrets.test_repo == prod_repo and secrets.pr_base_branch == prod_base:
+            if secrets.is_prod:
                 with open(f'{chart_dir}/OWNERS', 'r') as fd:
                     try:
                         owners = yaml.safe_load(fd)
@@ -291,24 +275,24 @@ def submission_tests_run_for_submitted_charts(secrets):
             repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
                           f'HEAD:refs/heads/{base_branch}', '-f')
 
-            # Push chart files to fork_repo:fork_branch
+            # Push chart files to test_repo:pr_branch
             repo.git.add(f'{chart_dir}/{chart_version}')
             repo.git.commit(
                 '-m', f"Add {vendor_type} {vendor_name} {chart_name} {chart_version} chart files")
-            repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.fork_repo}',
-                          f'HEAD:refs/heads/{fork_branch}', '-f')
+            repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
+                          f'HEAD:refs/heads/{pr_branch}', '-f')
 
-            # Create PR from fork_repo:fork_branch to test_repo:base_branch
+            # Create PR from test_repo:pr_branch to test_repo:base_branch
             actions_bot_name = 'github-actions[bot]'
             if secrets.bot_name == actions_bot_name:
-                head = fork_branch
+                head = pr_branch
             else:
-                head = f'{secrets.bot_name}:{fork_branch}'
+                head = f'{secrets.bot_name}:{pr_branch}'
             data = {'head': head, 'base': base_branch,
-                    'title': fork_branch}
+                    'title': pr_branch}
 
             logger.info(
-                f"Create PR with chart files from '{secrets.fork_repo}:{fork_branch}' to '{secrets.test_repo}:{base_branch}'")
+                f"Create PR with chart files from '{secrets.test_repo}:{pr_branch}' to '{secrets.test_repo}:{base_branch}'")
             r = github_api(
                 'post', f'repos/{secrets.test_repo}/pulls', secrets.bot_token, json=data)
             j = json.loads(r.text)
@@ -331,10 +315,11 @@ def submission_tests_run_for_submitted_charts(secrets):
             chart_dir = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
             chart_owners = owners_table[chart_dir]
             pass_verification = conclusion == 'success'
-            os.environ['GITHUB_ORGANIZATION'] = secrets.test_repo.split('/')[0]
-            os.environ['GITHUB_REPO'] = secrets.test_repo.split('/')[1]
+            os.environ['GITHUB_ORGANIZATION'] = PROD_REPO.split('/')[0]
+            os.environ['GITHUB_REPO'] = PROD_REPO.split('/')[1]
             os.environ['GITHUB_AUTH_TOKEN'] = secrets.bot_token
-            logger.info(f"Send notification to '{chart_owners}' about verification result of '{chart}'")
+            logger.info(
+                f"Send notification to '{chart_owners}' about verification result of '{chart}'")
             create_verification_issue(chart_name, chart_owners, run_html_url, secrets.software_name,
                                       secrets.software_version, pass_verification, secrets.bot_token)
 

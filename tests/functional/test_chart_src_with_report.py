@@ -24,7 +24,7 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_release_by_tag
+from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_release_by_tag, TEST_REPO
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -34,13 +34,11 @@ logger.setLevel(logging.INFO)
 def secrets():
     @dataclass
     class Secret:
-        cluster_token: str
         test_repo: str
-        fork_repo: str
         bot_name: str
         bot_token: str
         base_branch: str
-        fork_branch: str
+        pr_branch: str
 
         pr_number: int = -1
         vendor_type: str = ''
@@ -61,16 +59,7 @@ vendor:
         chart_name, chart_version = get_name_and_version_from_report(
             test_report)
 
-    test_repo = os.environ.get("TEST_REPO")
-    if not test_repo:
-        raise Exception("TEST_REPO environment variable not defined")
-    fork_repo = os.environ.get("FORK_REPO")
-    if not fork_repo:
-        raise Exception("FORK_REPO environment variable not defined")
-    bot_name = fork_repo.split("/")[0]
-    cluster_token = os.environ.get("CLUSTER_TOKEN")
-    if not cluster_token:
-        raise Exception("CLUSTER_TOKEN environment variable not defined")
+    bot_name = os.environ.get("BOT_NAME")
     bot_token = os.environ.get("BOT_TOKEN")
     if not bot_token:
         bot_name = "github-actions[bot]"
@@ -78,6 +67,7 @@ vendor:
         if not bot_token:
             raise Exception("BOT_TOKEN environment variable not defined")
 
+    test_repo = TEST_REPO
     repo = git.Repo()
     current_branch = repo.active_branch.name
     r = github_api(
@@ -91,12 +81,9 @@ vendor:
                   f'HEAD:refs/heads/{current_branch}', '-f')
 
     base_branch = 'vault-0.13.0-src-with-report'
-    fork_branch = base_branch + '-pr'
-    test_repo = str(base64.b64decode(test_repo), encoding="utf-8")
-    fork_repo = str(base64.b64decode(fork_repo), encoding="utf-8")
+    pr_branch = base_branch + '-pr'
 
-    secrets = Secret(cluster_token, test_repo, fork_repo,
-                     bot_name, bot_token, base_branch, fork_branch)
+    secrets = Secret(test_repo, bot_name, bot_token, base_branch, pr_branch)
     yield secrets
 
     # Teardown step to cleanup branches
@@ -109,9 +96,9 @@ vendor:
     github_api(
         'delete', f'repos/{secrets.test_repo}/git/refs/heads/{secrets.base_branch}-gh-pages', secrets.bot_token)
 
-    logger.info(f"Delete '{secrets.fork_repo}:{secrets.fork_branch}'")
+    logger.info(f"Delete '{secrets.test_repo}:{secrets.pr_branch}'")
     github_api(
-        'delete', f'repos/{secrets.fork_repo}/git/refs/heads/{secrets.fork_branch}', secrets.bot_token)
+        'delete', f'repos/{secrets.test_repo}/git/refs/heads/{secrets.pr_branch}', secrets.bot_token)
 
     logger.info(f"Delete local '{secrets.base_branch}'")
     try:
@@ -151,7 +138,7 @@ def the_user_has_created_a_error_free_chart_src_with_report(secrets):
 
     with TemporaryDirectory(prefix='tci-') as temp_dir:
         secrets.base_branch = f'{secrets.vendor_type}-{secrets.vendor}-{secrets.base_branch}'
-        secrets.fork_branch = f'{secrets.base_branch}-pr'
+        secrets.pr_branch = f'{secrets.base_branch}-pr'
 
         repo = git.Repo(os.getcwd())
         if os.environ.get('WORKFLOW_DEVELOPMENT'):
@@ -206,9 +193,9 @@ def the_user_has_created_a_error_free_chart_src_with_report(secrets):
             os.rename(f'{chart_dir}/{secrets.chart_version}/{secrets.chart_name}',
                       f'{chart_dir}/{secrets.chart_version}/src')
 
-        # Copy report to temporary location and push to fork_repo:fork_branch
+        # Copy report to temporary location and push to test_repo:pr_branch
         logger.info(
-            f"Push report to '{secrets.fork_repo}:{secrets.fork_branch}'")
+            f"Push report to '{secrets.test_repo}:{secrets.pr_branch}'")
         tmpl = open(secrets.test_report).read()
         values = {'repository': secrets.test_repo,
                   'branch': secrets.base_branch}
@@ -216,13 +203,13 @@ def the_user_has_created_a_error_free_chart_src_with_report(secrets):
         with open(f'charts/{secrets.vendor_type}/{secrets.vendor}/{secrets.chart_name}/{secrets.chart_version}/report.yaml', 'w') as fd:
             fd.write(content)
 
-        # Push chart src files to fork_repo:fork_branch
+        # Push chart src files to test_repo:pr_branch
         repo.git.add('charts')
         repo.git.commit(
             '-m', f"Add {secrets.vendor} {secrets.chart_name} {secrets.chart_version} chart source files and report")
 
-        repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.fork_repo}',
-                      f'HEAD:refs/heads/{secrets.fork_branch}', '-f')
+        repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
+                      f'HEAD:refs/heads/{secrets.pr_branch}', '-f')
 
         os.chdir(old_cwd)
 
@@ -234,14 +221,14 @@ def the_user_sends_the_pull_request(secrets):
 
     actions_bot_name = 'github-actions[bot]'
     if secrets.bot_name == actions_bot_name:
-        head = secrets.fork_branch
+        head = secrets.pr_branch
     else:
-        head = f'{secrets.bot_name}:{secrets.fork_branch}'
+        head = f'{secrets.bot_name}:{secrets.pr_branch}'
     data = {'head': head, 'base': secrets.base_branch,
-            'title': secrets.fork_branch}
+            'title': secrets.pr_branch}
 
     logger.info(
-        f"Create PR with chart source files from '{secrets.fork_repo}:{secrets.fork_branch}'")
+        f"Create PR with chart source files from '{secrets.test_repo}:{secrets.pr_branch}'")
     r = github_api(
         'post', f'repos/{secrets.test_repo}/pulls', secrets.bot_token, json=data)
     j = json.loads(r.text)
