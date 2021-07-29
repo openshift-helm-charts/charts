@@ -5,14 +5,18 @@ on:
     types: [opened, synchronize, reopened, edited, labeled, workflow_dispatch]
   workflow_dispatch:
       inputs:
+        dry-run:
+          description: 'Run tests but do not create issues {true,false}'
+          required: true
+          default: 'true'
+        notify-id:
+          description: 'Issue notification {github id}'
+          required: false
+          default:
         vendor-type:
           description: 'Vendor type {all,partner,redhat,community}'
           required: true
           default: 'all'
-        notify-id:
-          description: 'Issue notification {OWNERS,none,<github id>}'
-          required: true
-          default: 'none'
         software-name:
           description: 'Software Name'
           required: true
@@ -63,6 +67,7 @@ jobs:
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: = ${{ github.event.inputs.dry-run }}
           VENDOR_TYPE: = ${{ github.event.inputs.vendor-type }}
           NOTIFY_ID: = ${{ github.event.inputs.notify-id }}
           SOFTWARE_NAME: = ${{ github.event.inputs.software-name }}
@@ -72,8 +77,9 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
               ve1/bin/pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py
           else
-              echo "[INFO] Vendor type ${{ env.TEST_VENDOR_TYPE }}"
-              echo "[INFO] Notify ID ${{ env.TEST_NOTIFY_ID }}"
+              echo "[INFO] Dry run ${{ env.DRY_RUN }}"
+              echo "[INFO] Vendor type ${{ env.VENDOR_TYPE }}"
+              echo "[INFO] Notify ID ${{ env.NOTIFY_ID }}"
               echo "[INFO] Software Name ${{ env.SOFTWARE_NAME }}"
               echo "[INFO] Software Version ${{ env.SOFTWARE_VERSION }}"
               ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO
