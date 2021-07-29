@@ -56,7 +56,7 @@ def verify_user(username):
         data = open(owners_path).read()
         out = yaml.load(data, Loader=Loader)
         if username in out["approvers"]:
-            print(f"[INFO] {username} verified")
+            print(f"[INFO] {username} authorized")
             return True
         else:
            print(f"[ERROR] {username} cannot run tests")
