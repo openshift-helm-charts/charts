@@ -1,8 +1,9 @@
 chart:
   name: test-helm-chart-external
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: a60ff8a9f84112e0e05948ef3
   name: Shakespeare Birthplace Trust
