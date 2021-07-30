@@ -12,7 +12,6 @@ on:
         notify-id:
           description: 'Issue notification {github id}'
           required: false
-          default:
         vendor-type:
           description: 'Vendor type {all,partner,redhat,community}'
           required: true
@@ -67,11 +66,11 @@ jobs:
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRY_RUN: = ${{ github.event.inputs.dry-run }}
-          VENDOR_TYPE: = ${{ github.event.inputs.vendor-type }}
-          NOTIFY_ID: = ${{ github.event.inputs.notify-id }}
-          SOFTWARE_NAME: = ${{ github.event.inputs.software-name }}
-          SOFTWARE_VERSION: = ${{ github.event.inputs.software-version }}
+          DRY_RUN: ${{ github.event.inputs.dry-run }}
+          VENDOR_TYPE: ${{ github.event.inputs.vendor-type }}
+          NOTIFY_ID: ${{ github.event.inputs.notify-id }}
+          SOFTWARE_NAME: ${{ github.event.inputs.software-name }}
+          SOFTWARE_VERSION: ${{ github.event.inputs.software-version }}
         run: |
           # Run the wokflow tests
           if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
