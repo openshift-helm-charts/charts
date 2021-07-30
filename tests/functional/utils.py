@@ -17,6 +17,8 @@ TEST_REPO = 'openshift-helm-charts/sandbox'
 PROD_REPO = 'openshift-helm-charts/charts'
 # The prod branch where we store all chart files
 PROD_BRANCH = 'main'
+# This is used to find chart certification workflow run id
+CERTIFICATION_CI_NAME = 'CI'
 
 
 @retry(stop_max_delay=30_000, wait_fixed=1000)
@@ -31,7 +33,7 @@ def get_run_id(secrets, pr_number=None):
     runs = json.loads(r.text)
 
     for run in runs['workflow_runs']:
-        if run['head_sha'] == pr['head']['sha']:
+        if run['head_sha'] == pr['head']['sha'] and run['name'] == CERTIFICATION_CI_NAME:
             return run['id']
     else:
         pytest.fail("Workflow for the submitted PR did not run.")
@@ -108,6 +110,16 @@ def get_all_charts(charts_path: str, vendor_types: str) -> list:
                     ret.append((vt, vn, cn, cv))
     return ret
 
+
+def set_git_username_email(repo, username, email):
+    """
+    Parameters:
+    repo (git.Repo): git.Repo instance of the local directory
+    username (str): git username to set
+    email (str): git email to set
+    """
+    repo.config_writer().set_value("user", "name", username).release()
+    repo.config_writer().set_value("user", "email", email).release()
 
 def get_name_and_version_from_report(path):
     """
