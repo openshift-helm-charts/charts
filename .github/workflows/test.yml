@@ -2,7 +2,7 @@ name: Test Workflow
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, edited, labeled, workflow_dispatch]
+    types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
       inputs:
         dry-run:
@@ -34,6 +34,9 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ github.event.inputs.bot-token }}
+          fetch-depth: 0
 
       - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v2
