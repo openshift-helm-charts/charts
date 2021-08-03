@@ -28,7 +28,7 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_all_charts, get_release_by_tag, set_git_username_email, get_release_assets, TEST_REPO, PROD_REPO, PROD_BRANCH
+from functional.utils import *
 from functional.notifier import create_verification_issue
 
 logger = logging.getLogger(__name__)
@@ -92,17 +92,7 @@ vendor:
     if not software_version:
         raise Exception("SOFTWARE_VERSION environment variable not defined")
 
-    bot_name = os.environ.get("BOT_NAME")
-    bot_token = os.environ.get("BOT_TOKEN")
-    if not bot_name and not bot_token:
-        bot_name = "github-actions[bot]"
-        bot_token = os.environ.get("GITHUB_TOKEN")
-        if not bot_token:
-            raise Exception("BOT_TOKEN environment variable not defined")
-    elif not bot_name:
-        raise Exception("BOT_TOKEN set but BOT_NAME not specified")
-    elif not bot_token:
-        raise Exception("BOT_NAME set but BOT_TOKEN not specified")
+    bot_name, bot_token = get_bot_name_and_token()
 
     vendor_type = os.environ.get("VENDOR_TYPE")
     if not vendor_type:

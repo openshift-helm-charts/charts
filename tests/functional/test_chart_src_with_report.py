@@ -25,7 +25,7 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_release_by_tag, set_git_username_email, get_release_assets, TEST_REPO
+from functional.utils import *
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -60,17 +60,7 @@ vendor:
         chart_name, chart_version = get_name_and_version_from_report(
             test_report)
 
-    bot_name = os.environ.get("BOT_NAME")
-    bot_token = os.environ.get("BOT_TOKEN")
-    if not bot_name and not bot_token:
-        bot_name = "github-actions[bot]"
-        bot_token = os.environ.get("GITHUB_TOKEN")
-        if not bot_token:
-            raise Exception("BOT_TOKEN environment variable not defined")
-    elif not bot_name:
-        raise Exception("BOT_TOKEN set but BOT_NAME not specified")
-    elif not bot_token:
-        raise Exception("BOT_NAME set but BOT_TOKEN not specified")
+    bot_name, bot_token = get_bot_name_and_token()
 
     test_repo = TEST_REPO
     repo = git.Repo()

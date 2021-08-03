@@ -73,6 +73,20 @@ def get_release_by_tag(secrets, release_tag):
             return release
     raise Exception("Release not published")
 
+def get_bot_name_and_token():
+    bot_name = os.environ.get("BOT_NAME")
+    bot_token = os.environ.get("BOT_TOKEN")
+    if not bot_name and not bot_token:
+        bot_name = "github-actions[bot]"
+        bot_token = os.environ.get("GITHUB_TOKEN")
+        if not bot_token:
+            raise Exception("BOT_TOKEN environment variable not defined")
+    elif not bot_name:
+        raise Exception("BOT_TOKEN set but BOT_NAME not specified")
+    elif not bot_token:
+        raise Exception("BOT_NAME set but BOT_TOKEN not specified")
+    return bot_name, bot_token
+
 # TODO: Support `community` as vendor_type.
 def get_all_charts(charts_path: str, vendor_types: str) -> list:
     """Gets charts with src or tgz under `charts/` given vendor_types and without report.
