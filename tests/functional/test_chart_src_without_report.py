@@ -10,6 +10,7 @@ import base64
 import pathlib
 import tarfile
 import logging
+import shutil
 from tempfile import TemporaryDirectory
 from dataclasses import dataclass
 from string import Template
@@ -24,7 +25,7 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_chart_tar, github_api, get_run_id, get_run_result, get_release_by_tag, TEST_REPO
+from functional.utils import get_name_and_version_from_chart_tar, github_api, get_run_id, get_run_result, get_release_by_tag, set_git_username_email, get_release_assets, TEST_REPO
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -69,9 +70,19 @@ vendor:
     elif not bot_token:
         raise Exception("BOT_NAME set but BOT_TOKEN not specified")
 
-    repo = git.Repo()
-    current_branch = repo.active_branch.name
     test_repo = TEST_REPO
+    repo = git.Repo()
+
+    # Differentiate between github runner env and local env
+    github_actions = os.environ.get("GITHUB_ACTIONS")
+    if github_actions:
+        # Create a new branch locally from detached HEAD
+        head_sha = repo.git.rev_parse('--short', 'HEAD')
+        local_branches = [h.name for h in repo.heads]
+        if head_sha not in local_branches:
+            repo.git.checkout('-b', f'{head_sha}')
+
+    current_branch = repo.active_branch.name
     r = github_api(
         'get', f'repos/{test_repo}/branches', bot_token)
     branches = json.loads(r.text)
@@ -90,6 +101,16 @@ vendor:
 
     # Teardown step to cleanup branches
     repo.git.worktree('prune')
+
+    if github_actions:
+        logger.info(f"Delete local '{head_sha}' branch")
+        repo.git.checkout('main')
+        repo.git.branch('-D', head_sha)
+
+        logger.info(f"Delete remote '{head_sha}' branch")
+        github_api(
+            'delete', f'repos/{secrets.test_repo}/git/refs/heads/{head_sha}', secrets.bot_token)
+
     logger.info(f"Delete '{secrets.test_repo}:{secrets.base_branch}'")
     github_api(
         'delete', f'repos/{secrets.test_repo}/git/refs/heads/{secrets.base_branch}', secrets.bot_token)
@@ -143,6 +164,8 @@ def the_user_has_created_a_error_free_chart_src(secrets):
         secrets.pr_branch = f'{secrets.base_branch}-pr'
 
         repo = git.Repo(os.getcwd())
+        set_git_username_email(repo, secrets.bot_name,
+                               f'{secrets.bot_name}@test.email')
         if os.environ.get('WORKFLOW_DEVELOPMENT'):
             logger.info("Wokflow development enabled")
             repo.git.add(A=True)
@@ -168,10 +191,39 @@ def the_user_has_created_a_error_free_chart_src(secrets):
 
         os.chdir(temp_dir)
         repo = git.Repo(temp_dir)
+        set_git_username_email(repo, secrets.bot_name,
+                               f'{secrets.bot_name}@test.email')
         repo.git.checkout('-b', secrets.base_branch)
         chart_dir = f'charts/{secrets.vendor_type}/{secrets.vendor}/{secrets.chart_name}'
         pathlib.Path(
             f'{chart_dir}/{secrets.chart_version}').mkdir(parents=True, exist_ok=True)
+
+        # Remove chart files from base branch
+        logger.info(
+            f"Remove {chart_dir}/{secrets.chart_version} from {secrets.test_repo}:{secrets.base_branch}")
+        try:
+            repo.git.rm('-rf', '--cached',
+                        f'{chart_dir}/{secrets.chart_version}')
+            repo.git.commit(
+                '-m', f'Remove {chart_dir}/{secrets.chart_version}')
+            repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
+                          f'HEAD:refs/heads/{secrets.base_branch}')
+        except git.exc.GitCommandError:
+            logger.info(
+                f"{chart_dir}/{secrets.chart_version} not exist on {secrets.test_repo}:{secrets.base_branch}")
+
+        # Remove the OWNERS file from base branch
+        logger.info(
+            f"Remove {chart_dir}/OWNERS from {secrets.test_repo}:{secrets.base_branch}")
+        try:
+            repo.git.rm('-rf', '--cached', f'{chart_dir}/OWNERS')
+            repo.git.commit(
+                '-m', f'Remove {chart_dir}/OWNERS')
+            repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
+                          f'HEAD:refs/heads/{secrets.base_branch}')
+        except git.exc.GitCommandError:
+            logger.info(
+                f"{chart_dir}/OWNERS not exist on {secrets.test_repo}:{secrets.base_branch}")
 
         # Create the OWNERS file from the string template
         values = {'bot_name': secrets.bot_name,
@@ -183,7 +235,7 @@ def the_user_has_created_a_error_free_chart_src(secrets):
         # Push OWNERS file to the test_repo
         logger.info(
             f"Push OWNERS file to '{secrets.test_repo}:{secrets.base_branch}'")
-        repo.git.add('charts')
+        repo.git.add(f'{chart_dir}/OWNERS')
         repo.git.commit(
             '-m', f"Add {secrets.vendor} {secrets.chart_name} OWNERS file")
         repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
@@ -192,11 +244,11 @@ def the_user_has_created_a_error_free_chart_src(secrets):
         # Unzip files into temporary directory for PR submission
         with tarfile.open(secrets.test_chart, 'r') as fd:
             fd.extractall(f'{chart_dir}/{secrets.chart_version}')
-            os.rename(f'{chart_dir}/{secrets.chart_version}/{secrets.chart_name}',
-                      f'{chart_dir}/{secrets.chart_version}/src')
+            shutil.move(f'{chart_dir}/{secrets.chart_version}/{secrets.chart_name}',
+                        f'{chart_dir}/{secrets.chart_version}/src')
 
         # Push chart src files to test_repo:pr_branch
-        repo.git.add('charts')
+        repo.git.add(f'{chart_dir}/{secrets.chart_version}/src')
         repo.git.commit(
             '-m', f"Add {secrets.vendor} {secrets.chart_name} {secrets.chart_version} chart source files")
 
@@ -289,29 +341,17 @@ def the_release_is_published(secrets):
 
         chart_tgz = secrets.test_chart.split('/')[-1]
         expected_chart_asset = f'{secrets.vendor}-{chart_tgz}'
-        logger.info(f"Check '{expected_chart_asset}' is in release assets")
+        expected_report_asset = 'report.yaml'
+        required_assets = [expected_chart_asset, expected_report_asset]
+        logger.info(f"Check '{required_assets}' is in release assets")
         release_id = release['id']
-        r = github_api(
-            'get', f'repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
-        asset_list = json.loads(r.text)
-        asset_names = [asset['name'] for asset in asset_list]
-
+        get_release_assets(secrets, release_id, required_assets)
+        return
+    finally:
         logger.info(f"Delete release '{expected_tag}'")
-        r = github_api(
+        github_api(
             'delete', f'repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
 
         logger.info(f"Delete release tag '{expected_tag}'")
-        r = github_api(
+        github_api(
             'delete', f'repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
-
-        if expected_chart_asset not in asset_names:
-            pytest.fail(f"Missing release asset: {expected_chart_asset}")
-
-        expected_report_asset = 'report.yaml'
-        logger.info(
-            f"Check '{expected_report_asset}' is in release assets")
-        if expected_report_asset not in asset_names:
-            pytest.fail(f"Missing release asset: {expected_report_asset}")
-        return
-    except:
-        pytest.fail(f"'{expected_tag}' not in the release list")

@@ -50,6 +50,18 @@ def get_run_result(secrets, run_id):
 
     return run['conclusion']
 
+@retry(stop_max_delay=10_000, wait_fixed=1000)
+def get_release_assets(secrets, release_id, required_assets):
+    r = github_api(
+        'get', f'repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
+    asset_list = json.loads(r.text)
+    asset_names = [asset['name'] for asset in asset_list]
+    missing_assets = list()
+    for asset in required_assets:
+        if asset not in asset_names:
+            missing_assets.append(asset)
+    if len(missing_assets) > 0:
+        pytest.fail(f"Missing release asset: {missing_assets}")
 
 @retry(stop_max_delay=15_000, wait_fixed=1000)
 def get_release_by_tag(secrets, release_tag):
@@ -63,7 +75,7 @@ def get_release_by_tag(secrets, release_tag):
 
 # TODO: Support `community` as vendor_type.
 def get_all_charts(charts_path: str, vendor_types: str) -> list:
-    """Gets charts with src or tgz under `charts/` given vendor_types.
+    """Gets charts with src or tgz under `charts/` given vendor_types and without report.
 
     Parameters:
     charts_path (str): path to the `charts/` directory

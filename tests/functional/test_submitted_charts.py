@@ -28,7 +28,7 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_all_charts, get_release_by_tag, set_git_username_email, TEST_REPO, PROD_REPO, PROD_BRANCH
+from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_all_charts, get_release_by_tag, set_git_username_email, get_release_assets, TEST_REPO, PROD_REPO, PROD_BRANCH
 from functional.notifier import create_verification_issue
 
 logger = logging.getLogger(__name__)
@@ -428,18 +428,16 @@ def submission_tests_run_for_submitted_charts(secrets):
             expected_tag = f'{vendor_name}-{chart_name}-{chart_version}'
             try:
                 release = get_release_by_tag(secrets, expected_tag)
-
                 logger.info(f"Released '{expected_tag}' successfully")
-                chart_tar = f'{chart_name}-{chart_version}.tgz'
-                expected_chart_asset = f'{vendor_name}-{chart_tar}'
-                logger.info(
-                    f"Check '{expected_chart_asset}' is in release assets")
-                release_id = release['id']
-                r = github_api(
-                    'get', f'repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
-                asset_list = json.loads(r.text)
-                asset_names = [asset['name'] for asset in asset_list]
 
+                chart_tgz = f'{chart_name}-{chart_version}.tgz'
+                expected_chart_asset = f'{vendor_name}-{chart_tgz}'
+                required_assets = [expected_chart_asset]
+                logger.info(f"Check '{required_assets}' is in release assets")
+                release_id = release['id']
+                get_release_assets(secrets, release_id, required_assets)
+                return
+            finally:
                 logger.info(f"Delete release '{expected_tag}'")
                 github_api(
                     'delete', f'repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
@@ -447,12 +445,6 @@ def submission_tests_run_for_submitted_charts(secrets):
                 logger.info(f"Delete release tag '{expected_tag}'")
                 github_api(
                     'delete', f'repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
-
-                if expected_chart_asset not in asset_names:
-                    logger.warning(
-                        f"Missing release asset: {expected_chart_asset}")
-            except:
-                logger.warning(f"'{expected_tag}' not in the release list")
 
 
 @then("all results are reported back to the caller")
