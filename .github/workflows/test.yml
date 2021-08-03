@@ -4,24 +4,25 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
-      inputs:
-        dry-run:
-          description: 'Run tests but do not create issues {true,false}'
-          required: true
-          default: 'true'
-        notify-id:
-          description: 'Issue notification {github id}'
-          required: false
-        vendor-type:
-          description: 'Vendor type {all,partner,redhat,community}'
-          required: true
-          default: 'all'
-        software-name:
-          description: 'Software Name'
-          required: true
-        software-version:
-          description: 'Software Version'
-          required: true
+    inputs:
+      dry-run:
+        description: 'Run tests but do not create issues {true,false}'
+        required: true
+        default: 'true'
+      notify-id:
+        description: 'Issue notification {github id}'
+        required: false
+        default: ''
+      vendor-type:
+        description: 'Vendor type {all,partner,redhat,community}'
+        required: true
+        default: 'all'
+      software-name:
+        description: 'Software Name'
+        required: true
+      software-version:
+        description: 'Software Version'
+        required: true
 
 
 jobs:
@@ -35,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          token: ${{ github.event.inputs.bot-token }}
+          token: ${{ secrets.BOT_TOKEN }}
           fetch-depth: 0
 
       - name: Set up Python 3.x Part 1
@@ -74,6 +75,8 @@ jobs:
           NOTIFY_ID: ${{ github.event.inputs.notify-id }}
           SOFTWARE_NAME: ${{ github.event.inputs.software-name }}
           SOFTWARE_VERSION: ${{ github.event.inputs.software-version }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           # Run the wokflow tests
           if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
