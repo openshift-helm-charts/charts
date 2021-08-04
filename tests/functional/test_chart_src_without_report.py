@@ -232,10 +232,7 @@ def the_user_has_created_a_error_free_chart_src(secrets):
                       f'HEAD:refs/heads/{secrets.base_branch}', '-f')
 
         # Unzip files into temporary directory for PR submission
-        with tarfile.open(secrets.test_chart, 'r') as fd:
-            fd.extractall(f'{chart_dir}/{secrets.chart_version}')
-            shutil.move(f'{chart_dir}/{secrets.chart_version}/{secrets.chart_name}',
-                        f'{chart_dir}/{secrets.chart_version}/src')
+        extract_chart_tgz(secrets.test_chart, f'{chart_dir}/{secrets.chart_version}', secrets, logger)
 
         # Push chart src files to test_repo:pr_branch
         repo.git.add(f'{chart_dir}/{secrets.chart_version}/src')
