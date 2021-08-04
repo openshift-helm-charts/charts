@@ -92,9 +92,6 @@ def create_verification_issue(chart_name, chart_owners, report_url, software_nam
     access_token -- An optional github access token secret. If not passed will try to get from GITHUB_AUTH_TOKEN environment variable\n
     """
 
-    if os.environ.get('NOTIFY_ID'):
-        chart_owners = [os.environ.get('NOTIFY_ID')]
-
     title = f"Action needed for {chart_name} after a certification dependency change"
 
     report_result = "some chart checks have failed. Consider submiting a new chart version with the appropiate corrections"
@@ -121,9 +118,6 @@ def create_version_change_issue(chart_name, chart_owners, software_name, softwar
     software_version -- The softwared dependency version used\n
     access_token -- An optional github access token secret. If not passed will try to get from GITHUB_AUTH_TOKEN environment variable\n
     """
-
-    if os.environ.get('NOTIFY_ID'):
-        chart_owners = [os.environ.get('NOTIFY_ID')]
 
     title = f"Action needed for {chart_name} after a certification dependency change"
 

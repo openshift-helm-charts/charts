@@ -28,7 +28,7 @@ from pytest_bdd import (
     when,
 )
 
-from functional.utils import get_name_and_version_from_report, github_api, get_run_id, get_run_result, get_all_charts, get_release_by_tag, TEST_REPO, PROD_REPO, PROD_BRANCH
+from functional.utils import *
 from functional.notifier import create_verification_issue
 
 logger = logging.getLogger(__name__)
@@ -48,7 +48,8 @@ def secrets():
         pr_base_branch: str
         base_branches: list
         pr_branches: list
-        is_prod: bool
+        dry_run: bool
+        notify_id: list
 
         submitted_charts: list = None
         owners_file_content: str = """\
@@ -67,13 +68,21 @@ vendor:
         chart_name, chart_version = get_name_and_version_from_report(
             test_report)
 
-    # Accepts 'True' or 'False', depending on whether we want to tag chart owners, or bot for testing
-    is_prod = os.environ.get("IS_PROD")
-    if not is_prod:
-        # Default to False to avoid spamming tags to chart owners
-        is_prod = False
+    # Accepts 'true' or 'false', depending on whether we want to notify
+    dry_run = os.environ.get("DRY_RUN")
+    if not dry_run:
+        # Default to dry run to avoid spamming notifications
+        dry_run = True
     else:
-        is_prod = is_prod == 'True'
+        dry_run = dry_run == 'true'
+
+    # Accepts comma separated Github IDs or empty strings to override people to tag in notifications
+    notify_id = os.environ.get("NOTIFY_ID")
+    if notify_id:
+        notify_id = [vt.strip() for vt in notify_id.split(',')]
+    else:
+        # Default to not override, i.e. use chart owners
+        notify_id = []
 
     software_name = os.environ.get("SOFTWARE_NAME")
     if not software_name:
@@ -83,13 +92,7 @@ vendor:
     if not software_version:
         raise Exception("SOFTWARE_VERSION environment variable not defined")
 
-    bot_name = os.environ.get("BOT_NAME")
-    bot_token = os.environ.get("BOT_TOKEN")
-    if not bot_token:
-        bot_name = "github-actions[bot]"
-        bot_token = os.environ.get("GITHUB_TOKEN")
-        if not bot_token:
-            raise Exception("BOT_TOKEN environment variable not defined")
+    bot_name, bot_token = get_bot_name_and_token()
 
     vendor_type = os.environ.get("VENDOR_TYPE")
     if not vendor_type:
@@ -113,8 +116,8 @@ vendor:
     repo.git.push(f'https://x-access-token:{bot_token}@github.com/{test_repo}',
                   f'HEAD:refs/heads/{pr_base_branch}', '-f')
 
-    secrets = Secret(software_name, software_version, test_repo, bot_name,
-                     bot_token, vendor_type, pr_base_branch, base_branches, pr_branches, is_prod)
+    secrets = Secret(software_name, software_version, test_repo, bot_name, bot_token,
+                     vendor_type, pr_base_branch, base_branches, pr_branches, dry_run, notify_id)
     yield secrets
 
     # Teardown step to cleanup branches
@@ -172,11 +175,21 @@ def workflow_is_triggered():
 def submission_tests_run_for_submitted_charts(secrets):
     """submission tests are run for existing charts."""
 
+    # Don't notify on dry runs, default to True
+    dry_run = True
+    if not secrets.dry_run:
+        # Don't notify if not triggerd on PROD_REPO and PROD_BRANCH
+        triggered_branch = os.environ.get("GITHUB_REF").split('/')[-1]
+        triggered_repo = os.environ.get("GITHUB_REPOSITORY")
+        if triggered_repo == PROD_REPO and triggered_branch == PROD_BRANCH:
+            dry_run = False
+
     with TemporaryDirectory(prefix='tci-') as temp_dir:
         owners_table = dict()
         pr_number_list = []
 
         repo = git.Repo(os.getcwd())
+        set_git_username_email(repo, secrets.bot_name, f'{secrets.bot_name}@test.email')
         if os.environ.get('WORKFLOW_DEVELOPMENT'):
             logger.info("Wokflow development enabled")
             repo.git.add(A=True)
@@ -193,11 +206,12 @@ def submission_tests_run_for_submitted_charts(secrets):
         logger.info(f'Worktree directory: {temp_dir}')
         repo.git.worktree('add', '--detach', temp_dir, f'HEAD')
 
-        # Run submission flow test on charts from main branch
+        # Run submission flow test with charts in PROD_REPO:PROD_BRANCH
         os.chdir(temp_dir)
         repo = git.Repo(temp_dir)
+        set_git_username_email(repo, secrets.bot_name, f'{secrets.bot_name}@test.email')
         repo.git.fetch(
-            f'https://github.com/{secrets.test_repo}.git', f'{PROD_BRANCH}:{PROD_BRANCH}', '-f')
+            f'https://github.com/{PROD_REPO}.git', f'{PROD_BRANCH}:{PROD_BRANCH}', '-f')
         repo.git.checkout(PROD_BRANCH, 'charts')
         repo.git.restore('--staged', 'charts')
         secrets.submitted_charts = get_all_charts(
@@ -246,23 +260,51 @@ def submission_tests_run_for_submitted_charts(secrets):
             r = github_api(
                 'post', f'repos/{secrets.test_repo}/git/refs', secrets.bot_token, json=data)
 
+            # Remove chart files from base branch
+            logger.info(
+                f"Remove {chart_dir}/{chart_version} from {secrets.test_repo}:{base_branch}")
+            try:
+                repo.git.rm('-rf', '--cached', f'{chart_dir}/{chart_version}')
+                repo.git.commit(
+                    '-m', f'Remove {chart_dir}/{chart_version}')
+                repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
+                              f'HEAD:refs/heads/{base_branch}')
+            except git.exc.GitCommandError:
+                logger.info(
+                    f"{chart_dir}/{chart_version} not exist on {secrets.test_repo}:{base_branch}")
+
+            # Remove the OWNERS file from base branch
+            logger.info(
+                f"Remove {chart_dir}/OWNERS from {secrets.test_repo}:{base_branch}")
+            try:
+                repo.git.rm('-rf', '--cached', f'{chart_dir}/OWNERS')
+                repo.git.commit(
+                    '-m', f'Remove {chart_dir}/OWNERS')
+                repo.git.push(f'https://x-access-token:{secrets.bot_token}@github.com/{secrets.test_repo}',
+                              f'HEAD:refs/heads/{base_branch}')
+            except git.exc.GitCommandError:
+                logger.info(
+                    f"{chart_dir}/OWNERS not exist on {secrets.test_repo}:{base_branch}")
+
             # Modify the OWNERS file so the bot account can test chart submission flow
             values = {'bot_name': secrets.bot_name,
                       'vendor': vendor_name, 'chart_name': chart_name}
             content = Template(secrets.owners_file_content).substitute(values)
-            # Use bot account for notifications unless in production
-            if secrets.is_prod:
-                with open(f'{chart_dir}/OWNERS', 'r') as fd:
-                    try:
-                        owners = yaml.safe_load(fd)
-                        # Pick owner ids for notification
-                        owners_table[chart_dir] = [
-                            owner.get(['githubUsername'], '') for owner in owners['users']]
-                    except yaml.YAMLError as err:
-                        logger.warning(
-                            f"Error parsing OWNERS of {chart_dir}: {err}")
-            else:
-                owners_table[chart_dir] = [secrets.bot_name]
+
+            # Don't send notifications on dry runs
+            if not dry_run:
+                if len(secrets.notify_id) == 0:
+                    with open(f'{chart_dir}/OWNERS', 'r') as fd:
+                        try:
+                            owners = yaml.safe_load(fd)
+                            # Pick owner ids for notification
+                            owners_table[chart_dir] = [
+                                owner.get(['githubUsername'], '') for owner in owners['users']]
+                        except yaml.YAMLError as err:
+                            logger.warning(
+                                f"Error parsing OWNERS of {chart_dir}: {err}")
+                else:
+                    owners_table[chart_dir] = secrets.notify_id
             with open(f'{chart_dir}/OWNERS', 'w') as fd:
                 fd.write(content)
 
@@ -308,20 +350,21 @@ def submission_tests_run_for_submitted_charts(secrets):
             conclusion = get_run_result(secrets, run_id)
 
             # Send notification to owner through GitHub issues
-            r = github_api(
-                'get', f'repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
-            run = r.json()
-            run_html_url = run['html_url']
-            chart_dir = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
-            chart_owners = owners_table[chart_dir]
-            pass_verification = conclusion == 'success'
-            os.environ['GITHUB_ORGANIZATION'] = PROD_REPO.split('/')[0]
-            os.environ['GITHUB_REPO'] = PROD_REPO.split('/')[1]
-            os.environ['GITHUB_AUTH_TOKEN'] = secrets.bot_token
-            logger.info(
-                f"Send notification to '{chart_owners}' about verification result of '{chart}'")
-            create_verification_issue(chart_name, chart_owners, run_html_url, secrets.software_name,
-                                      secrets.software_version, pass_verification, secrets.bot_token)
+            if not dry_run:
+                r = github_api(
+                    'get', f'repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
+                run = r.json()
+                run_html_url = run['html_url']
+                chart_dir = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
+                chart_owners = owners_table[chart_dir]
+                pass_verification = conclusion == 'success'
+                os.environ['GITHUB_ORGANIZATION'] = PROD_REPO.split('/')[0]
+                os.environ['GITHUB_REPO'] = PROD_REPO.split('/')[1]
+                os.environ['GITHUB_AUTH_TOKEN'] = secrets.bot_token
+                logger.info(
+                    f"Send notification to '{chart_owners}' about verification result of '{chart}'")
+                create_verification_issue(chart_name, chart_owners, run_html_url, secrets.software_name,
+                                          secrets.software_version, pass_verification, secrets.bot_token)
 
             if conclusion == 'success':
                 logger.info(f"Workflow run for {chart} was 'success'")
@@ -375,18 +418,16 @@ def submission_tests_run_for_submitted_charts(secrets):
             expected_tag = f'{vendor_name}-{chart_name}-{chart_version}'
             try:
                 release = get_release_by_tag(secrets, expected_tag)
-
                 logger.info(f"Released '{expected_tag}' successfully")
-                chart_tar = f'{chart_name}-{chart_version}.tgz'
-                expected_chart_asset = f'{vendor_name}-{chart_tar}'
-                logger.info(
-                    f"Check '{expected_chart_asset}' is in release assets")
-                release_id = release['id']
-                r = github_api(
-                    'get', f'repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
-                asset_list = json.loads(r.text)
-                asset_names = [asset['name'] for asset in asset_list]
 
+                chart_tgz = f'{chart_name}-{chart_version}.tgz'
+                expected_chart_asset = f'{vendor_name}-{chart_tgz}'
+                required_assets = [expected_chart_asset]
+                logger.info(f"Check '{required_assets}' is in release assets")
+                release_id = release['id']
+                get_release_assets(secrets, release_id, required_assets)
+                return
+            finally:
                 logger.info(f"Delete release '{expected_tag}'")
                 github_api(
                     'delete', f'repos/{secrets.test_repo}/releases/{release_id}', secrets.bot_token)
@@ -394,12 +435,6 @@ def submission_tests_run_for_submitted_charts(secrets):
                 logger.info(f"Delete release tag '{expected_tag}'")
                 github_api(
                     'delete', f'repos/{secrets.test_repo}/git/refs/tags/{expected_tag}', secrets.bot_token)
-
-                if expected_chart_asset not in asset_names:
-                    logger.warning(
-                        f"Missing release asset: {expected_chart_asset}")
-            except:
-                logger.warning(f"'{expected_tag}' not in the release list")
 
 
 @then("all results are reported back to the caller")

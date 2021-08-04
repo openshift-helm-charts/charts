@@ -17,6 +17,8 @@ TEST_REPO = 'openshift-helm-charts/sandbox'
 PROD_REPO = 'openshift-helm-charts/charts'
 # The prod branch where we store all chart files
 PROD_BRANCH = 'main'
+# This is used to find chart certification workflow run id
+CERTIFICATION_CI_NAME = 'CI'
 
 
 @retry(stop_max_delay=30_000, wait_fixed=1000)
@@ -31,7 +33,7 @@ def get_run_id(secrets, pr_number=None):
     runs = json.loads(r.text)
 
     for run in runs['workflow_runs']:
-        if run['head_sha'] == pr['head']['sha']:
+        if run['head_sha'] == pr['head']['sha'] and run['name'] == CERTIFICATION_CI_NAME:
             return run['id']
     else:
         pytest.fail("Workflow for the submitted PR did not run.")
@@ -48,6 +50,18 @@ def get_run_result(secrets, run_id):
 
     return run['conclusion']
 
+@retry(stop_max_delay=10_000, wait_fixed=1000)
+def get_release_assets(secrets, release_id, required_assets):
+    r = github_api(
+        'get', f'repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
+    asset_list = json.loads(r.text)
+    asset_names = [asset['name'] for asset in asset_list]
+    missing_assets = list()
+    for asset in required_assets:
+        if asset not in asset_names:
+            missing_assets.append(asset)
+    if len(missing_assets) > 0:
+        pytest.fail(f"Missing release asset: {missing_assets}")
 
 @retry(stop_max_delay=15_000, wait_fixed=1000)
 def get_release_by_tag(secrets, release_tag):
@@ -59,9 +73,23 @@ def get_release_by_tag(secrets, release_tag):
             return release
     raise Exception("Release not published")
 
+def get_bot_name_and_token():
+    bot_name = os.environ.get("BOT_NAME")
+    bot_token = os.environ.get("BOT_TOKEN")
+    if not bot_name and not bot_token:
+        bot_name = "github-actions[bot]"
+        bot_token = os.environ.get("GITHUB_TOKEN")
+        if not bot_token:
+            raise Exception("BOT_TOKEN environment variable not defined")
+    elif not bot_name:
+        raise Exception("BOT_TOKEN set but BOT_NAME not specified")
+    elif not bot_token:
+        raise Exception("BOT_NAME set but BOT_TOKEN not specified")
+    return bot_name, bot_token
+
 # TODO: Support `community` as vendor_type.
 def get_all_charts(charts_path: str, vendor_types: str) -> list:
-    """Gets charts with src or tgz under `charts/` given vendor_types.
+    """Gets charts with src or tgz under `charts/` given vendor_types and without report.
 
     Parameters:
     charts_path (str): path to the `charts/` directory
@@ -108,6 +136,16 @@ def get_all_charts(charts_path: str, vendor_types: str) -> list:
                     ret.append((vt, vn, cn, cv))
     return ret
 
+
+def set_git_username_email(repo, username, email):
+    """
+    Parameters:
+    repo (git.Repo): git.Repo instance of the local directory
+    username (str): git username to set
+    email (str): git email to set
+    """
+    repo.config_writer().set_value("user", "name", username).release()
+    repo.config_writer().set_value("user", "email", email).release()
 
 def get_name_and_version_from_report(path):
     """
