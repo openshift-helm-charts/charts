@@ -327,6 +327,23 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-dotnet-0.0.1/redhat-dotnet-0.0.1.tgz
     version: 0.0.1
+  redhat-jenkins:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: N/A
+      charts.openshift.io/digest: sha256:a971a396498cf24a58aa18a3cccf0848c538592d748b9d92202e354cc5ed5d27
+      charts.openshift.io/lastCertifiedTimestamp: '2021-08-04T13:37:58.716524+00:00'
+      charts.openshift.io/provider: Openshift Jenkins chart
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-08-04T13:38:30.493271+00:00'
+    apiVersion: v2
+    appVersion: 1.16.0
+    description: A Helm chart for Openshift Jenkins
+    digest: e1f8b8b34790c860fe43e17cda0a981cb5693b38d18619dc701a84a24906a6f2
+    name: jenkins
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-jenkins-0.0.1/redhat-jenkins-0.0.1.tgz
+    version: 0.0.1
   redhat-nodejs:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -406,4 +423,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-07-29T21:28:20.656909+00:00'
+generated: '2021-08-04T13:38:30.493271+00:00'
