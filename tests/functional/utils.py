@@ -2,6 +2,7 @@
 """Common utility functions used by tests"""
 
 import os
+import shutil
 import tarfile
 import json
 
@@ -50,6 +51,7 @@ def get_run_result(secrets, run_id):
 
     return run['conclusion']
 
+
 @retry(stop_max_delay=10_000, wait_fixed=1000)
 def get_release_assets(secrets, release_id, required_assets):
     r = github_api(
@@ -63,6 +65,7 @@ def get_release_assets(secrets, release_id, required_assets):
     if len(missing_assets) > 0:
         pytest.fail(f"Missing release asset: {missing_assets}")
 
+
 @retry(stop_max_delay=15_000, wait_fixed=1000)
 def get_release_by_tag(secrets, release_tag):
     r = github_api(
@@ -72,6 +75,7 @@ def get_release_by_tag(secrets, release_tag):
         if release['tag_name'] == release_tag:
             return release
     raise Exception("Release not published")
+
 
 def get_bot_name_and_token():
     bot_name = os.environ.get("BOT_NAME")
@@ -87,8 +91,27 @@ def get_bot_name_and_token():
         raise Exception("BOT_NAME set but BOT_TOKEN not specified")
     return bot_name, bot_token
 
-# TODO: Support `community` as vendor_type.
+
+def extract_chart_tgz(src, dst, secrets, logger):
+    """Extracts the chart tgz file into the target location under 'charts/' for PR submission tests
+
+    Parameters:
+    src (str): path to the test chart tgz
+    dst (str): path to the extract destination, e.g. 'charts/partners/hashicorp/vault/0.13.0'
+    """
+    try:
+        logger.info(f"Remove existing local '{dst}/src'")
+        shutil.rmtree(f'{dst}/src')
+    except FileNotFoundError:
+        logger.info(f"'{dst}/src' does not exist")
+    finally:
+        with tarfile.open(src, 'r') as fd:
+            fd.extractall(dst)
+            os.rename(f'{dst}/{secrets.chart_name}', f'{dst}/src')
+
+
 def get_all_charts(charts_path: str, vendor_types: str) -> list:
+    # TODO: Support `community` as vendor_type.
     """Gets charts with src or tgz under `charts/` given vendor_types and without report.
 
     Parameters:
@@ -146,6 +169,7 @@ def set_git_username_email(repo, username, email):
     """
     repo.config_writer().set_value("user", "name", username).release()
     repo.config_writer().set_value("user", "email", email).release()
+
 
 def get_name_and_version_from_report(path):
     """
