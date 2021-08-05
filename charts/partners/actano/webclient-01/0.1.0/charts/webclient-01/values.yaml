@@ -21,7 +21,7 @@ logLevel: info
 
 config:
   app:
-    port: 80
+    port: 8080
 
   rplan_config_webclient:
     rest_api_protocol: http
