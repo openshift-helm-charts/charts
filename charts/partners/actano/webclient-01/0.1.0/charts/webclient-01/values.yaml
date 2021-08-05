@@ -1,0 +1,57 @@
+# Default values for  webclient-01.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: eu.gcr.io/allex-artifacts/rplan-webclient-redhat
+  tag: latest 
+  pullPolicy: IfNotPresent
+
+service:
+  name:  webclient-01
+  type: ClusterIP
+  port: 80
+
+  annotations: {}
+  labels: {}
+
+logLevel: info
+
+config:
+  app:
+    port: 80
+
+  rplan_config_webclient:
+    rest_api_protocol: http
+    rest_api_host: localhost
+    sentry_environment: local
+    sentry_enabled: false
+    sentry_dsn:
+    intercom_enabled: false
+    intercom_app_id:
+    intercom_widget_url:
+
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+podLabels: {}
+
+podAnnotations: {}
