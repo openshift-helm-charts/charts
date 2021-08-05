@@ -8,5 +8,5 @@ spec:
   containers:
     - name: {{ .Release.Name }}
       image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-      command: [ curl 127.0.0.1:80 -v ] 
+      command: [ oc get service webclient-01 || kubectl get service webclient-01 ]
   restartPolicy: Never
