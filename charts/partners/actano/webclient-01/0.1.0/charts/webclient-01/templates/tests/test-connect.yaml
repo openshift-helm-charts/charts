@@ -9,5 +9,5 @@ spec:
     - name: {{ .Release.Name }}
       image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
       #command: [ oc get service webclient-01 || kubectl get service webclient-01 ]
-      command: [ http://webclient-01.default ]
+      command: [ curl http://webclient-01.default ]
   restartPolicy: Never
