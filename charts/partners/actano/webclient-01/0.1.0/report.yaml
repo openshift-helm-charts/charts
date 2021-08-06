@@ -6,19 +6,19 @@ metadata:
         profile:
             VendorType: partner
             version: v1.0
-        chart-uri: https://github.com/actano/charts-2/blob/main/charts/partners/actano/webclient-01/0.1.0/charts/webclient-01-0.1.2.tgz?raw=true
-        digest: sha256:dea1ecc7c34c96bf8785f709e1a1b739f392dd5626b7678d8c316d7a5926db0b
+        chart-uri: https://github.com/actano/charts-2/blob/main/charts/partners/actano/webclient-01/0.1.0/charts/webclient-01-0.1.6.tgz?raw=true
+        digest: sha256:f5766a0df7bb3873290e60a98ac0a5546289750ea3142b6ca9658347cdbf70e2
         digests:
-            chart: sha256:dea1ecc7c34c96bf8785f709e1a1b739f392dd5626b7678d8c316d7a5926db0b
-            package: 59e860cdcb6ecd9b84977b880aaff46e5bd45e9fd4ac014cd544dfdedd39ffc1
-        lastCertifiedTimestamp: "2021-08-05T11:15:24.817181+00:00"
+            chart: sha256:f5766a0df7bb3873290e60a98ac0a5546289750ea3142b6ca9658347cdbf70e2
+            package: 36a0d342b8a06275b521602c33b326d37c36676c35386900d504fdd8aba031bc
+        lastCertifiedTimestamp: "2021-08-06T00:49:25.793377+00:00"
         certifiedOpenShiftVersions: N/A
     chart:
         name: webclient-01
         home: ""
         sources: []
-        version: 0.1.0
-        description: A Helm chart for Kubernetes
+        version: 0.1.6
+        description: Webclient helm chart
         keywords: []
         maintainers: []
         icon: ""
@@ -33,22 +33,6 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-  - check: v1.0/contains-values
-    type: Mandatory
-    outcome: PASS
-    reason: Values file exist
-  - check: v1.0/has-kubeversion
-    type: Mandatory
-    outcome: PASS
-    reason: Kubernetes version specified
-  - check: v1.0/not-contain-csi-objects
-    type: Mandatory
-    outcome: PASS
-    reason: CSI objects do not exist
-  - check: v1.0/images-are-certified
-    type: Mandatory
-    outcome: PASS
-    reason: 'Image is Red Hat certified : eu.gcr.io/allex-artifacts/rplan-webclient-redhat:latest'
   - check: v1.0/has-readme
     type: Mandatory
     outcome: PASS
@@ -61,13 +45,6 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Chart test files exist
-  - check: v1.0/chart-testing
-    type: Mandatory
-    outcome: FAIL
-    reason: |-
-        Error running process: executing helm with args "install webclient-01-x5756oqcei /root/.cache/chart-verifier/https___github_com_actano_charts_2_blob_main_charts_partners_actano_webclient_01_0_1_0_charts_webclient_01_0_1_2_tgz_raw=true/webclient-01 --namespace default --wait --values /tmp/chart-testing-910196179/values.yaml": exit status 1
-        ---
-        Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
   - check: v1.0/contains-values-schema
     type: Mandatory
     outcome: PASS
@@ -76,8 +53,31 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Chart does not contain CRDs
+  - check: v1.0/not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
+  - check: v1.0/contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
+  - check: v1.0/has-kubeversion
+    type: Mandatory
+    outcome: PASS
+    reason: Kubernetes version specified
   - check: v1.0/helm-lint
     type: Mandatory
     outcome: PASS
     reason: Helm lint successful
+  - check: v1.0/images-are-certified
+    type: Mandatory
+    outcome: PASS
+    reason: 'Image is Red Hat certified : eu.gcr.io/allex-artifacts/rplan-webclient-redhat:latest'
+  - check: v1.0/chart-testing
+    type: Mandatory
+    outcome: FAIL
+    reason: |-
+        Error running process: executing helm with args "install webclient-01-oyylmznnaf /root/.cache/chart-verifier/https___github_com_actano_charts_2_blob_main_charts_partners_actano_webclient_01_0_1_0_charts_webclient_01_0_1_6_tgz_raw=true/webclient-01 --namespace default --wait --values /tmp/chart-testing-089933993/values.yaml": exit status 1
+        ---
+        Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp [::1]:8080: connect: connection refused
 
