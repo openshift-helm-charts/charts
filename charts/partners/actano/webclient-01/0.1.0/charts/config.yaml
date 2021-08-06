@@ -1,6 +1,6 @@
  chart-testing:
-     buildId: 0.1.4
+     buildId: 0.1.5
      upgrade: true
      skipMissingValues: true
-     namespace: webclient-01
+     namespace: default
      releaseLabel: "app.kubernetes.io/instance"
