@@ -4,6 +4,8 @@ import os
 import requests
 import json
 import yaml
+import sys
+
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
@@ -76,12 +78,14 @@ def main():
             print(f"::set-output name=run-tests::true")
         else:
             print(f"[INFO] User not authorized for manual invocation - do not run tests.")
+            print(f"::set-output name=workflow-only-but-not-authorized::true")
     elif check_if_ci_only_is_modified(args.api_url):
         if verify_user(args.username):
             print(f"[INFO] PR is workflow changes only and user is authorized - run tests.")
             print(f"::set-output name=run-tests::true")
         else:
             print(f"[INFO] PR is workflow changes only but user is not authorized - do not run tests.")
+            print(f"::set-output name=workflow-only-but-not-authorized::true")
     else:
         print(f"[INFO] Non workflow changes were found - do not run tests")
 
