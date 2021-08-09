@@ -241,7 +241,7 @@ def check_report_success(directory, api_url, report_path, version):
     failures_in_report = failed > 0
     if failures_in_report:
         msgs = []
-        msgs.append("[ERROR] Chart verifier report includes failures:")
+        msgs.append("[ERROR] Chart verifier report includes failures blah davp:")
         msgs.append(f"- Number of checks passed: {passed}")
         msgs.append(f"- Number of checks failed: {failed}")
         msgs.append(f"- Error message(s):")
