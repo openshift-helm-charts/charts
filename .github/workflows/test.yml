@@ -1,7 +1,7 @@
 name: Test Workflow
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
     inputs:
@@ -36,6 +36,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ secrets.BOT_TOKEN }}
           fetch-depth: 0
 
@@ -56,7 +58,7 @@ jobs:
         run: |
           # check if workflow testing should run.
           echo "Request type: $GITHUB_EVENT_NAME"
-          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+          if [ "$GITHUB_EVENT_NAME" == "pull_request_target" ]; then
               echo "[INFO] check if PR contains only workflow changes and user is authorized"
               ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           else
@@ -79,7 +81,7 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           # Run the wokflow tests
-          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+          if [ "$GITHUB_EVENT_NAME" == "pull_request_target" ]; then
               ve1/bin/pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py
           else
               echo "[INFO] Dry run ${{ env.DRY_RUN }}"

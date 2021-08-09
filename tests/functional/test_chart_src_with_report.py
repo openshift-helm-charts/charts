@@ -85,7 +85,7 @@ vendor:
     repo.git.push(f'https://x-access-token:{bot_token}@github.com/{test_repo}',
                   f'HEAD:refs/heads/{current_branch}', '-f')
 
-    base_branch = 'vault-0.13.0-src-with-report'
+    base_branch = f'chart-src-with-report-{current_branch}'
     pr_branch = base_branch + '-pr'
 
     secrets = Secret(test_repo, bot_name, bot_token, base_branch, pr_branch)
@@ -95,10 +95,6 @@ vendor:
     repo.git.worktree('prune')
 
     if github_actions:
-        logger.info(f"Delete local '{head_sha}' branch")
-        repo.git.checkout('main')
-        repo.git.branch('-D', head_sha)
-
         logger.info(f"Delete remote '{head_sha}' branch")
         github_api(
             'delete', f'repos/{secrets.test_repo}/git/refs/heads/{head_sha}', secrets.bot_token)
@@ -156,7 +152,7 @@ def the_user_has_created_a_error_free_chart_src_with_report(secrets):
         secrets.pr_branch = f'{secrets.base_branch}-pr'
 
         repo = git.Repo(os.getcwd())
-        set_git_username_email(repo, secrets.bot_name, f'{secrets.bot_name}@test.email')
+        set_git_username_email(repo, secrets.bot_name, GITHUB_ACTIONS_BOT_EMAIL)
         if os.environ.get('WORKFLOW_DEVELOPMENT'):
             logger.info("Wokflow development enabled")
             repo.git.add(A=True)
@@ -182,7 +178,7 @@ def the_user_has_created_a_error_free_chart_src_with_report(secrets):
 
         os.chdir(temp_dir)
         repo = git.Repo(temp_dir)
-        set_git_username_email(repo, secrets.bot_name, f'{secrets.bot_name}@test.email')
+        set_git_username_email(repo, secrets.bot_name, GITHUB_ACTIONS_BOT_EMAIL)
         repo.git.checkout('-b', secrets.base_branch)
         chart_dir = f'charts/{secrets.vendor_type}/{secrets.vendor}/{secrets.chart_name}'
         pathlib.Path(

@@ -20,6 +20,8 @@ PROD_REPO = 'openshift-helm-charts/charts'
 PROD_BRANCH = 'main'
 # This is used to find chart certification workflow run id
 CERTIFICATION_CI_NAME = 'CI'
+# GitHub actions bot email for git email
+GITHUB_ACTIONS_BOT_EMAIL = '41898282+github-actions[bot]@users.noreply.github.com'
 
 
 @retry(stop_max_delay=30_000, wait_fixed=1000)
