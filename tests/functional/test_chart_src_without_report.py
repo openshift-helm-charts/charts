@@ -245,13 +245,7 @@ def the_user_has_created_a_error_free_chart_src(secrets):
 @when("the redhat associate sends a pull request with the vault source chart")
 def the_user_sends_the_pull_request_with_the_chart_src(secrets):
     """The user sends the pull request with the chart source files."""
-
-    actions_bot_name = 'github-actions[bot]'
-    if secrets.bot_name == actions_bot_name:
-        head = secrets.pr_branch
-    else:
-        head = f'{secrets.bot_name}:{secrets.pr_branch}'
-    data = {'head': head, 'base': secrets.base_branch,
+    data = {'head': secrets.pr_branch, 'base': secrets.base_branch,
             'title': secrets.pr_branch}
 
     logger.info(
