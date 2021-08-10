@@ -82,12 +82,12 @@ jobs:
         run: |
           # Run the wokflow tests
           if [ "$GITHUB_EVENT_NAME" == "pull_request_target" ]; then
-              ve1/bin/pytest tests/ --log-cli-level=INFO --ignore=tests/functional/test_submitted_charts.py
+              ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/test_submitted_charts.py
           else
               echo "[INFO] Dry run ${{ env.DRY_RUN }}"
               echo "[INFO] Vendor type ${{ env.VENDOR_TYPE }}"
               echo "[INFO] Notify ID ${{ env.NOTIFY_ID }}"
               echo "[INFO] Software Name ${{ env.SOFTWARE_NAME }}"
               echo "[INFO] Software Version ${{ env.SOFTWARE_VERSION }}"
-              ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=INFO
+              ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING
           fi
