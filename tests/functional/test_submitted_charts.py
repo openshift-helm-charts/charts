@@ -421,7 +421,6 @@ def submission_tests_run_for_submitted_charts(secrets):
                 logger.info(f"Check '{required_assets}' is in release assets")
                 release_id = release['id']
                 get_release_assets(secrets, release_id, required_assets)
-                return
             finally:
                 logger.info(f"Delete release '{expected_tag}'")
                 github_api(
