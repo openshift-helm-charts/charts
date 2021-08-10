@@ -66,6 +66,13 @@ jobs:
               ve1/bin/check-pr-for-ci --verify-user=${{ github.actor }}
           fi
 
+      - name: Check Request Result
+        id: check_request_result
+        if: ${{ steps.check_request.outputs.workflow-only-but-not-authorized == 'true'}}
+        run: |
+          # workflow only change but user not authorized
+          exit 1
+
       - name: Test CI Workflow
         id: test_ci_workflow
         if: ${{ steps.check_request.outputs.run-tests == 'true'}}

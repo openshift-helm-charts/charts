@@ -38,11 +38,11 @@ jobs:
 
       - name: Exit if CI tests will run
         id: exit_if_ci
-        if: steps.check_ci_changes.outputs.run-tests == 'true'
+        if: steps.check_ci_changes.outputs.run-tests == 'true' || steps.check_ci_changes.outputs.workflow-only-but-not-authorized == 'true'
         run: |
           # exit: workflow testing will run.
           echo "The PR is workflow changes only - do not continue."
-          exit
+          exit 0
 
       - name: Sanity Check PR Content
         id: sanity_check_pr_content
