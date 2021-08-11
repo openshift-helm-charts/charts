@@ -248,7 +248,7 @@ def the_user_has_created_a_report_without_errors(secrets):
 def the_user_sends_the_pull_request_with_the_report(secrets):
     """The user sends the pull request with the report."""
     data = {'head': secrets.pr_branch, 'base': secrets.base_branch,
-            'title': secrets.pr_branch}
+            'title': secrets.pr_branch, 'body': os.environ.get('PR_BODY')}
 
     logger.info(
         f"Create PR with report from '{secrets.test_repo}:{secrets.pr_branch}'")
