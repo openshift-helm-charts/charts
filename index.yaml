@@ -1,5 +1,28 @@
 apiVersion: v1
 entries:
+  fortanix-dsm-secrets-injector-chart:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: '4.7'
+      charts.openshift.io/digest: sha256:492efc99f1c44f9a854b916859732a067bb1500795856b97f890cd1e0b672ffc
+      charts.openshift.io/lastCertifiedTimestamp: '2021-08-11T08:00:19.068501+00:00'
+      charts.openshift.io/provider: Fortanix
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2021-08-11T09:52:43.903021+00:00'
+    apiVersion: v2
+    appVersion: '1.0'
+    dependencies:
+    - name: fortanix-cert-setup
+      repository: file://cert-setup
+      version: '1.1'
+    digest: 75eea9fd654f060dee68bf936a7cf413e2587a0a6b685d7bc1b8421bda8ebd5e
+    kubeVersion: '>= 1.16.0 < 1.22.0'
+    maintainers:
+    - email: aman.ahuja@fortanix.com
+      name: Aman Ahuja
+    name: dsm-secrets-injector-chart
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/fortanix-dsm-secrets-injector-chart-2.0/fortanix-dsm-secrets-injector-chart-2.0.tgz
+    version: '2.0'
   hashicorp-vault:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -423,4 +446,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-08-04T13:38:30.493271+00:00'
+generated: '2021-08-11T09:52:43.903021+00:00'
