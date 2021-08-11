@@ -1,8 +1,9 @@
 chart:
   name: test-link-helm-chart-internal
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: redhat-sp
   name: Red Hat Inc.
