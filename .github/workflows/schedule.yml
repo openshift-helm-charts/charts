@@ -5,6 +5,12 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
+      # XXX: dry-run has two side effects:
+      # 1. Don't launch github issues for notifications
+      # 2. Run this workflow but don't update the software-version.yaml,
+      #     used to re-run the cron job when there's version difference.
+      # Can lift this input when we feel comfortable to run this workflow once
+      # for each software version change and send notifications (no backdoor).
       dry-run:
         description: "Run tests but do not create issues {true,false}"
         required: true
