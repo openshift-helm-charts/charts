@@ -1,0 +1,8 @@
+chart:
+  name: test-2021-11-release-helm-chart-external
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: bpm-test-registry-namespace
+  name: BPM Test Company
