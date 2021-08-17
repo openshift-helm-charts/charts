@@ -1,0 +1,22 @@
+{
+    "uverifier:license": {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzA3OTk5OTksImlhdCI6MTYyODA4NjM2Nn0.gVs2vTwYRGuTSdQ4GplIySlOMCVS83wZdIcWUmsprZo"
+    },
+    "uverifier:publisher": {
+        "stdout" : {
+            "format": "json"
+        }
+    },
+    "uverifier:agent": {
+        "tags" : ["Docker", "iPerf3 Server"]
+    },
+    "uverifier:test": {
+        "cron": "* * * * * * *",
+        "iteration": 1,
+        "iperf3server": {
+            "testReportInterval": 1,
+			"srcIPAddr": "192.168.77.228",
+			"serverPort": 5201
+        }
+    }
+}

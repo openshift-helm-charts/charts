@@ -1,0 +1,32 @@
+{
+    "uverifier:license": {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzA3OTk5OTksImlhdCI6MTYyODA4NjM2Nn0.gVs2vTwYRGuTSdQ4GplIySlOMCVS83wZdIcWUmsprZo"
+    },
+    "uverifier:agent": {
+        "tags" : ["Docker", "Ping"]
+    },
+    "uverifier:publisher": {
+        "stdout" : {
+            "format": "json"
+        }
+    },
+    "uverifier:test": {
+        "cron": "* * * * * * *",
+        "iteration": 1,
+        "pingactivetest": {
+            "host": [
+{ "host": "www.google.com" },
+{ "host": "8.8.8.8" }
+            ],
+            "payloadSize": 32,
+            "lastPacketTimeoutTime": 1000000,
+            "waitTime": 1000000,
+            "numPings": 5,
+            "ttl": 64,
+            "diffservCodepoint": 0,
+            "percentageLo": 25,
+            "percentageHi": 75,
+            "reverseLookup": false
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+  "schedules": [
+    {
+      "cron": "* * * * * * *",
+      "iteration": 1,
+      "tests": [
+        {
+          "ottvideo": {
+            "buffer_target": 60000,
+            "youtube_video_id": "UWZ43q0gcoU",
+            "video_filter": {
+              "min_width": 1920,
+              "min_height": 1080,
+              "min_framerate": 24,
+              "mime_types": [
+                "mp4",
+                "webm"
+              ]
+            },
+            "audio_filter": {
+              "min_sampling_rate": 40000,
+              "mime_types": [
+                "mp4",
+                "webm"
+              ]
+            },
+            "http_timeout": 30000,
+            "segment_info": false
+          }
+        }
+      ]
+    }
+  ],
+  "authorizer": {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzA3OTk5OTksImlhdCI6MTYyODA4NjM2Nn0.gVs2vTwYRGuTSdQ4GplIySlOMCVS83wZdIcWUmsprZo"
+  },
+  "publisher": {
+    "stdout": {
+      "format": "json"
+    }
+  }
+}

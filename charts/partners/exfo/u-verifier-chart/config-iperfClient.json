@@ -1,0 +1,38 @@
+{
+    "uverifier:license": {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzA3OTk5OTksImlhdCI6MTYyODA4NjM2Nn0.gVs2vTwYRGuTSdQ4GplIySlOMCVS83wZdIcWUmsprZo"
+    },
+    "uverifier:publisher": {
+        "stdout" : {
+            "format": "json"
+        }
+    },
+    "uverifier:agent": {
+        "tags" : ["Docker", "iPerf3 Client"]
+    },
+    "uverifier:test": {
+        "cron": "* * * * * * *",
+        "iteration": 1,
+        "iperf3client": {
+            "destAddr": [
+                { "host": "192.168.77.228" }
+             ],              
+             "JSONformat": true,
+             "XmitBlockUnit": 0,
+             "XmitBufferUnit": 0,
+             "bandwidthUnit": 0,
+             "getServerOutput": false,
+             "readWriteBufSizeUnit": 0,
+             "reportFormat": 0,
+             "runDuration": 10,
+             "sendReverse": false,
+             "serverPort": 5201,
+             "useIPv4Addr": true,
+             "useIPv6Addr": false,
+             "useUDP": false,
+             "numConnections": 4,
+             "verboseMode": false,
+             "srcIPAddr": "192.168.77.227"
+        }
+    }
+}

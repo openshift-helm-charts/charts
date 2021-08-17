@@ -1,0 +1,19 @@
+# Default values for uverifier.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+name: "uverifier"
+
+image: "localhost:32000/uverifier"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+  
+pullpolicy:
+  "IfNotPresent"
+
+testconfig:
+  "uverifier-configmap"
