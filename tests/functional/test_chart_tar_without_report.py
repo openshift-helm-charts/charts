@@ -313,7 +313,7 @@ def the_index_yaml_is_updated_with_a_new_entry(secrets):
 def the_release_is_published(secrets):
     """a release is published with the chart"""
 
-    expected_tag = f'{secrets.vendor}-{secrets.chart_name}-{secrets.chart_version}'
+    expected_tag = f'{secrets.vendor}-{secrets.chart_name}-{secrets.chart_version}-test-pr{secrets.pr_number}'
     try:
         release = get_release_by_tag(secrets, expected_tag)
         logger.info(f"Released '{expected_tag}' successfully")

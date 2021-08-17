@@ -44,12 +44,32 @@ jobs:
           echo "The PR is workflow changes only - do not continue."
           exit 0
 
+      - name: Add 'test' label to PR
+        id: set_test_label
+        if: |
+          steps.check_ci_changes.outputs.run-tests != 'true' &&
+          github.event.pull_request.user.login == 'openshift-helm-charts-bot'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue_number = ${{ github.event.number }};
+            github.issues.addLabels({
+                issue_number: Number(issue_number),
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['test']
+            })
+            core.setOutput('triggered_by_test', 'true');
+
       - name: Sanity Check PR Content
         id: sanity_check_pr_content
         if: steps.check_ci_changes.outputs.run-tests != 'true'
         continue-on-error: true
         env:
           GITHUB_REF: ${{ github.ref }}
+          TRIGGERED_BY_TEST: ${{ steps.set_test_label.outputs.triggered_by_test }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
          INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
           ./ve1/bin/sanity-check-pr --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
@@ -256,6 +276,8 @@ jobs:
           CHART_ENTRY_NAME: ${{ steps.sanity_check_pr_content.outputs.chart-entry-name }}
           CHART_NAME_WITH_VERSION: ${{ steps.sanity_check_pr_content.outputs.chart-name-with-version }}
           REDHAT_TO_COMMUNITY: ${{ steps.verify_pr.outputs.redhat_to_community }}
+          TRIGGERED_BY_TEST: ${{ steps.set_test_label.outputs.triggered_by_test }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         id: release-charts
         run: |
           curl -L -o cr.tar.gz https://github.com/helm/chart-releaser/releases/download/v1.2.0/chart-releaser_1.2.0_linux_amd64.tar.gz
