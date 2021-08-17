@@ -246,7 +246,7 @@ def the_user_has_created_a_error_free_chart_src(secrets):
 def the_user_sends_the_pull_request_with_the_chart_src(secrets):
     """The user sends the pull request with the chart source files."""
     data = {'head': secrets.pr_branch, 'base': secrets.base_branch,
-            'title': secrets.pr_branch}
+            'title': secrets.pr_branch, 'body': os.environ.get('PR_BODY')}
 
     logger.info(
         f"Create PR with chart source files from '{secrets.test_repo}:{secrets.pr_branch}'")

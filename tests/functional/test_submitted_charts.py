@@ -326,7 +326,7 @@ def submission_tests_run_for_submitted_charts(secrets):
 
             # Create PR from test_repo:pr_branch to test_repo:base_branch
             data = {'head': pr_branch, 'base': base_branch,
-                    'title': pr_branch}
+                    'title': pr_branch, 'body': os.environ.get('PR_BODY')}
 
             logger.info(
                 f"Create PR with chart files from '{secrets.test_repo}:{pr_branch}' to '{secrets.test_repo}:{base_branch}'")
