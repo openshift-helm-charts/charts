@@ -1,6 +1,0 @@
-apiVersion: v2
-appVersion: 21.02.8838
-description: A Helm chart for Kubernetes
-name: uverifier
-type: application
-version: 0.1.0
