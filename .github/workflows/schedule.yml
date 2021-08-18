@@ -1,0 +1,287 @@
+name: Check Software Version
+on:
+  # Daily trigger to check updates
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      # XXX: dry-run has two side effects:
+      # 1. Don't launch github issues for notifications
+      # 2. Run this workflow but don't update the software-version.yaml,
+      #     used to re-run the cron job when there's version difference.
+      # Can lift this input when we feel comfortable to run this workflow once
+      # for each software version change and send notifications (no backdoor).
+      dry-run:
+        description: "Run tests but do not create issues {true,false}"
+        required: true
+        default: "true"
+      vendor-type:
+        description: "Vendor type {all,partner,redhat,community}"
+        required: true
+        default: "all"
+      notify-id:
+        description: "(Optional) Issue notification {github id}"
+        required: false
+        default: ""
+jobs:
+  check-ocp:
+    name: Check OpenShift Version
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install oc
+        run: |
+          curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+          tar zxvf openshift-client-linux.tar.gz oc
+
+      - name: Log into OpenShift cluster
+        run: |
+          API_SERVER=$(echo -n ${{ secrets.API_SERVER }} | base64 -d)
+          ./oc login --insecure-skip-tls-verify --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
+        shell: bash
+
+      - name: Get current OpenShift version
+        id: get_curr_ocp_version
+        run: |
+          OCP_VERSION=$(./oc version -o json | jq '.releaseClientVersion')
+          printf "[INFO] Current OCP Version: %s\n" ${OCP_VERSION}
+          echo "::set-output name=curr_ocp_version::${OCP_VERSION}"
+        shell: bash
+
+      - name: Checkout software-version branch
+        uses: actions/checkout@v2
+        with:
+          ref: "software-version"
+
+      - name: Read previous OpenShift version
+        id: get_prev_ocp_version
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq e '.openshift.release-client-version' software-version.yaml
+
+      - name: Compare OpenShift versions
+        id: compare_ocp_versions
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}" = "${{ steps.get_prev_ocp_version.outputs.result }}" ]; then
+            # No change in the OpenShift version
+            printf "OpenShift version has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
+            echo "::set-output name=run_tests::false"
+          else
+            # New OpenShift version is set
+            printf "OpenShift version has changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
+            echo "::set-output name=run_tests::true"
+          fi
+        shell: bash
+
+      - name: Update software-version.yaml
+        if: |
+          steps.compare_ocp_versions.outputs.run_tests == 'true'
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq eval -i '.openshift.release-client-version = ${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}' 'software-version.yaml'
+
+      - name: Push software-version.yaml
+        if: |
+          steps.compare_ocp_versions.outputs.run_tests == 'true' &&
+          (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run != 'true'))
+        run: |
+          COMMIT_MESSAGE=$(printf "software-version.yaml: Update OpenShift version from '%s' to '%s'" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}")
+          git remote -v
+          git branch -vv
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "${COMMIT_MESSAGE}"
+          git push
+
+      - name: Checkout main branch
+        if: |
+          steps.compare_ocp_versions.outputs.run_tests == 'true'
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_dispatch.ref }}
+
+      - name: Set up Python 3.x Part 1
+        if: |
+          steps.compare_ocp_versions.outputs.run_tests == 'true'
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        if: |
+          steps.compare_ocp_versions.outputs.run_tests == 'true'
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: (Manual) Run tests on existing charts
+        if: |
+          github.event_name == 'workflow_dispatch' && steps.compare_ocp_versions.outputs.run_tests == 'true'
+        env:
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry-run }}
+          VENDOR_TYPE: ${{ github.event.inputs.vendor-type }}
+          NOTIFY_ID: ${{ github.event.inputs.notify-id }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          SOFTWARE_NAME: "OpenShift"
+          SOFTWARE_VERSION: ${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}
+        run: |
+          printf "[INFO] Dry run: '%s'\n" "${{ env.DRY_RUN }}"
+          printf "[INFO] Vendor type: '%s'\n" "${{ env.VENDOR_TYPE }}"
+          printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
+          printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
+          printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
+          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING
+
+      - name: (Schedule) Run tests on existing charts
+        if: |
+          github.event_name == 'schedule' && steps.compare_ocp_versions.outputs.run_tests == 'true'
+        env:
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          # XXX: set to false when ready to launch notifications
+          DRY_RUN: "true"
+          VENDOR_TYPE: "all"
+          NOTIFY_ID: ""
+          SOFTWARE_NAME: "OpenShift"
+          SOFTWARE_VERSION: ${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}
+        run: |
+          printf "[INFO] Dry run: '%s'\n" "${{ env.DRY_RUN }}"
+          printf "[INFO] Vendor type: '%s'\n" "${{ env.VENDOR_TYPE }}"
+          printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
+          printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
+          printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
+          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING
+
+  check-chart-verifier:
+    name: Check Chart Verifier Version
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get current Chart Verifier version
+        id: get_curr_cv_version
+        run: |
+          QUAY_API='https://quay.io/api/v1/repository/redhat-certification/chart-verifier/tag/'
+          CV_DIGEST=$(curl ${QUAY_API} | jq '[.tags[] | select(.name == "latest")] | .[0].manifest_digest')
+          printf "[INFO] Current Chart Verifier digest: %s\n" ${CV_DIGEST}
+          echo "::set-output name=current_cv_digest::${CV_DIGEST}"
+        shell: bash
+
+      - name: Checkout software-version branch
+        uses: actions/checkout@v2
+        with:
+          ref: "software-version"
+
+      - name: Read previous Chart Verifier digest
+        id: get_prev_cv_digest
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq e '.chart-verifier.latest-manifest-digest' software-version.yaml
+
+      - name: Compare Chart Verifier versions
+        id: compare_cv_versions
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}" = "${{ steps.get_prev_cv_digest.outputs.result }}" ]; then
+            # No change in the Chart Verifier image
+            printf "Chart Verifier has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
+            echo "::set-output name=run_tests::false"
+          else
+            # New Chart Verifier image is found
+            printf "Chart Verifier has changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
+            echo "::set-output name=run_tests::true"
+          fi
+        shell: bash
+
+      - name: Update software-version.yaml
+        if: |
+          steps.compare_cv_versions.outputs.run_tests == 'true'
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq eval -i '.chart-verifier.latest-manifest-digest = ${{ steps.get_curr_cv_version.outputs.current_cv_digest }}' 'software-version.yaml'
+
+      - name: Push software-version.yaml
+        if: |
+          steps.compare_cv_versions.outputs.run_tests == 'true' &&
+          (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run != 'true'))
+        run: |
+          COMMIT_MESSAGE=$(printf "software-version.yaml: Update OpenShift version from '%s' to '%s'" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}")
+          git remote -v
+          git branch -vv
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "${COMMIT_MESSAGE}"
+          git push
+
+      - name: Checkout main branch
+        if: |
+          steps.compare_cv_versions.outputs.run_tests == 'true'
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_dispatch.ref }}
+
+      - name: Set up Python 3.x Part 1
+        if: |
+          steps.compare_cv_versions.outputs.run_tests == 'true'
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        if: |
+          steps.compare_cv_versions.outputs.run_tests == 'true'
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: (Manual) Run tests on existing charts
+        if: |
+          github.event_name == 'workflow_dispatch' && steps.compare_cv_versions.outputs.run_tests == 'true'
+        env:
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry-run }}
+          VENDOR_TYPE: ${{ github.event.inputs.vendor-type }}
+          NOTIFY_ID: ${{ github.event.inputs.notify-id }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          SOFTWARE_NAME: "OpenShift"
+          SOFTWARE_VERSION: ${{ steps.get_curr_cv_version.outputs.current_cv_digest }}
+        run: |
+          printf "[INFO] Dry run: '%s'\n" "${{ env.DRY_RUN }}"
+          printf "[INFO] Vendor type: '%s'\n" "${{ env.VENDOR_TYPE }}"
+          printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
+          printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
+          printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
+          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING
+
+      - name: (Schedule) Run tests on existing charts
+        if: |
+          github.event_name == 'schedule' && steps.compare_cv_versions.outputs.run_tests == 'true'
+        env:
+          CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          # XXX: set to false when ready to launch notifications
+          DRY_RUN: "true"
+          VENDOR_TYPE: "all"
+          NOTIFY_ID: ""
+          SOFTWARE_NAME: "OpenShift"
+          SOFTWARE_VERSION: ${{ steps.get_curr_cv_version.outputs.current_cv_digest }}
+        run: |
+          printf "[INFO] Dry run: '%s'\n" "${{ env.DRY_RUN }}"
+          printf "[INFO] Vendor type: '%s'\n" "${{ env.VENDOR_TYPE }}"
+          printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
+          printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
+          printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
+          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING
