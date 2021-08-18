@@ -1,9 +1,9 @@
 chart:
   name: u-verifier-chart
-  shortDescription: null
+  shortDescription: Nova u-Verifier is a container based active test agent
 publicPgpKey: null
-users:
-- githubUsername: arasyid-aziz
+users: 
+  - githubUsername: arasyid-aziz
 vendor:
   label: exfo
   name: EXFO Inc.
