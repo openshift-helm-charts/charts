@@ -1,0 +1,9 @@
+chart:
+  name: infinispan
+  shortDescription: This is the Red Hat Infinispan chart
+publicPgpKey: null
+users:
+- githubUsername: ryanemerson
+vendor:
+  label: redhat
+  name: infinispan chart
