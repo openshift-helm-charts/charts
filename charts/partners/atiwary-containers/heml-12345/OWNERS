@@ -1,8 +1,9 @@
 chart:
   name: heml-12345
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: aish
 vendor:
   label: atiwary-containers
   name: Red Hat
