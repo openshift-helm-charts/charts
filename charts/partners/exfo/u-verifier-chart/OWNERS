@@ -1,0 +1,9 @@
+chart:
+  name: u-verifier-chart
+  shortDescription: helm chart for Nova uVerifier
+publicPgpKey: null
+users:
+- githubUsername: arasyid-aziz
+vendor:
+  label: exfo
+  name: EXFO Inc.
