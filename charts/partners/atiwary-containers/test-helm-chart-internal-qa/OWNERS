@@ -1,8 +1,9 @@
 chart:
   name: test-helm-chart-internal-qa
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: dGVzdA==
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: atiwary-containers
   name: Red Hat
