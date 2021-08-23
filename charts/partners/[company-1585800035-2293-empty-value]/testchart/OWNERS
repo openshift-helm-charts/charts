@@ -1,0 +1,9 @@
+chart:
+  name: testchart
+  shortDescription: test
+publicPgpKey: d3dkd2R3ZmdmZ2Zn
+users:
+- githubUsername: test
+vendor:
+  label: '[company-1585800035-2293-empty-value]'
+  name: Wipro Technologoes LTD
