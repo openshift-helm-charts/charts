@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.0
-        chart-uri: /charts/ibm-spectrum-protect-plus-prod-1.2.1.tgz
+        chart-uri: https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-spectrum-protect-plus-prod-1.2.1.tgz?raw=true
         digest: sha256:bdca5ff578ed63268169e9bf2b0ead107b89c8f9634eaf93492dc63a3234cc17
         digests:
             chart: sha256:bdca5ff578ed63268169e9bf2b0ead107b89c8f9634eaf93492dc63a3234cc17
             package: 0073bda1813deff6e980f8266d2ca2827a9fdd8661cab823651b3077018c2f0f
-        lastCertifiedTimestamp: "2021-08-23T18:46:36.266909+00:00"
+        lastCertifiedTimestamp: "2021-08-24T14:56:27.916199+00:00"
         certifiedOpenShiftVersions: 4.7.0
     chart:
         name: ibm-spectrum-protect-plus-prod
@@ -51,51 +51,6 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-  - check: v1.0/has-readme
-    type: Mandatory
-    outcome: PASS
-    reason: Chart has a README
-  - check: v1.0/contains-values-schema
-    type: Mandatory
-    outcome: PASS
-    reason: Values schema file exist
-  - check: v1.0/helm-lint
-    type: Mandatory
-    outcome: PASS
-    reason: Helm lint successful
-  - check: v1.0/not-contain-csi-objects
-    type: Mandatory
-    outcome: PASS
-    reason: CSI objects do not exist
-  - check: v1.0/not-contains-crds
-    type: Mandatory
-    outcome: PASS
-    reason: Chart does not contain CRDs
-  - check: v1.0/images-are-certified
-    type: Mandatory
-    outcome: PASS
-    reason: |-
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-transaction-manager-redis:10.1.8.1
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-transaction-manager-worker:10.1.8.1
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-transaction-manager:10.1.8.1
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-minio:10.1.8.1
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-kafka-operator:10.1.8.1
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-controller:10.1.8.1
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-scheduler:10.1.8.1
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-spp-agent:10.1.8.1
-        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-cert-monitor:10.1.8.1
-  - check: v1.0/chart-testing
-    type: Mandatory
-    outcome: PASS
-    reason: Chart tests have passed
-  - check: v1.0/is-helm-v3
-    type: Mandatory
-    outcome: PASS
-    reason: API version is V2, used in Helm 3
-  - check: v1.0/contains-test
-    type: Mandatory
-    outcome: PASS
-    reason: Chart test files exist
   - check: v1.0/contains-values
     type: Mandatory
     outcome: PASS
@@ -104,3 +59,48 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Kubernetes version specified
+  - check: v1.0/not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
+  - check: v1.0/chart-testing
+    type: Mandatory
+    outcome: PASS
+    reason: Chart tests have passed
+  - check: v1.0/has-readme
+    type: Mandatory
+    outcome: PASS
+    reason: Chart has a README
+  - check: v1.0/contains-test
+    type: Mandatory
+    outcome: PASS
+    reason: Chart test files exist
+  - check: v1.0/contains-values-schema
+    type: Mandatory
+    outcome: PASS
+    reason: Values schema file exist
+  - check: v1.0/not-contains-crds
+    type: Mandatory
+    outcome: PASS
+    reason: Chart does not contain CRDs
+  - check: v1.0/helm-lint
+    type: Mandatory
+    outcome: PASS
+    reason: Helm lint successful
+  - check: v1.0/images-are-certified
+    type: Mandatory
+    outcome: PASS
+    reason: |-
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-transaction-manager:10.1.8.1
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-minio:10.1.8.1
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-kafka-operator:10.1.8.1
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-controller:10.1.8.1
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-scheduler:10.1.8.1
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-spp-agent:10.1.8.1
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-transaction-manager-redis:10.1.8.1
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-transaction-manager-worker:10.1.8.1
+        Image is Red Hat certified : cp.icr.io/cp/sppc/baas-cert-monitor:10.1.8.1
+  - check: v1.0/is-helm-v3
+    type: Mandatory
+    outcome: PASS
+    reason: API version is V2, used in Helm 3
