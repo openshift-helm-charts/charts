@@ -363,6 +363,52 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-operator-catalog-enablement-1.2.1.tgz?raw=true
     version: 1.2.1
+  ibm-ibm-spectrum-protect-plus-prod:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
+      charts.openshift.io/digest: sha256:bdca5ff578ed63268169e9bf2b0ead107b89c8f9634eaf93492dc63a3234cc17
+      charts.openshift.io/lastCertifiedTimestamp: '2021-08-24T14:56:27.916199+00:00'
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2021-08-24T15:08:45.616458+00:00'
+    apiVersion: v2
+    appVersion: 10.1.8.1
+    description: 'IBM Spectrum Protect Plus is a data protection and availability
+      solution for virtual environments and database applications that can be rapidly
+      deployed to protect your environment.
+
+
+      Container Backup Support is a feature of IBM Spectrum Protect Plus that extends
+      data protection to containers in Kubernetes and OpenShift clusters. Container
+      Backup Support protects persistent volumes that are attached to containers in
+      Kubernetes and OpenShift clusters.
+
+
+      Documentation
+
+      For additional details regarding install parameters check the Container Backup
+      Support documentation at https://www.ibm.com/support/knowledgecenter/SSNQFQ_10.1.8/spp/welcome.html
+
+
+      License
+
+      By installing this product you accept the following license terms: https://ibm.biz/BdquzE.'
+    digest: 0073bda1813deff6e980f8266d2ca2827a9fdd8661cab823651b3077018c2f0f
+    home: https://www.ibm.com/us-en/marketplace/ibm-spectrum-protect-plus
+    icon: https://www.ibm.com/cloud-computing/scalable-icon.svg
+    keywords:
+    - Commercial
+    - Storage
+    - Operations
+    - amd64
+    - RHOCP
+    - Other
+    kubeVersion: '>=1.18.0'
+    maintainers:
+    - name: IBM
+    name: ibm-spectrum-protect-plus-prod
+    urls:
+    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-spectrum-protect-plus-prod-1.2.1.tgz?raw=true
+    version: 1.2.1
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -522,4 +568,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-08-23T16:54:29.487621+00:00'
+generated: '2021-08-24T15:08:45.616458+00:00'
