@@ -1,0 +1,10 @@
+chart:
+  name: kyverno
+  shortDescription: Kyverno is a Kubernetes Native Policy Management engine.
+publicPgpKey: null
+users:
+- githubUsername: realshuting
+- githubUsername: patelrit
+vendor:
+  label: nirmata
+  name: Nirmata
