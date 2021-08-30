@@ -1,8 +1,9 @@
 chart:
   name: prodtest
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: https://github.com/brianwcook/happywebserver.git
 vendor:
   label: a612c831fa9b77a0f23cc4ef7
   name: RED HAT
