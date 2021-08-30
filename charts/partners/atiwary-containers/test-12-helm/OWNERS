@@ -1,8 +1,9 @@
 chart:
   name: test-12-helm
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: test
 vendor:
   label: atiwary-containers
   name: Red Hat
