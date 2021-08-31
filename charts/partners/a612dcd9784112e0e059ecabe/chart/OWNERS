@@ -1,0 +1,8 @@
+chart:
+  name: chart
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: a612dcd9784112e0e059ecabe
+  name: Red Hat
