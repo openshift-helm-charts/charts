@@ -259,7 +259,10 @@ def check_report_success(directory, api_url, report_path, version):
         write_error_log(directory, msg)
         sys.exit(1)
 
-    if not failures_in_report and "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
+    if failures_in_report or vendor_type == "community":
+        return
+
+    if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
         full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
         if not semver.VersionInfo.isvalid(full_version):
             msg = f"[ERROR] OpenShift version not conforming to SemVer spec: {full_version}"
