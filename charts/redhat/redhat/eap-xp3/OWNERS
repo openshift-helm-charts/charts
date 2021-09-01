@@ -1,0 +1,10 @@
+chart:
+  name: eap-xp3
+  shortDescription: Build and Deploy EAP XP 3 applications on OpenShift
+publicPgpKey: null
+users:
+  - githubUsername: bstansberry
+  - githubUsername: jmesnil
+vendor:
+  label: acme
+  name: Red Hat JBoss Entreprise Application Platform expansion pack
