@@ -4,6 +4,7 @@ chart:
 publicPgpKey: null
 users:
 - githubUsername: dperaza4dustbit
+- githubUsername: AshCripps
 vendor:
   label: redhat
   name: NodeJs chart
