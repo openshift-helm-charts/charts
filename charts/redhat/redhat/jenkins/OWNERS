@@ -7,4 +7,4 @@ users:
 - githubUsername: akram
 vendor:
   label: redhat
-  name: Openshift Jenkins chart
+  name: Red Hat

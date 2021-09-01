@@ -7,4 +7,4 @@ users:
 - githubUsername: AshCripps
 vendor:
   label: redhat
-  name: NodeJs chart
+  name: Red Hat
