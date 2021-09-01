@@ -6,4 +6,4 @@ users:
 - githubUsername: dperaza4dustbit
 vendor:
   label: redhat
-  name: DotNet Chart
+  name: Red Hat

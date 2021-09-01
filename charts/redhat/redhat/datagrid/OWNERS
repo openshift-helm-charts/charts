@@ -6,4 +6,4 @@ users:
 - githubUsername: ryanemerson
 vendor:
   label: redhat
-  name: Red Hat Data Grid
+  name: Red Hat
