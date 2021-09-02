@@ -465,6 +465,27 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-dotnet-0.0.1/redhat-dotnet-0.0.1.tgz
     version: 0.0.1
+  redhat-eap74:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: N/A
+      charts.openshift.io/digest: sha256:c21bfc66510ed4deeb5dda0be56c23179335728bd966edcc5110dd8bf12906e1
+      charts.openshift.io/lastCertifiedTimestamp: '2021-09-01T14:46:21.647631+00:00'
+      charts.openshift.io/provider: Red Hat JBoss Entreprise Application Platform
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-09-02T07:18:22.395724+00:00'
+    apiVersion: v2
+    appVersion: '7.4'
+    dependencies:
+    - name: wildfly-common
+      repository: https://docs.wildfly.org/wildfly-charts/
+      version: 1.3.0
+    description: Build and Deploy EAP 7.4 applications on OpenShift
+    digest: 76c75d5d114489b62a05093c0571d9183d6bf4c8907147c015b1eaf04d533864
+    name: eap74
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-eap74-1.1.0/redhat-eap74-1.1.0.tgz
+    version: 1.1.0
   redhat-jenkins:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
@@ -606,4 +627,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-08-26T00:14:55.099627+00:00'
+generated: '2021-09-02T07:18:22.395724+00:00'
