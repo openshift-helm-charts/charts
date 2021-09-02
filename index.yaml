@@ -465,6 +465,27 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-dotnet-0.0.1/redhat-dotnet-0.0.1.tgz
     version: 0.0.1
+  redhat-eap-xp3:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: N/A
+      charts.openshift.io/digest: sha256:85d0347b6c3377037f8ad5287fc0c4a1baef708a65c26669993d2ed5b5f765bb
+      charts.openshift.io/lastCertifiedTimestamp: '2021-09-02T11:32:44.405532+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-09-02T11:37:05.001295+00:00'
+    apiVersion: v2
+    appVersion: '3.0'
+    dependencies:
+    - name: wildfly-common
+      repository: https://docs.wildfly.org/wildfly-charts/
+      version: 1.3.0
+    description: Build and Deploy EAP XP3 applications on OpenShift
+    digest: 1dca1d8a2314713878a2052d674fddfc47063deb3fb67650d95f9bf51b33500b
+    name: eap-xp3
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-eap-xp3-1.0.0/redhat-eap-xp3-1.0.0.tgz
+    version: 1.0.0
   redhat-eap74:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
@@ -627,4 +648,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-09-02T07:18:22.395724+00:00'
+generated: '2021-09-02T11:37:05.001295+00:00'
