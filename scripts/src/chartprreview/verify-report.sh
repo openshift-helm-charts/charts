@@ -228,6 +228,18 @@ getFails() {
         results=true
       elif [ "$results" = true ]; then
         if [[ $line == *" - "* ]]; then
+            if [ "$multireason" = true ]; then
+              if [ -n "$check" ] && [ -n "$type" ] && [ -n "$outcome" ] && [ -n "$reason" ]; then
+                if [[ $outcome != "PASS" ]] && [[ $type == "Mandatory" ]]; then
+                    fails+=("$check : $reason")
+                else
+                  passed=$((passed+1))
+                fi
+
+                remove="$delim$check$delim"
+                mandatoryChecks=("${mandatoryChecks[@]/$remove}")
+              fi
+            fi
             multireason=false
             nextlinereason=false
             check=""
@@ -242,21 +254,21 @@ getFails() {
         elif [[ $line == *"outcome:"* ]]; then
            outcome=`echo $line | cut -d: -f2- | xargs`
         elif [[ $line == *"reason:"* ]]; then
-           reason=`echo $line | cut -d: -f2- | xargs`
+           reason=`echo $line | cut -d: -f2-`
            if [[ $reason == *'|-' ]]; then
              multireason=true
              reason=""
            elif [[ $reason == *'|' ]]; then
              nextlinereason=true
              reason=""
+           elif [[ $reason == *\'* ]]; then
+             multireason=true
+             reason=`printf "$reason\n" | sed "s/\"/'/g"`
+             continue
            fi
         elif [ "$multireason" = true ]; then
-          reason=`echo $line | xargs`
-          if [[ $line == *"Image is Red Hat certified"* ]]; then
-            outcome="PASS"
-          else
-            outcome="FAIL"
-          fi
+          reason+=`printf "$line\n" | sed "s/\"/'/g"`
+          continue
         elif [ "$nextlinereason" = true ]; then
           reason=`echo $line | xargs`
           nextlinereason=false
