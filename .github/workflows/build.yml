@@ -71,6 +71,7 @@ jobs:
           TRIGGERED_BY_TEST: ${{ steps.set_test_label.outputs.triggered_by_test }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
+          # Sanity check PR content
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
            ./ve1/bin/sanity-check-pr --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
 
@@ -149,6 +150,7 @@ jobs:
         id: install-oc
         if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.cache.outputs.cache-hit != 'true' && steps.check_ci_changes.outputs.run-tests != 'true'}}
         run: |
+          # install oc
           curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
           tar zxvf openshift-client-linux.tar.gz oc
           echo "::set-output name=oc-installed::true"
@@ -157,6 +159,7 @@ jobs:
         if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_ci_changes.outputs.run-tests != 'true'}}
         id: get-repository
         run: |
+          # get the reposditory name
           REPO=$(echo ${{ github.repository }} | tr '\/' '-')
           echo "::set-output name=repository::${REPO}"
         shell: bash
@@ -168,6 +171,7 @@ jobs:
           KUBECONFIG: /tmp/ci-kubeconfig
           VENDOR_TYPE: ${{ steps.sanity_check_pr_content.outputs.category }}
         run: |
+          # Verify the chart by running the chart verifier
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
           docker pull ${{ env.VERIFIER_IMAGE }}
@@ -185,6 +189,7 @@ jobs:
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
+          # Delete the Namespace
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
           ve1/bin/sa-for-chart-testing --delete charts-${{ github.event.number }}
@@ -192,6 +197,7 @@ jobs:
       - name: Save PR artifact
         if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' }}
         run: |
+          # Save the PR artifact
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Prepare PR comment
@@ -254,6 +260,7 @@ jobs:
       - name: Check for PR merge
         if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
         run: |
+          # Check for PR merge completing
           ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Block until there is no running workflow
@@ -281,6 +288,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         id: release-charts
         run: |
+          # Create a release for the chart and update the index
           curl -L -o cr.tar.gz https://github.com/helm/chart-releaser/releases/download/v1.2.0/chart-releaser_1.2.0_linux_amd64.tar.gz
           tar zxvf cr.tar.gz
           sudo cp -f cr /usr/local/bin/cr
