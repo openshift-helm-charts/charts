@@ -433,16 +433,10 @@ messages.
 Yes, you can do it.
 
 1. Ensure the `main` branch in your fork is updated with the latest changes.
-2. Ensure there is a `gh-pages` branch in your fork.
-3. You need a publicly accessible OpenShift cluster (See [partner guide to get
-   free access to OCP][partner-ocp]).
-4. Follow the [documentation to create a service account][sa-cluster-token] and
-   corresponding token.  The token should be stored as an [encrypted secret in
-   GitHub repository settings][encrypted-secret] with the key as
-   `CLUSTER_TOKEN`.  Follow the same document to create `API_SERVER` secret key.
-5. Create a branch, make the required chart changes and send a pull request to
-   your fork's `main` branch.  You should see the results in your fork as
-   explained in this document.
+2. Create a GitHub [personal access token][pat] (PAT) and add it as an
+   [encyrpted secret][encyrpted-secret] with name as `BOT_TOKEN`.
+3. Create a branch and make your required changes and send a pull request to
+   your `main` branch.
 
 ### Can I use any command-line interface to create pull request?
 
@@ -473,6 +467,3 @@ documentation][partner-success-desk].
 [partner-success-desk]: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/managing-your-account/getting-help/technology-partner-success-desk
 [new-issue]: https://github.com/openshift-helm-charts/repo/issues/new/choose
 [ascii-armor]: https://www.redhat.com/sysadmin/creating-gpg-keypairs
-[partner-ocp]: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/benefits/software-access
-[sa-cluster-token]: https://github.com/openshift-helm-charts/charts/blob/main/scripts/README.md
-[encrypted-secret]: https://docs.github.com/en/actions/reference/encrypted-secrets

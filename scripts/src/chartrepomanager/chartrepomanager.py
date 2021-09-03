@@ -102,7 +102,11 @@ def push_chart_release(repository, organization, commit_hash):
     org, repo = repository.split("/")
     token = os.environ.get("GITHUB_TOKEN")
     print("[INFO] Upload chart using the chart-releaser")
-    out = subprocess.run(["cr", "upload", "-c", commit_hash, "-o", org, "-r", repo, "--release-name-template", f"{organization}-"+"{{ .Name }}-{{ .Version }}", "-t", token], capture_output=True)
+    release_name_template = f"{organization}-"+"{{ .Name }}-{{ .Version }}"
+    if os.environ.get('TRIGGERED_BY_TEST') == 'true':
+        pr_number = os.environ.get("PR_NUMBER")
+        release_name_template += f'-test-pr{pr_number}'
+    out = subprocess.run(["cr", "upload", "-c", commit_hash, "-o", org, "-r", repo, "--release-name-template", release_name_template, "-t", token], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
 
@@ -366,6 +370,9 @@ def main():
         print("[INFO] Updating chart annotation")
         update_chart_annotation(category, organization, chart_file_name, chart, report_path)
         chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}/{organization}-{chart}-{version}.tgz"
+        if os.environ.get('TRIGGERED_BY_TEST') == 'true':
+            pr_number = os.environ.get("PR_NUMBER")
+            chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}-test-pr{pr_number}/{organization}-{chart}-{version}.tgz"
         print("[INFO] Helm package was released at %s" % chart_url)
         print("[INFO] Creating index from chart")
         chart_entry = create_index_from_chart(indexdir, args.repository, branch, category, organization, chart, version, chart_url)

@@ -1,0 +1,105 @@
+name: Test Workflow
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Run tests but do not create issues {true,false}"
+        required: true
+        default: "true"
+      vendor-type:
+        description: "Vendor type {all,partner,redhat,community}"
+        required: true
+        default: "all"
+      software-name:
+        description: "Software Name"
+        required: true
+      software-version:
+        description: "Software Version"
+        required: true
+      notify-id:
+        description: "(Optional) Issue notification {github id}"
+        required: false
+        default: ""
+
+jobs:
+  workflow-test:
+    name: Workflow Test
+    runs-on: ubuntu-20.04
+    if: |
+      github.event.pull_request.draft == false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ secrets.BOT_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python 3.x Part 1
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python requirements and scripts
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: Check Request
+        id: check_request
+        run: |
+          # check if workflow testing should run.
+          echo "Request type: '$GITHUB_EVENT_NAME'"
+          if [ "$GITHUB_EVENT_NAME" == "pull_request_target" ]; then
+              echo "[INFO] check if PR contains only workflow changes and user is authorized"
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+          else
+              echo "[INFO] manual invocation - check if user is authorized"
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.actor }}
+          fi
+
+      - name: Check Request Result
+        id: check_request_result
+        if: |
+          steps.check_request.outputs.workflow-only-but-not-authorized == 'true'
+        run: |
+          # workflow only change but user not authorized
+          exit 1
+
+      - name: (PR) Test CI Workflow
+        if: |
+          github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          PR_BODY: "Test triggered by ${{ github.event.pull_request.html_url }}."
+        run: |
+          ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/test_submitted_charts.py
+
+      - name: (Manual) Test CI Workflow
+        if: |
+          github.event_name == 'workflow_dispatch' && steps.check_request.outputs.run-tests == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry-run }}
+          VENDOR_TYPE: ${{ github.event.inputs.vendor-type }}
+          NOTIFY_ID: ${{ github.event.inputs.notify-id }}
+          SOFTWARE_NAME: ${{ github.event.inputs.software-name }}
+          SOFTWARE_VERSION: ${{ github.event.inputs.software-version }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          PR_BODY: "Triggerd by ${{ github.event.sender.html_url }} from ${{ github.event.repository.html_url }} on `${{ github.event.ref }}`."
+        run: |
+          echo "[INFO] Dry run '${{ env.DRY_RUN }}'"
+          echo "[INFO] Vendor type '${{ env.VENDOR_TYPE }}'"
+          echo "[INFO] Notify ID '${{ env.NOTIFY_ID }}'"
+          echo "[INFO] Software Name '${{ env.SOFTWARE_NAME }}'"
+          echo "[INFO] Software Version '${{ env.SOFTWARE_VERSION }}'"
+          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING
