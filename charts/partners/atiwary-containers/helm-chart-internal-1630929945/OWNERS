@@ -1,0 +1,8 @@
+chart:
+  name: helm-chart-internal-1630929945
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: atiwary-containers
+  name: Red Hat
