@@ -1,0 +1,3 @@
+kubernetes Integration with Fortanix SDKMS has been deployed successfully.
+
+Follow the guide to setup your application and inject secrets from SDKMS into your application on Kubernetes.
