@@ -447,6 +447,31 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-spectrum-protect-plus-prod-1.2.1.tgz?raw=true
     version: 1.2.1
+  infinispan-infinispan:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: N/A
+      charts.openshift.io/digest: sha256:8e03aa2f451e691a0ebeac17ff737136485879273492a0602577aeefcfec6959
+      charts.openshift.io/lastCertifiedTimestamp: '2021-09-07T11:52:25.72654+00:00'
+      charts.openshift.io/provider: Infinispan
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-09-07T11:53:37.020008+00:00'
+    apiVersion: v2
+    appVersion: '12.1'
+    description: A Helm chart that lets you build and deploy Infinispan clusters.
+    digest: 9f0309866c50b355999ce78e28b340777dab795764495e4b52030acabbdae49b
+    home: https://infinispan.org/
+    icon: https://design.jboss.org/infinispan/logo/final/PNG/infinispan_icon_rgb_lightbluewhite_256px.png
+    maintainers:
+    - name: Infinispan
+      url: https://infinispan.org/
+    name: infinispan
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.1.0/infinispan-infinispan-0.1.0.tgz
+    version: 0.1.0
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -648,4 +673,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-09-02T11:37:05.001295+00:00'
+generated: '2021-09-07T11:53:37.020008+00:00'
