@@ -198,6 +198,7 @@ jobs:
         if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' }}
         env:
           SANITY_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.sanity-error-message }}
+          OWNERS_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.owners-error-message }}
         run: |
           python3 scripts/prepare_pr_comment.py ${{ steps.sanity_check_pr_content.outcome }} ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 

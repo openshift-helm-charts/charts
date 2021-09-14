@@ -81,7 +81,7 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_BODY: "Test triggered by ${{ github.event.pull_request.html_url }}."
         run: |
-          ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/test_submitted_charts.py
+          ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/test_submitted_charts.py --tb=short
 
       - name: (Manual) Test CI Workflow
         if: |
@@ -102,4 +102,4 @@ jobs:
           echo "[INFO] Notify ID '${{ env.NOTIFY_ID }}'"
           echo "[INFO] Software Name '${{ env.SOFTWARE_NAME }}'"
           echo "[INFO] Software Version '${{ env.SOFTWARE_VERSION }}'"
-          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING
+          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING --tb=short
