@@ -23,6 +23,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/fortanix-dsm-secrets-injector-chart-2.0/fortanix-dsm-secrets-injector-chart-2.0.tgz
     version: '2.0'
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: '4.6'
+      charts.openshift.io/digest: sha256:a0969bf498847f6ed19b4b35dc30a7ac4183640a105d86ac37c1c8032fb2226a
+      charts.openshift.io/lastCertifiedTimestamp: '2021-09-06T13:35:02.516167+00:00'
+      charts.openshift.io/provider: Fortanix
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2021-09-15T16:16:28.446206+00:00'
+    apiVersion: v2
+    appVersion: '1.0'
+    dependencies:
+    - name: fortanix-cert-setup
+      repository: file://cert-setup
+      version: '1.1'
+    digest: 8ecd9293d8bd594b26955d20e722495730648df5c95334de9bbe3dcf09a0c4d0
+    kubeVersion: '>= 1.16.0 < 1.22.0'
+    maintainers:
+    - email: aman.ahuja@fortanix.com
+      name: Aman Ahuja
+    name: dsm-secrets-injector-chart
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/fortanix-dsm-secrets-injector-chart-2.2-4.6/fortanix-dsm-secrets-injector-chart-2.2-4.6.tgz
+    version: 2.2-4.6
   hashicorp-vault:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
