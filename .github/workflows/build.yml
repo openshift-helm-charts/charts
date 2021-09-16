@@ -44,6 +44,14 @@ jobs:
           echo "The PR is workflow changes only - do not continue."
           exit 0
 
+      - name: Exit if no code included
+        id: exit_if_no_code
+        if: ${{ steps.check_ci_changes.outputs.do-not-build == 'true' }}
+        run: |
+          # exit: nothing to check
+          echo "The PR does not contain changes which need build or test."
+          exit 0
+
       - name: Add 'test' label to PR
         id: set_test_label
         if: |
@@ -64,7 +72,7 @@ jobs:
 
       - name: Sanity Check PR Content
         id: sanity_check_pr_content
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         continue-on-error: true
         env:
           GITHUB_REF: ${{ github.ref }}
@@ -110,7 +118,7 @@ jobs:
 
       - name: Remove 'authorized-request' label from PR
         uses: actions/github-script@v3
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -124,7 +132,7 @@ jobs:
             })
 
       - name: Checkout
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -133,13 +141,13 @@ jobs:
 
       - name: Get Date
         id: get-date
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_ci_changes.outputs.run-tests != 'true'}}
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
 
       - uses: actions/cache@v2
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_ci_changes.outputs.run-tests != 'true'}}
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         id: cache
         with:
           path: oc
@@ -147,14 +155,14 @@ jobs:
 
       - name: Install oc
         id: install-oc
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.cache.outputs.cache-hit != 'true' && steps.check_ci_changes.outputs.run-tests != 'true'}}
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.cache.outputs.cache-hit != 'true' && steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         run: |
           curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
           tar zxvf openshift-client-linux.tar.gz oc
           echo "::set-output name=oc-installed::true"
 
       - name: Get Repository
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_ci_changes.outputs.run-tests != 'true'}}
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         id: get-repository
         run: |
           REPO=$(echo ${{ github.repository }} | tr '\/' '-')
@@ -163,7 +171,7 @@ jobs:
 
       - name: Verify PR - generate report
         id: verify_pr
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true'  && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
           VENDOR_TYPE: ${{ steps.sanity_check_pr_content.outputs.category }}
@@ -190,19 +198,20 @@ jobs:
           ve1/bin/sa-for-chart-testing --delete charts-${{ github.event.number }}
 
       - name: Save PR artifact
-        if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         run: |
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Prepare PR comment
-        if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         env:
           SANITY_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.sanity-error-message }}
+          OWNERS_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.owners-error-message }}
         run: |
           python3 scripts/prepare_pr_comment.py ${{ steps.sanity_check_pr_content.outcome }} ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 
       - name: Comment on PR
-        if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -218,7 +227,7 @@ jobs:
             });
 
       - name: Add 'authorized-request' label to PR
-        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success' && steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success' && steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -252,24 +261,24 @@ jobs:
           MERGE_LABELS: ""
 
       - name: Check for PR merge
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         run: |
           ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Block until there is no running workflow
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Release Charts
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true'  && steps.check_ci_changes.outputs.do-not-build != 'true' }}
         env:
           GITHUB_REF: ${{ github.ref }}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
