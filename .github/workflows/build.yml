@@ -44,6 +44,14 @@ jobs:
           echo "The PR is workflow changes only - do not continue."
           exit 0
 
+      - name: Exit if no code included
+        id: exit_if_no_code
+        if: ${{ steps.check_ci_changes.outputs.do-not-build == 'true' }}
+        run: |
+          # exit: nothing to check
+          echo "The PR does not contain changes which need build or test."
+          exit 0
+
       - name: Add 'test' label to PR
         id: set_test_label
         if: |
@@ -64,7 +72,7 @@ jobs:
 
       - name: Sanity Check PR Content
         id: sanity_check_pr_content
-        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' }}
+        if: ${{ steps.check_ci_changes.outputs.run-tests != 'true' && steps.check_ci_changes.outputs.do-not-build != 'true'}}
         continue-on-error: true
         env:
           GITHUB_REF: ${{ github.ref }}
@@ -198,6 +206,7 @@ jobs:
         if: ${{ always() && steps.check_ci_changes.outputs.run-tests != 'true' }}
         env:
           SANITY_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.sanity-error-message }}
+          OWNERS_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.owners-error-message }}
         run: |
           python3 scripts/prepare_pr_comment.py ${{ steps.sanity_check_pr_content.outcome }} ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 

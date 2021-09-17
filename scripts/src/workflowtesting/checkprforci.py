@@ -19,10 +19,14 @@ def check_if_ci_only_is_modified(api_url):
     pattern_workflow = re.compile(r".github/workflows/.*")
     pattern_script = re.compile(r"scripts/.*")
     pattern_test = re.compile(r"tests/.*")
+    pattern_release = re.compile(r"release/release_info.json")
+    pattern_readme = re.compile(r"README.md")
+    pattern_docs = re.compile(r"docs/([\w-]+)\.md")
     page_number = 1
     max_page_size,page_size = 100,100
 
     workflow_found = False
+    others_found = False
 
     while (page_size == max_page_size):
 
@@ -41,9 +45,13 @@ def check_if_ci_only_is_modified(api_url):
                 workflow_found = True
             elif pattern_test.match(filename):
                 workflow_found = True
+            elif pattern_release.match(filename) or pattern_readme.match(filename) or pattern_docs.match(filename):
+                others_found=  True
             else:
                 return False
 
+    if others_found and not workflow_found:
+        print(f"::set-output name=do-not-build::true")
 
     return workflow_found
 
