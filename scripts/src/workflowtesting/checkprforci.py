@@ -16,13 +16,14 @@ def check_if_ci_only_is_modified(api_url):
 
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
-    pattern_workflow = re.compile(r".github/workflows/.*")
-    pattern_script = re.compile(r"scripts/.*")
-    pattern_test = re.compile(r"tests/.*")
+
+    workflow_files = [re.compile(r".github/workflows/.*"),re.compile(r"scripts/.*"),re.compile(r"tests/.*")]
+    skip_build_files = [re.compile(r"release/release_info.json"),re.compile(r"README.md"),re.compile(r"docs/([\w-]+)\.md")]
     page_number = 1
     max_page_size,page_size = 100,100
 
     workflow_found = False
+    others_found = False
 
     while (page_size == max_page_size):
 
@@ -32,18 +33,17 @@ def check_if_ci_only_is_modified(api_url):
         page_size = len(files)
         page_number += 1
 
-
         for f in files:
             filename = f["filename"]
-            if pattern_workflow.match(filename):
+            if any([pattern.match(filename) for pattern in workflow_files]):
                 workflow_found = True
-            elif pattern_script.match(filename):
-                workflow_found = True
-            elif pattern_test.match(filename):
-                workflow_found = True
+            elif any([pattern.match(filename) for pattern in skip_build_files]):
+                others_found = True
             else:
                 return False
 
+    if others_found and not workflow_found:
+        print(f"::set-output name=do-not-build::true")
 
     return workflow_found
 
