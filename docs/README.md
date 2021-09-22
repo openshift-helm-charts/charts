@@ -80,8 +80,6 @@ your local system.  If you had followed the [partner connect
 documentation][partners], you should see an _OWNERS_ file under your chart
 directory within your organization directory.
 
-For Red Hat and Community charts, first submit a PR towards `main` branch with an _OWNERS_ file under your chart directory within your orgranization directory.
-
 You should see the `OWNERS` file at:
 
 ```
@@ -117,6 +115,19 @@ with the version number as the name.  For example, if you are publishing the
 charts/partners/acme/awesome/0.1.0/
 ```
 
+For Community charts only (partners should follow process above), submit the _OWNERS_ file PR towards `main` branch under your charts/community directory within your orgranization directory. This PR should be sent prior to sending any charts to the repo. For example, for a community chart named awesome for an organization named acme, send it here:
+
+```
+charts/community/acme/awesome/OWNERS
+```
+
+Alternatively, for charts that represent a product supported by Red Hat, submit the _OWNERS_ file PR towards `main` branch under the charts/redhat directory within your orgranization directory. For example, for a Red Hat chart named awesome, send it here:
+
+```
+charts/redhat/redhat/awesome/OWNERS
+```
+
+Notice that in this case your organization will also be redhat.
 
 ### Submitting a Chart without Chart Verification Report
 
