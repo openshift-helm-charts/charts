@@ -4,6 +4,7 @@
 import os
 import shutil
 import tarfile
+import time
 import json
 
 import pytest
@@ -271,3 +272,9 @@ def github_api(method, endpoint, bot_token, headers={}, data={}, json={}):
     else:
         raise ValueError(
             "Github API method not implemented in helper function")
+
+def get_unique_vendor(vendor):
+    suffix = str(int(time.time())) # unique string based on current time in seconds
+    if "PR_NUMBER" in os.environ:
+        suffix = os.environ["PR_NUMBER"]
+    return f"{vendor}-{suffix}"

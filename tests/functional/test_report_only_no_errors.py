@@ -129,14 +129,14 @@ def test_redhat_submits_report_without_any_errors():
 def hashicorp_is_a_valid_partner(secrets):
     """hashicorp is a valid partner"""
     secrets.vendor_type = 'partners'
-    secrets.vendor = 'hashicorp'
+    secrets.vendor = get_unique_vendor('hashicorp')
 
 
 @given("a redhat associate has a valid identity")
 def redhat_associate_is_valid(secrets):
     """a redhat associate has a valid identity"""
     secrets.vendor_type = 'redhat'
-    secrets.vendor = 'redhat'
+    secrets.vendor = get_unique_vendor('redhat')
 
 
 @given("hashicorp has created a error-free report")
