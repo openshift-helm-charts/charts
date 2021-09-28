@@ -703,6 +703,24 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nodejs-0.0.1/redhat-nodejs-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: N/A
+      charts.openshift.io/digest: sha256:de3a72dc87a4726315f76b0e618650f5212d21504bb41c11e2f164988261b846
+      charts.openshift.io/lastCertifiedTimestamp: '2021-09-28T14:29:09.977461+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-09-28T14:29:47.768554+00:00'
+    apiVersion: v2
+    description: A Helm chart to build and deploy Node.js applications
+    digest: e95a9fcb1c7a52025c09a37e2150235624a12bfadad561c34279abc2d067272f
+    keywords:
+    - runtimes
+    - nodejs
+    kubeVersion: '>= 1.21.0-0'
+    name: nodejs
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nodejs-0.0.2/redhat-nodejs-0.0.2.tgz
+    version: 0.0.2
   redhat-nodejs-ex-k:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -764,4 +782,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-09-24T05:06:09.114787+00:00'
+generated: '2021-09-28T14:29:47.768554+00:00'
