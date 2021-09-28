@@ -73,6 +73,7 @@ rules:
     verbs:
       - 'get'
       - 'create'
+      - 'delete'
   - apiGroups:
       - "admissionregistration.k8s.io"
     resources:
@@ -83,6 +84,7 @@ rules:
       - 'list'
       - 'watch'
       - 'patch'
+      - 'delete'
   - apiGroups:
       - "authentication.k8s.io"
     resources:

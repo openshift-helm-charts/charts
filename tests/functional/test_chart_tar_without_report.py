@@ -131,14 +131,14 @@ def test_redhat_chart_tar_submission():
 def hashicorp_is_a_valid_partner(secrets):
     """hashicorp is a valid partner"""
     secrets.vendor_type = 'partners'
-    secrets.vendor = 'hashicorp'
+    secrets.vendor = get_unique_vendor('hashicorp')
 
 
 @given("a redhat associate has a valid identity")
 def redhat_associate_is_valid(secrets):
     """a redhat associate has a valid identity"""
     secrets.vendor_type = 'redhat'
-    secrets.vendor = 'redhat'
+    secrets.vendor = get_unique_vendor('redhat')
 
 
 @given("hashicorp has created an error-free chart tar for vault")
@@ -313,7 +313,7 @@ def the_index_yaml_is_updated_with_a_new_entry(secrets):
 def the_release_is_published(secrets):
     """a release is published with the chart"""
 
-    expected_tag = f'{secrets.vendor}-{secrets.chart_name}-{secrets.chart_version}-test-pr{secrets.pr_number}'
+    expected_tag = f'{secrets.vendor}-{secrets.chart_name}-{secrets.chart_version}'
     try:
         release = get_release_by_tag(secrets, expected_tag)
         logger.info(f"Released '{expected_tag}' successfully")
