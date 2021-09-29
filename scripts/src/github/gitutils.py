@@ -96,7 +96,7 @@ def create_pr(branch_name,skip_files,repository,message):
                    f'HEAD:refs/heads/{branch_name}','-f')
 
         print("make the pull request")
-        data = {'head': branch_name, 'base': 'main',
+        data = {'head': branch_name, 'base': 'test',
                 'title': branch_name, 'body': f'{message}'}
 
         r = github_api(
