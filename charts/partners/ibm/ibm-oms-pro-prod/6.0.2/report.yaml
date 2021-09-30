@@ -6,7 +6,7 @@ metadata:
     profile:
       VendorType: partner
       version: v1.0
-    chart-uri: /charts/stable/ibm-oms-pro-case-bundle/charts/ibm-oms-pro-prod
+    chart-uri: https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-oms-pro-prod-6.0.2.tgz?raw=true
     digest: sha256:5ef57b10f8b72f04f1a38b7e07c657687342f50db75ef812d720986bc14c9b97
     digests:
       chart: sha256:5ef57b10f8b72f04f1a38b7e07c657687342f50db75ef812d720986bc14c9b97
