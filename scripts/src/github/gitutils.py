@@ -19,8 +19,8 @@ from git import Repo
 from git.exc import GitCommandError
 
 GITHUB_BASE_URL = 'https://api.github.com'
-CHARTS_REPO = f"{os.environ.get('REPOSITORY_ORGANIZATION')}/charts"
-DEVELOPMENT_REPO = f"{os.environ.get('REPOSITORY_ORGANIZATION')}/development"
+CHARTS_REPO = "/charts"
+DEVELOPMENT_REPO = f"/development"
 
 PR_CREATED = "PR_CREATED"
 PR_NOT_NEEDED = "PR_NOT_NEEDED"
@@ -75,7 +75,7 @@ def get_bot_name_and_token():
     return bot_name, bot_token
 
 
-def create_pr(branch_name,skip_files,repository,message):
+def create_pr(branch_name,skip_files,repository,message,target_branch):
 
     repo = Repo(os.getcwd())
 
@@ -95,8 +95,8 @@ def create_pr(branch_name,skip_files,repository,message):
         repo.git.push(f'https://x-access-token:{bot_token}@github.com/{repository}',
                    f'HEAD:refs/heads/{branch_name}','-f')
 
-        print("make the pull request")
-        data = {'head': branch_name, 'base': 'main',
+        print(f"make the pull request to {target_branch}")
+        data = {'head': branch_name, 'base': f'{target_branch}',
                 'title': branch_name, 'body': f'{message}'}
 
         r = github_api(
