@@ -40,7 +40,7 @@ from github import gitutils
 VERSION_FILE = "release/release_info.json"
 TYPE_MATCH_EXPRESSION = "(partners|redhat|community)"
 CHARTS_PR_BASE_REPO = gitutils.CHARTS_REPO
-CHARTS_PR_HEAD_REPO = gitutils.DEVELOPMENT_REPO
+CHARTS_PR_HEAD_REPO = gitutils.CHARTS_REPO
 DEV_PR_BASE_REPO = gitutils.DEVELOPMENT_REPO
 DEV_PR_HEAD_REPO = gitutils.DEVELOPMENT_REPO
 DEFAULT_BOT_NAME = "openshift-helm-charts-bot"
