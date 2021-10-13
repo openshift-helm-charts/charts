@@ -74,7 +74,7 @@ jobs:
 
       - name: (PR) Test CI Workflow
         if: |
-          github.event_name == 'pall_request_target' && steps.check_request.outputs.run-tests == 'true'
+          github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BOT_NAME: ${{ secrets.BOT_NAME }}
