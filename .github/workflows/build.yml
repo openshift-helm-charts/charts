@@ -9,7 +9,7 @@ jobs:
     name: Chart Certification
     runs-on: ubuntu-20.04
     env:
-      VERIFIER_IMAGE: quay.io/redhat-certification/chart-verifier:main
+      VERIFIER_IMAGE: quay.io/redhat-certification/chart-verifier:latest
     if: |
       github.event.pull_request.draft == false &&
       (github.event.action != 'labeled' || github.event.label.name == 'force-publish')

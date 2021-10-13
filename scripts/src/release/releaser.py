@@ -34,7 +34,7 @@ BUILD_YAML_FILE=".github/workflows/build.yml"
 DEV_PR_BRANCH_BODY_PREFIX="Charts workflow version"
 DEV_PR_BRANCH_NAME_PREFIX="Auto-Release-"
 CHARTS_PR_BRANCH_BODY_PREFIX="Workflow and script updates from development repository"
-CHARTS_PR_BRANCH_NAME_PREFIX="Auto-Release-"
+CHARTS_PR_BRANCH_NAME_PREFIX="Release-"
 
 SCHEDULE_INSERT = [
     '  # Daily trigger to check updates',
@@ -147,6 +147,16 @@ def main():
 
     args = parser.parse_args()
 
+    print("[INFO] releaser inputs:")
+    print(f"[INFO] arg version : {args.version}")
+    print(f"[INFO] arg dev_dir : {args.dev_dir}")
+    print(f"[INFO] arg charts_dir : {args.charts_dir}")
+    print(f"[INFO] arg pr_dir : {args.pr_dir}")
+    print(f"[INFO] arg dev_pr_body : {args.dev_pr_body}")
+    print(f"[INFO] arg target_branch :  {args.target_branch}")
+    print(f"[INFO] arg target_repository :  {args.target_repository}")
+
+
     start_directory = os.getcwd()
     print(f"working directory: {start_directory}")
 
@@ -159,7 +169,7 @@ def main():
 
     organization = args.target_repository.split("/")[0]
     charts_repository=f"{organization}{gitutils.CHARTS_REPO}"
-    print(f"create charts pull request")
+    print(f"create charts pull request, repository: {charts_repository}, branch: {args.target_branch} ")
     branch_name = f"{CHARTS_PR_BRANCH_NAME_PREFIX}{args.version}"
     message = f'{CHARTS_PR_BRANCH_BODY_PREFIX} {branch_name}'
     outcome = gitutils.create_pr(branch_name,[],charts_repository,message,args.target_branch)
@@ -168,6 +178,7 @@ def main():
     elif outcome == gitutils.PR_NOT_NEEDED:
         print(f'::set-output name=charts_pr_not_needed::true')
     else:
+        printf("[ERROR] error creating charts PR")
         print(f'::set-output name=charts_pr_error::true')
         os.chdir(start_directory)
         return
@@ -175,6 +186,8 @@ def main():
     os.chdir(start_directory)
 
     print(f"make changes to development from charts")
+    make_required_changes(args.pr_dir,args.charts_dir,args.dev_dir)
+
     os.chdir(args.dev_dir)
     print(f"create development pull request")
     branch_name = f"{DEV_PR_BRANCH_NAME_PREFIX}{args.version}"
@@ -186,7 +199,7 @@ def main():
         print("Dev PR not needed.")
         print(f'::set-output name=dev_pr_not_needed::true')
     else:
-        print("Dev PR errored.")
+        print("[ERROR] error creating development PR.")
         print(f'::set-output name=dev_pr_error::true')
 
     os.chdir(start_directory)
