@@ -239,6 +239,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-06-23T16:56:38.235364+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-06-23T17:05:06.186367+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Object Storage Plugin
     apiversion: v2
     appversion: 2.1.2
     condition: ''
@@ -285,6 +287,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-08-26T00:09:57.26517+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-08-26T00:14:55.099627+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Object Storage Plugin
     apiVersion: v2
     appVersion: 2.1.3
     description: 'Chart for deploying ibmcloud object storage plugin.
@@ -323,6 +327,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-09-24T03:31:42.046658+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-09-24T05:06:09.114787+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Object Storage Plugin
     apiVersion: v2
     appVersion: 2.1.4
     description: 'Chart for deploying ibmcloud object storage plugin.
@@ -361,6 +367,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-10-05T06:33:11.266306+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-10-05T10:40:50.696469+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Object Storage Plugin
     apiVersion: v2
     appVersion: 2.1.5
     description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object
@@ -393,6 +401,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-06T17:39:35.891029+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-07-08T19:12:47.414530+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Order Management Software Enterprise Edition
     apiversion: v2
     appversion: 10.0.0
     condition: ''
@@ -453,6 +463,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-09-30T00:26:17.53459+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-09-30T13:31:43.533924+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Order Management Software Enterprise Edition
     apiVersion: v2
     appVersion: 10.0.0
     dependencies:
@@ -498,6 +510,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-06T17:45:15.703527+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-07-08T19:26:26.434437+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Order Management Software Professional Edition
     apiversion: v2
     appversion: 10.0.0
     condition: ''
@@ -560,6 +574,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-09-30T00:20:11.381803+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-09-30T13:27:15.496178+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Order Management Software Professional Edition
     apiVersion: v2
     appVersion: 10.0.0
     dependencies:
@@ -606,6 +622,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T15:42:56.073039+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-07-09T21:30:28.319486+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Operator Catalog Enablement
     apiversion: v2
     appversion: 1.1.0
     condition: ''
@@ -650,6 +668,8 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2021-08-24T14:56:27.916199+00:00'
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-08-24T15:08:45.616458+00:00'
+      charts.openshift.io/provider: IBM
+      charts.openshift.io/name: IBM Spectrum Protect Plus
     apiVersion: v2
     appVersion: 10.1.8.1
     description: 'IBM Spectrum Protect Plus is a data protection and availability
