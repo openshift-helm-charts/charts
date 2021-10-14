@@ -739,7 +739,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:483cb0144a3e7838e95da3a04a3df4178dc06b40fb4b3276e7c1c2a3b65555ff
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T21:58:18.976945+00:00'
-      charts.openshift.io/provider: DotNet Chart
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-07-09T22:02:05.171415+00:00'
     apiVersion: v2
@@ -778,7 +778,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
       charts.openshift.io/digest: sha256:c21bfc66510ed4deeb5dda0be56c23179335728bd966edcc5110dd8bf12906e1
       charts.openshift.io/lastCertifiedTimestamp: '2021-09-01T14:46:21.647631+00:00'
-      charts.openshift.io/provider: Red Hat JBoss Entreprise Application Platform
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-09-02T07:18:22.395724+00:00'
     apiVersion: v2
@@ -799,7 +799,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
       charts.openshift.io/digest: sha256:a971a396498cf24a58aa18a3cccf0848c538592d748b9d92202e354cc5ed5d27
       charts.openshift.io/lastCertifiedTimestamp: '2021-08-04T13:37:58.716524+00:00'
-      charts.openshift.io/provider: Openshift Jenkins chart
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-08-04T13:38:30.493271+00:00'
     apiVersion: v2
@@ -815,7 +815,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
       charts.openshift.io/digest: sha256:3b6f3166b1e4e17b219a1f7a7b9d0460f010bd8d8f426844cb7ea5d47fad4782
       charts.openshift.io/lastCertifiedTimestamp: '2021-08-11T21:45:55.549194+00:00'
-      charts.openshift.io/provider: Openshift Jenkins chart
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-08-11T21:49:15.334993+00:00'
     apiVersion: v2
@@ -836,7 +836,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
       charts.openshift.io/digest: sha256:658e19c4c331cccd07c35aa79c33e6fcb0c810f7ebc7c1b4361927bc9cd08b9e
       charts.openshift.io/lastCertifiedTimestamp: '2021-08-11T22:53:28.472133+00:00'
-      charts.openshift.io/provider: Openshift Jenkins chart
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-08-11T22:57:05.254175+00:00'
     apiVersion: v2
@@ -861,7 +861,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:3696fe9d93f49c0a87c2424b792056ce60ef373ce11b6c28b53674417b474314
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T22:47:54.970912+00:00'
-      charts.openshift.io/provider: NodeJs chart
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-07-09T22:52:51.435018+00:00'
     apiVersion: v2
@@ -897,7 +897,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:ee5c3d26bfc17ce6333678c1279dbed06a2c7d3cd0bd8f2b4128a1a7a7cf8acf
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T23:02:59.065099+00:00'
-      charts.openshift.io/provider: NodeJs EX K chart
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-07-09T23:07:09.654333+00:00'
     apiVersion: v2
@@ -914,7 +914,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:fc2516e2e7350d9edc2dd491348ded34ee97085269b303f26b68eb2a8ec0ef88
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T21:36:27.096408+00:00'
-      charts.openshift.io/provider: Quarkus chart
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-07-09T21:42:40.467265+00:00'
     apiVersion: v2
@@ -932,7 +932,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:80630f72e50faa6cd799f8bad147f834fe2e4b181ba4a8298a40e743665fba1b
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T23:13:06.36487+00:00'
-      charts.openshift.io/provider: Wildfly
+      charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-07-09T23:17:53.597397+00:00'
     apiVersion: v2
