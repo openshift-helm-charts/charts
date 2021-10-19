@@ -861,6 +861,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:483cb0144a3e7838e95da3a04a3df4178dc06b40fb4b3276e7c1c2a3b65555ff
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T21:58:18.976945+00:00'
+      charts.openshift.io/name: '.NET'
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-07-09T22:02:05.171415+00:00'
