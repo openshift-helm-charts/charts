@@ -2,18 +2,19 @@
 
 approvers:
 - baijum
-- DhritiShikhar
-- Avni-Sharma
 - isutton
 - pedjak
 - mmulholla
 - jasperchui
+- dperaza4dustbit
+- zonggen
+- openshift-helm-charts-bot
 
 reviewers:
 - baijum
-- DhritiShikhar
-- Avni-Sharma
 - isutton
 - pedjak
 - mmulholla
 - jasperchui
+- dperaza4dustbit
+- zonggen

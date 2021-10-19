@@ -5,7 +5,7 @@ To generate a new token follow these instructions.
 Login using your OpenShift token:
 
 ```
-oc login --token=<token-string> --server=https://api.ocpappsvc-osd.zn6c.p1.openshiftapps.com:6443
+oc login --token=<token-string> --server=<api-server-url>
 ```
 
 Delete existing service account, roles, and role bindings:
@@ -43,3 +43,5 @@ oc get secret chart-verifier-admin-token-t9sjg -n prod-chart-verifier-infra -o y
 
 You can store the returned value in the GitHub secrets with key as
 `CLUSTER_TOKEN`.
+
+Alternatively, run `scripts/get-secrets --server <token-string> --server <api-server-url>` to get `CLUSTER_TOKEN` and `API_SERVER`.

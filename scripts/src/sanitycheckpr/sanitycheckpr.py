@@ -26,29 +26,66 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
     r = requests.get(files_api_url, headers=headers)
     pattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
     reportpattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/report.yaml")
-    count = 0
+    page_number = 1
+    max_page_size,page_size = 100,100
     match_found = False
-    for f in r.json():
-        filename = f["filename"]
-        match = pattern.match(filename)
-        if not match:
-            msg = f"[ERROR] PR should only modify chart related files: {filename}"
+    none_chart_files = {}
+    file_count = 0
+
+    while page_size == max_page_size:
+
+        files_api_query = f'{files_api_url}?per_page={page_size}&page={page_number}'
+        print(f"Query files : {files_api_query}")
+        r = requests.get(files_api_query,headers=headers)
+        files = r.json()
+        page_size = len(files)
+        file_count += page_size
+        page_number += 1
+
+        for f in files:
+            file_path = f["filename"]
+            match = pattern.match(file_path)
+            if not match:
+                file_name = os.path.basename(file_path)
+                none_chart_files[file_name] = file_path
+            else:
+                if reportpattern.match(file_path):
+                    print("[INFO] Report found")
+                    print("::set-output name=report-exists::true")
+                if not match_found:
+                    pattern_match = match
+                    match_found = True
+                elif pattern_match.groups() != match.groups():
+                    msg = f"[ERROR] PR must only include one chart"
+                    print(msg)
+                    print(f"::set-output name=sanity-error-message::{msg}")
+                    sys.exit(1)
+    
+    if none_chart_files:
+        if file_count > 1 or "OWNERS" not in none_chart_files: #OWNERS not present or preset but not the only file
+            example_file = list(none_chart_files.values())[0]
+            msg = f"[ERROR] PR includes one or more files not related to charts, e.g., {example_file}"
             print(msg)
             print(f"::set-output name=sanity-error-message::{msg}")
-            sys.exit(1)
-        else:
-            if reportpattern.match(filename):
-                print("[INFO] Report found")
-                print("::set-output name=report-exists::true")
-            if not match_found:
-                pattern_match = match
-                match_found = True
-            elif pattern_match.groups() != match.groups():
-                msg = f"[ERROR] PR must only include one chart"
-                print(msg)
-                print(f"::set-output name=sanity-error-message::{msg}")
-                sys.exit(1)
 
+        if "OWNERS" in none_chart_files:
+            file_path = none_chart_files["OWNERS"]
+            path_parts = file_path.split("/")
+            category = path_parts[1] # Second after charts
+            if category == "partners":
+                msg = "[ERROR] OWNERS file should never be set directly by partners. See certification docs."
+                print(msg)
+                print(f"::set-output name=owners-error-message::{msg}")
+            elif match_found: # There is a mix of chart and non-chart files including OWNERS
+                msg = "[ERROR] Send OWNERS file by itself in a separate PR."
+                print(msg)
+                print(f"::set-output name=owners-error-message::{msg}")
+            elif file_count == 1: # OWNERS file is the only file in PR
+                msg = "[INFO] OWNERS file changes require manual review by maintainers."
+                print(msg)
+                print(f"::set-output name=owners-error-message::{msg}") 
+                
+        sys.exit(1)
 
 
     if match_found:

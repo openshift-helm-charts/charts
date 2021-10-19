@@ -8,6 +8,8 @@ jobs:
   chart-certification:
     name: Chart Certification
     runs-on: ubuntu-20.04
+    env:
+      VERIFIER_IMAGE: quay.io/redhat-certification/chart-verifier:latest
     if: |
       github.event.pull_request.draft == false &&
       (github.event.action != 'labeled' || github.event.label.name == 'force-publish')
@@ -15,24 +17,70 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.x
+      - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: Check for CI changes
+        id: check_ci_changes
+        run: |
+          # check if workflow testing should run.
+          echo "[INFO] check if PR contains only workflow changes and user is authorized"
+          ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+
+      - name: Check if PR created as part of release process
+        id: check_created_release_pr
+        if: ${{ steps.check_ci_changes.outputs.run-tests != true }}
+        env:
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+        run: |
+          # check if PR was created as part of release processing
+          ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
+                                    --sender='${{ github.event.sender.login }}' \
+                                    --pr_branch='${{ github.event.pull_request.head.ref }}' \
+                                    --pr_body='${{ github.event.pull_request.body }}'
+
+      - name: Exit if build not required
+        id: check_build_required
+        env:
+          RUN_TESTS: ${{ steps.check_ci_changes.outputs.run-tests }}
+          NOT_CI_AUTHORIZED: ${{ steps.check_ci_changes.outputs.workflow-only-but-not-authorized }}
+          NO_CODE_TO_BUILD: ${{ steps.check_ci_changes.outputs.do-not-build }}
+          DEV_PR_FOR_RELEASE: ${{ steps.check_created_release_pr.outputs.dev_release_branch }}
+        run: |
+          # exit if build not required
+          if [ ${RUN_TESTS} == "true" ] || [ ${NOT_CI_AUTHORIZED} == "true" ]; then
+            echo "The PR is workflow changes only - do not continue."
+            exit 0
+          elif [ ${NO_CODE_TO_BUILD} == "true" ]; then
+             echo "The PR does not contain changes which need build or test."
+             exit 0
+          elif [ ${DEV_PR_FOR_RELEASE} == "true" ]; then
+              echo "The PR is part of release processing for the devleopmnet branch - do not continue."
+          else
+            echo "::set-output name=run-build::true"
+          fi
 
       - name: Sanity Check PR Content
         id: sanity_check_pr_content
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         continue-on-error: true
         env:
           GITHUB_REF: ${{ github.ref }}
         run: |
-          python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
-          ./ve1/bin/sanity-check-pr --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
+           ./ve1/bin/sanity-check-pr --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
 
-      - uses: actions/github-script@v3
+      - name: Add 'sanity-ok' label
+        uses: actions/github-script@v3
         if: ${{ steps.sanity_check_pr_content.outcome == 'success'}}
         continue-on-error: true
         with:
@@ -45,7 +93,8 @@ jobs:
               labels: ['sanity-ok']
             })
 
-      - uses: actions/github-script@v3
+      - name: Remove 'sanity-ok' label
+        uses: actions/github-script@v3
         if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
         continue-on-error: true
         with:
@@ -64,8 +113,9 @@ jobs:
           echo "The 'Sanity Check PR Content' step has failed."
           exit 1
 
-      - name: 'Remove label from PR'
+      - name: Remove 'authorized-request' label from PR
         uses: actions/github-script@v3
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -79,6 +129,7 @@ jobs:
             })
 
       - name: Checkout
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -87,74 +138,77 @@ jobs:
 
       - name: Get Date
         id: get-date
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }}
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_build_required.outputs.run-build == 'true' }}
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
 
       - uses: actions/cache@v2
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }}
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_build_required.outputs.run-build == 'true' }}
         id: cache
         with:
           path: oc
           key: ${{ steps.get-date.outputs.date }}
 
       - name: Install oc
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.cache.outputs.cache-hit != 'true' }}
+        id: install-oc
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.cache.outputs.cache-hit != 'true' && steps.check_build_required.outputs.run-build == 'true' }}
         run: |
           curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
           tar zxvf openshift-client-linux.tar.gz oc
+          echo "::set-output name=oc-installed::true"
 
       - name: Get Repository
-        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' }}
+        if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_build_required.outputs.run-build == 'true' }}
         id: get-repository
         run: |
           REPO=$(echo ${{ github.repository }} | tr '\/' '-')
           echo "::set-output name=repository::${REPO}"
         shell: bash
 
-      - name: 'Verify PR - generate report'
+      - name: Verify PR - generate report
         id: verify_pr
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
           VENDOR_TYPE: ${{ steps.sanity_check_pr_content.outputs.category }}
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
-          docker pull quay.io/redhat-certification/chart-verifier:latest
+          docker pull ${{ env.VERIFIER_IMAGE }}
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{steps.sanity_check_pr_content.outputs.report-exists}}" != "true" ]; then
             ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
-            ve1/bin/sa-for-chart-testing --create chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }} --token token.txt --server ${API_SERVER}
+            ve1/bin/sa-for-chart-testing --create charts-${{ github.event.number }} --token token.txt --server ${API_SERVER}
           fi
           cd pr-branch
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
 
-
       - name: Delete Namespace
-        if: always() && steps.sanity_check_pr_content.outputs.report-exists != 'true'
+        if: ${{ steps.install-oc.outputs.oc-installed == 'true' }}
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
-          ve1/bin/sa-for-chart-testing --delete chart-verifier-ci-${{ steps.get-repository.outputs.repository }}-${{ github.event.number }}
+          ve1/bin/sa-for-chart-testing --delete charts-${{ github.event.number }}
 
       - name: Save PR artifact
-        if: always()
+        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
         run: |
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
 
-      - name: 'Prepare PR comment'
-        if: always()
+      - name: Prepare PR comment
+        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
         env:
           SANITY_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.sanity-error-message }}
+          OWNERS_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.owners-error-message }}
         run: |
           python3 scripts/prepare_pr_comment.py ${{ steps.sanity_check_pr_content.outcome }} ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 
-      - name: 'Comment on PR'
-        if: always()
+      - name: Comment on PR
+        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -169,8 +223,8 @@ jobs:
               body: comment
             });
 
-      - name: 'Add label to PR'
-        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success'}}
+      - name: Add 'authorized-request' label to PR
+        if: ${{ always() && steps.sanity_check_pr_content.outcome == 'success' && steps.check_build_required.outputs.run-build == 'true' }}
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -187,14 +241,14 @@ jobs:
                 labels: ['authorized-request']
             })};
 
-      - name: 'Approve PR'
+      - name: Approve PR
         id: approve_pr
         if: ${{ steps.verify_pr.conclusion == 'success' }}
         uses: hmarr/auto-approve-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Merge PR'
+      - name: Merge PR
         id: merge_pr
         if: ${{ steps.approve_pr.conclusion == 'success' }}
         uses: pascalgn/automerge-action@v0.13.1
@@ -204,20 +258,24 @@ jobs:
           MERGE_LABELS: ""
 
       - name: Check for PR merge
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         run: |
           ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Block until there is no running workflow
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Release Charts
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         env:
           GITHUB_REF: ${{ github.ref }}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -238,7 +296,7 @@ jobs:
 
       - name: Release
         if: ${{ steps.release-charts.outputs.tag != '' }}
-        uses: softprops/action-gh-release@master
+        uses: softprops/action-gh-release@v0.1.12
         continue-on-error: true
         with:
           tag_name: ${{ steps.release-charts.outputs.tag }}
