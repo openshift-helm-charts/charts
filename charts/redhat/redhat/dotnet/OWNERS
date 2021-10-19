@@ -3,7 +3,7 @@ chart:
   shortDescription: This is the Red Hat DotNet chart
 publicPgpKey: null
 users:
-- githubUsername: dperaza4dustbit
+- githubUsername: tmds
 vendor:
   label: redhat
   name: Red Hat
