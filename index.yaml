@@ -770,6 +770,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.1.0/infinispan-infinispan-0.1.0.tgz
     version: 0.1.0
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: N/A
+      charts.openshift.io/digest: sha256:aca4e4e0781863ba07dae80c5e4c3a7f8afa7114f2fcdd4247e950c6cae46e85
+      charts.openshift.io/lastCertifiedTimestamp: '2021-10-21T14:41:46.644204+00:00'
+      charts.openshift.io/provider: Infinispan
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-10-21T14:42:27.172842+00:00'
+    apiVersion: v2
+    appVersion: '13.0'
+    description: A Helm chart that lets you build and deploy Infinispan clusters.
+    digest: 80f090e462e893cb87bcfaf12b75cd99a96e151345e50a762c5dbf2c2249d648
+    home: https://infinispan.org/
+    icon: https://design.jboss.org/infinispan/logo/final/PNG/infinispan_icon_rgb_lightbluewhite_256px.png
+    maintainers:
+    - name: Infinispan
+      url: https://infinispan.org/
+    name: infinispan
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.2.0/infinispan-infinispan-0.2.0.tgz
+    version: 0.2.0
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -989,4 +1013,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-10-19T05:01:53.860425+00:00'
+generated: '2021-10-21T14:42:27.172842+00:00'
