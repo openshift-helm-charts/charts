@@ -1,0 +1,10 @@
+chart:
+  name: wildfly
+  shortDescription: Build and Deploy WildFly applications
+publicPgpKey: null
+users:
+  - githubUsername: bstansberry
+  - githubUsername: jmesnil
+vendor:
+  label: wildfly
+  name: WildFly
