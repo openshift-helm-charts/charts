@@ -1,9 +1,10 @@
 chart:
   name: wildfly
-  shortDescription: This is the Red Hat Wildfly chart
+  shortDescription: Build and Deploy WildFly applications
 publicPgpKey: null
 users:
-- githubUsername: dperaza4dustbit
+  - githubUsername: bstansberry
+  - githubUsername: jmesnil
 vendor:
-  label: redhat
-  name: Red Hat
+  label: wildfly
+  name: WildFly
