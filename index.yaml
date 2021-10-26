@@ -727,6 +727,8 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
       charts.openshift.io/digest: sha256:e2ac016fcad031ed7c577d6be83cfc46d3f61d46cba44dcec00026ba4b283ac8
       charts.openshift.io/lastCertifiedTimestamp: '2021-10-19T04:53:29.320557+00:00'
+      charts.openshift.io/name: IBM Operator Catalog Enablement
+      charts.openshift.io/provider: IBM
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-10-19T05:01:53.860425+00:00'
     apiVersion: v2
