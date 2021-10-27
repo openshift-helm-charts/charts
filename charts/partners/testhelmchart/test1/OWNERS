@@ -1,0 +1,9 @@
+chart:
+  name: test1
+  shortDescription: unknown
+publicPgpKey: unknown
+users:
+- githubUsername: sebrandon1
+vendor:
+  label: testhelmchart
+  name: Red Hat
