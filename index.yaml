@@ -858,12 +858,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.2.0/infinispan-infinispan-0.2.0.tgz
     version: 0.2.0
+  redhat-arkady-test-test1:
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: '4.8'
+      charts.openshift.io/digest: sha256:8a48c0bb4fe5e87c2f7161753e6c0373f043add219951ded3901d5b16d5030f8
+      charts.openshift.io/lastCertifiedTimestamp: '2021-10-28T18:57:08.156487+00:00'
+      charts.openshift.io/provider: Red Hat, Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2021-10-28T18:57:39.783565+00:00'
+    apiVersion: v2
+    appVersion: 1-42
+    description: A Helm chart for Kubernetes
+    digest: 79f64b336665f6469648212bdf2e015200ca6dd910386e7fe514256e756f6ec6
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.20.0'
+    name: test1
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-arkady-test-test1-0.1.0/redhat-arkady-test-test1-0.1.0.tgz
+    version: 0.1.0
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:483cb0144a3e7838e95da3a04a3df4178dc06b40fb4b3276e7c1c2a3b65555ff
       charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T21:58:18.976945+00:00'
-      charts.openshift.io/name: '.NET'
+      charts.openshift.io/name: .NET
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-07-09T22:02:05.171415+00:00'
@@ -1078,4 +1097,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-10-22T08:58:50.807788+00:00'
+generated: '2021-10-28T18:57:39.783565+00:00'
