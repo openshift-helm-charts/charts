@@ -858,25 +858,6 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.2.0/infinispan-infinispan-0.2.0.tgz
     version: 0.2.0
-  redhat-arkady-test-test1:
-  - annotations:
-      charts.openshift.io/certifiedOpenShiftVersions: '4.8'
-      charts.openshift.io/digest: sha256:8a48c0bb4fe5e87c2f7161753e6c0373f043add219951ded3901d5b16d5030f8
-      charts.openshift.io/lastCertifiedTimestamp: '2021-10-28T18:57:08.156487+00:00'
-      charts.openshift.io/provider: Red Hat, Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2021-10-28T18:57:39.783565+00:00'
-    apiVersion: v2
-    appVersion: 1-42
-    description: A Helm chart for Kubernetes
-    digest: 79f64b336665f6469648212bdf2e015200ca6dd910386e7fe514256e756f6ec6
-    icon: https://www.example.com/chart-icon.png
-    kubeVersion: '>=1.20.0'
-    name: test1
-    type: application
-    urls:
-    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-arkady-test-test1-0.1.0/redhat-arkady-test-test1-0.1.0.tgz
-    version: 0.1.0
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
