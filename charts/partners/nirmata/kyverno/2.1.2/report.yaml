@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.0
-        chart-uri: /nirmata/kyverno/kyverno-v2.1.2.tgz
+        chart-uri: https://nirmata.github.io/kyverno/kyverno-v2.1.2.tgz
         digest: sha256:1ec146e47d633862cc751c6f1c5dcf97602d3efe2ee5b9fdacf872d84f70524e
         digests:
             chart: sha256:1ec146e47d633862cc751c6f1c5dcf97602d3efe2ee5b9fdacf872d84f70524e
