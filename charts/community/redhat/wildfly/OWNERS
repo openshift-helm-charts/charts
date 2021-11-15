@@ -6,5 +6,5 @@ users:
   - githubUsername: bstansberry
   - githubUsername: jmesnil
 vendor:
-  label: wildfly
+  label: redhat
   name: WildFly
