@@ -294,6 +294,37 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/hashicorp-vault-0.17.1/hashicorp-vault-0.17.1.tgz
     version: 0.17.1
+  - annotations:
+      charts.openshift.io/certifiedOpenShiftVersions: '4.8'
+      charts.openshift.io/digest: sha256:b095c185d6764bd9b9001b252409fccc7767d8cbeeffed60cf3fbcc1227668fb
+      charts.openshift.io/lastCertifiedTimestamp: '2021-11-18T01:19:57.312218+00:00'
+      charts.openshift.io/provider: HashiCorp
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2021-11-18T01:20:52.063300+00:00'
+    apiVersion: v2
+    appVersion: 1.9.0
+    description: Official HashiCorp Vault Chart
+    digest: 82cdc2b639519ea668c525a711bd3bb4f865a451b632979a562eb9c052115d5f
+    home: https://www.vaultproject.io
+    icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+    keywords:
+    - vault
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.14.0-0'
+    name: vault
+    sources:
+    - https://github.com/hashicorp/vault
+    - https://github.com/hashicorp/vault-helm
+    - https://github.com/hashicorp/vault-k8s
+    - https://github.com/hashicorp/vault-csi-provider
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/hashicorp-vault-0.18.0/hashicorp-vault-0.18.0.tgz
+    version: 0.18.0
   ibm-ibm-object-storage-plugin:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
@@ -1109,4 +1140,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
-generated: '2021-11-05T17:07:57.442461+00:00'
+generated: '2021-11-18T01:20:52.063300+00:00'
