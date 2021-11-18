@@ -1,19 +1,31 @@
-Feature: Chart tar only submission
-    Partners or redhat associates can publish their chart by submitting
-    error-free chart in tar format without the report.
+Feature: Chart tarball submission without report
+    Partners, redhat and community users can publish their chart by submitting
+    error-free chart in tarball format without a report.
 
-    Scenario: The partner hashicorp submits a error-free chart tar for vault
-        Given hashicorp is a valid partner
-        And hashicorp has created an error-free chart tar for vault
-        When hashicorp sends a pull request with the vault tar chart
-        Then hashicorp sees the pull request is merged
-        And the index.yaml file is updated with an entry for the submitted chart
-        And a release for the vault chart is published with corresponding report and chart tarball
+    Examples:
+        | chart_path                   |
+        | tests/data/vault-0.13.0.tgz  |
 
-    Scenario: A redhat associate submits a error-free chart tar for vault
-        Given a redhat associate has a valid identity
-        And the redhat associate has created an error-free chart tar for vault
-        When the redhat associate sends a pull request with the vault tar chart
-        Then the redhat associate sees the pull request is merged
+    Scenario Outline: A partner or redhat associate submits an error-free chart tarball
+        Given the vendor <vendor> has a valid identity as <vendor_type>
+        And an error-free chart tarball is used in <chart_path>
+        When the user sends a pull request with the chart
+        Then the user sees the pull request is merged
         And the index.yaml file is updated with an entry for the submitted chart
-        And a release for the vault chart is published with corresponding report and chart tarball
+        And a release is published with corresponding report and chart tarball
+
+        Examples:
+            | vendor_type  | vendor    |
+            | partners     | hashicorp |
+            | redhat       | redhat    |
+    
+    Scenario Outline: A community user submits an error-free chart tarball without report
+        Given the vendor <vendor> has a valid identity as <vendor_type>
+        And an error-free chart tarball is used in <chart_path>
+        When the user sends a pull request with the chart
+        Then the pull request is not merged
+        And user gets the <message> in the pull request comment
+
+        Examples:
+            | vendor_type   | vendor    | message                                                               |
+            | community     | redhat    | Community charts require manual review and approval from maintainers  |

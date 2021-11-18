@@ -1,16 +1,13 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Utility module for sending chart owners notifications."""
 
-import copy
-import base64
-import datetime
 import json
 import os
 import sys
-import time
 
 import requests
 
-from functional.utils import GITHUB_BASE_URL
+from functional.utils.setttings import *
 
 endpoint_data = {}
 

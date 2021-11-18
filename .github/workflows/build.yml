@@ -46,7 +46,9 @@ jobs:
           ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
                                     --sender='${{ github.event.sender.login }}' \
                                     --pr_branch='${{ github.event.pull_request.head.ref }}' \
-                                    --pr_body='${{ github.event.pull_request.body }}'
+                                    --pr_body='${{ github.event.pull_request.body }}' \
+                                    --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
+                                    --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
 
       - name: Exit if build not required
         id: check_build_required
@@ -55,16 +57,19 @@ jobs:
           NOT_CI_AUTHORIZED: ${{ steps.check_ci_changes.outputs.workflow-only-but-not-authorized }}
           NO_CODE_TO_BUILD: ${{ steps.check_ci_changes.outputs.do-not-build }}
           DEV_PR_FOR_RELEASE: ${{ steps.check_created_release_pr.outputs.dev_release_branch }}
+          CHARTS_PR_FOR_RELEASE: ${{ steps.check_created_release_pr.outputs.charts_release_branch }}
         run: |
           # exit if build not required
           if [ ${RUN_TESTS} == "true" ] || [ ${NOT_CI_AUTHORIZED} == "true" ]; then
             echo "The PR is workflow changes only - do not continue."
             exit 0
           elif [ ${NO_CODE_TO_BUILD} == "true" ]; then
-             echo "The PR does not contain changes which need build or test."
-             exit 0
+            echo "The PR does not contain changes which need build or test."
+            exit 0
           elif [ ${DEV_PR_FOR_RELEASE} == "true" ]; then
-              echo "The PR is part of release processing for the devleopmnet branch - do not continue."
+            echo "The PR is part of release processing for the development repository - do not continue."
+          elif [ ${CHART_PR_FOR_RELEASE} == "true" ]; then
+            echo "The PR is part of release processing for the charts repository - do not continue."
           else
             echo "::set-output name=run-build::true"
           fi
@@ -178,7 +183,11 @@ jobs:
           docker pull ${{ env.VERIFIER_IMAGE }}
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{steps.sanity_check_pr_content.outputs.report-exists}}" != "true" ]; then
-            ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
+            if [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
+              ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
+            else
+              ./oc login --insecure-skip-tls-verify --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
+            fi
             ve1/bin/sa-for-chart-testing --create charts-${{ github.event.number }} --token token.txt --server ${API_SERVER}
           fi
           cd pr-branch

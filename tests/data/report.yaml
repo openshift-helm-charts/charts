@@ -7,9 +7,9 @@ metadata:
             VendorType: partner
             version: v1.0
         chart-uri: https://github.com/${repository}/raw/${branch}/tests/data/vault-0.13.0.tgz
-        digest: sha256:2e96d8f78fb494c8a5d6b9e21b677897011a55f8a005253f0e8dcf996c1d4183
+        digest: sha256:5883c2483bbd948e50e013d88625eca60a469c1de333b67db72a43c9467282e6
         digests:
-            chart: sha256:2e96d8f78fb494c8a5d6b9e21b677897011a55f8a005253f0e8dcf996c1d4183
+            chart: sha256:5883c2483bbd948e50e013d88625eca60a469c1de333b67db72a43c9467282e6
         lastCertifiedTimestamp: "2021-07-09T14:48:37.949758+00:00"
         certifiedOpenShiftVersions: 4.7.0
     chart:
