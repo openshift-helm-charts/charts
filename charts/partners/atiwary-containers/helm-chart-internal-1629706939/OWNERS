@@ -1,9 +1,9 @@
 chart:
   name: helm-chart-internal-1629706939
-  shortDescription: sdfdsfsdafdsfsd
+  shortDescription: sdfdsfsdafdsfsdbvbv
 publicPgpKey: null
 users:
-- githubUsername: hggh
+- githubUsername: hgghvcc
 vendor:
   label: atiwary-containers
   name: Red Hat
