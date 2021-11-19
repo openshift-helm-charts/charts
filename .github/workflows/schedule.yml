@@ -28,18 +28,35 @@ jobs:
     name: Check OpenShift Version
     runs-on: ubuntu-20.04
     steps:
+
+      - name: check schedule and main repository
+        id: check_repo
+        run: |
+          echo "GITHUB_EVENT_NAME : $GITHUB_EVENT_NAME"
+          echo "GITHUB_REPOSITORY : $GITHUB_REPOSITORY"
+          if [ $GITHUB_EVENT_NAME == 'workflow_dispatch' ]; then
+            echo '::set-output name=run-job::true'
+          elif [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
+            echo '::set-output name=run-job::true'
+          else
+            echo '::set-output name=run-job::false'
+          fi
+
       - name: Install oc
+        if: steps.check_repo.outputs.run-job == 'true'
         run: |
           curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
           tar zxvf openshift-client-linux.tar.gz oc
 
       - name: Log into OpenShift cluster
+        if: steps.check_repo.outputs.run-job == 'true'
         run: |
           API_SERVER=$(echo -n ${{ secrets.API_SERVER }} | base64 -d)
           ./oc login --insecure-skip-tls-verify --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
         shell: bash
 
       - name: Get current OpenShift version
+        if: steps.check_repo.outputs.run-job == 'true'
         id: get_curr_ocp_version
         run: |
           OCP_VERSION=$(./oc version -o json | jq '.openshiftVersion')
@@ -48,12 +65,14 @@ jobs:
         shell: bash
 
       - name: Checkout software-version branch
+        if: steps.check_repo.outputs.run-job == 'true'
         uses: actions/checkout@v2
         with:
           ref: "software-version"
 
       - name: Read previous OpenShift version
         id: get_prev_ocp_version
+        if: steps.check_repo.outputs.run-job == 'true'
         uses: mikefarah/yq@master
         with:
           cmd: yq e '.openshift.release-client-version' software-version.yaml
@@ -62,7 +81,9 @@ jobs:
         id: compare_ocp_versions
         run: |
           set -euo pipefail
-          if [ "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}" = "${{ steps.get_prev_ocp_version.outputs.result }}" ]; then
+          if [ "${{ steps.check_repo.outputs.run-job }}" != "true" ]; then
+            echo "::set-output name=run_tests::false"
+          elif [ "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}" = "${{ steps.get_prev_ocp_version.outputs.result }}" ]; then
             # No change in the OpenShift version
             printf "OpenShift version has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
             echo "::set-output name=run_tests::false"
@@ -138,7 +159,7 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
 
       - name: (Schedule) Run tests on existing charts
         if: |
@@ -160,14 +181,28 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
 
   check-chart-verifier:
     name: Check Chart Verifier Version
     runs-on: ubuntu-20.04
     steps:
+      - name: check schedule and main repository
+        id: check_repo
+        run: |
+          echo "GITHUB_EVENT_NAME : $GITHUB_EVENT_NAME"
+          echo "GITHUB_REPOSITORY : $GITHUB_REPOSITORY"
+          if [ $GITHUB_EVENT_NAME == 'workflow_dispatch' ]; then
+            echo '::set-output name=run-job::true'
+          elif [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
+            echo '::set-output name=run-job::true'
+          else
+            echo '::set-output name=run-job::false'
+          fi
+
       - name: Get current Chart Verifier version
         id: get_curr_cv_version
+        if: steps.chart-repo.outputs.run-job == 'true'
         run: |
           QUAY_API='https://quay.io/api/v1/repository/redhat-certification/chart-verifier/tag/'
           CV_DIGEST=$(curl ${QUAY_API} | jq '[.tags[] | select(.name == "latest")] | .[0].manifest_digest')
@@ -176,11 +211,13 @@ jobs:
         shell: bash
 
       - name: Checkout software-version branch
+        if: steps.chart-repo.outputs.run-job == 'true'
         uses: actions/checkout@v2
         with:
           ref: "software-version"
 
       - name: Read previous Chart Verifier digest
+        if: steps.chart-repo.outputs.run-job == 'true'
         id: get_prev_cv_digest
         uses: mikefarah/yq@master
         with:
@@ -190,7 +227,9 @@ jobs:
         id: compare_cv_versions
         run: |
           set -euo pipefail
-          if [ "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}" = "${{ steps.get_prev_cv_digest.outputs.result }}" ]; then
+          if [ "${{ steps.check_repo.outputs.run-job }}" != "true" ]; then
+            echo "::set-output name=run_tests::false"
+          elif [ "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}" = "${{ steps.get_prev_cv_digest.outputs.result }}" ]; then
             # No change in the Chart Verifier image
             printf "Chart Verifier has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
             echo "::set-output name=run_tests::false"
@@ -266,7 +305,7 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
 
       - name: (Schedule) Run tests on existing charts
         if: |
@@ -288,4 +327,4 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short

@@ -82,7 +82,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_BODY: "Test triggered by ${{ github.event.pull_request.html_url }}."
         run: |
-          ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/test_submitted_charts.py --tb=short
+          ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/step_defs/test_submitted_charts.py --tb=short
 
       - name: (Manual) Test CI Workflow
         if: |
@@ -103,4 +103,37 @@ jobs:
           echo "[INFO] Notify ID '${{ env.NOTIFY_ID }}'"
           echo "[INFO] Software Name '${{ env.SOFTWARE_NAME }}'"
           echo "[INFO] Software Version '${{ env.SOFTWARE_VERSION }}'"
-          ve1/bin/pytest tests/functional/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+
+      - name: (PR) check for release flow
+        id: check_if_release_pr
+        if: |
+          github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
+        env:
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+        run: |
+          # check if PR was created as part of release processing
+          ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
+                                --sender='${{ github.event.sender.login }}' \
+                                --pr_branch='${{ github.event.pull_request.head.ref }}' \
+                                --pr_body='${{ github.event.pull_request.body }}' \
+                                --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
+                                --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
+
+      - name: Approve PR
+        id: approve_pr
+        if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
+        uses: hmarr/auto-approve-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge PR
+        id: merge_pr
+        if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
+        uses: pascalgn/automerge-action@v0.13.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash
+          MERGE_LABELS: ""
+
+

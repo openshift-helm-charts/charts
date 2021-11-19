@@ -8,6 +8,7 @@ import hashlib
 import tempfile
 
 import semver
+import semantic_version
 import requests
 import yaml
 try:
@@ -216,11 +217,21 @@ def check_report_success(directory, api_url, report_path, version):
         write_error_log(directory, msg)
         sys.exit(1)
 
+    report_metadata = report_info.get_report_metadata(report_path)
+    profile_version = report_metadata["profileVersion"]
+
+    print(f"[INFO] Profile version:  {profile_version}")
     annotations = report_info.get_report_annotations(report_path)
 
     required_annotations = {"charts.openshift.io/lastCertifiedTimestamp",
-                            "charts.openshift.io/certifiedOpenShiftVersions",
+                            "charts.openshift.io/testedOpenShiftVersion",
+                            "charts.openshift.io/supportedOpenShiftVersions",
                             "charts.openshift.io/digest"}
+
+    if profile_version == "v1.0":
+        required_annotations = {"charts.openshift.io/lastCertifiedTimestamp",
+                                "charts.openshift.io/certifiedOpenShiftVersions",
+                                "charts.openshift.io/digest"}
 
     available_annotations = set(annotations.keys())
 
@@ -262,10 +273,19 @@ def check_report_success(directory, api_url, report_path, version):
     if failures_in_report or vendor_type == "community":
         return
 
+    if "charts.openshift.io/testedOpenShiftVersion" in annotations:
+        full_version = annotations["charts.openshift.io/testedOpenShiftVersion"]
+        try:
+            semantic_version.Version.coerce(full_version)
+        except ValueError:
+            msg = f"[ERROR] tested OpenShift version not conforming to SemVer spec: {full_version}"
+            write_error_log(directory, msg)
+            sys.exit(1)
+
     if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
         full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
         if not semver.VersionInfo.isvalid(full_version):
-            msg = f"[ERROR] OpenShift version not conforming to SemVer spec: {full_version}"
+            msg = f"[ERROR] certified OpenShift version not conforming to SemVer spec: {full_version}"
             write_error_log(directory, msg)
             sys.exit(1)
 

@@ -19,6 +19,7 @@ except ImportError:
 
 sys.path.append('../')
 from report import report_info
+from chartrepomanager import indexannotations
 
 def get_modified_charts(api_url):
     files_api_url = f'{api_url}/files'
@@ -140,7 +141,7 @@ def create_index_from_chart(indexdir, repository, branch, category, organization
 def create_index_from_report(category, report_path):
     print("[INFO] create index from report. %s, %s" % (category, report_path))
 
-    annotations = report_info.get_report_annotations(report_path)
+    annotations = indexannotations.getIndexAnnotations(report_path)
 
     print("category:", category)
     redhat_to_community = bool(os.environ.get("REDHAT_TO_COMMUNITY"))
@@ -272,7 +273,7 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
     print("[INFO] Update chart annotation. %s, %s, %s, %s" % (category, organization, chart_file_name, chart))
     dr = tempfile.mkdtemp(prefix="annotations-")
 
-    annotations = report_info.get_report_annotations(report_path)
+    annotations = indexannotations.getIndexAnnotations(report_path)
 
     print("category:", category)
     redhat_to_community = bool(os.environ.get("REDHAT_TO_COMMUNITY"))
@@ -288,14 +289,6 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
         out = yaml.load(data, Loader=Loader)
         vendor_name = out["vendor"]["name"]
         annotations["charts.openshift.io/provider"] = vendor_name
-
-    if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
-        full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
-        if full_version == "N/A":
-            annotations["charts.openshift.io/certifiedOpenShiftVersions"] = "N/A"
-        else:
-            ver = semver.VersionInfo.parse(full_version)
-            annotations["charts.openshift.io/certifiedOpenShiftVersions"] = f"{ver.major}.{ver.minor}"
 
     out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))

@@ -31,8 +31,10 @@ from github import gitutils
 
 SCHEDULE_YAML_FILE=".github/workflows/schedule.yml"
 BUILD_YAML_FILE=".github/workflows/build.yml"
+DEV_PR_BRANCH_BODY_PREFIX="Charts workflow version"
 DEV_PR_BRANCH_NAME_PREFIX="Auto-Release-"
-DEV_PR_BRANCH_BODY_PREFIX="Workflow and script updates from development repository"
+CHARTS_PR_BRANCH_BODY_PREFIX="Workflow and script updates from development repository"
+CHARTS_PR_BRANCH_NAME_PREFIX="Release-"
 
 SCHEDULE_INSERT = [
     '  # Daily trigger to check updates',
@@ -138,7 +140,22 @@ def main():
                         help="Directory of pull request code.")
     parser.add_argument("-b", "--dev_pr_body", dest="dev_pr_body", type=str, required=True,
                         help="Body to use for the dev PR")
+    parser.add_argument("-t", "--target_branch", dest="target_branch", type=str, required=True,
+                        help="Target branch of the Pull Request" )
+    parser.add_argument("-r", "--target_repository", dest="target_repository", type=str, required=True,
+                        help="Repository which is the target of the pull request" )
+
     args = parser.parse_args()
+
+    print("[INFO] releaser inputs:")
+    print(f"[INFO] arg version : {args.version}")
+    print(f"[INFO] arg dev_dir : {args.dev_dir}")
+    print(f"[INFO] arg charts_dir : {args.charts_dir}")
+    print(f"[INFO] arg pr_dir : {args.pr_dir}")
+    print(f"[INFO] arg dev_pr_body : {args.dev_pr_body}")
+    print(f"[INFO] arg target_branch :  {args.target_branch}")
+    print(f"[INFO] arg target_repository :  {args.target_repository}")
+
 
     start_directory = os.getcwd()
     print(f"working directory: {start_directory}")
@@ -150,15 +167,18 @@ def main():
     os.chdir(args.charts_dir)
     update_workflow()
 
-    print(f"create charts pull request")
-    branch_name = f"Release-{args.version}"
-    message = f'Workflow and script updates from development repository {branch_name}'
-    outcome = gitutils.create_pr(branch_name,[],gitutils.CHARTS_REPO,message)
+    organization = args.target_repository.split("/")[0]
+    charts_repository=f"{organization}{gitutils.CHARTS_REPO}"
+    print(f"create charts pull request, repository: {charts_repository}, branch: {args.target_branch} ")
+    branch_name = f"{CHARTS_PR_BRANCH_NAME_PREFIX}{args.version}"
+    message = f'{CHARTS_PR_BRANCH_BODY_PREFIX} {branch_name}'
+    outcome = gitutils.create_pr(branch_name,[],charts_repository,message,args.target_branch)
     if outcome == gitutils.PR_CREATED:
         print(f'::set-output name=charts_pr_created::true')
     elif outcome == gitutils.PR_NOT_NEEDED:
         print(f'::set-output name=charts_pr_not_needed::true')
     else:
+        printf("[ERROR] error creating charts PR")
         print(f'::set-output name=charts_pr_error::true')
         os.chdir(start_directory)
         return
@@ -171,7 +191,7 @@ def main():
     os.chdir(args.dev_dir)
     print(f"create development pull request")
     branch_name = f"{DEV_PR_BRANCH_NAME_PREFIX}{args.version}"
-    outcome = gitutils.create_pr(branch_name,[release_info.RELEASE_INFO_FILE],gitutils.DEVELOPMENT_REPO,args.dev_pr_body)
+    outcome = gitutils.create_pr(branch_name,[release_info.RELEASE_INFO_FILE],args.target_repository,args.dev_pr_body,args.target_branch)
     if outcome == gitutils.PR_CREATED:
         print("Dev PR successfully created.")
         print(f'::set-output name=dev_pr_created::true')
@@ -179,7 +199,7 @@ def main():
         print("Dev PR not needed.")
         print(f'::set-output name=dev_pr_not_needed::true')
     else:
-        print("Dev PR errored.")
+        print("[ERROR] error creating development PR.")
         print(f'::set-output name=dev_pr_error::true')
 
     os.chdir(start_directory)
