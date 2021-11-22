@@ -1171,4 +1171,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.4.0/redhat-wildfly-1.4.0.tgz
     version: 1.4.0
+  - annotations:
+      charts.openshift.io/digest: sha256:0fc18ecec3ca14a3fe4bcd7dd097e50f34945f412a476df34a60a235f02671fc
+      charts.openshift.io/lastCertifiedTimestamp: '2021-10-26T13:47:49.146017+00:00'
+      charts.openshift.io/provider: WildFly
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2021-11-19T22:23:07.180786+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: '25.0'
+    dependencies:
+    - name: wildfly-common
+      repository: file://../wildfly-common
+      version: 1.4.1
+    description: Build and Deploy WildFly applications on OpenShift
+    digest: 0c999e8ba0987312ec5a40a148a37f8a69d3c0949a3f174ba7e5ca51fa98975f
+    icon: https://design.jboss.org/wildfly/logo/final/wildfly_logomark_256px.png
+    maintainers:
+    - email: wildfly-dev@lists.jboss.org
+      name: WildFly
+      url: https://wildfly.org
+    name: wildfly
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.5.2/redhat-wildfly-1.5.2.tgz
+    version: 1.5.2
 generated: '2021-11-18T06:58:36.453397+00:00'
