@@ -1,6 +1,6 @@
 chart:
   name: samplechart
-  shortDescription: null
+  shortDescription: update description
 publicPgpKey: null
 users:
 - githubUsername: wying3
