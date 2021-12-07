@@ -951,6 +951,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.2.0/infinispan-infinispan-0.2.0.tgz
     version: 0.2.0
+  redhat-arkady-test-samplechart:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:7eb4836e9b39d05743a44320b4b9d057269409fa0605c6c797a960221a63e214
+      charts.openshift.io/lastCertifiedTimestamp: '2021-12-07T14:41:30.222057-06:00'
+      charts.openshift.io/name: RedHat Test
+      charts.openshift.io/provider: RedHat
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2021-12-07T20:48:55.120588+00:00'
+      charts.openshift.io/supportURL: https://github.com/dperaza4dustbit/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 1-42
+    description: A Helm chart for Kubernetes
+    digest: 6823ec50ab88b1cf6970bb1ce0ee696a5d78adec5ce8e7f6640b4d8d44944fb5
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.20.0'
+    name: samplechart
+    type: application
+    urls:
+    - https://github.com/ansvu/samplechart/releases/download/samplechart-0.1.1/samplechart-0.1.1.tgz
+    version: 0.1.1
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -1197,4 +1220,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.5.2/redhat-wildfly-1.5.2.tgz
     version: 1.5.2
-generated: '2021-11-18T06:58:36.453397+00:00'
+generated: '2021-12-07T20:48:55.120588+00:00'
