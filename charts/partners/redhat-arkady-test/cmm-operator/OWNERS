@@ -1,8 +1,10 @@
 chart:
   name: cmm-operator
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: cmmtest
+publicPgpKey: null
+users:
+- githubUsername: wying3
+- githubUsername: ansvu
 vendor:
   label: redhat-arkady-test
   name: Red Hat, Inc.
