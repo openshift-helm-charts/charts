@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.0
-        chart-uri: https://nirmata.github.io/kyverno/kyverno-v2.1.2.tgz
-        digest: sha256:1ec146e47d633862cc751c6f1c5dcf97602d3efe2ee5b9fdacf872d84f70524e
+        chart-uri: /nirmata/kyverno/kyverno-v2.1.2.tgz
+        digest: sha256:8047975f9d619989c327810b3b46ff710e906617ac32dc3641a3f2542118e747
         digests:
-            chart: sha256:1ec146e47d633862cc751c6f1c5dcf97602d3efe2ee5b9fdacf872d84f70524e
-            package: 2422bb047ac9b3a322d763553c4616bf2862c9cf89d8d41083ec5df024b9525a
-        lastCertifiedTimestamp: "2021-11-02T06:39:20.934931+00:00"
+            chart: sha256:8047975f9d619989c327810b3b46ff710e906617ac32dc3641a3f2542118e747
+            package: 88adf93eee4efb4550e347787c48b912dc237e7643f164d5a40c7f9c4b3dae99
+        lastCertifiedTimestamp: "2021-12-13T14:07:40.329565+00:00"
         certifiedOpenShiftVersions: N/A
     chart:
         name: kyverno
@@ -31,7 +31,7 @@ metadata:
             email: ""
             url: https://kyverno.io/
         icon: https://github.com/kyverno/kyverno/raw/main/img/logo.png
-        apiversion: v1
+        apiversion: v2
         condition: ""
         tags: ""
         appversion: v1.5.1
@@ -48,25 +48,14 @@ results:
     reason: |-
         Image is Red Hat certified : registry.connect.redhat.com/nirmata/kyvernopre:v1.5.1
         Image is Red Hat certified : registry.connect.redhat.com/nirmata/kyverno:v1.5.1
+        Image is Red Hat certified : registry.access.redhat.com/rhel7/rhel-atomic:7.9-438
   - check: v1.0/chart-testing
     type: Mandatory
     outcome: FAIL
     reason: |-
-        Error running process: executing helm with args "install kyverno-mzxesye9wb /root/.cache/chart-verifier/_nirmata_kyverno_kyverno_v2_1_2_tgz/kyverno --namespace default --wait --values /tmp/chart-testing-893734320/values.yaml": exit status 1
+        Error running process: executing helm with args "install kyverno-mc0os4i0yc /root/.cache/chart-verifier/_nirmata_kyverno_kyverno_v2_1_2_tgz/kyverno --namespace default --wait --values /tmp/chart-testing-141851917/values.yaml": exit status 1
         ---
         Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
-  - check: v1.0/has-readme
-    type: Mandatory
-    outcome: PASS
-    reason: Chart has a README
-  - check: v1.0/contains-test
-    type: Mandatory
-    outcome: FAIL
-    reason: Chart test files do not exist
-  - check: v1.0/contains-values
-    type: Mandatory
-    outcome: PASS
-    reason: Values file exist
   - check: v1.0/helm-lint
     type: Mandatory
     outcome: PASS
@@ -75,10 +64,14 @@ results:
     type: Mandatory
     outcome: PASS
     reason: CSI objects do not exist
-  - check: v1.0/is-helm-v3
+  - check: v1.0/contains-test
     type: Mandatory
-    outcome: FAIL
-    reason: API version is not V2, used in Helm 3
+    outcome: PASS
+    reason: Chart test files exist
+  - check: v1.0/contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
   - check: v1.0/contains-values-schema
     type: Mandatory
     outcome: FAIL
@@ -91,3 +84,11 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Chart does not contain CRDs
+  - check: v1.0/has-readme
+    type: Mandatory
+    outcome: PASS
+    reason: Chart has a README
+  - check: v1.0/is-helm-v3
+    type: Mandatory
+    outcome: PASS
+    reason: API version is V2, used in Helm 3
