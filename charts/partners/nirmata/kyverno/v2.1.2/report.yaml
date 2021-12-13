@@ -7,11 +7,11 @@ metadata:
             VendorType: partner
             version: v1.0
         chart-uri: /nirmata/kyverno/kyverno-v2.1.2.tgz
-        digest: sha256:8047975f9d619989c327810b3b46ff710e906617ac32dc3641a3f2542118e747
+        digest: sha256:8675bc3f50b56ba1e6a8d21d00ece3c0a20bc3300cb294b5adbd6514238744bb
         digests:
-            chart: sha256:8047975f9d619989c327810b3b46ff710e906617ac32dc3641a3f2542118e747
-            package: 88adf93eee4efb4550e347787c48b912dc237e7643f164d5a40c7f9c4b3dae99
-        lastCertifiedTimestamp: "2021-12-13T14:07:40.329565+00:00"
+            chart: sha256:8675bc3f50b56ba1e6a8d21d00ece3c0a20bc3300cb294b5adbd6514238744bb
+            package: 70c54366966570ba786a7501da551938305f4f07f060302cb5ddbf85ab3655c1
+        lastCertifiedTimestamp: "2021-12-13T14:23:46.420255+00:00"
         certifiedOpenShiftVersions: N/A
     chart:
         name: kyverno
@@ -42,6 +42,60 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
+  - check: v1.0/contains-values-schema
+    type: Mandatory
+    outcome: PASS
+    reason: Values schema file exist
+  - check: v1.0/has-kubeversion
+    type: Mandatory
+    outcome: PASS
+    reason: Kubernetes version specified
+  - check: v1.0/helm-lint
+    type: Mandatory
+    outcome: FAIL
+    reason: |+
+        Helm lint has failed:  [ERROR] templates/: values don't meet the specifications of the schema(s) in the following chart(s):
+        kyverno:
+        - (root): nameOverride is required
+        - (root): fullnameOverride is required
+        - (root): namespace is required
+        - (root): generatecontrollerExtraResources is required
+        - initImage: tag is required
+        - initImage: pullPolicy is required
+        - config: excludeGroupRole is required
+        - config: excludeUsername is required
+        - config: webhooks is required
+        - metricsService: nodePort is required
+        - testImage: pullPolicy is required
+        - serviceMonitor: additionalLabels is required
+        - serviceMonitor: namespace is required
+        - rbac.serviceAccount: name is required
+        - service: nodePort is required
+        - image: tag is required
+
+  - check: v1.0/chart-testing
+    type: Mandatory
+    outcome: FAIL
+    reason: |-
+        Error running process: executing helm with args "install kyverno-xniqpuzad8 /root/.cache/chart-verifier/_nirmata_kyverno_kyverno_v2_1_2_tgz/kyverno --namespace default --wait --values /tmp/chart-testing-769626066/values.yaml": exit status 1
+        ---
+        Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+  - check: v1.0/has-readme
+    type: Mandatory
+    outcome: PASS
+    reason: Chart has a README
+  - check: v1.0/contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
+  - check: v1.0/not-contains-crds
+    type: Mandatory
+    outcome: PASS
+    reason: Chart does not contain CRDs
+  - check: v1.0/not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
   - check: v1.0/images-are-certified
     type: Mandatory
     outcome: PASS
@@ -49,46 +103,11 @@ results:
         Image is Red Hat certified : registry.connect.redhat.com/nirmata/kyvernopre:v1.5.1
         Image is Red Hat certified : registry.connect.redhat.com/nirmata/kyverno:v1.5.1
         Image is Red Hat certified : registry.access.redhat.com/rhel7/rhel-atomic:7.9-438
-  - check: v1.0/chart-testing
-    type: Mandatory
-    outcome: FAIL
-    reason: |-
-        Error running process: executing helm with args "install kyverno-mc0os4i0yc /root/.cache/chart-verifier/_nirmata_kyverno_kyverno_v2_1_2_tgz/kyverno --namespace default --wait --values /tmp/chart-testing-141851917/values.yaml": exit status 1
-        ---
-        Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
-  - check: v1.0/helm-lint
-    type: Mandatory
-    outcome: PASS
-    reason: Helm lint successful
-  - check: v1.0/not-contain-csi-objects
-    type: Mandatory
-    outcome: PASS
-    reason: CSI objects do not exist
-  - check: v1.0/contains-test
-    type: Mandatory
-    outcome: PASS
-    reason: Chart test files exist
-  - check: v1.0/contains-values
-    type: Mandatory
-    outcome: PASS
-    reason: Values file exist
-  - check: v1.0/contains-values-schema
-    type: Mandatory
-    outcome: FAIL
-    reason: Values schema file does not exist
-  - check: v1.0/has-kubeversion
-    type: Mandatory
-    outcome: PASS
-    reason: Kubernetes version specified
-  - check: v1.0/not-contains-crds
-    type: Mandatory
-    outcome: PASS
-    reason: Chart does not contain CRDs
-  - check: v1.0/has-readme
-    type: Mandatory
-    outcome: PASS
-    reason: Chart has a README
   - check: v1.0/is-helm-v3
     type: Mandatory
     outcome: PASS
     reason: API version is V2, used in Helm 3
+  - check: v1.0/contains-test
+    type: Mandatory
+    outcome: PASS
+    reason: Chart test files exist
