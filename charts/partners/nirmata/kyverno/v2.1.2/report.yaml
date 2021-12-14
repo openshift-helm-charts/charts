@@ -7,12 +7,12 @@ metadata:
             VendorType: partner
             version: v1.0
         chart-uri: /nirmata/kyverno/kyverno-v2.1.2.tgz
-        digest: sha256:834c6bbf1f39fdc560467389d909fac88021ce07843440660fb0c6f08a2e9b0c
+        digest: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
         digests:
-            chart: sha256:834c6bbf1f39fdc560467389d909fac88021ce07843440660fb0c6f08a2e9b0c
-            package: 975a4a97281fa79ee9f984366d324ffef0b049b0715c79e6439f58fa9e61b67f
-        lastCertifiedTimestamp: "2021-12-13T14:35:43.111228+00:00"
-        certifiedOpenShiftVersions: N/A
+            chart: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
+            package: 88247892d2f6b5f7eb5d56ed92fccf092bfd9c57f11e9750a756f9df449ee5d9
+        lastCertifiedTimestamp: "2021-12-14T05:34:57.758331+00:00"
+        certifiedOpenShiftVersions: 4.8.0
     chart:
         name: kyverno
         home: https://kyverno.io/
@@ -42,6 +42,10 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
+  - check: v1.0/not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
   - check: v1.0/contains-test
     type: Mandatory
     outcome: PASS
@@ -54,24 +58,25 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Chart does not contain CRDs
+  - check: v1.0/has-kubeversion
+    type: Mandatory
+    outcome: PASS
+    reason: Kubernetes version specified
   - check: v1.0/helm-lint
     type: Mandatory
     outcome: PASS
     reason: Helm lint successful
-  - check: v1.0/chart-testing
-    type: Mandatory
-    outcome: FAIL
-    reason: |-
-        Error running process: executing helm with args "install kyverno-2mt4sk2c8t /root/.cache/chart-verifier/_nirmata_kyverno_kyverno_v2_1_2_tgz/kyverno --namespace default --wait --values /tmp/chart-testing-989758613/values.yaml": exit status 1
-        ---
-        Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
   - check: v1.0/images-are-certified
     type: Mandatory
     outcome: PASS
     reason: |-
         Image is Red Hat certified : registry.connect.redhat.com/nirmata/kyvernopre:v1.5.1
         Image is Red Hat certified : registry.connect.redhat.com/nirmata/kyverno:v1.5.1
-        Image is Red Hat certified : registry.access.redhat.com/rhel7/rhel-atomic:7.9-438
+        Image is Red Hat certified : registry.access.redhat.com/ubi8/nginx-120:1-5.1638356804
+  - check: v1.0/chart-testing
+    type: Mandatory
+    outcome: PASS
+    reason: Chart tests have passed
   - check: v1.0/has-readme
     type: Mandatory
     outcome: PASS
@@ -84,11 +89,3 @@ results:
     type: Mandatory
     outcome: PASS
     reason: Values schema file exist
-  - check: v1.0/has-kubeversion
-    type: Mandatory
-    outcome: PASS
-    reason: Kubernetes version specified
-  - check: v1.0/not-contain-csi-objects
-    type: Mandatory
-    outcome: PASS
-    reason: CSI objects do not exist
