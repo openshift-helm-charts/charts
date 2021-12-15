@@ -1,0 +1,8 @@
+chart:
+  name: demo-helm
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: ibm-edge
+  name: Edge Redhat Partner Enablement
