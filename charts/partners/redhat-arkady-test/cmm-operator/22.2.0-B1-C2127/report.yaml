@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: ying/cmm-operator-22.2.0-B1-C2127.tgz
+        chart-uri: https://github.com/ansvu/cmm-operator-chart/releases/download/cmm-operator-22.2.0-B1-C2127/cmm-operator-22.2.0-B1-C2127.tgz
         digests:
             chart: sha256:18c95cd27c2da72b3f5b0e91e2865b13fc638a1abe511b8921c288cb49e34750
             package: 84001747694860b33b2f54fd3e1c3518821f382cce313d524e189d32d88582a9
