@@ -8,7 +8,7 @@ metadata:
             version: v1.1
         chart-uri: /charts/_build/wavefront-1.7.10.tgz
         digests:
-            chart: sha256:594cb8be9013c9dd98c89693878f35c3b632c7b7465ab83cdaa0d31c71acc57c
+            chart: sha256:663b50a03cf0adac0485f8731a1e0c8cb729b216f75ce9e43d1f09ffbe2faa1a
             package: 89f74153cbe57e617a49a16993daf1a13eef31a375fbdbb4c3e501c28d0bb25a
         lastCertifiedTimestamp: "2021-12-20T22:13:45.725332+00:00"
         testedOpenShiftVersion: "4.9"
