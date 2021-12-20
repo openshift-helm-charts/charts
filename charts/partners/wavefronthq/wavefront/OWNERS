@@ -1,0 +1,8 @@
+chart:
+  name: wavefront
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: wavefronthq
+  name: VMware
