@@ -6,10 +6,11 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: /charts/wavefront
+        chart-uri: /charts/_build/wavefront-1.7.10.tgz
         digests:
-            chart: sha256:614a5f84f075953819bd9f9ddbf85c9e3ce40d243556d97ba9e89ac2f395f7af
-        lastCertifiedTimestamp: "2021-12-20T21:17:22.418305+00:00"
+            chart: sha256:594cb8be9013c9dd98c89693878f35c3b632c7b7465ab83cdaa0d31c71acc57c
+            package: 89f74153cbe57e617a49a16993daf1a13eef31a375fbdbb4c3e501c28d0bb25a
+        lastCertifiedTimestamp: "2021-12-20T22:13:45.725332+00:00"
         testedOpenShiftVersion: "4.9"
         supportedOpenShiftVersions: '>=4.6'
     chart:
@@ -68,6 +69,10 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
     - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
@@ -76,18 +81,34 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Values schema file exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
     - check: v1.0/images-are-certified
       type: Mandatory
       outcome: PASS
@@ -99,23 +120,3 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
