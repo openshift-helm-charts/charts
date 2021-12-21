@@ -6,18 +6,18 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: https://github.com/ansvu/cmm-operator-chart/releases/download/cmm-operator-22.2.0-B1-C2127/cmm-operator-22.2.0-B1-C2127.tgz
+        chart-uri: https://github.com/ansvu/cmm-operator-chart/releases/download/cmm-operator-22.2.0-B1-C2357/cmm-operator-22.2.0-B1-C2357.tgz
         digests:
-            chart: sha256:18c95cd27c2da72b3f5b0e91e2865b13fc638a1abe511b8921c288cb49e34750
-            package: 84001747694860b33b2f54fd3e1c3518821f382cce313d524e189d32d88582a9
-        lastCertifiedTimestamp: "2021-12-16T11:44:24.803663-06:00"
-        testedOpenShiftVersion: "4.8"
-        supportedOpenShiftVersions: "4.8"
+            chart: sha256:f7a7c27629022d0976e3eb7c446a79330fcf71b1ea1baafa8865a453d099f79f
+            package: fdd8f96b137a00f26f39f43d3e6c3c8d8bf48f61aa0f80275752d0b97f929b33
+        lastCertifiedTimestamp: "2021-12-21T08:07:55.70886-06:00"
+        testedOpenShiftVersion: "4.9"
+        supportedOpenShiftVersions: 4.7 - 4.9
     chart:
         name: cmm-operator
         home: ""
         sources: []
-        version: 22.2.0-B1-C2127
+        version: 22.2.0-B1-C2357
         description: A Helm chart for CMM in Kubernetes using operators
         keywords: []
         maintainers: []
@@ -32,11 +32,15 @@ metadata:
             charts.openshift.io/name: Nokia CMM
             charts.openshift.io/provider: Nokia
             charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
-        kubeversion: "1.21"
+        kubeversion: 1.20 - 1.22
         dependencies: []
         type: application
     chart-overrides: ""
 results:
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
@@ -53,6 +57,18 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Values schema file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
     - check: v1.1/has-kubeversion
       type: Mandatory
       outcome: PASS
@@ -64,24 +80,8 @@ results:
     - check: v1.0/images-are-certified
       type: Mandatory
       outcome: FAIL
-      reason: 'Failed to certify images : Failed to get images, error running helm template : chart requires kubeVersion: 1.21 which is incompatible with Kubernetes v1.20.0'
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
+      reason: 'Image is not Red Hat certified : quay.io/rhcert/cmm-operator:CMM22.2.0_B1_C2056 : No images found for Registry/Repository: quay.io/rhcert/cmm-operator'
     - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
