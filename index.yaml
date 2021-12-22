@@ -1275,4 +1275,50 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.7.10/wavefronthq-wavefront-1.7.10.tgz
     version: 1.7.10
-generated: '2021-12-20T23:12:23.936274+00:00'
+  - annotations:
+      charts.openshift.io/digest: sha256:9abe8f186f580e207339c9d4b0b91aa4d0fc6c74eb7d2179a1bb7fcde3a3305a
+      charts.openshift.io/lastCertifiedTimestamp: '2021-12-22T18:22:43.246542+00:00'
+      charts.openshift.io/provider: VMware
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2021-12-22T18:31:58.201736+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: 1.7.5
+    dependencies:
+    - condition: kubeStateMetrics.enabled
+      name: kube-state-metrics
+      repository: https://charts.helm.sh/stable
+      version: ^2.2.1
+    description: Wavefront Collector for Kubernetes
+    digest: e7cd53c0fee52a945be756c99a76a0eaa42c5b167d39a9a55cd0f4cd1f2f2cdd
+    home: https://www.wavefront.com
+    keywords:
+    - metric
+    - monitoring
+    - observability
+    - alerting
+    kubeVersion: '>= 1.19'
+    maintainers:
+    - email: akodali@vmware.com
+      name: akodali18
+    - email: jcornish@vmware.com
+      name: johncornish
+    - email: jgee@vmware.com
+      name: josephgee
+    - email: shaoh@vmware.com
+      name: helen-shao
+    - email: matthewco@vmware.com
+      name: mceldeen
+    - email: mamichael@vmware.com
+      name: mmichael
+    - email: pselvaganesa@vmware.com
+      name: priyaselvaganesan
+    name: wavefront
+    sources:
+    - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
+    - https://github.com/wavefrontHQ/wavefront-proxy
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.7.11/wavefronthq-wavefront-1.7.11.tgz
+    version: 1.7.11
+generated: '2021-12-22T18:31:58.201736+00:00'
