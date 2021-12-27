@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-red
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: node-red-app
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: node-red-app
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ .Values.serviceaccount }}    
+      # securityContext:
+        # fsGroup: 1000
+      containers:
+      - name: node-red
+        image: {{ .Values.image }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 1880
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 1880
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 1880
+          initialDelaySeconds: 30
+          failureThreshold: 5
+          periodSeconds: 30
+          timeoutSeconds: 5
+        volumeMounts:
+          - mountPath: /data
+            name: data
+          - mountPath: /data/usr/conf
+            name: config-volume
+        command:
+          - /bin/bash
+          - '-c'
+          - |
+          
+            if [ -f "/data/package.json" ]; then echo "Installing Packages....." && cd /data/  && npm install && echo "Installed...."; fi
+                    
+            cd /usr/src/node-red/ && npm start -- --settings /data/usr/conf/settings.js
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: node-red-pvc
+        - configMap:
+            name: settings-configmap
+          name: config-volume
+
+
+

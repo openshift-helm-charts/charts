@@ -1,0 +1,17 @@
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: node-red-pvc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: node-red-app
+spec:
+  storageClassName: {{ .Values.persistencevolume.storageclass }}
+  accessModes: 
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.persistencevolume.size | quote }}
+
+

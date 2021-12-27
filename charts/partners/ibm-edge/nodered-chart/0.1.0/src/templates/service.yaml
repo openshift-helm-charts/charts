@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: node-red-app
+spec:
+  selector:
+      app: node-red-app
+  type: {{ .Values.service.type }}
+  ports:
+    - name: 1880-tcp
+      protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetport }}
