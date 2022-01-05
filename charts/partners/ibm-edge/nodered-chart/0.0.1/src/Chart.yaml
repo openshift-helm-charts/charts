@@ -1,5 +1,8 @@
 annotations:
+  charts.openshift.io/archs: x86_64
   charts.openshift.io/name: Node Red Chart
+  charts.openshift.io/provider: IBM-Edge
+  charts.openshift.io/supportURL: https://github.com/rhm-samples/node-red-operator/issues
 
 apiVersion: v2
 name: nodered-chart

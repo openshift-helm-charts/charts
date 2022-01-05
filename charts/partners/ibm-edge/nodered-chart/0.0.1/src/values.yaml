@@ -8,9 +8,9 @@ imagePullSecrets: []
 serviceAccount:
   create: true
   annotations: {}
-  name: nodered-operator
+  name: nodered-chart
 
-serviceaccount: nodered-operator
+serviceaccount: nodered-chart
 podSecurityContext: {}
   # fsGroup: 2000
 

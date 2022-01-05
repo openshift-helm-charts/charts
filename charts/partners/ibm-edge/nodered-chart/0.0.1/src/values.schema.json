@@ -16,7 +16,7 @@
       },
       "name": "node-red-serviceaccount"
     },
-    "serviceaccount": "nodered-operator",
+    "serviceaccount": "nodered-chart",
     "podSecurityContext": {
     },
     "securityContext": {
