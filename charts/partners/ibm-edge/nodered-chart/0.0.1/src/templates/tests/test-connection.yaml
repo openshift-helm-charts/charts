@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['"node-red-chart":{{ .Values.service.port }}']
+      args: ['"nodered-chart":{{ .Values.service.port }}']
   restartPolicy: Never
