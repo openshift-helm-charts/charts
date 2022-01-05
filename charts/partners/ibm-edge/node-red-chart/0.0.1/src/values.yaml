@@ -1,0 +1,78 @@
+
+############NODERED###############
+replicas: 1
+
+image: registry.connect.redhat.com/ibm-edge/node-red:v0.0.3
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: node-red-operator
+
+serviceaccount: node-red-operator
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: null
+  name: node-red-svc
+  targetport: 1880
+  port: 1880
+
+resources: {}
+
+route: 
+ enabled: true
+ path: node-red
+ targetport: 1880-tcp
+
+persistencevolume:
+  enabled:  true
+  storageclass: ibmc-block-bronze
+  size: 20Gi
+
+adminpassword: $2a$10$CKiupJiSGOl9pai3aM/7i.Y9PkKZ9ltjlo9AXKeZM4SkT3QtIqQO6
+secret_credentials: cGFzc3cwcmQK
+secretkey: c2VjcmV0
+
+
+
+#############NODERED-BACKUP#################
+
+nodered_backup:
+  ibm_s_3:
+    api_key: null
+    bucket_name: null
+    endpoint: null
+    auth_endpoint: null
+    resource_crn: null
+  
+  backup:
+    schedule: "0 8 * * *"
+
+  image: registry.connect.redhat.com/ibm-edge/node-red-backup-restore:v0.0.1
+
+
+
+###############NODERED_RESTORE###################
+
+nodered_restore:
+  ibm_s_3:
+    api_key: null
+    bucket_name: null
+    endpoint: null
+    auth_endpoint: null
+    resource_crn: null
+  
+  restore_file_name: null
+
+  image: registry.connect.redhat.com/ibm-edge/node-red-backup-restore:v0.0.1
