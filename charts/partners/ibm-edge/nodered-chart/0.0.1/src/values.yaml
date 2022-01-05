@@ -8,9 +8,9 @@ imagePullSecrets: []
 serviceAccount:
   create: true
   annotations: {}
-  name: node-red-operator
+  name: nodered-operator
 
-serviceaccount: node-red-operator
+serviceaccount: nodered-operator
 podSecurityContext: {}
   # fsGroup: 2000
 

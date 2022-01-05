@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: busybox
+      image: registry.connect.redhat.com/ibm-edge/node-red:v0.0.3
       command: ['wget']
       args: ['"nodered-chart":{{ .Values.service.port }}']
   restartPolicy: Never
