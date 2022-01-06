@@ -1,8 +1,9 @@
 chart:
   name: ext4
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
 vendor:
   label: atiwary-containers
   name: Red Hat
