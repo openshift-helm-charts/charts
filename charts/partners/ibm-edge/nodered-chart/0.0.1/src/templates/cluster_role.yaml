@@ -12,3 +12,19 @@ rules:
   - anyuid
   verbs:
   - use
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - clusterrolebindings
+  - roles
+  - rolebindings
+  verbs:
+  - get
+  - create
+  - delete
+  - bind
+  - escalate
+  - list
+  - watch
+  - patch
