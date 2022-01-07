@@ -5,6 +5,22 @@ metadata:
   #namespace: {{ .Release.namespace }}
 rules:
 - apiGroups:
+  - security.openshift.io
+  resources:
+  - securitycontextconstraints
+  resourceNames:
+  - anyuid
+  verbs:
+  - use
+  - get
+  - create
+  - delete
+  - bind
+  - escalate
+  - list
+  - watch
+  - patch
+- apiGroups:
   - rbac.authorization.k8s.io
   resources:
   - clusterroles
@@ -20,11 +36,3 @@ rules:
   - list
   - watch
   - patch
-# - apiGroups:
-#   - security.openshift.io
-#   resources:
-#   - securitycontextconstraints
-#   resourceNames:
-#   - anyuid
-#   verbs:
-#   - use
