@@ -20,11 +20,11 @@ rules:
   - list
   - watch
   - patch
-- apiGroups:
-  - security.openshift.io
-  resources:
-  - securitycontextconstraints
-  resourceNames:
-  - anyuid
-  verbs:
-  - use
+# - apiGroups:
+#   - security.openshift.io
+#   resources:
+#   - securitycontextconstraints
+#   resourceNames:
+#   - anyuid
+#   verbs:
+#   - use
