@@ -1,0 +1,8 @@
+chart:
+  name: cc-ubi8-hw
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: cloudcastles
+  name: Cloud Castles
