@@ -1,8 +1,9 @@
 chart:
   name: trrtr
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: vcvf
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
 vendor:
   label: swatsolutions
   name: SWAT Solutions
