@@ -66,8 +66,8 @@ You can submit chart related changes in three methods:
 1. Submit a chart without Chart Verification Report
 
    - Chart as a tarball
-      - must be created using ```helm package```
-      - name is ```<chart-name>-<chart-version>.tgz```
+      - name must be ``<chart-name>-<chart-version>.tgz``.
+      - recommend using ``helm package``.
    - Chart in a directory
 
 2. Submit a Chart Verification Report without the Chart
