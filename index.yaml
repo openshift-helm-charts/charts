@@ -368,7 +368,7 @@ entries:
     name: nodered-chart
     type: application
     urls:
-    - https://github.com/rhm-samples/edge-helm-charts/blob/master/nodered-chart-0.0.2.tgz
+    - https://github.com/rhm-samples/edge-helm-charts/blob/master/nodered-chart-0.0.2.tgz?raw=true
     version: 0.0.2
   ibm-ibm-object-storage-plugin:
   - annotations:
