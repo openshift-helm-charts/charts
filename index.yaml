@@ -328,28 +328,6 @@ entries:
   ibm-edge-nodered-chart:
   - annotations:
       charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:b652b9b97a00c12c2998c690d54b2b974a84093dd3b21d1dfe35fb72eca4c583
-      charts.openshift.io/lastCertifiedTimestamp: '2022-01-11T11:53:30.78766+00:00'
-      charts.openshift.io/name: Node Red Chart
-      charts.openshift.io/provider: IBM-Edge
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-01-11T15:04:50.631921+00:00'
-      charts.openshift.io/supportURL: https://github.com/rhm-samples/node-red-operator/issues
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
-      charts.openshift.io/testedOpenShiftVersion: '4.7'
-    apiVersion: v2
-    appVersion: 1.16.0
-    description: A Helm chart for NodeRed.
-    digest: 8bc2576c5c07648ea377e68cbc5151e3c7799d1563256ebe571772e86e3e3746
-    icon: https://raw.githubusercontent.com/rhm-samples/node-red-operator/node-red-logo/_images/nodered-logo.png
-    kubeVersion: '>=1.18.0'
-    name: nodered-chart
-    type: application
-    urls:
-    - https://github.com/rhm-samples/edge-helm-charts/blob/master/nodered-chart-0.0.1.tgz?raw=true
-    version: 0.0.1
-  - annotations:
-      charts.openshift.io/archs: x86_64
       charts.openshift.io/digest: sha256:c37f3a107d1de21e42f59438fbb7418c3dcc16b9c9145b919a5b2b093d473f7f
       charts.openshift.io/lastCertifiedTimestamp: '2022-01-12T07:08:08.731538+00:00'
       charts.openshift.io/name: Node Red Chart
