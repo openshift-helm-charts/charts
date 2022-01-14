@@ -4,6 +4,7 @@ chart:
 publicPgpKey: null
 users:
 - githubUsername: rhm-samples
+- githubUsername: demo123
 vendor:
   label: ibm-edge
   name: Edge Redhat Partner Enablement
