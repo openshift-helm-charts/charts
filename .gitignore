@@ -4,4 +4,3 @@ __pycache__
 sanity-check.py
 .cr-release-packages/*.tgz
 oc
-.idea/
