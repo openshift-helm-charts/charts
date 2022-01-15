@@ -1,8 +1,9 @@
 chart:
   name: streebo-chatbot
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Helm chart for Streebo Chatbot Builder.
+publicPgpKey: null
+users:
+- githubUsername: abrarstreebo
 vendor:
   label: streebo
   name: Streebo Inc.
