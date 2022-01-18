@@ -1,0 +1,8 @@
+chart:
+  name: tyuytu
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: redhat-sp
+  name: Red Hat Inc.
