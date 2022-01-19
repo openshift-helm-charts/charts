@@ -183,10 +183,13 @@ spec:
               value: {{ .Values.broker.forwardingEnabled | quote | upper }}
             {{- end }}
 
-
             # db
             - name: {{ .Values.broker.envPrefix }}MONGO_HOST
+              {{- if .Values.mongo.enabled }}
+              value: {{ include "orion.fullname" . }}-mongo:27017
+              {{- else }}
               value: {{ join "," .Values.broker.db.hosts }}
+              {{- end }}
             - name: {{ .Values.broker.envPrefix }}MONGO_DB
               value: {{ .Values.broker.db.name }}
             {{ $numHosts := len .Values.broker.db.hosts }}

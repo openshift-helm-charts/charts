@@ -279,3 +279,18 @@ broker:
     # statSemWaitEnabled: true
     # statTimingEnabled: true
     # statNotifQueueEnabled: true
+
+## Configuration for embedding mongodb into the chart. Do not use this in production.
+mongo:
+  # -- should mongodb be enabled
+  enabled: true
+  ## configuration for the mongo image to be used
+  image:
+    # -- pull policy to be used for mongo
+    pullPolicy: IfNotPresent
+    # -- mongo image name
+    repository: quay.io/opencloudio/ibm-mongodb
+    # -- version of mongo
+    tag: 4.0.24
+  # -- port to make mongo accessible at
+  port: 27017
