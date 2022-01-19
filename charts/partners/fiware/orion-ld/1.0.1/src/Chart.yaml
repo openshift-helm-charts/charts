@@ -2,6 +2,7 @@ apiVersion: v2
 name: orion-ld
 version: 1.0.1
 appVersion: 1.0.1
+kubeVersion: '>= 1.19.0-0'
 home: https://github.com/FIWARE/context.Orion-LD
 description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
