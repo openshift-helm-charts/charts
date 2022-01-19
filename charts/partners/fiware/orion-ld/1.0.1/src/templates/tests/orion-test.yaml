@@ -10,5 +10,5 @@ spec:
   containers:
     - name: curl
       image: quay.io/opencloudio/curl:4.2.0-build.8
-      args: [ '{{ include "orion.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local' ]
+      args: [ '{{ include "orion.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.service.port }}/version' ]
   restartPolicy: Never
