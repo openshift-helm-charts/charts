@@ -1,4 +1,4 @@
-# orion
+# orion-ld
 
 ![Version: 1.0.1](https://img.shields.io/badge/Version-1.0.1-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
 
@@ -15,6 +15,10 @@ A Helm chart for running the fiware orion-ld context broker on kubernetes.
 ## Source Code
 
 * <https://github.com/FIWARE/context.Orion-LD>
+
+## Requirements
+
+Kubernetes: `>= 1.19`
 
 ## Values
 
@@ -69,6 +73,11 @@ A Helm chart for running the fiware orion-ld context broker on kubernetes.
 | ingress.enabled | bool | `false` | should there be an ingress to connect orion with the public internet |
 | ingress.hosts | list | `[]` |  |
 | ingress.tls | list | `[]` | provide a hosts and the paths that should be available - host: localhost paths: - / -- configure the ingress' tls |
+| mongo.enabled | bool | `true` | should mongodb be enabled |
+| mongo.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used for mongo |
+| mongo.image.repository | string | `"quay.io/opencloudio/ibm-mongodb"` | mongo image name |
+| mongo.image.tag | string | `"4.0.24"` | version of mongo |
+| mongo.port | int | `27017` | port to make mongo accessible at |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | route.annotations | object | `{}` | annotations to be added to the route |
 | route.enabled | bool | `false` |  |

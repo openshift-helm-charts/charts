@@ -51,13 +51,19 @@ spec:
           livenessProbe:
             exec:
               command:
-                - "mongo --quiet 127.0.0.1/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1"
+                - bash
+                - -ec
+                - |
+                  mongo --eval 'db.runCommand("ping").ok' 127.0.0.1:27017/test && echo 0 || echo 1
             initialDelaySeconds: 5
             periodSeconds: 5
           readinessProbe:
             exec:
               command:
-                - "mongo --quiet 127.0.0.1/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0: 2)' && echo 0 || echo 1"
+                - bash
+                - -ec
+                - |
+                  mongo --eval 'db.runCommand("ping").ok' 127.0.0.1:27017/test && echo 0 || echo 1
             initialDelaySeconds: 5
             periodSeconds: 5
 {{- end }}
