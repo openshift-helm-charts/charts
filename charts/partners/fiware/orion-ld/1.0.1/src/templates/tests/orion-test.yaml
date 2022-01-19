@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-orion-test"
+  labels:
+    {{ include "orion.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+  spec:
+    name: curl
+      image: radial/busyboxplus:curl
+      command: [ 'curl' ]
+      args: [ '{{ include "orion.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local' ]
+      restartPolicy: Never
