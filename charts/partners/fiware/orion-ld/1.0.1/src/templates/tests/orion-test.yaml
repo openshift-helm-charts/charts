@@ -7,8 +7,9 @@ metadata:
   annotations:
     "helm.sh/hook": test
   spec:
-    name: curl
-      image: radial/busyboxplus:curl
-      command: [ 'curl' ]
-      args: [ '{{ include "orion.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local' ]
-      restartPolicy: Never
+    containers:
+      - name: curl
+        image: radial/busyboxplus:curl
+        command: [ 'curl' ]
+        args: [ '{{ include "orion.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local' ]
+    restartPolicy: Never
