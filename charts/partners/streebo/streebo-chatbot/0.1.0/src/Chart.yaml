@@ -2,6 +2,8 @@ apiVersion: v2
 name: streebo-chatbot
 description: A Helm chart for Kubernetes
 kubeVersion: '>=1.20.0'
+annotations:
+  charts.openshift.io/name: streebo-chatbot
 
 # A chart can be either an 'application' or a 'library' chart.
 #
