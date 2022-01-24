@@ -1,0 +1,13 @@
+{{- if not .Values.openshift.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.components.mongodbPv.claimName }}
+spec:
+  storageClassName: {{ .Values.components.mongodbPv.storageClassName }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.components.mongodbPv.storage }}
+{{- end }}

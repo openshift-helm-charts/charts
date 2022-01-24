@@ -1,0 +1,6 @@
+{{- if not .Values.openshift.enabled -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx-ingress
+{{- end }}

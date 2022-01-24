@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.cibackend }}
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ .Values.components.cibackend.label }}
+  ports:
+    - port: {{ .Values.components.cibackend.port }}
+      targetPort: {{ .Values.components.cibackend.port }}
+  

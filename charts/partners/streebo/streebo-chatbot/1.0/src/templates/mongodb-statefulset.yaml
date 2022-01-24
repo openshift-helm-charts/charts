@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.components.mongodb.label }}
+spec:
+  selector:
+    matchLabels:
+      component: {{ .Values.components.mongodb.label }}
+  serviceName: {{ .Values.services.mongodb }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.components.mongodb.label }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.connectRegistry }}
+      terminationGracePeriodSeconds: 30
+      {{- if not .Values.openshift.enabled -}}
+      volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.components.mongodbPv.claimName }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.components.mongodb.label }}
+          image: {{ .Values.components.mongodb.image }}
+          ports:
+            - containerPort: {{ .Values.components.mongodb.port }}
+          {{- if not .Values.openshift.enabled -}}
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /var/lib/mongo
+              subPath: db
+            - name: mongodb-data
+              mountPath: /data/chatbot-init
+              subPath: init
+          {{- end }}

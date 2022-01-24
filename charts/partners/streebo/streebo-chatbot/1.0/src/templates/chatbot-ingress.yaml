@@ -1,0 +1,101 @@
+{{- if not .Values.openshift.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chatbot-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+    - hosts:
+        - {{ .Values.service.hostname }}
+      secretName: {{ .Values.service.certificateName }}
+  rules:
+    - host: {{ .Values.service.hostname }}
+      http:
+        paths:
+          - path: /apps
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.hclleap }}
+                port:
+                  number: 9080
+          - path: /web
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.mfRestUI }}
+                port:
+                  number: 9080
+          - path: /MFRestService
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.mfRestUI }}
+                port:
+                  number: 9080
+          - path: /facebook
+            pathType: Exact
+            backend:
+              service:
+                name: {{ .Values.services.cilayers }}
+                port:
+                  number: {{ .Values.components.cilayers.port }}
+          - path: /teams
+            pathType: Exact
+            backend:
+              service:
+                name: {{ .Values.services.cilayers }}
+                port:
+                  number: {{ .Values.components.cilayers.port }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.ciservices }}
+                port:
+                  number: {{ .Values.components.ciservices.port }}
+          - path: /console
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.mfRestUIadmin }}
+                port:
+                  number: 9990
+          - path: /keycloak
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.mfRestUIadmin }}
+                port:
+                  number: 9990
+          - path: /management
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.mfRestUIadmin }}
+                port:
+                  number: 9990
+          - path: /FEBForms
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.mfRestUI }}
+                port:
+                  number: 9080
+          - path: /analytics
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.cibackend }}
+                port:
+                  number: {{ .Values.components.cibackend.port }}
+          - path: /botscriptConfig
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.services.cibackend }}
+                port:
+                  number: {{ .Values.components.cibackend.port }}
+{{- end }}

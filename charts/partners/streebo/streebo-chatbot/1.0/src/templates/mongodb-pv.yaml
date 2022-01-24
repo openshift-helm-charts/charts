@@ -1,0 +1,17 @@
+{{- if not .Values.openshift.enabled -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.components.mongodbPv.name }}
+  labels:
+    type: local
+spec:
+  storageClassName: {{ .Values.components.mongodbPv.storageClassName }}
+  capacity: 
+    storage: {{ .Values.components.mongodbPv.storage }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: {{ .Values.components.mongodbPv.persistentVolumeReclaimPolicy }}
+  hostPath:
+    path: {{ .Values.components.mongodbPv.volumeHostPath }}
+{{- end }}

@@ -1,0 +1,13 @@
+{{- if not .Values.openshift.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.components.resourcesPv.claimName }}
+spec:
+  storageClassName: {{ .Values.components.resourcesPv.storageClassName }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.components.resourcesPv.storage }}
+{{- end }}

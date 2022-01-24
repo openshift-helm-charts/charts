@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.components.redis.label }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.components.redis.label }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.registrySecret }}
+      containers:
+        - name: {{ .Values.components.redis.label }}
+          image: {{ .Values.components.redis.image }}
+          ports:
+            - containerPort: {{ .Values.components.redis.port }}
+      

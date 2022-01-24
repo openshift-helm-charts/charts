@@ -1,0 +1,17 @@
+{{- if not .Values.openshift.enabled -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.components.resourcesPv.name }}
+  labels:
+    type: local
+spec:
+  storageClassName: {{ .Values.components.resourcesPv.storageClassName }}
+  capacity:
+    storage: {{ .Values.components.resourcesPv.storage }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: {{ .Values.components.resourcesPv.persistentVolumeReclaimPolicy }}
+  hostPath:
+    path: {{ .Values.components.resourcesPv.volumeHostPath }}
+{{- end }}

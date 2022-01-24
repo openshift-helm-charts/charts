@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ci-backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.components.cibackend.label }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.components.cibackend.label }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.connectRegistry }}
+        # - name: {{ .Values.imagePullSecrets.registrySecret }}
+      containers:
+        - name: {{ .Values.components.cibackend.label }}
+          image: {{ .Values.components.cibackend.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.components.cibackend.port }}
+          env:
+            {{- range .Values.env.cibackend }}
+              - name: {{ .name }}
+                value: {{ .value | quote }}
+            {{- end }}
+          {{- if not .Values.openshift.enabled }}
+          volumeMounts:
+            - name: resources-data
+              mountPath: /opt/app-root/src/GTrans_JSON
+              subPath: GTrans_JSON
+            - name: resources-data
+              mountPath: /opt/app-root/src/chatbotpdf
+              subPath: chatbotpdf
+          {{- end }}
+      {{- if not .Values.openshift.enabled }}
+      volumes:
+        - name: resources-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.components.resourcesPv.claimName }}
+      {{- end }}
