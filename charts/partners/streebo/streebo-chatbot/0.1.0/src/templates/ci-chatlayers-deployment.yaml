@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ci-chatlayers-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.components.cilayers.label }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.components.cilayers.label }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.connectRegistry }}
+      containers:
+        - name: {{ .Values.components.cilayers.label }}
+          image: {{ .Values.components.cilayers.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.components.cilayers.port }}
+          env:
+            {{- range .Values.env.cilayers }}
+              - name: {{ .name }}
+                value: {{ .value | quote }}
+            {{- end }}

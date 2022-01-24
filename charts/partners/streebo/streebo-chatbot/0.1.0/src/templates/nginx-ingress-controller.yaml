@@ -1,0 +1,15 @@
+{{- if not .Values.openshift.enabled -}}
+apiVersion: k8s.nginx.org/v1alpha1
+kind: NginxIngressController
+metadata:
+  name: nginx-ingress-controller
+  namespace: nginx-ingress
+spec:
+  type: deployment
+  image:
+    repository: {{ .Values.components.NginxIngressController.repository }}
+    tag: {{ .Values.components.NginxIngressController.tag }}
+    pullPolicy: Always
+  serviceType: LoadBalancer
+  nginxPlus: False
+{{- end }}

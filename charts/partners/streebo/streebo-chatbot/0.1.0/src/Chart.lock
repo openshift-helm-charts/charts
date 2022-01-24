@@ -1,0 +1,18 @@
+dependencies:
+- name: db2
+  repository: file://../db2
+  version: 0.1.0
+- name: hcl-leap
+  repository: file://../hcl-leap
+  version: 0.1.0
+- name: mf-liberty
+  repository: file://../mf-liberty
+  version: 0.1.0
+- name: mysql
+  repository: file://../mysql
+  version: 0.1.0
+- name: mf-jboss
+  repository: file://../mf-jboss
+  version: 0.1.0
+digest: sha256:a6256c72bbeba232116f8613131a6ba1bc4969f1ca71ac2c06372a844473790a
+generated: "2022-01-07T17:36:54.8119024+05:30"

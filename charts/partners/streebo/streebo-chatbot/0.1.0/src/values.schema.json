@@ -1,0 +1,426 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": [
+        "imagePullSecrets",
+        "components",
+        "db2",
+        "leap",
+        "liberty",
+        "mysql",
+        "jboss",
+        "service",
+        "services",
+        "env"
+    ],
+    "properties": {
+        "imagePullSecrets": {
+            "type": "object",
+            "required": [
+                "registrySecret",
+                "connectRegistry"
+            ],
+            "properties": {
+                "registrySecret": {
+                    "type": "string"
+                },
+                "connectRegistry": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true
+        },
+        "components": {
+            "type": "object",
+            "required": [
+                "redis",
+                "mongodb",
+                "cibackend",
+                "ciservices",
+                "cilayers",
+                "mongodbPv",
+                "resourcesPv",
+                "NginxIngressController"
+            ],
+            "properties": {
+                "redis": {
+                    "type": "object",
+                    "required": [
+                        "image",
+                        "port",
+                        "label"
+                    ],
+                    "properties": {
+                        "image": {
+                            "type": "string"
+                        },
+                        "port": {
+                            "type": "integer"
+                        },
+                        "label": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "mongodb": {
+                    "type": "object",
+                    "required": [
+                        "image",
+                        "port",
+                        "label"
+                    ],
+                    "properties": {
+                        "image": {
+                            "type": "string"
+                        },
+                        "port": {
+                            "type": "integer"
+                        },
+                        "label": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "cibackend": {
+                    "type": "object",
+                    "required": [
+                        "image",
+                        "port",
+                        "label"
+                    ],
+                    "properties": {
+                        "image": {
+                            "type": "string"
+                        },
+                        "port": {
+                            "type": "integer"
+                        },
+                        "label": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "ciservices": {
+                    "type": "object",
+                    "required": [
+                        "image",
+                        "port",
+                        "label"
+                    ],
+                    "properties": {
+                        "image": {
+                            "type": "string"
+                        },
+                        "port": {
+                            "type": "integer"
+                        },
+                        "label": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "cilayers": {
+                    "type": "object",
+                    "required": [
+                        "image",
+                        "port",
+                        "label"
+                    ],
+                    "properties": {
+                        "image": {
+                            "type": "string"
+                        },
+                        "port": {
+                            "type": "integer"
+                        },
+                        "label": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "mongodbPv": {
+                    "type": "object",
+                    "required": [
+                        "name",
+                        "claimName",
+                        "volumeHostPath",
+                        "storage",
+                        "storageClassName",
+                        "persistentVolumeReclaimPolicy"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "claimName": {
+                            "type": "string"
+                        },
+                        "volumeHostPath": {
+                            "type": "string"
+                        },
+                        "storage": {
+                            "type": "string"
+                        },
+                        "storageClassName": {
+                            "type": "string"
+                        },
+                        "persistentVolumeReclaimPolicy": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "resourcesPv": {
+                    "type": "object",
+                    "required": [
+                        "name",
+                        "claimName",
+                        "volumeHostPath",
+                        "storage",
+                        "storageClassName",
+                        "persistentVolumeReclaimPolicy"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "claimName": {
+                            "type": "string"
+                        },
+                        "volumeHostPath": {
+                            "type": "string"
+                        },
+                        "storage": {
+                            "type": "string"
+                        },
+                        "storageClassName": {
+                            "type": "string"
+                        },
+                        "persistentVolumeReclaimPolicy": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "NginxIngressController": {
+                    "type": "object",
+                    "required": [
+                        "repository",
+                        "tag"
+                    ],
+                    "properties": {
+                        "repository": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        },
+        "db2": {
+            "type": "object",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true
+        },
+        "leap": {
+            "type": "object",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true
+        },
+        "liberty": {
+            "type": "object",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true
+        },
+        "mysql": {
+            "type": "object",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true
+        },
+        "jboss": {
+            "type": "object",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true
+        },
+        "service": {
+            "type": "object",
+            "required": [
+                "hostname"
+            ],
+            "properties": {
+                "hostname": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true
+        },
+        "services": {
+            "type": "object",
+            "required": [
+                "redis",
+                "mongodb",
+                "cibackend",
+                "ciservices",
+                "cilayers",
+                "mfRestUI",
+                "mfRestUIadmin",
+                "hclleap"
+            ],
+            "properties": {
+                "redis": {
+                    "type": "string"
+                },
+                "mongodb": {
+                    "type": "string"
+                },
+                "cibackend": {
+                    "type": "string"
+                },
+                "ciservices": {
+                    "type": "string"
+                },
+                "cilayers": {
+                    "type": "string"
+                },
+                "mfRestUI": {
+                    "type": "string"
+                },
+                "mfRestUIadmin": {
+                    "type": "string"
+                },
+                "hclleap": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true
+        },
+        "env": {
+            "type": "object",
+            "required": [
+                "cibackend",
+                "ciservices",
+                "cilayers"
+            ],
+            "properties": {
+                "cibackend": {
+                    "type": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "required": [
+                                    "name",
+                                    "value"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        ]
+                    }
+                },
+                "ciservices": {
+                    "type": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "required": [
+                                    "name",
+                                    "value"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        ]
+                    }
+                },
+                "cilayers": {
+                    "type": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "required": [
+                                    "name",
+                                    "value"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}

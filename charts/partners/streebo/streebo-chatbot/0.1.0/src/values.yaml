@@ -1,0 +1,155 @@
+imagePullSecrets:
+  registrySecret: rh-registry-secret
+  connectRegistry: rh-connect-registry-secret
+
+imagePullSecretsConfig:
+  registrySecret:
+  connectRegistry:
+
+components:
+  redis:
+    image: registry.redhat.io/rhscl/redis-5-rhel7:latest
+    port: 6379
+    label: redis
+
+  mongodb:
+    image: registry.connect.redhat.com/streebo/ci-mongodb:4.4.1
+    port: 27017
+    label: mongodb
+
+  cibackend:
+    image: registry.connect.redhat.com/streebo/ci-backend:9.0-decoupling
+    port: 4000
+    label: ci-backend
+
+  ciservices:
+    image: registry.connect.redhat.com/streebo/ci-services:9.0-decoupling
+    port: 3000
+    label: ci-services
+
+  cilayers:
+    image: registry.connect.redhat.com/streebo/ci-layers:latest
+    port: 3008
+    label: ci-chatlayers
+
+  mongodbPv:
+    name: mongodb-pv
+    claimName: mongodb-pv-claim
+    volumeHostPath: /data/mongodb
+    storage: 100Mi
+    storageClassName: standard
+    persistentVolumeReclaimPolicy: Retain
+
+  resourcesPv:
+    name: resources-pv
+    claimName: resources-pv-claim
+    volumeHostPath: /data/resources
+    storage: 1Gi
+    storageClassName: standard
+    persistentVolumeReclaimPolicy: Retain
+
+  NginxIngressController:
+    repository: nginx/nginx-ingress
+    tag: 2.0.0-ubi
+
+db2:
+  enabled: true
+
+leap:
+  enabled: false
+
+liberty:
+  enabled: false
+
+mysql:
+  enabled: false
+
+jboss:
+  enabled: true
+
+openshift:
+  enabled: true
+
+service:
+  hostname: ""
+  protocol: "http"
+  certificateName: ""
+
+services:
+  redis: redis-svc
+  mongodb: mongodb-svc
+  cibackend: ci-backend-svc
+  ciservices: ci-services-svc
+  cilayers: ci-chatlayers-svc
+  mfRestUI: mf-rest-ui-svc
+  mfRestUIadmin: mf-rest-ui-jboss-admin-svc
+  hclleap: hcl-leap-svc
+
+env:
+  cibackend:
+    - name: MONGO_HOST
+      value: "mongodb-svc"
+    - name: MONGO_PORT
+      value: "27017"
+    - name: REDIS_HOSTNAME
+      value: "redis-svc"
+    - name: REDIS_PORTNUM
+      value: "6379"
+    - name: SERVER_URL
+      value: "0.0.0.0"
+    - name: SERVICE_URL
+      value: "ci-services-svc"
+    - name: SERVICE_PORT
+      value: "3000"
+    - name: MOBILEFORM_NODEHOST
+      value: "http://ci-backend-svc:4000"
+    - name: MOBILEFORM_SERVLETNAME
+      value: "http://mf-rest-ui-svc:9080/MFRestService/StreeboAdapter"
+    - name: MOBILEFORM_HOST
+      value: "http://mf-rest-ui-svc:9080"
+    - name: GAUTH_PATH
+      value: "/opt/app-root/src/GTrans_JSON"
+    - name: PDF_FILE_PATH
+      value: "/opt/app-root/src/chatbotpdf"
+
+  ciservices:
+    - name: MONGO_HOST
+      value: "mongodb-svc"
+    - name: MONGO_PORT
+      value: "27017"
+    - name: REDIS_HOSTNAME
+      value: "redis-svc"
+    - name: REDIS_PORTNUM
+      value: "6379"
+    - name: SERVER_URL
+      value: 0.0.0.0
+    - name: SERVICE_URL
+      value: "ci-backend-svc"
+    - name: SERVICE_PORT
+      value: "4000"
+    - name: MOBILEFORM_NODEHOST
+      value: "http://ci-backend-svc:4000"
+    - name: MOBILEFORM_SERVLETNAME
+      value: "http://mf-rest-ui-svc:9080/MFRestService/StreeboAdapter"
+    - name: MOBILEFORM_HOST
+      value: "http://mf-rest-ui-svc:9080"
+    - name: GAUTH_PATH
+      value: "/opt/app-root/src/GTrans_JSON"
+    - name: PDF_FILE_PATH
+      value: "/opt/app-root/src/chatbotpdf"
+
+  cilayers:
+    - name: MONGO_HOST
+      value: "mongodb-svc"
+    - name: MONGO_PORT
+      value: "27017"
+    - name: REDIS_HOSTNAME
+      value: "redis-svc"
+    - name: REDIS_PORTNUM
+      value: "6379"
+    - name: MAIN_HOST
+      value: 0.0.0.0
+    - name: CB_HOST
+      value: "ci-services-svc"
+    - name: CB_PORT
+      value: "3000"

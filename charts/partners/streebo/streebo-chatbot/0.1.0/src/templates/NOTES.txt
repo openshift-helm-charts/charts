@@ -1,0 +1,3 @@
+Successfully deployed streebo-chatbot.
+
+If there is error in pulling images make sure you have added the service account registry secrets in the rh-connect-registry-secret.yaml & rh-registry-secret.yaml files.
