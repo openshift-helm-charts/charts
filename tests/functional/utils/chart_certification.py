@@ -3,11 +3,10 @@
 
 import os
 import json
-from datetime import datetime
 import pathlib
 import shutil
-import time
 import logging
+import uuid
 from tempfile import TemporaryDirectory
 from dataclasses import dataclass
 from string import Template
@@ -127,9 +126,11 @@ vendor:
         r = github_api(
             'post', f'repos/{remote_repo}/pulls', bot_token, json=data)
         j = json.loads(r.text)
+        if not 'number' in j:
+            pytest.fail(f"error sending pull request, response was: {r.text}")
         return j['number']
 
-    def create_and_push_owners_file(self, chart_directory, base_branch, vendor_name, vendor_type, chart_name):
+    def create_and_push_owners_file(self, chart_directory, base_branch, vendor_name, vendor_type, chart_name,):
         with SetDirectory(Path(self.temp_dir.name)):
             # Create the OWNERS file from the string template
             values = {'bot_name': self.secrets.bot_name,
@@ -147,7 +148,7 @@ vendor:
             self.temp_repo.git.push(f'https://x-access-token:{self.secrets.bot_token}@github.com/{self.secrets.test_repo}',
                         f'HEAD:refs/heads/{base_branch}', '-f')
 
-    def check_index_yaml(self, base_branch, vendor, chart_name, chart_version, logger=pytest.fail):
+    def check_index_yaml(self, base_branch, vendor, chart_name, chart_version, check_provider_type=False, logger=pytest.fail):
         old_branch = self.repo.active_branch.name
         self.repo.git.fetch(f'https://github.com/{self.secrets.test_repo}.git',
                     '{0}:{0}'.format(f'{base_branch}-gh-pages'), '-f')
@@ -170,6 +171,14 @@ vendor:
             logger(
                 f"{chart_name} {chart_version} not added to index")
             return False
+
+        #This check is applicable for charts submitted in redhat path when one of the chart-verifier check fails
+        #Check whether providerType annotations is community in index.yaml when vendor_type is redhat
+        if check_provider_type and self.secrets.vendor_type == 'redhat':
+            provider_type_in_index_yaml = index['entries'][entry][0]['annotations']['charts.openshift.io/providerType']
+            if provider_type_in_index_yaml != 'community':
+                logger(f"{provider_type_in_index_yaml} is not correct as providerType in index.yaml")
+
 
         logging.info("Index updated correctly, cleaning up local branch")
         self.repo.git.checkout(old_branch)
@@ -265,17 +274,21 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
     secrets: E2ETestSecretOneShot = E2ETestSecretOneShot()
 
     def __post_init__(self) -> None:
+        # unique string based on uuid.uuid4(), not using timestamp here because even
+        # in nanoseconds there are chances of collisions among first test cases of
+        # different processes.
+        self.uuid = uuid.uuid4().hex
+
         chart_name, chart_version = self.get_chart_name_version()
         bot_name, bot_token = self.get_bot_name_and_token()
         test_repo = TEST_REPO
 
-        # Differentiate between github runner env and local env
-        if self.github_actions:
-            # Create a new branch locally from detached HEAD
-            head_sha = self.repo.git.rev_parse('--short', 'HEAD')
-            local_branches = [h.name for h in self.repo.heads]
-            if head_sha not in local_branches:
-                self.repo.git.checkout('-b', f'{head_sha}')
+        # Create a new branch locally from detached HEAD
+        head_sha = self.repo.git.rev_parse('--short', 'HEAD')
+        unique_branch = f'{head_sha}-{self.uuid}'
+        local_branches = [h.name for h in self.repo.heads]
+        if unique_branch not in local_branches:
+            self.repo.git.checkout('-b', f'{unique_branch}')
 
         current_branch = self.repo.active_branch.name
         r = github_api(
@@ -289,7 +302,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                     f'HEAD:refs/heads/{current_branch}', '-f')
 
         pretty_test_name = self.test_name.strip().lower().replace(' ', '-')
-        base_branch = f'{pretty_test_name}-{current_branch}' if pretty_test_name else f'test-{current_branch}'
+        base_branch = f'{self.uuid}-{pretty_test_name}-{current_branch}' if pretty_test_name else f'{self.uuid}-test-{current_branch}'
         pr_branch = base_branch + '-pr-branch'
 
         self.secrets.owners_file_content = self.owners_file_content
@@ -311,11 +324,11 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
             self.temp_dir.cleanup()
         self.repo.git.worktree('prune')
 
-        if self.github_actions:
-            head_sha = self.repo.git.rev_parse('--short', 'HEAD')
-            logging.info(f"Delete remote '{head_sha}' branch")
-            github_api(
-                'delete', f'repos/{self.secrets.test_repo}/git/refs/heads/{head_sha}', self.secrets.bot_token)
+        head_sha = self.repo.git.rev_parse('--short', 'HEAD')
+        current_branch = f'{head_sha}-{self.uuid}'
+        logging.info(f"Delete remote '{current_branch}' branch")
+        github_api(
+            'delete', f'repos/{self.secrets.test_repo}/git/refs/heads/{current_branch}', self.secrets.bot_token)
 
         logging.info(f"Delete '{self.secrets.test_repo}:{self.secrets.base_branch}'")
         github_api(
@@ -335,6 +348,12 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         except git.exc.GitCommandError:
             logging.info(f"Local '{self.secrets.base_branch}' does not exist")
 
+        logging.info(f"Delete local '{current_branch}'")
+        try:
+            self.repo.git.branch('-D', current_branch)
+        except git.exc.GitCommandError:
+            logging.info(f"Local '{current_branch}' does not exist")
+
     def update_test_chart(self, test_chart):
         if test_chart != self.test_chart:
             # reinitialize the settings according with new chart
@@ -348,8 +367,11 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
             self.__post_init__()
 
     def get_unique_vendor(self, vendor):
-        # unique string based on current time in seconds
-        suffix = str(int(time.time()))
+        """Set unique vendor name.
+        Note that release tag is generated with this vendor name.
+        """
+        # unique string based on uuid.uuid4()
+        suffix = self.uuid
         if "PR_NUMBER" in os.environ:
             pr_num = os.environ["PR_NUMBER"]
             suffix = f"{suffix}-{pr_num}"
@@ -368,7 +390,9 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         # use unique vendor id to avoid collision between tests
         self.secrets.vendor = self.get_unique_vendor(vendor)
         self.secrets.vendor_type = vendor_type
-        self.secrets.base_branch = f'{self.secrets.base_branch}-{self.secrets.vendor_type}-{self.secrets.vendor}-{self.secrets.chart_name}-{self.secrets.chart_version}'
+        base_branch_without_uuid = "-".join(self.secrets.base_branch.split("-")[:-1])
+        vendor_without_suffix = self.secrets.vendor.split("-")[0]
+        self.secrets.base_branch = f'{base_branch_without_uuid}-{self.secrets.vendor_type}-{vendor_without_suffix}-{self.secrets.chart_name}-{self.secrets.chart_version}'
         self.secrets.pr_branch = f'{self.secrets.base_branch}-pr-branch'
         self.chart_directory = f'charts/{self.secrets.vendor_type}/{self.secrets.vendor}/{self.secrets.chart_name}'
 
@@ -411,6 +435,14 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                         fd.write(yaml.dump(chart))
                 except Exception as e:
                     pytest.fail("Failed to update version in yaml file")
+    
+    def remove_readme_file(self):
+        with SetDirectory(Path(self.temp_dir.name)):
+            path = f'{self.chart_directory}/{self.secrets.chart_version}/src/README.md'
+            try:
+                os.remove(path)
+            except Exception as e:
+                pytest.fail(f"Failed to remove readme file : {e}")
 
     def process_owners_file(self):
         super().create_and_push_owners_file(self.chart_directory, self.secrets.base_branch, self.secrets.vendor, self.secrets.vendor_type, self.secrets.chart_name)
@@ -426,7 +458,10 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                 # Unzip files into temporary directory for PR submission
                 extract_chart_tgz(self.secrets.test_chart, f'{self.chart_directory}/{self.secrets.chart_version}', self.secrets, logging)
 
-    def process_report(self):
+
+    def process_report(self, update_chart_sha=False, update_url=False, url=None,
+                       update_versions=False,supported_versions=None,tested_version=None,kube_version=None, missing_check=None):
+
         with SetDirectory(Path(self.temp_dir.name)):
             # Copy report to temporary location and push to test_repo:pr_branch
             logging.info(
@@ -435,21 +470,82 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
             values = {'repository': self.secrets.test_repo,
                     'branch': self.secrets.base_branch}
             content = Template(tmpl).substitute(values)
-            with open(f'{self.chart_directory}/{self.secrets.chart_version}/report.yaml', 'w') as fd:
-                fd.write(content)
-            self.temp_repo.git.add(f'{self.chart_directory}/{self.secrets.chart_version}/report.yaml')
-            self.temp_repo.git.commit(
-                '-m', f"Add {self.secrets.vendor} {self.secrets.chart_name} {self.secrets.chart_version} report")
-            self.temp_repo.git.push(f'https://x-access-token:{self.secrets.bot_token}@github.com/{self.secrets.test_repo}',
-                        f'HEAD:refs/heads/{self.secrets.pr_branch}', '-f')
 
-    def push_chart(self, is_tarball: bool):
+            report_path = f'{self.chart_directory}/{self.secrets.chart_version}/' + self.secrets.test_report.split('/')[-1]
+
+            with open(report_path, 'w') as fd:
+                fd.write(content)
+
+            if update_chart_sha or update_url or update_versions:
+
+                with open(report_path, 'r') as fd:
+                    try:
+                        report = yaml.safe_load(fd)
+                    except yaml.YAMLError as err:
+                        pytest.fail(f"error parsing '{report_path}': {err}")
+
+                #For updating the report.yaml, for chart sha mismatch scenario
+                if update_chart_sha:
+                    new_sha_value = 'sha256:5b85ae00b9ca2e61b2d70a59f98fd72136453b1a185676b29d4eb862981c1xyz'
+                    logging.info(f"Current SHA Value in report: {report['metadata']['tool']['digests']['chart']}")
+                    report['metadata']['tool']['digests']['chart'] = new_sha_value
+                    logging.info(f"Updated sha value in report: {new_sha_value}")
+
+                #For updating the report.yaml, for invalid_url sceanrio
+                if update_url:
+                    logging.info(f"Current chart-uri in report: {report['metadata']['tool']['chart-uri']}")
+                    report['metadata']['tool']['chart-uri'] = url
+                    logging.info(f"Updated chart-uri value in report: {url}")
+
+                if update_versions:
+                    report['metadata']['tool']['testedOpenShiftVersion'] = tested_version
+                    report['metadata']['tool']['supportedOpenShiftVersions'] = supported_versions
+                    report['metadata']['chart']['kubeversion'] = kube_version
+                    logging.info(f"Updated testedOpenShiftVersion value in report: {tested_version}")
+                    logging.info(f"Updated supportedOpenShiftVersions value in report: {supported_versions}")
+                    logging.info(f"Updated kubeversion value in report: {kube_version}")
+
+                with open(report_path, 'w') as fd:
+                    try:
+                        fd.write(yaml.dump(report))
+                        logging.info("Report updated with new values")
+                    except Exception as e:
+                        pytest.fail("Failed to update report yaml with new values")            
+
+            #For removing the check for missing check scenario
+            if missing_check:
+                logging.info(f"Updating report with {missing_check}")
+                with open(report_path, 'r+') as fd:
+                    report_content = yaml.safe_load(fd)
+                    results = report_content["results"]
+                    new_results = filter(lambda x: x['check'] != missing_check, results)
+                    report_content["results"] = list(new_results)
+                    fd.seek(0)
+                    yaml.dump(report_content, fd)
+                    fd.truncate()
+
+        self.temp_repo.git.add(report_path)
+        self.temp_repo.git.commit(
+                '-m', f"Add {self.secrets.vendor} {self.secrets.chart_name} {self.secrets.chart_version} report")
+        self.temp_repo.git.push(f'https://x-access-token:{self.secrets.bot_token}@github.com/{self.secrets.test_repo}',
+                f'HEAD:refs/heads/{self.secrets.pr_branch}', '-f')
+
+    def add_non_chart_related_file(self):
+        with SetDirectory(Path(self.temp_dir.name)):
+            path = f'{self.chart_directory}/Notes.txt'
+            with open(path, 'w') as fd:
+                fd.write("This is a test file")
+
+    def push_chart(self, is_tarball: bool, add_non_chart_file=False):
         # Push chart to test_repo:pr_branch
         if is_tarball:
             chart_tar = self.secrets.test_chart.split('/')[-1]
             self.temp_repo.git.add(f'{self.chart_directory}/{self.secrets.chart_version}/{chart_tar}')
         else:
-            self.temp_repo.git.add(f'{self.chart_directory}/{self.secrets.chart_version}/src')
+            if add_non_chart_file:
+                self.temp_repo.git.add(f'{self.chart_directory}/')
+            else:
+                self.temp_repo.git.add(f'{self.chart_directory}/{self.secrets.chart_version}/src')
         self.temp_repo.git.commit(
             '-m', f"Add {self.secrets.vendor} {self.secrets.chart_name} {self.secrets.chart_version} chart")
 
@@ -481,8 +577,8 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         else:
             pytest.fail(f"Was expecting '{expect_message}' in the comment {complete_comment}")
 
-    def check_index_yaml(self):
-        super().check_index_yaml(self.secrets.base_branch, self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, pytest.fail)
+    def check_index_yaml(self, check_provider_type=False):
+        super().check_index_yaml(self.secrets.base_branch, self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, check_provider_type, pytest.fail)
 
     def check_release_result(self):
         chart_tgz = self.secrets.test_chart.split('/')[-1]
@@ -683,7 +779,7 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
             return
 
         # Check index.yaml is updated
-        if not super().check_index_yaml(base_branch, vendor_name, chart_name, chart_version, logging.warning):
+        if not super().check_index_yaml(base_branch, vendor_name, chart_name, chart_version, False, logging.warning):
             return
 
         # Check release is published

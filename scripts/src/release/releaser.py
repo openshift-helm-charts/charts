@@ -178,7 +178,7 @@ def main():
     elif outcome == gitutils.PR_NOT_NEEDED:
         print(f'::set-output name=charts_pr_not_needed::true')
     else:
-        printf("[ERROR] error creating charts PR")
+        print("[ERROR] error creating charts PR")
         print(f'::set-output name=charts_pr_error::true')
         os.chdir(start_directory)
         return
@@ -200,7 +200,7 @@ def main():
         print(f'::set-output name=dev_pr_not_needed::true')
     else:
         print("[ERROR] error creating development PR.")
-        print(f'::set-output name=dev_pr_error::true')
+        print('::set-output name=dev_pr_error::true')
 
     os.chdir(start_directory)
 
