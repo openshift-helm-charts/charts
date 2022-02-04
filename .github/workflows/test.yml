@@ -113,10 +113,15 @@ jobs:
           BOT_NAME: ${{ secrets.BOT_NAME }}
         run: |
           # check if PR was created as part of release processing
+          # mitigate unmatched quote error in bash
+          pr_body=$(cat <<EOF | xargs -0 printf '%q'
+          ${{ github.event.pull_request.body }}
+          EOF
+          )
           ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
                                 --sender='${{ github.event.sender.login }}' \
                                 --pr_branch='${{ github.event.pull_request.head.ref }}' \
-                                --pr_body='${{ github.event.pull_request.body }}' \
+                                --pr_body="${pr_body}" \
                                 --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
                                 --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
 

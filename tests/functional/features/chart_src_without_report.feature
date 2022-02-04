@@ -4,7 +4,7 @@ Feature: Chart source submission without report
 
     Examples:
         | chart_path                   |
-        | tests/data/vault-0.13.0.tgz  |
+        | tests/data/vault-0.17.0.tgz  |
 
     Scenario Outline: A partner or redhat associate submits an error-free chart source
         Given the vendor <vendor> has a valid identity as <vendor_type>
@@ -27,5 +27,5 @@ Feature: Chart source submission without report
         And user gets the <message> in the pull request comment
 
         Examples:
-            | vendor_type   | vendor    | message                                                               |
-            | community     | redhat    | Community charts require manual review and approval from maintainers  |
+            | vendor_type   | vendor    | message                                                                                     |
+            | community     | redhat    | Community charts require maintainer review and approval, a review will be conducted shortly |

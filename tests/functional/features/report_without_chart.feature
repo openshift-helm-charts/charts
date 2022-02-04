@@ -27,5 +27,5 @@ Feature: Report only submission
         And user gets the <message> in the pull request comment
 
         Examples:
-            | vendor_type   | vendor    | message                                                               |
-            | community     | redhat    | Community charts require manual review and approval from maintainers  |
+            | vendor_type   | vendor    | message                                                                                     |
+            | community     | redhat    | Community charts require maintainer review and approval, a review will be conducted shortly |
