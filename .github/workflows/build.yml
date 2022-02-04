@@ -46,7 +46,7 @@ jobs:
           ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
                                     --sender='${{ github.event.sender.login }}' \
                                     --pr_branch='${{ github.event.pull_request.head.ref }}' \
-                                    --pr_body='${{ github.event.pull_request.body }}' \
+                                    --pr_body="${{ github.event.pull_request.body }}" \
                                     --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
                                     --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
 
@@ -60,15 +60,15 @@ jobs:
           CHARTS_PR_FOR_RELEASE: ${{ steps.check_created_release_pr.outputs.charts_release_branch }}
         run: |
           # exit if build not required
-          if [ ${RUN_TESTS} == "true" ] || [ ${NOT_CI_AUTHORIZED} == "true" ]; then
+          if [ "${RUN_TESTS}" == "true" ] || [ "${NOT_CI_AUTHORIZED}" == "true" ]; then
             echo "The PR is workflow changes only - do not continue."
             exit 0
-          elif [ ${NO_CODE_TO_BUILD} == "true" ]; then
+          elif [ "${NO_CODE_TO_BUILD}" == "true" ]; then
             echo "The PR does not contain changes which need build or test."
             exit 0
-          elif [ ${DEV_PR_FOR_RELEASE} == "true" ]; then
+          elif [ "${DEV_PR_FOR_RELEASE}" == "true" ]; then
             echo "The PR is part of release processing for the development repository - do not continue."
-          elif [ ${CHART_PR_FOR_RELEASE} == "true" ]; then
+          elif [ "${CHART_PR_FOR_RELEASE}" == "true" ]; then
             echo "The PR is part of release processing for the charts repository - do not continue."
           else
             echo "::set-output name=run-build::true"
@@ -161,7 +161,6 @@ jobs:
         run: |
           curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
           tar zxvf openshift-client-linux.tar.gz oc
-          echo "::set-output name=oc-installed::true"
 
       - name: Get Repository
         if: ${{ steps.sanity_check_pr_content.outputs.report-exists != 'true' && steps.check_build_required.outputs.run-build == 'true' }}
@@ -213,6 +212,8 @@ jobs:
         env:
           SANITY_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.sanity-error-message }}
           OWNERS_ERROR_MESSAGE: ${{ steps.sanity_check_pr_content.outputs.owners-error-message }}
+          COMMUNITY_MANUAL_REVIEW: ${{ steps.verify_pr.outputs.community_manual_review_required }}
+          OC_INSTALL_RESULT: ${{ steps.install-oc.conclusion }}
         run: |
           python3 scripts/prepare_pr_comment.py ${{ steps.sanity_check_pr_content.outcome }} ${{ steps.verify_pr.conclusion }} ${{ github.repository }}
 
@@ -294,8 +295,7 @@ jobs:
           REDHAT_TO_COMMUNITY: ${{ steps.verify_pr.outputs.redhat_to_community }}
         id: release-charts
         run: |
-          curl -L -o cr.tar.gz https://github.com/helm/chart-releaser/releases/download/v1.2.0/chart-releaser_1.2.0_linux_amd64.tar.gz
-          tar zxvf cr.tar.gz
+          tar zxvf ./scripts/dependencies/helm-chart-releaser/chart-releaser_1.2.0_linux_amd64.tar.gz
           sudo cp -f cr /usr/local/bin/cr
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
           CWD=`pwd`

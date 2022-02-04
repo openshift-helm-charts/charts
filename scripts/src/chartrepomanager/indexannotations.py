@@ -100,7 +100,7 @@ def getIndexAnnotations(report_path):
     if not OCPSupportedSet:
         chart = report_info.get_report_chart(report_path)
         OCPVersions = "N/A"
-        if "kubeVersion" in chart and chart["kubeVersion"]:
+        if "kubeVersion" in  chart and chart["kubeVersion"]:
             kubeVersion = chart["kubeVersion"]
             OCPVersions = getOCPVersions(kubeVersion)
         set_annotations["charts.openshift.io/supportedOpenShiftVersions"] = OCPVersions
