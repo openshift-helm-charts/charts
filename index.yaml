@@ -1447,6 +1447,46 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.5.4/redhat-wildfly-1.5.4.tgz
     version: 1.5.4
+  solace-pubsubplus-openshift:
+  - annotations:
+      charts.openshift.io/digest: sha256:088b96c259efc2e3338a491a23904533fe94c49334c3c305b54a44987bd3eb4d
+      charts.openshift.io/lastCertifiedTimestamp: '2022-02-04T18:24:20.678551+00:00'
+      charts.openshift.io/provider: Solace Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-02-04T18:24:55.525272+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    description: Deploy a single-node non-HA Solace PubSub+ Event Broker Software
+      on OpenShift
+    digest: ddddf055d0a81e871d0cfa983a8a7f29c9a83b11a02225ac1e3acdffb8936409
+    home: https://dev.solace.com
+    icon: https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/images/PubSubPlus.png
+    keywords:
+    - solace
+    - pubsubplus
+    - pubsub+
+    - pubsub
+    - messaging
+    - advanced event broker
+    - event broker
+    - event mesh
+    - event streaming
+    - data streaming
+    - event integration
+    - middleware
+    kubeVersion: '>= 1.10.0-0'
+    maintainers:
+    - name: Solace Community Forum
+      url: https://solace.community/
+    - name: Solace Support
+      url: https://solace.com/support/
+    name: pubsubplus-openshift
+    sources:
+    - https://github.com/SolaceProducts/pubsubplus-kubernetes-quickstart
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-3.0.0/solace-pubsubplus-openshift-3.0.0.tgz
+    version: 3.0.0
   wavefronthq-wavefront:
   - annotations:
       charts.openshift.io/digest: sha256:663b50a03cf0adac0485f8731a1e0c8cb729b216f75ce9e43d1f09ffbe2faa1a
@@ -1586,4 +1626,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.8.0/wavefronthq-wavefront-1.8.0.tgz
     version: 1.8.0
-generated: '2022-01-24T09:47:36.307486+00:00'
+generated: '2022-02-04T18:24:55.525272+00:00'
