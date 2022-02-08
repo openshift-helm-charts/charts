@@ -1,8 +1,9 @@
 chart:
   name: chart-name--802
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: aa
+publicPgpKey: YWFh
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: atiwary-containers
   name: Red Hat
