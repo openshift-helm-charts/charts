@@ -441,13 +441,42 @@ messages.
 
 ### Can I test the pull request in my fork before submitting?
 
-Yes, you can do it.
+Yes, you can do it. 
 
-1. Ensure the `main` branch in your fork is updated with the latest changes.
-2. Create a GitHub [personal access token][pat] (PAT) and add it as an
+1. Create a fork of this repository, or if you previously did this, ensure the `main` branch in your fork is updated with the latest changes.
+1. If one does not already exist, create an empty ```gh-pages``` branch in your fork.
+   - for example see: [stackoverflow - how to create an empty branch](https://stackoverflow.com/questions/34100048/create-empty-branch-on-github)
+1. If an OWNERS file has not yet been created for your chart, create and merge a branch into the main branch of your fork to add it.
+   - The file is added as ```charts/partners/<vendor>/<chart-name>/OWNERS```
+   - For example (note the values for ```<chart-name>``` and ```<vendor>``` must match the directory structure) :
+      ```
+      chart:
+         name: <chart-name>
+         shortDescription: <chart description>
+         publicPgpKey: null
+      users:
+         - githubUsername: <your github id>
+      vendor:
+         label: <vendor>
+         name: <decriptive name>
+      ```
+   - Note: the pull request will fail and you will need to manually merge it.
+   - Note: this is just a workaround for testing. You cannot add an OWNERS file to the main repository in a pull request. See [Preparation](#preparation). 
+1. Create a GitHub [personal access token][pat] (PAT) and add it as an
    [encyrpted secret][encyrpted-secret] with name as `BOT_TOKEN`.
-3. Create a branch and make your required changes and send a pull request to
-   your `main` branch.
+1. For the chart testing check to work add two github action secrets with information about your cluster:
+   - ```API_SERVER``` : the base64 encoded version of the cluster url you would use in an ```oc login``` request.
+      - for example, to encode the url : ```echo '<cluster-url>' | base64```
+   - ```CLUSTER_TOKEN``` : the token you would use for an ```oc login``` request.
+1. Create a branch with the required changes to add your chart and send a pull request to your `main` branch.
+   - Note: this PR must not include any OWNERS file updates.
+1. If your chart passes certification:
+   - the PR request will be auto-merged into the main branch.
+   - the information which would be published for the chart will be added to ```index.yaml``` in the ```gh-pages``` branch.
+   - if the PR included the chart source or chart tarball, a github release will have been created with the name ```<vendor>-<chart-name>-<chart-version>```.
+   - Note: If you want to repeat the test you will need to undo these changes.
+   
+Note: If you use a different branch instead of main, to target your test PR, the ```index.yaml``` file will be created in ```<branch-name>-gh-pages``` and not ```gh_pages```. 
 
 ### Can I use any command-line interface to create pull request?
 
