@@ -1,5 +1,5 @@
 chart:
-  name: datagrid
+  name: data-grid
   shortDescription: This is the Red Had Data Grid chart
 publicPgpKey: null
 users:
