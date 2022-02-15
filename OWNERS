@@ -7,7 +7,6 @@ approvers:
 - mmulholla
 - jasperchui
 - dperaza4dustbit
-- zonggen
 - openshift-helm-charts-bot
 
 reviewers:
@@ -17,4 +16,3 @@ reviewers:
 - mmulholla
 - jasperchui
 - dperaza4dustbit
-- zonggen
