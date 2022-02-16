@@ -1,8 +1,9 @@
 chart:
   name: test792eewe
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: dfd
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
 vendor:
   label: atiwary-containers
   name: Red Hat
