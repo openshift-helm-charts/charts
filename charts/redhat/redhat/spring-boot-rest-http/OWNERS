@@ -1,0 +1,9 @@
+chart:
+  name: spring-boot-rest-http
+  shortDescription: A Helm chart to build and deploy Spring Boot application with REST endpoints
+publicPgpKey: null
+users:
+- githubUsername: Sgitario
+vendor:
+  label: redhat
+  name: Red Hat
