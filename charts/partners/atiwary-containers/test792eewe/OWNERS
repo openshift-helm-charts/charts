@@ -1,7 +1,7 @@
 chart:
   name: test792eewe
   shortDescription: dfd
-publicPgpKey: null
+publicPgpKey: dGVzdA==
 users:
 - githubUsername: rnargotr
 vendor:
