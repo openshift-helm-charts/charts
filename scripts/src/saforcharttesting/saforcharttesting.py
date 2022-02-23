@@ -251,15 +251,15 @@ def switch_project_context(namespace, token, api_server):
     for i in range(7):
         out = subprocess.run(["./oc", "login", "--token", tkn, "--server", api_server], capture_output=True)
         stdout = out.stdout.decode("utf-8")
-        print(stdout)
+        print("switch_project_context: oc login", stdout)
         out = subprocess.run(["./oc", "project", namespace], capture_output=True)
         stdout = out.stdout.decode("utf-8")
-        print(stdout)
+        print("switch_project_context: oc project",stdout)
         out = subprocess.run(["./oc", "config", "current-context"], capture_output=True)
         stdout = out.stdout.decode("utf-8").strip()
-        print(stdout)
+        print("switch_project_context: oc config",stdout)
         if stdout.endswith(":".join((namespace, namespace))):
-            print("current-context:", stdout)
+            print("switch_project_context: current-context:", stdout)
             return
         time.sleep(10)
 
@@ -286,7 +286,9 @@ def main():
         create_rolebinding(args.create)
         create_clusterrole(args.create)
         create_clusterrolebinding(args.create)
+        print("[INFO] call write_sa_token")
         write_sa_token(args.create, args.token)
+        print("[INFO] switch_project_contex")
         switch_project_context(args.create, args.token, args.server)
     elif args.delete:
         delete_clusterrolebinding(args.delete)
@@ -294,3 +296,5 @@ def main():
         delete_namespace(args.delete)
     else:
         parser.print_help()
+
+    print("[INFO] exit saforcharttesting")
