@@ -346,6 +346,7 @@ def generate_verify_report(directory, category, organization, chart, version):
 
 
 def main():
+    print("[INFO] Enter chart-pr-review")
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--directory", dest="directory", type=str, required=True,
                                         help="artifact directory for archival")
@@ -354,7 +355,12 @@ def main():
     parser.add_argument("-u", "--api-url", dest="api_url", type=str, required=True,
                                         help="API URL for the pull request")
     args = parser.parse_args()
+
+    print("[INFO] args.directory:",args.directory)
+    print("[INFO] args.username:",args.username)
+    print("[INFO] args.api_url:",args.api_url)
     os.makedirs(args.directory, exist_ok=True)
+    print("[INFO] call get_modified_chart")
     category, organization, chart, version = get_modified_charts(args.directory, args.api_url)
     verify_user(args.directory, args.username, category, organization, chart)
     check_owners_file_against_directory_structure(args.directory, args.username, category, organization, chart)
