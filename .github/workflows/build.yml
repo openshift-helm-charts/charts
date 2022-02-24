@@ -9,7 +9,7 @@ jobs:
     name: Chart Certification
     runs-on: ubuntu-20.04
     env:
-      VERIFIER_IMAGE: quay.io/redhat-certification/chart-verifier:latest
+      VERIFIER_IMAGE: quay.io/redhat-certification/chart-verifier:main
     if: |
       github.event.pull_request.draft == false &&
       (github.event.action != 'labeled' || github.event.label.name == 'force-publish')
@@ -207,6 +207,7 @@ jobs:
           echo "--api-url = ${{ github.event.pull_request._links.self.href }}"
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
+
 
       - name: Delete Namespace
         if: ${{ steps.install-oc.outputs.oc-installed == 'true' }}
