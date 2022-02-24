@@ -252,6 +252,9 @@ def check_report_success(directory, api_url, report_path, version):
     vendor_type = get_vendor_type(directory)
     report = report_info.get_report_results(report_path,vendor_type,"")
 
+    print("Bombing early 2a")
+    sys.exit(1)
+
     labels = get_labels(api_url)
     label_names = [l["name"] for l in labels]
 
