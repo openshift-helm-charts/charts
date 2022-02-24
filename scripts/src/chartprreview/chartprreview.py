@@ -221,9 +221,6 @@ def check_report_success(directory, api_url, report_path, version):
         msg = f"[ERROR] Chart Version '{report_version}' doesn't match the version in the directory path: '{version}'"
         write_error_log(directory, msg)
         sys.exit(1)
-    else:
-        print("Bombing early 1a")
-        sys.exit(1)
 
     report_metadata = report_info.get_report_metadata(report_path)
     profile_version = report_metadata["profileVersion"]
@@ -252,8 +249,7 @@ def check_report_success(directory, api_url, report_path, version):
     vendor_type = get_vendor_type(directory)
     report = report_info.get_report_results(report_path,vendor_type,"")
 
-    print("Bombing early 2a")
-    sys.exit(1)
+
 
     labels = get_labels(api_url)
     label_names = [l["name"] for l in labels]
@@ -266,7 +262,10 @@ def check_report_success(directory, api_url, report_path, version):
         msgs.append("[ERROR] Chart verifier report includes failures:")
         msgs.append(f"- Number of checks passed: {passed}")
         msgs.append(f"- Number of checks failed: {failed}")
-        msgs.append(f"- Error message(s):")
+        msgs.append(f'- Error message(s): {report["message"]}')
+        print("Bombing early 2a")
+        sys.exit(1)
+
         for m in report["message"]:
             msgs.append(f"  - {m}")
         write_error_log(directory, *msgs)
