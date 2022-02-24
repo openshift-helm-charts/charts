@@ -375,6 +375,9 @@ def main():
             sys.exit(1)
         else:
             print("[INFO] Submitted report passed validity check!")
+    else:
+        print("INFO: bombing early")
+        sys.exit(1)
 
     generate_verify_report(args.directory, category, organization, chart, version)
     if os.path.exists(submitted_report_path):
