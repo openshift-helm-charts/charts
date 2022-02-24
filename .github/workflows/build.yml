@@ -170,8 +170,8 @@ jobs:
           echo "::set-output name=repository::${REPO}"
         shell: bash
 
-      - name: Verify PR - generate report
-        id: verify_pr
+      - name: Set up cluster
+        id: cluster-setup
         if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
@@ -193,10 +193,17 @@ jobs:
             ve1/bin/sa-for-chart-testing --create charts-${{ github.event.number }} --token token.txt --server ${API_SERVER}
             echo "return from sa-for-chart-testing"
           fi
+
+      - name: Verify PR - generate report
+        id: verify_pr
+        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        env:
+          KUBECONFIG: /tmp/ci-kubeconfig
+          VENDOR_TYPE: ${{ steps.sanity_check_pr_content.outputs.category }}
+        run: |
           cd pr-branch
           echo "call chart-pr-review"
           echo "verify-user = ${{ github.event.pull_request.user.login }}"
-          ps -ef
           echo "--api-url = ${{ github.event.pull_request._links.self.href }}"
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
