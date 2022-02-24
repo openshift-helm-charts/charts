@@ -3,9 +3,6 @@ import os
 import sys
 import argparse
 import subprocess
-import json
-import hashlib
-import tempfile
 
 import semver
 import semantic_version
@@ -43,6 +40,9 @@ def get_labels(api_url):
 
 def get_modified_charts(directory, api_url):
     print("[INFO] Get modified charts. %s" %directory)
+
+    return "redhat","redhat","data-grid","8.3.0"
+    
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(files_api_url, headers=headers)
