@@ -335,8 +335,6 @@ def generate_verify_report(directory, category, organization, chart, version):
         else:
             out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
                                  os.environ.get("VERIFIER_IMAGE"), "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
-            print("Bombing early 4")
-        sys.exit(1)
     else:
         return
 
