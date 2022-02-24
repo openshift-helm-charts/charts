@@ -375,11 +375,13 @@ def main():
             sys.exit(1)
         else:
             print("[INFO] Submitted report passed validity check!")
-    else:
-        print("INFO: bombing early")
-        sys.exit(1)
+
 
     generate_verify_report(args.directory, category, organization, chart, version)
+
+    print("INFO: bombing early 2")
+    sys.exit(1)
+
     if os.path.exists(submitted_report_path):
         print("[INFO] Report exists: ", submitted_report_path)
         verify_signature(args.directory, category, organization, chart, version)
