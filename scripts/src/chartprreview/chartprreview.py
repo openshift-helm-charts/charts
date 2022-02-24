@@ -243,20 +243,20 @@ def check_report_success(directory, api_url, report_path, version):
         sys.exit(1)
 
 
-    #print("Bombing early 2a - cam out")
+    print("Bombing early 1a - came out")
     #sys.exit(1)
 
     vendor_type = get_vendor_type(directory)
     report = report_info.get_report_results(report_path,vendor_type,"")
 
-    #print("Bombing early 3a - came out")
+    print("Bombing early 2a - came out")
     #sys.exit(1)
 
 
     labels = get_labels(api_url)
     label_names = [l["name"] for l in labels]
 
-    print("Bombing early 4a")
+    print("Bombing early 3a - came out")
 
     failed = report["failed"]
     passed = report["passed"]
@@ -267,8 +267,7 @@ def check_report_success(directory, api_url, report_path, version):
         msgs.append(f"- Number of checks passed: {passed}")
         msgs.append(f"- Number of checks failed: {failed}")
         msgs.append(f'- Error message(s): {report["message"]}')
-        print("Bombing early 3a - did not bomb")
-        sys.exit(1)
+        print("Bombing early 4a - came out")
 
         for m in report["message"]:
             msgs.append(f"  - {m}")
@@ -280,6 +279,8 @@ def check_report_success(directory, api_url, report_path, version):
                 # requires manual review and approval
                 print(f"::set-output name=community_manual_review_required::True")
             sys.exit(1)
+        print("Bombing early 5a")
+        sys.exit(1)
 
     if vendor_type == "community" and "force-publish" not in label_names:
         # requires manual review and approval
