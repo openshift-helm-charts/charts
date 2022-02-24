@@ -249,12 +249,14 @@ def check_report_success(directory, api_url, report_path, version):
     vendor_type = get_vendor_type(directory)
     report = report_info.get_report_results(report_path,vendor_type,"")
 
-    print("Bombing early 3a")
-    sys.exit(1)
+    #print("Bombing early 3a - came out")
+    #sys.exit(1)
 
 
     labels = get_labels(api_url)
     label_names = [l["name"] for l in labels]
+
+    print("Bombing early 4a")
 
     failed = report["failed"]
     passed = report["passed"]
