@@ -279,8 +279,8 @@ def check_report_success(directory, api_url, report_path, version):
                 # requires manual review and approval
                 print(f"::set-output name=community_manual_review_required::True")
             sys.exit(1)
-        print("Bombing early 5a")
-        sys.exit(1)
+        print("Bombing early 5a - came out")
+        #sys.exit(1)
 
     if vendor_type == "community" and "force-publish" not in label_names:
         # requires manual review and approval
