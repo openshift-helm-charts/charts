@@ -177,6 +177,9 @@ jobs:
           KUBECONFIG: /tmp/ci-kubeconfig
           VENDOR_TYPE: ${{ steps.sanity_check_pr_content.outputs.category }}
         run: |
+          echo "verify-user = ${{ github.event.pull_request.user.login }}
+          echo "--api-url = ${{ github.event.pull_request._links.self.href }}
+          ps -ef
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           gpg --version
           docker pull ${{ env.VERIFIER_IMAGE }}
@@ -192,6 +195,9 @@ jobs:
           fi
           cd pr-branch
           echo "call chart-pr-review"
+          echo "verify-user = ${{ github.event.pull_request.user.login }}
+          ps -ef
+          echo "--api-url = ${{ github.event.pull_request._links.self.href }}
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
 
