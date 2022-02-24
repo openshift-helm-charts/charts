@@ -211,11 +211,18 @@ def check_report_success(directory, api_url, report_path, version):
     quoted_data = data.replace("%", "%25").replace("\n", "%0A").replace("\r", "%0D")
     print(f"::set-output name=report_content::{quoted_data}")
 
+    print("Bombing early 1a")
+    sys.exit(1)
+
+
     chart = report_info.get_report_chart(report_path)
     report_version = chart["version"]
     if report_version != version:
         msg = f"[ERROR] Chart Version '{report_version}' doesn't match the version in the directory path: '{version}'"
         write_error_log(directory, msg)
+        sys.exit(1)
+    else:
+        print("Bombing early 1a")
         sys.exit(1)
 
     report_metadata = report_info.get_report_metadata(report_path)
@@ -392,6 +399,4 @@ def main():
         report_path = "report.yaml"
 
     match_name_and_version(args.directory, category, organization, chart, version)
-    print("INFO: bombing early 5")
-    sys.exit(1)
     check_report_success(args.directory, args.api_url, report_path, version)
