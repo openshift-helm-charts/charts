@@ -208,6 +208,7 @@ jobs:
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
 
+
       - name: Delete Namespace
         if: ${{ steps.install-oc.outputs.oc-installed == 'true' }}
         env:
