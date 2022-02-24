@@ -246,10 +246,12 @@ def check_report_success(directory, api_url, report_path, version):
         write_error_log(directory, msg)
         sys.exit(1)
 
+
+    print("Bombing early 2a")
+    sys.exit(1)
+
     vendor_type = get_vendor_type(directory)
     report = report_info.get_report_results(report_path,vendor_type,"")
-
-
 
     labels = get_labels(api_url)
     label_names = [l["name"] for l in labels]
@@ -263,7 +265,7 @@ def check_report_success(directory, api_url, report_path, version):
         msgs.append(f"- Number of checks passed: {passed}")
         msgs.append(f"- Number of checks failed: {failed}")
         msgs.append(f'- Error message(s): {report["message"]}')
-        print("Bombing early 2a")
+        print("Bombing early 3a - did not bomb")
         sys.exit(1)
 
         for m in report["message"]:
