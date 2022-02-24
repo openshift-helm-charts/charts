@@ -379,9 +379,6 @@ def main():
 
     generate_verify_report(args.directory, category, organization, chart, version)
 
-    print("INFO: bombing early 2")
-    sys.exit(1)
-
     if os.path.exists(submitted_report_path):
         print("[INFO] Report exists: ", submitted_report_path)
         verify_signature(args.directory, category, organization, chart, version)
@@ -395,4 +392,6 @@ def main():
         report_path = "report.yaml"
 
     match_name_and_version(args.directory, category, organization, chart, version)
+    print("INFO: bombing early 5")
+    sys.exit(1)
     check_report_success(args.directory, args.api_url, report_path, version)
