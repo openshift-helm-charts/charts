@@ -1,0 +1,8 @@
+chart:
+  name: int
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: some_label
+  name: Artificial Vendor
