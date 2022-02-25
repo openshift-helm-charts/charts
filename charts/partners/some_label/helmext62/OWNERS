@@ -1,0 +1,9 @@
+chart:
+  name: helmext62
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
+vendor:
+  label: some_label
+  name: Artificial Vendor
