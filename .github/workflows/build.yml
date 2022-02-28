@@ -186,7 +186,7 @@ jobs:
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           if [ "${{steps.sanity_check_pr_content.outputs.report-exists}}" != "true" ]; then
             if [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
-              ./oc login --insecure-skip-tls-verify --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
+              ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
             else
               ./oc login --insecure-skip-tls-verify --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
             fi
@@ -207,7 +207,9 @@ jobs:
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
 
-
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        
       - name: Delete Namespace
         if: ${{ steps.install-oc.outputs.oc-installed == 'true' }}
         env:
