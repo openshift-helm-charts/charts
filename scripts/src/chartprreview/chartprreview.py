@@ -347,6 +347,8 @@ def generate_verify_report(directory, category, organization, chart, version):
             out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm", os.environ.get("VERIFIER_IMAGE"),
                                  "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
         else:
+            print(f"[INFO] generate report for {dn}" )
+            sys.exit(1)
             out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
                                  os.environ.get("VERIFIER_IMAGE"), "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
     else:
@@ -392,12 +394,10 @@ def main():
 
 
     print("[INFO]generate report")
-    sys.exit(1)
 
     generate_verify_report(args.directory, category, organization, chart, version)
 
     print("[INFO]report generated")
-    sys.exit(1)
 
     if os.path.exists(submitted_report_path):
         print("[INFO] Report exists: ", submitted_report_path)
