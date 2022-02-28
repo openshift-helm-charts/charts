@@ -204,13 +204,13 @@ def generate_report(chart_dir,chart_file, kubeconfig, vendor_type):
 
     try:
         output = client.containers.run(os.environ.get("VERIFIER_IMAGE"),docker_command,stdin_open=True,tty=True,stdout=True,auto_remove=True,
-                                    volumes={chart_dir: {'bind': '/charts/', 'mode': 'rw'},kubeconfig: {'bind': '/kubeconfig', 'mode':'ro'}},
-                                    environment={"KUBECONFIG": kubeconfig})
+                                    volumes={chart_dir: {'bind': '/charts/', 'mode': 'rw'},kubeconfig: {'bind': '/kubeconfig/', 'mode':'ro'}},
+                                    environment={"KUBECONFIG": f"/{kubeconfig}"})
     except Exception as err:
         print(f"[ERROR]: exception from docker when generating the report: {err}")
         sys.exit(1)
 
-    print(f'Report:\n{output}')
+    print(f'Report 1:\n{output.decode("utf8")}')
 
-    return output
+    return output.decode("utf8")
 
