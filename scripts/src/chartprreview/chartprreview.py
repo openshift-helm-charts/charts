@@ -348,9 +348,10 @@ def generate_verify_report(directory, category, organization, chart, version):
                                  "verify", "--set", f"profile.vendortype={vendor_type}", "-e", "has-readme", f"/charts/{chart}-{version}.tgz"], capture_output=True)
         else:
             print(f"[INFO] generate report for {dn}" )
-            out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
-                                 os.environ.get("VERIFIER_IMAGE"), "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
-            print(f"[INFO] generated report for {dn}" )
+            out = verifier_report.generate_report(dn,f"{chart}-{version}.tgz",kubeconfig,vendor_type)
+            #out = subprocess.run(["docker", "run", "-v", dn+":/charts:z", "-v", kubeconfig+":/kubeconfig", "-e", "KUBECONFIG=/kubeconfig", "--rm",
+            #                     os.environ.get("VERIFIER_IMAGE"), "verify", "--set", f"profile.vendortype={vendor_type}", f"/charts/{chart}-{version}.tgz"], capture_output=True)
+            print(f"[INFO] generated report for {dn}: {out}" )
             sys.exit(1)
     else:
         return

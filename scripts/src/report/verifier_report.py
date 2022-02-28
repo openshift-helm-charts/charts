@@ -26,6 +26,8 @@ These are not comprehensive lists - other certification checks will preform furt
 import sys
 import os
 import semantic_version
+import docker
+import json
 
 import yaml
 try:
@@ -185,3 +187,29 @@ def validate(report_path):
         print("[INFO] Chart testing failed so skip report checking")
 
     return True,""
+
+def generate_report(chart_dir,chart_file, kubeconfig, vendor_type):
+
+    docker_command = f"report verify /charts/{chart_file}"
+
+    if vendor_type:
+        set_values = "profile.vendortype=%s" % vendor_type
+        docker_command = "%s --set %s" % (docker_command, set_values)
+
+
+    client = docker.from_env()
+
+    print(f'[INFO] Call docker using imsge: {os.environ.get("VERIFIER_IMAGE")}, docker command: {docker_command}, chart: {chart_dir}/{chart_file}')
+    print(f'[INFO] kubeconfig={kubeconfig}')
+
+    try:
+        output = client.containers.run(os.environ.get("VERIFIER_IMAGE"),docker_command,stdin_open=True,tty=True,stdout=True,auto_remove=True,
+                                    volumes={chart_dir: {'bind': '/charts/', 'mode': 'rw'},kubeconfig: {'bind': '/kubeconfig', 'mode':'ro'}},
+                                    environment={"KUBECONFIG": kubeconfig})
+    except Exception as err:
+        print(f"[ERROR]: exception from docker when generating the report: {err}")
+        sys.exit(1)
+
+    report_out = json.loads(output)
+    return report_out
+
