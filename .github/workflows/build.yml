@@ -209,7 +209,7 @@ jobs:
           exit 1
 
       - name: Delete Namespace
-        if: ${{ steps.cluster-setup.outcome == 'success' }}
+        if: ${{ always() && steps.cluster-setup.outcome == 'success' }}
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
