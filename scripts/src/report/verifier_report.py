@@ -190,7 +190,7 @@ def validate(report_path):
 
 def generate_report(chart_dir,chart_file, kubeconfig, vendor_type):
 
-    docker_command = f"report verify /charts/{chart_file}"
+    docker_command = f"verify /charts/{chart_file}"
 
     if vendor_type:
         set_values = "profile.vendortype=%s" % vendor_type
