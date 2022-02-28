@@ -393,6 +393,9 @@ def main():
 
     generate_verify_report(args.directory, category, organization, chart, version)
 
+    print("[INFO]report generated")
+    sys.exit(1)
+
     if os.path.exists(submitted_report_path):
         print("[INFO] Report exists: ", submitted_report_path)
         verify_signature(args.directory, category, organization, chart, version)

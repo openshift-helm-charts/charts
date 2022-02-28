@@ -191,7 +191,6 @@ jobs:
               ./oc login --insecure-skip-tls-verify --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
             fi
             ve1/bin/sa-for-chart-testing --create charts-${{ github.event.number }} --token token.txt --server ${API_SERVER}
-            echo "return from sa-for-chart-testing"
           fi
 
       - name: Verify PR - generate report
