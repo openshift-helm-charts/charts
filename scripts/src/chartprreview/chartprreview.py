@@ -355,6 +355,8 @@ def generate_verify_report(directory, category, organization, chart, version):
             #with open(report_path, "w") as fd:
             #    fd.write(out)
             #return
+            errors = out.stderr.decode("utf-8")
+            print("[INFO] errors creating report:\n", errors)
 
     else:
         return
