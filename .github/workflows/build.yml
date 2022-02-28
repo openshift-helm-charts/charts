@@ -206,10 +206,8 @@ jobs:
           echo "--api-url = ${{ github.event.pull_request._links.self.href }}"
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
+          exit 1
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        
       - name: Delete Namespace
         if: ${{ steps.install-oc.outputs.oc-installed == 'true' }}
         env:
