@@ -391,6 +391,9 @@ def main():
             print("[INFO] Submitted report passed validity check!")
 
 
+    print("[INFO]generate report")
+    sys.exit(1)
+
     generate_verify_report(args.directory, category, organization, chart, version)
 
     print("[INFO]report generated")
