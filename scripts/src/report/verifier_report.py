@@ -210,5 +210,7 @@ def generate_report(chart_dir,chart_file, kubeconfig, vendor_type):
         print(f"[ERROR]: exception from docker when generating the report: {err}")
         sys.exit(1)
 
+    print(f'Report:\n{output}')
+
     return output
 
