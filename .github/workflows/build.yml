@@ -195,9 +195,9 @@ jobs:
           ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
           echo "helm list:"
-          helm list
+          helm list --all-namespaces
           echo "kubectl get pods:"
-          kubectl get pods
+          kubectl get pods --all-namespaces
           exit 1
 
       - name: Delete Namespace
@@ -209,9 +209,9 @@ jobs:
           ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
           ve1/bin/sa-for-chart-testing --delete charts-${{ github.event.number }}
           echo "helm list:"
-          helm list
+          helm list --all-namespaces
           echo "kubectl get pods:"
-          kubectl get pods
+          kubectl get pods --all-namespaces
 
       - name: Save PR artifact
         if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
