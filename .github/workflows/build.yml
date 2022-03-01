@@ -209,6 +209,7 @@ jobs:
           exit 1
 
       - name: Setup tmate session
+        if: always()
         uses: mxschmitt/action-tmate@v3
 
       - name: Delete Namespace
