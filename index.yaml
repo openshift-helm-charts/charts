@@ -1232,6 +1232,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/nirmata-kyverno-v2.1.2/nirmata-kyverno-v2.1.2.tgz
     version: v2.1.2
+  redhat-data-grid:
+  - annotations:
+      charts.openshift.io/digest: sha256:4a60f63bec9744cc6b6261ae1b81670a96c3e9d95c1bb259894b4b2220a42549
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-01T16:11:36.091647+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-03-01T16:12:09.058214+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: '8.3'
+    description: A Helm chart that lets you build and deploy Red Hat Data Grid clusters.
+    digest: 4415500e239a902c57ebe2f856ae26dd50829511748d1cde5ff08e803d4a540a
+    home: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.3
+    icon: https://access.redhat.com/webassets/avalon/d/red-hat-data-grid/images/rhdg-icon.png
+    maintainers:
+    - name: Red Hat
+      url: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.3
+    name: data-grid
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-data-grid-8.3.0/redhat-data-grid-8.3.0.tgz
+    version: 8.3.0
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -1790,4 +1816,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.8.0/wavefronthq-wavefront-1.8.0.tgz
     version: 1.8.0
-generated: '2022-03-01T06:46:51.048234+00:00'
+generated: '2022-03-01T16:12:09.058214+00:00'
