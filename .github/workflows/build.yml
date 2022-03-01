@@ -201,7 +201,7 @@ jobs:
           exit 1
 
       - name: Delete Namespace
-        if: ${{ always() && ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
         env:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
