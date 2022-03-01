@@ -116,7 +116,6 @@ jobs:
         if: ${{ steps.sanity_check_pr_content.outcome == 'failure'}}
         run: |
           echo "The 'Sanity Check PR Content' step has failed."
-          exit 1
 
       - name: Remove 'authorized-request' label from PR
         uses: actions/github-script@v3
