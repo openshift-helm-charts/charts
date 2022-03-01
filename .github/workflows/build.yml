@@ -208,9 +208,13 @@ jobs:
           cd ..
           exit 1
 
-      - name: Setup tmate session
+      - name: Check cluster
         if: always()
-        uses: mxschmitt/action-tmate@v3
+        run:
+          echo "helm list:"
+          helm list
+          echo "kubectl get pods"
+          kubectl get pods
 
       - name: Delete Namespace
         if: ${{ always() && steps.cluster-setup.outcome == 'success' }}
@@ -220,6 +224,14 @@ jobs:
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
           ./oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER}
           ve1/bin/sa-for-chart-testing --delete charts-${{ github.event.number }}
+
+      - name: Check cluster 2
+        if: always()
+        run:
+          echo "helm list:"
+          helm list
+          echo "kubectl get pods"
+          kubectl get pods
 
       - name: Save PR artifact
         if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
