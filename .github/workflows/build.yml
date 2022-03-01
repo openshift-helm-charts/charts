@@ -208,6 +208,9 @@ jobs:
           cd ..
           exit 1
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
       - name: Delete Namespace
         if: ${{ always() && steps.cluster-setup.outcome == 'success' }}
         env:
