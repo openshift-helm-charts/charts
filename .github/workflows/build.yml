@@ -210,7 +210,7 @@ jobs:
 
       - name: Check cluster
         if: always()
-        run:
+        run: |
           echo "helm list:"
           helm list
           echo "kubectl get pods"
@@ -227,7 +227,7 @@ jobs:
 
       - name: Check cluster 2
         if: always()
-        run:
+        run: |
           echo "helm list:"
           helm list
           echo "kubectl get pods"
