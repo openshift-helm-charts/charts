@@ -1426,6 +1426,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
     version: 0.0.3
+  redhat-spring-boot-rest-http:
+  - annotations:
+      charts.openshift.io/digest: sha256:5d312abe9fb8e5a3255036e0b9f4f53f480fc2c12ed0c0f36f03c72ab9af9038
+      charts.openshift.io/lastCertifiedTimestamp: '2021-07-09T21:36:27.096408+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-03-01T06:46:51.048234+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: '4.7'
+    apiVersion: v2
+    dependencies:
+    - name: spring-boot-example-app
+      repository: http://snowdrop.github.io/helm
+      version: 0.0.1
+    description: A Helm chart to build and deploy Spring Boot application with REST
+      endpoints
+    digest: 60118356338a1d932de598436cf5b482bfe59fe3344fa90db55db359f9ec0a86
+    icon: https://avatars.githubusercontent.com/u/558276?s=400&u=19efc68c74844b2e092698a8a7a752921edcdc19&v=4
+    keywords:
+    - runtimes
+    - spring-boot
+    name: spring-boot-rest-http
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-spring-boot-rest-http-0.0.1/redhat-spring-boot-rest-http-0.0.1.tgz
+    version: 0.0.1
   redhat-wildfly:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -1765,4 +1790,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.8.0/wavefronthq-wavefront-1.8.0.tgz
     version: 1.8.0
-generated: '2022-02-22T15:00:08.424853+00:00'
+generated: '2022-03-01T06:46:51.048234+00:00'
