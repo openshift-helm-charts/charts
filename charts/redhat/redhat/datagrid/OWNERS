@@ -1,9 +1,0 @@
-chart:
-  name: datagrid
-  shortDescription: This is the Red Had Data Grid chart
-publicPgpKey: null
-users:
-- githubUsername: ryanemerson
-vendor:
-  label: redhat
-  name: Red Hat
