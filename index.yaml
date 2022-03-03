@@ -1502,6 +1502,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-spring-boot-rest-http-0.0.1/redhat-spring-boot-rest-http-0.0.1.tgz
     version: 0.0.1
+  redhat-vertx:
+  - annotations:
+      charts.openshift.io/digest: sha256:3331fdb13510b38a2e420a370716e542a31dc764c02976659e653213b2e764ee
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-03T20:20:51.042123+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-03-03T20:21:25.097245+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    description: A Helm chart to build and deploy Vert.x applications
+    digest: 289c31c91e21819f527f64662a5e8c365f2d24c4263908eef39bc612b957cb47
+    keywords:
+    - runtimes
+    - vertx
+    name: vertx
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-vertx-0.0.1/redhat-vertx-0.0.1.tgz
+    version: 0.0.1
   redhat-wildfly:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -1887,4 +1906,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.9.0/wavefronthq-wavefront-1.9.0.tgz
     version: 1.9.0
-generated: '2022-03-03T17:13:23.115059+00:00'
+generated: '2022-03-03T20:21:25.097245+00:00'
