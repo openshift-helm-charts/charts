@@ -1957,7 +1957,7 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2022-03-03T22:21:27.665181+00:00'
       charts.openshift.io/provider: VMware
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-03-03T22:36:47.518027+00:00'
+      charts.openshift.io/submissionTimestamp: '2022-03-03T22:37:39.893332+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
       charts.openshift.io/testedOpenShiftVersion: '4.9'
     apiVersion: v2
@@ -1998,4 +1998,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.9.2/wavefronthq-wavefront-1.9.2.tgz
     version: 1.9.2
-generated: '2022-03-03T22:36:47.518027+00:00'
+generated: '2022-03-03T22:37:39.893332+00:00'
