@@ -1201,6 +1201,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.2.0/infinispan-infinispan-0.2.0.tgz
     version: 0.2.0
+  - annotations:
+      charts.openshift.io/digest: sha256:5572d807fffe437716f164f8093f88d460336cd4954a75fa8ffee814bf504055
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-03T17:12:48.054258+00:00'
+      charts.openshift.io/provider: Infinispan
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-03-03T17:13:23.115059+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: '13.0'
+    description: A Helm chart that lets you build and deploy Infinispan clusters.
+    digest: c3e67727c11fc8035d89af35b03947ea527df48aa1fff2fa41d441ac62c562cf
+    home: https://infinispan.org/
+    icon: https://design.jboss.org/infinispan/logo/final/PNG/infinispan_icon_rgb_lightbluewhite_256px.png
+    maintainers:
+    - name: Infinispan
+      url: https://infinispan.org/
+    name: infinispan
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.2.1/infinispan-infinispan-0.2.1.tgz
+    version: 0.2.1
   nirmata-kyverno:
   - annotations:
       charts.openshift.io/digest: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
@@ -1862,4 +1887,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.9.0/wavefronthq-wavefront-1.9.0.tgz
     version: 1.9.0
-generated: '2022-03-02T19:40:52.404621+00:00'
+generated: '2022-03-03T17:13:23.115059+00:00'
