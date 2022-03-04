@@ -1,0 +1,9 @@
+chart:
+  name: dvdv
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
+vendor:
+  label: test467
+  name: rhn-support-test1710922225

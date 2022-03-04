@@ -1,0 +1,85 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.4.1
+        profile:
+            VendorType: partner
+            version: v1.0
+        chart-uri: https://redhat-developer.github.io/redhat-helm-charts/charts/spring-boot-rest-http-0.0.1.tgz
+        digest: sha256:60118356338a1d932de598436cf5b482bfe59fe3344fa90db55db359f9ec0a86
+        digests:
+            chart: sha256:5d312abe9fb8e5a3255036e0b9f4f53f480fc2c12ed0c0f36f03c72ab9af9038
+            package: 60118356338a1d932de598436cf5b482bfe59fe3344fa90db55db359f9ec0a86
+        lastCertifiedTimestamp: "2021-07-09T21:36:27.096408+00:00"
+        certifiedOpenShiftVersions: 4.7.5
+    chart:
+        name: spring-boot-rest-http
+        home: ""
+        sources: []
+        version: 0.0.1
+        description: A Helm chart to build and deploy Spring Boot application with REST endpoints
+        keywords:
+          - runtimes
+          - spring-boot
+        maintainers: []
+        icon: "https://avatars.githubusercontent.com/u/558276?s=400&u=19efc68c74844b2e092698a8a7a752921edcdc19&v=4"
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: ""
+        deprecated: false
+        annotations: {}
+        kubeversion: ""
+        dependencies:
+          - name: spring-boot-example-app
+            version: 0.0.3
+            repository: http://snowdrop.github.io/helm
+        type: ""
+    chart-overrides: ""
+results:
+  - check: v1.0/has-readme
+    type: Mandatory
+    outcome: FAIL
+    reason: Chart does not have a README
+  - check: v1.0/contains-test
+    type: Mandatory
+    outcome: FAIL
+    reason: Chart test files do not exist
+  - check: v1.0/contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
+  - check: v1.0/has-kubeversion
+    type: Mandatory
+    outcome: FAIL
+    reason: Kubernetes version is not specified
+  - check: v1.0/not-contains-crds
+    type: Mandatory
+    outcome: PASS
+    reason: Chart does not contain CRDs
+  - check: v1.0/helm-lint
+    type: Mandatory
+    outcome: PASS
+    reason: Helm lint successful
+  - check: v1.0/not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
+  - check: v1.0/chart-testing
+    type: Mandatory
+    outcome: PASS
+    reason: Chart tests have passed
+  - check: v1.0/is-helm-v3
+    type: Mandatory
+    outcome: PASS
+    reason: API version is V2, used in Helm 3
+  - check: v1.0/contains-values-schema
+    type: Mandatory
+    outcome: PASS
+    reason: Values schema file exist
+  - check: v1.0/images-are-certified
+    type: Mandatory
+    outcome: FAIL
+    reason: 'Image is not Red Hat certified :   : Bad response code from Pyxis: 400
+        : https://catalog.redhat.com/api/containers/v1/repositories?filter=repository%3D%3D+'

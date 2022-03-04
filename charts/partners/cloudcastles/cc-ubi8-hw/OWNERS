@@ -1,0 +1,9 @@
+chart:
+  name: cc-ubi8-hw
+  shortDescription: Basic helm chart for cc sample application
+publicPgpKey: null
+users:
+- githubUsername: vrvaderom
+vendor:
+  label: cloudcastles
+  name: Cloud Castles

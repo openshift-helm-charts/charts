@@ -1,0 +1,87 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.4.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: https://github.com/rhm-samples/edge-helm-charts/blob/master/nodered-chart-0.0.3.tgz?raw=true
+        digests:
+            chart: sha256:46714455003028a6026b8f12f7bd4dbef30f06a38a79a58f3576fa5a13fa087b
+            package: f29558295f24ea49f87523a230b67b941180ba95775e6ea4533bcd8c2b5b40c5
+        lastCertifiedTimestamp: "2022-01-14T13:27:34.56394+00:00"
+        testedOpenShiftVersion: "4.8"
+        supportedOpenShiftVersions: '>=4.5'
+    chart:
+        name: nodered-chart
+        home: ""
+        sources: []
+        version: 0.0.3
+        description: A Helm chart for NodeRed.
+        keywords: []
+        maintainers: []
+        icon: https://raw.githubusercontent.com/rhm-samples/node-red-operator/node-red-logo/_images/nodered-logo.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.16.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: Node Red Chart
+            charts.openshift.io/provider: IBM-Edge
+            charts.openshift.io/supportURL: https://github.com/rhm-samples/node-red-operator/issues
+        kubeversion: '>=1.18.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : registry.connect.redhat.com/ibm-edge/node-red:v0.0.3'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs

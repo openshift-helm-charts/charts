@@ -1,0 +1,9 @@
+chart:
+  name: test-helm-chart-internal
+  shortDescription: test
+publicPgpKey: dGVzdA==
+users:
+- githubUsername: sawalgiriraj
+vendor:
+  label: test61bc576f84112e60431226fd
+  name: A AND COMPANY
