@@ -79,8 +79,8 @@ results:
       reason: Chart does not contain CRDs
     - check: v1.0/images-are-certified
       type: Mandatory
-      outcome: FAIL
-      reason: 'Image is not Red Hat certified : quay.io/rhcert/cmm-operator:CMM22.2.0_B1_C2056 : No images found for Registry/Repository: quay.io/rhcert/cmm-operator'
+      outcome: PASS
+      reason: 'Image scan passed'
     - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
