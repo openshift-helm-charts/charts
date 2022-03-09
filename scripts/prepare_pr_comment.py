@@ -24,12 +24,12 @@ def prepare_success_comment():
     msg = f"Congratulations! Your chart has been certified and will be published shortly.\n\n"
     return msg
 
-def prepare_sanity_failure_comment():
+def prepare_pr_content_failure_comment():
     msg = f"One or more errors were found with the pull request: \n"
-    sanity_error_msg = os.environ.get("SANITY_ERROR_MESSAGE", "")
+    pr_content_error_msg = os.environ.get("PR_CONTENT_ERROR_MESSAGE", "")
     owners_error_msg = os.environ.get("OWNERS_ERROR_MESSAGE", "")
-    if sanity_error_msg:
-        msg += f"{sanity_error_msg}\n\n"
+    if pr_content_error_msg:
+        msg += f"{pr_content_error_msg}\n\n"
     if owners_error_msg:
         msg += f"{owners_error_msg}\n\n"
     return msg
@@ -60,7 +60,7 @@ def get_comment_footer(vendor_label, chart_name):
     return msg
 
 def main():
-    sanity_result = sys.argv[1]
+    pr_content_result = sys.argv[1]
     verify_result = sys.argv[2]
     repository = sys.argv[3]
     issue_number = open("./pr/NR").read().strip()
@@ -68,8 +68,8 @@ def main():
     chart_name = open("./pr/chart").read().strip()
     msg = get_comment_header(issue_number)
     oc_install_result = os.environ.get("OC_INSTALL_RESULT", False)
-    if sanity_result == "failure":
-        msg += prepare_sanity_failure_comment()
+    if pr_content_result == "failure":
+        msg += prepare_pr_content_failure_comment()
     elif verify_result == "failure":
         community_manual_review = os.environ.get("COMMUNITY_MANUAL_REVIEW",False)
         if community_manual_review:

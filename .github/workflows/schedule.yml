@@ -162,6 +162,7 @@ jobs:
           ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
 
       - name: (Schedule) Run tests on existing charts
+        id: run-schedule-tests
         if: |
           github.event_name == 'schedule' && steps.compare_ocp_versions.outputs.run_tests == 'true'
         env:
@@ -183,6 +184,19 @@ jobs:
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
           ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
 
+      - name: Send message to slack channel
+        id: notify
+        if: always() && github.event_name == 'schedule' && steps.compare_cv_versions.outputs.run_tests == 'true'
+        uses: archive/github-actions-slack@v2.0.0
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: C02979BDUPL
+          slack-text: ${{ steps.run-schedule-tests.conclusion }}! Nightly run after OCP version update detected. See '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
+
+      - name: Result from "Send Message to slack channel"
+        run: echo "The result was ${{ steps.notify.outputs.slack-result }}"
+
+
   check-chart-verifier:
     name: Check Chart Verifier Version
     runs-on: ubuntu-20.04
@@ -202,7 +216,7 @@ jobs:
 
       - name: Get current Chart Verifier version
         id: get_curr_cv_version
-        if: steps.chart-repo.outputs.run-job == 'true'
+        if: steps.check-repo.outputs.run-job == 'true'
         run: |
           QUAY_API='https://quay.io/api/v1/repository/redhat-certification/chart-verifier/tag/'
           CV_DIGEST=$(curl ${QUAY_API} | jq '[.tags[] | select(.name == "latest")] | .[0].manifest_digest')
@@ -211,13 +225,13 @@ jobs:
         shell: bash
 
       - name: Checkout software-version branch
-        if: steps.chart-repo.outputs.run-job == 'true'
+        if: steps.check-repo.outputs.run-job == 'true'
         uses: actions/checkout@v2
         with:
           ref: "software-version"
 
       - name: Read previous Chart Verifier digest
-        if: steps.chart-repo.outputs.run-job == 'true'
+        if: steps.check-repo.outputs.run-job == 'true'
         id: get_prev_cv_digest
         uses: mikefarah/yq@master
         with:
@@ -252,7 +266,7 @@ jobs:
           steps.compare_cv_versions.outputs.run_tests == 'true' &&
           (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run != 'true'))
         run: |
-          COMMIT_MESSAGE=$(printf "software-version.yaml: Update OpenShift version from '%s' to '%s'" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}")
+          COMMIT_MESSAGE=$(printf "software-version.yaml: Update chart-verifier version from '%s' to '%s'" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}")
           git remote -v
           git branch -vv
 
@@ -308,6 +322,7 @@ jobs:
           ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
 
       - name: (Schedule) Run tests on existing charts
+        id: run-schedule-tests
         if: |
           github.event_name == 'schedule' && steps.compare_cv_versions.outputs.run_tests == 'true'
         env:
@@ -328,3 +343,16 @@ jobs:
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
           ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+
+      - name: Send message to slack channel
+        id: notify
+        if: always() && github.event_name == 'schedule' && steps.compare_cv_versions.outputs.run_tests == 'true'
+        uses: archive/github-actions-slack@v2.0.0
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: C02979BDUPL
+          slack-text: ${{ steps.run-schedule-tests.conclusion }}! Nightly run after chartverifier version update detected. See '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
+
+      - name: Result from "Send Message to slack channel"
+        run: echo "The result was ${{ steps.notify.outputs.slack-result }}"
+

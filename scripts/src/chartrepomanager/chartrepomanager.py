@@ -194,10 +194,10 @@ def set_package_digest(chart_entry):
 
 
 
-def update_index_and_push(indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number):
+def update_index_and_push(indexfile,indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number):
     token = os.environ.get("GITHUB_TOKEN")
-    print("Downloading index.yaml")
-    r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
+    print(f"Downloading {indexfile}")
+    r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/{indexfile}')
     original_etag = r.headers.get('etag')
     now = datetime.now(timezone.utc).astimezone().isoformat()
     if r.status_code == 200:
@@ -228,8 +228,8 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
 
     print("[INFO] Add and commit changes to git")
     out = yaml.dump(data, Dumper=Dumper)
-    print("index.yaml content:\n", out)
-    with open(os.path.join(indexdir, "index.yaml"), "w") as fd:
+    print(f"{indexfile} content:\n", out)
+    with open(os.path.join(indexdir,indexfile), "w") as fd:
         fd.write(out)
     old_cwd = os.getcwd()
     os.chdir(indexdir)
@@ -237,11 +237,11 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print("Git status:")
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
-    out = subprocess.run(["git", "add", os.path.join(indexdir, "index.yaml")], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "add", os.path.join(indexdir, indexfile)], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
-        print("Error adding index.yaml to git staging area", "index directory", indexdir, "branch", branch)
+        print(f"Error adding {indexfile} to git staging area", "index directory", indexdir, "branch", branch)
     out = subprocess.run(["git", "status"], cwd=indexdir, capture_output=True)
     print("Git status:")
     print(out.stdout.decode("utf-8"))
@@ -250,11 +250,11 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
-        print("Error committing index.yaml", "index directory", indexdir, "branch", branch, "error:", err)
-    r = requests.head(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
+        print(f"Error committing {indexfile}", "index directory", indexdir, "branch", branch, "error:", err)
+    r = requests.head(f'https://raw.githubusercontent.com/{repository}/{branch}/{indexfile}')
     etag = r.headers.get('etag')
     if original_etag and etag and (original_etag != etag):
-        print("index.html not updated. ETag mismatch.", "original ETag", original_etag, "new ETag", etag, "index directory", indexdir, "branch", branch)
+        print(f"{indexfile} not updated. ETag mismatch.", "original ETag", original_etag, "new ETag", etag, "index directory", indexdir, "branch", branch)
         sys.exit(1)
     out = subprocess.run(["git", "status"], cwd=indexdir, capture_output=True)
     print("Git status:")
@@ -264,7 +264,7 @@ def update_index_and_push(indexdir, repository, branch, category, organization, 
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
     if out.returncode:
-        print("index.html not updated. Push failed.", "index directory", indexdir, "branch", branch)
+        print(f"{indexfile} not updated. Push failed.", "index directory", indexdir, "branch", branch)
         sys.exit(1)
     os.chdir(old_cwd)
 
@@ -331,6 +331,12 @@ def main():
     print("[INFO] Creating Git worktree for index branch")
     indexdir = create_worktree_for_index(branch)
 
+    print(f'[INFO] os.environ["PROVIDER_DELIVERY"] {os.environ["PROVIDER_DELIVERY"]}')
+    if os.environ["PROVIDER_DELIVERY"] and os.environ["PROVIDER_DELIVERY"] == "True":
+        indexfile = "unpublished-certified-charts.yaml"
+    else:
+        indexfile = "index.yaml"
+
     print("[INFO] Report Content : ", os.environ.get("REPORT_CONTENT"))
     if chart_source_exists or chart_tarball_exists:
         if chart_source_exists:
@@ -367,4 +373,4 @@ def main():
         print("[INFO] Creating index from report")
         chart_entry, chart_url = create_index_from_report(category, report_path)
 
-    update_index_and_push(indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number)
+    update_index_and_push(indexfile,indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number)

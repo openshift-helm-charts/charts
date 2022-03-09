@@ -25,6 +25,8 @@ class E2ETestSecretOneShot(E2ETestSecret):
     pr_number: int = -1
     vendor: str = ''
     bad_version: str = ''
+    provider_delivery: bool = False
+    index_file: str = "index.yaml"
 
 @dataclass
 class E2ETestSecretRecursive(E2ETestSecret):
