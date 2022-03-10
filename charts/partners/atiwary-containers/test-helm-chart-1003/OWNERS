@@ -1,0 +1,8 @@
+chart:
+  name: test-helm-chart-1003
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: atiwary-containers
+  name: Red Hat, Inc.
