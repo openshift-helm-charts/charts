@@ -14,7 +14,8 @@
       },
       "lastCertifiedTimestamp": "2021-11-24T11:42:48.736244+05:30",
       "testedOpenShiftVersion": "4.9",
-      "supportedOpenShiftVersions": ">=4.2"
+      "supportedOpenShiftVersions": ">=4.2",
+      "providerControlledDelivery": "false"
     },
     "chart": {
       "name": "vault",

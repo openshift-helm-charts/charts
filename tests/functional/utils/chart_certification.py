@@ -30,6 +30,7 @@ chart:
   name: ${chart_name}
   shortDescription: Test chart for testing chart submission workflows.
 publicPgpKey: null
+providerDelivery: ${provider_delivery}
 users:
 - githubUsername: ${bot_name}
 vendor:
@@ -130,11 +131,12 @@ vendor:
             pytest.fail(f"error sending pull request, response was: {r.text}")
         return j['number']
 
-    def create_and_push_owners_file(self, chart_directory, base_branch, vendor_name, vendor_type, chart_name,):
+    def create_and_push_owners_file(self, chart_directory, base_branch, vendor_name, vendor_type, chart_name, provider_delivery=False):
         with SetDirectory(Path(self.temp_dir.name)):
             # Create the OWNERS file from the string template
             values = {'bot_name': self.secrets.bot_name,
-                    'vendor': vendor_name, 'chart_name': chart_name}
+                    'vendor': vendor_name, 'chart_name': chart_name,
+                      "provider_delivery" : provider_delivery}
             content = Template(self.secrets.owners_file_content).substitute(values)
             with open(f'{chart_directory}/OWNERS', 'w') as fd:
                 fd.write(content)
@@ -148,12 +150,12 @@ vendor:
             self.temp_repo.git.push(f'https://x-access-token:{self.secrets.bot_token}@github.com/{self.secrets.test_repo}',
                         f'HEAD:refs/heads/{base_branch}', '-f')
 
-    def check_index_yaml(self, base_branch, vendor, chart_name, chart_version, check_provider_type=False, logger=pytest.fail):
+    def check_index_yaml(self,base_branch, vendor, chart_name, chart_version, index_file="index.yaml", check_provider_type=False, logger=pytest.fail):
         old_branch = self.repo.active_branch.name
         self.repo.git.fetch(f'https://github.com/{self.secrets.test_repo}.git',
                     '{0}:{0}'.format(f'{base_branch}-gh-pages'), '-f')
         self.repo.git.checkout(f'{base_branch}-gh-pages')
-        with open('index.yaml', 'r') as fd:
+        with open(index_file, 'r') as fd:
             try:
                 index = yaml.safe_load(fd)
             except yaml.YAMLError as err:
@@ -163,13 +165,13 @@ vendor:
         entry = vendor + '-' + chart_name
         if entry not in index['entries']:
             logger(
-                f"{chart_name} {chart_version} not added to index")
+                f"{entry} not added in entries to {index_file}")
             return False
 
         version_list = [release['version'] for release in index['entries'][entry]]
         if chart_version not in version_list:
             logger(
-                f"{chart_name} {chart_version} not added to index")
+                f"{chart_version} not added to {index_file}")
             return False
 
         #This check is applicable for charts submitted in redhat path when one of the chart-verifier check fails
@@ -315,6 +317,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         self.secrets.pr_branch = pr_branch
         self.secrets.chart_name = chart_name
         self.secrets.chart_version = chart_version
+        self.secrets.index_file = "index.yaml"
 
     def cleanup (self):
         # Cleanup releases and release tags
@@ -445,7 +448,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                 pytest.fail(f"Failed to remove readme file : {e}")
 
     def process_owners_file(self):
-        super().create_and_push_owners_file(self.chart_directory, self.secrets.base_branch, self.secrets.vendor, self.secrets.vendor_type, self.secrets.chart_name)
+        super().create_and_push_owners_file(self.chart_directory, self.secrets.base_branch, self.secrets.vendor, self.secrets.vendor_type, self.secrets.chart_name,self.secrets.provider_delivery)
 
     def process_chart(self, is_tarball: bool):
         with SetDirectory(Path(self.temp_dir.name)):
@@ -460,7 +463,8 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
 
     def process_report(self, update_chart_sha=False, update_url=False, url=None,
-                       update_versions=False,supported_versions=None,tested_version=None,kube_version=None, missing_check=None):
+                       update_versions=False,supported_versions=None,tested_version=None,kube_version=None,
+                       update_provider_delivery=False, provider_delivery=False, missing_check=None):
 
         with SetDirectory(Path(self.temp_dir.name)):
             # Copy report to temporary location and push to test_repo:pr_branch
@@ -476,7 +480,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
             with open(report_path, 'w') as fd:
                 fd.write(content)
 
-            if update_chart_sha or update_url or update_versions:
+            if update_chart_sha or update_url or update_versions or update_provider_delivery:
 
                 with open(report_path, 'r') as fd:
                     try:
@@ -504,6 +508,9 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                     logging.info(f"Updated testedOpenShiftVersion value in report: {tested_version}")
                     logging.info(f"Updated supportedOpenShiftVersions value in report: {supported_versions}")
                     logging.info(f"Updated kubeversion value in report: {kube_version}")
+
+                if update_provider_delivery:
+                    report['metadata']['tool']['providerControlledDelivery'] = provider_delivery
 
                 with open(report_path, 'w') as fd:
                     try:
@@ -554,6 +561,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
     def send_pull_request(self):
         self.secrets.pr_number = super().send_pull_request(self.secrets.test_repo, self.secrets.base_branch, self.secrets.pr_branch, self.secrets.bot_token)
+        print(f"[INFO] PR number: {self.secrets.pr_number}")
 
     # expect_result: a string representation of expected result, e.g. 'success'
     def check_workflow_conclusion(self, expect_result: str):
@@ -578,7 +586,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
             pytest.fail(f"Was expecting '{expect_message}' in the comment {complete_comment}")
 
     def check_index_yaml(self, check_provider_type=False):
-        super().check_index_yaml(self.secrets.base_branch, self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, check_provider_type, pytest.fail)
+        super().check_index_yaml(self.secrets.base_branch, self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, self.secrets.index_file,check_provider_type, pytest.fail)
 
     def check_release_result(self):
         chart_tgz = self.secrets.test_chart.split('/')[-1]

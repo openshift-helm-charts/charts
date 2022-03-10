@@ -72,6 +72,26 @@ jobs:
           # workflow only change but user not authorized
           exit 1
 
+      - name: (PR) check for release flow
+        id: check_if_release_pr
+        if: |
+          github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
+        env:
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+        run: |
+          # check if PR was created as part of release processing
+          # mitigate unmatched quote error in bash
+          pr_body=$(cat <<EOF | xargs -0 printf '%q'
+          ${{ github.event.pull_request.body }}
+          EOF
+          )
+          ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
+                                --sender='${{ github.event.sender.login }}' \
+                                --pr_branch='${{ github.event.pull_request.head.ref }}' \
+                                --pr_body="${pr_body}" \
+                                --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
+                                --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
+
       - name: (PR) Test CI Workflow
         if: |
           github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
@@ -82,7 +102,14 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_BODY: "Test triggered by ${{ github.event.pull_request.html_url }}."
         run: |
-          ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/step_defs/test_submitted_charts.py --tb=short
+          echo "Full test in pr : {{steps.check_request.outputs.full_tests_in_pr }}"
+          if ${{steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }} ; then
+            echo "Release PR from dev to charts, oer PR with new full test, so running full tests"
+            ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/step_defs/test_smoke_scenarios.py --ignore=tests/functional/step_defs/test_submitted_charts.py --tb=short
+          else
+            echo "Not a release PR from dev to charts, so running only smoke tests"
+            ve1/bin/pytest tests/functional/step_defs/test_smoke_scenarios.py --log-cli-level=WARNING --tb=short
+          fi
 
       - name: (Manual) Test CI Workflow
         if: |
@@ -104,26 +131,6 @@ jobs:
           echo "[INFO] Software Name '${{ env.SOFTWARE_NAME }}'"
           echo "[INFO] Software Version '${{ env.SOFTWARE_VERSION }}'"
           ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
-
-      - name: (PR) check for release flow
-        id: check_if_release_pr
-        if: |
-          github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
-        env:
-          BOT_NAME: ${{ secrets.BOT_NAME }}
-        run: |
-          # check if PR was created as part of release processing
-          # mitigate unmatched quote error in bash
-          pr_body=$(cat <<EOF | xargs -0 printf '%q'
-          ${{ github.event.pull_request.body }}
-          EOF
-          )
-          ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
-                                --sender='${{ github.event.sender.login }}' \
-                                --pr_branch='${{ github.event.pull_request.head.ref }}' \
-                                --pr_body="${pr_body}" \
-                                --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
-                                --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
 
       - name: Approve PR
         id: approve_pr

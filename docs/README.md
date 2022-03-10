@@ -243,12 +243,12 @@ checks are marked with the "required" label to merge the PR automatically:
 
 > CI / Chart Certification (pull_request_target)            [Details](#)
 
-The first part of Chart Certification (Sanity Check) fails if the pull request
+The first part of Chart Certification (PR Content Check) fails if the pull request
 contains changes not related to any chart.  This check performs using the script
 already part of the upstream repository.  That way, it will ensure the pull
-request author is not modifying the verification scripts themselves.  Sanity
-check also ensures the chart version submitted is not already released
-earlier. The job will fail if any sanity checks fail.
+request author is not modifying the verification scripts themselves. PR Content
+check also ensures the chart version submitted is not already released and if 
+provider control delivery settings are consistant. The job will fail if any of the checks fail.
 
 The second part of Chart Certification (Verify PR) performs all the necessary
 checks to merge the pull request.  The following sections explain various errors
