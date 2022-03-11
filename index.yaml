@@ -799,6 +799,38 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.10.tgz?raw=true
     version: 2.1.10
+  - annotations:
+      charts.openshift.io/digest: sha256:80c76c8bd30cea069523dc9b87e92d319c91afd3a22230857eb336005033dfc9
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-11T04:28:56.873761+00:00'
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-03-11T04:31:07.648080+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.7'
+    apiVersion: v2
+    appVersion: 2.1.12
+    description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object
+      Storage is persistent, highly available storage that you can mount to apps that
+      run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The
+      plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage
+      buckets to pods in your cluster. '
+    digest: 4251e5d56b15f860648a17fe21726adbfe930d5ffb446d02a24fff2e8a11cd3f
+    icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
+    keywords:
+    - IKS
+    - amd64
+    - Storage
+    - Commercial
+    - Limited
+    - Other
+    - ROKS
+    kubeVersion: '>=1.19.0'
+    maintainers:
+    - email: contsto2@in.ibm.com
+      name: IBM
+    name: ibm-object-storage-plugin
+    urls:
+    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.12.tgz?raw=true
+    version: 2.1.12
   ibm-ibm-oms-ent-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
@@ -2090,4 +2122,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.9.4/wavefronthq-wavefront-1.9.4.tgz
     version: 1.9.4
-generated: '2022-03-08T22:29:15.114518+00:00'
+generated: '2022-03-11T04:31:07.648080+00:00'
