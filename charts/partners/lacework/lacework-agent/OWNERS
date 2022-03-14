@@ -1,0 +1,8 @@
+chart:
+  name: lacework-agent
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: lacework
+  name: Lacework
