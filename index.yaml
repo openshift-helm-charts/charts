@@ -1438,6 +1438,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-jenkins-0.0.3/redhat-jenkins-0.0.3.tgz
     version: 0.0.3
+  redhat-mysql-sed:
+  - annotations:
+      charts.openshift.io/digest: sha256:451087463b43fdffa1bd542bdec76f50909355cced7310d8093c4da38a15be48
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-15T13:30:29.675151+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2022-03-15T13:35:36.438027+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: 0.1.0
+    description: A Helm chart for MySQL Service Endpoint Definition (SED)
+    digest: 6f3f5b053e2bd381fc7941f7a7528a82ab66f846ade4c23ff55a607ec7ac58d6
+    kubeVersion: '>=1.20.0'
+    name: mysql-sed
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mysql-sed-0.1.0/redhat-mysql-sed-0.1.0.tgz
+    version: 0.1.0
   redhat-nodejs:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -2141,4 +2160,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.9.4/wavefronthq-wavefront-1.9.4.tgz
     version: 1.9.4
-generated: '2022-03-15T00:45:48.347205+00:00'
+generated: '2022-03-15T13:35:36.438027+00:00'
