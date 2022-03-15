@@ -8,9 +8,9 @@ metadata:
             version: v1.1
         chart-uri: /.kube/mysql-sed-0.1.0.tgz
         digests:
-            chart: sha256:c1cfc44f46003f6297b37cc5b2146332d1939531e8ec7cefd27b47a94fb18010
-            package: 64562e9b3b8ad8730f17624af739b5b29352647f928a7e1eb10019de5c1d4359
-        lastCertifiedTimestamp: "2022-03-15T11:40:56.647882+00:00"
+            chart: sha256:451087463b43fdffa1bd542bdec76f50909355cced7310d8093c4da38a15be48
+            package: 6f3f5b053e2bd381fc7941f7a7528a82ab66f846ade4c23ff55a607ec7ac58d6
+        lastCertifiedTimestamp: "2022-03-15T13:30:29.675151+00:00"
         testedOpenShiftVersion: "4.9"
         supportedOpenShiftVersions: '>=4.7'
         providerControlledDelivery: false
@@ -38,38 +38,10 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: 'Image is Red Hat certified : registry.access.redhat.com/rhscl/mysql-80-rhel7:latest'
     - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
@@ -78,11 +50,39 @@ results:
       type: Mandatory
       outcome: PASS
       reason: All required annotations present
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : registry.access.redhat.com/rhscl/mysql-80-rhel7:latest'
