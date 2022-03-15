@@ -1,8 +1,9 @@
 chart:
   name: lacework-agent
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Lacework Agent Helm Charts
+publicPgpKey: null
+users:
+- githubUsername: cirego
 vendor:
   label: lacework
   name: Lacework
