@@ -1491,6 +1491,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nodejs-ex-k-0.2.1/redhat-nodejs-ex-k-0.2.1.tgz
     version: 0.2.1
+  redhat-psql-sed:
+  - annotations:
+      charts.openshift.io/digest: sha256:9f6343df9aac5a44a06589169f912a9be9582df0e0ff9cb80865b0927e79c452
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-15T00:32:30.409953+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2022-03-15T00:45:48.347205+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart for PostgreSQL Service Endpoint Definition (SED)
+    digest: b775e389fc61719c9f6360c175f24dc0e1fc2465eab121db12725c0a7aebbc01
+    kubeVersion: '>=1.20.0'
+    name: psql-sed
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-psql-sed-1.0.0/redhat-psql-sed-1.0.0.tgz
+    version: 1.0.0
   redhat-quarkus:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -2122,4 +2141,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.9.4/wavefronthq-wavefront-1.9.4.tgz
     version: 1.9.4
-generated: '2022-03-11T04:31:07.648080+00:00'
+generated: '2022-03-15T00:45:48.347205+00:00'
