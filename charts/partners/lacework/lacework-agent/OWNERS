@@ -4,6 +4,15 @@ chart:
 publicPgpKey: null
 users:
 - githubUsername: cirego
+- githubUsername: nschmeller
+- githubUsername: theopolis
+- githubUsername: mohamedghozzi-lw
+- githubUsername: jprakash-lw
+- githubUsername: mattiv-lw
+- githubUsername: rnalexlacework
+- githubUsername: ammarekbote
+- githubUsername: anilnanduribote
+- githubUsername: ''
 vendor:
   label: lacework
   name: Lacework
