@@ -1438,6 +1438,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-jenkins-0.0.3/redhat-jenkins-0.0.3.tgz
     version: 0.0.3
+  redhat-mongo-sed:
+  - annotations:
+      charts.openshift.io/digest: sha256:0c58aaebf6f6fed25017c33d1a073febbb448d3cb561e3dfc6611a3b2a016cfd
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-15T11:59:46.057866+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2022-03-17T06:23:22.169968+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart for MongoDB Service Endpoint Definition (SED)
+    digest: 3fcd1efd82f984ad24b27d32c6349bff57e5ec1861380d2c05e6461485597f64
+    kubeVersion: '>=1.20.0'
+    name: mongo-sed
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mongo-sed-1.0.0/redhat-mongo-sed-1.0.0.tgz
+    version: 1.0.0
   redhat-mysql-sed:
   - annotations:
       charts.openshift.io/digest: sha256:451087463b43fdffa1bd542bdec76f50909355cced7310d8093c4da38a15be48
@@ -2206,4 +2225,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.0/wavefronthq-wavefront-1.10.0.tgz
     version: 1.10.0
-generated: '2022-03-16T21:21:46.844899+00:00'
+generated: '2022-03-17T06:23:22.169968+00:00'
