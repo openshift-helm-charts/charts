@@ -1,0 +1,95 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.6.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: /charts/lacework-agent-5.4.1.tgz
+        digests:
+            chart: sha256:fdc6f7c21a4f42349848a970de8a1d4a548c58e3f1366b0d3f84705a3b979a31
+            package: 60a977f3f65094912be2819b8952bc0d4ec1e1eb566b796e265ad327069b08ad
+        lastCertifiedTimestamp: "2022-03-15T17:49:54.212404+00:00"
+        testedOpenShiftVersion: "4.9"
+        supportedOpenShiftVersions: '>=4.1'
+        providerControlledDelivery: false
+    chart:
+        name: lacework-agent
+        home: https://www.lacework.com
+        sources: []
+        version: 5.4.1
+        description: Lacework Agent
+        keywords:
+            - monitoring
+            - security
+            - run-time
+            - metric
+            - troubleshooting
+        maintainers:
+            - name: lacework-support
+              email: info@lacework.net
+              url: ""
+        icon: https://www.lacework.com/wp-content/uploads/2019/07/Lacework_Logo_color_2019.svg
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: "1.0"
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Lacework Agent
+            charts.openshift.io/provider: Lacework
+            charts.openshift.io/supportURL: https://support.lacework.com
+        kubeversion: '> 1.9.0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : registry.connect.redhat.com/lacework/lacework-agent:5.4.1'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
