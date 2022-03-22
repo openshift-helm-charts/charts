@@ -1258,6 +1258,35 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.2.1/infinispan-infinispan-0.2.1.tgz
     version: 0.2.1
+  lacework-lacework-agent:
+  - annotations:
+      charts.openshift.io/digest: sha256:fdc6f7c21a4f42349848a970de8a1d4a548c58e3f1366b0d3f84705a3b979a31
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-15T17:49:54.212404+00:00'
+      charts.openshift.io/provider: Lacework
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-03-22T18:25:03.951306+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '1.0'
+    description: Lacework Agent
+    digest: 60a977f3f65094912be2819b8952bc0d4ec1e1eb566b796e265ad327069b08ad
+    home: https://www.lacework.com
+    icon: https://www.lacework.com/wp-content/uploads/2019/07/Lacework_Logo_color_2019.svg
+    keywords:
+    - monitoring
+    - security
+    - run-time
+    - metric
+    - troubleshooting
+    kubeVersion: '> 1.9.0'
+    maintainers:
+    - email: info@lacework.net
+      name: lacework-support
+    name: lacework-agent
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/lacework-lacework-agent-5.4.1/lacework-lacework-agent-5.4.1.tgz
+    version: 5.4.1
   nirmata-kyverno:
   - annotations:
       charts.openshift.io/digest: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
@@ -2225,4 +2254,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.0/wavefronthq-wavefront-1.10.0.tgz
     version: 1.10.0
-generated: '2022-03-17T06:23:22.169968+00:00'
+generated: '2022-03-22T18:25:03.951306+00:00'
