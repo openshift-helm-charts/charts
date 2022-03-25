@@ -831,6 +831,38 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.12.tgz?raw=true
     version: 2.1.12
+  - annotations:
+      charts.openshift.io/digest: sha256:806a694f109c2c0518e8f7c6eb15604cdd9bae68ce785a65c5fb6a1f9117c60b
+      charts.openshift.io/lastCertifiedTimestamp: '2022-03-25T04:25:02.265068+00:00'
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-03-25T05:08:22.528689+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.7'
+    apiVersion: v2
+    appVersion: 2.1.13
+    description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object
+      Storage is persistent, highly available storage that you can mount to apps that
+      run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The
+      plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage
+      buckets to pods in your cluster. '
+    digest: 14666fe65925048cf1ff08e61837583fd33baa1f84fba08d3d9e3a2728afebec
+    icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
+    keywords:
+    - IKS
+    - amd64
+    - Storage
+    - Commercial
+    - Limited
+    - Other
+    - ROKS
+    kubeVersion: '>=1.19.0'
+    maintainers:
+    - email: contsto2@in.ibm.com
+      name: IBM
+    name: ibm-object-storage-plugin
+    urls:
+    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.13.tgz?raw=true
+    version: 2.1.13
   ibm-ibm-oms-ent-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
@@ -2254,4 +2286,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.0/wavefronthq-wavefront-1.10.0.tgz
     version: 1.10.0
-generated: '2022-03-22T18:25:03.951306+00:00'
+generated: '2022-03-25T05:08:22.528689+00:00'
