@@ -1437,6 +1437,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-eap74-1.1.0/redhat-eap74-1.1.0.tgz
     version: 1.1.0
+  redhat-elasticsearch-sed:
+  - annotations:
+      charts.openshift.io/digest: sha256:1ac0cba03bf38fe0b83cc96501bc12b4b2e9bd0ea002f2bd3b2d2dd2e5ef8a6b
+      charts.openshift.io/lastCertifiedTimestamp: '2022-04-06T06:41:55.034514+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2022-04-06T11:58:38.066408+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart for Elasticsearch Service Endpoint Definition (SED)
+    digest: c596717d2c09d9cafe6a43780c9a45e30d070237ee0dbde2ea0009c5f7882d59
+    kubeVersion: '>=1.20.0'
+    name: elasticsearch-sed
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-elasticsearch-sed-1.0.0/redhat-elasticsearch-sed-1.0.0.tgz
+    version: 1.0.0
   redhat-jenkins:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
@@ -2378,4 +2397,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.2/wavefronthq-wavefront-1.10.2.tgz
     version: 1.10.2
-generated: '2022-03-30T20:42:25.162832+00:00'
+generated: '2022-04-06T11:58:38.066408+00:00'
