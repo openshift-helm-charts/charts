@@ -863,6 +863,38 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.13.tgz?raw=true
     version: 2.1.13
+  - annotations:
+      charts.openshift.io/digest: sha256:f716155a758362e0f4d632c231bce2b9a36d9fca416be0350098e07098d1054f
+      charts.openshift.io/lastCertifiedTimestamp: '2022-04-11T09:09:49.145444+00:00'
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-04-11T09:25:11.502811+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.7'
+    apiVersion: v2
+    appVersion: 2.1.14
+    description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object
+      Storage is persistent, highly available storage that you can mount to apps that
+      run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The
+      plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage
+      buckets to pods in your cluster. '
+    digest: 8f03acc84643650e6e1a5a50df3e3b1ba3354e5e7a70427de2c1b2a2f4bfde19
+    icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
+    keywords:
+    - IKS
+    - amd64
+    - Storage
+    - Commercial
+    - Limited
+    - Other
+    - ROKS
+    kubeVersion: '>=1.19.0'
+    maintainers:
+    - email: contsto2@in.ibm.com
+      name: IBM
+    name: ibm-object-storage-plugin
+    urls:
+    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.14.tgz?raw=true
+    version: 2.1.14
   ibm-ibm-oms-ent-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
@@ -2397,4 +2429,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.2/wavefronthq-wavefront-1.10.2.tgz
     version: 1.10.2
-generated: '2022-04-06T11:58:38.066408+00:00'
+generated: '2022-04-11T09:25:11.502811+00:00'
