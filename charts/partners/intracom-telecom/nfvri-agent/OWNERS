@@ -1,8 +1,10 @@
 chart:
   name: nfvri-agent
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: angelouev
+- githubUsername: victor-timofei
 vendor:
   label: intracom-telecom
   name: Intracom S A Telecom Solutions
