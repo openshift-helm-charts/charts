@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: europe-docker.pkg.dev/nfv-ri/rh-helm-charts/nfvri
+        chart-uri: https://europe-docker.pkg.dev/nfv-ri/rh-helm-charts/nfvri
         digests:
             chart: sha256:590d7a20414c751498c355163f48bf312481726fc617f9a034bbcd682e802477
             package: 311b83691f68272f4cc09a13c547b67052457d02775b2455687c1b59f660b3b9
