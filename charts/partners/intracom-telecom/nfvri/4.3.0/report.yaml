@@ -10,7 +10,7 @@ metadata:
         digests:
             chart: sha256:590d7a20414c751498c355163f48bf312481726fc617f9a034bbcd682e802477
             package: 311b83691f68272f4cc09a13c547b67052457d02775b2455687c1b59f660b3b9
-        lastCertifiedTimestamp: "2022-04-12T10:34:46.151802+00:00"
+        lastCertifiedTimestamp: "2022-04-20T10:33:50.894848+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.7'
         providerControlledDelivery: false
@@ -79,6 +79,17 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : docker.io/bitnami/redis:6.2.6-debian-10-r169 : No images found for Registry/Repository: docker.io/bitnami/redis
+        Image is not Red Hat certified : busybox : Respository not found: busybox
+        Image is Red Hat certified : europe-docker.pkg.dev/nfv-ri/images/dc-agent-rhel8:v4.3.0
+        Image is Red Hat certified : europe-docker.pkg.dev/nfv-ri/images/apiserver-ubi8:v4.3.0
+        Image is Red Hat certified : europe-docker.pkg.dev/nfv-ri/images/dashboard-ubi8:v4.3.0
+        Image is Red Hat certified : europe-docker.pkg.dev/nfv-ri/images/orchestrator-rhel8:v4.3.0
+        Image is not Red Hat certified : docker.io/bitnami/postgresql:10 : No images found for Registry/Repository: docker.io/bitnami/postgresql
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
