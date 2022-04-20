@@ -1322,6 +1322,38 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.2.1/infinispan-infinispan-0.2.1.tgz
     version: 0.2.1
+  intracom-telecom-nfvri:
+  - annotations:
+      charts.openshift.io/digest: sha256:590d7a20414c751498c355163f48bf312481726fc617f9a034bbcd682e802477
+      charts.openshift.io/lastCertifiedTimestamp: '2022-04-20T10:33:50.894848+00:00'
+      charts.openshift.io/name: nfvri
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-04-20T10:51:38.139164+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 4.3.0
+    dependencies:
+    - name: nfvri-agent
+      repository: file://../nfvri-agent
+      version: 4.3.0
+    - name: nfvri-apiserver
+      repository: file://../nfvri-apiserver
+      version: 4.3.0
+    - name: nfvri-orchestrator
+      repository: file://../nfvri-orchestrator
+      version: 4.3.0
+    - name: nfvri-dashboard
+      repository: file://../nfvri-dashboard
+      version: 4.3.0
+    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
+    digest: 311b83691f68272f4cc09a13c547b67052457d02775b2455687c1b59f660b3b9
+    kubeVersion: '>= 1.20.0'
+    name: nfvri
+    type: application
+    urls:
+    - https://europe-docker.pkg.dev/nfv-ri/rh-helm-charts/nfvri
+    version: 4.3.0
   lacework-lacework-agent:
   - annotations:
       charts.openshift.io/digest: sha256:fdc6f7c21a4f42349848a970de8a1d4a548c58e3f1366b0d3f84705a3b979a31
@@ -2429,4 +2461,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.2/wavefronthq-wavefront-1.10.2.tgz
     version: 1.10.2
-generated: '2022-04-11T09:25:11.502811+00:00'
+generated: '2022-04-20T10:51:38.139164+00:00'
