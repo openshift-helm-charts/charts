@@ -1,0 +1,8 @@
+chart:
+  name: nfvri
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: intracom-telecom
+  name: Intracom S A Telecom Solutions
