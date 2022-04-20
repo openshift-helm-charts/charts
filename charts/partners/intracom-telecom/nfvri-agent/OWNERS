@@ -1,6 +1,6 @@
 chart:
   name: nfvri-agent
-  shortDescription: null
+  shortDescription: NFV-RI (TM) Agent Helm Chart Repository
 publicPgpKey: null
 users:
 - githubUsername: angelouev
