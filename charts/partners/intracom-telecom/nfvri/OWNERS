@@ -5,6 +5,7 @@ publicPgpKey: null
 users:
 - githubUsername: angelouev
 - githubUsername: victor-timofei
+- githubUsername: gpanouts
 vendor:
   label: intracom-telecom
   name: Intracom S A Telecom Solutions
