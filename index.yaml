@@ -1,5 +1,34 @@
 apiVersion: v1
 entries:
+  broadpeak-bks400:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:d4dd1dc0d01d17f9c9642a59a1ae630d296f5439c19cb1ca0a4d4d316c981f26
+      charts.openshift.io/lastCertifiedTimestamp: '2022-04-21T10:18:45.000372+02:00'
+      charts.openshift.io/name: BkS400 Helm chart for Kubernetes
+      charts.openshift.io/provider: Broadpeak
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-04-21T09:43:38.109702+00:00'
+      charts.openshift.io/supportURL: https://broadpeak.tv
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 02.01.07
+    description: BkS400 Helm chart for Kubernetes
+    digest: 42c5dd57c0445e76286c216a01ca264bbc9ae3c4eefa9445bf44e3d6240fc340
+    home: https://broadpeak.tv
+    icon: https://broadpeak.tv/wp-content/uploads/2017/12/Logotype-Broadpeak-rgb.png
+    keywords:
+    - http
+    - https
+    - www
+    - web
+    - cache
+    kubeVersion: '>=1.15.0-0'
+    name: bks400
+    urls:
+    - https://github.com/Broadpeak-tv/Openshift/raw/main/Certification/bks400-0.2.0.tgz
+    version: 0.2.0
   fiware-orion-ld:
   - annotations:
       charts.openshift.io/digest: sha256:7e67553ee7d697bed1b7d40a9d1c3ed1d724e32c7894c43629b5c156718aa3dd
@@ -2461,4 +2490,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.2/wavefronthq-wavefront-1.10.2.tgz
     version: 1.10.2
-generated: '2022-04-20T10:51:38.139164+00:00'
+generated: '2022-04-21T09:43:38.109702+00:00'
