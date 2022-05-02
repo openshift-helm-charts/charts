@@ -444,6 +444,7 @@ messages.
 Yes, you can do it. 
 
 1. Create a fork of this repository, or if you previously did this, ensure the `main` branch in your fork is updated with the latest changes.
+   -  Ensure the forked repository is enabled to run workflow actions. See: [Managing GitHub Actions settings for a repository](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository)
 1. If one does not already exist, create an empty ```gh-pages``` branch in your fork.
    - for example see: [stackoverflow - how to create an empty branch](https://stackoverflow.com/questions/34100048/create-empty-branch-on-github)
 1. If an OWNERS file has not yet been created for your chart, create and merge a branch into the main branch of your fork to add it.
