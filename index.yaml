@@ -1863,6 +1863,34 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.5.4/redhat-wildfly-1.5.4.tgz
     version: 1.5.4
+  - annotations:
+      charts.openshift.io/digest: sha256:d5ae388e5c1f9e38d4aba75d35fa174a67b5a67037fbb7475bceabae53d96b87
+      charts.openshift.io/lastCertifiedTimestamp: '2022-05-02T16:50:21.509463+00:00'
+      charts.openshift.io/provider: WildFly
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-05-02T16:50:52.751967+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: '26.1'
+    dependencies:
+    - name: wildfly-common
+      repository: file://../wildfly-common
+      version: 1.4.1
+    description: Build and Deploy WildFly applications on OpenShift
+    digest: d34c69f486dcdf35d6863180326dd89ccb89a31c3c7080188930c79769d24a6b
+    home: https://wildfly.org
+    icon: https://design.jboss.org/wildfly/logo/final/wildfly_logomark_256px.png
+    kubeVersion: '>= 1.19.0'
+    maintainers:
+    - email: wildfly-dev@lists.jboss.org
+      name: WildFly
+      url: https://wildfly.org
+    name: wildfly
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.5.5/redhat-wildfly-1.5.5.tgz
+    version: 1.5.5
   solace-pubsubplus-openshift:
   - annotations:
       charts.openshift.io/digest: sha256:088b96c259efc2e3338a491a23904533fe94c49334c3c305b54a44987bd3eb4d
@@ -2490,4 +2518,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.2/wavefronthq-wavefront-1.10.2.tgz
     version: 1.10.2
-generated: '2022-04-21T09:43:38.109702+00:00'
+generated: '2022-05-02T16:50:52.751967+00:00'
