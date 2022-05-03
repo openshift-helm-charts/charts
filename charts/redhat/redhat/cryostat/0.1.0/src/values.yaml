@@ -32,7 +32,7 @@ core:
     tls: []
   route:
     ## @param core.route.enabled Whether to create a Route object for the Cryostat service. Available only on OpenShift
-    enabled: false
+    enabled: true
     tls:
       ## @param core.route.tls.enabled Whether to secure the Cryostat application Route with TLS. See: [TLSConfig](https://docs.openshift.com/container-platform/4.10/rest_api/network_apis/route-route-openshift-io-v1.html#spec-tls)
       enabled: true
@@ -85,7 +85,7 @@ grafana:
     tls: []
   route:
     ## @param grafana.route.enabled Whether to create a Route object for the Grafana service. Available only on OpenShift
-    enabled: false
+    enabled: true
     tls:
       ## @param grafana.route.tls.enabled Whether to secure the Grafana Route with TLS. See: [TLSConfig](https://docs.openshift.com/container-platform/4.10/rest_api/network_apis/route-route-openshift-io-v1.html#spec-tls)
       enabled: true

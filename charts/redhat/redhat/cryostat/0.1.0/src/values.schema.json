@@ -104,7 +104,7 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Whether to create a Route object for the Cryostat service. Available only on OpenShift",
-                            "default": false
+                            "default": true
                         },
                         "tls": {
                             "type": "object",
@@ -257,7 +257,7 @@
                         "enabled": {
                             "type": "boolean",
                             "description": "Whether to create a Route object for the Grafana service. Available only on OpenShift",
-                            "default": false
+                            "default": true
                         },
                         "tls": {
                             "type": "object",
