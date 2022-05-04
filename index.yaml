@@ -2518,4 +2518,50 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.10.2/wavefronthq-wavefront-1.10.2.tgz
     version: 1.10.2
-generated: '2022-05-02T16:50:52.751967+00:00'
+  - annotations:
+      charts.openshift.io/digest: sha256:1c34d13550dd3d1679c8e8b7e478505447bdaf9a346b54301adc7975864be654
+      charts.openshift.io/lastCertifiedTimestamp: '2022-05-04T17:05:50.960603+00:00'
+      charts.openshift.io/provider: VMware
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-05-04T17:44:35.586961+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: 1.11.0
+    dependencies:
+    - condition: kubeStateMetrics.enabled
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: ^4.7.0
+    description: Wavefront Collector for Kubernetes
+    digest: 5b4243216b9a3192bf65fc3a9ef2cb9c998b52ed2a3083bd80c2bab638a9c1f3
+    home: https://www.wavefront.com
+    keywords:
+    - metric
+    - monitoring
+    - observability
+    - alerting
+    kubeVersion: '>= 1.19'
+    maintainers:
+    - email: akodali@vmware.com
+      name: akodali18
+    - email: jcornish@vmware.com
+      name: johncornish
+    - email: jgee@vmware.com
+      name: josephgee
+    - email: shaoh@vmware.com
+      name: helen-shao
+    - email: matthewco@vmware.com
+      name: mceldeen
+    - email: mamichael@vmware.com
+      name: mmichael
+    - email: pselvaganesa@vmware.com
+      name: priyaselvaganesan
+    name: wavefront
+    sources:
+    - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
+    - https://github.com/wavefrontHQ/wavefront-proxy
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.0/wavefronthq-wavefront-1.11.0.tgz
+    version: 1.11.0
+generated: '2022-05-04T17:44:35.586961+00:00'
