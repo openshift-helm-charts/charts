@@ -11,6 +11,7 @@ users:
 - githubUsername: mceldeen
 - githubUsername: mmichael
 - githubUsername: priyaselvaganesan
+- githubUsername: wf-jenkins
 vendor:
   label: wavefronthq
   name: VMware
