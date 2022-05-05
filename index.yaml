@@ -1739,6 +1739,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
     version: 0.0.3
+  redhat-redis-sed:
+  - annotations:
+      charts.openshift.io/digest: sha256:639de96ec12341cab72ca4aa1f539dcf475e3a5c82c0871e3798418004fd36c8
+      charts.openshift.io/lastCertifiedTimestamp: '2022-05-05T07:17:43.075639+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2022-05-05T08:07:34.175614+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: 1.0.1
+    description: A Helm chart for Redis Service Endpoint Definition (SED)
+    digest: 3115a6b272e34d7afe44bf2d25dc8eef34b10df9042fa858f597be3306ab1a25
+    kubeVersion: '>=1.20.0'
+    name: redis-sed
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-sed-1.0.1/redhat-redis-sed-1.0.1.tgz
+    version: 1.0.1
   redhat-spring-boot-rest-http:
   - annotations:
       charts.openshift.io/digest: sha256:5d312abe9fb8e5a3255036e0b9f4f53f480fc2c12ed0c0f36f03c72ab9af9038
@@ -2564,4 +2583,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.0/wavefronthq-wavefront-1.11.0.tgz
     version: 1.11.0
-generated: '2022-05-04T17:44:35.586961+00:00'
+generated: '2022-05-05T08:07:34.175614+00:00'
