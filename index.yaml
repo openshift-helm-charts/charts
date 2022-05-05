@@ -84,6 +84,33 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/fiware-orion-ld-1.0.2/fiware-orion-ld-1.0.2.tgz
     version: 1.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:4fbe5370fcc2d45adf73d69320f2efb193c2946faf359b6436ac27dc06c8a359
+      charts.openshift.io/lastCertifiedTimestamp: '2022-05-05T12:16:10.065501+00:00'
+      charts.openshift.io/provider: FIWARE FOUNDATION E V
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-05-05T12:19:58.153684+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 1.0.1
+    description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
+    digest: 810e43a784a63a1cbaad8129c7772202961077528a6b1fd9fd5952dfd32dd75f
+    home: https://github.com/FIWARE/context.Orion-LD
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion-ld
+    kubeVersion: '>= 1.19'
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: orion-ld
+    sources:
+    - https://github.com/FIWARE/context.Orion-LD
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/fiware-orion-ld-1.0.3/fiware-orion-ld-1.0.3.tgz
+    version: 1.0.3
   fortanix-dsm-secrets-injector-chart:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -2583,4 +2610,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.0/wavefronthq-wavefront-1.11.0.tgz
     version: 1.11.0
-generated: '2022-05-05T08:07:34.175614+00:00'
+generated: '2022-05-05T12:19:58.153684+00:00'
