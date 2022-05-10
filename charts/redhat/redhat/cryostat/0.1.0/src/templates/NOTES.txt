@@ -4,8 +4,7 @@
 {{- if not (and .Values.core.ingress.enabled .Values.grafana.ingress.enabled) }}
 {{ $listNum }}. Tell Cryostat how to serve external traffic:
 {{- $listNum = add1 $listNum }}
-{{- end }}
-
+  ```
 {{- if .Values.core.route.enabled }}
   export ROUTE_HOST=$(oc get route -n {{ .Release.Namespace }} {{ include "cryostat.fullname" . }} -o jsonpath="{.status.ingress[0].host}")
 {{- $envVars = list "CRYOSTAT_WEB_HOST=$ROUTE_HOST" }}
@@ -27,7 +26,7 @@
 {{- $portForwards = prepend $portForwards "8080:$CONTAINER_PORT" }}
 {{- end }}
 
-{{- if .Values.core.route.enabled }}
+{{- if .Values.grafana.route.enabled }}
   export GRAFANA_ROUTE_HOST=$(oc get route -n {{ .Release.Namespace }} {{ include "cryostat.fullname" . }}-grafana -o jsonpath="{.status.ingress[0].host}")
 {{- $envVars = append $envVars ( tpl "GRAFANA_DASHBOARD_URL=http{{ if .Values.grafana.route.tls.enabled }}s{{ end }}://$GRAFANA_ROUTE_HOST" . ) }}
 {{- else if .Values.grafana.ingress.enabled }}
@@ -57,17 +56,22 @@
 {{- if not (empty $envVars) }}
   kubectl -n {{ .Release.Namespace }} set env deploy --containers={{ .Chart.Name }} {{ include "cryostat.fullname" . }} {{ join " " $envVars }}
 {{- end }}
+  ```
+{{- end }}
 
 {{- if not (empty $portForwards) }}
 
 {{ $listNum }}. Forward local ports to the application's pod:
+  ```
   export POD_NAME=$(kubectl get pods -n {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "cryostat.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"  --sort-by=.metadata.creationTimestamp -o jsonpath="{.items[-1:].metadata.name}")
   kubectl -n {{ .Release.Namespace }} wait --for=condition=available --timeout=60s deploy/{{ include "cryostat.fullname" . }}
   kubectl -n {{ .Release.Namespace }} port-forward $POD_NAME {{ join " " $portForwards }}
+  ```
   {{- $listNum = add1 $listNum }}
 {{- end }}
 
-{{ $listNum }}. {{ "Visit the " }}{{ .Chart.Name | camelcase }}{{ " application at: " -}}
+{{ $listNum }}. {{ "Visit the " }}{{ .Chart.Name | camelcase }}{{ " application at: " }}
+  ```
 {{- if .Values.core.route.enabled }}
   echo http{{ if $.Values.core.route.tls.enabled }}s{{ end }}://$ROUTE_HOST
 {{- else if .Values.core.ingress.enabled -}}
@@ -80,6 +84,7 @@
   echo http://$NODE_IP:$NODE_PORT
 {{- else if contains "LoadBalancer" .Values.core.service.type }}
   echo http://$SERVICE_IP:{{ .Values.core.service.port }}
-{{- else if contains "ClusterIP" .Values.core.service.type -}}
+{{- else if contains "ClusterIP" .Values.core.service.type }}
   http://127.0.0.1:8080
 {{- end }}
+  ```
