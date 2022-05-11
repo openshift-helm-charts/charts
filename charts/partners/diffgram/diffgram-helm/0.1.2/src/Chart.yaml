@@ -1,5 +1,5 @@
 apiVersion: v2
-name: diffgram
+name: diffgram-helm
 description: A Helm for Diffgram
 
 # A chart can be either an 'application' or a 'library' chart.
