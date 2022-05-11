@@ -1,0 +1,59 @@
+{{ if eq .Values.dbSettings.dbProvider "azure"}}
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install, pre-upgrade, pre-rollback
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation, hook-succeeded
+  labels:
+    app: postgres-azure-service-hook
+  name: postgres-azure-service-hook
+spec:
+  externalName: {{ .Values.dbSettings.azureSqlEndpoint }}
+  selector:
+    app: postgres-azure-service-hook
+  type: ExternalName
+status:
+  loadBalancer: {}
+{{ end }}
+{{ if eq .Values.dbSettings.dbProvider "rds"}}
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install, pre-upgrade, pre-rollback
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation, hook-succeeded
+  labels:
+    app: postgres-rds-service-hook
+  name: postgres-rds-service-hook
+spec:
+  externalName: {{ .Values.dbSettings.rdsEndpoint }}
+  selector:
+    app: ppostgres-rds-service-hook
+  type: ExternalName
+status:
+  loadBalancer: {}
+{{ end }}
+{{ if eq .Values.dbSettings.dbProvider "local"}}
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install, pre-upgrade, pre-rollback
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation, hook-succeeded
+  name: diffgram-postgres-hook
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres
+{{ end }}

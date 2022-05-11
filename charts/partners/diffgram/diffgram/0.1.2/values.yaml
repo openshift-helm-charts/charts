@@ -1,0 +1,124 @@
+# Default values for diffgram.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# The Diffgram Version. Whenever a new update arrives, this will be changed.
+diffgramVersion: 0.14.1
+
+# Either 'opencore' or 'enterprise'. Please note that selecting 'enterprise'
+# requires that you also set imagePullCredentials.gcrCredentials.
+diffgramEdition: opencore
+
+# Set this to your public domain where you want diffgram to be.
+# This must be a domain name and not a public IP address.
+# The chart will generate TLS certificates for the provided domain if useCertManager is 'true'
+diffgramDomain: example.com
+
+# Set this to true if you want to use cert manager for TLS certificates generation.
+useCertManager: true
+# Use it to activate TLS on the nginx ingress
+useTls: true
+
+dbSettings:
+  # Specify How the DB Service should be created
+  # - local: use a Postgres Image and Service (No external service) Recommended only for non-production enviroments.
+  # - rds: use an ExternalService with an AWS RDS instance. If you set this you need to provide the rdsEndpoint field.
+  # - azure: use an ExternalService with an Azure Postgres instance. If you set this you need to provide the azureSqlEndpoint field.
+  # - gcsql: use an ExternalService with a Google Cloud SQL instance. If you set this you need to provide the gcSqlEndpoint field.
+  dbProvider: local
+  rdsEndpoint: none
+  azureSqlEndpoint: none
+  gcsqlEndpoint: none
+  dbUser: postgres
+  dbName: postgres
+  dbPassword: postgres
+  # For the local postgres DB. Does not have effect on RDS or GCP services.
+  storageAmount: 5Gi
+
+# All the Secrets Used in Diffgram.
+diffgramSecrets:
+  STRIPE_API_KEY: none
+  DIFFGRAM_AWS_ACCESS_KEY_ID: write_your_aws_access_key
+  DIFFGRAM_AWS_ACCESS_KEY_SECRET: write_your_aws_access_key_secret
+  _ANALYTICS_WRITE_KEY: provided_by_diffgram_team
+  MAILGUN_KEY: provided_by_diffgram_team
+  HUB_SPOT_KEY: provided_by_diffgram_team
+  SECRET_KEY: provided_by_diffgram_team
+  FERNET_KEY: NeL_RED6zZ1XF3XT7Yd1hzFPYyebrg6UdkECTOLHEdI= # Please change this for production usage
+  INTER_SERVICE_SECRET: provided_by_diffgram_team
+  # Use diffgram-postgres, postgres-rds-service depending on which DB service you set on dbSettings
+  USER_PASSWORDS_SECRET: provided_by_diffgram_team
+  # The service account JSON for GCP Static Storage Encoded in Base64.
+  SERVICE_ACCOUNT_JSON_B64: put_your_gcp_secret_in_base_64_here
+  DIFFGRAM_AZURE_CONNECTION_STRING: put_your_azure_connection_string_here
+
+
+
+diffgramSettings:
+  USERDOMAIN: kubernetes
+  WALRUS_SERVICE_URL_BASE: example.com
+  DIFFGRAM_SYSTEM_MODE: production
+  DIFFGRAM_STATIC_STORAGE_PROVIDER: aws
+  DIFFGRAM_S3_BUCKET_NAME: none
+  DIFFGRAM_AZURE_CONTAINER_NAME: none
+  ML__DIFFGRAM_AZURE_CONTAINER_NAME: none
+  ML__DIFFGRAM_S3_BUCKET_NAME: diffgram-testing
+  CLOUD_STORAGE_BUCKET: diffgram-testing
+  ML__CLOUD_STORAGE_BUCKET: diffgram-testing
+  SERVICE_ACCOUNT_FULL_PATH: /etc/gcp/sa_credentials.json
+  PROCESS_MEDIA_NUM_VIDEO_THREADS: '"1"'
+  PROCESS_MEDIA_NUM_FRAME_THREADS: '"4"'
+  DATABASE_CONNECTION_POOL_SIZE: '"10"'
+  GOOGLE_APPLICATION_CREDENTIALS: /etc/gcp/sa_credentials.json # Check the volume in deployment.yaml and service_account_secret.yaml
+  EMAIL_DOMAIN_NAME: example.com
+
+  # Set this value if you want to use GCP as your storage. Put your json service account encoded in base 64
+  SERVICE_ACCOUNT_JSON_B64: none
+
+  SERVICE_ACCOUNT: sa_credentials.json
+  # Change this to a unique ID, otherwise leave default
+  DIFFGRAM_INSTALL_FINGERPRINT: helm_fingerprint_default
+  # If you know the OS diffgram is running ON put it here, otherwise leave default
+  DIFFGRAM_HOST_OS: helm_os_default
+  NEW_RELIC_LICENSE_KEY: none
+  ALLOW_EVENTHUB: '"False"'
+  EMAIL_VALIDATION: '"False"'
+  ALLOW_STRIPE_BILLING: '"False"'
+  IS_OPEN_SOURCE: '"True"'
+
+imagePullCredentials:
+  # The service account with permissions to pull from the GCR Repository. [Should be Provided by Diffgram Team.]
+  gcrCredentials: provided_by_diffgram_team
+
+nodeGroupLabel: null
+
+# The service for API calls.
+# This are minimal defaults. Please feel free to change them as you start having more usage
+defaultService:
+  numReplicas: 1
+  requests:
+    cpu: "1.0"
+    memory: "1G"
+  limits:
+    cpu: "2.0"
+    memory: "2G"
+# The service for the UI frontend.
+# This are minimal defaults. Please feel free to change them as you start having more usage
+frontendService:
+  numReplicas: 1
+  requests:
+    cpu: "1.0"
+    memory: "1G"
+  limits:
+    cpu: "1.0"
+    memory: "1G"
+# The service for video processing. This is where the heavy processing takes place.
+# This are minimal defaults. Please feel free to change them as you start having more usage
+walrusService:
+  numReplicas: 1
+  requests:
+    cpu: "1.0"
+    memory: "1G"
+  limits:
+    cpu: "2.0"
+    memory: "2G"

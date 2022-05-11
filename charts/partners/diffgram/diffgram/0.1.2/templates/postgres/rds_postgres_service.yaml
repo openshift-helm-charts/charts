@@ -1,0 +1,15 @@
+{{ if eq .Values.dbSettings.dbProvider "rds"}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgres-rds-service
+  name: postgres-rds-service
+spec:
+  externalName: {{ .Values.dbSettings.rdsEndpoint }}
+  selector:
+    app: postgres-rds-service
+  type: ExternalName
+status:
+  loadBalancer: {}
+{{ end }}

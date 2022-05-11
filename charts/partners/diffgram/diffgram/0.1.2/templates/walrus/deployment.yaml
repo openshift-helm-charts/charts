@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: diffgram-walrus
+  name: diffgram-walrus
+  namespace:
+spec:
+  replicas: {{ .Values.walrusService.numReplicas }}
+  selector:
+    matchLabels:
+      app: diffgram-walrus
+  template:
+    metadata:
+      labels:
+        app: diffgram-walrus
+    spec:
+      {{ if .Values.nodeGroupLabel }}
+      nodeSelector:
+        poolName: {{ .Values.nodeGroupLabel }}
+      {{ end }}
+      {{ if eq .Values.diffgramEdition "enterprise"}}
+      imagePullSecrets:
+      - name: diffgramsecret
+      {{ end }}
+      volumes:
+      {{ if eq .Values.diffgramSettings.DIFFGRAM_STATIC_STORAGE_PROVIDER "gcp"}}
+      - name: service-account-credentials-volume
+        secret:
+          secretName: gcp-service-account-credentials
+          items:
+          - key: sa_json
+            path: sa_credentials.json
+      {{ end }}
+      - name: empty-dir
+        emptyDir: {}
+      initContainers:
+      - name: check-db-ready
+        image: postgres:11
+        {{ if eq .Values.dbSettings.dbProvider "local"}}
+        command: ['sh', '-c',
+                  'until pg_isready -h diffgram-postgres -p 5432;
+          do echo waiting for database; sleep 2; done;']
+        {{ end }}
+        {{ if eq .Values.dbSettings.dbProvider "rds"}}
+        command: ['sh', '-c',
+                  'until pg_isready -h postgres-rds-service -p 5432;
+          do echo waiting for database; sleep 2; done;']
+        {{ end }}
+        {{ if eq .Values.dbSettings.dbProvider "azure"}}
+        command: ['sh', '-c',
+                  'until pg_isready -h postgres-azure-service -p 5432;
+          do echo waiting for database; sleep 2; done;']
+        {{ end }}
+      containers:
+      {{ if eq .Values.diffgramEdition "enterprise"}}
+      - image: gcr.io/diffgram-enterprise/walrus:{{ .Values.diffgramVersion }}
+      {{ end }}
+      {{ if eq .Values.diffgramEdition "opencore"}}
+      - image: gcr.io/diffgram-open-core/walrus:{{ .Values.diffgramVersion }}
+      {{ end }}
+        imagePullPolicy: Always
+        name: diffgram-walrus
+        ports:
+        - containerPort: 8080
+      {{ if eq .Values.diffgramSettings.DIFFGRAM_STATIC_STORAGE_PROVIDER "gcp"}}
+        volumeMounts:
+        - name: service-account-credentials-volume
+          mountPath: /etc/gcp
+          readOnly: true
+      {{ end }}
+        envFrom:
+        - configMapRef:
+            name: diffgram-walrus-configmap
+        - secretRef:
+            name: diffgram-walrus-secrets
+        resources:
+          requests:
+            cpu: {{ .Values.walrusService.requests.cpu }}
+            memory: {{ .Values.walrusService.requests.memory }}
+          limits:
+            cpu: {{ .Values.walrusService.limits.cpu }}
+            memory: {{ .Values.walrusService.limits.memory }}

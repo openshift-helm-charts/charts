@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  {{ if eq .Values.useTls false}}
+  hsts: "false"
+  ssl-redirect: "false"
+  {{ end }}
+  enable-underscores-in-headers: "true"
+  ignore-invalid-headers: "false"
+  use-gzip: "true" # ENABLE GZIP COMPRESSION
+  gzip-types: "*" # SPECIFY MIME TYPES TO COMPRESS ("*" FOR ALL) 
+metadata:
+  name: ingress-nginx-controller
+  namespace: {{ .Release.Namespace }}

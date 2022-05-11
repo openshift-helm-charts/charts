@@ -1,0 +1,19 @@
+{{- $mypvc := (lookup "v1" "PersistentVolumeClaim" .Release.Namespace (printf "postgres-pv-claim")) }}
+{{ if eq .Values.dbSettings.dbProvider "local" }}
+{{ if not $mypvc}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+  annotations:
+    "helm.sh/resource-policy": keep
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-weight": "-5"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.dbSettings.storageAmount }}
+{{ end }}
+{{ end }}

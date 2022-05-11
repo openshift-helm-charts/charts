@@ -1,0 +1,15 @@
+{{ if eq .Values.dbSettings.dbProvider "azure"}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgres-azure-service
+  name: postgres-azure-service
+spec:
+  externalName: {{ .Values.dbSettings.azureSqlEndpoint }}
+  selector:
+    app: postgres-azure-service
+  type: ExternalName
+status:
+  loadBalancer: {}
+{{ end }}

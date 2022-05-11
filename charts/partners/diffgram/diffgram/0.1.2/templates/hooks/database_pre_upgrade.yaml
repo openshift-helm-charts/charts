@@ -1,0 +1,64 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-pre-upgrade"
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "2"
+spec:
+  template:
+    metadata:
+      name: "{{ .Release.Name }}"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+      restartPolicy: Never
+      {{ if eq .Values.diffgramEdition "enterprise"}}
+      imagePullSecrets:
+      - name: diffgramsecret
+      {{ end }}
+      {{ if eq .Values.diffgramSettings.DIFFGRAM_STATIC_STORAGE_PROVIDER "gcp"}}
+      volumes:
+      - name: service-account-credentials-volume-hook
+        secret:
+          secretName: gcp-service-account-credentials-hook
+          items:
+          - key: sa_json
+            path: sa_credentials.json
+      {{ end }}
+      containers:
+      {{ if eq .Values.diffgramEdition "enterprise"}}
+      - image: gcr.io/diffgram-enterprise/default:{{ .Values.diffgramVersion }}
+      {{ end }}
+      {{ if eq .Values.diffgramEdition "opencore"}}
+      - image: gcr.io/diffgram-open-core/default:{{ .Values.diffgramVersion }}
+      {{ end }}
+        imagePullPolicy: Always
+        name: pre-upgrade-alembic-hook
+       {{ if eq .Values.diffgramSettings.DIFFGRAM_STATIC_STORAGE_PROVIDER "gcp"}}
+        volumeMounts:
+        - name: service-account-credentials-volume-hook
+          mountPath: /etc/gcp
+          readOnly: true
+       {{ end }}
+        envFrom:
+        - configMapRef:
+            name: db-migrations-configmap
+        - secretRef:
+            name:  db-migrations-secret
+        # The actual migrations command
+        command: ["sh","-c", "cd shared; export PYTHONPATH=/app; pip install sqlalchemy-utils==0.36.6;python /app/play_and_scripts/scripts/create_database.py; alembic upgrade head"]
+
+      {{ if .Values.nodeGroupLabel }}
+      nodeSelector:
+        poolName: {{ .Values.nodeGroupLabel }}
+      {{ end }}
