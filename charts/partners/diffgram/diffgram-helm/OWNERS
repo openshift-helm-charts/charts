@@ -1,5 +1,5 @@
 chart:
-  name: diffgram
+  name: diffgram-helm
   shortDescription: null
 publicPgpKey: null
 users:
