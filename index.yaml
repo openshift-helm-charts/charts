@@ -2096,6 +2096,45 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-dev-3.0.0/solace-pubsubplus-openshift-dev-3.0.0.tgz
     version: 3.0.0
+  - annotations:
+      charts.openshift.io/digest: sha256:b0afa5fcaafbd7c909b60d49e413d40075c46ed63002a63de7dea7e76be2327c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-05-12T12:38:15.457807+00:00'
+      charts.openshift.io/provider: Solace Corporation
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-05-12T12:40:51.615863+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: 4.10.6
+    apiVersion: v2
+    description: Deploy a minimum footprint single-node non-HA Solace PubSub+ Event
+      Broker Software on OpenShift for development purposes
+    digest: b5b328607cf14414fde6b9ad1903b3d891c8aef619e4d2bbe2c6b8199afa9306
+    home: https://dev.solace.com
+    icon: https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/images/PubSubPlus.png
+    keywords:
+    - solace
+    - pubsubplus
+    - pubsub+
+    - pubsub
+    - messaging
+    - advanced event broker
+    - event broker
+    - event mesh
+    - event streaming
+    - data streaming
+    - event integration
+    - middleware
+    kubeVersion: '>= 1.10.0-0'
+    maintainers:
+    - name: Solace Community Forum
+      url: https://solace.community/
+    - name: Solace Support
+      url: https://solace.com/support/
+    name: pubsubplus-openshift-dev
+    sources:
+    - https://github.com/SolaceProducts/pubsubplus-kubernetes-quickstart
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-dev-3.1.0/solace-pubsubplus-openshift-dev-3.1.0.tgz
+    version: 3.1.0
   solace-pubsubplus-openshift-ha:
   - annotations:
       charts.openshift.io/digest: sha256:00544736dcad0552b0adb2fa72275c9fd04783464b7c072ae35332ffc456d60f
@@ -2735,4 +2774,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.1/wavefronthq-wavefront-1.11.1.tgz
     version: 1.11.1
-generated: '2022-05-10T18:51:35.217687+00:00'
+generated: '2022-05-12T12:40:51.615863+00:00'
