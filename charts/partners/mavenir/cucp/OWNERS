@@ -3,7 +3,7 @@ chart:
   shortDescription: null
 publicPgpKey: null
 users:
-- githubUsername: https://github.com/shantanushivanekar123
+- githubUsername: shantanushivanekar123
 vendor:
   label: mavenir
   name: Mavenir
