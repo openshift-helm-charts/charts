@@ -1,9 +1,0 @@
-chart:
-  name: cucp
-  shortDescription: cucp helm chart 
-publicPgpKey: null
-users:
-- githubUsername: shantanushivanekar123
-vendor:
-  label: mavenir
-  name: mavnenir
