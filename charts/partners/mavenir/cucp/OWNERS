@@ -1,8 +1,9 @@
 chart:
   name: cucp
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: https://github.com/shantanushivanekar123
 vendor:
   label: mavenir
   name: Mavenir
