@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: https://github.com/shantanushivanekar123/charts/tree/cucp-5-0-326-53
+        chart-uri: https://github.com/ansvu/samplechart/releases/download/samplechart-0.1.1/samplechart-0.1.1.tgz
         digests:
             chart: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
         lastCertifiedTimestamp: "2022-05-05T18:19:51.249661+00:00"
