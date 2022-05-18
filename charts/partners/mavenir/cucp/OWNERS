@@ -2,6 +2,7 @@ chart:
   name: cucp
   shortDescription: null
 publicPgpKey: null
+providerDelivery: True
 users:
 - githubUsername: shantanushivanekar123
 vendor:
