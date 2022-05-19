@@ -1,0 +1,142 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.6.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: https://github.com/ansvu/samplechart/releases/cucp_358/g3_5_0_326_53/cucp_53_helmtest.tgz
+        digests:
+            chart: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
+        lastCertifiedTimestamp: "2022-05-05T18:19:51.249661+00:00"
+        testedOpenShiftVersion: "4.6"
+        supportedOpenShiftVersions: '>=4.4'
+        providerControlledDelivery: true
+    chart:
+        name: cucp
+        home: ""
+        sources: []
+        version: 5.0.326-53
+        description: NF Service template.
+        keywords: []
+        maintainers:
+            - name: ran pltf team
+              email: srikanth.subbaramu@mavenir.com
+              url: ""
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: "0.1"
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: test
+        kubeversion: '>= 1.17.0'
+        dependencies:
+            - name: gnbmgr
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: ueconmgr
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sctpe1iwf
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sctpf1iwf
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: ngclientiwf
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sctpxniwf
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/mrhcert/nginx-sctp_e1_iwf:5.0.326.53
+        Image is Red Hat certified : quay.io/mrhcert/nginx-sctp_f1_iwf:5.0.326.53
+        Image is Red Hat certified : quay.io/mrhcert/nginx-sctp_ng_client_iwf:5.0.326.53
+        Image is Red Hat certified : quay.io/mrhcert/nginx-sctp_xn_iwf:5.0.326.53
+        Image is Red Hat certified : quay.io/mrhcert/nginx-ue_conn_mgr:5.0.326.53
+        Image is Red Hat certified : quay.io/mrhcert/nginx-gnb_mgr:5.0.326.53
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+
