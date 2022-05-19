@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: https://github.com/ansvu/samplechart/releases/download/cucp_358/g3_5_0_326_53/cucp_53_helmtest.tgz
+        chart-uri: https://github.com/ansvu/samplechart/releases/cucp_358/g3_5_0_326_53/cucp_53_helmtest.tgz
         digests:
             chart: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
         lastCertifiedTimestamp: "2022-05-05T18:19:51.249661+00:00"
