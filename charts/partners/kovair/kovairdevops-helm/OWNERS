@@ -1,0 +1,8 @@
+chart:
+  name: kovairdevops-helm
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: kovair
+  name: Kovair Software, Inc.
