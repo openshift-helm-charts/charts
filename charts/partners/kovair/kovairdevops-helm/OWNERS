@@ -1,8 +1,9 @@
 chart:
   name: kovairdevops-helm
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Kovair DevOps Application Frontend Container
+publicPgpKey: null
+users:
+- githubUsername: sajjad@kovair.com
 vendor:
   label: kovair
   name: Kovair Software, Inc.
