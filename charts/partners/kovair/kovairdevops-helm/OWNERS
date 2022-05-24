@@ -3,7 +3,7 @@ chart:
   shortDescription: Kovair DevOps Application Frontend Container
 publicPgpKey: null
 users:
-- githubUsername: sajjad@kovair.com
+- githubUsername: saaj562
 vendor:
   label: kovair
   name: Kovair Software, Inc.
