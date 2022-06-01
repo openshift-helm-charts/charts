@@ -1,0 +1,153 @@
+piversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.6.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: https://github.com/shantanushivanekar123/rhdu_Ubi7sw/CUUP_Ubi8/Chart/helchart_cuup/cuup_helm_01062022_new.tgz
+        digests:
+            chart: sha256:2d662185426d2d11a310e8d055d4b86b4533f8c3fdb06c9c9450390dabecb6d8
+            package: 4be6bc722e266c6753a7ca4291d499c23817572ed87f35bd705175feb112ef5e
+        lastCertifiedTimestamp: "2022-06-01T07:13:20.343444+00:00"
+        testedOpenShiftVersion: "4.7"
+        supportedOpenShiftVersions: '>=4.5'
+        providerControlledDelivery: false
+    chart:
+        name: cuup
+        home: ""
+        sources: []
+        version: NRCC.R.2.0.14.1
+        description: NR CUUP services.
+        keywords: []
+        maintainers:
+            - name: George Jiang
+              email: junjie.jiang@mavenir.com
+              url: ""
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: NRCC-R_2_0_14_1_DB
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: test
+        kubeversion: '>=1.18.0-0'
+        dependencies:
+            - name: iwfsvc
+              version: 0.0.1
+              repository: http://10.69.12.211:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: gwsvc
+              version: 0.0.1
+              repository: http://10.69.12.211:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: intfmgrsvc
+              version: 0.0.1
+              repository: http://10.69.12.211:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: dprmsvc
+              version: 0.0.1
+              repository: http://10.69.12.211:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: srmsvc
+              version: 0.0.1
+              repository: http://10.69.12.211:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: bccsvc
+              version: 0.0.1
+              repository: http://10.69.12.211:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: dalsvc
+             version: 0.0.1
+              repository: http://10.69.12.211:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/mrhcert/nginx-srmsvc:NRCC.R.2.0.14.1.DB.20220520
+        Image is Red Hat certified : quay.io/mrhcert/nginx-iwfsvc:NRCC.R.2.0.14.1.DB.20220520
+        Image is Red Hat certified : quay.io/mrhcert/nginx-intfmgrsvc:NRCC.R.2.0.14.1.DB.20220520
+        Image is Red Hat certified : quay.io/mrhcert/nginx-gwsvc:NRCC.R.2.0.14.1.DB.20220520
+        Image is Red Hat certified : quay.io/mrhcert/nginx-etcdcleaner:NRCC.R.2.0.14.1.DB.20220520
+        Image is Red Hat certified : quay.io/mrhcert/nginx-dprmsvc:NRCC.R.2.0.14.1.DB.20220520
+        Image is Red Hat certified : quay.io/mrhcert/nginx-dalsvc:NRCC.R.2.0.14.1.DB.20220520
+        Image is Red Hat certified : quay.io/mrhcert/nginx-bccsvc:NRCC.R.2.0.14.1.DB.20220520
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+
