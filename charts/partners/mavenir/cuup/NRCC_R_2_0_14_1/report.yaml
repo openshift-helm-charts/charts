@@ -19,7 +19,7 @@ metadata:
         name: cuup
         home: ""
         sources: []
-        version: NRCC.R.2.0.14.1
+        version: NRCC_R_2_0_14_1
         description: NR CUUP services.
         keywords: []
         maintainers:
@@ -30,7 +30,7 @@ metadata:
         apiversion: v2
         condition: ""
         tags: ""
-        appversion: NRCC-R_2_0_14_1_DB
+        appversion: NRCC.R.2.0.14.1_DB
         deprecated: false
         annotations:
             charts.openshift.io/name: test
