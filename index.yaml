@@ -1442,6 +1442,28 @@ entries:
     urls:
     - https://europe-docker.pkg.dev/nfv-ri/rh-helm-charts/nfvri
     version: 4.3.0
+  kovair-kovairdevops-helm:
+  - annotations:
+      charts.openshift.io/digest: sha256:a4c8cc79dbc78fd8d10779d3e7e80518cacde3e4730e00207829d51cfc77b0f4
+      charts.openshift.io/lastCertifiedTimestamp: '2022-06-01T18:56:54.811673+00:00'
+      charts.openshift.io/provider: Kovair Software, Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-06-01T18:57:26.648461+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: '1.0'
+    description: A Helm Chart to deploy KovairDevOps on OpenShift Container Platform.
+    digest: 057da07b987b04f7e7a28a1031a33680c02914da54843921a5f92987f20f2122
+    icon: https://cloud.kovair.com/DevOpsCloud/KovairDocs/GlobalImages/devops-350x350new.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - name: Kovair Software
+    name: kovairdevops-helm
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/kovair-kovairdevops-helm-0.1.0/kovair-kovairdevops-helm-0.1.0.tgz
+    version: 0.1.0
   lacework-lacework-agent:
   - annotations:
       charts.openshift.io/digest: sha256:fdc6f7c21a4f42349848a970de8a1d4a548c58e3f1366b0d3f84705a3b979a31
@@ -2909,4 +2931,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.1/wavefronthq-wavefront-1.11.1.tgz
     version: 1.11.1
-generated: '2022-05-17T11:58:27.166946+00:00'
+generated: '2022-06-01T18:57:26.648461+00:00'
