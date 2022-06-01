@@ -1,4 +1,5 @@
-piversion: v1
+Using config file: /root/rhdu_Ubi7sw/CUUP_Ubi8/Chart/helchart_cuup/cuup_helm_01062022/config.yaml
+apiversion: v1
 kind: verify-report
 metadata:
     tool:
@@ -10,7 +11,7 @@ metadata:
         digests:
             chart: sha256:2d662185426d2d11a310e8d055d4b86b4533f8c3fdb06c9c9450390dabecb6d8
             package: 4be6bc722e266c6753a7ca4291d499c23817572ed87f35bd705175feb112ef5e
-        lastCertifiedTimestamp: "2022-06-01T07:13:20.343444+00:00"
+        lastCertifiedTimestamp: "2022-06-01T18:56:38.183573+00:00"
         testedOpenShiftVersion: "4.7"
         supportedOpenShiftVersions: '>=4.5'
         providerControlledDelivery: false
@@ -84,7 +85,7 @@ metadata:
               importvalues: []
               alias: ""
             - name: dalsvc
-             version: 0.0.1
+              version: 0.0.1
               repository: http://10.69.12.211:8080
               condition: ""
               tags: []
@@ -94,6 +95,38 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
     - check: v1.0/images-are-certified
       type: Mandatory
       outcome: PASS
@@ -110,38 +143,6 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
