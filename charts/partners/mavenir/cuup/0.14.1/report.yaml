@@ -19,7 +19,7 @@ metadata:
         name: cuup
         home: ""
         sources: []
-        version: NRCC_R_2_0_14_1
+        version: 0.14.1
         description: NR CUUP services.
         keywords: []
         maintainers:
