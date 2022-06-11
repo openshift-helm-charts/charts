@@ -8,7 +8,7 @@ Feature: Edited report only submission
   | redhat       | redhat    | tests/data/report.yaml    |
   | community    | redhat    | tests/data/report.yaml    |
 
-  Scenario Outline: A partner or redhat associate submits an edited report
+  Scenario Outline: [HC-10-001] A partner or redhat associate submits an edited report
     Given the vendor <vendor> has a valid identity as <vendor_type>
     And a <report_path> is provided
     And the report includes <tested> and <supported> OpenshiftVersion values and chart <kubeversion> value

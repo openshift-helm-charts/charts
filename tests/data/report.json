@@ -10,7 +10,8 @@
       },
       "chart-uri": "https://github.com/${repository}/raw/${branch}/tests/data/vault-0.17.0.tgz",
       "digests": {
-        "chart": "sha256:f01dd362d81fe4b1ef99bb7fa5be268fa94dc96f3009d28bc93a18517aa1ef7a"
+        "chart": "sha256:f01dd362d81fe4b1ef99bb7fa5be268fa94dc96f3009d28bc93a18517aa1ef7a",
+        "package" : "9cb7e3a5d82537f512319c754ccd6e9a4be08118b34849609d0fc261934d062a"
       },
       "lastCertifiedTimestamp": "2021-11-24T11:42:48.736244+05:30",
       "testedOpenShiftVersion": "4.9",

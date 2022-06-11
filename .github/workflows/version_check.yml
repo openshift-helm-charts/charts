@@ -5,14 +5,12 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
-      # XXX: dry-run has two side effects:
-      # 1. Don't launch github issues for notifications
-      # 2. Run this workflow but don't update the software-version.yaml,
-      #     used to re-run the cron job when there's version difference.
-      # Can lift this input when we feel comfortable to run this workflow once
-      # for each software version change and send notifications (no backdoor).
+      # XXX: dry-run has side effects:
+      # 1. Opens issue in openshift-helm-chart/sandbox if failures are detected.
+      # 2. Runs this workflow whether or not a version change has occurred
+      # 3. By default dperaza and mmulholla are tagged in any issues raised.
       dry-run:
-        description: "Run tests but do not create issues {true,false}"
+        description: "Dry Run? (Run tests but create issues in sandbox) {true,false}"
         required: true
         default: "true"
       vendor-type:
@@ -69,6 +67,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: "software-version"
+          repository: "openshift-helm-charts/charts"
 
       - name: Read previous OpenShift version
         id: get_prev_ocp_version
@@ -84,9 +83,13 @@ jobs:
           if [ "${{ steps.check_repo.outputs.run-job }}" != "true" ]; then
             echo "::set-output name=run_tests::false"
           elif [ "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}" = "${{ steps.get_prev_ocp_version.outputs.result }}" ]; then
-            # No change in the OpenShift version
-            printf "OpenShift version has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
-            echo "::set-output name=run_tests::false"
+            # No change in the OpenShift version - do not run tests if a scheduled run or dry-run is not set
+            if [ "${{ github.event_name }}" == 'schedule' || "${{ github.event.inputs.dry-run }}" != 'true']; then
+              printf "OpenShift version has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
+              echo "::set-output name=run_tests::false"
+            else
+              echo "::set-output name=run_tests::true"
+            fi
           else
             # New OpenShift version is set
             printf "OpenShift version has changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
@@ -120,7 +123,7 @@ jobs:
           steps.compare_ocp_versions.outputs.run_tests == 'true'
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.workflow_dispatch.ref }}
+          ref: "main"
           token: ${{ secrets.BOT_TOKEN }}
           fetch-depth: 0
 
@@ -159,7 +162,7 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=INFO --tb=short
 
       - name: (Schedule) Run tests on existing charts
         id: run-schedule-tests
@@ -182,7 +185,7 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=INFO --tb=short
 
       - name: Send message to slack channel
         id: notify
@@ -208,15 +211,18 @@ jobs:
           echo "GITHUB_REPOSITORY : $GITHUB_REPOSITORY"
           if [ $GITHUB_EVENT_NAME == 'workflow_dispatch' ]; then
             echo '::set-output name=run-job::true'
+            echo "workflow_dispatch: set run-job to true"
           elif [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
             echo '::set-output name=run-job::true'
+            echo "charts repo: set run-job to true"
           else
             echo '::set-output name=run-job::false'
+            echo "set run-job to false"
           fi
 
       - name: Get current Chart Verifier version
         id: get_curr_cv_version
-        if: steps.check-repo.outputs.run-job == 'true'
+        if: steps.check_repo.outputs.run-job == 'true'
         run: |
           QUAY_API='https://quay.io/api/v1/repository/redhat-certification/chart-verifier/tag/'
           CV_DIGEST=$(curl ${QUAY_API} | jq '[.tags[] | select(.name == "latest")] | .[0].manifest_digest')
@@ -225,13 +231,14 @@ jobs:
         shell: bash
 
       - name: Checkout software-version branch
-        if: steps.check-repo.outputs.run-job == 'true'
+        if: steps.check_repo.outputs.run-job == 'true'
         uses: actions/checkout@v2
         with:
           ref: "software-version"
+          repository: "openshift-helm-charts/charts"
 
       - name: Read previous Chart Verifier digest
-        if: steps.check-repo.outputs.run-job == 'true'
+        if: steps.check_repo.outputs.run-job == 'true'
         id: get_prev_cv_digest
         uses: mikefarah/yq@master
         with:
@@ -243,10 +250,14 @@ jobs:
           set -euo pipefail
           if [ "${{ steps.check_repo.outputs.run-job }}" != "true" ]; then
             echo "::set-output name=run_tests::false"
-          elif [ "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}" = "${{ steps.get_prev_cv_digest.outputs.result }}" ]; then
-            # No change in the Chart Verifier image
-            printf "Chart Verifier has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
-            echo "::set-output name=run_tests::false"
+          elif [ "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}" == "${{ steps.get_prev_cv_digest.outputs.result }}" ]; then
+            # No change in the Chart Verifier image - do not run tests if a scheduled run or dry-run is not set
+            if [ "${{ github.event_name }}" == 'schedule' || "${{ github.event.inputs.dry-run }}" != 'true']; then
+              printf "Chart Verifier has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
+              echo "::set-output name=run_tests::false"
+            else
+              echo "::set-output name=run_tests::true"
+            fi
           else
             # New Chart Verifier image is found
             printf "Chart Verifier has changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
@@ -275,12 +286,12 @@ jobs:
           git commit -am "${COMMIT_MESSAGE}"
           git push
 
-      - name: Checkout main branch
+      - name: Checkout charts main branch
         if: |
           steps.compare_cv_versions.outputs.run_tests == 'true'
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.workflow_dispatch.ref }}
+          ref: "main"
           token: ${{ secrets.BOT_TOKEN }}
           fetch-depth: 0
 
@@ -296,13 +307,14 @@ jobs:
           steps.compare_cv_versions.outputs.run_tests == 'true'
         run: |
           # set up python
+          pwd
           python3 -m venv ve1
           cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
           cd scripts && ../ve1/bin/python3 setup.py install && cd ..
 
       - name: (Manual) Run tests on existing charts
         if: |
-          github.event_name == 'workflow_dispatch' && steps.compare_cv_versions.outputs.run_tests == 'true'
+          github.event_name == 'workflow_dispatch'
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -311,7 +323,7 @@ jobs:
           NOTIFY_ID: ${{ github.event.inputs.notify-id }}
           BOT_NAME: ${{ secrets.BOT_NAME }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          SOFTWARE_NAME: "OpenShift"
+          SOFTWARE_NAME: "chart-verifier"
           SOFTWARE_VERSION: ${{ steps.get_curr_cv_version.outputs.current_cv_digest }}
         run: |
           printf "[INFO] Dry run: '%s'\n" "${{ env.DRY_RUN }}"
@@ -319,7 +331,7 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=INFO --tb=short
 
       - name: (Schedule) Run tests on existing charts
         id: run-schedule-tests
@@ -334,7 +346,7 @@ jobs:
           DRY_RUN: "true"
           VENDOR_TYPE: "all"
           NOTIFY_ID: ""
-          SOFTWARE_NAME: "OpenShift"
+          SOFTWARE_NAME: "chart-verifier"
           SOFTWARE_VERSION: ${{ steps.get_curr_cv_version.outputs.current_cv_digest }}
         run: |
           printf "[INFO] Dry run: '%s'\n" "${{ env.DRY_RUN }}"
@@ -342,7 +354,7 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=INFO --tb=short
 
       - name: Send message to slack channel
         id: notify

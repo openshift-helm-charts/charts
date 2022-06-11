@@ -77,7 +77,7 @@ def _verify_endpoint(access_token):
         endpoint_data["access_token"] = access_token
 
 
-def create_verification_issue(chart_name, chart_owners, report_url, software_name, software_version, pass_verification, access_token=None):
+def create_verification_issue(chart_name, chart_owners, notify_developers, report_url, software_name, software_version, pass_verification, access_token=None, dry_run=False):
     """Create and issue with chart-verifier findings after a version change trigger.
 
     chart_name -- Name of the chart that was verified. Include version for more verbose information\n
@@ -89,21 +89,25 @@ def create_verification_issue(chart_name, chart_owners, report_url, software_nam
     access_token -- An optional github access token secret. If not passed will try to get from GITHUB_AUTH_TOKEN environment variable\n
     """
 
-    title = f"Action needed for {chart_name} after a certification dependency change"
 
-    report_result = "some chart checks have failed. Consider submiting a new chart version with the appropiate corrections"
-    if pass_verification:
-        report_result = ("all chart checks have passed. With your approval, we could automatically "
-                         "update your chart annotations in index.yaml. Use this issue to communicate "
-                         "your response")
+    if not pass_verification:
+        title = f"Chart {chart_name}"
+        if dry_run:
+            title = f"Dry Run: Chart {chart_name}"
 
-    body = (f"FYI @{' @'.join(chart_owners)}, we have triggered chart-verifier against chart {chart_name} because the certification flow "
-            f"now supports {software_name} {software_version}. We have found that {report_result}. Check details in the report: "
-            f"{report_url}")
 
-    _set_endpoint()
-    _verify_endpoint(access_token)
-    create_an_issue(title, body)
+        title = f"{title} has failures with {software_name} version {software_version}"
+        report_result = "some chart checks have failed. Please review the failures and, if required, consider submitting a new chart version with the appropriate additions/corrections."
+
+        body = (f"FYI @{' @'.join(notify_developers)}, we have triggered the chart certification workflow against chart {chart_name} because the workflow "
+            f"now supports {software_name} version {software_version}. We have found that {report_result}. Check details in the report: "
+            f"{report_url}, Chart owners are: {chart_owners}")
+
+        _set_endpoint()
+        _verify_endpoint(access_token)
+        create_an_issue(title, body)
+
+
 
 
 def create_version_change_issue(chart_name, chart_owners, software_name, software_version, access_token=None):

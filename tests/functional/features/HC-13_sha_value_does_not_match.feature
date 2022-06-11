@@ -6,7 +6,7 @@ Feature: SHA value in the report does not match
       | chart_path                     | report_path               |
       | tests/data/vault-0.17.0.tgz    | tests/data/report.yaml    |
     
-    Scenario Outline: A user submits a chart tarball with report
+    Scenario Outline: [HC-13-001] A user submits a chart tarball with report
         Given the vendor <vendor> has a valid identity as <vendor_type>
         And a chart tarball is used in <chart_path> and report in <report_path>
         And the report contains an <error>

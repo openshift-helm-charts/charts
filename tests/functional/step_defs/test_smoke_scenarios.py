@@ -8,7 +8,8 @@ from functional.utils.chart_certification import ChartCertificationE2ETestSingle
 def workflow_test():
     test_name = 'Smoke Test'
     test_chart = 'tests/data/vault-0.17.0.tgz'
-    workflow_test = ChartCertificationE2ETestSingle(test_name=test_name, test_chart=test_chart)
+    test_report = 'tests/data/report.yaml'
+    workflow_test = ChartCertificationE2ETestSingle(test_name=test_name, test_chart=test_chart, test_report=test_report)
     yield workflow_test
     workflow_test.cleanup()
 

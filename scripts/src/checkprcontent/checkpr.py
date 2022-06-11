@@ -50,6 +50,7 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
             print(f"::set-output name=pr-content-error-message::{msg}")
             sys.exit(1)
 
+    provider_delivery = False
     if report_in_pr and num_files_in_pr > 1:
         if report_provider_delivery or owner_provider_delivery:
             msg = f"[ERROR] OWNERS file and/or report indicate provider controlled delivery but pull request is not report only."
@@ -58,8 +59,13 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
             sys.exit(1)
     elif report_in_pr:
         if report_provider_delivery and owner_provider_delivery:
-            print(f"[INFO] providerDelivery is a go")
-            print(f"::set-output name=providerDelivery::True")
+            if verifier_report.get_package_digest(report_data):
+                provider_delivery = True
+            else:
+                msg = f"[ERROR] Provider delivery control requires a package digest in the report."
+                print(msg)
+                print(f"::set-output name=pr-content-error-message::{msg}")
+                sys.exit(1)
         elif report_provider_delivery:
             msg = f"[ERROR] Report indicates provider controlled delivery but OWNERS file does not."
             print(msg)
@@ -70,11 +76,13 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
             print(msg)
             print(f"::set-output name=pr-content-error-message::{msg}")
             sys.exit(1)
-        else:
-            print(f"::set-output name=providerDelivery::False")
-            print(f"[INFO] providerDelivery is a no-go")
 
-
+    if provider_delivery:
+        print(f"[INFO] providerDelivery is a go")
+        print(f"::set-output name=providerDelivery::True")
+    else:
+        print(f"::set-output name=providerDelivery::False")
+        print(f"[INFO] providerDelivery is a no-go")
 
 
 def ensure_only_chart_is_modified(api_url, repository, branch):
@@ -156,6 +164,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
     if matches_found>0:
         category, organization, chart, version = pattern_match.groups()
         print(f"::set-output name=category::{'partner' if category == 'partners' else category}")
+        print(f"::set-output name=organization::{organization}")
         print("Downloading index.yaml", category, organization, chart, version)
         r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
         if r.status_code == 200:

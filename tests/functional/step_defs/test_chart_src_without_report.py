@@ -18,10 +18,10 @@ def workflow_test():
     yield workflow_test
     workflow_test.cleanup()
 
-@scenario('../features/chart_src_without_report.feature', "A partner or redhat associate submits an error-free chart source")
+@scenario('../features/HC-01_chart_src_without_report.feature', "[HC-01-001] A partner or redhat associate submits an error-free chart source")
 def test_partner_or_redhat_user_submits_chart_src():
     """A partner or redhat associate submits an error-free chart source."""
 
-@scenario('../features/chart_src_without_report.feature', "A community user submits an error-free chart source without report")
+@scenario('../features/HC-01_chart_src_without_report.feature', "[HC-01-002] A community user submits an error-free chart source without report")
 def test_community_user_submits_chart_src():
     """A community user submits an error-free chart source without report"""

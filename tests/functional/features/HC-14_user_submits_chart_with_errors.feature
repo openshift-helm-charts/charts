@@ -7,7 +7,7 @@ Feature: Chart submission with errors
   | redhat       | redhat    | vault   | 0.17.0   | tests/data/vault-0.17.0.tgz    |
   | community    | redhat    | vault   | 0.17.0   | tests/data/vault-0.17.0.tgz    |
 
-  Scenario Outline: An unauthorized user submits a chart
+  Scenario Outline: [HC-14-001] An unauthorized user submits a chart
     Given A <user> wants to submit a chart in <chart_path>
     And <vendor> of <vendor_type> wants to submit <chart> of <version>
     And the user creates a branch to add a new chart version
@@ -19,7 +19,7 @@ Feature: Chart submission with errors
       | message                                          | user         |
       | is not allowed to submit the chart on behalf of  | unauthorized |
 
-  Scenario Outline: An authorized user submits a chart with incorrect version
+  Scenario Outline: [HC-14-002] An authorized user submits a chart with incorrect version
     Given An authorized user wants to submit a chart in <chart_path>
     And <vendor> of <vendor_type> wants to submit <chart> of <version>
     And Chart.yaml specifies a <bad_version>

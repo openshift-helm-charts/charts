@@ -8,6 +8,8 @@ import tempfile
 from datetime import datetime, timezone
 import hashlib
 import urllib.parse
+import environs
+from environs import Env
 
 import semver
 import requests
@@ -180,7 +182,7 @@ def set_package_digest(chart_entry):
     pkg_digest = ""
     if "digest" in chart_entry:
         pkg_digest = chart_entry["digest"]
-    
+
     if target_digest:
         if not pkg_digest:
             # Digest was computed but not passed
@@ -194,7 +196,7 @@ def set_package_digest(chart_entry):
 
 
 
-def update_index_and_push(indexfile,indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number):
+def update_index_and_push(indexfile,indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number, provider_delivery):
     token = os.environ.get("GITHUB_TOKEN")
     print(f"Downloading {indexfile}")
     r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/{indexfile}')
@@ -221,7 +223,8 @@ def update_index_and_push(indexfile,indexdir, repository, branch, category, orga
         crtentries.append(v)
 
     chart_entry["urls"] = [chart_url]
-    set_package_digest(chart_entry)
+    if not provider_delivery:
+        set_package_digest(chart_entry)
     chart_entry["annotations"]["charts.openshift.io/submissionTimestamp"] = now
     crtentries.append(chart_entry)
     data["entries"][entry_name] = crtentries
@@ -331,8 +334,12 @@ def main():
     print("[INFO] Creating Git worktree for index branch")
     indexdir = create_worktree_for_index(branch)
 
-    print(f'[INFO] os.environ["PROVIDER_DELIVERY"] {os.environ["PROVIDER_DELIVERY"]}')
-    if os.environ["PROVIDER_DELIVERY"] and os.environ["PROVIDER_DELIVERY"] == "True":
+    env = Env()
+    provider_delivery = env.bool("PROVIDER_DELIVERY",False)
+
+    print(f'[INFO] provider delivery is {provider_delivery}')
+
+    if provider_delivery:
         indexfile = "unpublished-certified-charts.yaml"
     else:
         indexfile = "index.yaml"
@@ -373,4 +380,4 @@ def main():
         print("[INFO] Creating index from report")
         chart_entry, chart_url = create_index_from_report(category, report_path)
 
-    update_index_and_push(indexfile,indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number)
+    update_index_and_push(indexfile,indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number, provider_delivery)
