@@ -5,7 +5,7 @@ Feature: Chart verifier comes back with a failure
       | chart_path                     |
       | tests/data/vault-0.17.0.tgz    |
 
-  Scenario Outline: A partner or community user submits a chart which does not contain a readme file
+  Scenario Outline: [HC-03-001] A partner or community user submits a chart which does not contain a readme file
     Given the vendor <vendor> has a valid identity as <vendor_type>
     And chart source is used in <chart_path>
     And README file is missing in the chart
@@ -18,7 +18,7 @@ Feature: Chart verifier comes back with a failure
         | partners     | hashicorp | Chart does not have a README                            |
         | community    | redhat    | Community charts require maintainer review and approval |
 
-  Scenario Outline: A redhat user submits a chart which does not contain a readme file
+  Scenario Outline: [HC-03-002] A redhat user submits a chart which does not contain a readme file
     Given the vendor <vendor> has a valid identity as <vendor_type>
     And chart source is used in <chart_path>
     And README file is missing in the chart

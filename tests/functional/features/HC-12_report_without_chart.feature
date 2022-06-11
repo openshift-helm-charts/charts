@@ -7,7 +7,7 @@ Feature: Report only submission
         | tests/data/report.yaml    |
     
 
-    Scenario Outline: A partner or redhat associate submits an error-free report
+    Scenario Outline: [HC-12-001] A partner or redhat associate submits an error-free report
         Given the vendor <vendor> has a valid identity as <vendor_type>
         And an error-free report is used in <report_path>
         When the user sends a pull request with the report
@@ -19,7 +19,7 @@ Feature: Report only submission
             | partners     | hashicorp |
             | redhat       | redhat    |
 
-    Scenario Outline: A community user submits an error-free report
+    Scenario Outline: [HC-12-002] A community user submits an error-free report
         Given the vendor <vendor> has a valid identity as <vendor_type>
         And an error-free report is used in <report_path>
         When the user sends a pull request with the report

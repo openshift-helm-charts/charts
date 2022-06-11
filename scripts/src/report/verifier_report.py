@@ -84,6 +84,17 @@ def get_provider_delivery(report_data):
         pass
     return provider_delivery
 
+def get_package_digest(report_data):
+    package_digest = None
+    try:
+        digests = report_data["metadata"]["tool"]["digests"]
+        if "package" in digests:
+            package_digest = digests["package"]
+    except Exception as err:
+        print(f"Exception getting providerControlledDelivery {err=}, {type(err)=}")
+        pass
+    return package_digest
+
 def report_is_valid(report_data):
     outcome = True
 

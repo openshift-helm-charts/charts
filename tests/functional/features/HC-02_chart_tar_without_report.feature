@@ -6,7 +6,7 @@ Feature: Chart tarball submission without report
         | chart_path                   |
         | tests/data/vault-0.17.0.tgz  |
 
-    Scenario Outline: A partner or redhat associate submits an error-free chart tarball
+    Scenario Outline: [HC-02-001] A partner or redhat associate submits an error-free chart tarball
         Given the vendor <vendor> has a valid identity as <vendor_type>
         And an error-free chart tarball is used in <chart_path>
         When the user sends a pull request with the chart
@@ -19,7 +19,7 @@ Feature: Chart tarball submission without report
             | partners     | hashicorp |
             | redhat       | redhat    |
 
-    Scenario Outline: A community user submits an error-free chart tarball without report
+    Scenario Outline: [HC-02-002] A community user submits an error-free chart tarball without report
         Given the vendor <vendor> has a valid identity as <vendor_type>
         And an error-free chart tarball is used in <chart_path>
         When the user sends a pull request with the chart

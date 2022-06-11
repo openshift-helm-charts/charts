@@ -35,7 +35,7 @@ from release import releaser
 
 sys.path.append('../')
 from owners import checkuser
-from github import gitutils
+from tools import gitutils
 
 VERSION_FILE = "release/release_info.json"
 TYPE_MATCH_EXPRESSION = "(partners|redhat|community)"

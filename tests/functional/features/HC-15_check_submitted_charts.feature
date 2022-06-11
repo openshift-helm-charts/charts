@@ -6,7 +6,7 @@ Feature: Check submitted charts
     Besides, during workflow development, engineers would like to check if the changes will break checks
     on existing submitted charts.
 
-    Scenario: A new Openshift or chart-verifier version is specified either by a cron job or manually
+    Scenario: [HC-15-001] A new Openshift or chart-verifier version is specified either by a cron job or manually
         Given there's a github workflow for testing existing charts
         When workflow for testing existing charts is triggered
         And a new Openshift or chart-verifier version is specified

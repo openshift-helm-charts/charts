@@ -5,7 +5,7 @@ Feature: PR includes a non chart related file
       | chart_path                     | message                                             |
       | tests/data/vault-0.17.0.tgz    | PR includes one or more files not related to charts |
 
-  Scenario Outline: A user submits a chart with non chart related file
+  Scenario Outline: [HC-05-001] A user submits a chart with non chart related file
     Given the vendor <vendor> has a valid identity as <vendor_type>
     And chart source is used in <chart_path>
     And user adds a non chart related file

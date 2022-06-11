@@ -33,7 +33,7 @@ def get_run_result(secrets, run_id):
     run = json.loads(r.text)
 
     if run['conclusion'] is None:
-        raise Exception("Workflow is still running.")
+        raise Exception(f"Workflow {run_id} is still running, PR: {secrets.pr_number} ")
 
     return run['conclusion']
 

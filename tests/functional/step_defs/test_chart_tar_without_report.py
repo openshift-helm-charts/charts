@@ -18,11 +18,11 @@ def workflow_test():
     workflow_test.cleanup()
 
 
-@scenario('../features/chart_tar_without_report.feature', "A partner or redhat associate submits an error-free chart tarball")
+@scenario('../features/HC-02_chart_tar_without_report.feature', "[HC-02-001] A partner or redhat associate submits an error-free chart tarball")
 def test_partner_or_redhat_user_submits_chart_tarball():
     """A partner or redhat associate submits an error-free chart tarball."""
 
-@scenario('../features/chart_tar_without_report.feature', "A community user submits an error-free chart tarball without report")
+@scenario('../features/HC-02_chart_tar_without_report.feature', "[HC-02-002] A community user submits an error-free chart tarball without report")
 def test_community_user_submits_chart_tarball():
     """A community user submits an error-free chart tarball without report"""
 

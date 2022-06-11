@@ -5,7 +5,7 @@ Feature: Report does not include a check
       | report_path               |
       | tests/data/report.yaml    |
     
-    Scenario Outline: A user submits a report with missing checks
+    Scenario Outline: [HC-11-001] A user submits a report with missing checks
         Given the vendor <vendor> has a valid identity as <vendor_type>
         And a <report_path> is provided
         And the report has a <check> missing

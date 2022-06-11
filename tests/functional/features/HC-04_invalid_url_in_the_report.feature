@@ -5,7 +5,7 @@ Feature: Report contains an invalid URL
       | report_path               |
       | tests/data/report.yaml    |
     
-    Scenario Outline: A user submits a report with an invalid url
+    Scenario Outline: [HC-04-001] A user submits a report with an invalid url
         Given the vendor <vendor> has a valid identity as <vendor_type>
         And a <report_path> is provided
         And the report contains an <invalid_url>

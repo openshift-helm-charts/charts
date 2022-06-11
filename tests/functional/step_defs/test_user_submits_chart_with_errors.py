@@ -17,11 +17,11 @@ def workflow_test():
     workflow_test.cleanup()
 
 
-@scenario('../features/user_submits_chart_with_errors.feature', "An unauthorized user submits a chart")
+@scenario('../features/HC-14_user_submits_chart_with_errors.feature', "[HC-14-001] An unauthorized user submits a chart")
 def test_chart_submission_by_unauthorized_user():
     """An unauthorized user submits a chart"""
 
-@scenario('../features/user_submits_chart_with_errors.feature', "An authorized user submits a chart with incorrect version")
+@scenario('../features/HC-14_user_submits_chart_with_errors.feature', "[HC-14-002] An authorized user submits a chart with incorrect version")
 def test_chart_submission_with_incorrect_version():
     """ An authorized user submits a chart with incorrect version """
 

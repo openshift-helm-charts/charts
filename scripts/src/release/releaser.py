@@ -27,9 +27,9 @@ import shutil
 from release import release_info
 
 sys.path.append('../')
-from github import gitutils
+from tools import gitutils
 
-SCHEDULE_YAML_FILE=".github/workflows/schedule.yml"
+VERSION_CHECK_YAML_FILE=".github/workflows/version_check.yml"
 BUILD_YAML_FILE=".github/workflows/build.yml"
 DEV_PR_BRANCH_BODY_PREFIX="Charts workflow version"
 DEV_PR_BRANCH_NAME_PREFIX="Auto-Release-"
@@ -45,7 +45,7 @@ SCHEDULE_INSERT = [
 def update_workflow():
 
     lines=[]
-    with open(SCHEDULE_YAML_FILE,'r') as schedule_file:
+    with open(VERSION_CHECK_YAML_FILE,'r') as schedule_file:
 
         lines = schedule_file.readlines()
 
@@ -59,25 +59,8 @@ def update_workflow():
                     lines.insert(insert_location+2,f"{SCHEDULE_INSERT[2]}\n")
                     break
 
-    with open(SCHEDULE_YAML_FILE,'w') as schedule_file:
+    with open(VERSION_CHECK_YAML_FILE,'w') as schedule_file:
         schedule_file.write("".join(lines))
-
-
-    with open(BUILD_YAML_FILE,'r') as build_file:
-
-        lines = build_file.readlines()
-
-        for line in lines:
-            if "VERIFIER_IMAGE:" in line:
-                if "chart-verifier:main" in line:
-                    line_index = lines.index(line)
-                    print(f"replace: {lines[line_index].rstrip()}")
-                    lines[line_index] = lines[line_index].replace('chart-verifier:main','chart-verifier:latest')
-                    print(f"with   : {lines[line_index].rstrip()}")
-
-    with open(BUILD_YAML_FILE,'w') as build_file:
-        build_file.write("".join(lines))
-
 
 def make_required_changes(release_info_dir,origin,destination):
 

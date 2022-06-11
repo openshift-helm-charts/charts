@@ -6,7 +6,7 @@ Feature: Report only submission in json format
         | tests/data/report.json    | One of these must be modified: report, chart source, or tarball |
     
 
-    Scenario Outline: An user submits an report in json format
+    Scenario Outline: [HC-09-001] An user submits an report in json format
         Given the vendor <vendor> has a valid identity as <vendor_type>
         And report is used in <report_path>
         When the user sends a pull request with the report

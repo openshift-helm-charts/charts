@@ -18,7 +18,7 @@ def workflow_test():
     workflow_test.cleanup()
 
 
-@scenario('../features/sha_value_does_not_match.feature', "A user submits a chart tarball with report")
+@scenario('../features/HC-13_sha_value_does_not_match.feature', "[HC-13-001] A user submits a chart tarball with report")
 def test_chart_submission_with_report():
     """A user submits a chart tarball with report."""
 

@@ -23,15 +23,15 @@ def workflow_test():
     workflow_test.cleanup()
 
 
-@scenario('../features/provider_delivery_control.feature', "A partner associate submits an error-free report with provider controlled delivery")
+@scenario('../features/HC-06_provider_delivery_control.feature', "[HC-06-001] A partner associate submits an error-free report with provider controlled delivery")
 def test_partners_submits_error_free_report_for_provider_controlled_delivery():
     """A partner submits an error-free report for provider controlled delivery."""
 
-@scenario('../features/provider_delivery_control.feature', "A partner associate submits an error-free report and chart with provider controlled delivery")
+@scenario('../features/HC-06_provider_delivery_control.feature', "[HC-06-002] A partner associate submits an error-free report and chart with provider controlled delivery")
 def test_partners_submits_error_free_report_and_chart_for_provider_controlled_delivery():
     """A partner submits an error-free report and chart for provider controlled delivery."""
 
-@scenario('../features/provider_delivery_control.feature', "A partner associate submits an error-free report with inconsistent provider controlled delivery setting")
+@scenario('../features/HC-06_provider_delivery_control.feature', "[HC-06-003] A partner associate submits an error-free report with inconsistent provider controlled delivery setting")
 def test_partners_submits_error_free_report_with_inconsistent_provider_controlled_delivery_settings():
     """A partner submits an error-free report with inconsistent settings for provider controlled delivery."""
 
@@ -52,6 +52,20 @@ def provider_delivery_control_set_in_report(workflow_test,provider_control_repor
     else:
         print("[INFO] un-set provider delivery control_in report")
         workflow_test.process_report(update_provider_delivery=True,provider_delivery=False)
+
+@given(parsers.parse("provider delivery control is set to <provider_control_report> and a package digest is <package_digest_set> in the report"))
+def provider_delivery_control_and_package_digest_set_in_report(workflow_test,provider_control_report,package_digest_set=True):
+    if package_digest_set == "true":
+        no_package_digest = False
+    else:
+        no_package_digest = True
+
+    if provider_control_report == "true":
+        print("[INFO] set provider delivery control_in report")
+        workflow_test.process_report(update_provider_delivery=True,provider_delivery=True,unset_package_digest=no_package_digest)
+    else:
+        print("[INFO] un-set provider delivery control_in report")
+        workflow_test.process_report(update_provider_delivery=True,provider_delivery=False,unset_package_digest=no_package_digest)
 
 @then(parsers.parse("the <index_file> is updated with an entry for the submitted chart"))
 def index_file_is_updated(workflow_test,index_file):
