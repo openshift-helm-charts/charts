@@ -18,7 +18,7 @@ metadata:
         name: du
         home: ""
         sources: []
-        version: 5.0.326-53
+        version: du5.0.326-53
         description: NF Service template.
         keywords: []
         maintainers:
