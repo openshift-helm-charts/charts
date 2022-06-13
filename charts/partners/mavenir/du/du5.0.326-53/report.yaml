@@ -47,7 +47,7 @@ results:
       outcome: PASS
       reason: API version is V2, used in Helm 3
     - check: v1.0/contains-test
-     type: Mandatory
+      type: Mandatory
       outcome: PASS
       reason: Chart test files exist
     - check: v1.0/contains-values
