@@ -40,4 +40,47 @@ entries:
     urls:
     - https://github.com/ansvu/samplechart/releases/cucp_358/g3_5_0_326_53/cucp_53_helmtest.tgz
     version: 5.0.326-53
+  mavenir-cuup:
+  - annotations:
+      charts.openshift.io/digest: sha256:2d662185426d2d11a310e8d055d4b86b4533f8c3fdb06c9c9450390dabecb6d8
+      charts.openshift.io/lastCertifiedTimestamp: '2022-06-01T18:56:38.183573+00:00'
+      charts.openshift.io/name: test
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-06-08T17:10:55.815477+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.7'
+    apiVersion: v2
+    appVersion: NRCC.R.2.0.14.1_DB
+    dependencies:
+      - name: iwfsvc
+        repository: http://10.69.12.211:8080
+        version: 0.0.1
+      - name: gwsvc
+        repository: http://10.69.12.211:8080
+        version: 0.0.1
+      - name: intfmgrsvc
+        repository: http://10.69.12.211:8080
+        version: 0.0.1
+      - name: dprmsvc
+        repository: http://10.69.12.211:8080
+        version: 0.0.1
+      - name: srmsvc
+        repository: http://10.69.12.211:8080
+        version: 0.0.1
+      - name: bccsvc
+        repository: http://10.69.12.211:8080
+        version: 0.0.1
+      - name: dalsvc
+        repository: http://10.69.12.211:8080
+        version: 0.0.1
+    description: NR CUUP services.
+    digest: 4be6bc722e266c6753a7ca4291d499c23817572ed87f35bd705175feb112ef5e
+    kubeVersion: '>=1.18.0-0'
+    maintainers:
+      - email: junjie.jiang@mavenir.com
+        name: George Jiang
+    name: cuup
+    urls:
+      - https://github.com/shantanushivanekar123/rhdu_Ubi7sw/CUUP_Ubi8/Chart/helchart_cuup/cuup_helm_01062022_new.tgz
+    version: 0.14.1
 generated: '2022-05-24T15:09:33.742777+00:00'
