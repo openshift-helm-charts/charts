@@ -13,7 +13,7 @@ metadata:
         lastCertifiedTimestamp: "2022-06-11T16:49:30.472769+00:00"
         testedOpenShiftVersion: "4.9"
         supportedOpenShiftVersions: '>=4.5'
-        providerControlledDelivery: false
+        providerControlledDelivery: true
     chart:
         name: du
         home: ""
