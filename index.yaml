@@ -1603,6 +1603,45 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-cryostat-0.1.1/redhat-cryostat-0.1.1.tgz
     version: 0.1.1
+  - annotations:
+      charts.openshift.io/digest: sha256:90f4874624e17c41cb611eed0aa2cd8e151e68b9f681a4445aa29e4feb880c76
+      charts.openshift.io/lastCertifiedTimestamp: '2022-06-14T21:20:43.407519+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-06-14T21:21:14.514673+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 2.1.1.redhat
+    description: Securely manage JFR recordings for your containerized Java workloads
+    digest: 0f940e84d92e6c18e20c011de256c21b7e9bb2f57e47a225a51fe1be82ad8753
+    home: https://cryostat.io
+    icon: https://raw.githubusercontent.com/cryostatio/cryostat-helm/main/docs/images/cryostat-icon.svg
+    keywords:
+    - flightrecorder
+    - java
+    - jdk
+    - jfr
+    - jmc
+    - missioncontrol
+    - monitoring
+    - profiling
+    - diagnostic
+    kubeVersion: '>=1.19.0'
+    maintainers:
+    - name: The Cryostat Community
+      url: https://groups.google.com/g/cryostat-development
+    name: cryostat
+    sources:
+    - https://github.com/cryostatio/cryostat
+    - https://github.com/cryostatio/cryostat-core
+    - https://github.com/cryostatio/cryostat-web
+    - https://github.com/cryostatio/jfr-datasource
+    - https://github.com/cryostatio/cryostat-grafana-dashboard
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-cryostat-0.1.2/redhat-cryostat-0.1.2.tgz
+    version: 0.1.2
   redhat-data-grid:
   - annotations:
       charts.openshift.io/digest: sha256:4a60f63bec9744cc6b6261ae1b81670a96c3e9d95c1bb259894b4b2220a42549
@@ -2931,4 +2970,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.1/wavefronthq-wavefront-1.11.1.tgz
     version: 1.11.1
-generated: '2022-06-08T17:10:55.815477+00:00'
+generated: '2022-06-14T21:21:14.514673+00:00'
