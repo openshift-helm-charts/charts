@@ -1,0 +1,9 @@
+chart:
+  name: chart
+  shortDescription: A Helm chart for Kubernetes
+publicPgpKey: null
+users:
+  - githubUsername: dcicertbot
+vendor:
+  label: test telcoci cert
+  name: telcoci at red hat
