@@ -1,0 +1,9 @@
+chart:
+  name: illumio
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: jan-lucansky
+vendor:
+  label: illumio
+  name: Illumio
