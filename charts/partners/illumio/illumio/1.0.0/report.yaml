@@ -8,9 +8,9 @@ metadata:
             version: v1.1
         chart-uri: /charts/illumio-1.0.0.tgz
         digests:
-            chart: sha256:5f6b87e0238898714dc1e1f867d8b296d22bc685031737d9fd840df6fa4a9e56
-            package: af4b3325de27f849751748cb73d75abcd37e5db0ec16b26a332df1839f9dbfea
-        lastCertifiedTimestamp: "2022-06-28T14:33:38.469358+00:00"
+            chart: sha256:86e18df54395641a1a5866bb801df5b0b79e86f992dc72cc395c47387f633389
+            package: 2c4d9506b899577a79173adcb657d5948782b6fed208e84cedf37f2f2c3968ab
+        lastCertifiedTimestamp: "2022-06-29T08:51:56.286393+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.7'
         providerControlledDelivery: false
@@ -35,48 +35,55 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
-    - check: v1.1/has-kubeversion
+    - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
-      reason: Kubernetes version specified
+      reason: Values file exist
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
-    - check: v1.0/contains-values-schema
+    - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
-      reason: Values schema file exist
+      reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
       reason: Chart has a README
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/illumio/cven:21.5.14-1
+        Image is Red Hat certified : quay.io/illumio/kubelink:3.0.0.16f670
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/toolbox:9.0.0-13
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
 
