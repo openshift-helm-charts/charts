@@ -2,6 +2,7 @@ chart:
   name: illumio
   shortDescription: null
 publicPgpKey: null
+providerDelivery: True
 users:
 - githubUsername: jan-lucansky
 vendor:
