@@ -1,5 +1,25 @@
 apiVersion: v1
 entries:
+  illumio-illumio:
+  - annotations:
+      charts.openshift.io/digest: sha256:86e18df54395641a1a5866bb801df5b0b79e86f992dc72cc395c47387f633389
+      charts.openshift.io/lastCertifiedTimestamp: '2022-06-29T19:28:05.160154+00:00'
+      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-06-30T14:55:21.273307+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart of Illumio Core for Kubernetes
+    digest: 2c4d9506b899577a79173adcb657d5948782b6fed208e84cedf37f2f2c3968ab
+    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
+    kubeVersion: '>=1.20.0'
+    name: illumio
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   mavenir-cucp:
   - annotations:
       charts.openshift.io/digest: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
@@ -104,4 +124,4 @@ entries:
     urls:
     - https://github.com/ansvu/samplechart/releases/du_helmchart/du_helmchart_run.tgz
     version: du5.0.326-53
-generated: '2022-06-14T13:45:15.371882+00:00'
+generated: '2022-06-30T14:55:21.273307+00:00'
