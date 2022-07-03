@@ -156,6 +156,26 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/fortanix-dsm-secrets-injector-chart-2.2-4.6/fortanix-dsm-secrets-injector-chart-2.2-4.6.tgz
     version: 2.2-4.6
+  fredco-samplechart:
+  - annotations:
+      charts.openshift.io/digest: sha256:7eb4836e9b39d05743a44320b4b9d057269409fa0605c6c797a960221a63e214
+      charts.openshift.io/lastCertifiedTimestamp: '2022-07-03T19:10:57.461508+00:00'
+      charts.openshift.io/provider: Fredco
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-07-03T19:12:34.976945+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 1-42
+    description: A Helm chart for Kubernetes
+    digest: 6823ec50ab88b1cf6970bb1ce0ee696a5d78adec5ce8e7f6640b4d8d44944fb5
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.20.0'
+    name: samplechart
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/fredco-samplechart-0.1.1/fredco-samplechart-0.1.1.tgz
+    version: 0.1.1
   hashicorp-vault:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -3074,4 +3094,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.1/wavefronthq-wavefront-1.11.1.tgz
     version: 1.11.1
-generated: '2022-06-28T13:36:46.529997+00:00'
+generated: '2022-07-03T19:12:34.976945+00:00'
