@@ -176,6 +176,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/fredco-samplechart-0.1.1/fredco-samplechart-0.1.1.tgz
     version: 0.1.1
+  - annotations:
+      charts.openshift.io/digest: sha256:4abe3a57dcc5865e006b8165507a06b4f165b282a53afb3060a1ff0733c4f2dd
+      charts.openshift.io/lastCertifiedTimestamp: '2022-07-06T01:34:49.552863+00:00'
+      charts.openshift.io/provider: Fredco
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-07-06T01:36:21.837707+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 1-42
+    description: A Helm chart for Kubernetes
+    digest: 83770ebbecceabdfe413e37692c89344f8e1c9951fb4be68f083834815c864f2
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.20.0'
+    name: samplechart
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/fredco-samplechart-0.1.2/fredco-samplechart-0.1.2.tgz
+    version: 0.1.2
   hashicorp-vault:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -3094,4 +3113,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.1/wavefronthq-wavefront-1.11.1.tgz
     version: 1.11.1
-generated: '2022-07-03T19:12:34.976945+00:00'
+generated: '2022-07-06T01:36:21.837707+00:00'
