@@ -1,0 +1,9 @@
+chart:
+  name: hcl-helm-cert-partner
+  shortDescription: helm chart certification
+publicPgpKey: null
+users:
+- githubUsername: pulkit_k@hcl.com
+vendor:
+  label: hcl-helm-cert-partner
+  name: hcl

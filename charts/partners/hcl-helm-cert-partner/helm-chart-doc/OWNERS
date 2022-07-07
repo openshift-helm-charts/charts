@@ -1,0 +1,8 @@
+chart:
+  name: helm-chart-doc
+  shortDescription: helm chart certification
+publicPgpKey: unknown
+users: []
+vendor:
+  label: hcl-helm-cert-partner
+  name: hcl
