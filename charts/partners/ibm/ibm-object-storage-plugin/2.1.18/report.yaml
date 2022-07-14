@@ -1,0 +1,196 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.7.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.18.tgz?raw=true
+        digests:
+            chart: sha256:5f4bbada418c20f8b43705e1a1b2c35026871ced73840f67e964fdad7bc58421
+            package: 34580fbea59bc2e96d4bde61ea7781d65dfc5b638ae628f0890997c16e4f60b1
+        lastCertifiedTimestamp: "2022-07-14T04:36:01.761639+00:00"
+        testedOpenShiftVersion: "4.9"
+        supportedOpenShiftVersions: '>=4.6'
+        providerControlledDelivery: false
+    chart:
+        name: ibm-object-storage-plugin
+        home: ""
+        sources: []
+        version: 2.1.18
+        description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object Storage is persistent, highly available storage that you can mount to apps that run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage buckets to pods in your cluster. '
+        keywords:
+            - IKS
+            - amd64
+            - Storage
+            - Commercial
+            - Limited
+            - Other
+            - ROKS
+        maintainers:
+            - name: IBM
+              email: contsto2@in.ibm.com
+              url: ""
+        icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.1.18
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: ibm-object-storage-plugin Chart
+        kubeversion: '>=1.19.0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : icr.io/cpopen/ibmcloud-object-storage-driver@sha256:f3fe6d29ace4c40fda8e7773e8058d14c848f21dc5f2f790ec93d325bb5f691b : Digest sha256:f3fe6d29ace4c40fda8e7773e8058d14c848f21dc5f2f790ec93d325bb5f691b not found. Found : sha256:e9152b9e7dfca10cf02f8de7a8d14a4067e7fe69695699411cadaf282263f099, sha256:fc17bb3e89d00b3eb0f50b3ea83aa75c52e43d8e56cf2e0f17475e934eeeeb5f, sha256:4dda66d8e0a2b0f76eb18787c94f13d3d5e1f3506a1b388fa234f9ea08ebed2b, sha256:b4ce486c2f349d1f73d986fa131c7614a53b0d5713063eec51a4b3f1ed4d5da7, sha256:8e9979e8b3452f0d8a7c50a0235a232ef839f4ab75fb0474d00725f09718afd1, sha256:33dfbb6dbfbd4ab1b5f54b9dc929a84b81e0bc7080610c2e18d3ccecadbf2862, sha256:90abbd73323ac141780a77443235b3d6aca7073400cb3916c4a8da085f4bb58d, sha256:f4d54180ef449ca8d889c1c1b53d9ab6af3a3ebff17f0286de0e4e535d2e8495, sha256:3a37e09d38cf6fa48b377e170094b9e88016de233f576ffa9af9041c07a6ed8d, sha256:738c6820cc23bd0cb7cc4319054d511d6967e56db6b6a7af16e3738aaabce754, sha256:957e665d48eaf22575eef941711130e2ce7122bfea334815fa4b3f1ef1a533ab, sha256:667667c5907d0ad145e8518ca0f8cf013ca778d6738b028d1cd08103b1b64667, sha256:667667c5907d0ad145e8518ca0f8cf013ca778d6738b028d1cd08103b1b64667, sha256:cb2f9c4b7c2fe8b922fb2808c1566ef42bdb751b9d4469c1cf6fbe4bb954cda1, sha256:cb2f9c4b7c2fe8b922fb2808c1566ef42bdb751b9d4469c1cf6fbe4bb954cda1, sha256:5e7ad920c50ba88c4df1c0154ec8a1770011b38dc3eeda52ed5088f78b49c767
+        Image is Red Hat certified : icr.io/cpopen/ibmcloud-object-storage-plugin@sha256:ad5aaae009a37d97bc7d0ace9167180dfeece40ad7d41e7000ea1bab5924355b
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+
+root@devmachine1:~# docker run --rm -i -e KUBECONFIG=/.kube/config -v "${HOME}/.kube":/.kube -v "/root/.bluemix":/root/.bluemix "quay.io/redhat-certification/chart-verifier:latest" verify "https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.18.tgz?raw=true"  --kube-context bha-coreos-cluster/ca1058gd0gvse22vmfc0/admin --chart-set license=true --chart-set provider=RHOCP --chart-set kubeDriver=/etc/kubernetes --chart-set workerOS=redhat --chart-set platform=Openshift
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.7.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.18.tgz?raw=true
+        digests:
+            chart: sha256:5f4bbada418c20f8b43705e1a1b2c35026871ced73840f67e964fdad7bc58421
+            package: 34580fbea59bc2e96d4bde61ea7781d65dfc5b638ae628f0890997c16e4f60b1
+        lastCertifiedTimestamp: "2022-07-14T04:40:26.587801+00:00"
+        testedOpenShiftVersion: "4.9"
+        supportedOpenShiftVersions: '>=4.6'
+        providerControlledDelivery: false
+    chart:
+        name: ibm-object-storage-plugin
+        home: ""
+        sources: []
+        version: 2.1.18
+        description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object Storage is persistent, highly available storage that you can mount to apps that run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage buckets to pods in your cluster. '
+        keywords:
+            - IKS
+            - amd64
+            - Storage
+            - Commercial
+            - Limited
+            - Other
+            - ROKS
+        maintainers:
+            - name: IBM
+              email: contsto2@in.ibm.com
+              url: ""
+        icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.1.18
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: ibm-object-storage-plugin Chart
+        kubeversion: '>=1.19.0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : icr.io/cpopen/ibmcloud-object-storage-driver@sha256:f3fe6d29ace4c40fda8e7773e8058d14c848f21dc5f2f790ec93d325bb5f691b
+        Image is Red Hat certified : icr.io/cpopen/ibmcloud-object-storage-plugin@sha256:ad5aaae009a37d97bc7d0ace9167180dfeece40ad7d41e7000ea1bab5924355b
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
