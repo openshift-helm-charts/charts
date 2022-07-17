@@ -1,0 +1,9 @@
+chart:
+  name:
+  shortDescription: This is the Red Hat Openshift Jenkins chart
+publicPgpKey: null
+users:
+- githubUsername: pulkitkumar0
+vendor:
+  label:
+  name: HCL America Inc
