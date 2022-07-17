@@ -1,0 +1,240 @@
+# Source: jenkins/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins
+  labels:
+    helm.sh/chart: jenkins-0.0.1
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    serviceaccounts.openshift.io/oauth-redirectreference.jenkins: "{\"kind\":\"OAuthRedirectReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"Route\",\"name\":\"j
+enkins\"}}"
+---
+# Source: jenkins/templates/configmap-trusted-ca-bundle.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    config.openshift.io/inject-trusted-cabundle: "true"
+    helm.sh/chart: jenkins-0.0.1
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  name: jenkins-trusted-ca-bundle
+---
+# Source: jenkins/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+  name: jenkins-edit
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+- kind: ServiceAccount
+  name: jenkins
+---
+# Source: jenkins/templates/service-jnlp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-jnlp
+  labels:
+    helm.sh/chart: jenkins-0.0.1
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 50000
+      targetPort: 50000
+      protocol: TCP
+      name: agent
+  selector:
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+---
+# Source: jenkins/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  labels:
+    helm.sh/chart: jenkins-0.0.1
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: web
+  selector:
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+---
+# Source: jenkins/templates/deploymentconfig.yaml
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    helm.sh/chart: jenkins-0.0.1
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  name: jenkins
+spec:
+  replicas: 1
+  selector:
+
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jenkins
+        app.kubernetes.io/instance: release-name
+    spec:
+      containers:
+      - env:
+        - name: OPENSHIFT_ENABLE_OAUTH
+          value: "true"
+        - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+          value: "true"
+        - name: DISABLE_ADMINISTRATIVE_MONITORS
+          value: "false"
+        - name: KUBERNETES_MASTER
+          value: https://kubernetes.default:443
+        - name: KUBERNETES_TRUST_CERTIFICATES
+          value: "true"
+        - name: JENKINS_SERVICE_NAME
+          value: jenkins
+        - name: JNLP_SERVICE_NAME
+          value: jenkins-jnlp
+        - name: ENABLE_FATAL_ERROR_LOG_FILE
+          value: "false"
+        - name: JENKINS_UC_INSECURE
+          value: "false"
+        - name: CASC_JENKINS_CONFIG
+          value: /var/lib/jenkins/proxy.yaml
+        image: ""
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /login
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 420
+          periodSeconds: 360
+          successThreshold: 1
+          timeoutSeconds: 240
+        name: jenkins
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /login
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+        resources:
+          limits:
+            memory: 1Gi
+        securityContext:
+          capabilities: {}
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/jenkins
+          name: jenkins-data
+        - mountPath: /etc/pki/ca-trust/source/anchors
+          name: jenkins-trusted-ca-bundle
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: jenkins
+      serviceAccountName: jenkins
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: jenkins-data
+        emptyDir: {}
+      - configMap:
+          defaultMode: 420
+          name: jenkins-trusted-ca-bundle
+          optional: true
+        name: jenkins-trusted-ca-bundle
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - jenkins
+      from:
+        kind: ImageStreamTag
+        name: jenkins:2
+        namespace: openshift
+      lastTriggeredImage: ""
+    type: ImageChange
+  - type: ConfigChange
+---
+# Source: jenkins/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    haproxy.router.openshift.io/timeout: 4m
+  labels:
+    helm.sh/chart: jenkins-0.0.1
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  name: jenkins
+spec:
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: jenkins
+---
+# Source: jenkins/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins-test-connection"
+  labels:
+    helm.sh/chart: jenkins-0.0.1
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['jenkins:80']
+  restartPolicy: Never
