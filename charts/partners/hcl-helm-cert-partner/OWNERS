@@ -1,0 +1,9 @@
+chart:
+  name: hcl-helm-oc
+  shortDescription: This is the Red Hat Openshift Jenkins chart
+publicPgpKey: null
+users:
+- githubUsername: pulkitkumar0
+vendor:
+  label: hcl technologies
+  name: HCL America Inc
