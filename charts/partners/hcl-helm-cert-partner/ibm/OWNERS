@@ -1,9 +1,0 @@
-chart:
-  name: hcl-helm-cert-partner
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: pulkitkumar0
-vendor:
-  label: ibm
-  name: ibm
