@@ -8,9 +8,9 @@ metadata:
             version: v1.1
         chart-uri: ./uverifier-0.1.2.tgz
         digests:
-            chart: sha256:9d1cde6808afb4c3d82fc462ecba9fdab87d012e914144bd5db6b634e3e609df
-            package: 9587294df67496571fe2db19e0b7dcb15397c31ba875d92ef8fd85a3838c6808
-        lastCertifiedTimestamp: "2022-07-20T11:33:12.974953+08:00"
+            chart: sha256:74fa80d28a46d9da1ae7a74bc050449164389a358bd13bd2fb2a23d4770a9206
+            package: 388968518305560104f0422c70cb9a1511415779ebf65fd2d2ae915eda544c7e
+        lastCertifiedTimestamp: "2022-07-20T16:33:20.993665+08:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.7'
         providerControlledDelivery: false
@@ -37,24 +37,6 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: |-
-        Image is Red Hat certified : registry.connect.redhat.com/exfo/uverifier:21.08.17087
-        Image is Red Hat certified : registry.access.redhat.com/rhel-minimal:7.9-758
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
     - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
@@ -71,18 +53,36 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
-    - check: v1.0/contains-test
+    - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
-      reason: Chart test files exist
+      reason: Helm lint successful
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.connect.redhat.com/exfo/uverifier:21.08.17087
+        Image is Red Hat certified : registry.access.redhat.com/rhel-minimal:7.9-758
     - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
     - check: v1.0/required-annotations-present
       type: Mandatory
       outcome: PASS
