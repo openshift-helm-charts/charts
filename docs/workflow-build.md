@@ -2,7 +2,7 @@
 
 ## Worflow Overview
 
-Currently the chart submission to OpenShift Helm Charts repository is automated with a GitHub workflow. The workflow first sanity checks the submitted PR and according to the path of the changed files, it categorizes the chart submission as one of the `partner`, `redhat`, and `community`. The paths allowed are `charts/partners`, `charts/redhat`, and `charts/community`. Note that only chart related files for one single chart are allowed in a PR submission, otherwise it will not pass the sanity check. Then according to the category it runs different verification checks and follows different procedures to publish the chart.
+Currently the chart submission to OpenShift Helm Charts repository is automated with a GitHub workflow. The workflow first checks the submitted PR and according to the path of the changed files, it categorizes the chart submission as one of the `partner`, `redhat`, and `community`. The paths allowed are `charts/partners`, `charts/redhat`, and `charts/community`. Note that only chart related files for one single chart are allowed in a PR submission, otherwise it will not pass the pr content check. Then according to the category it runs different verification checks and follows different procedures to publish the chart.
 
 ## Partner
 

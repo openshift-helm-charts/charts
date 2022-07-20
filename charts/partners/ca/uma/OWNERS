@@ -1,0 +1,9 @@
+chart:
+  name: uma
+  shortDescription: Helm-charts for uma
+publicPgpKey: null
+users:
+- githubUsername: mn660971
+vendor:
+  label: ca
+  name: CA Technologies

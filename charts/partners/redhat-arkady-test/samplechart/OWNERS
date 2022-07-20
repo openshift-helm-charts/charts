@@ -1,0 +1,10 @@
+chart:
+  name: samplechart
+  shortDescription: update description
+publicPgpKey: null
+users:
+- githubUsername: wying3
+- githubUsername: ansvu
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.

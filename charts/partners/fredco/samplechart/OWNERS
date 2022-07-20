@@ -1,0 +1,9 @@
+chart:
+  name: samplechart
+  shortDescription: Fredco Samplechart
+publicPgpKey: null
+users:
+- githubUsername: dcicertbot
+vendor:
+  label: fredco
+  name: Fredco

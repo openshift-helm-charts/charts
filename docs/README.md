@@ -80,8 +80,6 @@ your local system.  If you had followed the [partner connect
 documentation][partners], you should see an _OWNERS_ file under your chart
 directory within your organization directory.
 
-For Red Hat and Community charts, first submit a PR towards `main` branch with an _OWNERS_ file under your chart directory within your orgranization directory.
-
 You should see the `OWNERS` file at:
 
 ```
@@ -117,6 +115,19 @@ with the version number as the name.  For example, if you are publishing the
 charts/partners/acme/awesome/0.1.0/
 ```
 
+For Community charts only (partners should follow process above), submit the _OWNERS_ file PR towards `main` branch under your charts/community directory within your orgranization directory. This PR should be sent prior to sending any charts to the repo. For example, for a community chart named awesome for an organization named acme, send it here:
+
+```
+charts/community/acme/awesome/OWNERS
+```
+
+Alternatively, for charts that represent a product supported by Red Hat, submit the _OWNERS_ file PR towards `main` branch under the charts/redhat directory within your orgranization directory. For example, for a Red Hat chart named awesome, send it here:
+
+```
+charts/redhat/redhat/awesome/OWNERS
+```
+
+Notice that in this case your organization will also be redhat.
 
 ### Submitting a Chart without Chart Verification Report
 
@@ -232,12 +243,12 @@ checks are marked with the "required" label to merge the PR automatically:
 
 > CI / Chart Certification (pull_request_target)            [Details](#)
 
-The first part of Chart Certification (Sanity Check) fails if the pull request
+The first part of Chart Certification (PR Content Check) fails if the pull request
 contains changes not related to any chart.  This check performs using the script
 already part of the upstream repository.  That way, it will ensure the pull
-request author is not modifying the verification scripts themselves.  Sanity
-check also ensures the chart version submitted is not already released
-earlier. The job will fail if any sanity checks fail.
+request author is not modifying the verification scripts themselves. PR Content
+check also ensures the chart version submitted is not already released and if 
+provider control delivery settings are consistant. The job will fail if any of the checks fail.
 
 The second part of Chart Certification (Verify PR) performs all the necessary
 checks to merge the pull request.  The following sections explain various errors
@@ -433,16 +444,10 @@ messages.
 Yes, you can do it.
 
 1. Ensure the `main` branch in your fork is updated with the latest changes.
-2. Ensure there is a `gh-pages` branch in your fork.
-3. You need a publicly accessible OpenShift cluster (See [partner guide to get
-   free access to OCP][partner-ocp]).
-4. Follow the [documentation to create a service account][sa-cluster-token] and
-   corresponding token.  The token should be stored as an [encrypted secret in
-   GitHub repository settings][encrypted-secret] with the key as
-   `CLUSTER_TOKEN`.  Follow the same document to create `API_SERVER` secret key.
-5. Create a branch, make the required chart changes and send a pull request to
-   your fork's `main` branch.  You should see the results in your fork as
-   explained in this document.
+2. Create a GitHub [personal access token][pat] (PAT) and add it as an
+   [encyrpted secret][encyrpted-secret] with name as `BOT_TOKEN`.
+3. Create a branch and make your required changes and send a pull request to
+   your `main` branch.
 
 ### Can I use any command-line interface to create pull request?
 
@@ -473,6 +478,3 @@ documentation][partner-success-desk].
 [partner-success-desk]: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/managing-your-account/getting-help/technology-partner-success-desk
 [new-issue]: https://github.com/openshift-helm-charts/repo/issues/new/choose
 [ascii-armor]: https://www.redhat.com/sysadmin/creating-gpg-keypairs
-[partner-ocp]: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/benefits/software-access
-[sa-cluster-token]: https://github.com/openshift-helm-charts/charts/blob/main/scripts/README.md
-[encrypted-secret]: https://docs.github.com/en/actions/reference/encrypted-secrets

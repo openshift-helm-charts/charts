@@ -1,0 +1,99 @@
+2021/10/26 13:47:48 [INFO] Missing required value: Git source repository URL is required
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.2.3
+        profile:
+            VendorType: partner
+            version: v1.0
+        chart-uri: /charts/1.5.2/wildfly-1.5.2.tgz
+        digest: sha256:0fc18ecec3ca14a3fe4bcd7dd097e50f34945f412a476df34a60a235f02671fc
+        digests:
+            chart: sha256:0fc18ecec3ca14a3fe4bcd7dd097e50f34945f412a476df34a60a235f02671fc
+            package: 0c999e8ba0987312ec5a40a148a37f8a69d3c0949a3f174ba7e5ca51fa98975f
+        lastCertifiedTimestamp: "2021-10-26T13:47:49.146017+00:00"
+        certifiedOpenShiftVersions: N/A
+    chart:
+        name: wildfly
+        home: ""
+        sources: []
+        version: 1.5.2
+        description: Build and Deploy WildFly applications on OpenShift
+        keywords: []
+        maintainers:
+          - name: WildFly
+            email: wildfly-dev@lists.jboss.org
+            url: https://wildfly.org
+        icon: https://design.jboss.org/wildfly/logo/final/wildfly_logomark_256px.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: "25.0"
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: WildFly
+            charts.openshift.io/provider: WildFly
+        kubeversion: ""
+        dependencies:
+          - name: wildfly-common
+            version: 1.4.1
+            repository: file://../wildfly-common
+            condition: ""
+            tags: []
+            enabled: false
+            importvalues: []
+            alias: ""
+        type: application
+    chart-overrides: ""
+results:
+  - check: v1.0/not-contains-crds
+    type: Mandatory
+    outcome: PASS
+    reason: Chart does not contain CRDs
+  - check: v1.0/helm-lint
+    type: Mandatory
+    outcome: PASS
+    reason: Helm lint successful
+  - check: v1.0/not-contain-csi-objects
+    type: Mandatory
+    outcome: PASS
+    reason: CSI objects do not exist
+  - check: v1.0/images-are-certified
+    type: Mandatory
+    outcome: FAIL
+    reason: 'Failed to certify images : Failed to get images, error running helm template
+        : execution error at (wildfly/templates/buildconfig-s2i-build-artifacts.yaml:2:4):
+        Git source repository URL is required'
+  - check: v1.0/is-helm-v3
+    type: Mandatory
+    outcome: PASS
+    reason: API version is V2, used in Helm 3
+  - check: v1.0/contains-values
+    type: Mandatory
+    outcome: PASS
+    reason: Values file exist
+  - check: v1.0/contains-values-schema
+    type: Mandatory
+    outcome: PASS
+    reason: Values schema file exist
+  - check: v1.0/has-kubeversion
+    type: Mandatory
+    outcome: FAIL
+    reason: Kubernetes version is not specified
+  - check: v1.0/chart-testing
+    type: Mandatory
+    outcome: FAIL
+    reason: |-
+        Error running process: executing helm with args "install wildfly-ua0iu48sbs /root/.cache/chart-verifier/_charts_1_5_2_wildfly_1_5_2_tgz/wildfly --namespace default --wait --values /tmp/chart-testing-093101968/values.yaml": exit status 1
+        ---
+        Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+  - check: v1.0/has-readme
+    type: Mandatory
+    outcome: PASS
+    reason: Chart has a README
+  - check: v1.0/contains-test
+    type: Mandatory
+    outcome: FAIL
+    reason: Chart test files do not exist
+

@@ -1,0 +1,9 @@
+chart:
+  name: diffgram-helm
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: anthony-sarkis
+vendor:
+  label: diffgram
+  name: Diffgram

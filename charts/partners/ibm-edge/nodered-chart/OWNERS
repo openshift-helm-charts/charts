@@ -1,0 +1,12 @@
+chart:
+  name: nodered-chart
+  shortDescription: Node-RED is a flow-based programming tool.
+publicPgpKey: null
+users:
+- githubUsername: rhm-samples
+- githubUsername: prajyotnarulkar25
+- githubUsername: isha-sangrolkar
+- githubUsername: prajyotNarulkar925
+vendor:
+  label: ibm-edge
+  name: Edge Redhat Partner Enablement

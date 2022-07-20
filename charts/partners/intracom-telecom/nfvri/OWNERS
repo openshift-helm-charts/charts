@@ -1,0 +1,11 @@
+chart:
+  name: nfvri
+  shortDescription: NFV-RI (TM) Helm Chart Repository
+publicPgpKey: null
+users:
+- githubUsername: angelouev
+- githubUsername: victor-timofei
+- githubUsername: gpanouts
+vendor:
+  label: intracom-telecom
+  name: Intracom S A Telecom Solutions

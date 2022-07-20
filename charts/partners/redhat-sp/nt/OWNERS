@@ -1,0 +1,9 @@
+chart:
+  name: nt
+  shortDescription: vcvf
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
+vendor:
+  label: redhat-sp
+  name: Red Hat INC

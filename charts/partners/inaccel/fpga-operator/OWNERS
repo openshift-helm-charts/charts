@@ -1,0 +1,9 @@
+chart:
+  name: fpga-operator
+  shortDescription: Simplifying FPGA management in Kubernetes
+publicPgpKey: null
+users:
+- githubUsername: eliaskoromilas
+vendor:
+  label: inaccel
+  name: InAccel

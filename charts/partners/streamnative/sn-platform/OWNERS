@@ -1,0 +1,8 @@
+chart:
+  name: sn-platform
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: streamnative
+  name: Streamnative, Inc.

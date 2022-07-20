@@ -1,0 +1,9 @@
+chart:
+  name: dotnet
+  shortDescription: This is the Red Hat DotNet chart
+publicPgpKey: null
+users:
+- githubUsername: tmds
+vendor:
+  label: redhat
+  name: Red Hat

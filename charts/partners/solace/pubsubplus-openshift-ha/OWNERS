@@ -1,0 +1,14 @@
+chart:
+  name: pubsubplus-openshift-ha
+  shortDescription: Deploy an HA redundancy group of Solace PubSub+ Event Broker Software
+    on OpenShift
+publicPgpKey: null
+users:
+- githubUsername: bczoma
+- githubUsername: juddrobertson
+- githubUsername: PhilippeKhalife
+- githubUsername: paul-kondrat
+- githubUsername: RagnarPaulson
+vendor:
+  label: solace
+  name: Solace Corporation

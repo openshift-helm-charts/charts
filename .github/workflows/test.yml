@@ -1,0 +1,151 @@
+name: Test Workflow
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Run tests but do not create issues {true,false}"
+        required: true
+        default: "true"
+      vendor-type:
+        description: "Vendor type {all,partner,redhat,community}"
+        required: true
+        default: "all"
+      software-name:
+        description: "Software Name"
+        required: true
+      software-version:
+        description: "Software Version"
+        required: true
+      notify-id:
+        description: "(Optional) Issue notification {github id}"
+        required: false
+        default: ""
+
+jobs:
+  workflow-test:
+    name: Workflow Test
+    runs-on: ubuntu-20.04
+    if: |
+      github.event.pull_request.draft == false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ secrets.BOT_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python 3.x Part 1
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python requirements and scripts
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: Check Request
+        id: check_request
+        run: |
+          # check if workflow testing should run.
+          echo "Request type: '$GITHUB_EVENT_NAME'"
+          if [ "$GITHUB_EVENT_NAME" == "pull_request_target" ]; then
+              echo "[INFO] check if PR contains only workflow changes and user is authorized"
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+          else
+              echo "[INFO] manual invocation - check if user is authorized"
+              ve1/bin/check-pr-for-ci --verify-user=${{ github.actor }}
+          fi
+
+      - name: Check Request Result
+        id: check_request_result
+        if: |
+          steps.check_request.outputs.workflow-only-but-not-authorized == 'true'
+        run: |
+          # workflow only change but user not authorized
+          exit 1
+
+      - name: (PR) check for release flow
+        id: check_if_release_pr
+        if: |
+          github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
+        env:
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+        run: |
+          # check if PR was created as part of release processing
+          # mitigate unmatched quote error in bash
+          pr_body=$(cat <<EOF | xargs -0 printf '%q'
+          ${{ github.event.pull_request.body }}
+          EOF
+          )
+          ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
+                                --sender='${{ github.event.sender.login }}' \
+                                --pr_branch='${{ github.event.pull_request.head.ref }}' \
+                                --pr_body="${pr_body}" \
+                                --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
+                                --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
+
+      - name: (PR) Test CI Workflow
+        if: |
+          github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_BODY: "Test triggered by ${{ github.event.pull_request.html_url }}."
+        run: |
+          echo "Full test in pr : {{steps.check_request.outputs.full_tests_in_pr }}"
+          if ${{steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }} ; then
+            echo "Release PR from dev to charts, oer PR with new full test, so running full tests"
+            ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/step_defs/test_smoke_scenarios.py --ignore=tests/functional/step_defs/test_submitted_charts.py --tb=short
+          else
+            echo "Not a release PR from dev to charts, so running only smoke tests"
+            ve1/bin/pytest tests/functional/step_defs/test_smoke_scenarios.py --log-cli-level=WARNING --tb=short
+          fi
+
+      - name: (Manual) Test CI Workflow
+        if: |
+          github.event_name == 'workflow_dispatch' && steps.check_request.outputs.run-tests == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry-run }}
+          VENDOR_TYPE: ${{ github.event.inputs.vendor-type }}
+          NOTIFY_ID: ${{ github.event.inputs.notify-id }}
+          SOFTWARE_NAME: ${{ github.event.inputs.software-name }}
+          SOFTWARE_VERSION: ${{ github.event.inputs.software-version }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          PR_BODY: "Triggerd by ${{ github.event.sender.html_url }} from ${{ github.event.repository.html_url }} on `${{ github.event.ref }}`."
+        run: |
+          echo "[INFO] Dry run '${{ env.DRY_RUN }}'"
+          echo "[INFO] Vendor type '${{ env.VENDOR_TYPE }}'"
+          echo "[INFO] Notify ID '${{ env.NOTIFY_ID }}'"
+          echo "[INFO] Software Name '${{ env.SOFTWARE_NAME }}'"
+          echo "[INFO] Software Version '${{ env.SOFTWARE_VERSION }}'"
+          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+
+      - name: Approve PR
+        id: approve_pr
+        if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
+        uses: hmarr/auto-approve-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge PR
+        id: merge_pr
+        if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
+        uses: pascalgn/automerge-action@v0.13.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash
+          MERGE_LABELS: ""
+
+

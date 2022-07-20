@@ -1,0 +1,10 @@
+chart:
+  name: c3-cluster
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: c3ivodujmovic
+- githubUsername: c3-shiva
+vendor:
+  label: c3-ai
+  name: C3.AI

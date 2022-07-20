@@ -1,0 +1,9 @@
+chart:
+  name: test-helmchart-2004-internal
+  shortDescription: fvsfvsdf
+publicPgpKey: dndlZnZ2Zg==
+users:
+- githubUsername: sawalgiriraj
+vendor:
+  label: bpm-test-registry-namespace
+  name: BPM Test Company

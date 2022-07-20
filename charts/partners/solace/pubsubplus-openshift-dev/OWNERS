@@ -1,0 +1,14 @@
+chart:
+  name: pubsubplus-openshift-dev
+  shortDescription: Deploy a single-node non-HA Solace PubSub+ Event Broker Software
+    on OpenShift for development purposes
+publicPgpKey: null
+users:
+- githubUsername: bczoma
+- githubUsername: juddrobertson
+- githubUsername: PhilippeKhalife
+- githubUsername: paul-kondrat
+- githubUsername: RagnarPaulson
+vendor:
+  label: solace
+  name: Solace Corporation

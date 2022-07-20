@@ -1,0 +1,10 @@
+chart:
+  name: orion-ld
+  shortDescription: Context Broker and CEF building block for context data management
+    which supports both the NGSI-LD and the NGSI-v2 APIs.
+publicPgpKey: null
+users:
+- githubUsername: wistefan
+vendor:
+  label: fiware
+  name: FIWARE FOUNDATION E V
