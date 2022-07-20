@@ -1,6 +1,6 @@
 chart:
   name: u-verifier-chart
-  shortDescription: helm chart for Nova uVerifier
+  shortDescription: Nova u-Verifier helm chart
 publicPgpKey: null
 users:
 - githubUsername: arasyid-aziz
