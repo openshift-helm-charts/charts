@@ -1,0 +1,8 @@
+chart:
+  name: testing-test
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: araszka
+  name: Red Hat
