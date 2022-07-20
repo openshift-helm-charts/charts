@@ -29,6 +29,26 @@ entries:
     urls:
     - https://github.com/Broadpeak-tv/Openshift/raw/main/Certification/bks400-0.2.0.tgz
     version: 0.2.0
+  exfo-uverifier:
+  - annotations:
+      charts.openshift.io/digest: sha256:74fa80d28a46d9da1ae7a74bc050449164389a358bd13bd2fb2a23d4770a9206
+      charts.openshift.io/lastCertifiedTimestamp: '2022-07-20T16:33:20.993665+08:00'
+      charts.openshift.io/provider: EXFO Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-07-20T08:38:02.575174+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.2.0
+    description: A Helm chart for Kubernetes
+    digest: 388968518305560104f0422c70cb9a1511415779ebf65fd2d2ae915eda544c7e
+    icon: https://www.exfo.com/dist/atomic/organism/o-header/o-header-banner/exfo.png
+    kubeVersion: '>=1.20.0-0'
+    name: uverifier
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/exfo-uverifier-0.1.2/exfo-uverifier-0.1.2.tgz
+    version: 0.1.2
   fiware-orion-ld:
   - annotations:
       charts.openshift.io/digest: sha256:7e67553ee7d697bed1b7d40a9d1c3ed1d724e32c7894c43629b5c156718aa3dd
@@ -3171,4 +3191,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.1/wavefronthq-wavefront-1.11.1.tgz
     version: 1.11.1
-generated: '2022-07-19T17:25:27.026672+00:00'
+generated: '2022-07-20T08:38:02.575174+00:00'
