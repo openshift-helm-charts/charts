@@ -1,8 +1,9 @@
 chart:
   name: 5gdu
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: shantanushivanekar123
 vendor:
   label: mavenir
   name: Mavenir
