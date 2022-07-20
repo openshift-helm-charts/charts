@@ -1,0 +1,8 @@
+chart:
+  name: uverifier
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: exfo
+  name: EXFO Inc.
