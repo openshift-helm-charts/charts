@@ -1954,6 +1954,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-eap-xp3-1.0.0/redhat-eap-xp3-1.0.0.tgz
     version: 1.0.0
+  redhat-eap-xp4:
+  - annotations:
+      charts.openshift.io/digest: sha256:ce65fa6805952cb861e644a410b0fbe020059a233c58912267b3d0fd7f749299
+      charts.openshift.io/lastCertifiedTimestamp: '2022-07-21T12:18:32.463594+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-07-21T12:18:49.875971+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: '4.0'
+    dependencies:
+    - name: wildfly-common
+      repository: https://docs.wildfly.org/wildfly-charts/
+      version: 1.3.1
+    description: Build and Deploy EAP XP4 applications on OpenShift
+    digest: 25ce0ae88a11857cf41cd0ab44c02f6d8d89a9411884f806eea07fbffeb527c7
+    name: eap-xp4
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-eap-xp4-1.0.0/redhat-eap-xp4-1.0.0.tgz
+    version: 1.0.0
   redhat-eap74:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
@@ -3191,4 +3213,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.11.1/wavefronthq-wavefront-1.11.1.tgz
     version: 1.11.1
-generated: '2022-07-20T08:38:02.575174+00:00'
+generated: '2022-07-21T12:18:49.875971+00:00'
