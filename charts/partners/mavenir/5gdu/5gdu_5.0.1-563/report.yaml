@@ -58,7 +58,7 @@ results:
       type: Mandatory
       outcome: PASS
       reason: |-
-        Image is not Red Hat certified : quay.io/mrhcert/5gdu:mvrp-du-x86-5.0.1.563
+        Image is Red Hat certified : quay.io/mrhcert/5gdu:mvrp-du-x86-5.0.1.563
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
