@@ -20,6 +20,27 @@ entries:
     urls:
     - N/A
     version: 1.0.0
+  mavenir-5gdu:
+  - annotations:
+      charts.openshift.io/digest: sha256:2c286be0b45a1852634966316cc394bec6ee746e54a991b9caf1ab8c9c39d4e8
+      charts.openshift.io/lastCertifiedTimestamp: '2022-07-21T14:04:14.999201+00:00'
+      charts.openshift.io/name: test
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-07-27T18:53:45.739048+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    description: NF Service template.
+    digest: c6586e42f85df1dc529892fca9ae41c45279610062c027c4262fc96ff219e4da
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - email: srikanth.subbaramu@mavenir.com
+      name: ran ptf team
+    name: 5gdu
+    urls:
+    - N/A
+    version: 5gdu_5.0.1-563
   mavenir-cucp:
   - annotations:
       charts.openshift.io/digest: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
@@ -124,4 +145,4 @@ entries:
     urls:
     - https://github.com/ansvu/samplechart/releases/du_helmchart/du_helmchart_run.tgz
     version: du5.0.326-53
-generated: '2022-06-30T14:55:21.273307+00:00'
+generated: '2022-07-27T18:53:45.739048+00:00'
