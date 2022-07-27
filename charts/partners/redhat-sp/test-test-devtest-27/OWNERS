@@ -1,0 +1,9 @@
+chart:
+  name: test-test-devtest-27
+  shortDescription: test repo desc
+publicPgpKey: null
+users:
+- githubUsername: gkr-bot
+vendor:
+  label: redhat-sp
+  name: GLOBAL SUPPORT SERVI RED HAT, INC.
