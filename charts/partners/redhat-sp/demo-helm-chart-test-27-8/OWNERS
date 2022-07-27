@@ -1,8 +1,9 @@
 chart:
   name: demo-helm-chart-test-27-8
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: test helm for demo
+publicPgpKey: null
+users:
+- githubUsername: gkr-bot
 vendor:
   label: redhat-sp
   name: GLOBAL SUPPORT SERVI RED HAT, INC.
