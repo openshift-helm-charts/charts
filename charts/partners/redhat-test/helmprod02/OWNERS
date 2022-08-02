@@ -1,8 +1,9 @@
 chart:
   name: helmprod02
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
 vendor:
   label: redhat-test
   name: Red Hat, Inc.
