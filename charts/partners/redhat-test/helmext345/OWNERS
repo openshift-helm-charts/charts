@@ -1,8 +1,9 @@
 chart:
   name: helmext345
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: vcvffdvdv
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
 vendor:
   label: redhat-test
   name: Red Hat, Inc.
