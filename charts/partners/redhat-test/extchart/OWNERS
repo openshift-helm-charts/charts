@@ -1,8 +1,9 @@
 chart:
   name: extchart
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: testuserrr
 vendor:
   label: redhat-test
   name: Red Hat, Inc.
