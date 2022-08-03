@@ -3,7 +3,7 @@ chart:
   shortDescription: null
 publicPgpKey: null
 users:
-- githubUsername: git user
+- githubUsername: vikasmulaje
 vendor:
   label: a60924148a9b77a2ff5f7b786
   name: Vikas Mulaje
