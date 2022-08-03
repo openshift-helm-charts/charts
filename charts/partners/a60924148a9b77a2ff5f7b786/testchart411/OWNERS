@@ -1,8 +1,9 @@
 chart:
   name: testchart411
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: test description for helm chart
+publicPgpKey: null
+users:
+- githubUsername: vikasmulaje
 vendor:
   label: a60924148a9b77a2ff5f7b786
   name: Vikas Mulaje
