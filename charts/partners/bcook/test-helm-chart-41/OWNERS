@@ -1,0 +1,8 @@
+chart:
+  name: test-helm-chart-41
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: bcook
+  name: Red Hat
