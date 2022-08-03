@@ -1,8 +1,9 @@
 chart:
   name: extchart
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: gituser
 vendor:
   label: a60924148a9b77a2ff5f7b786
   name: Vikas Mulaje
