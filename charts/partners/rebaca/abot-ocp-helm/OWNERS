@@ -1,8 +1,9 @@
 chart:
   name: abot-ocp-helm
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: abot
+publicPgpKey: null
+users:
+- githubUsername: suchi-rebaca
 vendor:
   label: rebaca
   name: Rebaca Technologies
