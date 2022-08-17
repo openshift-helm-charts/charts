@@ -1,0 +1,8 @@
+chart:
+  name: ybhelm1
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: yugabytedb
+  name: YugaByte Inc
