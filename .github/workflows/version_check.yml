@@ -10,9 +10,13 @@ on:
       # 2. Runs this workflow whether or not a version change has occurred
       # 3. By default dperaza and mmulholla are tagged in any issues raised.
       dry-run:
-        description: "Dry Run? (Run tests but create issues in sandbox) {true,false}"
+        description: "Dry Run? (Unconditionally run tests and create issues in sandbox) {true,false}"
         required: true
         default: "true"
+      update-version:
+        description: "Dry run also checks and updates software-version file if not charts repository"
+        required: true
+        default: "false"
       vendor-type:
         description: "Vendor type {all,partner,redhat,community}"
         required: true
@@ -32,13 +36,27 @@ jobs:
         run: |
           echo "GITHUB_EVENT_NAME : $GITHUB_EVENT_NAME"
           echo "GITHUB_REPOSITORY : $GITHUB_REPOSITORY"
+          echo "dry-run : ${{ github.event.inputs.dry-run }}"
+          echo "update-version : ${{ github.event.inputs.update-version }}"
           if [ $GITHUB_EVENT_NAME == 'workflow_dispatch' ]; then
             echo '::set-output name=run-job::true'
+            if [ "${{ github.event.inputs.dry-run }}" == "true" ]; then
+                if [[ "${{ github.event.inputs.update-version }}" == "true"  && $GITHUB_REPOSITORY != "openshift-helm-charts/charts" ]]; then
+                  echo '::set-output name=check-version::true'
+                else
+                  echo '::set-output name=check-version::false'
+                fi
+            else
+                echo '::set-output name=check-version::true'
+            fi
           elif [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
             echo '::set-output name=run-job::true'
+            echo '::set-output name=check-version::true'
           else
             echo '::set-output name=run-job::false'
+            echo '::set-output name=check-version::false'
           fi
+
 
       - name: Install oc
         if: steps.check_repo.outputs.run-job == 'true'
@@ -58,56 +76,67 @@ jobs:
         id: get_curr_ocp_version
         run: |
           OCP_VERSION=$(./oc version -o json | jq '.openshiftVersion')
+          OCP_VERSION=$(sed -e 's/^"//' -e 's/"$//' <<< $OCP_VERSION)
           printf "[INFO] Current OCP Version: %s\n" ${OCP_VERSION}
           echo "::set-output name=curr_ocp_version::${OCP_VERSION}"
         shell: bash
 
       - name: Checkout software-version branch
-        if: steps.check_repo.outputs.run-job == 'true'
+        if: steps.check_repo.outputs.check-version == 'true'
         uses: actions/checkout@v2
         with:
           ref: "software-version"
-          repository: "openshift-helm-charts/charts"
+          repository: ${{ github.repository }}
 
       - name: Read previous OpenShift version
         id: get_prev_ocp_version
-        if: steps.check_repo.outputs.run-job == 'true'
+        if: steps.check_repo.outputs.check-version == 'true'
         uses: mikefarah/yq@master
         with:
           cmd: yq e '.openshift.release-client-version' software-version.yaml
 
-      - name: Compare OpenShift versions
-        id: compare_ocp_versions
+      - name: Check if test should run
+        id: check_test
         run: |
           set -euo pipefail
           if [ "${{ steps.check_repo.outputs.run-job }}" != "true" ]; then
             echo "::set-output name=run_tests::false"
-          elif [ "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}" = "${{ steps.get_prev_ocp_version.outputs.result }}" ]; then
-            # No change in the OpenShift version - do not run tests if a scheduled run or dry-run is not set
-            if [ "${{ github.event_name }}" == 'schedule' || "${{ github.event.inputs.dry-run }}" != 'true']; then
+            echo "::set-output name=update-version::false"
+          elif [ "${{ steps.check_repo.outputs.check-version }}" == "true" ]; then
+            if [ "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}" == "${{ steps.get_prev_ocp_version.outputs.result }}" ]; then
+              # No change in the OpenShift versions.
               printf "OpenShift version has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
-              echo "::set-output name=run_tests::false"
+              echo "::set-output name=update-version::false"
+              if [ "${{ github.event.inputs.dry-run }}" == "true" ]; then
+                echo "Openshift version has not changed but run anyaway as dry-run is set"
+                echo "::set-output name=run_tests::true"
+              else
+                echo "Openshift version has not changed do not run tests"
+                echo "::set-output name=run_tests::false"
+              fi
             else
+              printf "OpenShift version has changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
               echo "::set-output name=run_tests::true"
+              echo "::set-output name=update-version::true"
             fi
           else
-            # New OpenShift version is set
-            printf "OpenShift version has changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"
+            # Run whether open shift version has changed or not
+            echo "Run tests - version check skipped"
+            echo "::set-output name=update-version::false"
             echo "::set-output name=run_tests::true"
           fi
         shell: bash
 
       - name: Update software-version.yaml
         if: |
-          steps.compare_ocp_versions.outputs.run_tests == 'true'
+          steps.check_test.outputs.update-version == 'true'
         uses: mikefarah/yq@master
         with:
-          cmd: yq eval -i '.openshift.release-client-version = ${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}' 'software-version.yaml'
+          cmd: yq eval -i '.openshift.release-client-version = "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}"' 'software-version.yaml'
 
       - name: Push software-version.yaml
         if: |
-          steps.compare_ocp_versions.outputs.run_tests == 'true' &&
-          (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run != 'true'))
+          steps.check_test.outputs.update-version == 'true'
         run: |
           COMMIT_MESSAGE=$(printf "software-version.yaml: Update OpenShift version from '%s' to '%s'" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }}")
           git remote -v
@@ -120,7 +149,7 @@ jobs:
 
       - name: Checkout main branch
         if: |
-          steps.compare_ocp_versions.outputs.run_tests == 'true'
+          steps.check_test.outputs.run_tests == 'true'
         uses: actions/checkout@v2
         with:
           ref: "main"
@@ -129,14 +158,14 @@ jobs:
 
       - name: Set up Python 3.x Part 1
         if: |
-          steps.compare_ocp_versions.outputs.run_tests == 'true'
+          steps.check_test.outputs.run_tests == 'true'
         uses: actions/setup-python@v2
         with:
           python-version: "3.9"
 
       - name: Set up Python 3.x Part 2
         if: |
-          steps.compare_ocp_versions.outputs.run_tests == 'true'
+          steps.check_test.outputs.run_tests == 'true'
         run: |
           # set up python
           python3 -m venv ve1
@@ -145,7 +174,7 @@ jobs:
 
       - name: (Manual) Run tests on existing charts
         if: |
-          github.event_name == 'workflow_dispatch' && steps.compare_ocp_versions.outputs.run_tests == 'true'
+          github.event_name == 'workflow_dispatch' && steps.check_test.outputs.run_tests == 'true'
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -162,19 +191,18 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=INFO --tb=short
+          ve1/bin/behave tests/functional/behave_features/ --tags=version-change --logging-level=INFO --no-capture --no-color
 
       - name: (Schedule) Run tests on existing charts
         id: run-schedule-tests
         if: |
-          github.event_name == 'schedule' && steps.compare_ocp_versions.outputs.run_tests == 'true'
+          github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true'
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BOT_NAME: ${{ secrets.BOT_NAME }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          # XXX: set to false when ready to launch notifications
-          DRY_RUN: "true"
+          DRY_RUN: "false"
           VENDOR_TYPE: "all"
           NOTIFY_ID: ""
           SOFTWARE_NAME: "OpenShift"
@@ -185,22 +213,24 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=INFO --tb=short
+          ve1/bin/behave tests/functional/behave_features/ --tags=version-change --logging-level=INFO --no-capture --no-color
 
       - name: Send message to slack channel
         id: notify
-        if: always() && github.event_name == 'schedule' && steps.compare_cv_versions.outputs.run_tests == 'true'
+        if: always() && github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true'
         uses: archive/github-actions-slack@v2.0.0
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C02979BDUPL
-          slack-text: ${{ steps.run-schedule-tests.conclusion }}! Nightly run after OCP version update detected. See '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
+          slack-text: ${{ steps.run-schedule-tests.conclusion }}! Nightly run after an OpenShift version update to ${{ steps.get_curr_ocp_version.outputs.curr_ocp_version }} was detected. See '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
 
       - name: Result from "Send Message to slack channel"
         run: echo "The result was ${{ steps.notify.outputs.slack-result }}"
 
 
   check-chart-verifier:
+    if: ${{ always() }}
+    needs: check-ocp
     name: Check Chart Verifier Version
     runs-on: ubuntu-20.04
     steps:
@@ -209,15 +239,25 @@ jobs:
         run: |
           echo "GITHUB_EVENT_NAME : $GITHUB_EVENT_NAME"
           echo "GITHUB_REPOSITORY : $GITHUB_REPOSITORY"
+          echo "dry-run : ${{ github.event.inputs.dry-run }}"
+          echo "update-version : ${{ github.event.inputs.update-version }}"
           if [ $GITHUB_EVENT_NAME == 'workflow_dispatch' ]; then
             echo '::set-output name=run-job::true'
-            echo "workflow_dispatch: set run-job to true"
+            if [ "${{ github.event.inputs.dry-run }}" == "true" ]; then
+                if [[ "${{ github.event.inputs.update-version }}" == "true"  && $GITHUB_REPOSITORY != "openshift-helm-charts/charts" ]]; then
+                  echo '::set-output name=check-version::true'
+                else
+                  echo '::set-output name=check-version::false'
+                fi
+            else
+                echo '::set-output name=check-version::true'
+            fi
           elif [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
             echo '::set-output name=run-job::true'
-            echo "charts repo: set run-job to true"
+            echo '::set-output name=check-version::true'
           else
             echo '::set-output name=run-job::false'
-            echo "set run-job to false"
+            echo '::set-output name=check-version::false'
           fi
 
       - name: Get current Chart Verifier version
@@ -231,51 +271,63 @@ jobs:
         shell: bash
 
       - name: Checkout software-version branch
-        if: steps.check_repo.outputs.run-job == 'true'
+        if: steps.check_repo.outputs.check-version == 'true'
         uses: actions/checkout@v2
         with:
           ref: "software-version"
-          repository: "openshift-helm-charts/charts"
+          repository: ${{ github.repository }}
 
       - name: Read previous Chart Verifier digest
-        if: steps.check_repo.outputs.run-job == 'true'
+        if: steps.check_repo.outputs.check-version == 'true'
         id: get_prev_cv_digest
         uses: mikefarah/yq@master
         with:
           cmd: yq e '.chart-verifier.latest-manifest-digest' software-version.yaml
 
       - name: Compare Chart Verifier versions
-        id: compare_cv_versions
+        id: check_test
         run: |
           set -euo pipefail
           if [ "${{ steps.check_repo.outputs.run-job }}" != "true" ]; then
             echo "::set-output name=run_tests::false"
-          elif [ "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}" == "${{ steps.get_prev_cv_digest.outputs.result }}" ]; then
-            # No change in the Chart Verifier image - do not run tests if a scheduled run or dry-run is not set
-            if [ "${{ github.event_name }}" == 'schedule' || "${{ github.event.inputs.dry-run }}" != 'true']; then
-              printf "Chart Verifier has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
-              echo "::set-output name=run_tests::false"
-            else
-              echo "::set-output name=run_tests::true"
-            fi
+            echo "::set-output name=update-version::false"
+          elif [ "${{ steps.check_repo.outputs.check-version }}" == "true" ]; then
+             if [ "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}" == "${{ steps.get_prev_cv_digest.outputs.result }}" ]; then
+               # No change in the Chart Verifier image - do not run tests if a scheduled run or dry-run is not set
+               printf "Chart Verifier has not changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
+               echo "::set-output name=update-version::false"
+               if [ "${{ github.event.inputs.dry-run }}" == "true" ]; then
+                 echo "Chart Verifier image has not changed but run anyaway as dry-run is set"
+                 echo "::set-output name=run_tests::true"
+               else
+                 echo "Chart Verifier image has not changed do not run tests"
+                 echo "::set-output name=run_tests::false"
+               fi
+             else
+                # New Chart Verifier image is found
+                printf "Chart Verifier has changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
+                echo "::set-output name=run_tests::true"
+                echo "::set-output name=update-version::true"
+             fi
           else
-            # New Chart Verifier image is found
-            printf "Chart Verifier has changed since last run: '%s' -> '%s'\n" "${{ steps.get_prev_cv_digest.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}"
+            # Run whether Chart Verifier image has changed or not
+            echo "Run tests - version check skipped"
+            echo "::set-output name=update-version::false"
             echo "::set-output name=run_tests::true"
           fi
+
         shell: bash
 
       - name: Update software-version.yaml
         if: |
-          steps.compare_cv_versions.outputs.run_tests == 'true'
+          steps.check_test.outputs.update-version == 'true'
         uses: mikefarah/yq@master
         with:
           cmd: yq eval -i '.chart-verifier.latest-manifest-digest = ${{ steps.get_curr_cv_version.outputs.current_cv_digest }}' 'software-version.yaml'
 
       - name: Push software-version.yaml
         if: |
-          steps.compare_cv_versions.outputs.run_tests == 'true' &&
-          (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run != 'true'))
+          steps.check_test.outputs.update-version == 'true'
         run: |
           COMMIT_MESSAGE=$(printf "software-version.yaml: Update chart-verifier version from '%s' to '%s'" "${{ steps.get_prev_ocp_version.outputs.result }}" "${{ steps.get_curr_cv_version.outputs.current_cv_digest }}")
           git remote -v
@@ -288,7 +340,7 @@ jobs:
 
       - name: Checkout charts main branch
         if: |
-          steps.compare_cv_versions.outputs.run_tests == 'true'
+          steps.check_test.outputs.run_tests == 'true'
         uses: actions/checkout@v2
         with:
           ref: "main"
@@ -297,14 +349,14 @@ jobs:
 
       - name: Set up Python 3.x Part 1
         if: |
-          steps.compare_cv_versions.outputs.run_tests == 'true'
+          steps.check_test.outputs.run_tests == 'true'
         uses: actions/setup-python@v2
         with:
           python-version: "3.9"
 
       - name: Set up Python 3.x Part 2
         if: |
-          steps.compare_cv_versions.outputs.run_tests == 'true'
+          steps.check_test.outputs.run_tests == 'true'
         run: |
           # set up python
           pwd
@@ -314,7 +366,7 @@ jobs:
 
       - name: (Manual) Run tests on existing charts
         if: |
-          github.event_name == 'workflow_dispatch'
+          github.event_name == 'workflow_dispatch' && steps.check_test.outputs.run_tests == 'true'
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -331,12 +383,12 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=INFO --tb=short
+          ve1/bin/behave tests/functional/behave_features/ --tags=version-change --logging-level=INFO --no-capture --no-color
 
       - name: (Schedule) Run tests on existing charts
         id: run-schedule-tests
         if: |
-          github.event_name == 'schedule' && steps.compare_cv_versions.outputs.run_tests == 'true'
+          github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true'
         env:
           CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -354,17 +406,21 @@ jobs:
           printf "[INFO] Notify ID: '%s'\n" "${{ env.NOTIFY_ID }}"
           printf "[INFO] Software Name: '%s'\n" "${{ env.SOFTWARE_NAME }}"
           printf "[INFO] Software Version: '%s'\n" "${{ env.SOFTWARE_VERSION }}"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=INFO --tb=short
+          ve1/bin/behave tests/functional/behave_features/ --tags=version-change --logging-level=INFO --no-capture --no-color
 
       - name: Send message to slack channel
         id: notify
-        if: always() && github.event_name == 'schedule' && steps.compare_cv_versions.outputs.run_tests == 'true'
+        if: always() && github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true'
         uses: archive/github-actions-slack@v2.0.0
+        env:
+          SOFTWARE_NAME: "chart-verifier"
+          SOFTWARE_VERSION: ${{ steps.get_curr_cv_version.outputs.current_cv_digest }}
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C02979BDUPL
-          slack-text: ${{ steps.run-schedule-tests.conclusion }}! Nightly run after chartverifier version update detected. See '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
+          slack-text: ${{ steps.run-schedule-tests.conclusion }}! Nightly run after a chart-verifier version update to ${{ steps.get_curr_cv_version.outputs.current_cv_digest }} was detected. See '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
 
       - name: Result from "Send Message to slack channel"
+        if: always() && github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true'
         run: echo "The result was ${{ steps.notify.outputs.slack-result }}"
 

@@ -7,7 +7,7 @@ import sys
 
 import requests
 
-from functional.utils.setttings import *
+from common.utils.setttings import *
 
 endpoint_data = {}
 

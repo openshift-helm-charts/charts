@@ -1,18 +1,22 @@
 import sys
 import semantic_version
+import requests
+import yaml
 
 sys.path.append('../')
 from report import report_info
 
-kubeOpenShiftVersionMap = {"1.13": "4.1",
-                           "1.14": "4.2",
-                           "1.16": "4.3",
-                           "1.17": "4.4",
-                           "1.18": "4.5",
-                           "1.19": "4.6",
-                           "1.20": "4.7",
-                           "1.21": "4.8",
-                           "1.22": "4.9"}
+kubeOpenShiftVersionMap = {}
+
+def getKubVersionMap():
+
+    if not kubeOpenShiftVersionMap:
+       content = requests.get("https://github.com/redhat-certification/chart-verifier/blob/main/internal/tool/kubeOpenShiftVersionMap.yaml?raw=true")
+       version_data = yaml.safe_load(content.text)
+       for kubeVersion in version_data["versions"]:
+           kubeOpenShiftVersionMap[kubeVersion["kube-version"]] = kubeVersion["ocp-version"]
+
+    return  kubeOpenShiftVersionMap
 
 
 def getOCPVersions(kubeVersion):
@@ -56,21 +60,26 @@ def getOCPVersions(kubeVersion):
 
     minOCP = ""
     maxOCP = ""
+    getKubVersionMap()
     for kubeVersionKey in kubeOpenShiftVersionMap :
+        #print(f"\n   Map entry : {kubeVersionKey}: {kubeOpenShiftVersionMap[kubeVersionKey]}")
+        #print(f"   MinOCP : {minOCP}, maxOCP: {maxOCP}")
         coercedKubeVersionKey = semantic_version.Version.coerce(kubeVersionKey)
-        if minOCP == "" and coercedKubeVersionKey in semantic_version.NpmSpec(checkKubeVersion):
-            minOCP = kubeOpenShiftVersionMap[kubeVersionKey]
-            print(f"   Found min : {kubeVersion}: {minOCP}")
-        elif coercedKubeVersionKey in semantic_version.NpmSpec(checkKubeVersion):
-            maxOCP = kubeOpenShiftVersionMap[kubeVersionKey]
-            print(f"   Found new Max : {kubeVersion}: {maxOCP}")
+        if coercedKubeVersionKey in semantic_version.NpmSpec(checkKubeVersion):
+            coercedOCPVersionValue = semantic_version.Version.coerce(kubeOpenShiftVersionMap[kubeVersionKey])
+            if minOCP == "" or  semantic_version.Version.coerce(minOCP) > coercedOCPVersionValue:
+                minOCP = kubeOpenShiftVersionMap[kubeVersionKey]
+                #print(f"   Found new min : {checkKubeVersion}: {minOCP}")
+            if maxOCP == "" or semantic_version.Version.coerce(maxOCP) < coercedOCPVersionValue:
+                maxOCP = kubeOpenShiftVersionMap[kubeVersionKey]
+                #print(f"   Found new Max : {checkKubeVersion}: {maxOCP}")
 
     # check if minOCP is open ended
     if minOCP != "" and semantic_version.Version("1.999.999") in semantic_version.NpmSpec(checkKubeVersion):
         ocp_versions = f">={minOCP}"
     elif minOCP == "":
         ocp_versions = "N/A"
-    elif maxOCP == "":
+    elif maxOCP == "" or maxOCP == minOCP:
         ocp_versions = minOCP
     else:
         ocp_versions = f"{minOCP} - {maxOCP}"

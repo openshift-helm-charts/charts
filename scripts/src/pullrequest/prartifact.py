@@ -7,13 +7,15 @@ import pathlib
 
 import requests
 
+sys.path.append('../')
+from checkprcontent import checkpr
+
 # TODO(baijum): Move this code under chartsubmission.chart module
 def get_modified_charts(api_url):
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(files_api_url, headers=headers)
-    pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.]+)/.*")
-    count = 0
+    pattern,_ = checkpr.get_file_match_compiled_patterns()
     for f in r.json():
         m = pattern.match(f["filename"])
         if m:
@@ -25,9 +27,11 @@ def get_modified_charts(api_url):
 
 def save_metadata(directory, vendor_label, chart, number):
     with open(os.path.join(directory, "vendor"), "w") as fd:
+        print(f"add {directory}/vendor as {vendor_label}")
         fd.write(vendor_label)
 
     with open(os.path.join(directory, "chart"), "w") as fd:
+        print(f"add {directory}/chart as {chart}")
         fd.write(chart)
 
     with open(os.path.join(directory, "NR"), "w") as fd:

@@ -105,10 +105,10 @@ jobs:
           echo "Full test in pr : {{steps.check_request.outputs.full_tests_in_pr }}"
           if ${{steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }} ; then
             echo "Release PR from dev to charts, oer PR with new full test, so running full tests"
-            ve1/bin/pytest tests/ --log-cli-level=WARNING --ignore=tests/functional/step_defs/test_smoke_scenarios.py --ignore=tests/functional/step_defs/test_submitted_charts.py --tb=short
+            ve1/bin/behave tests/functional/behave_features/ --tags=full --logging-level=WARNING --no-capture --no-color
           else
             echo "Not a release PR from dev to charts, so running only smoke tests"
-            ve1/bin/pytest tests/functional/step_defs/test_smoke_scenarios.py --log-cli-level=WARNING --tb=short
+            ve1/bin/behave tests/functional/behave_features/ --tags=smoke --logging-level=WARNING --no-capture --no-color
           fi
 
       - name: (Manual) Test CI Workflow
@@ -130,7 +130,7 @@ jobs:
           echo "[INFO] Notify ID '${{ env.NOTIFY_ID }}'"
           echo "[INFO] Software Name '${{ env.SOFTWARE_NAME }}'"
           echo "[INFO] Software Version '${{ env.SOFTWARE_VERSION }}'"
-          ve1/bin/pytest tests/functional/step_defs/test_submitted_charts.py --log-cli-level=WARNING --tb=short
+          ve1/bin/behave tests/functional/behave_features/ --tags=version-change --logging-level=WARNING --no-capture --no-color
 
       - name: Approve PR
         id: approve_pr

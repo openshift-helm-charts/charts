@@ -84,6 +84,24 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
         print(f"::set-output name=providerDelivery::False")
         print(f"[INFO] providerDelivery is a no-go")
 
+def get_file_match_compiled_patterns():
+    """Return a tuple of patterns, where the first can be used to match any file in a chart PR 
+    and the second can be used to match a valid report file within a chart PR. The patterns
+    match based on the relative path of a file to the base repository
+    
+    Both patterns capture chart type, chart vendor, chart name and chart version from the file path..
+    
+    Examples of valid file paths are:
+    
+    charts/partners/hashicorp/vault/0.20.0/<file>
+    charts/partners/hashicorp/vault/0.20.0//report.yaml
+    """
+
+    pattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
+    reportpattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/report.yaml")
+
+    return pattern,reportpattern
+
 
 def ensure_only_chart_is_modified(api_url, repository, branch):
     # api_url https://api.github.com/repos/<organization-name>/<repository-name>/pulls/1
@@ -95,8 +113,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(files_api_url, headers=headers)
-    pattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
-    reportpattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/report.yaml")
+    pattern,reportpattern = get_file_match_compiled_patterns()
     page_number = 1
     max_page_size,page_size = 100,100
     matches_found = 0
@@ -129,9 +146,10 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
                 if matches_found == 1:
                     pattern_match = match
                 elif pattern_match.groups() != match.groups():
-                    msg = f"[ERROR] PR must only include one chart"
+                    msg = "[ERROR] A PR must contain only one chart. Current PR includes files for multiple charts."
                     print(msg)
                     print(f"::set-output name=pr-content-error-message::{msg}")
+                    exit(1)
     
     if none_chart_files:
         if file_count > 1 or "OWNERS" not in none_chart_files: #OWNERS not present or preset but not the only file

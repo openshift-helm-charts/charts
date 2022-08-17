@@ -194,6 +194,7 @@ def user_should_see_pull_request_getting_merged(workflow_test):
     """the user sees the pull request is merged."""
     workflow_test.check_workflow_conclusion(expect_result='success')
     workflow_test.check_pull_request_result(expect_merged=True)
+    workflow_test.check_pull_request_labels()
 
 @then("the pull request is not merged")
 def the_pull_request_is_not_getting_merged(workflow_test):
