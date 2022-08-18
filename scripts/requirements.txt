@@ -34,3 +34,4 @@ toml==0.10.2
 urllib3==1.26.5
 websocket-client==1.2.1
 analytics-python==1.4.0
+behave==1.2.6

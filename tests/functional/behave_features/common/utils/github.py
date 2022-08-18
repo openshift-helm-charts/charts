@@ -2,11 +2,10 @@
 """Utility class for setting up and manipulating GitHub operations."""
 
 import json
-import pytest
 import requests
 from retrying import retry
 
-from functional.utils.setttings import *
+from common.utils.setttings import *
 
 @retry(stop_max_delay=30_000, wait_fixed=1000)
 def get_run_id(secrets, pr_number=None):

@@ -15,14 +15,14 @@ from pathlib import Path
 
 import git
 import yaml
-import pytest
-from functional.utils.notifier import *
-from functional.utils.index import *
-from functional.utils.github import *
-from functional.utils.secret import *
-from functional.utils.set_directory import SetDirectory
-from functional.utils.setttings import *
-from functional.utils.chart import *
+
+from common.utils.notifier import *
+from common.utils.index import *
+from common.utils.github import *
+from common.utils.secret import *
+from common.utils.set_directory import SetDirectory
+from common.utils.setttings import *
+from common.utils.chart import *
 
 @dataclass
 class ChartCertificationE2ETest:
@@ -45,7 +45,6 @@ vendor:
     temp_dir: TemporaryDirectory = None
     temp_repo: git.Repo = None
     github_actions: str = os.environ.get("GITHUB_ACTIONS")
-
     def set_git_username_email(self, repo, username, email):
         """
         Parameters:
@@ -58,6 +57,7 @@ vendor:
 
     def get_bot_name_and_token(self):
         bot_name = os.environ.get("BOT_NAME")
+        logging.debug(f"Enviroment variable value BOT_NAME: {bot_name}")
         bot_token = os.environ.get("BOT_TOKEN")
         if not bot_name and not bot_token:
             bot_name = "github-actions[bot]"
@@ -122,16 +122,17 @@ vendor:
             repo.git.commit('-m', 'Checkpoint')
 
     def send_pull_request(self, remote_repo, base_branch, pr_branch, bot_token):
+        pr_body = os.environ.get('PR_BODY')
         data = {'head': pr_branch, 'base': base_branch,
-                'title': base_branch, 'body': os.environ.get('PR_BODY')}
-
+                'title': base_branch, 'body': pr_body}
+        logging.debug(f"PR_BODY Content: {pr_body}")
         logging.info(
             f"Create PR from '{remote_repo}:{pr_branch}'")
         r = github_api(
             'post', f'repos/{remote_repo}/pulls', bot_token, json=data)
         j = json.loads(r.text)
         if not 'number' in j:
-            pytest.fail(f"error sending pull request, response was: {r.text}")
+            raise AssertionError(f"error sending pull request, response was: {r.text}")
         return j['number']
 
     def create_and_push_owners_file(self, chart_directory, base_branch, vendor_name, vendor_type, chart_name, provider_delivery=False):
@@ -141,6 +142,7 @@ vendor:
                     'vendor': vendor_name, 'chart_name': chart_name,
                       "provider_delivery" : provider_delivery}
             content = Template(self.secrets.owners_file_content).substitute(values)
+            logging.debug(f"OWNERS File Content: {content}")
             with open(f'{chart_directory}/OWNERS', 'w') as fd:
                 fd.write(content)
 
@@ -153,7 +155,7 @@ vendor:
             self.temp_repo.git.push(f'https://x-access-token:{self.secrets.bot_token}@github.com/{self.secrets.test_repo}',
                         f'HEAD:refs/heads/{base_branch}', '-f')
 
-    def check_index_yaml(self,base_branch, vendor, chart_name, chart_version, index_file="index.yaml", check_provider_type=False, logger=pytest.fail):
+    def check_index_yaml(self,base_branch, vendor, chart_name, chart_version, index_file="index.yaml", check_provider_type=False, failure_type='error'):
         old_branch = self.repo.active_branch.name
         self.repo.git.fetch(f'https://github.com/{self.secrets.test_repo}.git',
                     '{0}:{0}'.format(f'{base_branch}-gh-pages'), '-f')
@@ -164,29 +166,35 @@ vendor:
             try:
                 index = yaml.safe_load(fd)
             except yaml.YAMLError as err:
-                logger(f"error parsing index.yaml: {err}")
-                return False
+                if failure_type == 'error':
+                    raise AssertionError(f"error parsing index.yaml: {err}")
+                else:
+                    logging.warning(f"error parsing index.yaml: {err}")
+                    return False
 
         if index:
             entry = f"{vendor}-{chart_name}"
             if "entries" not in index or entry not in index['entries']:
-                logger(f"{entry} not added in entries to {index_file}")
-                logger(f"Index.yaml entries: {index['entries']}")
-                return False
+                if failure_type == 'error':
+                    raise AssertionError(f"{entry} not added in entries to {index_file} & Found index.yaml entries: {index['entries']}")
+                else:
+                    logging.warning(f"{chart_version} not added to {index_file}")
+                    logging.warning(f"Index.yaml entry content: {index['entries'][entry]}")
+                    return False
 
             version_list = [release['version'] for release in index['entries'][entry]]
             if chart_version not in version_list:
-                logger(f"{chart_version} not added to {index_file}")
-                logger(f"Index.yaml entry content: {index['entries'][entry]}")
-                return False
+                raise AssertionError(f"{chart_version} not added to {index_file} & Found index.yaml entry content: {index['entries'][entry]}")
 
             #This check is applicable for charts submitted in redhat path when one of the chart-verifier check fails
             #Check whether providerType annotations is community in index.yaml when vendor_type is redhat
             if check_provider_type and self.secrets.vendor_type == 'redhat':
                 provider_type_in_index_yaml = index['entries'][entry][0]['annotations']['charts.openshift.io/providerType']
                 if provider_type_in_index_yaml != 'community':
-                    logger(f"{provider_type_in_index_yaml} is not correct as providerType in index.yaml")
-
+                    if failure_type == 'error':
+                        raise AssertionError(f"{provider_type_in_index_yaml} is not correct as providerType in index.yaml")
+                    else:
+                        logging.warning(f"{provider_type_in_index_yaml} is not correct as providerType in index.yaml")
 
             logging.info("Index updated correctly, cleaning up local branch")
             self.repo.git.checkout(old_branch)
@@ -195,7 +203,7 @@ vendor:
         else:
             return False
 
-    def check_release_result(self, vendor, chart_name, chart_version, chart_tgz, logger=pytest.fail):
+    def check_release_result(self, vendor, chart_name, chart_version, chart_tgz, failure_type='error'):
         expected_tag = f'{vendor}-{chart_name}-{chart_version}'
         try:
             release = get_release_by_tag(self.secrets, expected_tag)
@@ -208,8 +216,11 @@ vendor:
             get_release_assets(self.secrets, release_id, required_assets)
             return True
         except Exception as e:
-            logger(e)
-            return False
+            if failure_type == 'error':
+                raise AssertionError(e)
+            else:
+                logging.warning(e)
+                return False
         finally:
             logging.info(f"Delete release '{expected_tag}'")
             github_api(
@@ -220,7 +231,7 @@ vendor:
                 'delete', f'repos/{self.secrets.test_repo}/git/refs/tags/{expected_tag}', self.secrets.bot_token)
 
     # expect_result: a string representation of expected result, e.g. 'success'
-    def check_workflow_conclusion(self, pr_number, expect_result: str, logger=pytest.fail):
+    def check_workflow_conclusion(self, pr_number, expect_result: str, failure_type='error'):
         try:
             # Check workflow conclusion
             run_id = get_run_id(self.secrets, pr_number)
@@ -228,15 +239,22 @@ vendor:
             if conclusion == expect_result:
                 logging.info(f"PR{pr_number} Workflow run was '{expect_result}' which is expected")
             else:
-                logger(
-                    f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{conclusion}' which is unexpected, run id: {run_id}")
+                if failure_type == 'warning':
+                    logging.warning(f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{conclusion}' which is unexpected, run id: {run_id}")
+                else:
+                    raise AssertionError(
+                        f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{conclusion}' which is unexpected, run id: {run_id}")
+                    
             return run_id, conclusion
         except Exception as e:
-            logger(e)
-            return None, None
+            if failure_type == 'error':
+                raise AssertionError(e)
+            else:
+                logging.warning(e)
+                return None, None
 
     # expect_merged: boolean representing whether the PR should be merged
-    def check_pull_request_result(self, pr_number, expect_merged: bool, logger=pytest.fail):
+    def check_pull_request_result(self, pr_number, expect_merged: bool, failure_type='error'):
         # Check if PR merged
         r = github_api(
             'get', f'repos/{self.secrets.test_repo}/pulls/{pr_number}/merge', self.secrets.bot_token)
@@ -248,16 +266,45 @@ vendor:
             logging.info(f"PR{pr_number} not merged, which is expected")
             return True
         elif r.status_code == 204 and not expect_merged:
-            logger(f"PR{pr_number} Expecting not merged but PR was merged")
-            return False
+            if failure_type == 'error':
+                raise AssertionError(f"PR{pr_number} Expecting not merged but PR was merged")
+            else:
+                logging.warning(f"PR{pr_number} Expecting not merged but PR was merged")
+                return False
         elif r.status_code == 404 and expect_merged:
-            logger(f"PR{pr_number} Expecting PR merged but PR was not merged")
-            return False
+            if failure_type == 'error':
+                raise AssertionError(f"PR{pr_number} Expecting PR merged but PR was not merged")
+            else:
+                logging.warning(f"PR{pr_number} Expecting PR merged but PR was not merged")
+                return False
         else:
-            logger(f"PR{pr_number} Got unexpected status code from PR: {r.status_code}")
-            return False
+            if failure_type == 'error':
+                raise AssertionError(f"PR{pr_number} Got unexpected status code from PR: {r.status_code}")
+            else:
+                logging.warning(f"PR{pr_number} Got unexpected status code from PR: {r.status_code}")
+                return False
 
-    def check_pull_request_labels(self,pr_number,logger=pytest.fail):
+    def cleanup_release(self, expected_tag):
+        """Cleanup the release and release tag.
+
+        Releases might be left behind if check_index_yam() ran before check_release_result() and fails the test.
+        """
+        r = github_api(
+            'get', f'repos/{self.secrets.test_repo}/releases', self.secrets.bot_token)
+        releases = json.loads(r.text)
+        logging.debug(f"List of releases: {releases}")
+        for release in releases:
+            if release['tag_name'] == expected_tag:
+                release_id = release['id']
+                logging.info(f"Delete release '{expected_tag}'")
+                github_api(
+                    'delete', f'repos/{self.secrets.test_repo}/releases/{release_id}', self.secrets.bot_token)
+
+                logging.info(f"Delete release tag '{expected_tag}'")
+                github_api(
+                    'delete', f'repos/{self.secrets.test_repo}/git/refs/tags/{expected_tag}', self.secrets.bot_token)
+    
+    def check_pull_request_labels(self, pr_number):
         r = github_api(
             'get', f'repos/{self.secrets.test_repo}/issues/{pr_number}/labels', self.secrets.bot_token)
         labels = json.loads(r.text)
@@ -269,34 +316,12 @@ vendor:
                 authorized_request = True
             if label['name'] == "content-ok":
                 content_ok = True
-
-
+        
         if authorized_request and content_ok:
             logging.info(f"PR{pr_number} authorized request and content-ok labels were found as expected")
             return True
         else:
-            logger(f"PR{pr_number} authorized request and/or content-ok labels were not found as expected")
-            return False
-
-
-    def cleanup_release(self, expected_tag):
-        """Cleanup the release and release tag.
-
-        Releases might be left behind if check_index_yam() ran before check_release_result() and fails the test.
-        """
-        r = github_api(
-            'get', f'repos/{self.secrets.test_repo}/releases', self.secrets.bot_token)
-        releases = json.loads(r.text)
-        for release in releases:
-            if release['tag_name'] == expected_tag:
-                release_id = release['id']
-                logging.info(f"Delete release '{expected_tag}'")
-                github_api(
-                    'delete', f'repos/{self.secrets.test_repo}/releases/{release_id}', self.secrets.bot_token)
-
-                logging.info(f"Delete release tag '{expected_tag}'")
-                github_api(
-                    'delete', f'repos/{self.secrets.test_repo}/git/refs/tags/{expected_tag}', self.secrets.bot_token)
+            raise AssertionError(f"PR{pr_number} authorized request and/or content-ok labels were not found as expected")
 
 @dataclass
 class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
@@ -312,25 +337,31 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         # different processes.
         self.uuid = uuid.uuid4().hex
 
-        if self.test_report or self.test_chart:
-            self.secrets.chart_name, self.secrets.chart_version = self.get_chart_name_version()
-            self.chart_directory = f'charts/{self.secrets.vendor_type}/{self.secrets.vendor}/{self.secrets.chart_name}'
-
         bot_name, bot_token = self.get_bot_name_and_token()
         test_repo = TEST_REPO
+
+        #Storing current branch to checkout after scenario execution
+        if os.environ.get('LOCAL_RUN'):
+            self.secrets.active_branch = self.repo.active_branch.name
+            logging.debug(f"Active branch name : {self.secrets.active_branch}")
 
         # Create a new branch locally from detached HEAD
         head_sha = self.repo.git.rev_parse('--short', 'HEAD')
         unique_branch = f'{head_sha}-{self.uuid}'
+        logging.debug(f"Unique branch name : {unique_branch}")
         local_branches = [h.name for h in self.repo.heads]
+        logging.debug(f"Local branch names : {local_branches}")
         if unique_branch not in local_branches:
             self.repo.git.checkout('-b', f'{unique_branch}')
 
         current_branch = self.repo.active_branch.name
+        logging.debug(f"Current active branch name : {current_branch}")
+        
         r = github_api(
             'get', f'repos/{test_repo}/branches', bot_token)
         branches = json.loads(r.text)
         branch_names = [branch['name'] for branch in branches]
+        logging.debug(f"Remote test repo branch names : {branch_names}")
         if current_branch not in branch_names:
             logging.info(
                 f"{test_repo}:{current_branch} does not exists, creating with local branch")
@@ -339,11 +370,10 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
         pretty_test_name = self.test_name.strip().lower().replace(' ', '-')
         base_branch = f'{self.uuid}-{pretty_test_name}-{current_branch}' if pretty_test_name else f'{self.uuid}-test-{current_branch}'
+        logging.debug(f"Base branch name : {base_branch}")
         pr_branch = base_branch + '-pr-branch'
 
         self.secrets.owners_file_content = self.owners_file_content
-        self.secrets.test_chart = self.test_chart
-        self.secrets.test_report = self.test_report
         self.secrets.test_repo = test_repo
         self.secrets.bot_name = bot_name
         self.secrets.bot_token = bot_token
@@ -351,6 +381,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         self.secrets.pr_branch = pr_branch
         self.secrets.index_file = "index.yaml"
         self.secrets.provider_delivery = False
+
 
     def cleanup (self):
         # Cleanup releases and release tags
@@ -386,21 +417,47 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
         logging.info(f"Delete local '{current_branch}'")
         try:
+            if os.environ.get('LOCAL_RUN'):
+                self.repo.git.checkout(f'{self.secrets.active_branch}')
             self.repo.git.branch('-D', current_branch)
         except git.exc.GitCommandError:
             logging.info(f"Local '{current_branch}' does not exist")
+    
+    def update_bot_name(self, bot_name):
+        logging.debug(f"Updating bot name: {bot_name}")
+        self.secrets.bot_name = bot_name
+    
+    def update_bad_version(self, bad_version):
+        logging.debug(f"Updating bad version: {bad_version}")
+        self.secrets.bad_version = bad_version
+
+    def update_chart_directory(self):
+        base_branch_without_uuid = "-".join(self.secrets.base_branch.split("-")[:-1])
+        vendor_without_suffix = self.secrets.vendor.split("-")[0]
+        self.secrets.base_branch = f'{base_branch_without_uuid}-{self.secrets.vendor_type}-{vendor_without_suffix}-{self.secrets.chart_name}-{self.secrets.chart_version}'
+        self.secrets.pr_branch = f'{self.secrets.base_branch}-pr-branch'
+        self.chart_directory = f'charts/{self.secrets.vendor_type}/{self.secrets.vendor}/{self.secrets.chart_name}'
+        logging.debug(f"Updating chart_directory: {self.chart_directory}")
 
     def update_test_chart(self, test_chart):
-        if test_chart != self.test_chart:
-            # reinitialize the settings according with new chart
-            self.test_chart = test_chart
-            self.__post_init__()
+        logging.debug(f"Updating test chart: {test_chart}")
+        self.test_chart = test_chart
+        chart_name, chart_version = self.get_chart_name_version()
+        logging.debug(f"Got chart_name: {chart_name} and chart_version: {chart_version} from the chart")
+        self.secrets.test_chart = self.test_chart
+        self.secrets.chart_name = chart_name
+        self.secrets.chart_version = chart_version
+        self.update_chart_directory()
 
     def update_test_report(self, test_report):
-        if test_report != self.test_report:
-            # reinitialize the settings according with new report
-            self.test_report = test_report
-            self.__post_init__()
+        logging.debug(f"Updating test report: {test_report}")
+        self.test_report = test_report
+        chart_name, chart_version = self.get_chart_name_version()
+        logging.debug(f"Got chart_name: {chart_name} and chart_version: {chart_version} from the report")
+        self.secrets.test_report = self.test_report
+        self.secrets.chart_name = chart_name
+        self.secrets.chart_version = chart_version
+        self.update_chart_directory()
 
     def get_unique_vendor(self, vendor):
         """Set unique vendor name.
@@ -415,7 +472,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
     def get_chart_name_version(self):
         if not self.test_report and not self.test_chart:
-            pytest.fail("Provide at least one of test report or test chart.")
+            raise AssertionError("Provide at least one of test report or test chart.")
         if self.test_report:
             chart_name, chart_version = get_name_and_version_from_report(self.test_report)
         else:
@@ -424,14 +481,10 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
     def set_vendor(self, vendor, vendor_type):
         # use unique vendor id to avoid collision between tests
+        logging.debug(f"Setting vendor: {vendor} vendor_type: {vendor_type}")
         self.secrets.vendor = self.get_unique_vendor(vendor)
+        logging.debug(f"Unique vendor value: {self.secrets.vendor}")
         self.secrets.vendor_type = vendor_type
-        base_branch_without_uuid = "-".join(self.secrets.base_branch.split("-")[:-1])
-        vendor_without_suffix = self.secrets.vendor.split("-")[0]
-        self.secrets.base_branch = f'{base_branch_without_uuid}-{self.secrets.vendor_type}-{vendor_without_suffix}-{self.secrets.chart_name}-{self.secrets.chart_version}'
-        self.secrets.pr_branch = f'{self.secrets.base_branch}-pr-branch'
-        self.chart_directory = f'charts/{self.secrets.vendor_type}/{self.secrets.vendor}/{self.secrets.chart_name}'
-
 
     def setup_git_context(self):
         super().setup_git_context(self.repo)
@@ -462,7 +515,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                 try:
                     chart = yaml.safe_load(fd)
                 except yaml.YAMLError as err:
-                    pytest.fail(f"error parsing '{path}': {err}")
+                    raise AssertionError(f"error parsing '{path}': {err}")
             current_version = chart['version']
 
             if current_version != new_version:
@@ -471,7 +524,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                     with open(path, 'w') as fd:
                         fd.write(yaml.dump(chart))
                 except Exception as e:
-                    pytest.fail("Failed to update version in yaml file")
+                    raise AssertionError("Failed to update version in yaml file")
     
     def remove_readme_file(self):
         with SetDirectory(Path(self.temp_dir.name)):
@@ -479,7 +532,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
             try:
                 os.remove(path)
             except Exception as e:
-                pytest.fail(f"Failed to remove readme file : {e}")
+                raise AssertionError(f"Failed to remove readme file : {e}")
 
     def process_owners_file(self):
         super().create_and_push_owners_file(self.chart_directory, self.secrets.base_branch, self.secrets.vendor, self.secrets.vendor_type, self.secrets.chart_name,self.secrets.provider_delivery)
@@ -504,68 +557,88 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
             # Copy report to temporary location and push to test_repo:pr_branch
             logging.info(
                 f"Push report to '{self.secrets.test_repo}:{self.secrets.pr_branch}'")
-            tmpl = open(self.secrets.test_report).read()
-            values = {'repository': self.secrets.test_repo,
-                    'branch': self.secrets.base_branch}
-            content = Template(tmpl).substitute(values)
+            
+            if self.secrets.test_report.endswith('json'):
+                logging.debug("Report type is json")
+                report_path = f'{self.chart_directory}/{self.secrets.chart_version}/' + self.secrets.test_report.split('/')[-1]
+                with open(self.secrets.test_report, 'r') as fd:
+                    try:
+                        report = json.load(fd)
+                    except Exception as e:
+                        raise AssertionError("Failed to read json file")
 
-            report_path = f'{self.chart_directory}/{self.secrets.chart_version}/' + self.secrets.test_report.split('/')[-1]
+                with open(report_path, 'w') as fd:
+                    try:
+                        fd.write(json.dumps(report, indent=4))
+                    except Exception as e:
+                        raise AssertionError("Failed to write report in json format")
 
-            try:
-                report = yaml.safe_load(content)
-            except yaml.YAMLError as err:
-                pytest.fail(f"error parsing '{report_path}': {err}")
+            elif self.secrets.test_report.endswith('yaml'):
+                logging.debug("Report type is yaml")
+                tmpl = open(self.secrets.test_report).read()
+                values = {'repository': self.secrets.test_repo,
+                        'branch': self.secrets.base_branch}
+                content = Template(tmpl).substitute(values)
 
-            if self.secrets.vendor_type != "partners":
-                report["metadata"]["tool"]["profile"]["VendorType"] = self.secrets.vendor_type
-                logging.info(f'VendorType set to {report["metadata"]["tool"]["profile"]["VendorType"]} in report.yaml')
+                report_path = f'{self.chart_directory}/{self.secrets.chart_version}/' + self.secrets.test_report.split('/')[-1]
 
-            if update_chart_sha or update_url or update_versions or update_provider_delivery or unset_package_digest:
-                #For updating the report.yaml, for chart sha mismatch scenario
-                if update_chart_sha:
-                    new_sha_value = 'sha256:5b85ae00b9ca2e61b2d70a59f98fd72136453b1a185676b29d4eb862981c1xyz'
-                    logging.info(f"Current SHA Value in report: {report['metadata']['tool']['digests']['chart']}")
-                    report['metadata']['tool']['digests']['chart'] = new_sha_value
-                    logging.info(f"Updated sha value in report: {new_sha_value}")
-
-                #For updating the report.yaml, for invalid_url sceanrio
-                if update_url:
-                    logging.info(f"Current chart-uri in report: {report['metadata']['tool']['chart-uri']}")
-                    report['metadata']['tool']['chart-uri'] = url
-                    logging.info(f"Updated chart-uri value in report: {url}")
-
-                if update_versions:
-                    report['metadata']['tool']['testedOpenShiftVersion'] = tested_version
-                    report['metadata']['tool']['supportedOpenShiftVersions'] = supported_versions
-                    report['metadata']['chart']['kubeversion'] = kube_version
-                    logging.info(f"Updated testedOpenShiftVersion value in report: {tested_version}")
-                    logging.info(f"Updated supportedOpenShiftVersions value in report: {supported_versions}")
-                    logging.info(f"Updated kubeversion value in report: {kube_version}")
-
-                if update_provider_delivery:
-                    report['metadata']['tool']['providerControlledDelivery'] = provider_delivery
-
-                if unset_package_digest:
-                    del report['metadata']['tool']['digests']['package']
-
-            with open(report_path, 'w') as fd:
                 try:
-                    fd.write(yaml.dump(report))
-                    logging.info("Report updated with new values")
-                except Exception as e:
-                    pytest.fail("Failed to update report yaml with new values")
+                    report = yaml.safe_load(content)
+                except yaml.YAMLError as err:
+                    raise AssertionError(f"error parsing '{report_path}': {err}")
 
-            #For removing the check for missing check scenario
-            if missing_check:
-                logging.info(f"Updating report with {missing_check}")
-                with open(report_path, 'r+') as fd:
-                    report_content = yaml.safe_load(fd)
-                    results = report_content["results"]
-                    new_results = filter(lambda x: x['check'] != missing_check, results)
-                    report_content["results"] = list(new_results)
-                    fd.seek(0)
-                    yaml.dump(report_content, fd)
-                    fd.truncate()
+                if self.secrets.vendor_type != "partners":
+                    report["metadata"]["tool"]["profile"]["VendorType"] = self.secrets.vendor_type
+                    logging.info(f'VendorType set to {report["metadata"]["tool"]["profile"]["VendorType"]} in report.yaml')
+
+                if update_chart_sha or update_url or update_versions or update_provider_delivery or unset_package_digest:
+                    #For updating the report.yaml, for chart sha mismatch scenario
+                    if update_chart_sha:
+                        new_sha_value = 'sha256:5b85ae00b9ca2e61b2d70a59f98fd72136453b1a185676b29d4eb862981c1xyz'
+                        logging.info(f"Current SHA Value in report: {report['metadata']['tool']['digests']['chart']}")
+                        report['metadata']['tool']['digests']['chart'] = new_sha_value
+                        logging.info(f"Updated sha value in report: {new_sha_value}")
+
+                    #For updating the report.yaml, for invalid_url sceanrio
+                    if update_url:
+                        logging.info(f"Current chart-uri in report: {report['metadata']['tool']['chart-uri']}")
+                        report['metadata']['tool']['chart-uri'] = url
+                        logging.info(f"Updated chart-uri value in report: {url}")
+
+                    if update_versions:
+                        report['metadata']['tool']['testedOpenShiftVersion'] = tested_version
+                        report['metadata']['tool']['supportedOpenShiftVersions'] = supported_versions
+                        report['metadata']['chart']['kubeversion'] = kube_version
+                        logging.info(f"Updated testedOpenShiftVersion value in report: {tested_version}")
+                        logging.info(f"Updated supportedOpenShiftVersions value in report: {supported_versions}")
+                        logging.info(f"Updated kubeversion value in report: {kube_version}")
+
+                    if update_provider_delivery:
+                        report['metadata']['tool']['providerControlledDelivery'] = provider_delivery
+
+                    if unset_package_digest:
+                        del report['metadata']['tool']['digests']['package']
+
+                with open(report_path, 'w') as fd:
+                    try:
+                        fd.write(yaml.dump(report))
+                        logging.info("Report updated with new values")
+                    except Exception as e:
+                        raise AssertionError("Failed to update report yaml with new values")
+
+                #For removing the check for missing check scenario
+                if missing_check:
+                    logging.info(f"Updating report with {missing_check}")
+                    with open(report_path, 'r+') as fd:
+                        report_content = yaml.safe_load(fd)
+                        results = report_content["results"]
+                        new_results = filter(lambda x: x['check'] != missing_check, results)
+                        report_content["results"] = list(new_results)
+                        fd.seek(0)
+                        yaml.dump(report_content, fd)
+                        fd.truncate()
+            else:
+                raise AssertionError("Unknown report type")
 
         self.temp_repo.git.add(report_path)
         self.temp_repo.git.commit(
@@ -602,16 +675,14 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
     # expect_result: a string representation of expected result, e.g. 'success'
     def check_workflow_conclusion(self, expect_result: str):
         # Check workflow conclusion
-        super().check_workflow_conclusion(None, expect_result, pytest.fail)
+        super().check_workflow_conclusion(None, expect_result)
 
     # expect_merged: boolean representing whether the PR should be merged
     def check_pull_request_result(self, expect_merged: bool):
-        super().check_pull_request_result(self.secrets.pr_number, expect_merged, pytest.fail)
+        super().check_pull_request_result(self.secrets.pr_number, expect_merged)
 
-    # expect_merged: boolean representing whether the PR should be merged
     def check_pull_request_labels(self):
-        super().check_pull_request_labels(self.secrets.pr_number, pytest.fail)
-
+        super().check_pull_request_labels(self.secrets.pr_number)
 
     def check_pull_request_comments(self, expect_message: str):
         r = github_api(
@@ -619,19 +690,22 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         logging.info(f'STATUS_CODE: {r.status_code}')
 
         response = json.loads(r.text)
+        logging.debug(f"CHECK PULL_REQUEST COMMENT RESPONSE: {response}")
+        if len(response) == 0:
+            raise AssertionError("No comment found in the PR")
         complete_comment = response[0]['body']
 
         if expect_message in complete_comment:
             logging.info("Found the expected comment in the PR")
         else:
-            pytest.fail(f"Was expecting '{expect_message}' in the comment {complete_comment}")
+            raise AssertionError(f"Was expecting '{expect_message}' in the comment {complete_comment}")
 
     def check_index_yaml(self, check_provider_type=False):
-        super().check_index_yaml(self.secrets.base_branch, self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, self.secrets.index_file,check_provider_type, pytest.fail)
+        super().check_index_yaml(self.secrets.base_branch, self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, self.secrets.index_file,check_provider_type)
 
     def check_release_result(self):
         chart_tgz = self.secrets.test_chart.split('/')[-1]
-        super().check_release_result(self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, chart_tgz, pytest.fail)
+        super().check_release_result(self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, chart_tgz)
 
     def cleanup_release(self):
         expected_tag = f'{self.secrets.vendor}-{self.secrets.chart_name}-{self.secrets.chart_version}'
@@ -816,7 +890,7 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
 
         # Check workflow conclusion
         chart = f'{vendor_name} {chart_name} {chart_version}'
-        run_id, conclusion = super().check_workflow_conclusion(pr_number, 'success', logging.warning)
+        run_id, conclusion = super().check_workflow_conclusion(pr_number, 'success', failure_type='warning')
 
         if conclusion and run_id:
             if conclusion != 'success':
@@ -843,19 +917,19 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
 
 
         # Check PRs are merged
-        if not super().check_pull_request_result(pr_number, True, logging.warning):
+        if not super().check_pull_request_result(pr_number, True, failure_type='warning'):
             logging.warning(f"PR{pr_number} pull request was not merged: {vendor_name}, {chart_name}, {chart_version}")
             return
         logging.info(f"PR{pr_number} pull request was merged: {vendor_name}, {chart_name}, {chart_version}")
 
         # Check index.yaml is updated
-        if not super().check_index_yaml(base_branch, vendor_name, chart_name, chart_version, check_provider_type=False, logger=logging.warning):
+        if not super().check_index_yaml(base_branch, vendor_name, chart_name, chart_version, check_provider_type=False, failure_type='warning'):
             logging.warning(f"PR{pr_number} - Chart was not found in Index file: {vendor_name}, {chart_name}, {chart_version}")
         logging.info(f"PR{pr_number} - Chart was found in Index file: {vendor_name}, {chart_name}, {chart_version}")
 
         # Check release is published
         chart_tgz = f'{chart_name}-{chart_version}.tgz'
-        if not super().check_release_result(vendor_name, chart_name, chart_version, chart_tgz, logging.warning):
+        if not super().check_release_result(vendor_name, chart_name, chart_version, chart_tgz, failure_type='warning'):
             logging.warning(f"PR{pr_number} - Release was not created: {vendor_name}, {chart_name}, {chart_version}")
         logging.info(f"PR{pr_number} - Release was created: {vendor_name}, {chart_name}, {chart_version}")
 
@@ -958,4 +1032,5 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
         for vendor_type, vendor_name, chart_name, chart_version, pr_number in pr_number_list:
             logging.info(f"PR{pr_number} Check result: {vendor_type}, {vendor_name}, {chart_name}, {chart_version}")
             self.check_single_chart_result(vendor_type, vendor_name, chart_name, chart_version, pr_number, owners_table)
+
 
