@@ -8,6 +8,7 @@ approvers:
 - jasperchui
 - dperaza4dustbit
 - openshift-helm-charts-bot
+- tisutisu
 
 reviewers:
 - baijum
