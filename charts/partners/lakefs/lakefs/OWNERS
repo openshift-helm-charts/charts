@@ -4,7 +4,7 @@ chart:
     to manage your data lake the way you manage your code.
 publicPgpKey: null
 users:
-- githubUsername: eior
+- githubUsername: nopcoder
 vendor:
   label: lakefs
   name: Treeverse
