@@ -1,0 +1,9 @@
+chart:
+  name: kubevious
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: kubevious
+vendor:
+  label: kubevious
+  name: Kubevious
