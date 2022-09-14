@@ -1,0 +1,8 @@
+chart:
+  name: dxemssql
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: dh2i
+  name: DH2i
