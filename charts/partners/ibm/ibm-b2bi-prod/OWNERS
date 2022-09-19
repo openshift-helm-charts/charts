@@ -1,0 +1,8 @@
+chart:
+  name: ibm-b2bi-prod
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: ibm
+  name: IBM Japan, Ltd.
