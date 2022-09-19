@@ -1,0 +1,8 @@
+chart:
+  name: cmm-operator-k8s
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: nokia-cmm
+  name: Nokia Networks - LTTH
