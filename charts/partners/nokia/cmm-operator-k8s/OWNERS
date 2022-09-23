@@ -3,7 +3,7 @@ chart:
   shortDescription: null
 publicPgpKey: null
 users:
-- githubUsername: NA
+- githubUsername: nelsonpraveen
 vendor:
   label: nokia
   name: Nokia Networks - LTTH
