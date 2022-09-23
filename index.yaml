@@ -29,6 +29,26 @@ entries:
     urls:
     - https://github.com/Broadpeak-tv/Openshift/raw/main/Certification/bks400-0.2.0.tgz
     version: 0.2.0
+  exfo-uv-helm:
+  - annotations:
+      charts.openshift.io/digest: sha256:4e7e593c0f1e3fd1d8b984122516d56d5c82035b6da313aac9c8ef12da64173a
+      charts.openshift.io/lastCertifiedTimestamp: '2022-09-23T20:35:00.390109+08:00'
+      charts.openshift.io/provider: EXFO Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-09-23T12:57:32.941284+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.2.0
+    description: A Helm chart for Kubernetes
+    digest: e22a5b5f5f7159c1af3f6ae7d06ff219f6a2fa075aa8e500b27ebc93ecaac77c
+    icon: https://www.exfo.com/dist/atomic/organism/o-header/o-header-banner/exfo.png
+    kubeVersion: '>=1.20.0-0'
+    name: uv-helm
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/exfo-uv-helm-0.1.3/exfo-uv-helm-0.1.3.tgz
+    version: 0.1.3
   exfo-uverifier:
   - annotations:
       charts.openshift.io/digest: sha256:74fa80d28a46d9da1ae7a74bc050449164389a358bd13bd2fb2a23d4770a9206
@@ -3475,4 +3495,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.12.0/wavefronthq-wavefront-1.12.0.tgz
     version: 1.12.0
-generated: '2022-09-08T21:04:03.210850+00:00'
+generated: '2022-09-23T12:57:32.941284+00:00'
