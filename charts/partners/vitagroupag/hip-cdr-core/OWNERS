@@ -1,0 +1,9 @@
+chart:
+  name: hip-cdr-core
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: bjoern.pauli@vitagroup.ag
+vendor:
+  label: vitagroupag
+  name: Vitagroup AG
