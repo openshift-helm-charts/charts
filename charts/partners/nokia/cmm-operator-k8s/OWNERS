@@ -2,6 +2,7 @@ chart:
   name: cmm-operator-k8s
   shortDescription: null
 publicPgpKey: null
+providerDelivery: True
 users:
 - githubUsername: nelsonpraveen
 vendor:
