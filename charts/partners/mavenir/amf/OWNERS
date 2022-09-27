@@ -1,8 +1,9 @@
 chart:
   name: amf
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: k-anirwan
 vendor:
   label: mavenir
   name: Mavenir Systems Inc.
