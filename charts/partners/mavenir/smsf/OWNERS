@@ -1,8 +1,9 @@
 chart:
   name: smsf
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: kaitaklam
 vendor:
   label: mavenir
   name: Mavenir Systems Inc.
