@@ -1,6 +1,6 @@
 chart:
   name: amf
-  shortDescription: null
+  shortDescription: Mavenir 5GCore AMF CNF Helm charts
 publicPgpKey: null
 users:
 - githubUsername: k-anirwan
