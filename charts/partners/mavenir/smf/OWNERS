@@ -1,8 +1,9 @@
 chart:
   name: smf
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Mavenir 5GCore SMF CNF Helm charts
+publicPgpKey: null
+users:
+- githubUsername: k-anirwan
 vendor:
   label: mavenir
   name: Mavenir Systems Inc.
