@@ -41,6 +41,52 @@ entries:
     urls:
     - N/A
     version: 5gdu_5.0.1-563
+  mavenir-amf:
+  - annotations:
+      charts.openshift.io/digest: sha256:c9e5119d0e0b9ce4845fc02807b44e0ab19555d584d0d805e32290511eaad1bd
+      charts.openshift.io/lastCertifiedTimestamp: '2022-09-28T11:10:54.803276+00:00'
+      charts.openshift.io/name: amf
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-09-29T05:14:20.115848+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: amf-comm
+      repository: file:///root/amf-comm/
+      version: '0.1'
+    - name: amf-mt
+      repository: file:///root/amf-mt/
+      version: '0.1'
+    - name: amf-gw
+      repository: file:///root/amf-gw/
+      version: '0.1'
+    - name: amf-n2iwf
+      repository: file:///root/amf-n2iwf/
+      version: '0.1'
+    - name: amf-ee
+      repository: file:///root/amf-ee/
+      version: '0.1'
+    - name: amf-slicemgmt
+      repository: file:///root/amf-slicemgmt/
+      version: '0.1'
+    - name: amf-gtpciwf
+      repository: file:///root/amf-gtpciwf/
+      version: '0.1'
+    - name: amf-pathmgmt
+      repository: file:///root/amf-pathmgmt/
+      version: '0.1'
+    description: NF Service template.
+    digest: d3f8a4885cdcf0f9137eb1acb8f90db8c7033caaeabf28d25a502affdd9f62e9
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - name: Copyright Mavenir Inc 2021
+      url: https://mavenir.com/
+    name: amf
+    urls:
+    - N/A
+    version: 10.1.0-4757
   mavenir-cucp:
   - annotations:
       charts.openshift.io/digest: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
@@ -167,4 +213,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-09-27T17:25:10.464758+00:00'
+generated: '2022-09-29T05:14:20.115848+00:00'
