@@ -1,8 +1,9 @@
 chart:
   name: udm
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Mavenir 5GCore UDM CNF Helm charts
+publicPgpKey: null
+users:
+- githubUsername: k-anirwan
 vendor:
   label: mavenir
   name: Mavenir Systems Inc.
