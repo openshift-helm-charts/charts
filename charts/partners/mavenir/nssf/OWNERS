@@ -2,6 +2,7 @@ chart:
   name: nssf
   shortDescription: Mavenir 5GCore NSSF CNF Helm charts
 publicPgpKey: null
+providerDelivery: True
 users:
 - githubUsername: k-anirwan
 vendor:
