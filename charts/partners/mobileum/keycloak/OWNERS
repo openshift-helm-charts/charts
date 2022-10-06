@@ -1,8 +1,9 @@
 chart:
   name: keycloak
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: 'This chart will deploy keycloak '
+publicPgpKey: null
+users:
+- githubUsername: mobaipws
 vendor:
   label: mobileum
   name: Mobileum India Pvt. Ltd
