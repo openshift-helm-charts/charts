@@ -11,7 +11,7 @@ metadata:
             chart: sha256:b86570624aa52e41d47de5d69157ffd4c2de06adefdf86427196b2d1b171e98b
         lastCertifiedTimestamp: "2022-10-18T18:49:24.637975+00:00"
         testedOpenShiftVersion: "4.10"
-        supportedOpenShiftVersions: N/A
+        supportedOpenShiftVersions: '>=4.7'
         providerControlledDelivery: false
     chart:
         name: caddy
