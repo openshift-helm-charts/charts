@@ -1,8 +1,9 @@
 chart:
   name: caddy-012
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: 'This chart will deploy caddy '
+publicPgpKey: null
+users:
+- githubUsername: mobaipws
 vendor:
   label: mobileum
   name: Mobileum India Pvt. Ltd
