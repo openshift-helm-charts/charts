@@ -27,8 +27,11 @@ metadata:
         tags: ""
         appversion: 0.1.2
         deprecated: false
-        annotations: {}
-        kubeversion: ""
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name:  Caddy Chart
+            charts.openshift.io/provider: Mobileum
+        kubeversion: "v1.23.5"
         dependencies:
             - name: aip-common
               version: 0.2.0
