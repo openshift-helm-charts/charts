@@ -302,6 +302,46 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mavenir-udm:
+  - annotations:
+      charts.openshift.io/digest: sha256:3ec23e856d691f4b816a2a623749c7d1a537f615dec3df93a3225fc82f1f87a0
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T10:23:47.837144+00:00'
+      charts.openshift.io/name: udm
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-19T12:09:16.825782+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: udm-ueau
+      repository: file:///root/udm-ueau/
+      version: '0.1'
+    - name: udm-ee
+      repository: file:///root/udm-ee/
+      version: '0.1'
+    - name: udm-sdm
+      repository: file:///root/udm-sdm/
+      version: '0.1'
+    - name: udm-uecm
+      repository: file:///root/udm-uecm/
+      version: '0.1'
+    - name: udm-notify
+      repository: file:///root/udm-notify/
+      version: '0.1'
+    - name: udm-mt
+      repository: file:///root/udm-mt/
+      version: '0.1'
+    description: NF Service template.
+    digest: 7bafec664cebeb0f3f6c71d97e8e3113ab0c9e5da57211122db7ec938a61c2a0
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - email: sayan.sarkar@mavenir.com
+      name: sayan sarkar
+    name: udm
+    urls:
+    - N/A
+    version: 22.1.3-1
   mavenir-udsf:
   - annotations:
       charts.openshift.io/digest: sha256:e28c1a71d916db4ec5ed045fab1c4e84c306b9792b1c6b35afae310086f66f4f
@@ -392,4 +432,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T12:06:11.268557+00:00'
+generated: '2022-10-19T12:09:16.825782+00:00'
