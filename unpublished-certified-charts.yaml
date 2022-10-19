@@ -342,6 +342,49 @@ entries:
     urls:
     - N/A
     version: 22.1.3-1
+  mavenir-udr:
+  - annotations:
+      charts.openshift.io/digest: sha256:75cb578786c9c051eac8eff9430f7de4c3640bdce49ca0b7819d2997fbca8f3c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T10:35:38.181319+00:00'
+      charts.openshift.io/name: udr
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-19T12:13:39.090752+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: udr-subs
+      repository: file:///root/udr-subs/
+      version: '0.1'
+    - name: udr-policy
+      repository: file:///root/udr-policy/
+      version: '0.1'
+    - name: udr-provision
+      repository: file:///root/udr-provision/
+      version: '0.1'
+    - name: udr-notify
+      repository: file:///root/udr-notify/
+      version: '0.1'
+    - name: udr-polling
+      repository: file:///root/udr-polling/
+      version: '0.1'
+    - name: udr-exp
+      repository: file:///root/udr-exp/
+      version: '0.1'
+    - name: udr-app
+      repository: file:///root/udr-app/
+      version: '0.1'
+    description: NF Service template.
+    digest: 1743b104e5dd85cbccd32649d50af9c54a876843191d6f7c6ff600869966082c
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - email: sayan.sarkar@mavenir.com
+      name: sayan sarkar
+    name: udr
+    urls:
+    - N/A
+    version: 22.1.3-1
   mavenir-udsf:
   - annotations:
       charts.openshift.io/digest: sha256:e28c1a71d916db4ec5ed045fab1c4e84c306b9792b1c6b35afae310086f66f4f
@@ -432,4 +475,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T12:09:16.825782+00:00'
+generated: '2022-10-19T12:13:39.090752+00:00'
