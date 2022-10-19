@@ -256,6 +256,49 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mavenir-pcf:
+  - annotations:
+      charts.openshift.io/digest: sha256:42603523dfa36198de190c597ab7a06a499e2da407647cec27f19c24ba562b9c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T07:54:01.013538+00:00'
+      charts.openshift.io/name: pcf
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-19T11:55:54.185190+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: pcf-eval-policy
+      repository: file:///root/pcf-eval-policy/
+      version: '0.1'
+    - name: pcfsm
+      repository: file:///root/pcfsm/
+      version: '0.1'
+    - name: pcfam
+      repository: file:///root/pcfam/
+      version: '0.1'
+    - name: pcfue
+      repository: file:///root/pcfue/
+      version: '0.1'
+    - name: pcf-diam-iwf
+      repository: file:///root/pcf-diam-iwf/
+      version: '0.1'
+    - name: pcfgw
+      repository: file:///root/pcfgw/
+      version: '0.1'
+    - name: pcfmgmt
+      repository: file:///root/pcfmgmt/
+      version: '0.1'
+    description: NF Service template.
+    digest: f91826bf02fa891f6fb500e24dbb436863c2e4b9ef95cdf00fd2dd8381cd3e76
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - name: Copyright Mavenir Inc 2021
+      url: https://mavenir.com/
+    name: pcf
+    urls:
+    - N/A
+    version: 10.1.0-4757
   mavenir-udsf:
   - annotations:
       charts.openshift.io/digest: sha256:e28c1a71d916db4ec5ed045fab1c4e84c306b9792b1c6b35afae310086f66f4f
@@ -321,4 +364,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T11:52:22.026088+00:00'
+generated: '2022-10-19T11:55:54.185190+00:00'
