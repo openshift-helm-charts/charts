@@ -87,37 +87,6 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
-  mavenir-ausf:
-  - annotations:
-      charts.openshift.io/digest: sha256:57db67a32dd1ebc362207a9067557523f50e9edbbe6c516962b7c87b4cc58415
-      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T07:25:54.524346+00:00'
-      charts.openshift.io/name: ausf
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-10-19T11:46:09.716625+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
-      charts.openshift.io/testedOpenShiftVersion: '4.9'
-    apiVersion: v2
-    appVersion: '0.1'
-    dependencies:
-    - name: ausf-auth
-      repository: file:///root/ausf-auth/
-      version: '0.1'
-    - name: ausf-sorprotect
-      repository: file:///root/ausf-sorprotect/
-      version: '0.1'
-    - name: ausf-upuprotect
-      repository: file:///root/ausf-upuprotect/
-      version: '0.1'
-    description: NF Service template.
-    digest: 7e5d7bc6db69006629a23712682a512ee2b1fe9d1c239566f738da6c0cd5d591
-    kubeVersion: '>= 1.17.0'
-    maintainers:
-    - name: Copyright Mavenir Inc 2021
-      url: https://mavenir.com/
-    name: ausf
-    urls:
-    - N/A
-    version: 10.1.0-4757
   mavenir-cucp:
   - annotations:
       charts.openshift.io/digest: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
@@ -222,6 +191,43 @@ entries:
     urls:
     - https://github.com/ansvu/samplechart/releases/du_helmchart/du_helmchart_run.tgz
     version: du5.0.326-53
+  mavenir-nrf:
+  - annotations:
+      charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T07:32:53.900139+00:00'
+      charts.openshift.io/name: nrf
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-19T11:49:24.221229+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: nrf-mgmt
+      repository: file:///root/nrf-mgmt/
+      version: '0.1'
+    - name: nrf-discovery
+      repository: file:///root/nrf-discovery/
+      version: '0.1'
+    - name: nrf-sn
+      repository: file:///root/nrf-sn/
+      version: '0.1'
+    - name: nrf-expiration
+      repository: file:///root/nrf-expiration/
+      version: '0.1'
+    - name: nrf-at
+      repository: file:///root/nrf-at/
+      version: '0.1'
+    description: NF Service template.
+    digest: fb681c4b20b95a12d4788fbc7d85872c06c1e15fb0cdca929fe006288eae673b
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - name: Copyright Mavenir Inc 2021
+      url: https://mavenir.com/
+    name: nrf
+    urls:
+    - N/A
+    version: 10.1.0-4757
   mavenir-udsf:
   - annotations:
       charts.openshift.io/digest: sha256:e28c1a71d916db4ec5ed045fab1c4e84c306b9792b1c6b35afae310086f66f4f
@@ -287,4 +293,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T11:46:09.716625+00:00'
+generated: '2022-10-19T11:49:24.221229+00:00'
