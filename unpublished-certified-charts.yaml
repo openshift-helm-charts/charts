@@ -197,7 +197,7 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T07:02:51.897224+00:00'
       charts.openshift.io/name: udsf
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-10-19T11:10:55.357733+00:00'
+      charts.openshift.io/submissionTimestamp: '2022-10-19T11:11:09.053889+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
       charts.openshift.io/testedOpenShiftVersion: '4.9'
     apiVersion: v2
@@ -256,4 +256,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T11:10:55.357733+00:00'
+generated: '2022-10-19T11:11:09.053889+00:00'
