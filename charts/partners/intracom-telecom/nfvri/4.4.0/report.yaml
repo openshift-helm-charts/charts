@@ -13,7 +13,7 @@ metadata:
         lastCertifiedTimestamp: "2022-10-19T09:24:59.061544+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.7'
-        providerControlledDelivery: false
+        providerControlledDelivery: true
     chart:
         name: nfvri
         home: ""
