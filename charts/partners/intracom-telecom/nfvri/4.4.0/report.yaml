@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: /deploy/nfvri-4.4.0.tgz
+        chart-uri: https://europe-docker.pkg.dev/nfv-ri/helm-charts/nfvri
         digests:
             chart: sha256:001abb541d0be2cc58a5ab6bf75bf0b05023ef37f40f9129ff677db7cef603e3
             package: a65ca1921a21c3a90cda7849ebe7355aed87a6dde755d5231bb4a314f2ee1ae1
