@@ -228,6 +228,34 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mavenir-nssf:
+  - annotations:
+      charts.openshift.io/digest: sha256:bb0e315f03d016a0b12c97696869bef2795c4f90086c8feca8f64413b180c2bc
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T07:42:24.360981+00:00'
+      charts.openshift.io/name: nssf
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-19T11:52:22.026088+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: nssf-nssaiavailability
+      repository: file:///root/nssf-nssaiavailability/
+      version: '0.1'
+    - name: nssf-nsselection
+      repository: file:///root/nssf-nsselection/
+      version: '0.1'
+    description: NF Service template.
+    digest: 32688501fafbe521dbbe28c2834756735302c4cd2c3a1b178476cb872591e669
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - name: Copyright Mavenir Inc 2021
+      url: https://mavenir.com/
+    name: nssf
+    urls:
+    - N/A
+    version: 10.1.0-4757
   mavenir-udsf:
   - annotations:
       charts.openshift.io/digest: sha256:e28c1a71d916db4ec5ed045fab1c4e84c306b9792b1c6b35afae310086f66f4f
@@ -293,4 +321,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T11:49:24.221229+00:00'
+generated: '2022-10-19T11:52:22.026088+00:00'
