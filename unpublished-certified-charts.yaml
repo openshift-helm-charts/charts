@@ -191,6 +191,49 @@ entries:
     urls:
     - https://github.com/ansvu/samplechart/releases/du_helmchart/du_helmchart_run.tgz
     version: du5.0.326-53
+  mavenir-udsf:
+  - annotations:
+      charts.openshift.io/digest: sha256:e28c1a71d916db4ec5ed045fab1c4e84c306b9792b1c6b35afae310086f66f4f
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T07:02:51.897224+00:00'
+      charts.openshift.io/name: udsf
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-19T11:10:55.357733+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: udsf-core
+      repository: file:///root/udsf-core/
+      version: '0.1'
+    - name: udsf-util
+      repository: file:///root/udsf-util/
+      version: '0.1'
+    - name: udsf-mgmt
+      repository: file:///root/udsf-mgmt/
+      version: '0.1'
+    - name: udsf-tsman
+      repository: file:///root/udsf-tsman/
+      version: '0.1'
+    - name: udsf-tsexp
+      repository: file:///root/udsf-tsexp/
+      version: '0.1'
+    - name: udsf-tscoor
+      repository: file:///root/udsf-tscoor/
+      version: '0.1'
+    - name: udsf-reconcile
+      repository: file:///root/udsf-reconcile/
+      version: '0.1'
+    description: NF Service template.
+    digest: 4f1ae168f4af6c172cb0b003b5705110e7999bfdd7fb84e3cdd7461fdb356c99
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - name: Copyright Mavenir Inc 2021
+      url: https://mavenir.com/
+    name: udsf
+    urls:
+    - N/A
+    version: 10.1.0-4757
   nokia-cmm-operator-k8s:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -213,4 +256,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-09-29T05:14:20.115848+00:00'
+generated: '2022-10-19T11:10:55.357733+00:00'
