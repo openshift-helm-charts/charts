@@ -87,6 +87,37 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mavenir-ausf:
+  - annotations:
+      charts.openshift.io/digest: sha256:57db67a32dd1ebc362207a9067557523f50e9edbbe6c516962b7c87b4cc58415
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T07:25:54.524346+00:00'
+      charts.openshift.io/name: ausf
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-19T11:46:09.716625+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: ausf-auth
+      repository: file:///root/ausf-auth/
+      version: '0.1'
+    - name: ausf-sorprotect
+      repository: file:///root/ausf-sorprotect/
+      version: '0.1'
+    - name: ausf-upuprotect
+      repository: file:///root/ausf-upuprotect/
+      version: '0.1'
+    description: NF Service template.
+    digest: 7e5d7bc6db69006629a23712682a512ee2b1fe9d1c239566f738da6c0cd5d591
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - name: Copyright Mavenir Inc 2021
+      url: https://mavenir.com/
+    name: ausf
+    urls:
+    - N/A
+    version: 10.1.0-4757
   mavenir-cucp:
   - annotations:
       charts.openshift.io/digest: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
@@ -256,4 +287,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T11:11:09.053889+00:00'
+generated: '2022-10-19T11:46:09.716625+00:00'
