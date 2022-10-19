@@ -256,46 +256,49 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
-  mavenir-pcf:
+  mavenir-smf:
   - annotations:
-      charts.openshift.io/digest: sha256:42603523dfa36198de190c597ab7a06a499e2da407647cec27f19c24ba562b9c
-      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T07:54:01.013538+00:00'
-      charts.openshift.io/name: pcf
+      charts.openshift.io/digest: sha256:08fd5c4cd8c86180336734a698c65fd85bf0f28ae76c669f6c028fc67998f0ab
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T08:05:00.640438+00:00'
+      charts.openshift.io/name: smf
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-10-19T11:55:54.185190+00:00'
+      charts.openshift.io/submissionTimestamp: '2022-10-19T11:59:35.387911+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
       charts.openshift.io/testedOpenShiftVersion: '4.9'
     apiVersion: v2
     appVersion: '0.1'
     dependencies:
-    - name: pcf-eval-policy
-      repository: file:///root/pcf-eval-policy/
+    - name: smf-pdusession
+      repository: file:///root/smf-pdusession/
       version: '0.1'
-    - name: pcfsm
-      repository: file:///root/pcfsm/
+    - name: smf-n4iwf
+      repository: file:///root/smf-n4iwf/
       version: '0.1'
-    - name: pcfam
-      repository: file:///root/pcfam/
+    - name: smf-gw
+      repository: file:///root/smf-gw/
       version: '0.1'
-    - name: pcfue
-      repository: file:///root/pcfue/
+    - name: smf-plc
+      repository: file:///root/smf-plc/
       version: '0.1'
-    - name: pcf-diam-iwf
-      repository: file:///root/pcf-diam-iwf/
+    - name: smf-ipm
+      repository: file:///root/smf-ipm/
       version: '0.1'
-    - name: pcfgw
-      repository: file:///root/pcfgw/
+    - name: smf-ctf
+      repository: file:///root/smf-ctf/
       version: '0.1'
-    - name: pcfmgmt
-      repository: file:///root/pcfmgmt/
+    - name: smf-restore
+      repository: file:///root/smf-restore/
+      version: '0.1'
+    - name: smf-eef
+      repository: file:///root/smf-eef/
       version: '0.1'
     description: NF Service template.
-    digest: f91826bf02fa891f6fb500e24dbb436863c2e4b9ef95cdf00fd2dd8381cd3e76
+    digest: 716fe24a5e072b0727454bf3a80410bc1593f14192f02faf7eb9bb8b9d87d624
     kubeVersion: '>= 1.17.0'
     maintainers:
     - name: Copyright Mavenir Inc 2021
       url: https://mavenir.com/
-    name: pcf
+    name: smf
     urls:
     - N/A
     version: 10.1.0-4757
@@ -364,4 +367,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T11:55:54.185190+00:00'
+generated: '2022-10-19T11:59:35.387911+00:00'
