@@ -191,27 +191,6 @@ entries:
     urls:
     - https://github.com/ansvu/samplechart/releases/du_helmchart/du_helmchart_run.tgz
     version: du5.0.326-53
-  mavenir-ksync:
-  - annotations:
-      charts.openshift.io/digest: sha256:7a5a55735164d17694fcec2eb8da47bda654693382904c09337e20a3c4e56b00
-      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T10:01:36.003934+00:00'
-      charts.openshift.io/name: ksync
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-10-19T12:02:48.092208+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
-      charts.openshift.io/testedOpenShiftVersion: '4.9'
-    apiVersion: v2
-    appVersion: '0.1'
-    description: NF Service template.
-    digest: 6f7430c5bf13c0214dfe327674ed8cd256f53284bb2de19adcdea602387d89f8
-    kubeVersion: '>= 1.17.0'
-    maintainers:
-    - name: Copyright Mavenir Inc 2021
-      url: https://mavenir.com/
-    name: ksync
-    urls:
-    - N/A
-    version: 10.1.0-4757
   mavenir-nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -366,6 +345,31 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mavenir-upf:
+  - annotations:
+      charts.openshift.io/digest: sha256:1a74e4708c98039c012fe61b92b4f43007106799cb6c1fcebd3c65380775d39c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T10:11:07.386609+00:00'
+      charts.openshift.io/name: upf
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-19T12:06:11.268557+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: '0.1'
+    dependencies:
+    - name: upf-dpe
+      repository: file:///root/upf-dpe/
+      version: '0.1'
+    description: NF Service template.
+    digest: 8283038b4e8f65dd4fd23df91de601fe1e3f65a532bc5be83739725cab781b44
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - name: Copyright Mavenir Inc 2021
+      url: https://mavenir.com/
+    name: upf
+    urls:
+    - N/A
+    version: 10.1.0-4757
   nokia-cmm-operator-k8s:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -388,4 +392,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T12:02:48.092208+00:00'
+generated: '2022-10-19T12:06:11.268557+00:00'
