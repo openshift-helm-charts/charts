@@ -20,6 +20,38 @@ entries:
     urls:
     - N/A
     version: 1.0.0
+  intracom-telecom-nfvri:
+  - annotations:
+      charts.openshift.io/digest: sha256:001abb541d0be2cc58a5ab6bf75bf0b05023ef37f40f9129ff677db7cef603e3
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T09:24:59.061544+00:00'
+      charts.openshift.io/name: nfvri
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-20T16:17:09.330740+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: v4.4.0
+    dependencies:
+    - name: nfvri-agent
+      repository: file://../nfvri-agent
+      version: 4.4.0
+    - name: nfvri-apiserver
+      repository: file://../nfvri-apiserver
+      version: 4.4.0
+    - name: nfvri-orchestrator
+      repository: file://../nfvri-orchestrator
+      version: 4.4.0
+    - name: nfvri-dashboard
+      repository: file://../nfvri-dashboard
+      version: 4.4.0
+    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
+    digest: a65ca1921a21c3a90cda7849ebe7355aed87a6dde755d5231bb4a314f2ee1ae1
+    kubeVersion: '>= 1.20.0'
+    name: nfvri
+    type: application
+    urls:
+    - https://europe-docker.pkg.dev/nfv-ri/helm-charts/nfvri
+    version: 4.4.0
   mavenir-5gdu:
   - annotations:
       charts.openshift.io/digest: sha256:2c286be0b45a1852634966316cc394bec6ee746e54a991b9caf1ab8c9c39d4e8
@@ -475,4 +507,4 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-19T12:13:39.090752+00:00'
+generated: '2022-10-20T16:17:09.330740+00:00'
