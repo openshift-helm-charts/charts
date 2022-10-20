@@ -2,7 +2,6 @@ chart:
   name: nfvri
   shortDescription: NFV-RI (TM) Helm Chart Repository
 publicPgpKey: null
-providerDelivery: True
 users:
 - githubUsername: angelouev
 - githubUsername: danielchristod
