@@ -1,0 +1,8 @@
+chart:
+  name: yugaware-openshift
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: yugabytedb
+  name: YugaByte Inc
