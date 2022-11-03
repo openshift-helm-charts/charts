@@ -3,7 +3,7 @@ chart:
   shortDescription: null
 publicPgpKey: null
 users:
-- githubUsername: bjoern.pauli@vitagroup.ag
+- githubUsername: bjoernpauli
 vendor:
   label: vitagroupag
   name: Vitagroup AG
