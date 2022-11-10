@@ -1,0 +1,108 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.9.0
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:11287898918013609949
+        chart-uri: cdr-core-ehrbase-enterprise-0.1.8.tgz
+        digests:
+            chart: sha256:00cb592ed19f926ece63f4c52c1081f35e0ec6bfe0298a4086e3d7cc764bdb3a
+            package: 69c9c5d960aae22b305bf5acf43f19612ac97b381a91a97aef53b5513db51989
+        lastCertifiedTimestamp: "2022-11-08T17:19:05.36212+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: '>=4.11'
+        providerControlledDelivery: false
+    chart:
+        name: cdr-core-ehrbase-enterprise
+        home: ""
+        sources: []
+        version: 0.1.8
+        description: A Helm chart for Kubernetes
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.1.8
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: EHRBase Enterprise
+            charts.openshift.io/provider: vitagroup AG
+        kubeversion: ^1.24.0
+        dependencies:
+            - name: postgresql-ha
+              version: 9.4.1
+              repository: https://charts.bitnami.com/bitnami
+              condition: postgresql-ha.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: yugabyte
+              version: 2.14.1
+              repository: https://charts.yugabyte.com
+              condition: yugabyte.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is signed : Signature verification skipped, a public key was not specified'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: 'Failed to certify images : Failed to get images, error running helm template : chart requires kubeVersion: ^1.24.0 which is incompatible with Kubernetes v1.20.0'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: FAIL
+      reason: 'Chart test failure: pod hip-cdr-core-ehrbase-enterprise-test-connection failed'
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+

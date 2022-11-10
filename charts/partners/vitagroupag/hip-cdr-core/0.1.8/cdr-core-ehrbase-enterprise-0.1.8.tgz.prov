@@ -1,0 +1,32 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+annotations:
+  charts.openshift.io/name: EHRBase Enterprise
+  charts.openshift.io/provider: vitagroup AG
+apiVersion: v2
+appVersion: 0.1.8
+dependencies:
+- - condition: postgresql-ha.enabled
+  name: postgresql-ha
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.4.1
+- - condition: yugabyte.enabled
+  name: yugabyte
+  repository: https://charts.yugabyte.com
+  version: 2.14.1
+description: A Helm chart for Kubernetes
+kubeVersion: ^1.24.0
+name: cdr-core-ehrbase-enterprise
+type: application
+version: 0.1.8
+
+...
+files:
+  cdr-core-ehrbase-enterprise-0.1.8.tgz: sha256:69c9c5d960aae22b305bf5acf43f19612ac97b381a91a97aef53b5513db51989
+-----BEGIN PGP SIGNATURE-----
+
+wl4EAREKABAFAmNqjuEJEF9UTr3TU4/LAAB9/AEAPxw/Y3yrCLjyLjA6WdtORGAh
+bZvpuKoF9DepsQQYvs8BAE0XAONuDDMmPXerq/TpXvXDVFzuSi2FNwGsMO5KoZOr
+=1jAr
+-----END PGP SIGNATURE-----
