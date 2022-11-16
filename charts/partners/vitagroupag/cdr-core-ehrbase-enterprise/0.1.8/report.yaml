@@ -6,15 +6,15 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:711260551524245636
-        chart-uri: "https://github.com/bjoernpauli/charts/blob/main/charts/partners/vitagroupag/cdr-core-ehrbase-enterprise/0.1.8/cdr-core-ehrbase-enterprise-0.1.8.tgz?raw=true"
+        reportDigest: uint64:14900475762016495688
+        chart-uri: N/A
         digests:
             chart: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
             package: 0e8b0937e1e2089546f647bdfe1186b3b60fb01e5fc0321cc80c3f9e9dd0a26e
-        lastCertifiedTimestamp: "2022-11-16T14:42:29.662335+00:00"
+        lastCertifiedTimestamp: "2022-11-16T16:24:03.450919+00:00"
         testedOpenShiftVersion: "4.11"
         supportedOpenShiftVersions: '>=4.7'
-        providerControlledDelivery: false
+        providerControlledDelivery: true
     chart:
         name: cdr-core-ehrbase-enterprise
         home: ""
@@ -53,18 +53,14 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is signed : Signature verification skipped, a public key was not specified'
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
-    - check: v1.0/contains-values-schema
+    - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
-      reason: Values schema file exist
+      reason: Chart tests have passed
     - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
@@ -82,32 +78,36 @@ results:
         Image is not Red Hat certified : artifactory.vitasystems.dev/docker-registry/ehrbase-enterprise:0.22.0-feat-PMK-40_RedHat-ef4cc20-7 : No images found for Registry/Repository: artifactory.vitasystems.dev/docker-registry/ehrbase-enterprise
         Image is not Red Hat certified : docker.io/bitnami/postgresql-repmgr:14.5.0-debian-11-r6 : No images found for Registry/Repository: docker.io/bitnami/postgresql-repmgr
         Image is not Red Hat certified : busybox : Respository not found: busybox
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is signed : Signature verification skipped, a public key was not specified'
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
 
