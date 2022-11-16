@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: /home/partner/Music/caddy
+        chart-uri: N/A
         digests:
             chart: sha256:81b722eade842a2223db08b1dba2a4bbec877f167bfb1569ce3898f91e49f580
         lastCertifiedTimestamp: "2022-11-03T19:50:01.598809+00:00"
