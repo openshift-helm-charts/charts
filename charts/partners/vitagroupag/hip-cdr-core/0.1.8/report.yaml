@@ -1,0 +1,113 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.9.0
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:711260551524245636
+        chart-uri: "https://github.com/bjoernpauli/charts/blob/main/charts/partners/vitagroupag/hip-cdr-core/0.1.8/cdr-core-ehrbase-enterprise-0.1.8.tgz?raw=true"
+        digests:
+            chart: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
+            package: 0e8b0937e1e2089546f647bdfe1186b3b60fb01e5fc0321cc80c3f9e9dd0a26e
+        lastCertifiedTimestamp: "2022-11-16T14:42:29.662335+00:00"
+        testedOpenShiftVersion: "4.11"
+        supportedOpenShiftVersions: '>=4.7'
+        providerControlledDelivery: false
+    chart:
+        name: cdr-core-ehrbase-enterprise
+        home: ""
+        sources: []
+        version: 0.1.8
+        description: A Helm chart for Kubernetes
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.1.8
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: EHRBase Enterprise
+            charts.openshift.io/provider: vitagroup AG
+        kubeversion: ^1.20.0
+        dependencies:
+            - name: postgresql-ha
+              version: 9.4.1
+              repository: https://charts.bitnami.com/bitnami
+              condition: postgresql-ha.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: yugabyte
+              version: 2.14.1
+              repository: https://charts.yugabyte.com
+              condition: yugabyte.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is signed : Signature verification skipped, a public key was not specified'
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : docker.io/bitnami/pgpool:4.3.3-debian-11-r1 : No images found for Registry/Repository: docker.io/bitnami/pgpool
+        Image is not Red Hat certified : docker.io/busybox:stable : No images found for Registry/Repository: docker.io/busybox
+        Image is not Red Hat certified : artifactory.vitasystems.dev/docker-registry/ehrbase-enterprise:0.22.0-feat-PMK-40_RedHat-ef4cc20-7 : No images found for Registry/Repository: artifactory.vitasystems.dev/docker-registry/ehrbase-enterprise
+        Image is not Red Hat certified : docker.io/bitnami/postgresql-repmgr:14.5.0-debian-11-r6 : No images found for Registry/Repository: docker.io/bitnami/postgresql-repmgr
+        Image is not Red Hat certified : busybox : Respository not found: busybox
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+
