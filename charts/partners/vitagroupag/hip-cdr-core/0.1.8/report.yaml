@@ -7,7 +7,7 @@ metadata:
             VendorType: partner
             version: v1.2
         reportDigest: uint64:711260551524245636
-        chart-uri: cdr-core-ehrbase-enterprise-0.1.8.tgz
+        chart-uri: ./cdr-core-ehrbase-enterprise-0.1.8.tgz
         digests:
             chart: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
             package: 0e8b0937e1e2089546f647bdfe1186b3b60fb01e5fc0321cc80c3f9e9dd0a26e
