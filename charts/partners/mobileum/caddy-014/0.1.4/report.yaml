@@ -12,7 +12,7 @@ metadata:
         lastCertifiedTimestamp: "2022-11-03T19:50:01.598809+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.3'
-        providerControlledDelivery: false
+        providerControlledDelivery: true
     chart:
         name: caddy
         home: ""
