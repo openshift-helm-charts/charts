@@ -6,5 +6,5 @@ publicPgpKey: null
 users:
 - githubUsername: elhadjici
 vendor:
-  label: bcook
+  label: abel
   name: Red Hat
