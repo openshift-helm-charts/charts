@@ -1,0 +1,97 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.7.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: https://github.com/hashicorp/vault-helm/archive/refs/tags/v0.20.1.tar.gz
+        digests:
+            chart: sha256:57963ae89dd40319c4c99754ef9ae42ce7b038c69386dd3d078d34a0e8c37b20
+            package: 45247744f34e92ce222a63b2f2e792bbfa800d1cf62728f3866d34e9b52d9e82
+        lastCertifiedTimestamp: "2022-11-16T17:10:09.877573+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: '>=4.3'
+        providerControlledDelivery: true
+    chart:
+        name: vault
+        home: https://www.vaultproject.io
+        sources:
+            - https://github.com/hashicorp/vault
+            - https://github.com/hashicorp/vault-helm
+            - https://github.com/hashicorp/vault-k8s
+            - https://github.com/hashicorp/vault-csi-provider
+        version: 0.20.1
+        description: Official HashiCorp Vault Chart
+        keywords:
+            - vault
+            - security
+            - encryption
+            - secrets
+            - management
+            - automation
+            - infrastructure
+        maintainers: []
+        icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.10.3
+        deprecated: false
+        annotations: {}
+        kubeversion: '>= 1.16.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: FAIL
+      reason: 'invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable'
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : hashicorp/vault:1.10.3 : Tag 1.10.3 not found. Found : 1.5.4-ubi, 1.5.5-ubi, 1.6.0-ubi, 1.6.1-ubi, 1.6.2-ubi, 1.6.3-ubi, 1.7.1-ubi, 1.6.4-ubi, 1.5.7-ubi, 1.5.6-ubi, 1.5.9-ubi, 1.6.5-ubi, 1.7.2-ubi, 1.7.3-ubi, 1.8.0-rc1-ubi, 1.8.0-rc2-ubi, 1.8.0-ubi, 1.8.1-ubi, 1.7.4-ubi, 1.6.6-ubi, 1.8.3-ubi, 1.7.5-ubi, 1.6.7-ubi, 1.8.4-ubi, 1.7.6-ubi, 1.8.5-ubi, 1.9.0-rc1-ubi, 1.9.0-ubi, 1.7.7-ubi, 1.8.6-ubi, 1.9.1-ubi, 1.7.8-ubi, 1.8.7-ubi, 1.9.2-ubi, 1.9.3-ubi, 1.8.8-ubi, 1.7.9-ubi, 1.10.0-rc1-ubi, 1.7.10-ubi, 1.8.9-ubi, 1.9.4-ubi, 1.10.0-ubi, 1.10.2-ubi, 1.10.1-ubi, 1.8.10-ubi, 1.8.11-ubi, 1.9.5-ubi, 1.9.6-ubi, 1.10.3-ubi, 1.9.7-ubi, 1.10.4-ubi, 1.8.12-ubi, 1.11.0-ubi, 1.10.5-ubi, 1.11.1-ubi, 1.9, 1.11.2-ubi, 1.11.3-ubi, 1.9.10-ubi, 1.9, 1.10.7-ubi, 1.11.4-ubi, 1.12.0-rc1-ubi, 1.12.0-ubi, 1.12.0-ubi, 1.10.8-ubi, 1.11.5-ubi, 1.12.1-ubi
+        Image is not Red Hat certified : hashicorp/vault-k8s:0.16.1 : Tag 0.16.1 not found. Found : 0.5.0-ubi, latest, 0.6.0-ubi, 0.7.0-ubi, 0.8.0-ubi, latest, 0.9.0-ubi, latest, 0.10.0-ubi, latest, 0.10.1-ubi, 0.10.2-ubi, latest, latest, 0.11.0-ubi, latest, 0.12.0-ubi, latest, 0.13.0-ubi, latest, 0.13.1-ubi, latest, 0.14.0-ubi, latest, 0.14.1-ubi, 0.14.2-ubi, latest, latest, 0.15.0-ubi, 0.16.0-ubi, latest, latest, 0.16.1-ubi, 0.17.0-ubi, 1.0.0-ubi
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: FAIL
+      reason: 'Missing required annotations: [charts.openshift.io/name]'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
