@@ -15,7 +15,7 @@ metadata:
         supportedOpenShiftVersions: '>=4.3'
         providerControlledDelivery: true
     chart:
-        name: vault
+        name: test-vault
         home: https://www.vaultproject.io
         sources:
             - https://github.com/hashicorp/vault
