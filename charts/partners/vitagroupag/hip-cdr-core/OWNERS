@@ -1,6 +1,7 @@
 chart:
   name: hip-cdr-core
   shortDescription: null
+providerDelivery: true
 publicPgpKey: null
 users:
 - githubUsername: bjoernpauli
