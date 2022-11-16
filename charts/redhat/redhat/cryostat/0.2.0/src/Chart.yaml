@@ -16,7 +16,7 @@ icon: "https://raw.githubusercontent.com/cryostatio/cryostat-helm/main/docs/imag
 
 annotations:
   charts.openshift.io/archs: x86_64
-  charts.openshift.io/name: Cryostat
+  charts.openshift.io/name: Red Hat build of Cryostat
   charts.openshift.io/provider: Red Hat
   charts.openshift.io/supportURL: https://github.com/cryostatio/cryostat-helm
 
