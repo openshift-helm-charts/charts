@@ -1,7 +1,7 @@
 chart:
   name: keycloak
   shortDescription: 'This chart will deploy keycloak '
-providerDelivery: true
+providerDelivery: false
 publicPgpKey: null
 users:
 - githubUsername: mobaipws
