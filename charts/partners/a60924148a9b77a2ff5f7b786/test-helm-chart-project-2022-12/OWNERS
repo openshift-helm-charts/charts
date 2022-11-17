@@ -1,0 +1,9 @@
+chart:
+  name: test-helm-chart-project-2022-12
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: a60924148a9b77a2ff5f7b786
+  name: Vikas Mulaje
