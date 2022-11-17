@@ -507,4 +507,33 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
-generated: '2022-10-20T16:17:09.330740+00:00'
+  vitagroupag-cdr-core-ehrbase-enterprise:
+  - annotations:
+      charts.openshift.io/digest: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
+      charts.openshift.io/lastCertifiedTimestamp: '2022-11-16T16:24:03.450919+00:00'
+      charts.openshift.io/name: EHRBase Enterprise
+      charts.openshift.io/provider: vitagroup AG
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-11-17T16:01:25.049348+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 0.1.8
+    dependencies:
+    - condition: postgresql-ha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.4.1
+    - condition: yugabyte.enabled
+      name: yugabyte
+      repository: https://charts.yugabyte.com
+      version: 2.14.1
+    description: A Helm chart for Kubernetes
+    digest: 0e8b0937e1e2089546f647bdfe1186b3b60fb01e5fc0321cc80c3f9e9dd0a26e
+    kubeVersion: ^1.20.0
+    name: cdr-core-ehrbase-enterprise
+    type: application
+    urls:
+    - N/A
+    version: 0.1.8
+generated: '2022-11-17T16:01:25.049348+00:00'
