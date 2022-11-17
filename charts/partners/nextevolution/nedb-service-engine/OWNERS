@@ -1,7 +1,7 @@
 chart:
   name: nedb-service-engine
   shortDescription: unknown
-providerDelivery: true
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
