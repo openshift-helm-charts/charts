@@ -1377,22 +1377,22 @@ entries:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.1.21.tgz?raw=true
     version: 2.1.21
   - annotations:
-      charts.openshift.io/digest: sha256:61b134fb29002db85aec6e24f660a92bf8075f5c36a82dfeccee500503b37e62
-      charts.openshift.io/lastCertifiedTimestamp: '2022-11-17T15:35:26.825332+00:00'
+      charts.openshift.io/digest: sha256:5b92b1c2b748ed82d6e8666dfb9367bafacecc80c2878837b9c1ff2a1eab8a46
+      charts.openshift.io/lastCertifiedTimestamp: '2022-11-17T15:40:33.873301+00:00'
       charts.openshift.io/name: ibm-object-storage-plugin Chart
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-11-17T15:42:26.592995+00:00'
+      charts.openshift.io/submissionTimestamp: '2022-11-17T15:44:24.531787+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
       charts.openshift.io/testedOpenShiftVersion: '4.10'
     apiVersion: v2
-    appVersion: 2.2.2
+    appVersion: 2.2.1
     description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object
       Storage is persistent, highly available storage that you can mount to apps that
       run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The
       plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage
       buckets to pods in your cluster.  License By installing this product you accept
       the following license terms: http://www.apache.org/licenses/ and https://www.redhat.com/licenses/EULA_Red_Hat_Universal_Base_Image_English_20190422.pdf'
-    digest: 228274427fce3ab12e69dc696ca806c016afa26c1d93da7132c9d0d3c34f57ca
+    digest: 5f6e3677a073a3c9b7a2ad2ba9fc80ef54d25fcfd6b0122d901f32037cc7d2a9
     icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
     keywords:
     - IKS
@@ -1408,8 +1408,8 @@ entries:
       name: IBM
     name: ibm-object-storage-plugin
     urls:
-    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.2.tgz?raw=true
-    version: 2.2.2
+    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.1.tgz?raw=true
+    version: 2.2.1
   ibm-ibm-oms-ent-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
@@ -3601,4 +3601,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.12.0/wavefronthq-wavefront-1.12.0.tgz
     version: 1.12.0
-generated: '2022-11-17T15:42:26.592995+00:00'
+generated: '2022-11-17T15:44:24.531787+00:00'
