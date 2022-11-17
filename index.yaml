@@ -2525,6 +2525,39 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-spring-boot-rest-http-0.0.1/redhat-spring-boot-rest-http-0.0.1.tgz
     version: 0.0.1
+  redhat-test-chartprodhelm:
+  - annotations:
+      charts.openshift.io/digest: sha256:59d34fa37d2bae1346165f65477694d6e0115ba98c32880c3b8fe4f5edec3e74
+      charts.openshift.io/lastCertifiedTimestamp: '2022-11-17T11:25:32.418899+00:00'
+      charts.openshift.io/provider: Red Hat, Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-11-17T11:26:10.622734+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 1.11.2
+    description: Official HashiCorp Vault Chart
+    digest: 132c0ce9fbb8c24f50f9a73fc3849c3ce61bf72374a1cca6273072940820bb17
+    home: https://www.vaultproject.io
+    icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+    keywords:
+    - vault
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.16.0-0'
+    name: chartprodhelm
+    sources:
+    - https://github.com/hashicorp/vault
+    - https://github.com/hashicorp/vault-helm
+    - https://github.com/hashicorp/vault-k8s
+    - https://github.com/hashicorp/vault-csi-provider
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-test-chartprodhelm-0.21.0/redhat-test-chartprodhelm-0.21.0.tgz
+    version: 0.21.0
   redhat-vertx:
   - annotations:
       charts.openshift.io/digest: sha256:3331fdb13510b38a2e420a370716e542a31dc764c02976659e653213b2e764ee
@@ -3534,4 +3567,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.12.0/wavefronthq-wavefront-1.12.0.tgz
     version: 1.12.0
-generated: '2022-11-16T20:21:44.528669+00:00'
+generated: '2022-11-17T11:26:10.622734+00:00'
