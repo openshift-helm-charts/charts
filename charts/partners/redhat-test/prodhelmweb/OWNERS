@@ -1,9 +1,10 @@
 chart:
   name: prodhelmweb
-  shortDescription: unknown
+  shortDescription: null
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: Aishwarya-Urne
 vendor:
   label: redhat-test
   name: Red Hat, Inc.
