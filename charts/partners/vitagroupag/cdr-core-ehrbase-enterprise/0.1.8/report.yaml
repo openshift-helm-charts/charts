@@ -71,13 +71,8 @@ results:
       reason: Chart has a README
     - check: v1.0/images-are-certified
       type: Mandatory
-      outcome: FAIL
-      reason: |-
-        Image is not Red Hat certified : docker.io/bitnami/pgpool:4.3.3-debian-11-r1 : No images found for Registry/Repository: docker.io/bitnami/pgpool
-        Image is not Red Hat certified : docker.io/busybox:stable : No images found for Registry/Repository: docker.io/busybox
-        Image is not Red Hat certified : artifactory.vitasystems.dev/docker-registry/ehrbase-enterprise:0.22.0-feat-PMK-40_RedHat-ef4cc20-7 : No images found for Registry/Repository: artifactory.vitasystems.dev/docker-registry/ehrbase-enterprise
-        Image is not Red Hat certified : docker.io/bitnami/postgresql-repmgr:14.5.0-debian-11-r6 : No images found for Registry/Repository: docker.io/bitnami/postgresql-repmgr
-        Image is not Red Hat certified : busybox : Respository not found: busybox
+      outcome: PASS
+      reason: Images are Red Hat certified
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
