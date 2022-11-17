@@ -1,9 +1,10 @@
 chart:
   name: test-helm-chart-project-2022-12
-  shortDescription: unknown
+  shortDescription: null
 providerDelivery: true
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: a60924148a9b77a2ff5f7b786
   name: Vikas Mulaje
