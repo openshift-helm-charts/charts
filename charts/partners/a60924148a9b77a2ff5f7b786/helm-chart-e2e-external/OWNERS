@@ -1,9 +1,10 @@
 chart:
   name: helm-chart-e2e-external
-  shortDescription: unknown
+  shortDescription: helm-chart-e2e-external is a helm chart
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: bovem
 vendor:
   label: a60924148a9b77a2ff5f7b786
   name: Vikas Mulaje
