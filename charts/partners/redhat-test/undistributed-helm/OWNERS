@@ -1,9 +1,9 @@
 chart:
-  name: caddy-014
+  name: undistributed-helm
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
-  label: mobileum
-  name: Mobileum India Pvt. Ltd
+  label: redhat-test
+  name: Red Hat, Inc.

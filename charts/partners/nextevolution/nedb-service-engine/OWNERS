@@ -1,9 +1,9 @@
 chart:
-  name: caddy-014
+  name: nedb-service-engine
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
-  label: mobileum
-  name: Mobileum India Pvt. Ltd
+  label: nextevolution
+  name: nextevolution GmbH
