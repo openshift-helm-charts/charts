@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: /home/partner/Music/newcharts/keycloak
+        chart-uri: https://github.com/mobaipws/aipcharts/blob/main/keycloak-0.3.2.tgz
         digests:
             chart: sha256:fc9ae6a68948b747feb0fad80df8d782f818e50cb85d24cf45f6a3a107c2096f
             package: fb258520ceb101f90da2c0eeba4674be7940e46ef7a2cfe8c176b10ee140b2f5
