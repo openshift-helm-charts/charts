@@ -1,0 +1,9 @@
+chart:
+  name: test-provider-delivery
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: abel
+  name: Red Hat
