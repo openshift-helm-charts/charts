@@ -2,7 +2,7 @@ apiversion: v1
 kind: verify-report
 metadata:
     tool:
-        verifier-version: 1.0.0
+        verifier-version: 1.7.0
         profile:
             VendorType: partner
             version: v1.1
