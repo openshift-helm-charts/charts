@@ -9,6 +9,7 @@ metadata:
         chart-uri: /home/partner/Music/caddy
         digests:
             chart: sha256:81b722eade842a2223db08b1dba2a4bbec877f167bfb1569ce3898f91e49f580
+            package: 15b21aaa420cc8eb1f2ebbf670b767a47fadaf31de2c427894cf32ade69f2b84
         lastCertifiedTimestamp: "2022-11-03T19:50:01.598809+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.3'
