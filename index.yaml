@@ -3602,4 +3602,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.12.0/wavefronthq-wavefront-1.12.0.tgz
     version: 1.12.0
-generated: '2022-11-17T15:47:33.974647+00:00'
+  yugabytedb-yugaware-openshift:
+  - annotations:
+      charts.openshift.io/digest: sha256:6e6edeb0cd098762e8e5c7ffc0c3005bdb61b2af6ed7b3725aeb3d6ac41d4806
+      charts.openshift.io/lastCertifiedTimestamp: '2022-11-17T10:21:33.625598+05:30'
+      charts.openshift.io/name: yugaware-openshift
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-11-28T15:58:53.933651+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 2.14.4.0-b26
+    description: YugaWare is YugaByte Database's Orchestration and Management console.
+    digest: 413e8c1befc0ecabb0a894d774f129a867d594f825c43869a457eb338faeb909
+    home: https://www.yugabyte.com
+    icon: https://avatars0.githubusercontent.com/u/17074854?s=200&v=4
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: sanketh@yugabyte.com
+      name: Sanketh Indarapu
+    - email: gjalla@yugabyte.com
+      name: Govardhan Reddy Jalla
+    name: yugaware-openshift
+    urls:
+    - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
+    version: 2.14.4
+generated: '2022-11-28T15:58:53.933651+00:00'
