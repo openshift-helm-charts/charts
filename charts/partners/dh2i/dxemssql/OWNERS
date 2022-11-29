@@ -1,6 +1,6 @@
 chart:
   name: dxemssql
-  shortDescription: DxEnterprise + SQL Server sidecar container deployment in Kubernetes
+  shortDescription: Helm chart for DxEnterprise + SQL Server sidecar container deployment
 providerDelivery: false
 publicPgpKey: null
 users:
