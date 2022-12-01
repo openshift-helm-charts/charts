@@ -4,10 +4,6 @@ chart:
 providerDelivery: false
 publicPgpKey: null
 users:
-- githubUsername: zeeshan@exate.com
-- githubUsername: daniel@exate.com
-- githubUsername: sonal.rattan@exate.com
-- githubUsername: rob.greenwood@exate.com
 - githubUsername: zeeshanAt
 vendor:
   label: exate
