@@ -8,6 +8,7 @@ users:
 - githubUsername: daniel@exate.com
 - githubUsername: sonal.rattan@exate.com
 - githubUsername: rob.greenwood@exate.com
+- githubUsername: zeeshanAt
 vendor:
   label: exate
   name: EXATE TECHNOLOGY LIMITED
