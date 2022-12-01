@@ -92,3 +92,4 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
+      
