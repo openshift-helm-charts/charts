@@ -4,7 +4,8 @@ chart:
 providerDelivery: false
 publicPgpKey: null
 users:
-- githubUsername: deepshore
+- githubUsername: selamanse
+- githubUsername: Blitzableiter
 vendor:
   label: nextevolution
   name: nextevolution GmbH
