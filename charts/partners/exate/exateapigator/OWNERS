@@ -1,0 +1,13 @@
+chart:
+  name: exateapigator
+  shortDescription: eXate APIgator deployment
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: zeeshan@exate.com
+- githubUsername: daniel@exate.com
+- githubUsername: sonal.rattan@exate.com
+- githubUsername: rob.greenwood@exate.com
+vendor:
+  label: exate
+  name: EXATE TECHNOLOGY LIMITED
