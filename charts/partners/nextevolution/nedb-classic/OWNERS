@@ -1,0 +1,9 @@
+chart:
+  name: nedb-classic
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: nextevolution
+  name: nextevolution GmbH
