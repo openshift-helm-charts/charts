@@ -6,7 +6,7 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: /foo/sagent-1.0.0-latest.tgz
+        #chart-uri: /foo/sagent-1.0.0-latest.tgz
         digests:
             chart: sha256:8c84f5a80048808b8ee2e86260aa801815d02638b84ad20a3085c1e5fbc65d8d
             package: f156d9b17a34f84171df9a87808ff7fdaed451c464daa6e1829f9cee1bf23932
