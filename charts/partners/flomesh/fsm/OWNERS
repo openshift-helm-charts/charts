@@ -1,0 +1,10 @@
+chart:
+  name: fsm
+  shortDescription: null
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: reaver-flomesh
+vendor:
+  label: flomesh
+  name: Flomesh

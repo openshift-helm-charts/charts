@@ -1,0 +1,10 @@
+chart:
+  name: exateapigator
+  shortDescription: eXate APIgator deployment
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: zeeshanAt
+vendor:
+  label: exate
+  name: EXATE TECHNOLOGY LIMITED

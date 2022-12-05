@@ -1,8 +1,10 @@
 chart:
   name: dxemssql
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
+  shortDescription: Helm chart for DxEnterprise + SQL Server sidecar container deployment
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: dh2i-oj
 vendor:
   label: dh2i
   name: DH2i

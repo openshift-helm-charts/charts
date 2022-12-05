@@ -1,0 +1,10 @@
+chart:
+  name: sagent
+  shortDescription: Granulate sAgent agent
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: shaharshitrit
+vendor:
+  label: granulate
+  name: Granulate
