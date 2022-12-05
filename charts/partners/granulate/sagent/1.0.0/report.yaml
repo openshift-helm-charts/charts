@@ -30,7 +30,7 @@ metadata:
         deprecated: false
         annotations:
             charts.openshift.io/name: sagent
-        kubeversion: '>=4.7'
+        kubeversion: '>=1.20.0'
         dependencies: []
         type: application
     chart-overrides: ""
