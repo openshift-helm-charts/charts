@@ -14,7 +14,7 @@ metadata:
         supportedOpenShiftVersions: '>=4.8'
         providerControlledDelivery: true
     chart:
-        name: keycloak
+        name: kc-032
         home: ""
         sources: []
         version: 0.3.2
