@@ -1,6 +1,6 @@
 chart:
   name: fsm
-  shortDescription: The official Flomesh Helm chart for installing and configuring fsm on OpenShift.
+  shortDescription: null
 providerDelivery: false
 publicPgpKey: null
 users:
