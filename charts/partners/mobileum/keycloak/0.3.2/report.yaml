@@ -13,7 +13,7 @@ metadata:
         lastCertifiedTimestamp: "2022-11-04T19:31:40.648516+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.8'
-        providerControlledDelivery: true
+        providerControlledDelivery: false
     chart:
         name: keycloak
         home: ""
