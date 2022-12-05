@@ -10,7 +10,7 @@ metadata:
         digests:
             chart: sha256:bc06099ce7ad4a72459b26d991a4328c0ad4ea97632f9709b107a7307ae6aa5d
             package: 6e88e55efbdab483509817dcce13605fe29878a0618689c6af25aed720ca860e
-        lastCertifiedTimestamp: "2022-12-05T13:14:30.465459+00:00"
+        lastCertifiedTimestamp: "2022-12-05T15:32:07.888541+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.7'
         providerControlledDelivery: false
