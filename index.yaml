@@ -1478,6 +1478,40 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.3.tgz?raw=true
     version: 2.2.3
+  - annotations:
+      charts.openshift.io/digest: sha256:156bc9938675ad26729698386365d459d3e5117f453bc2e51dcd8a7d4d60c1ab
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-05T08:47:59.829082+00:00'
+      charts.openshift.io/name: ibm-object-storage-plugin Chart
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-12-05T08:57:33.467426+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 2.2.4
+    description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object
+      Storage is persistent, highly available storage that you can mount to apps that
+      run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The
+      plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage
+      buckets to pods in your cluster.  License By installing this product you accept
+      the following license terms: http://www.apache.org/licenses/ and https://www.redhat.com/licenses/EULA_Red_Hat_Universal_Base_Image_English_20190422.pdf'
+    digest: 427b1b1bcc4ca1d53fb7265803c131ec4b9b9d81ff7231a8a0d0c4c6a35135eb
+    icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
+    keywords:
+    - IKS
+    - amd64
+    - Storage
+    - Commercial
+    - Limited
+    - Other
+    - ROKS
+    kubeVersion: '>=1.19.0'
+    maintainers:
+    - email: contsto2@in.ibm.com
+      name: IBM
+    name: ibm-object-storage-plugin
+    urls:
+    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.4.tgz?raw=true
+    version: 2.2.4
   ibm-ibm-oms-ent-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
@@ -3661,4 +3695,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2022-12-05T08:35:49.198209+00:00'
+generated: '2022-12-05T08:57:33.467426+00:00'
