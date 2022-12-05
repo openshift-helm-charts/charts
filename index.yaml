@@ -151,6 +151,52 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/fiware-orion-ld-1.0.3/fiware-orion-ld-1.0.3.tgz
     version: 1.0.3
+  flomesh-fsm:
+  - annotations:
+      charts.openshift.io/digest: sha256:00a7e7d10e098d226b2eaac68e2e51c9468afa2f9a9de9a96991ae94a52400be
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-05T15:47:16.440983+00:00'
+      charts.openshift.io/provider: Flomesh
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-12-05T16:15:13.318466+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 0.1.8-ubi.6
+    dependencies:
+    - name: tpls
+      repository: file://../tpls
+      version: 0.1.1
+    - condition: certManager.enabled
+      name: cert-manager
+      repository: https://charts.jetstack.io
+      version: 1.7.2
+    description: A Helm chart to install the FSM(Flomesh Service Mesh) on Kubernetes
+    digest: e39d34fafd4642cab84e127bdb0f2ac5056ed55348f5f5314a7abbcda8edd16e
+    home: https://flomesh.io
+    icon: https://charts.flomesh.io/flomesh.png
+    keywords:
+    - kubernetes
+    - helm
+    - service mesh
+    - ingress
+    - gateway api
+    - olm
+    - traffic management
+    - pipy
+    - sidecar
+    - proxy
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - email: reaver@flomesh.io
+      name: Eric
+    name: fsm
+    sources:
+    - https://github.com/flomesh-io/fsm
+    - https://github.com/flomesh-io/pipy
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-fsm-0.1.8-ubi.6/flomesh-fsm-0.1.8-ubi.6.tgz
+    version: 0.1.8-ubi.6
   fortanix-dsm-secrets-injector-chart:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -3695,4 +3741,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2022-12-05T08:57:33.467426+00:00'
+generated: '2022-12-05T16:15:13.318466+00:00'
