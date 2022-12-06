@@ -1,8 +1,0 @@
-apiVersion: v2
-description: granulate sAgent daemonset helm-chart
-name: sagent
-type: application
-version: 1.0.0-latest
-kubeVersion: ">=1.20.0"
-annotations:
-  charts.openshift.io/name: sagent
