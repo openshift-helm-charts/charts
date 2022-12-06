@@ -1,9 +1,10 @@
 chart:
   name: osm-edge
-  shortDescription: unknown
+  shortDescription: null
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: cybwan
 vendor:
   label: flomesh
   name: Flomesh
