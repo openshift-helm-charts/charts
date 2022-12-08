@@ -1,9 +1,10 @@
 chart:
   name: flomesh-console
-  shortDescription: unknown
+  shortDescription: null
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: nixff
 vendor:
   label: flomesh
   name: Flomesh
