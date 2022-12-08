@@ -1,0 +1,9 @@
+chart:
+  name: flomesh-console
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: flomesh
+  name: Flomesh
