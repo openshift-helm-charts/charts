@@ -151,6 +151,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/fiware-orion-ld-1.0.3/fiware-orion-ld-1.0.3.tgz
     version: 1.0.3
+  flomesh-flomesh-console:
+  - annotations:
+      charts.openshift.io/digest: sha256:285ad867162027142c056417a3c303867d3f8592c59822577af08f4cdd9b56ec
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-08T08:59:42.572296+08:00'
+      charts.openshift.io/provider: Flomesh
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-12-08T01:30:23.037844+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.70.0-30-ubi8
+    description: A Helm chart to install flomesh-console on Kubernetes
+    digest: 5b1c8194f7c932aebcc7909b629e6d821fa5ef719ee587a233275cfcb636492b
+    kubeVersion: '>= 1.19'
+    name: flomesh-console
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-flomesh-console-0.70.0-30-ubi8/flomesh-flomesh-console-0.70.0-30-ubi8.tgz
+    version: 0.70.0-30-ubi8
   flomesh-fsm:
   - annotations:
       charts.openshift.io/digest: sha256:00a7e7d10e098d226b2eaac68e2e51c9468afa2f9a9de9a96991ae94a52400be
@@ -3812,4 +3831,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2022-12-07T23:08:30.655226+00:00'
+generated: '2022-12-08T01:30:23.037844+00:00'
