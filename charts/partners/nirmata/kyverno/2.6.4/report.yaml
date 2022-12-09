@@ -9,9 +9,9 @@ metadata:
         chart-uri: kyverno-2.6.4.tgz
         digests:
             chart: sha256:46690196b5eb280b49e7db44657bdc819a7ef169b7139135fc48725e8455ad73
-            package: 7d1fe39331583339578c7e76b2404cafdf7e8d9c6011b4f18409140332a1babd
-        lastCertifiedTimestamp: "2022-12-09T10:30:18.999784+00:00"
-        testedOpenShiftVersion: N/A
+            package: 01d1388c64926684960e696a3d8f09c78b0df3885dfde0a0aa0a8b7e682c4ec8
+        lastCertifiedTimestamp: "2022-12-09T13:08:59.467196+00:00"
+        testedOpenShiftVersion: "4.11"
         supportedOpenShiftVersions: '>=4.3'
         providerControlledDelivery: false
     chart:
@@ -76,46 +76,14 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
       reason: Chart has a README
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
@@ -127,3 +95,35 @@ results:
         Image is Red Hat certified : registry.connect.redhat.com/nirmata/kyvernopre:v1.8.4
         Image is Red Hat certified : registry.connect.redhat.com/nirmata/kyverno:v1.8.4
         Image is Red Hat certified : registry.access.redhat.com/ubi8/nginx-120:1-74.1669834626
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
