@@ -2526,6 +2526,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-data-grid-8.3.1/redhat-data-grid-8.3.1.tgz
     version: 8.3.1
+  - annotations:
+      charts.openshift.io/digest: sha256:2e09a5c9496e7f749fbd9df733f3a91efb82ce4c3f6586daaa5a3366477b4024
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-14T14:49:29.367232+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-12-14T14:50:03.924995+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: '8.4'
+    description: A Helm chart that lets you build and deploy Red Hat Data Grid clusters.
+    digest: 637f0d7bec7b7dca02b6694c129d6c734625bd60f6b5a5e924965abebb411858
+    home: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.4
+    icon: https://access.redhat.com/webassets/avalon/d/red-hat-data-grid/images/rhdg-icon.png
+    maintainers:
+    - name: Red Hat
+      url: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.4
+    name: data-grid
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-data-grid-8.4.0/redhat-data-grid-8.4.0.tgz
+    version: 8.4.0
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -3896,4 +3921,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2022-12-12T05:10:01.883522+00:00'
+generated: '2022-12-14T14:50:03.924995+00:00'
