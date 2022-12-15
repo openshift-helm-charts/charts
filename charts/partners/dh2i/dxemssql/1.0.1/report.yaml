@@ -1,0 +1,91 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.9.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        reportDigest: uint64:2374458691333548155
+        chart-uri: ./dxemssql-1.0.1.tgz
+        digests:
+            chart: sha256:bba38b72bd647ead19350b86ec60253d203d9465d75efd4c25d210110b77d789
+            package: 7c06abccc415798d8e8dd0850d639f8e01a250e3dc9c27a9e3b250ccab86d100
+        lastCertifiedTimestamp: "2022-12-15T19:27:13.91183+00:00"
+        testedOpenShiftVersion: "4.10"
+        supportedOpenShiftVersions: '>=4.7'
+        providerControlledDelivery: false
+    chart:
+        name: dxemssql
+        home: ""
+        sources: []
+        version: 1.0.1
+        description: Helm chart for DH2i's DxEnterprise clustering solution with SQL Server availability groups
+        keywords: []
+        maintainers: []
+        icon: https://clients.dh2i.com/images/DH2i_Logo_Icon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: "22.0"
+        deprecated: false
+        annotations:
+            catalog.cattle.io/certified: partner
+            catalog.cattle.io/display-name: DxEnterprise for Microsoft SQL AG
+            catalog.cattle.io/release-name: dxemssql
+            charts.openshift.io/name: DxEnterprise for Microsoft SQL AG
+        kubeversion: '>= 1.20.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : mcr.microsoft.com/mssql/rhel/server:latest
+        Image is Red Hat certified : dh2i/dxe:rhel8
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
