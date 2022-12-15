@@ -6,10 +6,11 @@ metadata:
         profile:
             VendorType: partner
             version: v1.1
-        chart-uri: https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.5.tgz?raw=true
+        chart-uri: https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.6.tgz?raw=true
         digests:
-            chart: sha256:f5bee25bdf4e9f4391539912efdaeb5706dc656a86f8b00b724e0ecea81e4beb
-        lastCertifiedTimestamp: "2022-12-15T06:09:06.885092+00:00"
+            chart: sha256:5521f96d85411ee6fdadfeca37e4b2265dc24a63c08558986705b04ee312a0d6
+            package: 26f8a166b431d7b309a75d309267977b7412ac0e86f6c372ff755326b55e5011
+        lastCertifiedTimestamp: "2022-12-15T08:01:35.642774+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: '>=4.6'
         providerControlledDelivery: false
@@ -17,7 +18,7 @@ metadata:
         name: ibm-object-storage-plugin
         home: ""
         sources: []
-        version: 2.2.5
+        version: 2.2.6
         description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object Storage is persistent, highly available storage that you can mount to apps that run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage buckets to pods in your cluster.  License By installing this product you accept the following license terms: http://www.apache.org/licenses/ and https://www.redhat.com/licenses/EULA_Red_Hat_Universal_Base_Image_English_20190422.pdf'
         keywords:
             - IKS
@@ -35,7 +36,7 @@ metadata:
         apiversion: v2
         condition: ""
         tags: ""
-        appversion: 2.2.5
+        appversion: 2.2.6
         deprecated: false
         annotations:
             charts.openshift.io/name: ibm-object-storage-plugin Chart
@@ -44,22 +45,14 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
     - check: v1.0/images-are-certified
       type: Mandatory
       outcome: PASS
@@ -70,22 +63,18 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
     - check: v1.0/required-annotations-present
       type: Mandatory
       outcome: PASS
       reason: All required annotations present
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
     - check: v1.1/has-kubeversion
       type: Mandatory
       outcome: PASS
@@ -93,4 +82,16 @@ results:
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
-      reason: Chart does not contain CRDs 
+      reason: Chart does not contain CRDs
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
