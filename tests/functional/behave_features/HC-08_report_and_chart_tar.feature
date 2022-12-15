@@ -12,13 +12,13 @@ Feature: Chart tarball submission with report
 
         @partners @smoke @full
         Examples:
-            | vendor_type  | vendor    | chart_path                     | report_path               |
-            | partners     | hashicorp | tests/data/vault-0.17.0.tgz    | tests/data/report.yaml    |
+            | vendor_type  | vendor    | chart_path                  | report_path                           |
+            | partners     | hashicorp | tests/data/vault-0.17.0.tgz | tests/data/common/partner/report.yaml |
         
         @redhat @full
         Examples:
-            | vendor_type  | vendor    | chart_path                     | report_path               |
-            | redhat       | redhat    | tests/data/vault-0.17.0.tgz    | tests/data/report.yaml    |
+            | vendor_type  | vendor    | chart_path                  | report_path                          |
+            | redhat       | redhat    | tests/data/vault-0.17.0.tgz | tests/data/common/redhat/report.yaml |
     
     Scenario Outline: [HC-08-002] A community user submits an error-free chart tarball with report
         Given the vendor "<vendor>" has a valid identity as "<vendor_type>"
@@ -29,5 +29,5 @@ Feature: Chart tarball submission with report
 
         @community @smoke @full
         Examples:
-            | vendor_type | vendor | chart_path                  | report_path            | message                                                                                     |
-            | community   | redhat | tests/data/vault-0.17.0.tgz | tests/data/report.yaml | Community charts require maintainer review and approval, a review will be conducted shortly |
+            | vendor_type | vendor | chart_path                  | report_path                             | message                                                                                     |
+            | community   | redhat | tests/data/vault-0.17.0.tgz | tests/data/common/community/report.yaml | Community charts require maintainer review and approval, a review will be conducted shortly |

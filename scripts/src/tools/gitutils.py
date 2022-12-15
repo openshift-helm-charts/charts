@@ -21,6 +21,7 @@ from git.exc import GitCommandError
 GITHUB_BASE_URL = 'https://api.github.com'
 CHARTS_REPO = "/charts"
 DEVELOPMENT_REPO = "/development"
+STAGE_REPO = "/stage"
 
 PR_CREATED = "PR_CREATED"
 PR_NOT_NEEDED = "PR_NOT_NEEDED"

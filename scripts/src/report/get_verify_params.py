@@ -5,6 +5,7 @@ import argparse
 
 sys.path.append('../')
 from chartprreview import chartprreview
+from signedchart import signedchart
 
 def generate_verify_options(directory,category, organization, chart, version):
     print("[INFO] Generate verify options. %s, %s, %s" % (organization,chart,version))
@@ -28,6 +29,12 @@ def generate_verify_options(directory,category, organization, chart, version):
         return flags,src,True, cluster_needed
     elif os.path.exists(tar) and not os.path.exists(src):
         print("[INFO] tarball included")
+        if not os.path.exists(report_path):
+            owners_file = os.path.join(os.getcwd(),"charts", category, organization, chart, "OWNERS")
+            signed_flags = signedchart.get_verifier_flags(tar,owners_file,directory)
+            if signed_flags:
+                print(f"[INFO] include flags for signed chart: {signed_flags}")
+                flags = f"{flags} {signed_flags}"
         return flags,tar,True, cluster_needed
     elif os.path.exists(tar) and os.path.exists(src):
         msg = "[ERROR] Both chart source directory and tarball should not exist"

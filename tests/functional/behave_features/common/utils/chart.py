@@ -6,6 +6,39 @@ import tarfile
 import yaml
 import shutil
 import json
+from enum import Enum
+from dataclasses import dataclass
+
+class Chart_Type(Enum):
+    SRC = 1
+    TAR = 2
+    REPORT = 3
+    SRC_AND_REPORT = 4
+    TAR_AND_REPORT = 5
+
+class Release_Type(Enum):
+    CHART_ONLY = 1
+    REPORT_ONLY = 2
+    CHART_AND_REPORT = 3
+    REPORT_AND_KEY = 4
+    CHART_PROV_AND_REPORT = 5
+    CHART_REPORT_PROV_AND_KEY = 6
+
+@dataclass
+class Chart:
+    chart_file_path : str = ''
+    report_file_path : str = ''
+    chart_name: str = ''
+    chart_version: str = ''
+    chart_directory: str = ''
+    chart_type: Chart_Type = None
+
+    def update_chart_directory(self, secrets):
+        base_branch_without_uuid = "-".join(secrets.base_branch.split("-")[:-1])
+        vendor_without_suffix = secrets.vendor.split("-")[0]
+        secrets.base_branch = f'{base_branch_without_uuid}-{secrets.vendor_type}-{vendor_without_suffix}-{self.chart_name}-{self.chart_version}'
+        secrets.pr_branch = f'{secrets.base_branch}-pr-branch'
+        self.chart_directory = f'charts/{secrets.vendor_type}/{secrets.vendor}/{self.chart_name}'
 
 def get_name_and_version_from_report(path):
     """
@@ -75,7 +108,7 @@ def get_name_and_version_from_chart_src(path):
             raise AssertionError(f"error parsing '{path}': {err}")
     return chart_yaml['name'], chart_yaml['version']
 
-def extract_chart_tgz(src, dst, secrets, logger):
+def extract_chart_tgz(src, dst, chart_name, logger):
     """Extracts the chart tgz file into the target location under 'charts/' for PR submission tests
 
     Parameters:
@@ -90,7 +123,7 @@ def extract_chart_tgz(src, dst, secrets, logger):
     finally:
         with tarfile.open(src, 'r') as fd:
             fd.extractall(dst)
-            os.rename(f'{dst}/{secrets.chart_name}', f'{dst}/src')
+            os.rename(f'{dst}/{chart_name}', f'{dst}/src')
 
 def get_all_charts(charts_path: str, vendor_types: str) -> list:
     # TODO: Support `community` as vendor_type.
