@@ -2634,6 +2634,35 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-eap74-1.1.0/redhat-eap74-1.1.0.tgz
     version: 1.1.0
+  redhat-eap8:
+  - annotations:
+      charts.openshift.io/digest: sha256:84268d5cf64696c623c96a718a32162bd60307f6410f07d49ca9babe65b22151
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T15:27:40.509997+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2022-12-15T15:28:04.907010+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 8.0.0.Beta
+    dependencies:
+    - name: wildfly-common
+      repository: https://docs.wildfly.org/wildfly-charts/
+      version: 2.1.0
+    description: Build and deploy JBoss EAP 8 applications on OpenShift
+    digest: 77b29d20cac45fa459e69f3b45933c9a7316b792b6a096f14a4ceae368484ad2
+    home: https://www.redhat.com/en/technologies/jboss-middleware/application-platform
+    icon: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2Q3MWUwMDt9LmNscy0ye2ZpbGw6I2MyMWEwMDt9LmNscy0ze2ZpbGw6I2NkY2RjZDt9LmNscy00e2ZpbGw6I2I3YjdiNzt9LmNscy01e2ZpbGw6I2VhZWFlYTt9LmNscy02e2ZpbGw6I2ZmZjt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPkxvZ288L3RpdGxlPjxnIGlkPSJMYXllcl8xIiBkYXRhLW5hbWU9IkxheWVyIDEiPjxjaXJjbGUgY2xhc3M9ImNscy0xIiBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMC43MSA1MCkgcm90YXRlKC00NSkiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik04NS4zNiwxNC42NEE1MCw1MCwwLDAsMSwxNC42NCw4NS4zNloiLz48cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik02MC4xNyw0My4xM2EzLjQxLDMuNDEsMCwwLDEsLjA3LjY4QTMuNCwzLjQsMCwwLDAsNjAuMTcsNDMuMTNaIi8+PHBhdGggY2xhc3M9ImNscy0zIiBkPSJNNTkuMjEsNDEuMzhBMy40OCwzLjQ4LDAsMCwxLDYwLDQyLjQ3LDMuNDgsMy40OCwwLDAsMCw1OS4yMSw0MS4zOFoiLz48cG9seWdvbiBjbGFzcz0iY2xzLTMiIHBvaW50cz0iNTkuMTMgNDEuMjkgNTkuMTMgNDEuMjkgNTkuMDQgNDEuMjEgNTkuMTMgNDEuMjkiLz48cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik01OS4xMiw0Ni4zNCwzMy41NCw2OS43M2wyNS41OC0yMy40YTMuNDUsMy40NSwwLDAsMCwuOTEtMS40QTMuNDUsMy40NSwwLDAsMSw1OS4xMiw0Ni4zNFoiLz48cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yOC41NCw3MS40OCw1OC44Nyw0MSw1OC43OSw0MWEzLjcsMy43LDAsMCwwLTUuMjEuMkwyOSw2OC4yNmMtMSwxLTEuMTksMi41Mi0uMzUsMy4zMWExLjc1LDEuNzUsMCwwLDAsLjc0LjQxLDEuNzUsMS43NSwwLDAsMS0uNzQtLjQxWiIvPjxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTI4LjYyLDcxLjU3QTIuNTIsMi41MiwwLDAsMCwzMiw3MS4xMUw1OS4xMiw0Ni4zNGEzLjQyLDMuNDIsMCwwLDAsMC01TDU4Ljg3LDQxLDI4LjU0LDcxLjQ4WiIvPjxwYXRoIGNsYXNzPSJjbHMtNSIgZD0iTTM0LjQ2LDM0LjcxbC0xMC42LTguNDNhMi42LDIuNiwwLDAsMC00LjIsMi4zM2wuMTksMS42NGExOC4yMSwxOC4yMSwwLDAsMCwxMS42OSwxNWwxMy42OSw1LjE0LDIuMzEtMi41NUwzNi4xNiwzNi43M0ExNi40NSwxNi40NSwwLDAsMSwzNC40NiwzNC43MVoiLz48cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik03NC42OSw3NS40MSw2NS44OCw2NS4xMmExNi40NSwxNi40NSwwLDAsMS0yLjA4LTEuNjNMNTIuMzMsNTIuNTVsLTIuNTIsMi4zLDUuNjcsMTMuNThBMTguMjEsMTguMjEsMCwwLDAsNzAuODcsNzkuNTZsMS42NC4xM0EyLjYsMi42LDAsMCwwLDc0LjY5LDc1LjQxWiIvPjxwYXRoIGNsYXNzPSJjbHMtNSIgZD0iTTU4LjY0LDQ2Ljc4YTMsMywwLDAsMCwzLjg1LTIuMTcsMy4yOCwzLjI4LDAsMCwwLTMtNC4xNWgwbC0uNTkuNTloMGwuMjYuMjVhMy40MiwzLjQyLDAsMCwxLDAsNVoiLz48cGF0aCBjbGFzcz0iY2xzLTYiIGQ9Ik0zMi43NywxNy4xOGwtLjUsMS41M2ExNy42LDE3LjYsMCwwLDAsMy44OSwxOEw0Ny41Myw0Ny44MmwzLjYxLTQtMTMuNy0yN0EyLjU0LDIuNTQsMCwwLDAsMzIuNzcsMTcuMThaIi8+PHBhdGggY2xhc3M9ImNscy02IiBkPSJNODMuNjUsNjEuNDgsNTYuMzUsNDguODdsLTQsMy42OEw2My44LDYzLjQ5YTE3LjYsMTcuNiwwLDAsMCwxOC4xNSwzLjIzbDEuNTEtLjU1QTIuNTQsMi41NCwwLDAsMCw4My42NSw2MS40OFoiLz48cGF0aCBjbGFzcz0iY2xzLTYiIGQ9Ik01My41OCw0MS4xN2EzLjcsMy43LDAsMCwxLDUuMjEtLjJsLjA4LjA4aDBsLjU5LS41OWgwYTMuNDEsMy40MSwwLDAsMC00LjI5LTIuOTNjLTIsLjM4LTMuMDcsMi42OC0yLDQuMTFaIi8+PC9nPjwvc3ZnPg==
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - email: customerservice@redhat.com
+      name: Red Hat, Inc.
+      url: https://www.redhat.com/en/technologies/jboss-middleware/application-platform
+    name: eap8
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-eap8-1.0.0/redhat-eap8-1.0.0.tgz
+    version: 1.0.0
   redhat-elasticsearch-sed:
   - annotations:
       charts.openshift.io/digest: sha256:1ac0cba03bf38fe0b83cc96501bc12b4b2e9bd0ea002f2bd3b2d2dd2e5ef8a6b
@@ -3921,4 +3950,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2022-12-14T14:50:03.924995+00:00'
+generated: '2022-12-15T15:28:04.907010+00:00'
