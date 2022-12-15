@@ -93,4 +93,4 @@ results:
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
-      reason: Chart does not contain CRDs
+      reason: Chart does not contain CRDs 
