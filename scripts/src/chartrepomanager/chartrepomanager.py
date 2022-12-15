@@ -22,6 +22,7 @@ except ImportError:
 sys.path.append('../')
 from report import report_info
 from chartrepomanager import indexannotations
+from signedchart import signedchart
 
 def get_modified_charts(api_url):
     files_api_url = f'{api_url}/files'
@@ -81,24 +82,46 @@ def prepare_chart_source_for_release(category, organization, chart, version):
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
     chart_file_name = f"{chart}-{version}.tgz"
-    new_chart_file_name = f"{organization}-{chart}-{version}.tgz"
     try:
-        os.remove(os.path.join(".cr-release-packages", new_chart_file_name))
+        os.remove(os.path.join(".cr-release-packages", chart_file_name))
     except FileNotFoundError:
         pass
-    shutil.copy(f"{chart}-{version}.tgz" , f".cr-release-packages/{new_chart_file_name}")
+    shutil.copy(f"{chart}-{version}.tgz" , f".cr-release-packages/{chart_file_name}")
 
-def prepare_chart_tarball_for_release(category, organization, chart, version):
+def prepare_chart_tarball_for_release(category, organization, chart, version,signed_chart):
     print("[INFO] prepare chart tarball for release. %s, %s, %s, %s" % (category, organization, chart, version))
     chart_file_name = f"{chart}-{version}.tgz"
-    new_chart_file_name = f"{organization}-{chart}-{version}.tgz"
     path = os.path.join("charts", category, organization, chart, version, chart_file_name)
     try:
-        os.remove(os.path.join(".cr-release-packages", new_chart_file_name))
+        os.remove(os.path.join(".cr-release-packages", chart_file_name))
     except FileNotFoundError:
         pass
-    shutil.copy(path, f".cr-release-packages/{new_chart_file_name}")
+    shutil.copy(path, f".cr-release-packages/{chart_file_name}")
     shutil.copy(path, chart_file_name)
+
+    if signed_chart:
+        print("[INFO] Signed chart - include PROV file")
+        prov_file_name = f"{chart_file_name}.prov"
+        path = os.path.join("charts", category, organization, chart, version, prov_file_name)
+        try:
+            os.remove(os.path.join(".cr-release-packages", prov_file_name))
+        except FileNotFoundError:
+            pass
+        shutil.copy(path, f".cr-release-packages/{prov_file_name}")
+        shutil.copy(path, prov_file_name)
+        return get_key_file(category, organization, chart, version)
+    return ""
+
+def get_key_file(category, organization, chart, version):
+    owners_path = os.path.join("charts", category, organization, chart, "OWNERS")
+    key_in_owners = signedchart.get_pgp_key_from_owners(owners_path)
+    if key_in_owners:
+        key_file_name = f"{chart}-{version}.tgz.key"
+        print(f"[INFO] Signed chart - add public key file : {key_file_name}")
+        signedchart.create_public_key_file(key_in_owners,key_file_name)
+        return key_file_name
+    return ""
+
 
 def push_chart_release(repository, organization, commit_hash):
     print("[INFO]push chart release. %s, %s, %s " % (repository, organization, commit_hash))
@@ -193,7 +216,6 @@ def set_package_digest(chart_entry):
     elif not pkg_digest:
         # Digest was not passed and could not be computed
         raise Exception("Was unable to compute SHA256 digest, please ensure chart url points to a chart package.")
-
 
 
 def update_index_and_push(indexfile,indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number, provider_delivery):
@@ -293,7 +315,7 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
         vendor_name = out["vendor"]["name"]
         annotations["charts.openshift.io/provider"] = vendor_name
 
-    out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{organization}-{chart_file_name}"), "-C", dr], capture_output=True)
+    out = subprocess.run(["tar", "zxvf", os.path.join(".cr-release-packages", f"{chart_file_name}"), "-C", dr], capture_output=True)
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
 
@@ -344,12 +366,15 @@ def main():
     else:
         indexfile = "index.yaml"
 
+
+    public_key_file = ""
     print("[INFO] Report Content : ", os.environ.get("REPORT_CONTENT"))
     if chart_source_exists or chart_tarball_exists:
         if chart_source_exists:
             prepare_chart_source_for_release(category, organization, chart, version)
         if chart_tarball_exists:
-            prepare_chart_tarball_for_release(category, organization, chart, version)
+            signed_chart = signedchart.is_chart_signed(args.api_url,"")
+            public_key_file = prepare_chart_tarball_for_release(category, organization, chart, version, signed_chart)
 
         commit_hash = get_current_commit_sha()
         print("[INFO] Publish chart release to GitHub")
@@ -358,26 +383,39 @@ def main():
         print("[INFO] Check if report exist as part of the commit")
         report_exists, report_path = check_report_exists(category, organization, chart, version)
         chart_file_name = f"{chart}-{version}.tgz"
+
         if report_exists:
             shutil.copy(report_path, "report.yaml")
         else:
-            tag = os.environ.get("CHART_NAME_WITH_VERSION")
-            if not tag:
-                print("[ERROR] Internal error: missing chart name with version (tag)")
-                sys.exit(1)
-            print(f"::set-output name=tag::{tag}")
-            print("[INFO] Genereate report")
+            print("[INFO] Generate report")
             report_path = generate_report(chart_file_name)
 
         print("[INFO] Updating chart annotation")
         update_chart_annotation(category, organization, chart_file_name, chart, report_path)
-        chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}/{organization}-{chart}-{version}.tgz"
+        chart_url = f"https://github.com/{args.repository}/releases/download/{organization}-{chart}-{version}/{chart_file_name}"
         print("[INFO] Helm package was released at %s" % chart_url)
         print("[INFO] Creating index from chart")
         chart_entry = create_index_from_chart(indexdir, args.repository, branch, category, organization, chart, version, chart_url)
     else:
         report_path = os.path.join("charts", category, organization, chart, version, "report.yaml")
+        print(f"[INFO] Report only PR: {report_path}")
+        shutil.copy(report_path, "report.yaml")
+        if signedchart.check_report_for_signed_chart(report_path):
+            public_key_file = get_key_file(category, organization, chart, version)
         print("[INFO] Creating index from report")
         chart_entry, chart_url = create_index_from_report(category, report_path)
+
+    if not provider_delivery:
+        tag = os.environ.get("CHART_NAME_WITH_VERSION")
+        if not tag:
+            print("[ERROR] Internal error: missing chart name with version (tag)")
+            sys.exit(1)
+        print(f"::set-output name=tag::{tag}")
+
+        current_dir = os.getcwd()
+        print(f"::set-output name=report_file::{current_dir}/report.yaml")
+        if public_key_file:
+            print(f"[INFO] Add key file for release : {current_dir}/{public_key_file}")
+            print(f"::set-output name=public_key_file::{current_dir}/{public_key_file}")
 
     update_index_and_push(indexfile,indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number, provider_delivery)

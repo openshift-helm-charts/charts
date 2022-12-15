@@ -1,0 +1,98 @@
+name: OWNERS PR Check
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
+
+jobs:
+  owners-file-check:
+    name: OWNERS file PR checker
+    runs-on: ubuntu-20.04
+    if: github.event.pull_request.draft == false && github.actor == 'redhat-mercury-bot'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Set up Python 3.x Part 1
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - name: get files changed
+        id: get_files_changed
+        run: |
+          # get files in PR
+          ./ve1/bin/pr-artifact --api-url=${{ github.event.pull_request._links.self.href }} \
+                                --get-files
+
+      - name: check if only an OWNERS file is pushed
+        id: check_for_owners
+        env:
+          pr_files_py: "${{ steps.get_files_changed.outputs.pr_files }}"
+        run: |
+          # check if PR contains just one partner OWNERS file
+          pr_files=($(echo "$pr_files_py" | tr -d '[],'))
+          echo "Files in PR: ${pr_files[@]}"
+          eval first_file=${pr_files[0]}
+          if [ ${#pr_files[@]} == 1 ]; then
+            eval first_file=${pr_files[0]}
+            if [[ $first_file == "charts/partners/"*/*"/OWNERS" ]] ; then
+                echo "An OWNERS file has been modified or added"
+                echo "merge_pr=true" >> $GITHUB_OUTPUT
+            else
+              echo "The file in the PR is not a partner OWNERS file"
+              echo "merge_pr=false" >> $GITHUB_OUTPUT
+              echo "msg=ERROR: PR does not include a partner OWNERS file." >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "The PR contains multiple files."
+            echo "msg=ERROR: PR contains multiple files." >> $GITHUB_OUTPUT
+            echo "merge_pr=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment on PR
+        if: ${{ steps.check_for_owners.outputs.merge_pr == 'false' }}
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+              var issue_number = ${{ github.event.number }};
+              var comment = "${{ steps.check_for_owners.outputs.msg }}";
+              github.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: Number(issue_number),
+                body: comment
+              });
+
+      - name: Reflect on check for OWNERS file result
+        if: ${{ steps.check_for_owners.outputs.merge_pr == 'false' }}
+        run: |
+          # exit with failure if PR is not for a single partner OWNERS file
+          echo "The PR was not for a single partner OWNERS file."
+          exit 1
+
+      - name: Approve PR
+        id: approve_pr
+        if: ${{ steps.check_for_owners.outputs.merge_pr == 'true' }}
+        uses: hmarr/auto-approve-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge PR
+        id: merge_pr
+        if: ${{ steps.approve_pr.conclusion == 'success' }}
+        uses: pascalgn/automerge-action@v0.13.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash
+          MERGE_LABELS: ""
+
+
