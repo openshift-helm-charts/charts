@@ -1,6 +1,7 @@
 chart:
   name: test
   shortDescription: null
+providerDelivery: false
 publicPgpKey: null
 users:
 - githubUsername: test
