@@ -2,6 +2,7 @@ chart:
   name: yugaware-openshift
   shortDescription: 'Use YugabyteDB Anywhere''s orchestration and monitoring to manage
     YugabyteDB universes. '
+providerDelivery: false
 publicPgpKey: null
 users:
 - githubUsername: baba230896

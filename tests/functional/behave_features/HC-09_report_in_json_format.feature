@@ -12,16 +12,16 @@ Feature: Report only submission in json format
     
         @partners
         Examples:
-            | vendor_type  | vendor    | report_path            | message                                                         |
-            | partners     | hashicorp | tests/data/report.json | One of these must be modified: report, chart source, or tarball |
+            | vendor_type  | vendor    | report_path                          | message                                                         |
+            | partners     | hashicorp | tests/data/HC-09/partner/report.json | One of these must be modified: report, chart source, or tarball |
 
         @redhat
         Examples:
-            | vendor_type  | vendor    | report_path            | message                                                         |
-            | redhat       | redhat    | tests/data/report.json | One of these must be modified: report, chart source, or tarball |
+            | vendor_type  | vendor    | report_path                         | message                                                         |
+            | redhat       | redhat    | tests/data/HC-09/redhat/report.json | One of these must be modified: report, chart source, or tarball |
         
         @community
         Examples:
-            | vendor_type  | vendor    | report_path            | message                                                         |
-            | community    | redhat    | tests/data/report.json | One of these must be modified: report, chart source, or tarball |
+            | vendor_type  | vendor    | report_path                            | message                                                         |
+            | community    | redhat    | tests/data/HC-09/community/report.json | One of these must be modified: report, chart source, or tarball |
     

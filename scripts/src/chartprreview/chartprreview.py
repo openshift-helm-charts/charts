@@ -1,5 +1,6 @@
 import re
 import os
+import os.path
 import sys
 import argparse
 import subprocess
@@ -20,6 +21,7 @@ except ImportError:
 sys.path.append('../')
 from report import report_info
 from report import verifier_report
+from signedchart import signedchart
 
 def write_error_log(directory, *msg):
     os.makedirs(directory, exist_ok=True)
@@ -94,21 +96,24 @@ def check_owners_file_against_directory_structure(directory,username, category, 
 
 def verify_signature(directory, category, organization, chart, version):
     print("[INFO] Verify signature. %s, %s, %s" % (organization, chart, version))
-    data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
-    out = yaml.load(data, Loader=Loader)
-    publickey = out.get('publicPgpKey')
-    if not publickey:
-        return
-    with open("public.key", "w") as fd:
-        fd.write(publickey)
-    out = subprocess.run(["gpg", "--import", "public.key"], capture_output=True)
-    print("[INFO]", out.stdout.decode("utf-8"))
-    print("[WARNING]", out.stderr.decode("utf-8"))
-    report = os.path.join("charts", category, organization, chart, version, "report.yaml")
     sign = os.path.join("charts", category, organization, chart, version, "report.yaml.asc")
-    out = subprocess.run(["gpg", "--verify", sign, report], capture_output=True)
-    print("[INFO]", out.stdout.decode("utf-8"))
-    print("[WARNING]", out.stderr.decode("utf-8"))
+    if os.path.exists(sign):
+        data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
+        out = yaml.load(data, Loader=Loader)
+        publickey = out.get('publicPgpKey')
+        if not publickey:
+            return
+        with open("public.key", "w") as fd:
+            fd.write(publickey)
+        out = subprocess.run(["gpg", "--import", "public.key"], capture_output=True)
+        print("[INFO]", out.stdout.decode("utf-8"))
+        print("[WARNING]", out.stderr.decode("utf-8"))
+        report = os.path.join("charts", category, organization, chart, version, "report.yaml")
+        out = subprocess.run(["gpg", "--verify", sign, report], capture_output=True)
+        print("[INFO]", out.stdout.decode("utf-8"))
+        print("[WARNING]", out.stderr.decode("utf-8"))
+    else:
+        print(f"[INFO] Signed report not found: {sign}.")
 
 def match_checksum(directory,generated_report_info_path,category, organization, chart, version):
     print("[INFO] Check digests match. %s, %s, %s" % (organization, chart, version))
@@ -344,9 +349,19 @@ def main():
             print(f"[ERROR] {msg}")
             write_error_log(args.directory, msg)
             sys.exit(1)
-        else:
-            print("[INFO] Submitted report passed validity check!")
 
+        print("[INFO] Submitted report passed validity check!")
+        owners_file = os.path.join("charts", category, organization, chart, "OWNERS")
+        pgp_key_in_owners = signedchart.get_pgp_key_from_owners(owners_file)
+        if pgp_key_in_owners:
+            if signedchart.check_report_for_signed_chart(submitted_report_path):
+                if not signedchart.check_pgp_public_key(pgp_key_in_owners,submitted_report_path):
+                    msg = f"PGP key in OWNERS file does not match with key digest in report."
+                    print(f"[ERROR] {msg}")
+                    write_error_log(args.directory, msg)
+                    sys.exit(1)
+                else:
+                    print("[INFO] PGP key in OWNERS file matches with key digest in report.")
 
     report_generated = os.environ.get("REPORT_GENERATED")
     generated_report_path = os.environ.get("GENERATED_REPORT_PATH")

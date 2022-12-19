@@ -1,0 +1,10 @@
+chart:
+  name: test-chart
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: elhadjici
+vendor:
+  label: bcook
+  name: Red Hat
