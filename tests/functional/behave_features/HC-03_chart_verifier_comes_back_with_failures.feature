@@ -11,13 +11,13 @@ Feature: Chart verifier comes back with a failure
 
     @partners @smoke @full
     Examples:
-        | vendor_type  | vendor    | chart_path                     | message                                                 | 
-        | partners     | hashicorp | tests/data/vault-0.17.0.tgz    | Chart does not have a README                            |
+        | vendor_type  | vendor    | chart_path                  | message                                                 | 
+        | partners     | hashicorp | tests/data/vault-0.17.0.tgz | Chart does not have a README                            |
 
     @community @full
     Examples:
-        | vendor_type  | vendor    | chart_path                     | message                                                 |
-        | community    | redhat    | tests/data/vault-0.17.0.tgz    | Community charts require maintainer review and approval |
+        | vendor_type  | vendor    | chart_path                  | message                                                 |
+        | community    | redhat    | tests/data/vault-0.17.0.tgz | Community charts require maintainer review and approval |
 
   Scenario Outline: [HC-03-002] A redhat user submits a chart which does not contain a readme file
     Given the vendor "<vendor>" has a valid identity as "<vendor_type>"
@@ -30,6 +30,6 @@ Feature: Chart verifier comes back with a failure
   
     @redhat @full
     Examples:
-        | vendor_type  | vendor    | chart_path                     |
-        | redhat       | redhat    | tests/data/vault-0.17.0.tgz    |
+        | vendor_type  | vendor    | chart_path                  |
+        | redhat       | redhat    | tests/data/vault-0.17.0.tgz |
 

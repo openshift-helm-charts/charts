@@ -24,7 +24,6 @@ These are not comprehensive lists - other certification checks will preform furt
 """
 
 import sys
-import os
 import semantic_version
 
 import yaml
@@ -54,18 +53,23 @@ def get_report_data(report_path):
 
 def get_result(report_data,check_name):
     outcome = False
+    reason = "Not Found"
     for result in report_data["results"]:
         if result["check"].endswith(check_name):
+            reason = result["reason"]
             if result["outcome"] == "PASS":
                 outcome = True
             break
-    return outcome
+    return outcome,reason
 
 def get_chart_testing_result(report_data):
     return get_result(report_data,"/chart-testing")
 
 def get_has_kubeversion_result(report_data):
     return get_result(report_data,"/has-kubeversion")
+
+def get_signature_is_valid_result(report_data):
+    return get_result(report_data,"/signature-is-valid")
 
 def get_profile_version(report_data):
     profile_version = "1.1"
@@ -91,9 +95,21 @@ def get_package_digest(report_data):
         if "package" in digests:
             package_digest = digests["package"]
     except Exception as err:
-        print(f"Exception getting providerControlledDelivery {err=}, {type(err)=}")
+        print(f"Exception getting package digest {err=}, {type(err)=}")
         pass
     return package_digest
+
+def get_public_key_digest(report_data):
+    public_key_digest = None
+    try:
+        digests = report_data["metadata"]["tool"]["digests"]
+        if "publicKey" in digests:
+            public_key_digest = digests["publicKey"]
+    except Exception as err:
+        print(f"Exception getting publicKey digest {err=}, {type(err)=}")
+        pass
+    return public_key_digest
+
 
 def report_is_valid(report_data):
     outcome = True
@@ -130,7 +146,8 @@ def validate(report_path):
         return False,f"Report is incomplete and cannot be processed: {report_path}"
 
     ## No value in checking if chart testing failed
-    if get_chart_testing_result(report_data):
+    chart_testing_outcome,_ = get_chart_testing_result(report_data)
+    if chart_testing_outcome:
 
         profile_version_string = get_profile_version(report_data)
 
@@ -164,7 +181,8 @@ def validate(report_path):
         except ValueError:
             return False,f"{tested_version_annotation} {tested_version_string} is not a valid semantic version."
 
-        if get_has_kubeversion_result:
+        has_kubeversion_outcome,_ = get_chart_testing_result(report_data)
+        if has_kubeversion_outcome:
 
             chart = report_info.get_report_chart(report_path)
             if KUBE_VERSION_ATTRIBUTE in chart:

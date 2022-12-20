@@ -1,0 +1,15 @@
+chart:
+  name: 5g-amfmme
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: dyang
+- githubUsername: elee
+- githubUsername: jmyo
+- githubUsername: mpark
+- githubUsername: slee
+- githubUsername: wkim
+vendor:
+  label: samsung
+  name: Samsung Electronics Co., Ltd.

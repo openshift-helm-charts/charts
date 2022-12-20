@@ -1,0 +1,167 @@
+import requests
+import sys
+import subprocess
+import base64
+import filecmp
+import os
+import re
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
+
+sys.path.append('../')
+from report import verifier_report
+from owners import owners_file
+
+def check_and_prepare_signed_chart(api_url,report_path,owner_path,key_file_path):
+
+    signed_chart = is_chart_signed(api_url,report_path)
+    key_in_owners = False
+    keys_match = False
+    if signed_chart:
+        owners_pgp_key = get_pgp_key_from_owners(owner_path)
+        if owners_pgp_key:
+            key_in_owners = True
+            if report_path:
+                keys_match = check_pgp_public_key(owners_pgp_key,report_path)
+            elif key_file_path:
+                create_public_key_file(owners_pgp_key,key_file_path)
+
+    return signed_chart,key_in_owners,keys_match
+
+def get_verifier_flags(tar_file,owners_file,temp_dir):
+    prov_file = f"{tar_file}.prov"
+    if os.path.exists(prov_file):
+        gpg_key = get_pgp_key_from_owners(owners_file)
+        if gpg_key:
+            key_file = os.path.join(temp_dir,"pgp",f"{tar_file}.key")
+            create_public_key_file(gpg_key,key_file)
+            return f"--pgp-public-key {key_file}"
+    return ""
+
+
+def is_chart_signed(api_url,report_path):
+
+    if api_url:
+        files_api_url = f'{api_url}/files'
+        headers = {'Accept': 'application/vnd.github.v3+json'}
+        r = requests.get(files_api_url, headers=headers)
+        tgz_pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.-]+)/.*.tgz")
+        tgz_found = False
+        prov_pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.-]+)/.*.tgz.prov")
+        prov_found = False
+
+        for f in r.json():
+            if tgz_pattern.match(f["filename"]):
+                tgz_found = True
+            if prov_pattern.match(f["filename"]):
+                prov_found = True
+
+        if tgz_found and prov_found:
+            return True
+    elif report_path:
+        return check_report_for_signed_chart(report_path)
+
+    return False
+
+def key_in_owners_match_report(owner_path,report_path):
+    owner_key = get_pgp_key_from_owners(owner_path)
+    if not owner_key:
+        return True
+    return check_pgp_public_key(owner_key,report_path)
+
+def get_pgp_key_from_owners(owner_path):
+    found, owner_data = owners_file.get_owner_data_from_file(owner_path)
+    if found:
+        pgp_key = owners_file.get_pgp_public_key(owner_data)
+        if pgp_key == "null":
+            pgp_key = ""
+
+        return pgp_key
+    return ""
+
+
+def check_report_for_signed_chart(report_path):
+
+    found,report_data = verifier_report.get_report_data(report_path)
+    if found:
+        outcome,reason = verifier_report.get_signature_is_valid_result(report_data)
+        if "Chart is signed" in reason:
+            return True
+    return False
+
+
+def check_pgp_public_key(owner_pgp_key,report_path):
+
+    ## return True if one of:
+    #  - report not found
+    #  - report is not for a signed chart
+    #  - digests match
+    found,report_data = verifier_report.get_report_data(report_path)
+    if found:
+        pgp_public_key_digest_owners = subprocess.getoutput(f'echo {owner_pgp_key} | sha256sum').split(" ")[0]
+        print(f"[INFO] digest of PGP key from OWNERS :{pgp_public_key_digest_owners}:")
+        pgp_public_digest_report = verifier_report.get_public_key_digest(report_data)
+        print(f"[INFO] PGP key digest in report :{pgp_public_digest_report}:")
+        if pgp_public_digest_report:
+            return pgp_public_key_digest_owners == pgp_public_digest_report
+        else:
+            return not check_report_for_signed_chart(report_path)
+    return True
+
+
+def create_public_key_file(pgp_public_key_from_owners,key_file_path):
+
+    key_content = base64.b64decode(pgp_public_key_from_owners)
+
+    key_file = open(key_file_path, "w")
+    key_file.write(key_content.decode('utf-8'))
+    key_file.close()
+
+
+def main():
+
+    if not is_chart_signed("","./partner-report.yaml"):
+        print("ERROR chart is signed")
+    else:
+        print("PASS chart is signed")
+
+    if not check_report_for_signed_chart("./partner-report.yaml"):
+        print("ERROR report indicates chart is signed")
+    else:
+        print("PASS report is signed")
+
+
+    encoded_key_in_owners = get_pgp_key_from_owners("./OWNERS")
+    if not check_pgp_public_key(encoded_key_in_owners,"./partner-report.yaml"):
+        print("ERROR key digests do not match")
+    else:
+        print("PASS key digests match")
+
+
+    signed,key_in_owners,keys_match = check_and_prepare_signed_chart("","./partner-report.yaml","./OWNERS","./pgp.key")
+    if signed and key_in_owners and keys_match:
+        print("PASS all is good")
+    else:
+        print(f"ERROR, all true expected: signed = {signed}, key_in_owners = {key_in_owners}. keys_match = {keys_match}")
+
+    create_public_key_file(encoded_key_in_owners,"./pgp.key")
+    if os.path.exists("./pgp.key"):
+        if not filecmp.cmp("./psql-service-0.1.11.tgz.key","./pgp.key"):
+            print("ERROR public key files file do not match")
+        else:
+            print("PASS public key files do match")
+        os.remove("./pgp.key")
+    else:
+        print("ERROR pgp key file was not created")
+
+
+
+if __name__ == '__main__':
+    main()
+
+
+
+

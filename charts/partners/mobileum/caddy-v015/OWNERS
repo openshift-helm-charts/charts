@@ -1,0 +1,10 @@
+chart:
+  name: caddy-v015
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: mobaipws
+vendor:
+  label: mobileum
+  name: Mobileum India Pvt. Ltd
