@@ -2334,6 +2334,37 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/nirmata-kyverno-2.6.4/nirmata-kyverno-2.6.4.tgz
     version: 2.6.4
+  - annotations:
+      charts.openshift.io/digest: sha256:049e020cb9dd8e54a32156671d2e0cdb5a772769d16c64dd0c653bac3f99477c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-20T12:54:56.633958+00:00'
+      charts.openshift.io/provider: Nirmata
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-12-20T13:01:56.542182+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: v1.8.5
+    description: Kubernetes Native Policy Management
+    digest: bd614af286d981774392327e77020831d0dd85f0119afa06867c7182585fb7a1
+    home: https://kyverno.io/
+    icon: https://github.com/kyverno/kyverno/raw/main/img/logo.png
+    keywords:
+    - kubernetes
+    - nirmata
+    - policy agent
+    - validating webhook
+    - admissions controller
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - name: Nirmata
+      url: https://kyverno.io/
+    name: kyverno
+    sources:
+    - https://github.com/kyverno/kyverno
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/nirmata-kyverno-2.6.5/kyverno-2.6.5.tgz
+    version: 2.6.5
   redhat-cryostat:
   - annotations:
       charts.openshift.io/digest: sha256:16c798a6a148c3d5d7a95a1c25fa727f56cd065a2f412d0991781e5939472b64
@@ -4044,4 +4075,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2022-12-19T04:47:09.374328+00:00'
+generated: '2022-12-20T13:01:56.542182+00:00'
