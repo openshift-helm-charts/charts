@@ -4050,6 +4050,52 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.12.0/wavefronthq-wavefront-1.12.0.tgz
     version: 1.12.0
+  - annotations:
+      charts.openshift.io/digest: sha256:7c8f5d0ea4eb7f9672c7d49d59169adb7859ea8bc8837cb5f089704a84f7984f
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-21T00:08:46.958038+00:00'
+      charts.openshift.io/provider: VMWare
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-12-21T19:33:13.230174+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.9'
+    apiVersion: v2
+    appVersion: 1.13.0
+    dependencies:
+    - condition: kubeStateMetrics.enabled
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: ^4.16.0
+    description: Wavefront Collector for Kubernetes
+    digest: fd3723819deaea72526da3225b8360a1acd94df1af49d450c424a01b36569fd9
+    home: https://www.wavefront.com
+    keywords:
+    - metric
+    - monitoring
+    - observability
+    - alerting
+    kubeVersion: '>= 1.19'
+    maintainers:
+    - email: akodali@vmware.com
+      name: akodali18
+    - email: jcornish@vmware.com
+      name: johncornish
+    - email: jgee@vmware.com
+      name: josephgee
+    - email: shaoh@vmware.com
+      name: helen-shao
+    - email: matthewco@vmware.com
+      name: mceldeen
+    - email: mamichael@vmware.com
+      name: mmichael
+    - email: pselvaganesa@vmware.com
+      name: priyaselvaganesan
+    name: wavefront
+    sources:
+    - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
+    - https://github.com/wavefrontHQ/wavefront-proxy
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.13.0/wavefront-1.13.0.tgz
+    version: 1.13.0
   yugabytedb-yugaware-openshift:
   - annotations:
       charts.openshift.io/digest: sha256:6e6edeb0cd098762e8e5c7ffc0c3005bdb61b2af6ed7b3725aeb3d6ac41d4806
@@ -4075,4 +4121,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2022-12-20T13:01:56.542182+00:00'
+generated: '2022-12-21T19:33:13.230174+00:00'
