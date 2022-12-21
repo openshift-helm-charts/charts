@@ -1,0 +1,10 @@
+chart:
+  name: data-sync
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: mobaipws
+vendor:
+  label: mobileum
+  name: Mobileum India Pvt. Ltd
