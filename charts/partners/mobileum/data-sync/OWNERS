@@ -1,0 +1,9 @@
+chart:
+  name: data-sync
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: mobileum
+  name: Mobileum India Pvt. Ltd
