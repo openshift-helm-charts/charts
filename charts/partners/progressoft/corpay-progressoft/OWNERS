@@ -1,0 +1,9 @@
+chart:
+  name: corpay-progressoft
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: progressoft
+  name: ProgressSoft Corporation
