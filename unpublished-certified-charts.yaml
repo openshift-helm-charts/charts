@@ -526,6 +526,186 @@ entries:
     urls:
     - N/A
     version: 22.5.0-p4
+  progressoft-corpay-progressoft:
+  - annotations:
+      charts.openshift.io/digest: sha256:39b7fdecbc249d5570a769e0814575f7d3d65a99445c0d43be5459ca05dbfc75
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-27T17:31:03.429214+03:00'
+      charts.openshift.io/name: corpay-progressoft
+      charts.openshift.io/provider: ProgressSoft Corporation
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-12-27T15:45:36.415351+00:00'
+      charts.openshift.io/supportURL: https://www.progressoft.com/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 19.0.3
+    dependencies:
+    - condition: global.keycloak_enabled
+      name: keycloak
+      repository: ''
+    - condition: global.mq_rest_api_enabled
+      name: mq-rest-api
+      repository: ''
+    - condition: global.data_management_enabled
+      name: data-management
+      repository: ''
+    - condition: global.beneficiary_enabled
+      name: beneficiary
+      repository: ''
+    - condition: global.bi_dashboard_enabled
+      name: bi-dashboard
+      repository: ''
+    - condition: global.payments_enabled
+      name: payments
+      repository: ''
+    - condition: global.template_engine_enabled
+      name: template-engine
+      repository: ''
+    - condition: global.corporate_ui_shell_enabled
+      name: corporate-ui-shell
+      repository: ''
+    - condition: global.bank_frontend_shell_enabled
+      name: bank-frontend-shell
+      repository: ''
+    - condition: global.ecc_sync_enabled
+      name: ecc-sync
+      repository: ''
+    - condition: global.onus_sync_enabled
+      name: onus-sync
+      repository: ''
+    - condition: global.eccapi_mock_enabled
+      name: eccapi-mock
+      repository: ''
+    - condition: global.cash_management_enabled
+      name: cash-management
+      repository: ''
+    - condition: global.bc_enabled
+      name: bc
+      repository: ''
+    - condition: global.corpay_utility_enabled
+      name: corpay-utility
+      repository: ''
+    - condition: global.sib_corporate_shell_enabled
+      name: sib-corporate-shell
+      repository: ''
+    - condition: global.nic_bcn_integration_enabled
+      name: nic-bcn-integration
+      repository: ''
+    - condition: global.uae_sib_integration_enabled
+      name: uae-sib-integration
+      repository: ''
+    - condition: global.qib_integration_enabled
+      name: qib-integration
+      repository: ''
+    - condition: global.oracledb_enabled
+      name: oracledb
+      repository: ''
+    - condition: global.sib_corporate_profile_enabled
+      name: sib-corporate-profile
+      repository: ''
+    - condition: global.tf_config_service_enabled
+      name: tf-config-service
+      repository: ''
+    - condition: global.idm_enabled
+      name: idm
+      repository: ''
+    - condition: global.checks_enabled
+      name: checks
+      repository: ''
+    - condition: global.zuul_gateway_enabled
+      name: zuul-gateway
+      repository: ''
+    - condition: global.sib_checks_mngt_enabled
+      name: sib-checks-mngt
+      repository: ''
+    - condition: global.mailhog_enabled
+      name: mailhog
+      repository: ''
+    - condition: global.operator_ui_shell_enabled
+      name: operator-ui-shell
+      repository: ''
+    - condition: global.bnft_bank_shell_enabled
+      name: bnft-bank-shell
+      repository: ''
+    - condition: global.sib_bank_shell_enabled
+      name: sib-bank-shell
+      repository: ''
+    - condition: global.artemis_enabled
+      name: artemis
+      repository: ''
+    - condition: global.artemis_ha_enabled
+      name: artemis-ha
+      repository: ''
+    - condition: global.ecc_simulator_enabled
+      name: ecc-simulator
+      repository: ''
+    - condition: global.payment_file_parser_enabled
+      name: payment-file-parser
+      repository: ''
+    - condition: global.bc_enabled
+      name: bc
+      repository: ''
+    - condition: global.lg_enabled
+      name: lg
+      repository: ''
+    - condition: global.gc_enabled
+      name: gc
+      repository: ''
+    - condition: global.lc_enabled
+      name: lc
+      repository: ''
+    - condition: global.retail_ui_shell_enabled
+      name: retail-ui-shell
+      repository: ''
+    - condition: global.corpay_integration_enabled
+      name: corpay-integration
+      repository: ''
+    - condition: global.oab_integration_enabled
+      name: oab-integration
+      repository: ''
+    - condition: global.corpay_castlemock_enabled
+      name: corpay-castlemock
+      repository: ''
+    - condition: global.chatbot_enabled
+      name: chatbot
+      repository: ''
+    - condition: global.main_shell_enabled
+      name: main-shell
+      repository: ''
+    - condition: global.fixed_deposits_and_loans_enabled
+      name: fixed-deposits-and-loans
+      repository: ''
+    - condition: global.docs_enabled
+      name: docs
+      repository: ''
+    - condition: global.iccs_api_enabled
+      name: iccs-api
+      repository: ''
+    - condition: global.cloud_gateway_enabled
+      name: cloud-gateway
+      repository: ''
+    - condition: global.file_parser_enabled
+      name: file-parser
+      repository: ''
+    - condition: global.correspondence_enabled
+      name: correspondence
+      repository: ''
+    - condition: global.ibmmq_enabled
+      name: ibmmq
+      repository: ''
+    - condition: global.hazelcast_enabled
+      name: hazelcast
+      repository: ''
+    - condition: global.events_store_enabled
+      name: events-store
+      repository: ''
+    description: corpay team helm chart
+    digest: 356344e13ba47e2a7c7187803ebe1da430c22bd4e420620b1ca988956ba827d3
+    kubeVersion: '> 1.19.0'
+    name: corpay-progressoft
+    urls:
+    - N/A
+    version: 19.0.3
   vitagroupag-cdr-core-ehrbase-enterprise:
   - annotations:
       charts.openshift.io/digest: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
@@ -555,4 +735,4 @@ entries:
     urls:
     - N/A
     version: 0.1.8
-generated: '2022-11-21T15:44:26.481822+00:00'
+generated: '2022-12-27T15:45:36.415351+00:00'
