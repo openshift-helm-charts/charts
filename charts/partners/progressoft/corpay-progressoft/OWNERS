@@ -6,6 +6,7 @@ providerDelivery: true
 publicPgpKey: null
 users:
 - githubUsername: nour-alsatari
+- githubUsername: naelalbashir
 vendor:
   label: progressoft
   name: ProgressSoft Corporation
