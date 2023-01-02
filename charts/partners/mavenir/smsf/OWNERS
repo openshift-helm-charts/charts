@@ -1,6 +1,6 @@
 chart:
   name: smsf
-  shortDescription: null
+  shortDescription: Mavenir SMSF Helm Charts
 providerDelivery: false
 publicPgpKey: null
 users:
