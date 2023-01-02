@@ -1,8 +1,8 @@
 chart:
   name: smsf
   shortDescription: null
+providerDelivery: false
 publicPgpKey: null
-providerDelivery: True
 users:
 - githubUsername: kaitaklam
 vendor:
