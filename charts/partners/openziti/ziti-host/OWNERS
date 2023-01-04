@@ -1,9 +1,17 @@
 chart:
   name: ziti-host
-  shortDescription: unknown
+  shortDescription: Expose cluster services with Ziti
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: qrkourier
+- githubUsername: dovholuknf
+- githubUsername: smilindave26
+- githubUsername: gberl002
+- githubUsername: mguthrie88
+- githubUsername: mikegorman-nf
+- githubUsername: sabedevops
+- githubUsername: scareything
 vendor:
   label: openziti
   name: NetFoundry
