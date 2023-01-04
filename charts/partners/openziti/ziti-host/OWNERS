@@ -1,0 +1,9 @@
+chart:
+  name: ziti-host
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: openziti
+  name: NetFoundry
