@@ -1,6 +1,7 @@
 chart:
-  name: caddy
-  shortDescription: 'This chart will deploy caddy '
+  name: caddy-015
+  shortDescription: null
+providerDelivery: true
 publicPgpKey: null
 users:
 - githubUsername: mobaipws

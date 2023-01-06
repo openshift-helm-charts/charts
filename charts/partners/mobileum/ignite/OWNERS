@@ -1,0 +1,10 @@
+chart:
+  name: ignite
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: mobaipws
+vendor:
+  label: mobileum
+  name: Mobileum India Pvt. Ltd

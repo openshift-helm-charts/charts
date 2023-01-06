@@ -1,5 +1,5 @@
 chart:
-  name: caddy-v015
+  name: data-sync
   shortDescription: null
 providerDelivery: true
 publicPgpKey: null
