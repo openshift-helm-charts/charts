@@ -1,0 +1,9 @@
+chart:
+  name: stackgres-operator-gl
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: ongres
+  name: OnGres
