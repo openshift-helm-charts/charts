@@ -1,0 +1,10 @@
+chart:
+  name: a10tkc
+  shortDescription: test
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: chandansingh1653
+vendor:
+  label: a10networks
+  name: A10 Networks
