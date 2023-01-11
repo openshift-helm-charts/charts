@@ -1,0 +1,607 @@
+Using config file: config.yaml
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.9.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        reportDigest: uint64:7671850966091442761
+        chart-uri: N/A
+        digests:
+            chart: sha256:7483cdcc70e3465afc7e9d6d38239c398a71f78aff0e24958fb39b6bf1b35a3a
+            package: e7b60b37fb4a71a76dd88a990fb8baa1e3167cf4b287b93ca8b85904755b9e59
+        lastCertifiedTimestamp: "2023-01-09T11:28:35.454508+01:00"
+        testedOpenShiftVersion: "4.10"
+        supportedOpenShiftVersions: '>=4.5'
+        providerControlledDelivery: true
+    chart:
+        name: mco
+        home: ""
+        sources: []
+        version: 3.0.1800-b17
+        description: Helmchart for MCO
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 3.0.1800-b17
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: MCO Chart
+            charts.openshift.io/provider: Mavenir
+        kubeversion: '>= 1.17.3-0'
+        dependencies:
+            - name: admin-tools
+              version: 3.0.1800-b17
+              repository: ""
+              condition: admin-tools.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: arm
+              version: 3.0.1800-b17
+              repository: ""
+              condition: arm.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cdma
+              version: 3.0.1800-b17
+              repository: ""
+              condition: cdma-r.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: cdma-r
+            - name: cdma
+              version: 3.0.1800-b17
+              repository: ""
+              condition: cdma-t.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: cdma-t
+            - name: cex
+              version: 3.0.1800-b17
+              repository: ""
+              condition: cex.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cfgpull
+              version: 3.0.1800-b17
+              repository: ""
+              condition: cfgpull.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: collector
+              version: 3.0.1800-b17
+              repository: ""
+              condition: collector.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cron
+              version: 3.0.1800-b17
+              repository: ""
+              condition: cron.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: dbfi
+              version: 3.0.1800-b17
+              repository: ""
+              condition: dbfi.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: dbft
+              version: 3.0.1800-b17
+              repository: ""
+              condition: dbft.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: dbfm
+              version: 3.0.1800-b17
+              repository: ""
+              condition: dbfm.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: echos
+              version: 3.0.1800-b17
+              repository: ""
+              condition: echos.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: gsm-0340
+              version: 3.0.1800-b17
+              repository: ""
+              condition: gsm-0340-r.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: gsm-0340-r
+            - name: gsm-0340
+              version: 3.0.1800-b17
+              repository: ""
+              condition: gsm-0340-t.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: gsm-0340-t
+            - name: ifxr
+              version: 3.0.1800-b17
+              repository: ""
+              condition: ifxr.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: k8sag
+              version: 3.0.1800-b17
+              repository: ""
+              condition: k8sag.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: kernel
+              version: 3.0.1800-b17
+              repository: ""
+              condition: kernel.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: lida
+              version: 3.0.1800-b17
+              repository: ""
+              condition: lida.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: lipa
+              version: 3.0.1800-b17
+              repository: ""
+              condition: lipa.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mag
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mag.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mm1c
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mm1c.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mm1s
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mm1s.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mm3c
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mm3c.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mm3s
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mm3s.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mm4c
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mm4c.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mm4s
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mm4s.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mm7c
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mm7c.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mm7s
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mm7s.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mmk
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mmk.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: mmr
+              version: 3.0.1800-b17
+              repository: ""
+              condition: mmr.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: hmp
+              version: 3.0.1800-b17
+              repository: ""
+              condition: hmp.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: msg-t
+              version: 3.0.1800-b17
+              repository: ""
+              condition: msg-t.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: netconfgw
+              version: 3.0.1800-b17
+              repository: ""
+              condition: netconfgw.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: nrfag
+              version: 3.0.1800-b17
+              repository: ""
+              condition: nrfag.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: oamzoo
+              version: 3.0.1800-b17
+              repository: ""
+              condition: oamzoo.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: orion
+              version: 3.0.1800-b17
+              repository: ""
+              condition: orion.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: orion
+            - name: pag
+              version: 3.0.1800-b17
+              repository: ""
+              condition: pag.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: prometheus
+              version: 3.0.1800-b17
+              repository: ""
+              condition: prometheus.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: pusa
+              version: 3.0.1800-b17
+              repository: ""
+              condition: pusa.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: redis
+              version: 3.0.1800-b17
+              repository: ""
+              condition: redis-m.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: redis-m
+            - name: redis
+              version: 3.0.1800-b17
+              repository: ""
+              condition: redis-s.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: redis-s
+            - name: restgw
+              version: 3.0.1800-b17
+              repository: ""
+              condition: restgw.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: scn
+              version: 3.0.1800-b17
+              repository: ""
+              condition: scn.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: shark
+              version: 3.0.1800-b17
+              repository: ""
+              condition: shark.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: redis
+              version: 3.0.1800-b17
+              repository: ""
+              condition: shredis-m.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: shredis-m
+            - name: redis
+              version: 3.0.1800-b17
+              repository: ""
+              condition: shredis-s.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: shredis-s
+            - name: replicator
+              version: 3.0.1800-b17
+              repository: ""
+              condition: replicator.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sgs
+              version: 3.0.1800-b17
+              repository: ""
+              condition: sgs.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: slc
+              version: 3.0.1800-b17
+              repository: ""
+              condition: slc.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: smog
+              version: 3.0.1800-b17
+              repository: ""
+              condition: smog.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: smpp
+              version: 3.0.1800-b17
+              repository: ""
+              condition: smpp.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: smtp
+              version: 3.0.1800-b17
+              repository: ""
+              condition: smtp.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: snmpag
+              version: 3.0.1800-b17
+              repository: ""
+              condition: snmpag.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sodia
+              version: 3.0.1800-b17
+              repository: ""
+              condition: sodia.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sol
+              version: 3.0.1800-b17
+              repository: ""
+              condition: sol.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sonas
+              version: 3.0.1800-b17
+              repository: ""
+              condition: sonas.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: spooler
+              version: 3.0.1800-b17
+              repository: ""
+              condition: spooler.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: ucp
+              version: 3.0.1800-b17
+              repository: ""
+              condition: ucp.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: vesag
+              version: 3.0.1800-b17
+              repository: ""
+              condition: vesag.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: zookeeper
+              version: 3.0.1800-b17
+              repository: ""
+              condition: zookeeper.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/kaitlam/dbfi:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/pag:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/kernel:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/ice:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/gsm:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/cfgpull:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/dbft:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/k8sag:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/lida:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/smpp:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/ucp:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/sol:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/dbfm:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/arm:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/ims:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/echos:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/oamzoo:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/sgs:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/smog:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/sonas:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/admin-tools:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/zookeeper:3.8.00.b06.el7
+        Image is Red Hat certified : quay.io/kaitlam/vesag:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/shark:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/slc:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/snmpag:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/lipa:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/smtp:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/spooler:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/redis:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/restgw:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/pusa:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/orion:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/nrfag:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/ifxr:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/scn:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/sodia:r3.0-18.00.b17.el7
+        Image is Red Hat certified : quay.io/kaitlam/collector:r3.0-18.00.b17.el7
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+

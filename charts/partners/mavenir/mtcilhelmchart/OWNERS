@@ -1,0 +1,9 @@
+chart:
+  name: mtcilhelmchart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

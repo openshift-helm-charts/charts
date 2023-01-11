@@ -1,7 +1,7 @@
 chart:
-  name: smsf
-  shortDescription: Mavenir SMSF Helm Charts
-providerDelivery: false
+  name: mco
+  shortDescription: null
+providerDelivery: true
 publicPgpKey: null
 users:
 - githubUsername: kaitaklam

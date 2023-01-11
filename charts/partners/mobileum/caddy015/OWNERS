@@ -1,5 +1,5 @@
 chart:
-  name: caddy-v015
+  name: caddy015
   shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
@@ -7,4 +7,3 @@ users: []
 vendor:
   label: mobileum
   name: Mobileum India Pvt. Ltd
-  

@@ -1,5 +1,5 @@
 chart:
-  name: stackgres-operator
+  name: stackgres-operator-gl
   shortDescription: null
 providerDelivery: false
 publicPgpKey: null
