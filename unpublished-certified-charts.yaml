@@ -1004,4 +1004,23 @@ entries:
     urls:
     - N/A
     version: 0.1.8
-generated: '2023-01-09T11:22:11.038147+00:00'
+  vitagroupag-ehrbase:
+  - annotations:
+      charts.openshift.io/digest: sha256:556215013f4816d6ec8ee3233ff65944d7bebc4b1e3b0346eac2727408d57289
+      charts.openshift.io/lastCertifiedTimestamp: '2023-01-11T15:32:49.944127+00:00'
+      charts.openshift.io/name: EHRBase Enterprise
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-01-11T15:35:20.617241+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 0.1.12
+    description: A Helm chart for Kubernetes
+    digest: 7e52cee0d93ab7df5fb01394db892025eb159771e9ac4bf82e26054ed89c7a94
+    kubeVersion: ^1.20.0
+    name: ehrbase
+    type: application
+    urls:
+    - N/A
+    version: 0.1.12
+generated: '2023-01-11T15:35:20.617241+00:00'
