@@ -1,9 +1,10 @@
 chart:
   name: caddy015
-  shortDescription: unknown
+  shortDescription: Mobileum Private Repository
 providerDelivery: true
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: mobaipws
 vendor:
   label: mobileum
   name: Mobileum India Pvt. Ltd
