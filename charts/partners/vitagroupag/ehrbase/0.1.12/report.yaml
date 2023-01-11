@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:4077017086993041991
+        reportDigest: uint64:630251185802695708
         chart-uri: ehrbase-0.1.12.tgz
         digests:
             chart: sha256:556215013f4816d6ec8ee3233ff65944d7bebc4b1e3b0346eac2727408d57289
             package: 7e52cee0d93ab7df5fb01394db892025eb159771e9ac4bf82e26054ed89c7a94
-        lastCertifiedTimestamp: "2023-01-11T14:47:40.179035+00:00"
+        lastCertifiedTimestamp: "2023-01-11T15:12:27.542424+00:00"
         testedOpenShiftVersion: "4.11"
         supportedOpenShiftVersions: '>=4.7'
         providerControlledDelivery: false
@@ -36,58 +36,58 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
     - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
       reason: Values schema file exist
-    - check: v1.0/contains-values
+    - check: v1.1/has-kubeversion
       type: Mandatory
       outcome: PASS
-      reason: Values file exist
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
+      reason: Kubernetes version specified
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
-    - check: v1.0/required-annotations-present
+    - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
-      reason: All required annotations present
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
     - check: v1.0/signature-is-valid
       type: Mandatory
       outcome: SKIPPED
       reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
       reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
     - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
       reason: |-
         Image is Red Hat certified : registry.access.redhat.com/ubi8-minimal:latest
         Image is Red Hat certified : registry.connect.redhat.com/vitagroupag/ehrbase:0.22.0-feat-PMK-40_RedHat-OpenShift-Compliance-8
-    - check: v1.0/not-contains-crds
+    - check: v1.0/required-annotations-present
       type: Mandatory
       outcome: PASS
-      reason: Chart does not contain CRDs
+      reason: All required annotations present
     - check: v1.0/contains-test
       type: Mandatory
       outcome: PASS
       reason: Chart test files exist
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
 
