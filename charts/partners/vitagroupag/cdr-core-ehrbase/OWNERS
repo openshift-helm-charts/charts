@@ -1,9 +1,10 @@
 chart:
   name: cdr-core-ehrbase
-  shortDescription: unknown
+  shortDescription: null
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: bjoernpauli
 vendor:
   label: vitagroupag
   name: Vitagroup AG
