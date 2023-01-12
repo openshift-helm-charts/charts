@@ -1,6 +1,6 @@
 chart:
   name: alerter
-  shortDescription: null
+  shortDescription: Mobileum Private Repository
 providerDelivery: true
 publicPgpKey: null
 users:
