@@ -1,0 +1,9 @@
+chart:
+  name: keycloak040
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: mobileum
+  name: Mobileum India Pvt. Ltd
