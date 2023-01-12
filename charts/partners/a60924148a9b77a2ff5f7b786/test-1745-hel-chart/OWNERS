@@ -1,9 +1,10 @@
 chart:
   name: test-1745-hel-chart
-  shortDescription: unknown
+  shortDescription: test
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: dGVzdA==
+users:
+- githubUsername: sawalgiriraj
 vendor:
   label: a60924148a9b77a2ff5f7b786
   name: Vikas Mulaje
