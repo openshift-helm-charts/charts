@@ -50,6 +50,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/dh2i-dxemssql-1.0.1/dxemssql-1.0.1.tgz
     version: 1.0.1
+  exate-exateapigator:
+  - annotations:
+      charts.openshift.io/digest: sha256:2844ec382545ca9657f2a3ae5b0b4f417c5fe40b42cf8bdc11577ea162ecbcfb
+      charts.openshift.io/lastCertifiedTimestamp: '2023-01-16T13:52:25.629673+00:00'
+      charts.openshift.io/name: exateapigator
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-01-16T13:56:05.839757+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.6'
+    apiVersion: v2
+    appVersion: 0.1.0
+    description: An eXate APIgator application deployment
+    digest: c22f6a06a434022b30a92e05931a5c88cef509eb040b5cf5a99d3b8476c860fa
+    home: https://dev.azure.com/exatetechnology/exatetechnology/
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - name: eXate Technology
+    name: exateapigator
+    type: application
+    urls:
+    - https://charts.test.exate.co/chartrepo/exate-apigator/charts/exateapigator-0.1.0.tgz
+    version: 0.1.0
   exfo-uv-helm:
   - annotations:
       charts.openshift.io/digest: sha256:4e7e593c0f1e3fd1d8b984122516d56d5c82035b6da313aac9c8ef12da64173a
@@ -4155,4 +4177,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2023-01-05T09:24:11.264597+00:00'
+generated: '2023-01-16T13:56:05.839757+00:00'
