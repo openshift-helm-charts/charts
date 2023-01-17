@@ -28,7 +28,7 @@ metadata:
         condition: ""
         tags: ""
         appversion: 0.5.3
-        deprecated: false
+        deprecated: true
         annotations:
             charts.openshift.io/archs: x86_64
             charts.openshift.io/name: RAID Platform
