@@ -317,6 +317,7 @@ entries:
       charts.openshift.io/provider: Fortanix
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-09-15T16:16:28.446206+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: 4.3 - 4.8
     apiVersion: v2
     appVersion: '1.0'
     dependencies:
@@ -1839,6 +1840,7 @@ entries:
       charts.openshift.io/provider: IBM
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-09-30T13:31:43.533924+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
     apiVersion: v2
     appVersion: 10.0.0
     dependencies:
@@ -1950,6 +1952,7 @@ entries:
       charts.openshift.io/provider: IBM
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-09-30T13:27:15.496178+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
     apiVersion: v2
     appVersion: 10.0.0
     dependencies:
@@ -2043,6 +2046,7 @@ entries:
       charts.openshift.io/provider: IBM
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-10-19T05:01:53.860425+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
     apiVersion: v2
     appVersion: 1.1.0
     description: 'IBM Operator Catalog enablement deploys custom CatalogSources and
@@ -2082,6 +2086,7 @@ entries:
       charts.openshift.io/provider: IBM
       charts.openshift.io/providerType: partner
       charts.openshift.io/submissionTimestamp: '2021-08-24T15:08:45.616458+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
     apiVersion: v2
     appVersion: 10.1.8.1
     description: 'IBM Spectrum Protect Plus is a data protection and availability
@@ -2988,6 +2993,7 @@ entries:
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-09-28T14:29:47.768554+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
     apiVersion: v2
     description: A Helm chart to build and deploy Node.js applications
     digest: e95a9fcb1c7a52025c09a37e2150235624a12bfadad561c34279abc2d067272f
