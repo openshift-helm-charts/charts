@@ -5,6 +5,7 @@ providerDelivery: false
 publicPgpKey: null
 users:
 - githubUsername: bovem
+- githubUsername: opcert
 vendor:
   label: a60924148a9b77a2ff5f7b786
   name: Vikas Mulaje
