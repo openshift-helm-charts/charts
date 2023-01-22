@@ -1,9 +1,11 @@
 chart:
   name: opscruise
-  shortDescription: unknown
+  shortDescription: Helm chart for deploying OpsCruise
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: opscruiseindia
+- githubUsername: cesar.quintana
 vendor:
   label: opscruise
   name: Opscruise, Inc.
