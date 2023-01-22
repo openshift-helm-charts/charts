@@ -1,0 +1,9 @@
+chart:
+  name: opscruise
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: opscruise
+  name: Opscruise, Inc.
