@@ -6,15 +6,15 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:1594989441813019293
-        chart-uri: /charts/illumio-4.0.0.tgz
+        reportDigest: uint64:5148844088997397774
+        chart-uri: N/A
         digests:
             chart: sha256:7b56401ba5858f1178bc2a67fc72468512e2d47041505d90320540e4325cc138
             package: b9ecf4d4133d8b3e272ab21a252bf1c555e4cd9f67f9dcac86ec38ac4236932a
-        lastCertifiedTimestamp: "2023-01-23T20:54:18.442756+00:00"
+        lastCertifiedTimestamp: "2023-01-23T21:35:01.18158+00:00"
         testedOpenShiftVersion: "4.11"
         supportedOpenShiftVersions: '>=4.7'
-        providerControlledDelivery: false
+        providerControlledDelivery: true
     chart:
         name: illumio
         home: ""
@@ -36,22 +36,10 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/has-readme
+    - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
+      reason: Chart does not contain CRDs
     - check: v1.0/required-annotations-present
       type: Mandatory
       outcome: PASS
@@ -64,22 +52,6 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Kubernetes version specified
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
     - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
@@ -87,8 +59,36 @@ results:
         Image is Red Hat certified : quay.io/illumio/cven:22.5.11-9729
         Image is Red Hat certified : quay.io/illumio/kubelink:3.2.0.7b7a38
         Image is Red Hat certified : registry.access.redhat.com/ubi9/toolbox:9.0.0-13
-    - check: v1.0/not-contains-crds
+    - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
-      reason: Chart does not contain CRDs
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
 
