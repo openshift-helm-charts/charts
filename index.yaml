@@ -93,6 +93,27 @@ entries:
     urls:
     - https://charts.test.exate.co/chartrepo/exate-apigator/charts/exateapigator-0.2.0.tgz
     version: 0.2.0
+  - annotations:
+      charts.openshift.io/digest: sha256:2d585ecc336e63e2081ccbc3feadafcd7c6784bad00f82240aa969d4dc4ec7cc
+      charts.openshift.io/lastCertifiedTimestamp: '2023-01-23T09:59:54.580005+00:00'
+      charts.openshift.io/name: exateapigator
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-01-23T10:01:56.097237+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.6'
+    apiVersion: v2
+    appVersion: 0.3.0
+    description: An eXate APIgator application deployment
+    digest: 04f2b02145520ccb0ace6be786cb13e26acfa4624f3b129b1751d404757abac7
+    home: https://dev.azure.com/exatetechnology/exatetechnology/
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - name: eXate Technology
+    name: exateapigator
+    type: application
+    urls:
+    - https://charts.test.exate.co/chartrepo/exate-apigator/charts/exateapigator-0.3.0.tgz
+    version: 0.3.0
   exfo-uv-helm:
   - annotations:
       charts.openshift.io/digest: sha256:4e7e593c0f1e3fd1d8b984122516d56d5c82035b6da313aac9c8ef12da64173a
@@ -4238,4 +4259,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2023-01-23T07:09:58.531137+00:00'
+generated: '2023-01-23T10:01:56.097237+00:00'
