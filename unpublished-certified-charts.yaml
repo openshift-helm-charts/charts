@@ -44,7 +44,7 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2023-01-23T21:35:01.18158+00:00'
       charts.openshift.io/name: Illumio Core for Kubernetes
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-01-23T21:39:07.179638+00:00'
+      charts.openshift.io/submissionTimestamp: '2023-01-23T21:39:23.607630+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
       charts.openshift.io/testedOpenShiftVersion: '4.11'
     apiVersion: v2
@@ -1042,4 +1042,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-01-23T21:39:07.179638+00:00'
+generated: '2023-01-23T21:39:23.607630+00:00'
