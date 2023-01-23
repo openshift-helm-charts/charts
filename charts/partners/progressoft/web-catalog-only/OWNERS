@@ -1,0 +1,9 @@
+chart:
+  name: web-catalog-only
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: progressoft
+  name: ProgressSoft Corporation
