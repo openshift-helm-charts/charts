@@ -12,10 +12,6 @@ class E2ETestSecret:
     pr_number: int = -1
     vendor_type: str = ''
     owners_file_content: str = ''
-    test_chart: str = ''
-    test_report: str = ''
-    chart_name: str = ''
-    chart_version: str = ''
 
 @dataclass
 class E2ETestSecretOneShot(E2ETestSecret):

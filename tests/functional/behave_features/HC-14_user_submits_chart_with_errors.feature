@@ -11,18 +11,18 @@ Feature: Chart submission with errors
 
     @partners @smoke @full
     Examples:
-      | vendor_type  | vendor    | chart_path                     | message                                          | user         |
-      | partners     | hashicorp | tests/data/vault-0.17.0.tgz    | is not allowed to submit the chart on behalf of  | unauthorized |
+      | vendor_type  | vendor    | chart_path                  | message                                          | user         |
+      | partners     | hashicorp | tests/data/vault-0.17.0.tgz | is not allowed to submit the chart on behalf of  | unauthorized |
     
     @redhat @full
     Examples:
-      | vendor_type  | vendor    | chart_path                     | message                                          | user         |
-      | redhat       | redhat    | tests/data/vault-0.17.0.tgz    | is not allowed to submit the chart on behalf of  | unauthorized |
+      | vendor_type  | vendor    | chart_path                  | message                                          | user         |
+      | redhat       | redhat    | tests/data/vault-0.17.0.tgz | is not allowed to submit the chart on behalf of  | unauthorized |
     
     @community @full
     Examples:
-      | vendor_type  | vendor    | chart_path                     | message                                          | user         |
-      | community    | redhat    | tests/data/vault-0.17.0.tgz    | is not allowed to submit the chart on behalf of  | unauthorized |
+      | vendor_type  | vendor    | chart_path                  | message                                          | user         |
+      | community    | redhat    | tests/data/vault-0.17.0.tgz | is not allowed to submit the chart on behalf of  | unauthorized |
 
   Scenario Outline: [HC-14-002] An authorized user submits a chart with incorrect version
     Given the vendor "<vendor>" has a valid identity as "<vendor_type>"
@@ -35,15 +35,30 @@ Feature: Chart submission with errors
 
     @partners @smoke @full
     Examples:
-      | vendor_type  | vendor    | chart_path                     | message                               | bad_version | 
-      | partners     | hashicorp | tests/data/vault-0.17.0.tgz    | doesn't match the directory structure | 9.9.9       |
-    
+      | vendor_type  | vendor    | chart_path                  | message                               | bad_version | 
+      | partners     | hashicorp | tests/data/vault-0.17.0.tgz | doesn't match the directory structure | 9.9.9       |
+      | partners     | hashicorp | tests/data/vault-0.17.0.tgz | The chart verifier returned an error  | abc-9.9.9       |
+
     @redhat @full
     Examples:
-      | vendor_type  | vendor    | chart_path                     | message                               | bad_version |
-      | redhat       | redhat    | tests/data/vault-0.17.0.tgz    | doesn't match the directory structure | 9.9.9       |
+      | vendor_type  | vendor    | chart_path                  | message                               | bad_version |
+      | redhat       | redhat    | tests/data/vault-0.17.0.tgz | doesn't match the directory structure | 9.9.9       |
     
     @community @full
     Examples:
-      | vendor_type  | vendor    | chart_path                     | message                               | bad_version |
-      | community    | redhat    | tests/data/vault-0.17.0.tgz    | doesn't match the directory structure | 9.9.9       |
+      | vendor_type  | vendor    | chart_path                  | message                               | bad_version |
+      | community    | redhat    | tests/data/vault-0.17.0.tgz | doesn't match the directory structure | 9.9.9       |
+    
+  Scenario Outline: [HC-14-003] A user submits a chart with bad semantic version 
+    Given the vendor "<vendor>" has a valid identity as "<vendor_type>"
+    And a chart source used in "<chart_path>" and directory structure contains "<bad_version>"
+    And Chart.yaml specifies a "<bad_version>"
+    And the user creates a branch to add a new chart version
+    When the user sends a pull request with the chart
+    Then the pull request is not merged
+    And user gets the "<message>" in the pull request comment
+
+    @partners @smoke @full
+    Examples:
+      | vendor_type  | vendor    | chart_path                  | message                                            | bad_version |
+      | partners     | hashicorp | tests/data/vault-0.17.0.tgz | Helm chart version is not a valid semantic version | abc-0.17.0  |

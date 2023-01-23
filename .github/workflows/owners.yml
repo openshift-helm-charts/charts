@@ -1,0 +1,81 @@
+name: Metrics for owners file
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  owners-metrics:
+    name: Send Owner Metrics
+    runs-on: ubuntu-20.04
+    if: github.actor == 'redhat-mercury-bot'
+    env:
+      SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
+      SEGMENT_TEST_WRITE_KEY: ${{ secrets.SEGMENT_TEST_WRITE_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.x Part 1
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
+          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+
+      - uses: jitterbit/get-changed-files@v1
+        id: filesChangedOrModified
+        with:
+          format: space-delimited
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Printing changes made
+        run: |
+          echo "Added:"
+          echo "${{ steps.filesChangedOrModified.outputs.added }}"
+          echo "Modified:"
+          echo "${{ steps.filesChangedOrModified.outputs.modified }}"
+
+      - name: Quit if owners files pushed are not
+        id: check_pr_content
+        run: |
+          SUB="/OWNERS"
+          if [ "${{ steps.filesChangedOrModified.outputs.added[0] }}" == *"$SUB"* ] || [ "${{ steps.filesChangedOrModified.outputs.modified[0] }}" == *"$SUB"* ] ; then
+              echo "OWNERS files have been modified or added"
+              echo "collect_metrics=true" >> $GITHUB_OUTPUT
+          else
+              echo "OWNERS files not pushed"
+              echo "collect_metrics=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Add owner metrics
+        if: ${{ steps.check_pr_content.outputs.collect_metrics == 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
+              WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
+              ID_PREFIX="helm-metric-pr"
+              echo "Use segment production write key"
+          else
+              WRITE_KEY=${{ secrets.SEGMENT_TEST_WRITE_KEY }}
+              ID_PREFIX="helm-test-metric-pr"
+              echo "Use segment test write key"
+          fi
+
+          if [ "${WRITE_KEY}" != "" ]; then
+              echo "add owner metric"
+              ve1/bin/pushowners --write-key="${WRITE_KEY}" \
+                                --metric-type="push_request" \
+                                --repository="${GITHUB_REPOSITORY}" \
+                                --added="${{ steps.filesChangedOrModified.outputs.added }}" \
+                                --modified="${{ steps.filesChangedOrModified.outputs.modified }}" \
+                                --prefix="${ID_PREFIX}"
+          else
+              echo "Do not collect metrics, required segment write key is not set"
+          fi

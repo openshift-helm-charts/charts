@@ -4,7 +4,7 @@ chart:
 providerDelivery: false
 publicPgpKey: null
 users:
-- githubUsername: dh2i-oj
+- githubUsername: dh2i-devs
 vendor:
   label: dh2i
   name: DH2i

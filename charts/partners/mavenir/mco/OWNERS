@@ -1,0 +1,10 @@
+chart:
+  name: mco
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: kaitaklam
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

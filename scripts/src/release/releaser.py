@@ -35,6 +35,8 @@ DEV_PR_BRANCH_BODY_PREFIX="Charts workflow version"
 DEV_PR_BRANCH_NAME_PREFIX="Auto-Release-"
 CHARTS_PR_BRANCH_BODY_PREFIX="Workflow and script updates from development repository"
 CHARTS_PR_BRANCH_NAME_PREFIX="Release-"
+STAGE_PR_BRANCH_BODY_PREFIX="Workflow and script updates from development repository"
+STAGE_PR_BRANCH_NAME_PREFIX="Release-"
 
 SCHEDULE_INSERT = [
     '  # Daily trigger to check updates',
@@ -66,11 +68,19 @@ def make_required_changes(release_info_dir,origin,destination):
 
     print(f"Make required changes from {origin} to {destination}")
 
-    repository = "development"
-    if "charts" in origin or "development" in destination:
-        repository = "charts"
+    if "charts" in origin and "dev" in destination:
+        from_repository = "charts"
+        to_repository = "development"
+    elif "dev" in origin and "charts" in destination:
+        from_repository = "development"
+        to_repository = "charts"
+    elif "dev" in origin and "stage" in destination:
+        from_repository = "development"
+        to_repository = "stage"
+    else:
+        sys.exit("Wrong arguments while calling make_required_changes")
 
-    replaces = release_info.get_replaces(repository,release_info_dir)
+    replaces = release_info.get_replaces(from_repository,to_repository,release_info_dir)
 
     for replace in replaces:
         replace_this=f"{destination}/{replace}"
@@ -84,7 +94,7 @@ def make_required_changes(release_info_dir,origin,destination):
             print(f"Replace file {replace_this} with {with_this}")
             shutil.copy2(with_this,replace_this)
 
-    merges =  release_info.get_merges(repository,release_info_dir)
+    merges =  release_info.get_merges(from_repository,to_repository,release_info_dir)
 
     for merge in merges:
         merge_this = f"{origin}/{merge}"
@@ -98,7 +108,7 @@ def make_required_changes(release_info_dir,origin,destination):
             shutil.copy2(merge_this,into_this)
 
 
-    ignores = release_info.get_ignores(repository,release_info_dir)
+    ignores = release_info.get_ignores(from_repository,to_repository,release_info_dir)
     for ignore in ignores:
         ignore_this = f"{destination}/{ignore}"
         if os.path.isdir(ignore_this):
@@ -119,6 +129,8 @@ def main():
                        help="Directory of development code with latest release info.")
     parser.add_argument("-c", "--charts_dir", dest="charts_dir", type=str, required=True,
                         help="Directory of charts code.")
+    parser.add_argument("-s", "--stage_dir", dest="stage_dir", type=str, required=True,
+                        help="Directory of stage code.")
     parser.add_argument("-p", "--pr_dir", dest="pr_dir", type=str, required=True,
                         help="Directory of pull request code.")
     parser.add_argument("-b", "--dev_pr_body", dest="dev_pr_body", type=str, required=True,
@@ -134,6 +146,7 @@ def main():
     print(f"[INFO] arg version : {args.version}")
     print(f"[INFO] arg dev_dir : {args.dev_dir}")
     print(f"[INFO] arg charts_dir : {args.charts_dir}")
+    print(f"[INFO] arg stage_dir : {args.stage_dir}")
     print(f"[INFO] arg pr_dir : {args.pr_dir}")
     print(f"[INFO] arg dev_pr_body : {args.dev_pr_body}")
     print(f"[INFO] arg target_branch :  {args.target_branch}")
@@ -184,6 +197,26 @@ def main():
     else:
         print("[ERROR] error creating development PR.")
         print('::set-output name=dev_pr_error::true')
+
+    os.chdir(start_directory)
+
+    print(f"make changes to stage from development")
+    make_required_changes(args.pr_dir,args.dev_dir,args.stage_dir)
+    os.chdir(args.stage_dir)
+    stage_repository=f"{organization}{gitutils.STAGE_REPO}"
+    print(f"create stage pull request, repository: {stage_repository}, branch: {args.target_branch} ")
+    branch_name = f"{STAGE_PR_BRANCH_NAME_PREFIX}{args.version}"
+    message = f'{STAGE_PR_BRANCH_BODY_PREFIX} {branch_name}'
+    outcome = gitutils.create_pr(branch_name,[],stage_repository,message,args.target_branch)
+    if outcome == gitutils.PR_CREATED:
+        print(f'::set-output name=stage_pr_created::true')
+    elif outcome == gitutils.PR_NOT_NEEDED:
+        print(f'::set-output name=stage_pr_not_needed::true')
+    else:
+        print("[ERROR] error creating stage PR")
+        print(f'::set-output name=stage_pr_error::true')
+        os.chdir(start_directory)
+        return
 
     os.chdir(start_directory)
 

@@ -6,13 +6,13 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:6192049321601993699
+        reportDigest: uint64:4110802231717007294
         chart-uri: https://charts.test.exate.co/chartrepo/exate-apigator/charts/exateapigator-0.1.0.tgz
         digests:
-            chart: sha256:9627a6bd90aaf015e753cacf0715de7c557276dccf167cd832f86571bf51985e
-            package: eb274e548d662d06099142a5a9a2f7a0ec3595c8d6ce832ba6efcb9d12926de5
-        lastCertifiedTimestamp: "2022-12-07T08:58:40.028845+00:00"
-        testedOpenShiftVersion: "4.3"
+            chart: sha256:2844ec382545ca9657f2a3ae5b0b4f417c5fe40b42cf8bdc11577ea162ecbcfb
+            package: c22f6a06a434022b30a92e05931a5c88cef509eb040b5cf5a99d3b8476c860fa
+        lastCertifiedTimestamp: "2023-01-16T13:52:25.629673+00:00"
+        testedOpenShiftVersion: "4.6"
         supportedOpenShiftVersions: '>=4.3'
         providerControlledDelivery: false
     chart:
@@ -39,10 +39,14 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/contains-test
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/required-annotations-present
       type: Mandatory
       outcome: PASS
-      reason: Chart test files exist
+      reason: All required annotations present
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
@@ -51,39 +55,39 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
     - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
       reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : oneartifactoryexate.azurecr.io/exateapigator:2.11.00'
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed

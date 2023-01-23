@@ -1,0 +1,10 @@
+chart:
+  name: flomesh-console
+  shortDescription: null
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: nixff
+vendor:
+  label: flomesh
+  name: Flomesh

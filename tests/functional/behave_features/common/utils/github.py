@@ -3,6 +3,7 @@
 
 import json
 import requests
+import logging
 from retrying import retry
 
 from common.utils.setttings import *
@@ -35,11 +36,12 @@ def get_run_result(secrets, run_id):
 
 
 @retry(stop_max_delay=10_000, wait_fixed=1000)
-def get_release_assets(secrets, release_id, required_assets):
+def check_release_assets(secrets, release_id, required_assets):
     r = github_api(
         'get', f'repos/{secrets.test_repo}/releases/{release_id}/assets', secrets.bot_token)
     asset_list = json.loads(r.text)
     asset_names = [asset['name'] for asset in asset_list]
+    logging.debug(f'FOUND RELEASE ASSETS: {asset_names}')
     missing_assets = list()
     for asset in required_assets:
         if asset not in asset_names:
