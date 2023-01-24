@@ -1,0 +1,10 @@
+chart:
+  name: sepp
+  shortDescription: Internal TITAN.IUM Platform, LLC repository
+providerDelivery: false
+publicPgpKey: TkE=
+users:
+- githubUsername: NA
+vendor:
+  label: nti-containers
+  name: Titan.ium Platform LLC

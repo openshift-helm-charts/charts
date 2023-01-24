@@ -4,6 +4,7 @@ chart:
 publicPgpKey: null
 users:
 - githubUsername: ryanemerson
+- githubUsername: pminz
 vendor:
   label: redhat
   name: Red Hat

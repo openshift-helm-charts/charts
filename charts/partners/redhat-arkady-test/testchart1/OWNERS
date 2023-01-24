@@ -1,0 +1,9 @@
+chart:
+  name: testchart1
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: yinwang@redhat.com
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.

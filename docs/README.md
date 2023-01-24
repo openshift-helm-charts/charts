@@ -42,6 +42,8 @@ submit a chart and the report together.
       * [Error with the chart URL when submitting report](#error-with-the-chart-url-when-submitting-report)
       * [Chart name and version mismatch errors](#chart-name-and-version-mismatch-errors)
       * [Report failures](#report-failures)
+      * [Signed chart failures](#signed-chart-failures)
+      * [Web catalog only delivery](#web-catalog-only-delivery)
    * [Frequently Asked Questions](#frequently-asked-questions)
       * [Can I test the pull request in my fork before submitting?](#can-i-test-the-pull-request-in-my-fork-before-submitting)
       * [Can I use any command-line interface to create pull request?](#can-i-use-any-command-line-interface-to-create-pull-request)
@@ -55,17 +57,20 @@ submit a chart and the report together.
 
 In a nutshell, these are the actions that are performed when you submit a chart.
 The pull request is checked for non-chart-related changes and fails the job if
-found.  A check performs the chart is added to a correct directory path.  If a
-report is provided, confirm all mandatory checks are present and have passed.
+found.  A check confirms the chart is added to a correct directory path.  If a
+report is provided, confirm the report has not been modified after generation, all mandatory checks are present and have passed.
 If a chart is provided, check the digest in the report to match the digest
 calculated for the submitted chart.  If a report is not provided, run the
 chart-verifier and confirm all mandatory checks pass.
+
+Additionally, for signed charts, if a pgp public key is included in the OWNERS file a check will be made to ensure the key can be used to verify the chart. 
 
 You can submit chart related changes in three methods:
 
 1. Submit a chart without Chart Verification Report
 
    - Chart as a tarball
+     - For signed chart also include the providence file.
    - Chart in a directory
 
 2. Submit a Chart Verification Report without the Chart
@@ -94,6 +99,7 @@ chart:
   name: awesome
   shortDescription: A Helm chart for Awesomeness
 publicPgpKey: null
+providerDelivery: False
 users:
   - githubUsername: <username-one>
   - githubUsername: <username-two>
@@ -132,12 +138,24 @@ Notice that in this case your organization will also be redhat.
 ### Submitting a Chart without Chart Verification Report
 
 The chart could be a tarball created using the `helm package` command or a
-directory with the chart source.  If it is a tarball, it can be placed directly
-under the `0.1.0` directory.
+directory with the chart source.  If it is a tarball, it is placed directly
+under the `0.1.0` directory, further if the chart is signed, the providence file is added to the same directory.
 
 ```
 charts/partners/acme/awesome/0.1.0/awesome-0.1.0.tgz
+charts/partners/acme/awesome/0.1.0/awesome-0.1.0.tgz.prov
 ```
+
+For a signed chart the OWNERS file can include a base64 encoded public key for the chart. If this is present the key will be decoded and specified when the chart-verifier is used to create a report for the chart. If the public key does not match the chart the verifier report will include a check failure and, the PR will end with an error. If the public key does match the chart, and there are no other failures, a release will be created which will include the tarball, the providence file, the public key file, and the generated report.
+
+```
+awesome-0.1.0.tgz
+awesome-0.1.0.tgz.prov
+awesome-0.1.0.tgz.key
+report.yaml
+```
+
+If the OWNERS file does not include the public key the chart verifier check is skipped and will not affect the pull request outcome. Further the public key file will not be included in the release.
 
 If the chart is a directory with the chart source, create an `src` directory to
 place the chart source.
@@ -174,6 +192,8 @@ The file structure looks like this:
 [Generate the report][chart-verifier] and save it under `0.1.0` with a given
 file name as `report.yaml`.
 
+#### Signed Report
+
 When you follow the [partner connect documentation][partners], you could see
 details about adding a PGP public key.  Adding PGP public key is optional.  But
 if you have added that, you should see your public key in the _OWNERS_ file
@@ -191,6 +211,16 @@ gpg --sign --armor --detach-sign --output report.yaml.asc report.yaml
 There will be `[WARNING]` message in the console if the signature verification
 fails.
 
+#### Report for a Signed chart
+
+For a signed chart, if a pgp public key was provided to the chart verifier when generating the report, a digest of the key is included in the report. If a base64 encoded pgp public key is then included in the OWNERS file a check is made to confirm the digest of the decoded key in the OWNERS file matches the key digest in the report, and if the match fails the PR will fail. However, if the key digests match, and there are no other errors when processing the PR, a release is generated containing the public key and the report:
+
+```
+awesome-0.1.0.tgz.key
+report.yaml
+```
+Note: A release is not generated if provider control delivery is enabled.
+
 ### Submitting a Chart Verification Report with the Chart
 
 You can also submit a chart and the report together.  As mentioned in the
@@ -199,9 +229,14 @@ or tarball under the version numbered directory.  Similarly, as mentioned in the
 "Submitting a Chart Verification Report without the Chart" section, place
 `report.yaml` also under the save under the version numbered directory.
 
+#### Signed Report
 As mentioned in the previous section, optionally, you can sign the report.
 There will be `[WARNING]` message in the console if the signature verification
 fails.
+
+#### Signed Chart
+For a signed chart the submission must include a tarball and a providence file in addition to the report file. In this case, for checking purpose the PR is treated similarly to a [report only submission](#report-for-a-signed-chart). 
+
 
 ## Post Submission Manual Review
 
@@ -436,6 +471,51 @@ Error message: ..
 
 To fix the above failure, you need to modify the chart as per the failure
 messages.
+
+## Signed chart failures
+
+Signed chart failures can occur when a base64 encoded pgp public key is included in the OWNERS file.
+
+If the pull request includes a chart verifier report you may see a failure for example:
+
+```PGP key in OWNERS file does not match with key digest in report.```
+
+This can be caused by:
+- the PGP key in the OWNERS file is not base64 encoded.
+- the PGP key in the OWNERS file does not match to the PGP public key specified to the chart verifier when the report was generated.
+
+If the pull request includes a chart tarball and providence file, but no chart verifier report, you may see a failure for example:
+```
+[ERROR] Chart verifier report includes failures:
+
+Number of checks passed: 12
+Number of checks failed: 1
+Error message(s):
+Chart is signed : Signature verification failed : openpgp: signature made by unknown entity
+```
+This is because the key generated from the PGP key in the OWNERS file does not correspond to the secret key used to sign the chart. 
+
+### Web catalog only delivery
+
+Whenever there is a mismatch between provider delivery in the OWNERS file and the report, the following errors will show: 
+
+```
+[ERROR] Report indicates web catalog only but the distribution method set for the chart is not web catalog only.
+[ERROR] The web catalog distribution method is set for the chart but is not set in the report.
+[ERROR] The web catalog distribution method requires the pull request to be report only.
+```
+
+The distribution method of web catalog only requires providerDelivery to be set to true within the OWNERS file.
+
+There are three methods of distribution for certified helm charts.
+- Publish your chart in the Red Hat Helm Chart repository
+  - Submissions should include either a chart or chart and report.
+- Publish you chart in your own Helm Chart repository
+  - Submissions should be report only using a publicly available chart URL.
+- Web catalog only
+  - This submission should be report only using a private chart URL.
+
+For more information on the different Helm Chart Distribution methods, see: [Creating a Helm Chart Certification Project](https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/helm-chart-certification/creating-a-helm-chart-certification-project)
 
 ## Frequently Asked Questions
 

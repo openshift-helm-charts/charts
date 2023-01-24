@@ -1,0 +1,13 @@
+chart:
+  name: stackgres-operator-gl
+  shortDescription: null
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: ahachete
+- githubUsername: gelias
+- githubUsername: teoincontatto
+- githubUsername: jorsol
+vendor:
+  label: ongres
+  name: OnGres

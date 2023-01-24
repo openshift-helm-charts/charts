@@ -1,0 +1,9 @@
+chart:
+  name: chart4-11
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: testuser
+vendor:
+  label: redhat-test
+  name: Red Hat, Inc.

@@ -1,0 +1,10 @@
+chart:
+  name: avautochart2
+  shortDescription: This is a short description avautochart2!
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: ansvu
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.

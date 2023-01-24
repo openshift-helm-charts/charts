@@ -1,0 +1,10 @@
+chart:
+  name: lakefs
+  shortDescription: lakeFS is an open-source data version control, that enables you
+    to manage your data lake the way you manage your code.
+publicPgpKey: null
+users:
+- githubUsername: nopcoder
+vendor:
+  label: lakefs
+  name: Treeverse

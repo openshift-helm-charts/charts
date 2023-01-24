@@ -1,0 +1,10 @@
+chart:
+  name: ibm-sfg-prod
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: nikeshmi
+- githubUsername: imdad000
+vendor:
+  label: ibm
+  name: IBM Japan, Ltd.

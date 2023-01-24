@@ -11,6 +11,7 @@ from functional.utils.setttings import *
 
 endpoint_data = {}
 
+CHECKS_FAILED = "checks failed"
 
 def _set_endpoint_key(key, env_var):
     if key not in endpoint_data:
@@ -77,35 +78,39 @@ def _verify_endpoint(access_token):
         endpoint_data["access_token"] = access_token
 
 
-def create_verification_issue(chart_name, chart_owners, notify_developers, report_url, software_name, software_version, pass_verification, access_token=None, dry_run=False):
+def create_verification_issue(chart, chart_owners, failure_type, notify_developers, pr_url, report_url, software_name, software_version, access_token=None, dry_run=False):
     """Create and issue with chart-verifier findings after a version change trigger.
 
     chart_name -- Name of the chart that was verified. Include version for more verbose information\n
     chart_owners -- Github IDs of the chart owners\n
-    report_url -- URL or the report resulting from verification\n
+    failure_type - Indication of the type of failure
+    report_url -- URL or the report resulting from verification if applicable\n
+    kube-version -- The kubeVersion attribute of the chart if it is bade.\n
     software_name -- Name of the software dependency that changed e.g, OCP and Chart Verifier\n
     software_version -- The softwared dependency version used\n
-    pass_verification -- A boolean indicating whether the verification passed\n
-    access_token -- An optional github access token secret. If not passed will try to get from GITHUB_AUTH_TOKEN environment variable\n
+    access_token -- An optional github access token secret. If not passed will try to get from GITHUB_AUTH_TOKEN environment variable\
+    dry-run -- Set if the test run is a dry-run.
     """
 
 
-    if not pass_verification:
-        title = f"Chart {chart_name}"
-        if dry_run:
-            title = f"Dry Run: Chart {chart_name}"
+    title = f"Chart {chart}"
+    if dry_run:
+        title = f"Dry Run: Chart {chart}"
 
-
+    if failure_type == CHECKS_FAILED:
         title = f"{title} has failures with {software_name} version {software_version}"
         report_result = "some chart checks have failed. Please review the failures and, if required, consider submitting a new chart version with the appropriate additions/corrections."
+        body = (f"FYI @{' @'.join(notify_developers)}, in PR {pr_url} we triggered the chart certification workflow against chart {chart} because the workflow "
+                f"now supports {software_name} version {software_version}. We have found that {report_result}. Check details in the report: "
+                f"{report_url}, Chart owners are: {chart_owners}")
+    else:
+        title = f"{title} does not support {software_name} version {software_version}"
+        body = (f"FYI @{' @'.join(notify_developers)}, we checked the OCP versions supported by {chart} because the workflow "
+        f"now supports {software_name} version {software_version}. We have found that {failure_type}. Chart owners are: {chart_owners}")
 
-        body = (f"FYI @{' @'.join(notify_developers)}, we have triggered the chart certification workflow against chart {chart_name} because the workflow "
-            f"now supports {software_name} version {software_version}. We have found that {report_result}. Check details in the report: "
-            f"{report_url}, Chart owners are: {chart_owners}")
-
-        _set_endpoint()
-        _verify_endpoint(access_token)
-        create_an_issue(title, body)
+    _set_endpoint()
+    _verify_endpoint(access_token)
+    create_an_issue(title, body)
 
 
 

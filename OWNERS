@@ -2,17 +2,16 @@
 
 approvers:
 - baijum
-- isutton
-- pedjak
 - mmulholla
 - jasperchui
 - dperaza4dustbit
 - openshift-helm-charts-bot
+- tisutisu
+- Kartikey-star
 
 reviewers:
 - baijum
-- isutton
-- pedjak
 - mmulholla
 - jasperchui
 - dperaza4dustbit
+- Kartikey-star

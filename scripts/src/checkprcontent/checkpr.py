@@ -4,6 +4,7 @@ import sys
 import argparse
 
 import requests
+import semver
 import yaml
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -53,7 +54,7 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
     provider_delivery = False
     if report_in_pr and num_files_in_pr > 1:
         if report_provider_delivery or owner_provider_delivery:
-            msg = f"[ERROR] OWNERS file and/or report indicate provider controlled delivery but pull request is not report only."
+            msg = f"[ERROR] The web catalog distribution method requires the pull request to be report only."
             print(msg)
             print(f"::set-output name=pr-content-error-message::{msg}")
             sys.exit(1)
@@ -62,17 +63,17 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
             if verifier_report.get_package_digest(report_data):
                 provider_delivery = True
             else:
-                msg = f"[ERROR] Provider delivery control requires a package digest in the report."
+                msg = f"[ERROR] The web catalog distribution method requires a package digest in the report."
                 print(msg)
                 print(f"::set-output name=pr-content-error-message::{msg}")
                 sys.exit(1)
         elif report_provider_delivery:
-            msg = f"[ERROR] Report indicates provider controlled delivery but OWNERS file does not."
+            msg = f"[ERROR] Report indicates web catalog only but the distribution method set for the chart is not web catalog only."
             print(msg)
             print(f"::set-output name=pr-content-error-message::{msg}")
             sys.exit(1)
         elif owner_provider_delivery:
-            msg = f"[ERROR] OWNERS file indicates provider controlled delivery but report does not."
+            msg = f"[ERROR] The web catalog distribution method is set for the chart but is not set in the report."
             print(msg)
             print(f"::set-output name=pr-content-error-message::{msg}")
             sys.exit(1)
@@ -83,6 +84,24 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
     else:
         print(f"::set-output name=providerDelivery::False")
         print(f"[INFO] providerDelivery is a no-go")
+
+def get_file_match_compiled_patterns():
+    """Return a tuple of patterns, where the first can be used to match any file in a chart PR 
+    and the second can be used to match a valid report file within a chart PR. The patterns
+    match based on the relative path of a file to the base repository
+    
+    Both patterns capture chart type, chart vendor, chart name and chart version from the file path..
+    
+    Examples of valid file paths are:
+    
+    charts/partners/hashicorp/vault/0.20.0/<file>
+    charts/partners/hashicorp/vault/0.20.0//report.yaml
+    """
+
+    pattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
+    reportpattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/report.yaml")
+
+    return pattern,reportpattern
 
 
 def ensure_only_chart_is_modified(api_url, repository, branch):
@@ -95,8 +114,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
     files_api_url = f'{api_url}/files'
     headers = {'Accept': 'application/vnd.github.v3+json'}
     r = requests.get(files_api_url, headers=headers)
-    pattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
-    reportpattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/report.yaml")
+    pattern,reportpattern = get_file_match_compiled_patterns()
     page_number = 1
     max_page_size,page_size = 100,100
     matches_found = 0
@@ -123,15 +141,16 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
             else:
                 matches_found += 1
                 if reportpattern.match(file_path):
-                    print("[INFO] Report found")
+                    print(f"[INFO] Report found: {file_path}")
                     print("::set-output name=report-exists::true")
                     report_found = True
                 if matches_found == 1:
                     pattern_match = match
                 elif pattern_match.groups() != match.groups():
-                    msg = f"[ERROR] PR must only include one chart"
+                    msg = "[ERROR] A PR must contain only one chart. Current PR includes files for multiple charts."
                     print(msg)
                     print(f"::set-output name=pr-content-error-message::{msg}")
+                    exit(1)
     
     if none_chart_files:
         if file_count > 1 or "OWNERS" not in none_chart_files: #OWNERS not present or preset but not the only file
@@ -165,6 +184,13 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
         category, organization, chart, version = pattern_match.groups()
         print(f"::set-output name=category::{'partner' if category == 'partners' else category}")
         print(f"::set-output name=organization::{organization}")
+
+        if not semver.VersionInfo.isvalid(version):
+            msg = f"[ERROR] Helm chart version is not a valid semantic version: {version}"
+            print(msg)
+            print(f"::set-output name=pr-content-error-message::{msg}")
+            sys.exit(1)
+
         print("Downloading index.yaml", category, organization, chart, version)
         r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
         if r.status_code == 200:
@@ -173,7 +199,6 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
             data = {"apiVersion": "v1",
                 "entries": {}}
 
-        crtentries = []
         entry_name = f"{organization}-{chart}"
         d = data["entries"].get(entry_name, [])
         print(f"::set-output name=chart-entry-name::{entry_name}")

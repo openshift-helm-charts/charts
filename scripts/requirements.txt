@@ -9,7 +9,7 @@ GitPython==3.1.18
 glob2==0.7
 idna==2.10
 iniconfig==1.1.1
-Mako==1.1.4
+mako==1.2.3
 MarkupSafe==2.0.1
 packaging==21.0
 parse==1.19.0
@@ -34,3 +34,4 @@ toml==0.10.2
 urllib3==1.26.5
 websocket-client==1.2.1
 analytics-python==1.4.0
+behave==1.2.6

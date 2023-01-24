@@ -1,0 +1,10 @@
+chart:
+  name: cdr-core-ehrbase-enterprise
+  shortDescription: null
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: bjoernpauli
+vendor:
+  label: vitagroupag
+  name: Vitagroup AG

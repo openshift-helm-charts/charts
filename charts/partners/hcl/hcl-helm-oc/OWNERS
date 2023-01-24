@@ -1,6 +1,7 @@
 chart:
   name: hcl-helm-oc
   shortDescription: null
+providerDelivery: false
 publicPgpKey: null
 users:
 - githubUsername: pulkitkumar0
