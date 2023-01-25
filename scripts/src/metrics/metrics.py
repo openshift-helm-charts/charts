@@ -21,6 +21,8 @@ pr_submission="PR Submission v1.0"
 pr_merged="PR Merged v1.0"
 pr_outcome="PR Outcome v1.0"
 charts="charts"
+xRateLimit = "X-RateLimit-Limit"
+xRateRemain = "X-RateLimit-Remaining"
 
 def parse_response(response):
     result = []
@@ -36,12 +38,24 @@ def parse_response(response):
 def get_release_metrics():
     result = []
     for i in itertools.count(start=1):
+        request_headers = {'Accept': 'application/vnd.github.v3+json','Authorization': f'Bearer {os.environ.get("BOT_TOKEN")}'}
         response = requests.get(
-            f'https://api.github.com/repos/openshift-helm-charts/charts/releases?per_page=100&page={i}')
+            f'https://api.github.com/repos/openshift-helm-charts/charts/releases?per_page=100&page={i}',headers=request_headers)
+
         if not 200 <= response.status_code < 300:
             print(f"[ERROR] unexpected response getting release data : {response.status_code} : {response.reason}")
             sys.exit(1)
+            
         response_json = response.json()
+        if xRateLimit in response.headers:
+           print(f'[DEBUG] {xRateLimit} : {response.headers[xRateLimit]}')
+        if xRateRemain in response.headers:
+            print(f'[DEBUG] {xRateRemain}  : {response.headers[xRateRemain]}')
+
+        if "message" in response_json:
+            print(f'[ERROR] getting pr files: {response_json["message"]}')
+            sys.exit(1)
+
         if len(response_json) == 0:
             break
         result.extend(response_json)
@@ -397,14 +411,13 @@ def check_rate_limit(g,force):
         print(f"[INFO] rate limit info: {rate_limit.core}")
 
 def getChartUpdate(type,partner,chart,cwd):
-
     if type=="partner":
         directory_type="partners"
     else:
         directory_type=type
-    directoryPath=os.path.join(cwd, charts,directory_type, partner,chart)    # Checking if the directory contains only the OWNERS file
+    directoryPath=os.path.join(cwd, charts,directory_type, partner,chart)
+    # Checking if the directory contains only the OWNERS file
     print(os.listdir(directoryPath))
-    print(len(os.listdir(directoryPath)))
     if len(os.listdir(directoryPath)) == 1:
         return "new chart"
     else:
@@ -445,7 +458,7 @@ def main():
         print("Error: Segment write key not set")
         sys.exit(1)
 
-    g = Github(os.environ.get("github_token"))
+    g = Github(os.environ.get("BOT_TOKEN"))
 
     if args.type == "pull_request":
         repo_current = g.get_repo(args.repository)

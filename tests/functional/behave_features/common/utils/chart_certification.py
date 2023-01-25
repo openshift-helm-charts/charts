@@ -655,7 +655,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         response = json.loads(r.text)
         logging.debug(f"CHECK PULL_REQUEST COMMENT RESPONSE: {response}")
         if len(response) == 0:
-            raise AssertionError("No comment found in the PR")
+            raise AssertionError(f"No comment found in the PR {self.secrets.pr_number}")
         complete_comment = response[0]['body']
 
         if expect_message in complete_comment:

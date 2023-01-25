@@ -2,6 +2,7 @@ import argparse
 import shutil
 import os
 import sys
+import json
 import re
 import subprocess
 import tempfile
@@ -23,14 +24,14 @@ sys.path.append('../')
 from report import report_info
 from chartrepomanager import indexannotations
 from signedchart import signedchart
+from pullrequest import prartifact
+from tools import gitutils
 
 def get_modified_charts(api_url):
-    files_api_url = f'{api_url}/files'
-    headers = {'Accept': 'application/vnd.github.v3+json'}
-    r = requests.get(files_api_url, headers=headers)
+    files = prartifact.get_modified_files(api_url)
     pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
-    for f in r.json():
-        m = pattern.match(f["filename"])
+    for file_path in files:
+        m = pattern.match(file_path)
         if m:
             category, organization, chart, version = m.groups()
             return category, organization, chart, version
@@ -140,7 +141,7 @@ def create_worktree_for_index(branch):
     err = out.stderr.decode("utf-8")
     if err.strip():
         print("Adding upstream remote failed:", err, "branch", branch, "upstream", upstream)
-    out = subprocess.run(["git", "fetch", "upstream"], capture_output=True)
+    out = subprocess.run(["git", "fetch", "upstream",branch], capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
@@ -197,14 +198,22 @@ def set_package_digest(chart_entry):
 
     url = chart_entry["urls"][0]
     head = requests.head(url, allow_redirects=True)
+    print(f"[DEBUG]: tgz url : {url}")
+    print(f"[DEBUG]: response code from head request: {head.status_code}")
+
     target_digest = ""
     if head.status_code == 200:
         response = requests.get(url, allow_redirects=True)
+        print(f"[DEBUG]: response code get request: {response.status_code}")
         target_digest = hashlib.sha256(response.content).hexdigest()
+        print(f"[DEBUG]: calculated digest : {target_digest}")
+
 
     pkg_digest = ""
     if "digest" in chart_entry:
         pkg_digest = chart_entry["digest"]
+        print(f"[DEBUG]: digest in report : {pkg_digest}" )
+
 
     if target_digest:
         if not pkg_digest:
@@ -218,12 +227,13 @@ def set_package_digest(chart_entry):
         raise Exception("Was unable to compute SHA256 digest, please ensure chart url points to a chart package.")
 
 
-def update_index_and_push(indexfile,indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number, provider_delivery):
+def update_index_and_push(indexfile, indexdir, repository, branch, category, organization, chart, version, chart_url, chart_entry, pr_number, web_catalog_only):
     token = os.environ.get("GITHUB_TOKEN")
     print(f"Downloading {indexfile}")
     r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/{indexfile}')
     original_etag = r.headers.get('etag')
     now = datetime.now(timezone.utc).astimezone().isoformat()
+
     if r.status_code == 200:
         data = yaml.load(r.text, Loader=Loader)
         data["generated"] = now
@@ -245,7 +255,7 @@ def update_index_and_push(indexfile,indexdir, repository, branch, category, orga
         crtentries.append(v)
 
     chart_entry["urls"] = [chart_url]
-    if not provider_delivery:
+    if not web_catalog_only:
         set_package_digest(chart_entry)
     chart_entry["annotations"]["charts.openshift.io/submissionTimestamp"] = now
     crtentries.append(chart_entry)
@@ -271,12 +281,13 @@ def update_index_and_push(indexfile,indexdir, repository, branch, category, orga
     print("Git status:")
     print(out.stdout.decode("utf-8"))
     print(out.stderr.decode("utf-8"))
-    out = subprocess.run(["git", "commit",  "-m", f"{organization}-{chart}-{version} index.yaml (#{pr_number})"], cwd=indexdir, capture_output=True)
+    out = subprocess.run(["git", "commit",  "-m", f"{organization}-{chart}-{version} {indexfile} (#{pr_number})"], cwd=indexdir, capture_output=True)
     print(out.stdout.decode("utf-8"))
     err = out.stderr.decode("utf-8")
     if err.strip():
         print(f"Error committing {indexfile}", "index directory", indexdir, "branch", branch, "error:", err)
     r = requests.head(f'https://raw.githubusercontent.com/{repository}/{branch}/{indexfile}')
+
     etag = r.headers.get('etag')
     if original_etag and etag and (original_etag != etag):
         print(f"{indexfile} not updated. ETag mismatch.", "original ETag", original_etag, "new ETag", etag, "index directory", indexdir, "branch", branch)
@@ -357,11 +368,11 @@ def main():
     indexdir = create_worktree_for_index(branch)
 
     env = Env()
-    provider_delivery = env.bool("PROVIDER_DELIVERY",False)
+    web_catalog_only = env.bool("WEB_CATALOG_ONLY",False)
 
-    print(f'[INFO] provider delivery is {provider_delivery}')
+    print(f'[INFO] webCatalogOnly/providerDelivery is {web_catalog_only}')
 
-    if provider_delivery:
+    if web_catalog_only:
         indexfile = "unpublished-certified-charts.yaml"
     else:
         indexfile = "index.yaml"
@@ -405,17 +416,17 @@ def main():
         print("[INFO] Creating index from report")
         chart_entry, chart_url = create_index_from_report(category, report_path)
 
-    if not provider_delivery:
+    if not web_catalog_only:
         tag = os.environ.get("CHART_NAME_WITH_VERSION")
         if not tag:
             print("[ERROR] Internal error: missing chart name with version (tag)")
             sys.exit(1)
-        print(f"::set-output name=tag::{tag}")
+        gitutils.add_output("tag",tag)
 
         current_dir = os.getcwd()
-        print(f"::set-output name=report_file::{current_dir}/report.yaml")
+        gitutils.add_output("report_file",f"{current_dir}/report.yaml")
         if public_key_file:
             print(f"[INFO] Add key file for release : {current_dir}/{public_key_file}")
-            print(f"::set-output name=public_key_file::{current_dir}/{public_key_file}")
+            gitutils.add_output("public_key_file",f"{current_dir}/{public_key_file}")
 
-    update_index_and_push(indexfile,indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number, provider_delivery)
+    update_index_and_push(indexfile,indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number, web_catalog_only)

@@ -37,13 +37,16 @@ def get_chart(owner_data):
         pass
     return chart
 
-def get_provider_delivery(owner_data):
-    provider_delivery = False
+def get_web_catalog_only(owner_data):
+    web_catalog_only = False
     try:
-        provider_delivery = owner_data['providerDelivery']
+        if 'webCatalogOnly' in owner_data:
+            web_catalog_only = owner_data['webCatalogOnly']
+        elif 'providerDelivery' in owner_data:
+            web_catalog_only = owner_data['providerDelivery']
     except Exception:
         pass
-    return provider_delivery
+    return web_catalog_only
 
 def get_users_included(owner_data):
     users_included="No"
