@@ -1,5 +1,5 @@
 chart:
-  name: semeru
+  name: semeru-transition
   shortDescription: This is the helm chart to replace the Java, from OpenJdk 11 to IBM Semeru 11, that used in a Red Hat product container, such as EAP, .etc. 
 publicPgpKey: null
 users:
