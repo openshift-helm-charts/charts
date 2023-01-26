@@ -30,6 +30,8 @@ jobs:
 
       - name: Check for CI changes
         id: check_ci_changes
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           # check if workflow testing should run.
           echo "[INFO] check if PR contains only workflow changes and user is authorized"
@@ -40,6 +42,7 @@ jobs:
         if: ${{ steps.check_ci_changes.outputs.run-tests != true }}
         env:
           BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           # check if PR was created as part of release processing
           ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
@@ -70,7 +73,7 @@ jobs:
           elif [ "${CHART_PR_FOR_RELEASE}" == "true" ]; then
             echo "The PR is part of release processing for the charts repository - do not continue."
           else
-            echo "::set-output name=run-build::true"
+            echo "run-build=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Set Environment
@@ -79,12 +82,12 @@ jobs:
           #set environemnt based on repository
           if [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
             echo "Use latest verifier image"
-            echo "::set-output name=insecure_skip_tls_verify::false"
-            echo "::set-output name=verifier-action-image::latest"
+            echo "insecure_skip_tls_verify=false" >> $GITHUB_OUTPUT
+            echo "verifier-action-image=latest" >> $GITHUB_OUTPUT
           else
             echo "Use dev verifier image"
-            echo "::set-output name=insecure_skip_tls_verify::true"
-            echo "::set-output name=verifier-action-image::0.1.0"
+            echo "insecure_skip_tls_verify=true" >> $GITHUB_OUTPUT
+            echo "verifier-action-image=0.1.0" >> $GITHUB_OUTPUT
           fi
 
       - name: Checkout
@@ -101,6 +104,7 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_REF: ${{ github.ref }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
            ./ve1/bin/check-pr-content --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
@@ -164,6 +168,8 @@ jobs:
       - name: determine verify requirements
         if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         id: verify_requires
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         working-directory: ./pr-branch
         run: |
           ../ve1/bin/get-verify-params --directory=pr --api-url=${{ github.event.pull_request._links.self.href }}
@@ -180,7 +186,7 @@ jobs:
         run: |
           #calculate cluster params
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
-          echo "::set-output name=API_SERVER::${API_SERVER}"
+          echo "API_SERVER=${API_SERVER}" >> $GITHUB_OUTPUT
 
       - uses: redhat-actions/oc-login@v1
         id: oc_login
@@ -195,9 +201,10 @@ jobs:
         if: ${{ steps.verify_requires.outputs.cluster_needed == 'true' }}
         env:
           API_SERVER: ${{ steps.login-params.outputs.API_SERVER }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           ve1/bin/sa-for-chart-testing --create charts-${{ github.event.number }} --token token.txt --server ${API_SERVER}
-          echo "::set-output name=delete_namespace::true"
+          echo "delete_namespace=true" >> $GITHUB_OUTPUT
           echo $KUBECONFIG
 
       - uses: redhat-actions/chart-verifier@v1.1
@@ -214,14 +221,15 @@ jobs:
         if: ${{ always() && steps.run-verifier.outcome == 'failure' }}
         run: |
           error_message="The chart verifier returned an error when trying to obtain a verification report for the chart."
-          echo "::set-output name=verifier_error_message::$error_message"
+          echo "verifier_error_message=$error_message" >> $GITHUB_OUTPUT
 
       - name: Check Report
         id: check_report
         if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           VENDOR_TYPE: ${{ steps.check_pr_content.outputs.category }}
-          PROVIDER_DELIVERY: ${{ steps.check_pr_content.outputs.providerDelivery }}
+          WEB_CATALOG_ONLY: ${{ steps.check_pr_content.outputs.webCatalogOnly }}
           REPORT_GENERATED: ${{ steps.verify_requires.outputs.report_needed }}
           GENERATED_REPORT_PATH: ${{ steps.run-verifier.outputs.report_file }}
           REPORT_SUMMARY_PATH: ${{ steps.run-verifier.outputs.report_info_file }}
@@ -241,6 +249,8 @@ jobs:
           ve1/bin/sa-for-chart-testing --delete charts-${{ github.event.number }}
 
       - name: Save PR artifact
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
         run: |
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
@@ -249,6 +259,7 @@ jobs:
         id: pr_comment
         if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
         env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_CONTENT_ERROR_MESSAGE: ${{ steps.check_pr_content.outputs.pr-content-error-message }}
           OWNERS_ERROR_MESSAGE: ${{ steps.check_pr_content.outputs.owners-error-message }}
           COMMUNITY_MANUAL_REVIEW: ${{ steps.check_report.outputs.community_manual_review_required }}
@@ -309,6 +320,8 @@ jobs:
 
       - name: Check for PR merge
         if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
 
@@ -327,13 +340,14 @@ jobs:
       - name: Release Charts
         if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
         env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           GITHUB_REF: ${{ github.ref }}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           REPORT_CONTENT: ${{steps.check_report.outputs.report_content}}
           CHART_ENTRY_NAME: ${{ steps.check_pr_content.outputs.chart-entry-name }}
           CHART_NAME_WITH_VERSION: ${{ steps.check_pr_content.outputs.chart-name-with-version }}
           REDHAT_TO_COMMUNITY: ${{ steps.check_report.outputs.redhat_to_community }}
-          PROVIDER_DELIVERY: ${{ steps.check_pr_content.outputs.providerDelivery }}
+          WEB_CATALOG_ONLY: ${{ steps.check_pr_content.outputs.webCatalogOnly }}
         id: release-charts
         run: |
           tar zxvf ./scripts/dependencies/helm-chart-releaser/chart-releaser_1.2.0_linux_amd64.tar.gz
@@ -358,9 +372,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add metrics
-        if: always() && steps.check_build_required.outputs.run-build == 'true'
+        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           if [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
               WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
