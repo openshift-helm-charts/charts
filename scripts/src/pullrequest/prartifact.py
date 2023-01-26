@@ -9,31 +9,75 @@ import requests
 
 sys.path.append('../')
 from checkprcontent import checkpr
+from tools import gitutils
+
+pr_files = []
+pr_labels = []
+xRateLimit = "X-RateLimit-Limit"
+xRateRemain = "X-RateLimit-Remaining"
 
 # TODO(baijum): Move this code under chartsubmission.chart module
 def get_modified_charts(api_url):
-    files_api_url = f'{api_url}/files'
-    headers = {'Accept': 'application/vnd.github.v3+json'}
-    r = requests.get(files_api_url, headers=headers)
-    pattern,_ = checkpr.get_file_match_compiled_patterns()
-    for f in r.json():
-        m = pattern.match(f["filename"])
-        if m:
-            category, organization, chart, version = m.groups()
+    files = get_modified_files(api_url)
+    pattern,_,_ = checkpr.get_file_match_compiled_patterns()
+    for file in files:
+        match = pattern.match(file)
+        if match:
+            category, organization, chart, version = match.groups()
             return category, organization, chart, version
 
     return "", "", "", ""
 
 def get_modified_files(api_url):
-    files_api_url = f'{api_url}/files'
-    headers = {'Accept': 'application/vnd.github.v3+json'}
-    r = requests.get(files_api_url, headers=headers)
-    pr_files = []
-    print(f"[INFO] file info in PR {r.json()}")
-    for f in r.json():
-        if "filename" in f:
-            pr_files.append(f["filename"])
+    if not pr_files:
+        page_number = 1
+        max_page_size,page_size = 100,100
+        headers = {'Accept': 'application/vnd.github.v3+json','Authorization': f'Bearer {os.environ.get("BOT_TOKEN")}'}
+        files_api_url = f'{api_url}/files'
+
+        while page_size == max_page_size:
+
+            files_api_query = f'{files_api_url}?per_page={page_size}&page={page_number}'
+            print(f"[INFO] Query files : {files_api_query}")
+            r = requests.get(files_api_query,headers=headers)
+            files = r.json()
+            page_size = len(files)
+            page_number += 1
+
+            if xRateLimit in r.headers:
+                print(f'[DEBUG] {xRateLimit} : {r.headers[xRateLimit]}')
+            if xRateRemain in r.headers:
+                print(f'[DEBUG] {xRateRemain}  : {r.headers[xRateRemain]}')
+
+            if "message" in files:
+                print(f'[ERROR] getting pr files: {files["message"]}')
+                sys.exit(1)
+            else:
+                for file in files:
+                    if "filename" in file:
+                        pr_files.append(file["filename"])
+
     return pr_files
+
+def get_labels(api_url):
+    if not pr_labels:
+        headers = {'Accept': 'application/vnd.github.v3+json','Authorization': f'Bearer {os.environ.get("BOT_TOKEN")}'}
+        r = requests.get(api_url, headers=headers)
+        pr_data = r.json()
+
+        if xRateLimit in r.headers:
+            print(f'[DEBUG] {xRateLimit} : {r.headers[xRateLimit]}')
+        if xRateRemain in r.headers:
+            print(f'[DEBUG] {xRateRemain}  : {r.headers[xRateRemain]}')
+
+        if "message" in pr_data:
+            print(f'[ERROR] getting pr files: {pr_data["message"]}')
+            sys.exit(1)
+        if "labels" in pr_data:
+            for label in pr_data["labels"]:
+                pr_labels.append(label["name"])
+
+    return pr_labels
 
 def save_metadata(directory, vendor_label, chart, number):
     with open(os.path.join(directory, "vendor"), "w") as fd:
@@ -66,7 +110,7 @@ def main():
     if args.get_files:
         pr_files = get_modified_files(args.api_url)
         print(f"[INFO] files in pr: {pr_files}")
-        print(f"::set-output name=pr_files::{pr_files}")
+        gitutils.add_output("pr_files",pr_files)
     else:
         os.makedirs(args.directory, exist_ok=True)
         category, organization, chart, version = get_modified_charts(args.api_url)

@@ -1,10 +1,10 @@
 chart:
   name: a10tkc
-  shortDescription: test
+  shortDescription: Helm Chart for Installing A10 Thunder Kubernetes Connector
 providerDelivery: false
 publicPgpKey: null
 users:
-- githubUsername: chandansingh1653
+- githubUsername: csingh-a10
 vendor:
   label: a10networks
   name: A10 Networks
