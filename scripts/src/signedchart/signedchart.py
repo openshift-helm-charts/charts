@@ -14,6 +14,7 @@ except ImportError:
 sys.path.append('../')
 from report import verifier_report
 from owners import owners_file
+from pullrequest import prartifact
 
 def check_and_prepare_signed_chart(api_url,report_path,owner_path,key_file_path):
 
@@ -45,18 +46,16 @@ def get_verifier_flags(tar_file,owners_file,temp_dir):
 def is_chart_signed(api_url,report_path):
 
     if api_url:
-        files_api_url = f'{api_url}/files'
-        headers = {'Accept': 'application/vnd.github.v3+json'}
-        r = requests.get(files_api_url, headers=headers)
+        files = prartifact.get_modified_files(api_url)
         tgz_pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.-]+)/.*.tgz")
         tgz_found = False
         prov_pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.-]+)/.*.tgz.prov")
         prov_found = False
 
-        for f in r.json():
-            if tgz_pattern.match(f["filename"]):
+        for file_path in files:
+            if tgz_pattern.match(file_path):
                 tgz_found = True
-            if prov_pattern.match(f["filename"]):
+            if prov_pattern.match(file_path):
                 prov_found = True
 
         if tgz_found and prov_found:

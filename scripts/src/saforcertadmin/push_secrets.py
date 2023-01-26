@@ -24,10 +24,14 @@ from nacl import encoding, public
 import logging
 import os
 import sys
+import json
 import requests
 import argparse
 
-token = os.environ.get("GITHUB_TOKEN")
+sys.path.append('../')
+from pullrequest import prartifact
+
+token = os.environ.get("BOT_TOKEN")
 headers = {'Accept': 'application/vnd.github.v3+json', 'Authorization': f'token {token}'}
 
 logging.basicConfig(level=logging.INFO)
@@ -46,6 +50,16 @@ def get_repo_public_key(repo):
         logging.error(f"unexpected response getting repo public key : {response.status_code} : {response.reason}")
         sys.exit(1)
     response_json = response.json()
+
+    if prartifact.xRateLimit in r.headers:
+        print(f'[DEBUG] {prartifact.xRateLimit} : {r.headers[prartifact.xRateLimit]}')
+    if prartifact.xRateRemain in r.headers:
+        print(f'[DEBUG] {prartifact.xRateRemain}  : {r.headers[prartifact.xRateRemain]}')
+
+    if "message" in response_json:
+        print(f'[ERROR] getting public key: {response_json["message"]}')
+        sys.exit(1)
+
     return response_json['key_id'], response_json['key']
 
 def get_repo_secrets(repo):
@@ -53,9 +67,12 @@ def get_repo_secrets(repo):
     secret_names = []
     response = requests.get(f'https://api.github.com/repos/{repo}/actions/secrets', headers=headers)
     if response.status_code != 200:
-        logging.error(f"unexpected response getting secrets : {response.status_code} : {response.reason}")
+        logging.error(f"[ERROR] unexpected response getting repo secrets : {response.status_code} : {response.reason}")
         sys.exit(1)
     response_json = response.json()
+    if "message" in response_json:
+        print(f'[ERROR] getting repo secrets: {response_json["message"]}')
+        sys.exit(1)
     for i in range(response_json['total_count']):
         secret_names.append(response_json['secrets'][i]['name'])
     return secret_names
@@ -66,7 +83,15 @@ def create_or_update_repo_secrets(repo, secret_name, key_id, encrypted_value):
     if response.status_code != 201 and response.status_code != 204:
         logging.error(f"unexpected response during put request : {response.status_code} : {response.reason}")
         sys.exit(1)
-    #response_json = response.json()
+    try:
+        response_json = response.json()
+        if "message" in response_json:
+            print(f'[ERROR] updating repo secret: {response_json["message"]}')
+            sys.exit(1)
+    except json.decoder.JSONDecodeError:
+        pass
+
+
     logging.info(f'Secret {secret_name} create or update successful')
 
 def main():

@@ -2,6 +2,7 @@ import sys
 import semantic_version
 import requests
 import yaml
+import json
 
 sys.path.append('../')
 from report import report_info
@@ -11,10 +12,11 @@ kubeOpenShiftVersionMap = {}
 def getKubVersionMap():
 
     if not kubeOpenShiftVersionMap:
-       content = requests.get("https://github.com/redhat-certification/chart-verifier/blob/main/internal/tool/kubeOpenShiftVersionMap.yaml?raw=true")
-       version_data = yaml.safe_load(content.text)
-       for kubeVersion in version_data["versions"]:
-           kubeOpenShiftVersionMap[kubeVersion["kube-version"]] = kubeVersion["ocp-version"]
+        content = requests.get("https://github.com/redhat-certification/chart-verifier/blob/main/internal/tool/kubeOpenShiftVersionMap.yaml?raw=true")
+
+        version_data = yaml.safe_load(content.text)
+        for kubeVersion in version_data["versions"]:
+            kubeOpenShiftVersionMap[kubeVersion["kube-version"]] = kubeVersion["ocp-version"]
 
     return  kubeOpenShiftVersionMap
 

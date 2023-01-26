@@ -21,6 +21,9 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+sys.path.append('../')
+from pullrequest import prartifact
+
 
 OWNERS_FILE = "OWNERS"
 VERSION_FILE = "release/release_info.json"
@@ -42,27 +45,15 @@ def verify_user(username):
     return False
 
 def check_for_restricted_file(api_url):
-    files_api_url = f'{api_url}/files'
-    headers = {'Accept': 'application/vnd.github.v3+json'}
+    files = prartifact.get_modified_files(api_url)
     pattern_owners = re.compile(OWNERS_FILE)
     pattern_versionfile = re.compile(VERSION_FILE)
     pattern_thisfile = re.compile(THIS_FILE)
-    page_number = 1
-    max_page_size,page_size = 100,100
 
-    while (page_size == max_page_size):
-
-        files_api_query = f'{files_api_url}?per_page={page_size}&page={page_number}'
-        r = requests.get(files_api_query,headers=headers)
-        files = r.json()
-        page_size = len(files)
-        page_number += 1
-
-        for f in files:
-           filename = f["filename"]
-           if pattern_versionfile.match(filename) or pattern_owners.match(filename) or pattern_thisfile.match(filename):
-               print(f"[INFO] restricted file found: {filename}")
-               return True
+    for filename in files:
+        if pattern_versionfile.match(filename) or pattern_owners.match(filename) or pattern_thisfile.match(filename):
+            print(f"[INFO] restricted file found: {filename}")
+            return True
  
     return False
 
