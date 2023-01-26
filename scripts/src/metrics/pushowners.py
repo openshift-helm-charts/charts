@@ -1,7 +1,4 @@
 import argparse
-import re
-from github import Github
-import yaml
 import sys
 import analytics
 sys.path.append('../')
@@ -18,15 +15,15 @@ def getFileContent(changed_file):
     status,owner_data=owners_file.get_owner_data_from_file(changed_file)
     if status==True:
         users_included=owners_file.get_users_included(owner_data)
-        provider_delivery=owners_file.get_provider_delivery(owner_data)
-        if provider_delivery == False:
-            provider="No"
+        web_catalog_only=owners_file.get_web_catalog_only(owner_data)
+        if not web_catalog_only:
+            web_catalog_only_string="No"
         else:
-            provider="Yes"
+            web_catalog_only_string="Yes"
         vendor_name=owners_file.get_vendor(owner_data)
         chart_name=owners_file.get_chart(owner_data)
         vendor_type=getVendorType(changed_file)
-        return users_included,provider,vendor_name,chart_name,vendor_type
+        return users_included,web_catalog_only_string,vendor_name,chart_name,vendor_type
     else:
         print("Exception loading OWNERS file")
         return "","","","",""
@@ -35,19 +32,19 @@ def process_pr(added_file,modified_file):
     if modified_file!='':
         action="update"
         update="existing-vendor"
-        users_included,provider_delivery,vendor_name,chart_name,vendor_type=getFileContent(modified_file)
-        return users_included,provider_delivery,vendor_name,chart_name,vendor_type,action,update
+        users_included,web_catalog_only,vendor_name,chart_name,vendor_type=getFileContent(modified_file)
+        return users_included,web_catalog_only,vendor_name,chart_name,vendor_type,action,update
     elif added_file!='':
         action="create"
         update="new-vendor"
-        users_included,provider_delivery,vendor_name,chart_name,vendor_type=getFileContent(added_file)
-        return users_included,provider_delivery,vendor_name,chart_name,vendor_type,action,update
+        users_included,web_catalog_only,vendor_name,chart_name,vendor_type=getFileContent(added_file)
+        return users_included,web_catalog_only,vendor_name,chart_name,vendor_type,action,update
 
 
-def send_owner_metric(write_key,prefix,users_included,provider_delivery,partner,chart_name,type,action,update):
+def send_owner_metric(write_key,prefix,users_included,web_catalog_only,partner,chart_name,type,action,update):
     if chart_name!="" and partner!="":
         id = f"{prefix}-{type}-{chart_name}"
-        properties = { "type" : type, "vendor": partner, "chart" : chart_name, "users_included" : users_included, "provider_delivery" :provider_delivery, "action" : action, "update" : update}
+        properties = { "type" : type, "vendor": partner, "chart" : chart_name, "users_included" : users_included, "provider_delivery" :web_catalog_only, "action" : action, "update" : update}
         send_metric(write_key,id,"owners v1.0",properties)
 
 def on_error(error,items):
@@ -93,8 +90,8 @@ def main():
         print("Error: Segment write key not set")
         sys.exit(1)
 
-    users_included,provider_delivery,vendor_name,chart_name,vendor_type,action,update = process_pr(args.added[0],args.modified[0])
-    send_owner_metric(args.write_key,args.prefix,users_included,provider_delivery,vendor_name,chart_name,vendor_type,action,update)
+    users_included,web_catalog_only,vendor_name,chart_name,vendor_type,action,update = process_pr(args.added[0],args.modified[0])
+    send_owner_metric(args.write_key,args.prefix,users_included,web_catalog_only,vendor_name,chart_name,vendor_type,action,update)
 
 if __name__ == '__main__':
     main()

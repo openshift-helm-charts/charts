@@ -1,5 +1,6 @@
 import os
 import sys
+from tools import gitutils
 
 def get_success_coment():
     return "Congratulations! Your chart has been certified and will be published shortly."
@@ -38,9 +39,9 @@ def prepare_failure_comment():
 {get_verifier_errors_trailer()}
 
 """
-        print(f"::set-output name=error-message::{errors}")
+        gitutils.add_output("error-message",errors)
     else:
-        print(f"::set-output name=error-message::{get_failure_comment()}")
+        gitutils.add_output("error-message",get_failure_comment())
     return msg
 
 def prepare_success_comment():
@@ -52,16 +53,16 @@ def prepare_pr_content_failure_comment():
     pr_content_error_msg = os.environ.get("PR_CONTENT_ERROR_MESSAGE", "")
     owners_error_msg = os.environ.get("OWNERS_ERROR_MESSAGE", "")
     if pr_content_error_msg:
-        print(f"::set-output name=error-message::{pr_content_error_msg}")
+        gitutils.add_output("error-message",pr_content_error_msg)
         msg += f"{pr_content_error_msg}\n\n"
     if owners_error_msg:
-        print(f"::set-output name=error-message::{owners_error_msg}")
+        gitutils.add_output("error-message",owners_error_msg)
         msg += f"{owners_error_msg}\n\n"
     return msg
 
 def prepare_run_verifier_failure_comment():
     verifier_error_msg = os.environ.get("VERIFIER_ERROR_MESSAGE", "")
-    print(f"::set-output name=error-message::{verifier_error_msg}")
+    gitutils.add_output("error-message",verifier_error_msg)
     msg = f"""   
 {verifier_error_msg}
 
@@ -106,30 +107,30 @@ def main():
     oc_install_result = os.environ.get("OC_INSTALL_RESULT", False)
     if pr_content_result == "failure":
         msg += prepare_pr_content_failure_comment()
-        print(f"::set-output name=pr_passed::false")
+        gitutils.add_output("pr_passed","false")
     elif run_verifier_result == "failure":
         msg += prepare_run_verifier_failure_comment()
-        print(f"::set-output name=pr_passed::false")
+        gitutils.add_output("pr_passed","false")
     elif verify_result == "failure":
         community_manual_review = os.environ.get("COMMUNITY_MANUAL_REVIEW",False)
         if community_manual_review:
             msg += prepare_community_comment()
-            print(f"::set-output name=pr_passed::true")
+            gitutils.add_output("pr_passed","true")
         else:
             msg += prepare_failure_comment()
-            print(f"::set-output name=pr_passed::false")
+            gitutils.add_output("pr_passed","false")
     elif oc_install_result == "failure":
         msg += prepare_oc_install_fail_comment()
-        print(f"::set-output name=pr_passed::false")
+        gitutils.add_output("pr_passed","false")
     else:
-        print(f"::set-output name=pr_passed::true")
+        gitutils.add_output("pr_passed","true")
         msg += prepare_success_comment()
 
     msg += get_comment_footer(vendor_label, chart_name)
 
     with open("./pr/comment", "w") as fd:
         fd.write(msg)
-        print(f"::set-output name=message-file::{fd.name}")
+        gitutils.add_output("message-file",fd.name)
 
 if __name__ == "__main__":
     main()

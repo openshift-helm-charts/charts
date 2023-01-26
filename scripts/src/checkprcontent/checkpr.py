@@ -2,6 +2,7 @@ import re
 import os
 import sys
 import argparse
+import json
 
 import requests
 import semver
@@ -14,11 +15,13 @@ except ImportError:
 sys.path.append('../')
 from owners import owners_file
 from report import verifier_report
+from pullrequest import prartifact
+from tools import gitutils
 
 ALLOW_CI_CHANGES = "allow/ci-changes"
 TYPE_MATCH_EXPRESSION = "(partners|redhat|community)"
 
-def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
+def check_web_catalog_only(report_in_pr, num_files_in_pr, report_file_match):
 
     print(f"[INFO] report in PR {report_in_pr}")
     print(f"[INFO] num files in PR {num_files_in_pr}")
@@ -29,12 +32,12 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
     found_owners,owner_data = owners_file.get_owner_data(category, organization, chart)
 
     if found_owners:
-        owner_provider_delivery = owners_file.get_provider_delivery(owner_data)
-        print(f"[INFO] providerDelivery from OWNERS : {owner_provider_delivery}")
+        owner_web_catalog_only = owners_file.get_web_catalog_only(owner_data)
+        print(f"[INFO] webCatalogOnly/providerDelivery from OWNERS : {owner_web_catalog_only}")
     else:
         msg = "[ERROR] OWNERS file was not found."
         print(msg)
-        print(f"::set-output name=owners-error-message::{msg}")
+        gitutils.add_output("owners-error-message",msg)
         sys.exit(1)
 
     if report_in_pr:
@@ -43,47 +46,47 @@ def check_provider_delivery(report_in_pr,num_files_in_pr,report_file_match):
         found_report,report_data = verifier_report.get_report_data(report_file_path)
 
         if found_report:
-            report_provider_delivery = verifier_report.get_provider_delivery(report_data)
-            print(f"[INFO] providerDelivery from report : {report_provider_delivery}")
+            report_web_catalog_only = verifier_report.get_web_catalog_only(report_data)
+            print(f"[INFO] webCatalogOnly/providerDelivery from report : {report_web_catalog_only}")
         else:
             msg = f"[ERROR] Failed tp open report: {report_file_path}."
             print(msg)
-            print(f"::set-output name=pr-content-error-message::{msg}")
+            gitutils.add_output("pr-content-error-message",msg)
             sys.exit(1)
 
-    provider_delivery = False
+    web_catalog_only = False
     if report_in_pr and num_files_in_pr > 1:
-        if report_provider_delivery or owner_provider_delivery:
+        if report_web_catalog_only or owner_web_catalog_only:
             msg = f"[ERROR] The web catalog distribution method requires the pull request to be report only."
             print(msg)
-            print(f"::set-output name=pr-content-error-message::{msg}")
+            gitutils.add_output("pr-content-error-message",msg)
             sys.exit(1)
     elif report_in_pr:
-        if report_provider_delivery and owner_provider_delivery:
+        if report_web_catalog_only and owner_web_catalog_only:
             if verifier_report.get_package_digest(report_data):
-                provider_delivery = True
+                web_catalog_only = True
             else:
                 msg = f"[ERROR] The web catalog distribution method requires a package digest in the report."
                 print(msg)
-                print(f"::set-output name=pr-content-error-message::{msg}")
+                gitutils.add_output("pr-content-error-message",msg)
                 sys.exit(1)
-        elif report_provider_delivery:
+        elif report_web_catalog_only:
             msg = f"[ERROR] Report indicates web catalog only but the distribution method set for the chart is not web catalog only."
             print(msg)
-            print(f"::set-output name=pr-content-error-message::{msg}")
+            gitutils.add_output("pr-content-error-message",msg)
             sys.exit(1)
-        elif owner_provider_delivery:
+        elif owner_web_catalog_only:
             msg = f"[ERROR] The web catalog distribution method is set for the chart but is not set in the report."
             print(msg)
-            print(f"::set-output name=pr-content-error-message::{msg}")
+            gitutils.add_output("pr-content-error-message",msg)
             sys.exit(1)
 
-    if provider_delivery:
-        print(f"[INFO] providerDelivery is a go")
-        print(f"::set-output name=providerDelivery::True")
+    if web_catalog_only:
+        print(f"[INFO] webCatalogOnly/providerDelivery is a go")
+        gitutils.add_output("webCatalogOnly","True")
     else:
-        print(f"::set-output name=providerDelivery::False")
-        print(f"[INFO] providerDelivery is a no-go")
+        gitutils.add_output("webCatalogOnly","False")
+        print(f"[INFO] webCatalogOnly/providerDelivery is a no-go")
 
 def get_file_match_compiled_patterns():
     """Return a tuple of patterns, where the first can be used to match any file in a chart PR 
@@ -100,64 +103,59 @@ def get_file_match_compiled_patterns():
 
     pattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
     reportpattern = re.compile(r"charts/"+TYPE_MATCH_EXPRESSION+"/([\w-]+)/([\w-]+)/([\w\.-]+)/report.yaml")
-
-    return pattern,reportpattern
+    tarballpattern = re.compile(r"charts/(partners|redhat|community)/([\w-]+)/([\w-]+)/([\w\.-]+)/(.*\.tgz$)")
+    return pattern,reportpattern,tarballpattern
 
 
 def ensure_only_chart_is_modified(api_url, repository, branch):
-    # api_url https://api.github.com/repos/<organization-name>/<repository-name>/pulls/1
-    headers = {'Accept': 'application/vnd.github.v3+json'}
-    r = requests.get(api_url, headers=headers)
-    for label in r.json()["labels"]:
-        if label["name"] == ALLOW_CI_CHANGES:
+    label_names = prartifact.get_labels(api_url)
+    for label_name in label_names:
+        if label_name == ALLOW_CI_CHANGES:
             return
-    files_api_url = f'{api_url}/files'
-    headers = {'Accept': 'application/vnd.github.v3+json'}
-    r = requests.get(files_api_url, headers=headers)
-    pattern,reportpattern = get_file_match_compiled_patterns()
-    page_number = 1
-    max_page_size,page_size = 100,100
+
+    files = prartifact.get_modified_files(api_url)
+    pattern,reportpattern,tarballpattern = get_file_match_compiled_patterns()
     matches_found = 0
     report_found = False
     none_chart_files = {}
-    file_count = 0
 
-    while page_size == max_page_size:
-
-        files_api_query = f'{files_api_url}?per_page={page_size}&page={page_number}'
-        print(f"Query files : {files_api_query}")
-        r = requests.get(files_api_query,headers=headers)
-        files = r.json()
-        page_size = len(files)
-        file_count += page_size
-        page_number += 1
-
-        for f in files:
-            file_path = f["filename"]
-            match = pattern.match(file_path)
-            if not match:
-                file_name = os.path.basename(file_path)
-                none_chart_files[file_name] = file_path
+    for file_path in files:
+        match = pattern.match(file_path)
+        if not match:
+            file_name = os.path.basename(file_path)
+            none_chart_files[file_name] = file_path
+        else:
+            matches_found += 1
+            if reportpattern.match(file_path):
+                print(f"[INFO] Report found: {file_path}")
+                gitutils.add_output("report-exists","true")
+                report_found = True
             else:
-                matches_found += 1
-                if reportpattern.match(file_path):
-                    print(f"[INFO] Report found: {file_path}")
-                    print("::set-output name=report-exists::true")
-                    report_found = True
-                if matches_found == 1:
-                    pattern_match = match
-                elif pattern_match.groups() != match.groups():
-                    msg = "[ERROR] A PR must contain only one chart. Current PR includes files for multiple charts."
-                    print(msg)
-                    print(f"::set-output name=pr-content-error-message::{msg}")
-                    exit(1)
+                tar_match = tarballpattern.match(file_path)
+                if tar_match:
+                    print(f"[INFO] tarball found: {file_path}")
+                    _,_,chart_name,chart_version,tar_name = tar_match.groups()
+                    expected_tar_name = f"{chart_name}-{chart_version}.tgz"
+                    if tar_name != expected_tar_name:
+                        msg = f"[ERROR] the tgz file is named incorrectly. Expected: {expected_tar_name}"
+                        print(msg)
+                        gitutils.add_output("pr-content-error-message",msg)
+                        exit(1)
+
+            if matches_found == 1:
+                pattern_match = match
+            elif pattern_match.groups() != match.groups():
+                msg = "[ERROR] A PR must contain only one chart. Current PR includes files for multiple charts."
+                print(msg)
+                gitutils.add_output("pr-content-error-message",msg)
+                exit(1)
     
     if none_chart_files:
-        if file_count > 1 or "OWNERS" not in none_chart_files: #OWNERS not present or preset but not the only file
+        if len(files) > 1 or "OWNERS" not in none_chart_files: #OWNERS not present or preset but not the only file
             example_file = list(none_chart_files.values())[0]
             msg = f"[ERROR] PR includes one or more files not related to charts, e.g., {example_file}"
             print(msg)
-            print(f"::set-output name=pr-content-error-message::{msg}")
+            gitutils.add_output("pr-content-error-message",msg)
 
         if "OWNERS" in none_chart_files:
             file_path = none_chart_files["OWNERS"]
@@ -166,33 +164,34 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
             if category == "partners":
                 msg = "[ERROR] OWNERS file should never be set directly by partners. See certification docs."
                 print(msg)
-                print(f"::set-output name=owners-error-message::{msg}")
+                gitutils.add_output("owners-error-message",msg)
             elif matches_found>0: # There is a mix of chart and non-chart files including OWNERS
                 msg = "[ERROR] Send OWNERS file by itself in a separate PR."
                 print(msg)
-                print(f"::set-output name=owners-error-message::{msg}")
-            elif file_count == 1: # OWNERS file is the only file in PR
+                gitutils.add_output("owners-error-message",msg)
+            elif len(files) == 1: # OWNERS file is the only file in PR
                 msg = "[INFO] OWNERS file changes require manual review by maintainers."
                 print(msg)
-                print(f"::set-output name=owners-error-message::{msg}") 
+                gitutils.add_output("owners-error-message",msg)
                 
         sys.exit(1)
 
-    check_provider_delivery(report_found,matches_found,pattern_match)
+    check_web_catalog_only(report_found, matches_found, pattern_match)
 
     if matches_found>0:
         category, organization, chart, version = pattern_match.groups()
-        print(f"::set-output name=category::{'partner' if category == 'partners' else category}")
-        print(f"::set-output name=organization::{organization}")
+        gitutils.add_output("category",f"{'partner' if category == 'partners' else category}")
+        gitutils.add_output("organization",organization)
 
         if not semver.VersionInfo.isvalid(version):
             msg = f"[ERROR] Helm chart version is not a valid semantic version: {version}"
             print(msg)
-            print(f"::set-output name=pr-content-error-message::{msg}")
+            gitutils.add_output("pr-content-error-message",msg)
             sys.exit(1)
 
         print("Downloading index.yaml", category, organization, chart, version)
         r = requests.get(f'https://raw.githubusercontent.com/{repository}/{branch}/index.yaml')
+
         if r.status_code == 200:
             data = yaml.load(r.text, Loader=Loader)
         else:
@@ -201,25 +200,40 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
 
         entry_name = f"{organization}-{chart}"
         d = data["entries"].get(entry_name, [])
-        print(f"::set-output name=chart-entry-name::{entry_name}")
+        gitutils.add_output("chart-entry-name",entry_name)
         for v in d:
             if v["version"] == version:
                 msg = f"[ERROR] Helm chart release already exists in the index.yaml: {version}"
                 print(msg)
-                print(f"::set-output name=pr-content-error-message::{msg}")
+                gitutils.add_output("pr-content-error-message",msg)
                 sys.exit(1)
 
         tag_name = f"{organization}-{chart}-{version}"
-        print(f"::set-output name=chart-name-with-version::{tag_name}")
+        gitutils.add_output("chart-name-with-version",tag_name)
         tag_api = f"https://api.github.com/repos/{repository}/git/ref/tags/{tag_name}"
-        headers = {'Accept': 'application/vnd.github.v3+json'}
+        headers = {'Accept': 'application/vnd.github.v3+json','Authorization': f'Bearer {os.environ.get("BOT_TOKEN")}'}
         print(f"[INFO] checking tag: {tag_api}")
         r = requests.head(tag_api, headers=headers)
         if r.status_code == 200:
             msg = f"[ERROR] Helm chart release already exists in the GitHub Release/Tag: {tag_name}"
             print(msg)
-            print(f"::set-output name=pr-content-error-message::{msg}")
+            gitutils.add_output("pr-content-error-message",msg)
             sys.exit(1)
+        try:
+            if prartifact.xRateLimit in r.headers:
+                print(f'[DEBUG] {prartifact.xRateLimit} : {r.headers[prartifact.xRateLimit]}')
+            if prartifact.xRateRemain in r.headers:
+                print(f'[DEBUG] {prartifact.xRateRemain}  : {r.headers[prartifact.xRateRemain]}')
+
+            response_content = r.json()
+            if "message" in response_content:
+                print(f'[ERROR] getting index file content: {response_content["message"]}')
+                sys.exit(1)
+        except json.decoder.JSONDecodeError:
+            pass
+
+
+
 
 def main():
     parser = argparse.ArgumentParser()
