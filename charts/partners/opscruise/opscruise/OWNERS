@@ -4,8 +4,7 @@ chart:
 providerDelivery: false
 publicPgpKey: null
 users:
-- githubUsername: opscruiseindia
-- githubUsername: cesar.quintana
+- githubUsername: sudheeshopscruise
 vendor:
   label: opscruise
   name: Opscruise, Inc.
