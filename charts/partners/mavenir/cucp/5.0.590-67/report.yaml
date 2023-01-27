@@ -1,0 +1,141 @@
+Using config file: /root/VZ_PHASE1/CUCP/590_67_P2/cucp_ubi/config.yaml
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.9.0
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:544208512538136612
+        chart-uri: N/A
+        digests:
+            chart: sha256:9087cf91de6ceace64c2f07d7f997fe9d5f1f7b6b54b86ec45c03163ad774a63
+            package: 688f8e90c2b15472c061aa850485117273e989d382c8f8c3e2585ea9f880507c
+        lastCertifiedTimestamp: "2023-01-27T06:01:02.426399+00:00"
+        testedOpenShiftVersion: "4.10"
+        supportedOpenShiftVersions: '>=4.3'
+        providerControlledDelivery: true
+    chart:
+        name: cucp
+        home: ""
+        sources: []
+        version: 5.0.590-67
+        description: NF Service template.
+        keywords: []
+        maintainers:
+            - name: ran pltf team
+              email: srikanth.subbaramu@mavenir.com
+              url: ""
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: "0.1"
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: test
+        kubeversion: '>= 1.16.0-0'
+        dependencies:
+            - name: gnbmgr
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: ueconmgr
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sctpe1iwf
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sctpf1iwf
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: sctpx2iwf
+              version: "2.8"
+              repository: http://10.10.5.8:8080
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/mrhcert/cucp_gnb_mgr:5.0.590-67
+        Image is Red Hat certified : quay.io/mrhcert/mtcil-22.3.1_p5/cim:22.3.1-p5
+        Image is Red Hat certified : quay.io/mrhcert/cucp_sctp_e1_iwf:5.0.590-67
+        Image is Red Hat certified : quay.io/mrhcert/cucp_sctp_f1_iwf:5.0.590-67
+        Image is Red Hat certified : quay.io/mrhcert/cucp_sctp_x2_iwf:5.0.590-67
+        Image is Red Hat certified : quay.io/mrhcert/cucp_ue_conn_mgr:5.0.590-67
+
