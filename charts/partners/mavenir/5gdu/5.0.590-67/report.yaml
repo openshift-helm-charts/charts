@@ -17,7 +17,7 @@ metadata:
         supportedOpenShiftVersions: '>=4.5'
         webCatalogOnly: true
     chart:
-        name: du
+        name: 5gdu
         home: ""
         sources: []
         version: 5.0.590-67
