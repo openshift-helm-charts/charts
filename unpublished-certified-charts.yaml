@@ -297,6 +297,26 @@ entries:
     urls:
     - https://github.com/ansvu/samplechart/releases/du_helmchart/du_helmchart_run.tgz
     version: du5.0.326-53
+  - annotations:
+      charts.openshift.io/digest: sha256:d1d5ea0477078eba6ee785899e259399747e0dbbdeab8cf2ff1cfedecc67aac1
+      charts.openshift.io/lastCertifiedTimestamp: '2023-01-27T16:28:56.717361+00:00'
+      charts.openshift.io/name: test
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-01-30T18:15:45.294553+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: '0.1'
+    description: NF Service template.
+    digest: 92ccdf94af54cae1b1935907bbf8ddee8bd51bf5b4e5d4018250eb676ff9f004
+    kubeVersion: '>= 1.18.0-0'
+    maintainers:
+    - email: srikanth.subbaramu@mavenir.com
+      name: ran ptf team
+    name: du
+    urls:
+    - N/A
+    version: 5.0.590-67
   mavenir-mco:
   - annotations:
       charts.openshift.io/digest: sha256:7483cdcc70e3465afc7e9d6d38239c398a71f78aff0e24958fb39b6bf1b35a3a
@@ -1078,4 +1098,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-01-30T17:31:57.419650+00:00'
+generated: '2023-01-30T18:15:45.294553+00:00'
