@@ -1,0 +1,96 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.9.0
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:12568040126152350149
+        chart-uri: https://github.com/csingh-a10/openshift-a10tkc-helmchart/raw/main/charts/partners/a10networks/a10tkc/0.1.0/a10tkc-0.1.0.tgz
+        digests:
+            chart: sha256:ca6b78101b4754b4081e804858a033d28160a745fc8b202bf059ac0cc813c023
+            package: 92858594d3b7fc0b12065f99c1cf903a1d6bd16da97ab7a4efa771c2241d4f33
+        lastCertifiedTimestamp: "2023-01-30T23:18:41.932201-05:00"
+        testedOpenShiftVersion: "4.11"
+        supportedOpenShiftVersions: '>=4.6'
+        providerControlledDelivery: false
+    chart:
+        name: a10tkc
+        home: ""
+        sources: []
+        version: 0.1.0
+        description: A Helm chart for A10 Thunder Kubernetes Connector
+        keywords: []
+        maintainers:
+            - name: A10 Networks Support Group
+              email: support@a10networks.com
+              url: https://a10networks.com
+        icon: https://awsmp-logos.s3.amazonaws.com/0cda37b3-aa1a-4c9d-8daf-c396572cc98b/eb20666de8a7a71e6a26afe74e02e517.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.16.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: a10networks-a10tkc
+        kubeversion: '>= 1.19.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.connect.redhat.com/a10networks/tkc:2.1.0.0
+        Image is Red Hat certified : registry.access.redhat.com/ubi8/ubi
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+
