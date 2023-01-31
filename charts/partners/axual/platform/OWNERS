@@ -1,0 +1,10 @@
+chart:
+  name: platform
+  shortDescription: Self Service and Governance suite for Apache Kafka
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: richard-axual
+vendor:
+  label: axual
+  name: Axual B.V.
