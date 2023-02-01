@@ -3154,6 +3154,26 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-sed-1.0.1/redhat-redis-sed-1.0.1.tgz
     version: 1.0.1
+  redhat-semeru-transition:
+  - annotations:
+      charts.openshift.io/digest: sha256:f01d4467137338d7ccc7b6cdeb28df219bfdda77f0384d8adfbfa4059de96703
+      charts.openshift.io/lastCertifiedTimestamp: '2023-02-01T15:37:03.958259+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-02-01T15:37:31.848103+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: This is the helm chart to replace the Java, from OpenJdk 11 to IBM
+      Semeru 11, that used in a Red Hat product container, such as EAP, .etc.
+    digest: 61a995401bafd1864feb20d36c44d703cae7b21c18ea3674a1a99c338215de27
+    kubeVersion: '>= 1.19.0-0'
+    name: semeru-transition
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-semeru-transition-1.0.0/semeru-transition-1.0.0.tgz
+    version: 1.0.0
   redhat-spring-boot-rest-http:
   - annotations:
       charts.openshift.io/digest: sha256:5d312abe9fb8e5a3255036e0b9f4f53f480fc2c12ed0c0f36f03c72ab9af9038
@@ -4259,4 +4279,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2023-01-23T10:01:56.097237+00:00'
+generated: '2023-02-01T15:37:31.848103+00:00'
