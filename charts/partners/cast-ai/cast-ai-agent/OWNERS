@@ -1,0 +1,9 @@
+chart:
+  name: cast-ai-agent
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: cast-ai
+  name: CAST AI
