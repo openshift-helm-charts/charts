@@ -6,9 +6,7 @@ providerDelivery: false
 publicPgpKey: null
 users:
 - githubUsername: zilvinasu
-- githubUsername: UndeadRat22
-- githubUsername: aldor007
-- githubUsername: anjmao
+- githubUsername: CastAIPhil
 vendor:
   label: cast-ai
   name: CAST AI
