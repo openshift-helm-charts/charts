@@ -1,0 +1,9 @@
+chart:
+  name: ce-single
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: carbonio
+  name: Zextras Srl
