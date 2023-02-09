@@ -887,6 +887,32 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mobileum-caddy015:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:37e7d634146d7fe2250eb21460d4e33d2ad45e47bd6f774552a84a6ff9326ed4
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T13:15:12.777089+00:00'
+      charts.openshift.io/name: Reverse Proxy
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T13:43:59.400741+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.1.5
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: AIP - Reverse proxy component
+    digest: 4e3933814b7f8159f16c8d78cf1f4b425e4d1a824fb17dbab4cea077f0a6be6d
+    kubeVersion: '>=1.16.0-0'
+    name: caddy015
+    type: application
+    urls:
+    - N/A
+    version: 0.1.5
   mobileum-hivemetastore:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1189,4 +1215,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T13:37:45.802864+00:00'
+generated: '2023-02-09T13:43:59.400741+00:00'
