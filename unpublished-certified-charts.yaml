@@ -1047,6 +1047,34 @@ entries:
     urls:
     - N/A
     version: 0.5.3
+  mobileum-rafm:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:12752c5979aa7f7a8440e653eed45f5639bf44b99dcf70cc0722b1b00d70707c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-11-08T15:17:11.24113+00:00'
+      charts.openshift.io/name: RAID Revenue Assurance and Fraud Management
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:56:38.455103+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.3
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: RAFM backend product
+    digest: 8e062a2550852cf172ce2ff57fc7bd0729e3e9dbec5724078a49a2d527c39432
+    keywords:
+    - rafm
+    kubeVersion: '>=1.16.0-0'
+    name: rafm
+    type: application
+    urls:
+    - /home/partner/Music/newcharts/rafm
+    version: 0.5.3
   mobileum-sparkjobmanager:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1404,4 +1432,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T14:49:20.448564+00:00'
+generated: '2023-02-09T14:56:38.455103+00:00'
