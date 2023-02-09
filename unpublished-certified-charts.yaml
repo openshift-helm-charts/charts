@@ -939,6 +939,32 @@ entries:
     urls:
     - N/A
     version: 0.4.5
+  mobileum-keycloak040:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:8bab7186c7e40052846ebd225242f51abe7c6b1d659ab2ffb9040cf3bcc8f645
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-14T18:23:37.154027+00:00'
+      charts.openshift.io/name: Keycloak SSO
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:01:57.761150+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.4.0
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: A Helm chart for keycloak 1.0
+    digest: 751705b84c96d18cbbc5da21363489a7047157efaf58faaa6163b8cff2f3e8f4
+    kubeVersion: '>=1.21.0-0'
+    name: keycloak040
+    type: application
+    urls:
+    - N/A
+    version: 0.4.0
   mobileum-trinodb:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1215,4 +1241,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T13:43:59.400741+00:00'
+generated: '2023-02-09T14:01:57.761150+00:00'
