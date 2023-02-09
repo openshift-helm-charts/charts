@@ -1082,6 +1082,34 @@ entries:
     urls:
     - N/A
     version: 0.5.2
+  mobileum-wafplatform:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:320cae155d54f91c0eed9e7fb78402e77215e63a2fd2535354adb7684cc6a2ae
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-20T22:25:56.326238+00:00'
+      charts.openshift.io/name: RAID Platform
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:35:12.686899+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.3
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: Standard platform backend service
+    digest: ac7e998ce8e88ceb027f9b1502c2f355fc10cd5164e06c235f0ae451c36e651b
+    keywords:
+    - wafplatform
+    kubeVersion: '>=1.16.0-0'
+    name: wafplatform
+    type: application
+    urls:
+    - /home/partner/Music/Music/aip10/wafplatform-053/wafplatform-0.5.3.tgz
+    version: 0.5.3
   nokia-cmm-operator-k8s:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1332,4 +1360,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T14:27:20.697258+00:00'
+generated: '2023-02-09T14:35:12.686899+00:00'
