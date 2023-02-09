@@ -1025,6 +1025,37 @@ entries:
     urls:
     - N/A
     version: 0.5.3
+  mobileum-sparkjobmanager:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:e2a3a3063baf1591087b28e4ee8b05c45b60069a06bea16faad7e200d061028a
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T12:16:49.584668+00:00'
+      charts.openshift.io/name: Sparkjob Manager
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:27:20.697258+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.4
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.3
+    description: Spark JobManager is a middleware proxy that enables users to launch
+      data processing jobs as a service.
+    digest: 44c568172665d310e3de01f9fb776ab624b7545b27a52e75549c549595f6c185
+    keywords:
+    - apache
+    - spark
+    - aip
+    - sparkjobmanager
+    kubeVersion: '>=1.16.0-0'
+    name: sparkjobmanager
+    urls:
+    - N/A
+    version: 0.5.4
   mobileum-trinodb:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1301,4 +1332,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T14:12:55.113973+00:00'
+generated: '2023-02-09T14:27:20.697258+00:00'
