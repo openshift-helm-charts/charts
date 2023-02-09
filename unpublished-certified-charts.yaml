@@ -887,6 +887,32 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mobileum-hivemetastore:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:625230dea241958ee417a302768f0b79ca8199ac3dea19980f92a7908b9aa557
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T21:24:42.990199+00:00'
+      charts.openshift.io/name: hivemetastore
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T13:37:45.802864+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.4.5
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: Hive Metastore Application
+    digest: 85a029e9234ba18bb4694f2d763bf689a25bc22e462301b3e2ddc7c52d5b5bdb
+    kubeVersion: '>= 1.16.0-0'
+    name: hivemetastore
+    type: application
+    urls:
+    - N/A
+    version: 0.4.5
   mobileum-trinodb:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1163,4 +1189,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T13:23:34.443765+00:00'
+generated: '2023-02-09T13:37:45.802864+00:00'
