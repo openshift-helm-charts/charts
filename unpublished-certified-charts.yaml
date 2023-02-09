@@ -939,6 +939,37 @@ entries:
     urls:
     - N/A
     version: 0.4.5
+  mobileum-ignite:
+  - annotations:
+      category: Infrastructure
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:021abbc02e78cf0c57ce87d9a2af38da9d9a45cb74c691bf9139fb720c5fbac5
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T14:59:20.243663+00:00'
+      charts.openshift.io/name: KV Storage
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:12:55.113973+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.3.3
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: Apache Ignite is a distributed database management system for high-performance
+      computing.
+    digest: 96729e204ca52c29e29d429234c7cdf0e67da473d2bf738bbda5ae366d78a2de
+    keywords:
+    - apache
+    - ignite
+    - aip
+    kubeVersion: '>=1.16.0-0'
+    name: ignite
+    urls:
+    - N/A
+    version: 0.3.3
   mobileum-keycloak040:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1270,4 +1301,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T14:09:26.481047+00:00'
+generated: '2023-02-09T14:12:55.113973+00:00'
