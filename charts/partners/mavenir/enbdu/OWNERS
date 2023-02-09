@@ -1,7 +1,7 @@
 chart:
   name: enbdu
   shortDescription: unknown
-providerDelivery: false
+providerDelivery: true
 publicPgpKey: unknown
 users: []
 vendor:
