@@ -1056,6 +1056,28 @@ entries:
     urls:
     - N/A
     version: 0.5.4
+  mobileum-tracer:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:672682c2b807d5f1d4e11e292aea42b616b2dc7634749e369e214c292066416e
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T16:43:11.203255+00:00'
+      charts.openshift.io/name: tracer
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:41:47.617458+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart for Tracer
+    digest: 709221f0e6b2a104bd799d72d8e2de46c0e8b4c648c59bc119167126e6c74865
+    kubeVersion: '>=1.16.0-0'
+    name: tracer
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
   mobileum-trinodb:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1360,4 +1382,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T14:35:12.686899+00:00'
+generated: '2023-02-09T14:41:47.617458+00:00'
