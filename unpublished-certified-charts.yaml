@@ -887,6 +887,32 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mobileum-trinodb:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:6f9aef2444426e3cf5ed3292197016e45c7a6c3e7a5901df5b4cffb9ddc96857
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T12:55:16.191558+00:00'
+      charts.openshift.io/name: dqe
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T13:23:34.443765+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.2
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: AIP Query Engine
+    digest: 05dc36cadb084e3628e3adbfa06f698cdc4aed8825aa34cd5fa49702442df4d3
+    kubeVersion: '>= 1.16.0-0'
+    name: trinodb
+    type: application
+    urls:
+    - N/A
+    version: 0.5.2
   nokia-cmm-operator-k8s:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1137,4 +1163,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-01T11:23:12.377737+00:00'
+generated: '2023-02-09T13:23:34.443765+00:00'
