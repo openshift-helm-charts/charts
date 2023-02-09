@@ -965,6 +965,35 @@ entries:
     urls:
     - N/A
     version: 0.4.0
+  mobileum-portal:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:7d67e0e03cd9133a1121fac9b2cf808185c975cb8dca20b6b69a3714a1a6787c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T23:01:04.869067+00:00'
+      charts.openshift.io/name: Portal
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:09:26.481047+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.3
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: Mobileum portal integration all the products together on a single
+      UI
+    digest: 57061e704df16bee8249ba778aacb788f7d5afa4dd08ddcf5f7c8a308eb47aee
+    keywords:
+    - portal
+    kubeVersion: '>=1.16.0-0'
+    name: portal
+    type: application
+    urls:
+    - N/A
+    version: 0.5.3
   mobileum-trinodb:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1241,4 +1270,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T14:01:57.761150+00:00'
+generated: '2023-02-09T14:09:26.481047+00:00'
