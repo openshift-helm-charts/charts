@@ -356,6 +356,28 @@ entries:
     urls:
     - N/A
     version: 5.0.590-67
+  mavenir-enbdu:
+  - annotations:
+      charts.openshift.io/digest: sha256:c5531ba17e271ab8a4a946dc8b0655024af784a228d2c2e7dd985e1ed677b3c3
+      charts.openshift.io/lastCertifiedTimestamp: '2023-02-02T16:20:22.166542+00:00'
+      charts.openshift.io/name: test
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-10T17:48:49.946687+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: R_4_10_26_11
+    description: NF Service Template
+    digest: 254b898f97f9a34965d56cb38526d7c91ac568b7de9eb5b87cf026bf4eb02bbd
+    kubeVersion: '>= 1.17.0'
+    maintainers:
+    - email: rahul.gupta@mavenir.com
+      name: RAN PLTF Team
+    name: enbdu
+    type: application
+    urls:
+    - N/A
+    version: 4.10.26-11
   mavenir-mco:
   - annotations:
       charts.openshift.io/digest: sha256:7483cdcc70e3465afc7e9d6d38239c398a71f78aff0e24958fb39b6bf1b35a3a
@@ -1432,4 +1454,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-09T14:56:38.455103+00:00'
+generated: '2023-02-10T17:48:49.946687+00:00'
