@@ -2502,6 +2502,182 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/nirmata-kyverno-2.6.5/kyverno-2.6.5.tgz
     version: 2.6.5
+  opscruise-opscruise:
+  - annotations:
+      charts.openshift.io/digest: sha256:3936a9deac923380aa2dd842f19da07d32030a867ebd05eea48dd38b895b82c0
+      charts.openshift.io/lastCertifiedTimestamp: '2023-02-10T02:29:23.721977+00:00'
+      charts.openshift.io/name: opscruise
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-10T14:36:40.941377+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 3.2.1
+    dependencies:
+    - condition: global.awsgw.enabled,awsgw.enabled
+      name: awsgw
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.k8sgw.enabled,k8sgw.enabled
+      name: k8sgw
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.promgw.enabled,promgw.enabled
+      name: promgw
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.loggw-loki.enabled,loggw-loki.enabled
+      name: loggw-loki
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.azuregw.enabled,azuregw.enabled
+      name: azuregw
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.gcpgw.enabled,gcpgw.enabled
+      name: gcpgw
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.tracegw.enabled,tracegw.enabled
+      name: tracegw
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.trace-router.enabled,trace-router.enabled
+      name: trace-router
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.opscruise-node-exporter.enabled,opscruise-node-exporter.enabled
+      name: opscruise-node-exporter
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.opscruise-node-exporter-new.enabled,opscruise-node-exporter-new.enabled
+      name: opscruise-node-exporter-new
+      repository: ''
+      tags:
+      - opscruise
+      version: 0.1.0
+    - condition: global.prometheus-yace-exporter.enabled,prometheus-yace-exporter.enabled
+      name: prometheus-yace-exporter
+      repository: https://mogaal.github.io/helm-charts
+      tags:
+      - opscruise
+      version: 0.5.0
+    - condition: global.cadvisor.enabled,cadvisor.enabled
+      name: cadvisor
+      repository: ''
+      tags:
+      - collectors
+      version: 0.1.0
+    - condition: global.kube-state-metrics.enabled,kube-state-metrics.enabled
+      name: kube-state-metrics
+      repository: ''
+      tags:
+      - collectors
+      version: 0.1.0
+    - condition: global.fluent-bit.enabled,fluent-bit.enabled
+      name: fluent-bit
+      repository: https://fluent.github.io/helm-charts
+      tags:
+      - collectors
+      version: 0.20.2
+    - condition: global.prometheus.enabled,prometheus.enabled
+      name: prometheus
+      repository: ''
+      tags:
+      - collectors
+      version: 0.1.0
+    - condition: global.loki-stack.enabled,loki-stack.enabled
+      name: loki-stack
+      repository: https://grafana.github.io/helm-charts
+      tags:
+      - collectors
+      version: 2.3.0
+    - condition: global.jaeger.enabled,jaeger.enabled
+      name: jaeger
+      repository: https://jaegertracing.github.io/helm-charts
+      tags:
+      - collectors
+      version: 0.47.0
+    - condition: global.jaeger-operator.enabled,jaeger-operator.enabled
+      name: jaeger-operator
+      repository: https://jaegertracing.github.io/helm-charts
+      tags:
+      - collectors
+      version: 2.24.0
+    - condition: global.prometheus-postgres-exporter.enabled,prometheus-postgres-exporter.enabled
+      name: prometheus-postgres-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      tags:
+      - collectors
+      version: 2.4.0
+    - condition: global.prometheus-mongodb-exporter.enabled,prometheus-mongodb-exporter.enabled
+      name: prometheus-mongodb-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      tags:
+      - collectors
+      version: 3.1.2
+    - condition: global.kafka-exporter.enabled,kafka-exporter.enabled
+      name: kafka-exporter
+      repository: ''
+      tags:
+      - collectors
+      version: 0.1.0
+    - condition: global.prometheus-mysql-exporter.enabled,prometheus-mysql-exporter.enabled
+      name: prometheus-mysql-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      tags:
+      - collectors
+      version: 1.5.0
+    - condition: global.influxdb-exporter.enabled,influxdb-exporter.enabled
+      name: influxdb-exporter
+      repository: ''
+      tags:
+      - collectors
+      version: 0.1.0
+    - condition: global.x509-certificate-exporter.enabled,x509-certificate-exporter.enabled
+      name: x509-certificate-exporter
+      repository: https://charts.enix.io
+      tags:
+      - collectors
+      version: 3.4.0
+    - condition: global.prometheus-redis-exporter.enabled,prometheus-redis-exporter.enabled
+      name: prometheus-redis-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      tags:
+      - collectors
+      version: 5.2.1
+    - condition: global.nginx-prometheus-exporter.enabled,nginx-prometheus-exporter.enabled
+      name: nginx-prometheus-exporter
+      repository: ''
+      tags:
+      - collectors
+      version: 0.1.0
+    description: A Helm chart for installing OpsCruise
+    digest: 04623afc4fe021480af2282dcc61f59aae626bb11fd3dc9116134224e8fdbbd8
+    kubeVersion: ^1.16.1-0
+    name: opscruise
+    type: application
+    urls:
+    - https://opscruise-helm.bitbucket.io/opscruise-0.35.100.tgz.gzip
+    version: 0.35.100
   redhat-cryostat:
   - annotations:
       charts.openshift.io/digest: sha256:16c798a6a148c3d5d7a95a1c25fa727f56cd065a2f412d0991781e5939472b64
@@ -4279,4 +4455,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2023-02-01T15:37:31.848103+00:00'
+generated: '2023-02-10T14:36:40.941377+00:00'
