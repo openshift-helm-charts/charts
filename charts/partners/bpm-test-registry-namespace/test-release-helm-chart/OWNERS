@@ -1,9 +1,10 @@
 chart:
   name: test-release-helm-chart
-  shortDescription: unknown
+  shortDescription: null
 providerDelivery: false
-publicPgpKey: unknown
-users: []
+publicPgpKey: null
+users:
+- githubUsername: opcert
 vendor:
   label: bpm-test-registry-namespace
   name: BPM Test Company
