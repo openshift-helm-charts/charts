@@ -1,0 +1,9 @@
+chart:
+  name: helm-test-1
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: testcontainber
+  name: prod-sub-6
