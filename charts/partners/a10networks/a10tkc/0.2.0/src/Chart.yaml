@@ -1,0 +1,14 @@
+annotations:
+  charts.openshift.io/name: a10networks-a10tkc
+apiVersion: v2
+appVersion: 1.16.0
+description: A Helm chart for A10 Thunder Kubernetes Connector
+icon: https://awsmp-logos.s3.amazonaws.com/0cda37b3-aa1a-4c9d-8daf-c396572cc98b/eb20666de8a7a71e6a26afe74e02e517.png
+kubeVersion: '>= 1.19.0-0'
+maintainers:
+- email: support@a10networks.com
+  name: A10 Networks Support Group
+  url: https://a10networks.com
+name: a10tkc
+type: application
+version: 0.2.0

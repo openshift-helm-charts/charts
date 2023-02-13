@@ -1,0 +1,131 @@
+# Default values for a10tkc.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  # Redhat Certified ContainerRepository Link
+  repository: "registry.connect.redhat.com/a10networks/tkc"
+  pullPolicy: "IfNotPresent"
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "2.1.0.0"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext:
+  # Drop all the capabilites from container
+  capabilities:
+    drop:
+    - ALL
+  # Specify to run as non root  
+  runAsNonRoot: true
+  # Disable the Privilege Access
+  allowPrivilegeEscalation: false
+  # Use default cri runtime environment
+  seccompProfile:
+    type: RuntimeDefault
+
+args:
+  # Namespace to be monitored by a10tkc
+  watchNamespace: ""
+  # Use Ingress Class as annotation in route ofr filtering the ingress TKC will use for configuring the object
+  ingressClass: a10-acos
+  # Configures the external ip as slb configuration when using node port
+  useNodeExternalIp: true
+  # Patch to Update set as true
+  PatchToUpdate: true
+  # Safe Delete flag will delete the Resource when CRD is deleted else CRD will be deleted by ACOS configuration will not be removed
+  safeDelete: true
+  # Tkc use this option to filter out the ingress object that will be used for configuring on ACOS device
+  useIngressClassOnly: true
+  # Nodes to be exposed when using Node port while exposing service 
+  includeAllNodes: true
+  # Master node to include hen using Node port while exposing service
+  include-master: false
+  # Use Route Object or Ingress
+  useOpenShiftRoutes: true
+
+env:
+  # Mangement Ip for Vthunder
+  lbUrl: http://x.x.x.x
+  # Partition vthunder should use for saving the configuration
+  partition: shared
+  # Configures options for Overlay Tunnel
+  config_overlay:
+    # Enables the overlay tunnel configuration 
+    enable: true
+    # Overlay_endpoint_ip is the local ip address configuration of ACOS for Vtep
+    overlay_endpoint_ip: <local-ip-address>
+    # Type of encapsulation that vtep needs to use  default is ip-encap
+    vtep_encapsulation: ip-encap
+    # Custom ip pool name , default is default-ipv4-ippool
+    lif_ippool: default-ipv4-ippool
+  # IpUnNumbered Configuration Section  
+  ipUnNumbered:
+    # enables IpUnNumbered Feature
+    enable: false
+    # Configures the source ip 
+    sourceIp: 'ip'
+    # loop Back Interface id that ipUnNumbered feature will use
+    loopBackInterfaceId: 2
+  # Bgp Configuration Section   
+  bgp: 
+    # Enables the bgp route 
+    enable: false
+    # ASNumber that needs to configured default is ///somethig
+    bgpRouterAsNumber: 106
+    # Configures bgp Networks in bgp router
+    bgpNetworks: '[ip1/cidr,ip2/cidr]'
+    # Configures bgp Neighbors in bgp router
+    bgpNeighbors: '[ip1:port, ip2:port]'
+  # Write Memory Configuration Section  
+  acosMemory:
+    # enable the memory save configuration
+    enable: false
+    # define interval of saving the configuration back to memory
+    saveInterval: 3m
+    # profile name to be used for saving 
+    saveProfileName: a10tkc
+      
+
+
+resources: 
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 300m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+
+secret:
+  # Default User name and password of Vthunder
+  username: admin
+  password: a10
+ 
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
