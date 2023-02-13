@@ -9,7 +9,7 @@ image:
   repository: "registry.connect.redhat.com/a10networks/tkc"
   pullPolicy: "IfNotPresent"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "2.1.0.0"
+  tag: "2.1.1.0"
 
 imagePullSecrets: []
 nameOverride: ""
