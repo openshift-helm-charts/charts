@@ -1,7 +1,7 @@
 chart:
   name: mtcilhelmchart
   shortDescription: unknown
-providerDelivery: false
+providerDelivery: true
 publicPgpKey: unknown
 users: []
 vendor:
