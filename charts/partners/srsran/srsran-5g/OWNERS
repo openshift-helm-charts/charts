@@ -1,0 +1,9 @@
+chart:
+  name: srsran-5g
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: srsran
+  name: SOFTWARE RADIO SYSTEMS LIMITED
