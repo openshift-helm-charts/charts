@@ -647,6 +647,32 @@ entries:
     urls:
     - N/A
     version: 3.0.1800-b17
+  mavenir-mtcil:
+  - annotations:
+      charts.openshift.io/digest: sha256:62ca72bb1bd5357c632abf8270a0c40d4ce48e85420142a06f67a5b110a6a307
+      charts.openshift.io/lastCertifiedTimestamp: '2023-02-23T15:22:42.034718+00:00'
+      charts.openshift.io/name: mtcil
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-23T16:53:40.105543+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: '1.0'
+    dependencies:
+    - name: mtcil-infra
+      repository: ''
+    - name: mtcil-mgmt
+      repository: ''
+    description: A Helm chart for Mtcil.
+    digest: cd03e372891947283d3109dc36461523425b8008dcfe5002acd6066733557b2c
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - email: support@mavenir.com
+      name: mtcil team
+    name: mtcil
+    urls:
+    - N/A
+    version: 22.3.1
   mavenir-nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -1475,4 +1501,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-02-22T21:47:38.287845+00:00'
+generated: '2023-02-23T16:53:40.105543+00:00'
