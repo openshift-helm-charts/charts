@@ -53,6 +53,25 @@ entries:
     urls:
     - https://github.com/Broadpeak-tv/Openshift/raw/main/Certification/bks400-0.2.0.tgz
     version: 0.2.0
+  castai-castai-agent:
+  - annotations:
+      charts.openshift.io/digest: sha256:b3c7c29c5aa3e15db68cebd0f340385921539d79e6a9afd09756e38ae766913a
+      charts.openshift.io/lastCertifiedTimestamp: '2023-02-24T14:39:40.440139+02:00'
+      charts.openshift.io/provider: CAST AI
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-24T13:15:45.486802+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: v0.42.2
+    description: CAST AI agent deployment chart.
+    digest: 328c4bde8fb4412fa3cd5e13073ab41a961b1d8233fce77c010e4a3ed0cc5ed4
+    kubeVersion: '>= 1.19'
+    name: castai-agent
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/castai-castai-agent-0.52.0/castai-agent-0.52.0.tgz
+    version: 0.52.0
   dh2i-dxemssql:
   - annotations:
       charts.openshift.io/digest: sha256:bba38b72bd647ead19350b86ec60253d203d9465d75efd4c25d210110b77d789
@@ -4513,4 +4532,4 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2023-02-15T10:06:49.576063+00:00'
+generated: '2023-02-24T13:15:45.486802+00:00'
