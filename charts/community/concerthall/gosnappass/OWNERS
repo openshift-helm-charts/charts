@@ -1,0 +1,9 @@
+chart:
+  name: gosnappass
+  shortDescription: Share Secrets Securely
+publicPgpKey: null
+users:
+- githubUsername: komish
+vendor:
+  label: concerthall
+  name: concerthall
