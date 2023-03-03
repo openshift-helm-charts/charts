@@ -1,4 +1,3 @@
-openshift-version=4.10
 apiversion: v1
 kind: verify-report
 metadata:
