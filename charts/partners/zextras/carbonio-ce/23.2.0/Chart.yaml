@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: "23.2.0"
+description: Official Zextras Carbonio CE Chart
+home: https://www.zextras.com/carbonio-ce
+icon: https://www.zextras.com/images/carbonio_white.webp
+keywords:
+  - carbonio-ce
+  - email
+  - collaboration
+  - groupware
+kubeVersion: ">= 1.14.0-0"
+name: carbonio-ce
+version: "23.2.0"
+annotations:
+  charts.openshift.io/name: carbonio-ce
