@@ -1,10 +1,10 @@
 chart:
   name: ce-single
-  shortDescription: null
+  shortDescription: unknown
 providerDelivery: true
-publicPgpKey: null
+publicPgpKey: unknown
 users:
-- githubUsername: M0Rf30
+- githubUsername: m0rf30
 vendor:
   label: carbonio
   name: Zextras Srl
