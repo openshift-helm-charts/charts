@@ -4,7 +4,7 @@ chart:
 providerDelivery: true
 publicPgpKey: unknown
 users:
-- githubUsername: m0rf30
+- githubUsername: M0Rf30
 vendor:
   label: carbonio
   name: Zextras Srl
