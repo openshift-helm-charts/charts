@@ -3158,6 +3158,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
       charts.openshift.io/digest: sha256:85d0347b6c3377037f8ad5287fc0c4a1baef708a65c26669993d2ed5b5f765bb
       charts.openshift.io/lastCertifiedTimestamp: '2021-09-02T11:32:44.405532+00:00'
+      charts.openshift.io/name: JBoss EAP XP 3
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-09-02T11:37:05.001295+00:00'
@@ -3178,6 +3179,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:ce65fa6805952cb861e644a410b0fbe020059a233c58912267b3d0fd7f749299
       charts.openshift.io/lastCertifiedTimestamp: '2022-07-21T12:18:32.463594+00:00'
+      charts.openshift.io/name: JBoss EAP XP 4
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2022-07-21T12:18:49.875971+00:00'
@@ -3201,6 +3203,7 @@ entries:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
       charts.openshift.io/digest: sha256:c21bfc66510ed4deeb5dda0be56c23179335728bd966edcc5110dd8bf12906e1
       charts.openshift.io/lastCertifiedTimestamp: '2021-09-01T14:46:21.647631+00:00'
+      charts.openshift.io/name: JBoss EAP 7.4
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2021-09-02T07:18:22.395724+00:00'
@@ -3220,6 +3223,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:0afa9a0f59ae06ce62d75a8f71cfd69dda432da7d073b27e5ffa67f534a545b8
       charts.openshift.io/lastCertifiedTimestamp: '2023-03-20T08:16:02.067793+00:00'
+      charts.openshift.io/name: JBoss EAP 7.4
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2023-03-20T08:16:27.689177+00:00'
@@ -3249,6 +3253,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:84268d5cf64696c623c96a718a32162bd60307f6410f07d49ca9babe65b22151
       charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T15:27:40.509997+00:00'
+      charts.openshift.io/name: JBoss EAP 8
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2022-12-15T15:28:04.907010+00:00'
