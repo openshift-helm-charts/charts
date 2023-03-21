@@ -2,7 +2,7 @@ chart:
   name: enbdu
   shortDescription: 4GDU
 providerDelivery: true
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: shantanushivanekar123
 vendor:
