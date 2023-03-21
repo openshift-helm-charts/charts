@@ -3,7 +3,7 @@ chart:
   shortDescription: srsRAN is an open-source 4G and 5G software radio suite developed
     by Software Radio Systems (SRS)
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: ninjab3s
 vendor:
