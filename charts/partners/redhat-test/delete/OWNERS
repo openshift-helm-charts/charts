@@ -1,0 +1,9 @@
+chart:
+  name: delete
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: redhat-test
+  name: Red Hat, Inc.
