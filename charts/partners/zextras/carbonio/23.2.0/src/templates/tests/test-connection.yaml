@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-server-test
+  labels:
+    {{- include "carbonio.labels" . | nindent 4 }}
+  namespace: carbonio-system
+  annotations:
+    "helm.sh/hook": test
+spec:
+  {{- with .Values.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
+  serviceAccountName: {{- toYaml .Values.serviceAccountName | nindent 8 }}
+  securityContext:
+    {{- toYaml .Values.podSecurityContext | nindent 8 }}
+  containers:
+    - name: {{ .Release.Name }}-server-test
+      image: {{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion }}
+      imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+      command:
+        - /bin/sh
+        - -c
+        - |
+          /opt/zextras/bin/zmcontrol -v
+
+  restartPolicy: Never
