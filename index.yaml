@@ -4628,4 +4628,29 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
-generated: '2023-03-20T08:16:27.689177+00:00'
+  zextras-carbonio:
+  - annotations:
+      charts.openshift.io/digest: sha256:a93c347dd88ce22a68a4c2ecb7d6c05c211db6c297b57cdd912403ee5e578857
+      charts.openshift.io/lastCertifiedTimestamp: '2023-03-23T16:45:33.120585+01:00'
+      charts.openshift.io/provider: Zextras Srl
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-03-23T15:47:44.670235+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.2'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 23.2.0
+    description: Official Zextras Carbonio Chart
+    digest: 18d8aa3bfaca1be4b04f01dc4fa29ccb8e2b00b01422b8a08579799fc652f0b5
+    home: https://www.zextras.com/carbonio
+    icon: https://www.zextras.com/images/carbonio_white.webp
+    keywords:
+    - carbonio
+    - email
+    - collaboration
+    - groupware
+    kubeVersion: '>= 1.14.0-0'
+    name: carbonio
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.2.0/carbonio-23.2.0.tgz
+    version: 23.2.0
+generated: '2023-03-23T15:47:44.670235+00:00'
