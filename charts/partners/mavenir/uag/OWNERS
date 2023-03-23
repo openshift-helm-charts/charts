@@ -1,10 +1,11 @@
 chart:
   name: uag
-  shortDescription: unknown
+  shortDescription: uag helm
 providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: rameshmav
+- githubUsername: kapilkumardongre
 vendor:
   label: mavenir
   name: Mavenir Systems Inc.
