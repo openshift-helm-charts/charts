@@ -1,0 +1,338 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Welcome10",
+    "definitions": {
+        "Welcome10": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "nameOverride": {
+                    "type": "string"
+                },
+                "fullnameOverride": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/Service"
+                },
+                "serviceAccount": {
+                    "$ref": "#/definitions/ServiceAccount"
+                },
+                "serviceAccountName": {
+                    "type": "string"
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "items": {}
+                },
+                "deployment": {
+                    "$ref": "#/definitions/Deployment"
+                },
+                "autoscaling": {
+                    "$ref": "#/definitions/Autoscaling"
+                },
+                "route": {
+                    "$ref": "#/definitions/Route"
+                },
+                "ingress": {
+                    "$ref": "#/definitions/Ingress"
+                },
+                "podAnnotations": {
+                    "$ref": "#/definitions/PodAnnotations"
+                },
+                "podSecurityContext": {
+                    "$ref": "#/definitions/PodAnnotations"
+                },
+                "securityContext": {
+                    "$ref": "#/definitions/SecurityContext"
+                },
+                "resources": {
+                    "$ref": "#/definitions/PodAnnotations"
+                }
+            },
+            "required": [
+                "autoscaling",
+                "deployment",
+                "fullnameOverride",
+                "imagePullSecrets",
+                "ingress",
+                "nameOverride",
+                "podAnnotations",
+                "podSecurityContext",
+                "resources",
+                "route",
+                "securityContext",
+                "service",
+                "serviceAccount",
+                "serviceAccountName"
+            ],
+            "title": "Welcome10"
+        },
+        "Autoscaling": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "minReplicas": {
+                    "type": "integer"
+                },
+                "maxReplicas": {
+                    "type": "integer"
+                },
+                "metrics": {
+                    "type": "array",
+                    "items": {}
+                }
+            },
+            "required": [
+                "enabled",
+                "maxReplicas",
+                "metrics",
+                "minReplicas"
+            ],
+            "title": "Autoscaling"
+        },
+        "Deployment": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "replicaCount": {
+                    "type": "integer"
+                },
+                "revisionHistoryLimit": {
+                    "type": "integer"
+                },
+                "updateStrategy": {
+                    "$ref": "#/definitions/UpdateStrategy"
+                },
+                "image": {
+                    "$ref": "#/definitions/Image"
+                },
+                "additionalLabels": {
+                    "$ref": "#/definitions/PodAnnotations"
+                },
+                "additionalAnnotations": {
+                    "$ref": "#/definitions/PodAnnotations"
+                },
+                "nodeSelector": {
+                    "$ref": "#/definitions/PodAnnotations"
+                },
+                "tolerations": {
+                    "type": "array",
+                    "items": {}
+                },
+                "affinity": {
+                    "$ref": "#/definitions/PodAnnotations"
+                },
+                "livenessProbe": {
+                    "$ref": "#/definitions/NessProbe"
+                },
+                "readinessProbe": {
+                    "$ref": "#/definitions/NessProbe"
+                },
+                "sidecars": {
+                    "type": "array",
+                    "items": {}
+                },
+                "volumes": {
+                    "type": "array",
+                    "items": {}
+                }
+            },
+            "required": [
+                "additionalAnnotations",
+                "additionalLabels",
+                "affinity",
+                "image",
+                "livenessProbe",
+                "nodeSelector",
+                "readinessProbe",
+                "replicaCount",
+                "revisionHistoryLimit",
+                "sidecars",
+                "tolerations",
+                "updateStrategy",
+                "volumes"
+            ],
+            "title": "Deployment"
+        },
+        "PodAnnotations": {
+            "type": "object",
+            "additionalProperties": false,
+            "title": "PodAnnotations"
+        },
+        "Image": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                },
+                "pullPolicy": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pullPolicy",
+                "repository",
+                "tag"
+            ],
+            "title": "Image"
+        },
+        "NessProbe": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "initialDelaySeconds": {
+                    "type": "integer"
+                },
+                "periodSeconds": {
+                    "type": "integer"
+                },
+                "successThreshold": {
+                    "type": "integer"
+                },
+                "timeoutSeconds": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "initialDelaySeconds",
+                "periodSeconds",
+                "successThreshold",
+                "timeoutSeconds"
+            ],
+            "title": "NessProbe"
+        },
+        "UpdateStrategy": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "rollingUpdate": {
+                    "$ref": "#/definitions/RollingUpdate"
+                }
+            },
+            "required": [
+                "rollingUpdate",
+                "type"
+            ],
+            "title": "UpdateStrategy"
+        },
+        "RollingUpdate": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "maxSurge": {
+                    "type": "integer"
+                },
+                "maxUnavailable": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "maxSurge",
+                "maxUnavailable"
+            ],
+            "title": "RollingUpdate"
+        },
+        "Ingress": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "annotations": {
+                    "$ref": "#/definitions/PodAnnotations"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {}
+                },
+                "tls": {
+                    "type": "array",
+                    "items": {}
+                }
+            },
+            "required": [
+                "annotations",
+                "enabled",
+                "hosts",
+                "tls"
+            ],
+            "title": "Ingress"
+        },
+        "Route": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "annotations": {
+                    "$ref": "#/definitions/PodAnnotations"
+                },
+                "tls": {
+                    "$ref": "#/definitions/PodAnnotations"
+                }
+            },
+            "required": [
+                "annotations",
+                "enabled",
+                "tls"
+            ],
+            "title": "Route"
+        },
+        "SecurityContext": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "runAsUser": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "runAsUser"
+            ],
+            "title": "SecurityContext"
+        },
+        "Service": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "annotations": {
+                    "$ref": "#/definitions/PodAnnotations"
+                }
+            },
+            "required": [
+                "annotations",
+                "type"
+            ],
+            "title": "Service"
+        },
+        "ServiceAccount": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "create": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "create"
+            ],
+            "title": "ServiceAccount"
+        }
+    }
+}
