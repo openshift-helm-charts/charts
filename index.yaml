@@ -4653,4 +4653,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.2.0/carbonio-23.2.0.tgz
     version: 23.2.0
-generated: '2023-03-23T15:47:44.670235+00:00'
+  - annotations:
+      charts.openshift.io/digest: sha256:426742689a9ea566f48b8a28424eeb82cbad385d0ef0a4be350f6369795bc12b
+      charts.openshift.io/lastCertifiedTimestamp: '2023-03-23T18:10:46.447224+01:00'
+      charts.openshift.io/provider: Zextras Srl
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-03-23T17:15:08.856475+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.2'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 23.3.0
+    description: Official Zextras Carbonio Chart
+    digest: 64743919a2160901d75b3c33b59336274af05c6573ee280e2da94cce9f53f0aa
+    home: https://www.zextras.com/carbonio
+    icon: https://www.zextras.com/images/carbonio_white.webp
+    keywords:
+    - carbonio
+    - email
+    - collaboration
+    - groupware
+    kubeVersion: '>= 1.14.0-0'
+    name: carbonio
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
+    version: 23.3.0
+generated: '2023-03-23T17:15:08.856475+00:00'
