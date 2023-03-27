@@ -1,0 +1,90 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.10.1
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:8137202591105007307
+        chart-uri: .
+        digests:
+            chart: sha256:5ac936bda5cbe721ee3253fafbd9f51b80ff96e0c2b6a6475da10459f8e8cbff
+        lastCertifiedTimestamp: "2023-04-17T08:30:13.171625-04:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: N/A
+        webCatalogOnly: false
+    chart:
+        name: gatekeeper
+        home: https://github.com/open-policy-agent/gatekeeper
+        sources:
+            - https://github.com/open-policy-agent/gatekeeper.git
+        version: 3.11.0
+        description: A Helm chart for Gatekeeper
+        keywords:
+            - open policy agent
+        maintainers: []
+        icon: https://open-policy-agent.github.io/gatekeeper/website/img/logo.svg
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: v3.11.0
+        deprecated: false
+        annotations: {}
+        kubeversion: ""
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Image certification skipped : registry.redhat.io/gatekeeper/gatekeeper-rhel8:v3.11'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: FAIL
+      reason: 'Chart Install failure: Kubernetes cluster unreachable: Get "https://a0a53740604234cef86835e4ad0493c5-bc1ab37c74e8c979.elb.us-east-1.amazonaws.com:6443/version": dial tcp: lookup a0a53740604234cef86835e4ad0493c5-bc1ab37c74e8c979.elb.us-east-1.amazonaws.com: no such host'
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: FAIL
+      reason: Chart contains CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: FAIL
+      reason: 'Missing required annotations: [charts.openshift.io/name]'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: FAIL
+      reason: Chart test files do not exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: FAIL
+      reason: Kubernetes version is not specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: FAIL
+      reason: Values schema file does not exist
