@@ -1,0 +1,65 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  labels:
+    {{- include "openshift-jenkins.labels" . | nindent 4 }}
+  name: jenkins
+spec:
+  tags:
+  - name: latest
+    annotations:
+      description: Provides a Jenkins 2.X server from registry.redhat.io. For more information about using this container image, including OpenShift considerations, see https://github.com/openshift/jenkins/blob/master/README.md. This tag will will redeploy the Jenkins DeploymentConfig on an upgrade in OCP versions if the Jenkins image reference has changed.
+      iconClass: icon-jenkins
+      openshift.io/display-name: Jenkins 2.X
+      openshift.io/provider-display-name: Red Hat, Inc.
+      tags: jenkins
+      version: 2.x
+    from:
+      kind: ImageStreamTag
+      name: "2"
+    importPolicy: {}
+    referencePolicy:
+      type: Local
+  - name: "2"
+    annotations:
+      description: Provides a Jenkins 2.X server from registry.redhat.io. For more information about using this container image, including OpenShift considerations, see https://github.com/openshift/jenkins/blob/master/README.md. This tag will will redeploy the Jenkins DeploymentConfig on an upgrade in OCP versions if the Jenkins image reference has changed.
+      iconClass: icon-jenkins
+      openshift.io/display-name: Jenkins 2.X
+      openshift.io/provider-display-name: Red Hat, Inc.
+      tags: jenkins
+      version: 2.x
+    from:
+      kind: DockerImage
+      name: {{ .Values.imageStream.image }}
+    importPolicy: {}
+    referencePolicy:
+      type: Local
+  - name: user-maintained-upgrade-redeploy
+    annotations:
+      description: Provides a Jenkins 2.X server from registry.redhat.io. For more information about using this container image, including OpenShift considerations, see https://github.com/openshift/jenkins/blob/master/README.md. This tag will will redeploy the Jenkins DeploymentConfig on an upgrade in OCP versions if the Jenkins image reference has changed.
+      iconClass: icon-jenkins
+      openshift.io/display-name: Jenkins 2.X
+      openshift.io/provider-display-name: Red Hat, Inc.
+      tags: jenkins
+      version: 2.x
+    from:
+      kind: DockerImage
+      name: {{ .Values.imageStream.image }}
+    importPolicy: {}
+    referencePolicy:
+      type: Local
+  - name: scheduled-upgrade-redeploy
+    annotations:
+      description: Provides a Jenkins 2.X server from registry.redhat.io. For more information about using this container image, including OpenShift considerations, see https://github.com/openshift/jenkins/blob/master/README.md. This tag will will redeploy the Jenkins DeploymentConfig on an upgrade in OCP versions if the Jenkins image reference has changed.
+      iconClass: icon-jenkins
+      openshift.io/display-name: Jenkins 2.X
+      openshift.io/provider-display-name: Red Hat, Inc.
+      tags: jenkins
+      version: 2.x
+    from:
+      kind: DockerImage
+      name: {{ .Values.imageStream.image }}
+    importPolicy: {}
+    referencePolicy:
+      type: Local
+
