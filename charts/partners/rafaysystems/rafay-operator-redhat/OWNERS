@@ -1,0 +1,9 @@
+chart:
+  name: rafay-operator-redhat
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: rafaysystems
+  name: Rafay Systems
