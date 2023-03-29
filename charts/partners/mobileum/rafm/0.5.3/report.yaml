@@ -1,0 +1,99 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.0.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: /home/partner/Music/newcharts/rafm
+        digests:
+            chart: sha256:12752c5979aa7f7a8440e653eed45f5639bf44b99dcf70cc0722b1b00d70707c
+            package: 8e062a2550852cf172ce2ff57fc7bd0729e3e9dbec5724078a49a2d527c39432
+        lastCertifiedTimestamp: "2022-11-08T15:17:11.24113+00:00"
+        testedOpenShiftVersion: "4.10"
+        supportedOpenShiftVersions: '>=4.3'
+        providerControlledDelivery: true
+    chart:
+        name: rafm
+        home: ""
+        sources: []
+        version: 0.5.3
+        description: RAFM backend product
+        keywords:
+            - rafm
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.5.3
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: RAID Revenue Assurance and Fraud Management
+            charts.openshift.io/provider: Mobileum Inc.
+            charts.openshift.io/supportURL: http://www.mobileum.com
+        kubeversion: '>=1.16.0-0'
+        dependencies:
+            - name: aip-common
+              version: 0.3.1
+              repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : partner.cnfcert.nmlab.com:5000/base:0.2.3 : No images found for Registry/Repository: partner.cnfcert.nmlab.com:5000/base
+        Image is not Red Hat certified : partner.cnfcert.nmlab.com:5000/rafm-8.2.8.2.5_221110:0.5.2 : No images found for Registry/Repository: partner.cnfcert.nmlab.com:5000/rafm-8.2.5_221110
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files do not exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified

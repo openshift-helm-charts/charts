@@ -170,12 +170,12 @@ def main():
     message = f'{CHARTS_PR_BRANCH_BODY_PREFIX} {branch_name}'
     outcome = gitutils.create_pr(branch_name,[],charts_repository,message,args.target_branch)
     if outcome == gitutils.PR_CREATED:
-        print(f'::set-output name=charts_pr_created::true')
+        gitutils.add_output("charts_pr_created","true")
     elif outcome == gitutils.PR_NOT_NEEDED:
-        print(f'::set-output name=charts_pr_not_needed::true')
+        gitutils.add_output("charts_pr_not_needed","true")
     else:
         print("[ERROR] error creating charts PR")
-        print(f'::set-output name=charts_pr_error::true')
+        gitutils.add_output("charts_pr_error","true")
         os.chdir(start_directory)
         return
 
@@ -190,13 +190,13 @@ def main():
     outcome = gitutils.create_pr(branch_name,[release_info.RELEASE_INFO_FILE],args.target_repository,args.dev_pr_body,args.target_branch)
     if outcome == gitutils.PR_CREATED:
         print("Dev PR successfully created.")
-        print(f'::set-output name=dev_pr_created::true')
+        gitutils.add_output("dev_pr_created","true")
     elif outcome == gitutils.PR_NOT_NEEDED:
         print("Dev PR not needed.")
-        print(f'::set-output name=dev_pr_not_needed::true')
+        gitutils.add_output("dev_pr_not_needed","true")
     else:
         print("[ERROR] error creating development PR.")
-        print('::set-output name=dev_pr_error::true')
+        gitutils.add_output("dev_pr_error","true")
 
     os.chdir(start_directory)
 
@@ -209,12 +209,12 @@ def main():
     message = f'{STAGE_PR_BRANCH_BODY_PREFIX} {branch_name}'
     outcome = gitutils.create_pr(branch_name,[],stage_repository,message,args.target_branch)
     if outcome == gitutils.PR_CREATED:
-        print(f'::set-output name=stage_pr_created::true')
+        gitutils.add_output("stage_pr_created","true")
     elif outcome == gitutils.PR_NOT_NEEDED:
-        print(f'::set-output name=stage_pr_not_needed::true')
+        gitutils.add_output("stage_pr_not_needed","true")
     else:
         print("[ERROR] error creating stage PR")
-        print(f'::set-output name=stage_pr_error::true')
+        gitutils.add_output("stage_pr_error","true")
         os.chdir(start_directory)
         return
 

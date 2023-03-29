@@ -6,13 +6,13 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:16989833708667280020
+        reportDigest: uint64:5138098052618695524
         chart-uri: https://github.com/openshift-helm-charts/development/blob/main/tests/data/HC-10/signed_chart/vault-0.17.0.tgz?raw=true
         digests:
             chart: sha256:f01dd362d81fe4b1ef99bb7fa5be268fa94dc96f3009d28bc93a18517aa1ef7a
             package: df206272be1282a05af0576a054c9b35a8d2cebb836dc990d8b87dced82dcdb9
             publicKey: 662ba24b23e80f0b26a634f3c215e74d973943e32d0ee85868759365a5640995
-        lastCertifiedTimestamp: "2022-11-22T11:49:38.322793+05:30"
+        lastCertifiedTimestamp: "2023-01-17T14:39:57.760254+05:30"
         testedOpenShiftVersion: "4.11"
         supportedOpenShiftVersions: '>=4.2'
         providerControlledDelivery: false
@@ -48,15 +48,51 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-    - check: v1.0/contains-values-schema
+    - check: v1.0/contains-test
       type: Mandatory
       outcome: PASS
-      reason: Values schema file exist
+      reason: Chart test files exist
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
-    - check: v1.0/images-are-certified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: PASS
+      reason: 'Chart is signed : Signature verification passed'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
       reason: |-
@@ -66,40 +102,4 @@ results:
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: PASS
-      reason: 'Chart is signed : Signature verification passed'
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
 

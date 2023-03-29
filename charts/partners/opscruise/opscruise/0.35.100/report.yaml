@@ -1,0 +1,332 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.10.0
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:1530424512291900759
+        chart-uri: https://opscruise-helm.bitbucket.io/opscruise-0.35.100.tgz.gzip
+        digests:
+            chart: sha256:3936a9deac923380aa2dd842f19da07d32030a867ebd05eea48dd38b895b82c0
+            package: 04623afc4fe021480af2282dcc61f59aae626bb11fd3dc9116134224e8fdbbd8
+        lastCertifiedTimestamp: "2023-02-10T02:29:23.721977+00:00"
+        testedOpenShiftVersion: "4.10"
+        supportedOpenShiftVersions: '>=4.4'
+        webCatalogOnly: false
+    chart:
+        name: opscruise
+        home: ""
+        sources: []
+        version: 0.35.100
+        description: A Helm chart for installing OpsCruise
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 3.2.1
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: opscruise
+        kubeversion: ^1.16.1-0
+        dependencies:
+            - name: awsgw
+              version: 0.1.0
+              repository: ""
+              condition: global.awsgw.enabled,awsgw.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: k8sgw
+              version: 0.1.0
+              repository: ""
+              condition: global.k8sgw.enabled,k8sgw.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: promgw
+              version: 0.1.0
+              repository: ""
+              condition: global.promgw.enabled,promgw.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: loggw-loki
+              version: 0.1.0
+              repository: ""
+              condition: global.loggw-loki.enabled,loggw-loki.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: azuregw
+              version: 0.1.0
+              repository: ""
+              condition: global.azuregw.enabled,azuregw.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: gcpgw
+              version: 0.1.0
+              repository: ""
+              condition: global.gcpgw.enabled,gcpgw.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: tracegw
+              version: 0.1.0
+              repository: ""
+              condition: global.tracegw.enabled,tracegw.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: trace-router
+              version: 0.1.0
+              repository: ""
+              condition: global.trace-router.enabled,trace-router.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: opscruise-node-exporter
+              version: 0.1.0
+              repository: ""
+              condition: global.opscruise-node-exporter.enabled,opscruise-node-exporter.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: opscruise-node-exporter-new
+              version: 0.1.0
+              repository: ""
+              condition: global.opscruise-node-exporter-new.enabled,opscruise-node-exporter-new.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: prometheus-yace-exporter
+              version: 0.5.0
+              repository: https://mogaal.github.io/helm-charts
+              condition: global.prometheus-yace-exporter.enabled,prometheus-yace-exporter.enabled
+              tags:
+                - opscruise
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cadvisor
+              version: 0.1.0
+              repository: ""
+              condition: global.cadvisor.enabled,cadvisor.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: kube-state-metrics
+              version: 0.1.0
+              repository: ""
+              condition: global.kube-state-metrics.enabled,kube-state-metrics.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: fluent-bit
+              version: 0.20.2
+              repository: https://fluent.github.io/helm-charts
+              condition: global.fluent-bit.enabled,fluent-bit.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: prometheus
+              version: 0.1.0
+              repository: ""
+              condition: global.prometheus.enabled,prometheus.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: loki-stack
+              version: 2.3.0
+              repository: https://grafana.github.io/helm-charts
+              condition: global.loki-stack.enabled,loki-stack.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: jaeger
+              version: 0.47.0
+              repository: https://jaegertracing.github.io/helm-charts
+              condition: global.jaeger.enabled,jaeger.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: jaeger-operator
+              version: 2.24.0
+              repository: https://jaegertracing.github.io/helm-charts
+              condition: global.jaeger-operator.enabled,jaeger-operator.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: prometheus-postgres-exporter
+              version: 2.4.0
+              repository: https://prometheus-community.github.io/helm-charts
+              condition: global.prometheus-postgres-exporter.enabled,prometheus-postgres-exporter.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: prometheus-mongodb-exporter
+              version: 3.1.2
+              repository: https://prometheus-community.github.io/helm-charts
+              condition: global.prometheus-mongodb-exporter.enabled,prometheus-mongodb-exporter.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: kafka-exporter
+              version: 0.1.0
+              repository: ""
+              condition: global.kafka-exporter.enabled,kafka-exporter.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: prometheus-mysql-exporter
+              version: 1.5.0
+              repository: https://prometheus-community.github.io/helm-charts
+              condition: global.prometheus-mysql-exporter.enabled,prometheus-mysql-exporter.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: influxdb-exporter
+              version: 0.1.0
+              repository: ""
+              condition: global.influxdb-exporter.enabled,influxdb-exporter.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: x509-certificate-exporter
+              version: 3.4.0
+              repository: https://charts.enix.io
+              condition: global.x509-certificate-exporter.enabled,x509-certificate-exporter.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: prometheus-redis-exporter
+              version: 5.2.1
+              repository: https://prometheus-community.github.io/helm-charts
+              condition: global.prometheus-redis-exporter.enabled,prometheus-redis-exporter.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: nginx-prometheus-exporter
+              version: 0.1.0
+              repository: ""
+              condition: global.nginx-prometheus-exporter.enabled,nginx-prometheus-exporter.enabled
+              tags:
+                - collectors
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: FAIL
+      reason: Chart contains CRDs
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.connect.redhat.com/opscruise/opscruise-node-exporter:rel35.2.1
+        Image is Red Hat certified : registry.connect.redhat.com/opscruise/opscruise-awsgw:rel35.2.1
+        Image is Red Hat certified : registry.connect.redhat.com/opscruise/opscruise-gcpgw:rel35.2.1
+        Image is Red Hat certified : registry.connect.redhat.com/opscruise/opscruise-k8sgw:rel35.2.1
+        Image is Red Hat certified : registry.connect.redhat.com/opscruise/opscruise-loggw:rel35.2.1
+        Image is Red Hat certified : registry.connect.redhat.com/opscruise/opscruise-promgw:rel35.2.1
+        Image is Red Hat certified : registry.connect.redhat.com/opscruise/opscruise-tracegw:rel35.2.1
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+

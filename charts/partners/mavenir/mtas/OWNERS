@@ -1,0 +1,11 @@
+chart:
+  name: mtas
+  shortDescription: mtas helm report
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: rameshmav
+- githubUsername: kapilkumardongre
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

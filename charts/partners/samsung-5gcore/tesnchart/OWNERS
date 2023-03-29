@@ -1,0 +1,9 @@
+chart:
+  name: tesnchart
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: samsung-5gcore
+  name: Red Hat, Inc.

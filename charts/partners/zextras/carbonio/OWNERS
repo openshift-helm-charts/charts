@@ -1,0 +1,11 @@
+chart:
+  name: carbonio
+  shortDescription: Zextras Carbonio - The digital workplace software for digital
+    sovereignty
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: M0Rf30
+vendor:
+  label: zextras
+  name: Zextras Srl

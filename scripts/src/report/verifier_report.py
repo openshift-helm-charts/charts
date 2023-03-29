@@ -79,14 +79,17 @@ def get_profile_version(report_data):
         pass
     return profile_version
 
-def get_provider_delivery(report_data):
-    provider_delivery = False
+def get_web_catalog_only(report_data):
+    web_catalog_only = False
     try:
-        provider_delivery = report_data["metadata"]["tool"]["providerControlledDelivery"]
+        if "webCatalogOnly" in report_data["metadata"]["tool"]:
+            web_catalog_only = report_data["metadata"]["tool"]["webCatalogOnly"]
+        if "providerControlledDelivery" in report_data["metadata"]["tool"]:
+            web_catalog_only = report_data["metadata"]["tool"]["providerControlledDelivery"]
     except Exception as err:
-        print(f"Exception getting providerControlledDelivery {err=}, {type(err)=}")
+        print(f"Exception getting webCatalogOnly/providerControlledDelivery {err=}, {type(err)=}")
         pass
-    return provider_delivery
+    return web_catalog_only
 
 def get_package_digest(report_data):
     package_digest = None

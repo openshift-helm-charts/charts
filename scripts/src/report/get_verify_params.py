@@ -6,6 +6,7 @@ import argparse
 sys.path.append('../')
 from chartprreview import chartprreview
 from signedchart import signedchart
+from tools import gitutils
 
 def generate_verify_options(directory,category, organization, chart, version):
     print("[INFO] Generate verify options. %s, %s, %s" % (organization,chart,version))
@@ -58,9 +59,9 @@ def main():
     category, organization, chart, version = chartprreview.get_modified_charts(args.directory, args.api_url)
 
     flags,chart_uri,report_needed,cluster_needed = generate_verify_options(args.directory,category, organization, chart, version)
-    print(f"::set-output name=report_needed::{report_needed}")
-    print(f"::set-output name=cluster_needed::{cluster_needed}")
+    gitutils.add_output("report_needed",report_needed)
+    gitutils.add_output("cluster_needed",cluster_needed)
     if report_needed:
-        print(f"::set-output name=verify_args::{flags}")
-        print(f"::set-output name=verify_uri::{chart_uri}")
+        gitutils.add_output("verify_args",flags)
+        gitutils.add_output("verify_uri",chart_uri)
 

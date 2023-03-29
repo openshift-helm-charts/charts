@@ -1,8 +1,8 @@
 chart:
   name: mco
-  shortDescription: null
+  shortDescription: Mavenir MCO CNF Helm charts
 providerDelivery: true
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: kaitaklam
 vendor:

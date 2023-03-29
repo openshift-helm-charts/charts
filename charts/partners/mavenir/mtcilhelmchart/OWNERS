@@ -1,9 +1,10 @@
 chart:
   name: mtcilhelmchart
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: shantanushivanekar123
 vendor:
   label: mavenir
   name: Mavenir Systems Inc.

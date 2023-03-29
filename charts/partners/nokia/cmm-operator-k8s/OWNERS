@@ -1,6 +1,7 @@
 chart:
   name: cmm-operator-k8s
   shortDescription: null
+providerDelivery: true
 publicPgpKey: null
 users:
 - githubUsername: nelsonpraveen

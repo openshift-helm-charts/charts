@@ -1,10 +1,9 @@
 chart:
   name: test-provider-delivery
-  shortDescription: null
+  shortDescription: unknown
 providerDelivery: false
-publicPgpKey: null
-users:
-- githubUsername: elhadjici
+publicPgpKey: unknown
+users: []
 vendor:
   label: abel
   name: Red Hat
