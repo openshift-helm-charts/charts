@@ -2823,6 +2823,25 @@ entries:
     urls:
     - https://opscruise-helm.bitbucket.io/opscruise-0.35.100.tgz.gzip
     version: 0.35.100
+  rafaysystems-rafay-operator-redhat:
+  - annotations:
+      charts.openshift.io/digest: sha256:e90ed52496459379a844f3c7e258f6e71f024ab6ed0a8530be643f84003d5987
+      charts.openshift.io/lastCertifiedTimestamp: '2023-03-29T19:54:50.3391+00:00'
+      charts.openshift.io/provider: Rafay Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-03-29T20:12:36.744011+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 1.16.0
+    description: A Helm chart for Kubernetes
+    digest: fff15d14a1546115d27fa4ec911c079e3f82d378f3bb2d780ebdaee17077fc15
+    kubeVersion: '>= 1.20.0-0'
+    name: rafay-operator-redhat
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/rafaysystems-rafay-operator-redhat-0.2.1/rafay-operator-redhat-0.2.1.tgz
+    version: 0.2.1
   redhat-cryostat:
   - annotations:
       charts.openshift.io/digest: sha256:16c798a6a148c3d5d7a95a1c25fa727f56cd065a2f412d0991781e5939472b64
@@ -4677,4 +4696,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-03-23T17:15:08.856475+00:00'
+generated: '2023-03-29T20:12:36.744011+00:00'
