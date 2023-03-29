@@ -5,9 +5,8 @@ chart:
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: kgreczka9
 - githubUsername: triluch
-- githubUsername: RemiLis
+- githubUsername: alexnauda
 vendor:
   label: nobl9
   name: Nobl9
