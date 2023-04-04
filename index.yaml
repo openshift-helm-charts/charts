@@ -3500,6 +3500,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nodejs-ex-k-0.2.1/redhat-nodejs-ex-k-0.2.1.tgz
     version: 0.2.1
+  redhat-postgresql-persistent:
+  - annotations:
+      charts.openshift.io/digest: sha256:5a5917cd30b564e9a5b5c5b691d7d814c542f0fd53491e66dfa024ff29095009
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-04T13:42:57.004501+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-04-04T13:43:22.652612+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: 'PostgreSQL database service, with persistent storage. For more information
+      about using this template, including OpenShift considerations, see https://github.com/sclorg/postgresql-container/.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: 28e91f83bb682496f0289da8917dababe5be764ccff72a9f696608d09430a201
+    name: postgresql-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,postgresql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-postgresql-persistent-0.0.1/postgresql-persistent-0.0.1.tgz
+    version: 0.0.1
   redhat-psql-sed:
   - annotations:
       charts.openshift.io/digest: sha256:9f6343df9aac5a44a06589169f912a9be9582df0e0ff9cb80865b0927e79c452
@@ -4730,4 +4753,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-04-03T02:18:45.351701+00:00'
+generated: '2023-04-04T13:43:22.652612+00:00'
