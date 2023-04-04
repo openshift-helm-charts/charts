@@ -3500,6 +3500,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nodejs-ex-k-0.2.1/redhat-nodejs-ex-k-0.2.1.tgz
     version: 0.2.1
+  redhat-postgresql-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:fb33002134a2c14de3ea86015565621fa636ae7d6861999dc09157aab17aa7f8
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-04T13:44:52.296034+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-04-04T13:45:19.613094+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: Red Hat PostgreSQL database service imagestreams. For more information
+      about PostgreSQL container see https://github.com/sclorg/postgresql-container/.
+    digest: 4f2b21cebdacdaa0c246d66912684afb13981a77e21261761b94d7575a402e9b
+    kubeVersion: '>=1.20.0'
+    name: postgresql-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,postgresql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-postgresql-imagestreams-0.0.1/postgresql-imagestreams-0.0.1.tgz
+    version: 0.0.1
   redhat-postgresql-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:5a5917cd30b564e9a5b5c5b691d7d814c542f0fd53491e66dfa024ff29095009
@@ -4753,4 +4775,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-04-04T13:43:22.652612+00:00'
+generated: '2023-04-04T13:45:19.613094+00:00'
