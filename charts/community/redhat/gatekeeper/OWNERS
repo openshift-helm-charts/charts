@@ -1,0 +1,9 @@
+chart:
+  name: gatekeeper
+  shortDescription: OPA Gatekeeper
+publicPgpKey: null
+users:
+- githubUsername: thomasmckay
+vendor:
+  label: redhat
+  name: Red Hat
