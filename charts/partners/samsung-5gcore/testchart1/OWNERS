@@ -1,0 +1,10 @@
+chart:
+  name: testchart1
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: yinwang@redhat.com
+vendor:
+  label: samsung-5gcore
+  name: Red Hat, Inc.
