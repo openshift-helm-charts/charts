@@ -2,7 +2,7 @@ chart:
   name: tracer
   shortDescription: Mobileum Private Repository
 providerDelivery: true
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: mobaipws
 vendor:
