@@ -1,6 +1,7 @@
 chart:
   name: testhelmp
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
