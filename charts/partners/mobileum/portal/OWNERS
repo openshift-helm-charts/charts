@@ -1,8 +1,8 @@
 chart:
   name: portal
-  shortDescription: null
+  shortDescription: unknown
 providerDelivery: true
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: mobaipws
 vendor:
