@@ -1,0 +1,9 @@
+chart:
+  name: httpd-imagestreams
+  description: This is the Red Hat Postgresql Apache HTTP Server imagestream chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat
