@@ -6,6 +6,7 @@ import json
 import re
 import subprocess
 import tempfile
+import time
 from datetime import datetime, timezone
 import hashlib
 import urllib.parse
@@ -428,5 +429,6 @@ def main():
         if public_key_file:
             print(f"[INFO] Add key file for release : {current_dir}/{public_key_file}")
             gitutils.add_output("public_key_file",f"{current_dir}/{public_key_file}")
-
+    print("Sleeping for 10 seconds")
+    time.sleep(10)
     update_index_and_push(indexfile,indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number, web_catalog_only)
