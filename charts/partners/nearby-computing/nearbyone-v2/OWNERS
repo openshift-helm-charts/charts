@@ -1,0 +1,10 @@
+chart:
+  name: nearbyone-v2
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: fenech
+vendor:
+  label: nearby-computing
+  name: Nearby Computing SL
