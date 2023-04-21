@@ -3510,6 +3510,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mongo-sed-1.0.0/redhat-mongo-sed-1.0.0.tgz
     version: 1.0.0
+  redhat-mysql-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:0962e4f0320943efe3365dacaecedbe6d63f0b02bc86a24aa3526ea0b2e5246b
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-21T10:56:18.605631+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-04-21T10:56:53.138282+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is expermental, do not use it in production. Provides
+      a MySQL 8.0 database. For more information about using this database image,
+      including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/README.md.
+    digest: 585d0938e0bfce49571566a22bcc493c2d194a3a0f9e6739dd78b06bf077705a
+    kubeVersion: '>=1.20.0'
+    name: mysql-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mysql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mysql-imagestreams-0.0.1/mysql-imagestreams-0.0.1.tgz
+    version: 0.0.1
   redhat-mysql-sed:
   - annotations:
       charts.openshift.io/digest: sha256:451087463b43fdffa1bd542bdec76f50909355cced7310d8093c4da38a15be48
@@ -3687,29 +3710,6 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
     version: 0.0.3
-  redhat-redis-imagestreams:
-  - annotations:
-      charts.openshift.io/digest: sha256:e5d640b70d0a38ad5263b1493ae1018a4b642e481eb7e49678133e42422a1514
-      charts.openshift.io/lastCertifiedTimestamp: '2023-04-21T10:52:07.771893+00:00'
-      charts.openshift.io/provider: Red Hat
-      charts.openshift.io/providerType: community
-      charts.openshift.io/submissionTimestamp: '2023-04-21T10:52:42.162134+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    appVersion: 0.0.1
-    description: This content is expermental, do not use it in production. Provides
-      a Redis database on RHEL imagestreams. For more information about Redis container
-      see https://github.com/sclorg/redis-container/.
-    digest: 133f767efcc5b4b65719575494d952ecfba5ec65f4d5e5a20edf92b4e8c73877
-    kubeVersion: '>=1.20.0'
-    name: redis-imagestreams
-    sources:
-    - https://github.com/sclorg/helm-charts
-    tags: builder,redis
-    urls:
-    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-imagestreams-0.0.1/redis-imagestreams-0.0.1.tgz
-    version: 0.0.1
   redhat-redis-sed:
   - annotations:
       charts.openshift.io/digest: sha256:639de96ec12341cab72ca4aa1f539dcf475e3a5c82c0871e3798418004fd36c8
@@ -4955,4 +4955,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-04-21T10:52:42.162134+00:00'
+generated: '2023-04-21T10:56:53.138282+00:00'
