@@ -1,0 +1,9 @@
+chart:
+  name: nearbyone-controller
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: nearby-computing
+  name: Nearby Computing SL
