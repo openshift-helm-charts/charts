@@ -3383,6 +3383,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-elasticsearch-sed-1.0.0/redhat-elasticsearch-sed-1.0.0.tgz
     version: 1.0.0
+  redhat-httpd-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:90199aeffda3def820d5bfb98f013904345a5a608dc34f9a02c73eef772cb36d
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-21T10:47:12.19516+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-04-21T10:47:49.529950+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is expermental, do not use it in production. Red Hat
+      Apache HTTP Server imagestreams. For more information about HTTPD container
+      see https://github.com/sclorg/httpd-container/.
+    digest: a5920fbd88438f09963650deaebdb25f0ba960f93379d94c98bd93ee145a4953
+    kubeVersion: '>=1.20.0'
+    name: httpd-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,httpd
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-httpd-imagestreams-0.0.1/httpd-imagestreams-0.0.1.tgz
+    version: 0.0.1
   redhat-jenkins:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
@@ -4909,4 +4932,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-04-21T10:40:45.903780+00:00'
+generated: '2023-04-21T10:47:49.529950+00:00'
