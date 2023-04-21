@@ -1,0 +1,10 @@
+chart:
+  name: test-chart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: elhadjici
+vendor:
+  label: redhat-sap-cop
+  name: Red Hat
