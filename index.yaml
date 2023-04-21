@@ -3445,6 +3445,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-jenkins-0.0.3/redhat-jenkins-0.0.3.tgz
     version: 0.0.3
+  redhat-mariadb-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:0fe49f099fee528eb2ce20421087b04a2a6008f8c81686e9de102f905a5171b6
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-21T10:40:13.456196+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-04-21T10:40:45.903780+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is expermental, do not use it in production. Provides
+      a Red Hat MariaDB database. For more information about using this database image,
+      including OpenShift considerations, see https://github.com/sclorg/mariadb-container/blob/master/README.md.
+    digest: 5f87b6409c24576fa2e27cd75ed7136aeead192650225348cced46aea78a5cdb
+    kubeVersion: '>=1.20.0'
+    name: mariadb-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mariadb
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mariadb-imagestreams-0.0.1/mariadb-imagestreams-0.0.1.tgz
+    version: 0.0.1
   redhat-mongo-sed:
   - annotations:
       charts.openshift.io/digest: sha256:0c58aaebf6f6fed25017c33d1a073febbb448d3cb561e3dfc6611a3b2a016cfd
@@ -4886,4 +4909,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-04-14T19:55:53.925857+00:00'
+generated: '2023-04-21T10:40:45.903780+00:00'
