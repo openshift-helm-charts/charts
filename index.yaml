@@ -3552,6 +3552,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mysql-sed-0.1.0/redhat-mysql-sed-0.1.0.tgz
     version: 0.1.0
+  redhat-nginx-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:c84facc03b94cc97433fb6b8f7b3de1a832f4321c80ea6676029c4e1b684bb77
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-24T10:32:38.877173+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-04-24T10:33:18.394908+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is expermental, do not use it in production. Build and
+      serve static content via Nginx HTTP server and a reverse proxy (nginx) on RHEL.
+      https://github.com/sclorg/nginx-container/blob/master/README.md.
+    digest: fd1401cda04fda2bcfac58e1754a5de31891190287d7d1ff83ca2421669e23b7
+    kubeVersion: '>=1.20.0'
+    name: nginx-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,nginx
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nginx-imagestreams-0.0.1/nginx-imagestreams-0.0.1.tgz
+    version: 0.0.1
   redhat-nodejs:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -4955,4 +4978,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-04-21T10:56:53.138282+00:00'
+generated: '2023-04-24T10:33:18.394908+00:00'
