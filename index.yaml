@@ -2620,6 +2620,85 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/lacework-lacework-agent-5.4.1/lacework-lacework-agent-5.4.1.tgz
     version: 5.4.1
+  nearby-computing-nearbyone-controller:
+  - annotations:
+      charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-27T16:16:08.079605+00:00'
+      charts.openshift.io/name: NearbyOne Controller
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-04-27T16:20:22.469037+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.9'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 1.16.0
+    dependencies:
+    - alias: hydra
+      condition: hydra.enabled
+      name: hydra-maesterless
+      repository: https://registry.nearbycomputing.com/chartrepo/public
+      version: ~0.30.1
+    - alias: hydraDB
+      condition: hydraDB.enabled
+      name: postgresql
+      repository: https://registry.nearbycomputing.com/chartrepo/public
+      version: ~10.16.2
+    - condition: keto.enabled
+      name: keto
+      repository: https://registry.nearbycomputing.com/chartrepo/public
+      version: ~0.27.0
+    - alias: ketoDB
+      condition: ketoDB.enabled
+      name: postgresql
+      repository: https://registry.nearbycomputing.com/chartrepo/public
+      version: ~10.16.2
+    - condition: kratos.enabled
+      name: kratos
+      repository: https://registry.nearbycomputing.com/chartrepo/public
+      version: ~0.27.0
+    - alias: kratosDB
+      condition: kratosDB.enabled
+      name: postgresql
+      repository: https://registry.nearbycomputing.com/chartrepo/public
+      version: ~10.16.2
+    - alias: oathkeeper
+      condition: oathkeeper.enabled
+      name: oathkeeper-maesterless
+      repository: https://registry.nearbycomputing.com/chartrepo/public
+      version: ~0.30.0
+    - condition: metallb.enabled
+      name: metallb
+      repository: https://metallb.github.io/metallb
+      version: ~0.11.0
+    - condition: ingress-nginx.enabled
+      name: ingress-nginx
+      repository: https://kubernetes.github.io/ingress-nginx
+      version: 4.2.5
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: https://prometheus-community.github.io/helm-charts
+      version: ~15.0.1
+    - condition: fluentd.enabled
+      name: fluentd
+      repository: https://fluent.github.io/helm-charts
+      version: ~0.3.7
+    - condition: fluent-bit.enabled
+      name: fluent-bit
+      repository: https://fluent.github.io/helm-charts
+      version: ~0.24.0
+    - alias: externaldns
+      condition: externaldns.enabled
+      name: external-dns
+      repository: https://charts.bitnami.com/bitnami
+      version: ~6.5.5
+    description: A Helm chart for Kubernetes
+    digest: 25082acedb8eb2914aa78def6d9811a3018fab73377ddcc7f1e0b01484bae431
+    icon: https://blocklogos.s3.eu-west-1.amazonaws.com/nearbycomputing.png
+    kubeVersion: '>=1.22'
+    name: nearbyone-controller
+    type: application
+    urls:
+    - https://registry.nearbycomputing.com/chartrepo/redhat/charts/nearbyone-controller-2.119.1.tgz
+    version: 2.119.1
   nirmata-kyverno:
   - annotations:
       charts.openshift.io/digest: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
@@ -5001,4 +5080,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-04-27T08:42:02.418052+00:00'
+generated: '2023-04-27T16:20:22.469037+00:00'
