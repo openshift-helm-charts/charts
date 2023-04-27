@@ -3491,6 +3491,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mariadb-imagestreams-0.0.1/mariadb-imagestreams-0.0.1.tgz
     version: 0.0.1
+  redhat-mariadb-persistent:
+  - annotations:
+      charts.openshift.io/digest: sha256:1bbf7597694b67ac7e9fae4a3eccd997b1b45d45a16ea6ccca6f5ee7cb7436ba
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-27T08:41:27.971771+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-04-27T08:42:02.418052+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: 'MariaDB database service, with persistent storage. For more information
+      about using this template, including OpenShift considerations, see https://github.com/sclorg/mariadb-container/blob/master/10.3/root/usr/share/container-scripts/mysql/README.md.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: 6b69c70a47514997bc544522337806a630fc6fbfd43981d906f82a1b57f1e40b
+    name: mariadb-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mariadb
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mariadb-persistent-0.0.1/mariadb-persistent-0.0.1.tgz
+    version: 0.0.1
   redhat-mongo-sed:
   - annotations:
       charts.openshift.io/digest: sha256:0c58aaebf6f6fed25017c33d1a073febbb448d3cb561e3dfc6611a3b2a016cfd
@@ -4978,4 +5001,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-04-24T10:33:18.394908+00:00'
+generated: '2023-04-27T08:42:02.418052+00:00'
