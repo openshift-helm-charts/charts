@@ -15,7 +15,6 @@ metadata:
     testedOpenShiftVersion: "4.11"
     supportedOpenShiftVersions: ">=4.7"
     webCatalogOnly: true
-    providerControlledDelivery: true
   chart:
     name: nfvri
     home: ""
