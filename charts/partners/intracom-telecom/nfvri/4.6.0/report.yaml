@@ -14,6 +14,7 @@ metadata:
     lastCertifiedTimestamp: "2023-04-27T11:14:03.055081+00:00"
     testedOpenShiftVersion: "4.11"
     supportedOpenShiftVersions: ">=4.7"
+    webCatalogOnly: true
     providerControlledDelivery: true
   chart:
     name: nfvri
