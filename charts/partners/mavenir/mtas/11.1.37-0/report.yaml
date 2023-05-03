@@ -1,0 +1,102 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.10.0
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:3468823504650116408
+        chart-uri: N/A
+        digests:
+            chart: sha256:11e4be2f8bd5b555363608fe7d30acd699c49ceba54373071e6b3e8c3ce1bc9b
+            package: a8f380f54b3c9259cbabd7f41be833ef57d574f9ac9de0734170e48acba7f36a
+        lastCertifiedTimestamp: "2023-05-03T12:16:47.817002+00:00"
+        testedOpenShiftVersion: "4.11"
+        supportedOpenShiftVersions: '>=4.5'
+        webCatalogOnly: true
+    chart:
+        name: mtas
+        home: ""
+        sources: []
+        version: 11.1.37-0
+        description: A combined Helm chart for MTAS
+        keywords: []
+        maintainers: []
+        icon: https://www.example.com/chart-icon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1-42
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: mavenir IMS Test
+            charts.openshift.io/provider: Mavenir
+            charts.openshift.io/supportURL: https://github.com/dperaza4dustbit/helm-chart
+        kubeversion: '>=1.18.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/mrhcert/ims/vlbfe:r_1_0_34_0-v1
+        Image is Red Hat certified : quay.io/mrhcert/uag/init_container_ubi:v4.4
+        Image is Red Hat certified : quay.io/mrhcert/ims/rediam:r_2_0_40_0b-v1
+        Image is Red Hat certified : quay.io/mrhcert/ims/regt:r_2_0_44_0d-v1
+        Image is Red Hat certified : quay.io/mrhcert/ims/resip:r_2_0_41_0b-v2
+        Image is Red Hat certified : quay.io/mrhcert/ims/sm:r_2_0_13_3d-v1
+        Image is Red Hat certified : quay.io/mrhcert/ims/ress7:r_2_0_27_0a-v1
+        Image is Red Hat certified : quay.io/mrhcert/ims/mtas:r_11_1_37_0-v16
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+
