@@ -720,6 +720,29 @@ entries:
     urls:
     - N/A
     version: 3.0.1800-b17
+  mavenir-mtas:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:11e4be2f8bd5b555363608fe7d30acd699c49ceba54373071e6b3e8c3ce1bc9b
+      charts.openshift.io/lastCertifiedTimestamp: '2023-05-03T12:16:47.817002+00:00'
+      charts.openshift.io/name: mavenir IMS Test
+      charts.openshift.io/provider: Mavenir
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-05-03T12:43:20.668757+00:00'
+      charts.openshift.io/supportURL: https://github.com/dperaza4dustbit/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 1-42
+    description: A combined Helm chart for MTAS
+    digest: a8f380f54b3c9259cbabd7f41be833ef57d574f9ac9de0734170e48acba7f36a
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.18.0'
+    name: mtas
+    type: application
+    urls:
+    - N/A
+    version: 11.1.37-0
   mavenir-mtcil:
   - annotations:
       charts.openshift.io/digest: sha256:62ca72bb1bd5357c632abf8270a0c40d4ce48e85420142a06f67a5b110a6a307
@@ -1574,4 +1597,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-05-03T10:48:33.168839+00:00'
+generated: '2023-05-03T12:43:20.668757+00:00'
