@@ -79,6 +79,14 @@ def prepare_community_comment():
         msg += f"{errors}\n\n"
     return msg
 
+def prepare_generic_fail_comment():
+    if os.path.exists("./pr/errors"):
+        errors = open("./pr/errors").read()
+        msg += "One or more errors were found while building and verifying your pull request:\n\n"
+        msg += f"{errors}\n\n"
+    else: msg+= "An unspecified error has occured while building and verifying your pull request." 
+    return msg
+
 def prepare_oc_install_fail_comment():
     msg = "Unfortunately the certification process failed to install OpenShift and could not complete.\n\n"
     msg += "This problem will be addressed by maintainers and no further action is required from the submitter at this time.\n\n"
@@ -105,7 +113,10 @@ def main():
     chart_name = open("./pr/chart").read().strip()
     msg = get_comment_header(issue_number)
     oc_install_result = os.environ.get("OC_INSTALL_RESULT", False)
-    if pr_content_result == "failure":
+    if pr_content_result == "success" and run_verifier_result == "success" and verify_result == "success" and oc_install_result == "success":
+        gitutils.add_output("pr_passed","true")
+        msg += prepare_success_comment()
+    elif pr_content_result == "failure":
         msg += prepare_pr_content_failure_comment()
         gitutils.add_output("pr_passed","false")
     elif run_verifier_result == "failure":
@@ -123,8 +134,8 @@ def main():
         msg += prepare_oc_install_fail_comment()
         gitutils.add_output("pr_passed","false")
     else:
-        gitutils.add_output("pr_passed","true")
-        msg += prepare_success_comment()
+        msg += prepare_generic_fail_comment()
+        gitutils.add_output("pr_passed","false")
 
     msg += get_comment_footer(vendor_label, chart_name)
 
