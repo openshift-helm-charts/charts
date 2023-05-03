@@ -880,6 +880,29 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mavenir-uag:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:178c73a526cc639686059202c663057635bbe3f0307c8a2f8efc5cb872a97ed4
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-28T07:56:59.488064+00:00'
+      charts.openshift.io/name: mavenir IMS Test
+      charts.openshift.io/provider: Mavenir
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-05-03T13:11:36.613581+00:00'
+      charts.openshift.io/supportURL: https://github.com/dperaza4dustbit/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 1-42
+    description: Combined Helm for UAG
+    digest: 90b1b2c3b2849fdca0a6dd0d99cd9e5a2a48492ada6be65d452ee3f3c41cfe86
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.18.0'
+    name: uag
+    type: application
+    urls:
+    - N/A
+    version: 8.1.7-10
   mavenir-udm:
   - annotations:
       charts.openshift.io/digest: sha256:3ec23e856d691f4b816a2a623749c7d1a537f615dec3df93a3225fc82f1f87a0
@@ -1597,4 +1620,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-05-03T12:43:20.668757+00:00'
+generated: '2023-05-03T13:11:36.613581+00:00'
