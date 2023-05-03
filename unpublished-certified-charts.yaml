@@ -428,6 +428,29 @@ entries:
     urls:
     - N/A
     version: 4.10.26-11
+  mavenir-imc:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:e7d6661f2d7082e7544e1e8d51bd674567b62b3efa4282769e0024543e5f50b2
+      charts.openshift.io/lastCertifiedTimestamp: '2023-05-03T06:39:10.957232+00:00'
+      charts.openshift.io/name: mavenir IMS Test
+      charts.openshift.io/provider: Mavenir
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-05-03T10:48:33.168839+00:00'
+      charts.openshift.io/supportURL: https://github.com/dperaza4dustbit/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 1-42
+    description: A combined Helm chart for IMC
+    digest: 881978099097aa7ac4692bb0dc526afc5520d3ad19780cfa6a1c8cbcca589ffd
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.18.0'
+    name: imc
+    type: application
+    urls:
+    - N/A
+    version: 11.0.2-2a
   mavenir-mco:
   - annotations:
       charts.openshift.io/digest: sha256:7483cdcc70e3465afc7e9d6d38239c398a71f78aff0e24958fb39b6bf1b35a3a
@@ -1551,4 +1574,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-04-27T12:46:00.071187+00:00'
+generated: '2023-05-03T10:48:33.168839+00:00'
