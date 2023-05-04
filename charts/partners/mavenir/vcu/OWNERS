@@ -1,9 +1,10 @@
 chart:
   name: vcu
-  shortDescription: unknown
+  shortDescription: 4GCU
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: shantanushivanekar123
 vendor:
   label: mavenir
   name: Mavenir Systems Inc.
