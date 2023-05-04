@@ -1,0 +1,9 @@
+chart:
+  name: vcu
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.
