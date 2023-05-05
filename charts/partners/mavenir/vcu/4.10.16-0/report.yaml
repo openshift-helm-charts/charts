@@ -7,15 +7,15 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:4993302121322093602
-        chart-uri: /home/xr11-sno2/4GCU/Newchart_29_3_23/vcu-4.10.16-chartverifier-3_new_12april.tgz
+        reportDigest: uint64:2406821223687813486
+        chart-uri: N/A
         digests:
             chart: sha256:786c5fbde450aa7c72680a976fa9a78bf4091550a89b04fd78b1734dbb63ea38
             package: 94023809318f5e0af99a6dcd6f9ddb8e67acf3b9c56ba5bd0f2f00629e6bab7d
-        lastCertifiedTimestamp: "2023-05-05T10:41:50.983135+00:00"
+        lastCertifiedTimestamp: "2023-05-05T12:01:41.065908+00:00"
         testedOpenShiftVersion: "4.12"
         supportedOpenShiftVersions: '>=4.4'
-        webCatalogOnly: false
+        webCatalogOnly: true
     chart:
         name: vcu
         home: ""
@@ -37,18 +37,6 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
@@ -60,30 +48,26 @@ results:
         Image is Red Hat certified : quay.io/mrhcert/init_container_ubi:v4.1
         Image is Red Hat certified : quay.io/mrhcert/4g_cuup:4.10.16-0
         Image is Red Hat certified : quay.io/mrhcert/4gcucp:4.10.16-0
-    - check: v1.0/required-annotations-present
+    - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
+      reason: Chart does not contain CRDs
     - check: v1.0/contains-test
       type: Mandatory
       outcome: PASS
       reason: Chart test files exist
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.1/has-kubeversion
       type: Mandatory
       outcome: PASS
       reason: Kubernetes version specified
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
@@ -92,4 +76,20 @@ results:
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
 
