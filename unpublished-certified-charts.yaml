@@ -1054,6 +1054,25 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  mavenir-vcu:
+  - annotations:
+      charts.openshift.io/digest: sha256:786c5fbde450aa7c72680a976fa9a78bf4091550a89b04fd78b1734dbb63ea38
+      charts.openshift.io/lastCertifiedTimestamp: '2023-05-05T12:01:41.065908+00:00'
+      charts.openshift.io/name: test
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-05-05T12:08:18.187407+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: M4GCU-R_4_10_16_0
+    description: A Helm chart for Kubernetes
+    digest: 94023809318f5e0af99a6dcd6f9ddb8e67acf3b9c56ba5bd0f2f00629e6bab7d
+    kubeVersion: '>= 1.17.0'
+    name: vcu
+    type: application
+    urls:
+    - N/A
+    version: 4.10.16-0
   mobileum-alerter:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1620,4 +1639,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-05-03T13:11:36.613581+00:00'
+generated: '2023-05-05T12:08:18.187407+00:00'
