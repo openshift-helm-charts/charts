@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: https://github.com/arjunkumar999/izacinstaller.git
 vendor:
   label: whiteklay
   name: Whiteklay Pvt. Ltd.
