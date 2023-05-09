@@ -3869,6 +3869,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
     version: 0.0.3
+  redhat-redis-persistent:
+  - annotations:
+      charts.openshift.io/digest: sha256:eae26d4b45e70eb169356246007fb953f87ba84b5133da8e549b0df9f0fe54db
+      charts.openshift.io/lastCertifiedTimestamp: '2023-05-09T11:07:33.836439+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-05-09T11:08:08.081468+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: 'This content is expermental, do not use it in production. Redis
+      in-memory data structure store, with persistent storage. For more information
+      about using this template, including OpenShift considerations, see https://github.com/sclorg/redis-container/blob/master/5.  NOTE:
+      You must have persistent volumes available in your cluster to use this template.'
+    digest: 228d0a334749cc7767ae8c04a932567ccabb9a7433e198489ad15838dcbd5cc6
+    name: redis-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,redis
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-persistent-0.0.1/redis-persistent-0.0.1.tgz
+    version: 0.0.1
   redhat-redis-sed:
   - annotations:
       charts.openshift.io/digest: sha256:639de96ec12341cab72ca4aa1f539dcf475e3a5c82c0871e3798418004fd36c8
@@ -5114,4 +5137,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-05-02T07:20:59.955945+00:00'
+generated: '2023-05-09T11:08:08.081468+00:00'
