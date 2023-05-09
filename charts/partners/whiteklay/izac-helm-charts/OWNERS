@@ -1,0 +1,9 @@
+chart:
+  name: izac-helm-charts
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: whiteklay
+  name: Whiteklay Pvt. Ltd.
