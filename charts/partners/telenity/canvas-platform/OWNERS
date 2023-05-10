@@ -4,7 +4,7 @@ chart:
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: gurol.akman@telenity.com
+- githubUsername: gurolakman
 vendor:
   label: telenity
   name: Telenity Iletisim Sistemleri Sa
