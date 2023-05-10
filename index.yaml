@@ -4320,6 +4320,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-ha-3.1.0/solace-pubsubplus-openshift-ha-3.1.0.tgz
     version: 3.1.0
+  telenity-canvas-dmid:
+  - annotations:
+      charts.openshift.io/digest: sha256:947a298988ef9d58d9efd7d443f09ea8679dd4f177cdefd92da0fa036cab83e7
+      charts.openshift.io/lastCertifiedTimestamp: '2023-05-10T15:05:16.249174+00:00'
+      charts.openshift.io/provider: Telenity Iletisim Sistemleri Sa
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-05-10T15:05:54.991057+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.9'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 0.0.0
+    description: Canvas DMID Helm Chart
+    digest: 8574bdbbbb0c168eb9de7dcb1576ab0cc1de06ece63fd8f9731eb7380d1f59e6
+    kubeVersion: '>=v1.21.2'
+    maintainers:
+    - email: info@telenity.com
+      name: Telenity
+      url: https://www.telenity.com
+    name: canvas-dmid
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/telenity-canvas-dmid-3.0.1/canvas-dmid-3.0.1.tgz
+    version: 3.0.1
   wavefronthq-wavefront:
   - annotations:
       charts.openshift.io/digest: sha256:663b50a03cf0adac0485f8731a1e0c8cb729b216f75ce9e43d1f09ffbe2faa1a
@@ -5137,4 +5159,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-05-09T11:08:08.081468+00:00'
+generated: '2023-05-10T15:05:54.991057+00:00'
