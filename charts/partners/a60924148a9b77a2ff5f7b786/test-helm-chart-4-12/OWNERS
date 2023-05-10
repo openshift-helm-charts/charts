@@ -2,7 +2,7 @@ chart:
   name: test-helm-chart-4-12
   shortDescription: test-helm-chart-4-12
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: bovem
 - githubUsername: opcert

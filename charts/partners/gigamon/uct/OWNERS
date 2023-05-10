@@ -1,0 +1,9 @@
+chart:
+  name: uct
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: gigamon
+  name: Gigamon

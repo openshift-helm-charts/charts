@@ -1,8 +1,8 @@
 chart:
   name: prodhelmweb
-  shortDescription: null
-providerDelivery: false
-publicPgpKey: null
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
 users:
 - githubUsername: Aishwarya-Urne
 vendor:

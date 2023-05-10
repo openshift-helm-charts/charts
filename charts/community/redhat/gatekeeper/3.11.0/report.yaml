@@ -1,0 +1,90 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.10.1
+        profile:
+            VendorType: community
+            version: v1.2
+        reportDigest: uint64:366159531824194231
+        chart-uri: .
+        digests:
+            chart: sha256:5ac936bda5cbe721ee3253fafbd9f51b80ff96e0c2b6a6475da10459f8e8cbff
+        lastCertifiedTimestamp: "2023-04-20T13:00:34.695177-04:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: N/A
+        webCatalogOnly: false
+    chart:
+        name: gatekeeper
+        home: https://github.com/open-policy-agent/gatekeeper
+        sources:
+            - https://github.com/open-policy-agent/gatekeeper.git
+        version: 3.11.0
+        description: A Helm chart for Gatekeeper
+        keywords:
+            - open policy agent
+        maintainers: []
+        icon: https://open-policy-agent.github.io/gatekeeper/website/img/logo.svg
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: v3.11.0
+        deprecated: false
+        annotations: {}
+        kubeversion: ""
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: FAIL
+      reason: 'Missing required annotations: [charts.openshift.io/name]'
+    - check: v1.0/signature-is-valid
+      type: Optional
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: FAIL
+      reason: 'Chart Install failure: failed to install CRD crds/assign-customresourcedefinition.yaml: customresourcedefinitions.apiextensions.k8s.io is forbidden: User "thomasmckay" cannot create resource "customresourcedefinitions" in API group "apiextensions.k8s.io" at the cluster scope'
+    - check: v1.0/has-readme
+      type: Optional
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: FAIL
+      reason: Chart contains CRDs
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: FAIL
+      reason: Kubernetes version is not specified
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: FAIL
+      reason: Chart test files do not exist
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: FAIL
+      reason: Values schema file does not exist
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/images-are-certified
+      type: Optional
+      outcome: SKIPPED
+      reason: 'Image certification skipped : registry.redhat.io/gatekeeper/gatekeeper-rhel8:v3.11'
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3

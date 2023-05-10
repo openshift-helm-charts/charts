@@ -1,6 +1,7 @@
 chart:
   name: normalchart
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:

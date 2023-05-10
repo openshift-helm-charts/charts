@@ -3,8 +3,11 @@ chart:
   shortDescription: This is the Red Hat Openshift Jenkins chart
 publicPgpKey: null
 users:
-- githubUsername: waveywaves
-- githubUsername: akram
+- githubUsername: coreydaley
+- githubUsername: jkhelil
+- githubUsername: divyansh42
+- githubUsername: apoorvajagtap
+- githubUsername: mbharatk
 vendor:
   label: redhat
   name: Red Hat
