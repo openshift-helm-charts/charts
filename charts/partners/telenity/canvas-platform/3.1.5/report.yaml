@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:14245941755753855822
+        reportDigest: uint64:17579788661490364015
         chart-uri: canvas-platform-3.1.5.tgz
         digests:
-            chart: sha256:b61fe20bf65245fb9e9f2117f4d51e6907a4cafa0b6291c7d472dca94ccb33a8
-            package: 662ca1ca5d2430b3fdb148a74cf6826ec18769160cb27e2f8d7702516fd2c6fa
-        lastCertifiedTimestamp: "2023-05-16T16:47:51.419297-04:00"
+            chart: sha256:834a104fd3250558a8d838001f54fc398e6e72fda9e282342448738ae849264c
+            package: acead6e0ab12f430aa463b6a31d7f48ebe9cbd825d9f30ce18a4bd626186b4c0
+        lastCertifiedTimestamp: "2023-05-16T17:48:34.588294-04:00"
         testedOpenShiftVersion: "4.8"
         supportedOpenShiftVersions: '>=4.8'
         webCatalogOnly: false
@@ -35,7 +35,7 @@ metadata:
         annotations:
             charts.openshift.io/name: Canvas Platform Helm Chart
             charts.openshift.io/provider: Telenity INC.
-        kubeversion: '>=v1.21.0'
+        kubeversion: '>=1.21.0'
         dependencies:
             - name: canvas-dmid
               version: ^3
@@ -48,26 +48,44 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : docker.io/gurolakman/dmid:1.0.9
+        Image is Red Hat certified : docker.io/gurolakman/platform:3.1
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
@@ -76,30 +94,12 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/contains-test
+    - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/is-helm-v3
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: |-
-        Image is Red Hat certified : docker.io/gurolakman/dmid:1.0.9
-        Image is Red Hat certified : docker.io/gurolakman/platform:3.1
+      reason: Values file exist
 
