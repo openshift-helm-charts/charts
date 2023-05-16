@@ -4389,6 +4389,34 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-canvas-oamportal-3.0.24-SNAPSHOT/canvas-oamportal-3.0.24-SNAPSHOT.tgz
     version: 3.0.24-SNAPSHOT
+  telenity-canvas-platform:
+  - annotations:
+      charts.openshift.io/digest: sha256:834a104fd3250558a8d838001f54fc398e6e72fda9e282342448738ae849264c
+      charts.openshift.io/lastCertifiedTimestamp: '2023-05-16T17:48:34.588294-04:00'
+      charts.openshift.io/provider: Telenity Iletisim Sistemleri Sa
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-05-16T21:52:38.222976+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 3.0.0
+    dependencies:
+    - alias: dmid
+      condition: dmid.enabled
+      name: canvas-dmid
+      repository: https://nexus.telenity.com/repository/helm-telenity/
+      version: ^3
+    description: Canvas Platform Helm Chart
+    digest: acead6e0ab12f430aa463b6a31d7f48ebe9cbd825d9f30ce18a4bd626186b4c0
+    kubeVersion: '>=1.21.0'
+    maintainers:
+    - email: info@telenity.com
+      name: Telenity
+      url: https://www.telenity.com
+    name: canvas-platform
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/telenity-canvas-platform-3.1.5/canvas-platform-3.1.5.tgz
+    version: 3.1.5
   wavefronthq-wavefront:
   - annotations:
       charts.openshift.io/digest: sha256:663b50a03cf0adac0485f8731a1e0c8cb729b216f75ce9e43d1f09ffbe2faa1a
@@ -5206,4 +5234,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-05-15T11:28:58.759590+00:00'
+generated: '2023-05-16T21:52:38.222976+00:00'
