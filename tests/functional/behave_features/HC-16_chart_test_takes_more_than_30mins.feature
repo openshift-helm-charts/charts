@@ -11,7 +11,7 @@ Feature: Chart test takes longer time and exceeds default timeout
     @partners @full
     Examples:
       | vendor_type  | vendor    | chart_path                                  | message                                                                                     |
-      | partners     | hashicorp | tests/data/vault-test-timeout-0.17.0.tgz    | Chart test failure: timed out waiting for the condition                                     |
+      | partners     | hashicorp | tests/data/vault-test-timeout-0.17.0.tgz    | chart test failure: timed out waiting for the condition                                     |
     
     @community @full
     Examples:
