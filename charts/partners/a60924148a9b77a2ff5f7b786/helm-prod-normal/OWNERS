@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: opcert
 vendor:
   label: a60924148a9b77a2ff5f7b786
   name: Vikas Mulaje
