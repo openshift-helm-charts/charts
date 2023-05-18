@@ -39,7 +39,7 @@ spec:
             secretKeyRef:
               key: database-name
               name: {{ .Values.database_service_name }}
-        image: ' '
+        image: "mysql:{{ .Values.mysql_version }}"
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
@@ -80,5 +80,6 @@ spec:
       from:
         kind: ImageStreamTag
         name: mysql:{{ .Values.mysql_version }}
+        namespace: {{ .Values.namespace }}
     type: ImageChange
   - type: ConfigChange
