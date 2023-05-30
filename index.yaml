@@ -3670,11 +3670,11 @@ entries:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-httpd-template-0.0.2/httpd-template-0.0.2.tgz
     version: 0.0.2
   - annotations:
-      charts.openshift.io/digest: sha256:e13869ca9dbaef7a5fda94fe3e14eb0f86db60cf70fc2264dd163cf3c647d399
-      charts.openshift.io/lastCertifiedTimestamp: '2023-05-30T06:27:08.036534+00:00'
+      charts.openshift.io/digest: sha256:bce074b9baf923eff65200998c660b3bcc1ee0e7d2f29d7af2b216436e37c0fb
+      charts.openshift.io/lastCertifiedTimestamp: '2023-05-30T06:27:42.224228+00:00'
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
-      charts.openshift.io/submissionTimestamp: '2023-05-30T06:27:42.441824+00:00'
+      charts.openshift.io/submissionTimestamp: '2023-05-30T06:29:13.582147+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
       charts.openshift.io/testedOpenShiftVersion: N/A
     apiVersion: v2
@@ -5406,4 +5406,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-05-30T06:27:42.441824+00:00'
+generated: '2023-05-30T06:29:13.582147+00:00'
