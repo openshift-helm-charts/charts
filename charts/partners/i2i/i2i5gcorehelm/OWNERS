@@ -2,7 +2,7 @@ chart:
   name: i2i5gcorehelm
   shortDescription: Github i2i 5G Core Repository
 providerDelivery: false
-publicPgpKey: unknown
+publicPgpKey: NzBiMTI0MTljOTdjMGUwZGJkMDMwOGJlOTFlMzY4NTEwYjZiOTc3NjcyZWUxYjA2OTgxMDU5YTllZWNkNTEzYg==
 users:
 - githubUsername: hasankose86
 vendor:
