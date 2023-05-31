@@ -2,7 +2,7 @@ chart:
   name: jm-helm-gpg-test
   shortDescription: Josh Manning GPG Key Test
 providerDelivery: false
-publicPgpKey: unknown
+publicPgpKey: somerandomstring
 users:
 - githubUsername: jsm84
 vendor:
