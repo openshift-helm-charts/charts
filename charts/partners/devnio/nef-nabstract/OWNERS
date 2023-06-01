@@ -1,0 +1,9 @@
+chart:
+  name: nef-nabstract
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: devnio
+  name: Nabstract Technologies Pvt. Ltd.
