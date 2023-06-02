@@ -966,6 +966,26 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/hashicorp-vault-0.24.0/vault-0.24.0.tgz
     version: 0.24.0
+  i2i-i2i5gcorehelm:
+  - annotations:
+      charts.openshift.io/digest: sha256:e189b295ee18215a63d967e51320316c819a9e59cc0541df4a0eddb917034000
+      charts.openshift.io/lastCertifiedTimestamp: '2023-06-02T18:24:33.677172+00:00'
+      charts.openshift.io/provider: i2i Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-06-02T19:58:32.325525+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart for Kubernetes
+    digest: 93843f71ea216b1fc829839574485b25ecc39e537b9a24185ba71f269668ab89
+    icon: https://i2i-systems.com/wp-content/uploads/2020/02/i2i_logo.png
+    kubeVersion: v1.25.x
+    name: i2i5gcorehelm
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/i2i-i2i5gcorehelm-1.0.0/i2i5gcorehelm-1.0.0.tgz
+    version: 1.0.0
   ibm-edge-nodered-chart:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -5406,4 +5426,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-05-30T06:29:13.582147+00:00'
+generated: '2023-06-02T19:58:32.325525+00:00'
