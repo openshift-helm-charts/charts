@@ -7,7 +7,7 @@ metadata:
             VendorType: partner
             version: v1.2
         reportDigest: uint64:4444042853800099363
-        chart-uri: /home/stack/hasan/git5g/n5g-cnf-master-HelmChartCertification/i2i5gcorehelm-1.0.0.tgz
+        chart-uri: N/A
         digests:
             chart: sha256:d745d194aca120b767f336eec049954087360396ae6ae11147b561735b944d85
             package: a3f53fee03a5139d2c3ad5b01dffdd01beae810b5d02fe28c8f02f7be9173222
@@ -27,7 +27,7 @@ metadata:
         apiversion: v2
         condition: ""
         tags: ""
-        appversion: 0.0.1
+        appversion: 1.0.0
         deprecated: false
         annotations:
             charts.openshift.io/name: i2i-5G-Core
