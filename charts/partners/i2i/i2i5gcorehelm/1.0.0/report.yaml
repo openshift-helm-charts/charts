@@ -6,13 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:5998018919047206495
-        chart-uri: n5g-cnf-master-HelmChartCertification/i2i5gcorehelm-1.0.0.tgz
+        reportDigest: uint64:4444042853800099363
+        chart-uri: /home/stack/hasan/git5g/n5g-cnf-master-HelmChartCertification/i2i5gcorehelm-1.0.0.tgz
         digests:
-            chart: sha256:04f79bee4258a4cca352251323a74bb8bae276c6addcfcbb2323f7e9547ddd2f
-            package: cb6e6e938ed617f9870d3fce6e3e1ba8f783218097ac33878542f7e4c137b70b
-            publicKey: c3e7c51547e40ce879a5c1c245149583751b4fa19b624bfd360f783ff80528e4
-        lastCertifiedTimestamp: "2023-06-01T11:28:17.568739+00:00"
+            chart: sha256:d745d194aca120b767f336eec049954087360396ae6ae11147b561735b944d85
+            package: a3f53fee03a5139d2c3ad5b01dffdd01beae810b5d02fe28c8f02f7be9173222
+        lastCertifiedTimestamp: "2023-06-02T15:13:15.918444+00:00"
         testedOpenShiftVersion: "4.12"
         supportedOpenShiftVersions: "4.12"
         webCatalogOnly: false
@@ -37,6 +36,18 @@ metadata:
         type: application
     chart-overrides: ""
 results:
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
     - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
@@ -45,57 +56,45 @@ results:
       type: Mandatory
       outcome: PASS
       reason: |-
+        Image is Red Hat certified : quay.io/i2i/ausf-app-ubi9@sha256:a1c83f8037c8faeba63e37c090cf66e19e447ef66c900f2d752e51fcfd5f9a81
+        Image is Red Hat certified : quay.io/i2i/nssf-app-ubi9@sha256:51559b3c4abf1fc3a409bc2208863a8e593188592b93016400aea0d1ef76e8e3
+        Image is Red Hat certified : quay.io/i2i/smf-app-ubi9@sha256:8c0838303e74632a864020aea09bc6b43dd5aac57027d038e06afc722ae1070a
+        Image is Red Hat certified : quay.io/i2i/udm-app-ubi9@sha256:76c4e7a77b68a2355282b405922f49420198c58a7897442ac73535f003820bb7
+        Image is Red Hat certified : quay.io/i2i/amf-app-ubi9@sha256:726b6bf6f126c68c72b3d244ae587b6923504ea4195465049fb23d1515140a80
+        Image is Red Hat certified : quay.io/i2i/nrf-app-ubi9@sha256:a1a8bed55970bf45960514ccf73b0af97a31d9f4fe55efc6edc2abb88cfee581
+        Image is Red Hat certified : quay.io/i2i/pcf-app-ubi9@sha256:da9c7cea3163472bb54067e0cfa6c51cfa003a05d0c39558f9c0e56a4acef717
+        Image is Red Hat certified : quay.io/i2i/udr-app-ubi9@sha256:9f1bcc5bbf499ec5c09f9cce0bae47cf6262aca405cba18417862b7dc7df819a
+        Image is Red Hat certified : quay.io/i2i/upf-app-ubi8@sha256:d9dbb83e0fe6a532e5cdb2ced151b9fd088fef8fdf4b46b5e50efe4c6ac0753b
         Image is Red Hat certified : registry.access.redhat.com/ubi8/ubi
-        Image is Red Hat certified : quay.io/i2i/pcf-app-ubi9:n5g-pcf-api_latest
-        Image is Red Hat certified : quay.io/i2i/upf-app-ubi8:latest
-        Image is Red Hat certified : quay.io/i2i/nrf-app-ubi9:n5g-nrf-api_latest
-        Image is Red Hat certified : quay.io/i2i/nssf-app-ubi9:n5g-nssf-api_latest
-        Image is Red Hat certified : quay.io/i2i/smf-app-ubi9:n5g-smf-api_latest
-        Image is Red Hat certified : quay.io/i2i/udm-app-ubi9:n5g-udm-api_latest
-        Image is Red Hat certified : quay.io/i2i/udr-app-ubi9:n5g-udr-api_latest
-        Image is Red Hat certified : quay.io/i2i/amf-app-ubi9:n5g-amf-api_latest
-        Image is Red Hat certified : quay.io/i2i/ausf-app-ubi9:n5g-ausf-api_latest
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: FAIL
-      reason: 'Chart is signed : Signature verification failed : openpgp: signature made by unknown entity'
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
