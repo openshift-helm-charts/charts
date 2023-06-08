@@ -2591,6 +2591,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.3.0/infinispan-infinispan-0.3.0.tgz
     version: 0.3.0
+  - annotations:
+      charts.openshift.io/digest: sha256:6043ba507f1bf49b87d9b47302eae44f161521e195393c44b5cbf8e2edcb76a5
+      charts.openshift.io/lastCertifiedTimestamp: '2023-06-08T21:35:17.635093+00:00'
+      charts.openshift.io/provider: Infinispan
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-06-08T21:35:56.365397+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: '14.0'
+    description: A Helm chart that lets you build and deploy Infinispan clusters.
+    digest: 4db62e2930febf7c9d6d79db86ba47d76222482a910796c13916ef57254bd065
+    home: https://infinispan.org/
+    icon: https://design.jboss.org/infinispan/logo/final/PNG/infinispan_icon_rgb_lightbluewhite_256px.png
+    kubeVersion: '>= 1.21.0'
+    maintainers:
+    - name: Infinispan
+      url: https://infinispan.org/
+    name: infinispan
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.3.1/infinispan-0.3.1.tgz
+    version: 0.3.1
   intracom-telecom-nfvri:
   - annotations:
       charts.openshift.io/digest: sha256:590d7a20414c751498c355163f48bf312481726fc617f9a034bbcd682e802477
@@ -5465,4 +5491,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-06-08T21:29:20.843722+00:00'
+generated: '2023-06-08T21:35:56.365397+00:00'
