@@ -1,0 +1,10 @@
+chart:
+  name: sofy-hcl-commerce
+  shortDescription: A Helm chart for HCL commerce software
+publicPgpKey: null
+providerDelivery: False
+users:
+  - githubUsername: ravishranahcl
+vendor:
+  label: hcl
+  name: HCL America Inc.
