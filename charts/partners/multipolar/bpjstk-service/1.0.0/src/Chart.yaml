@@ -1,0 +1,12 @@
+annotations:
+  charts.openshift.io/archs: x86_64
+  charts.openshift.io/name: BPJSTK Multichannel Payment Gateway
+  charts.openshift.io/provider: Multipolar
+  charts.openshift.io/supportURL: https://github.com/andrianrf/bpjstk-helm
+apiVersion: v2
+appVersion: 1.0.0
+description: BPJSTK Multichannel Payment Gateway
+kubeVersion: ">=1.20.0"
+name: bpjstk-service
+type: application
+version: 1.0.0

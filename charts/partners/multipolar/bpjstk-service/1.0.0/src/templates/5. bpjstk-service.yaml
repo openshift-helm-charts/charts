@@ -1,0 +1,98 @@
+{{- if .Values.bpjstkService.enabled -}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bpjstk-service
+  name: bpjstk-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bpjstk-service
+  template:
+    metadata:
+      labels:
+        app: bpjstk-service
+    spec:
+      containers:
+        - image: andrianrf/bpjstk-service:latest
+          imagePullPolicy: IfNotPresent
+          name: bpjstk-service
+          ports:
+            - containerPort: 8091
+          envFrom:
+            - configMapRef:
+                name: bpjstk-cm
+          env:
+            - name: "bpjstkUri"
+              value: "{{ .Values.bpjstkService.bpjstkUri }}"
+            - name: "bpjstkUsername"
+              value: "{{ .Values.bpjstkService.bpjstkUsername }}"
+            - name: "bpjstkPassword"
+              value: "{{ .Values.bpjstkService.bpjstkPassword }}"
+            - name: "vlinkUrl"
+              value: "{{ .Values.bpjstkService.vlinkUrl }}"
+            - name: "vlinkAccountAdminFee"
+              value: "{{ .Values.bpjstkService.vlinkAccountAdminFee }}"
+            - name: "vlinkAccountJht"
+              value: "{{ .Values.bpjstkService.vlinkAccountJht }}"
+            - name: "vlinkAccountJkk"
+              value: "{{ .Values.bpjstkService.vlinkAccountJkk }}"
+            - name: "vlinkAccountJkm"
+              value: "{{ .Values.bpjstkService.vlinkAccountJkm }}"
+            - name: "vlinkAccountJpk"
+              value: "{{ .Values.bpjstkService.vlinkAccountJpk }}"
+            - name: "vlinkAccountJpn"
+              value: "{{ .Values.bpjstkService.vlinkAccountJpn }}"
+            - name: "vlinkNoteTotalIuran"
+              value: "{{ .Values.bpjstkService.vlinkNoteTotalIuran }}"
+            - name: "vlinkNoteAdminFee"
+              value: "{{ .Values.bpjstkService.vlinkNoteAdminFee }}"
+            - name: "vlinkNoteJht"
+              value: "{{ .Values.bpjstkService.vlinkNoteJht }}"
+            - name: "vlinkNoteJkk"
+              value: "{{ .Values.bpjstkService.vlinkNoteJkk }}"
+            - name: "vlinkNoteJkm"
+              value: "{{ .Values.bpjstkService.vlinkNoteJkm }}"
+            - name: "vlinkNoteJpk"
+              value: "{{ .Values.bpjstkService.vlinkNoteJpk }}"
+            - name: "vlinkNoteJpn"
+              value: "{{ .Values.bpjstkService.vlinkNoteJpn }}"
+            - name: "springJpaHibernateDdlAuto"
+              value: "{{ .Values.bpjstkService.springJpaHibernateDdlAuto }}"
+          resources:
+            requests:
+              memory: "0Mi"
+              cpu: "0m"
+            limits:
+              memory: "{{ .Values.bpjstkService.limits.memory }}"
+              cpu: "{{ .Values.bpjstkService.limits.cpu }}"
+          readinessProbe:
+            httpGet:
+              path: /bpjstk-service/actuator/health
+              port: 8091
+            initialDelaySeconds: 120
+            periodSeconds: 15
+            failureThreshold: 3
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bpjstk-service
+  labels:
+    app: bpjstk-service
+spec:
+  type: ClusterIP
+  selector:
+    app: bpjstk-service
+  ports:
+    - name: 8091-tcp
+      protocol: TCP
+      port: 8091
+      targetPort: 8091
+
+{{- end }}

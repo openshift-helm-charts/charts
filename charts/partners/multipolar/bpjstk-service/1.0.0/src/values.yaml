@@ -1,0 +1,72 @@
+database:
+  host: "payment-teller.visiondg.xyz"
+  port: "1521"
+  sid: "ORADB"
+  username: "BPJSTK"
+  password: "P4ssw0rd"
+
+oracleDb:
+  enabled: false
+  pvEnabled: false
+  pvHostPath: "/d/docker-volume/oracle-xe/oradata"
+
+isoClient:
+  enabled: true
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+  isoServer:
+    enabled: true
+    limits:
+      memory: "512Mi"
+      cpu: "1000m"
+  isoServerUrl: "iso-server"
+  isoServerPort: "8828"
+  springJpaHibernateDdlAuto: "update"
+
+bpjstkService:
+  enabled: true
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+  bpjstkSimulator:
+    enabled: true
+    limits:
+      memory: "512Mi"
+      cpu: "1000m"
+    springJpaHibernateDdlAuto: "update"
+  bpjstkUri: "http://bpjstk-simulator:8090/ws"
+  bpjstkUsername: "admin"
+  bpjstkPassword: "password"
+  vlinkUrl: "http://iso-client:8100/pembayaran-bpjstk"
+  vlinkAccountAdminFee: "11111111111"
+  vlinkAccountJht: "22222222222"
+  vlinkAccountJkk: "33333333333"
+  vlinkAccountJkm: "44444444444"
+  vlinkAccountJpk: "55555555555"
+  vlinkAccountJpn: "66666666666"
+  vlinkNoteTotalIuran: "Total Iuran BPJSTK"
+  vlinkNoteAdminFee: "Admin Fee Bank BPJSTK"
+  vlinkNoteJht: "Iuran JHT BPJSTK"
+  vlinkNoteJkk: "Iuran JKK BPJSTK"
+  vlinkNoteJkm: "Iuran JKM BPJSTK"
+  vlinkNoteJpk: "Iuran JPK BPJSTK"
+  vlinkNoteJpn: "Iuran JPN BPJSTK"
+  springJpaHibernateDdlAuto: "update"
+
+backofficeBe:
+  enabled: true
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+  springJpaHibernateDdlAuto: "update"
+
+backoffice:
+  enabled: true
+  ingress:
+    enabled: true
+    rules:
+      host: backoffice-helm.docker.internal
+
+
+

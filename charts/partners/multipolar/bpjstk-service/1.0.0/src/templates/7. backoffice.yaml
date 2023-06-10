@@ -1,0 +1,153 @@
+{{- if .Values.backoffice.enabled -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backoffice-nginx-config
+data:
+  backoffice.conf: |
+    worker_processes  auto;
+
+    error_log  /var/log/nginx/error.log notice;
+    pid        /var/cache/nginx/nginx.pid;
+
+
+    events {
+        worker_connections  1024;
+    }
+
+
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                          '$status $body_bytes_sent "$http_referer" '
+                          '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log  /var/log/nginx/access.log  main;
+
+        sendfile        on;
+        #tcp_nopush     on;
+
+        keepalive_timeout  65;
+
+        #gzip  on;
+
+        server {
+        # listen 8080 default_server ssl;
+        listen 8080 default_server;
+        server_name localhost;
+        root /usr/share/nginx/html;
+        index index.html;
+
+        # ssl_certificate /ssl/fullchain.pem; # managed by Certbot
+        # ssl_certificate_key /ssl/key.pem;
+
+        gzip on;
+        gzip_disable "msie6";
+
+        gzip_vary on;
+        gzip_proxied any;
+        gzip_comp_level 9;
+        gzip_buffers 16 8k;
+        gzip_http_version 1.1;
+        gzip_min_length 0;
+        gzip_types text/plain application/javascript text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype;
+
+        location / {
+      return 301 /backoffice;
+        }
+
+        location /backoffice {
+            try_files $uri $uri/backoffice /backoffice/index.html;
+        }
+
+      location /backoffice-be {
+          proxy_pass http://backoffice-be:8089;
+          proxy_set_header    Host               $host;
+          proxy_set_header    X-Real-IP          $remote_addr;
+          proxy_set_header    X-Forwarded-For    $proxy_add_x_forwarded_for;
+          proxy_set_header    X-Forwarded-Host   $host;
+          proxy_set_header    X-Forwarded-Server $host;
+          proxy_set_header    X-Forwarded-Port   $server_port;
+          proxy_set_header    X-Forwarded-Proto  $scheme;
+      }
+
+      location /bpjstk-service {
+          proxy_pass http://bpjstk-service:8091;
+          proxy_set_header    Host               $host;
+          proxy_set_header    X-Real-IP          $remote_addr;
+          proxy_set_header    X-Forwarded-For    $proxy_add_x_forwarded_for;
+          proxy_set_header    X-Forwarded-Host   $host;
+          proxy_set_header    X-Forwarded-Server $host;
+          proxy_set_header    X-Forwarded-Port   $server_port;
+          proxy_set_header    X-Forwarded-Proto  $scheme;
+      }
+    }
+    }
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: backoffice
+  name: backoffice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backoffice
+  template:
+    metadata:
+      labels:
+        app: backoffice
+    spec:
+      containers:
+        - image: andrianrf/backoffice:latest
+          imagePullPolicy: IfNotPresent
+          name: backoffice
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "0Mi"
+              cpu: "0m"
+            limits:
+              memory: "300Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: application-config
+              mountPath: "/etc/nginx/nginx.conf"
+              subPath: "nginx.conf"
+              readOnly: true
+      # kubectl create configmap backoffice-nginx-config --from-file="C:\\Users\\AndrianRF\\Desktop\bpjstk bsb\\deployment\\1. docker\\backoffice.conf"
+      volumes:
+        - name: application-config
+          configMap:
+            name: backoffice-nginx-config
+            items:
+              - key: backoffice.conf
+                path: nginx.conf
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backoffice
+  labels:
+    app: backoffice
+spec:
+  type: ClusterIP
+  selector:
+    app: backoffice
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+{{- end }}
