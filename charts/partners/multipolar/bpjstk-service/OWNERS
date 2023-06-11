@@ -5,6 +5,7 @@ providerDelivery: false
 publicPgpKey: unknown
 users:
 - githubUsername: andrianrf
+- githubUsername: andrianmlpt
 vendor:
   label: multipolar
   name: PT. Multipolar Tbk
