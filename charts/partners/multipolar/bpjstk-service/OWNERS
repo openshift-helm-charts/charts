@@ -5,6 +5,9 @@ providerDelivery: false
 publicPgpKey: unknown
 users:
 - githubUsername: andrianrf
+- githubUsername: partners
+- githubUsername: multipolar
+- githubUsername: bpjstk-service
 vendor:
   label: multipolar
   name: PT. Multipolar Tbk
