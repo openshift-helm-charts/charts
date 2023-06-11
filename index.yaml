@@ -2798,6 +2798,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/multipolar-bpjstk-service-1.0.0/bpjstk-service-1.0.0.tgz
     version: 1.0.0
+  nabstract-nef-nabstract:
+  - annotations:
+      charts.openshift.io/digest: sha256:f17a0108bde61a2e532b1a4dc9f1608acfd1450267d7828bc2b9e872e6e6803f
+      charts.openshift.io/lastCertifiedTimestamp: '2023-06-11T20:02:27.729265+00:00'
+      charts.openshift.io/provider: Nabstract Technologies Pvt. Ltd.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-06-11T20:08:27.377546+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: 2.5.7
+    description: NABSTRACT NEF deployment Helm chart
+    digest: 2844b47efc233871585fb45b77ec255351b9220a3d0581e7c0f43d506af77e9a
+    kubeVersion: '>= 1.25.0'
+    name: nef-nabstract
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/nabstract-nef-nabstract-1.1.0/nef-nabstract-1.1.0.tgz
+    version: 1.1.0
   nearby-computing-nearbyone-controller:
   - annotations:
       charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
@@ -5510,4 +5529,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-06-11T05:54:24.738943+00:00'
+generated: '2023-06-11T20:08:27.377546+00:00'
