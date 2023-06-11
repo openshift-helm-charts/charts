@@ -1,0 +1,95 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.10.1
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:11211049658433656114
+        chart-uri: /charts/nef-nabstract-1.1.0.tgz
+        digests:
+            chart: sha256:f17a0108bde61a2e532b1a4dc9f1608acfd1450267d7828bc2b9e872e6e6803f
+            package: ec612af20c97d4511c904aecb9704b1c5bd002b9c157581b94c6e79820cb4a2a
+        lastCertifiedTimestamp: "2023-06-10T16:23:03.758654+00:00"
+        testedOpenShiftVersion: "4.10"
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: false
+    chart:
+        name: nef-nabstract
+        home: ""
+        sources: []
+        version: 1.1.0
+        description: NABSTRACT NEF deployment Helm chart
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.5.7
+        deprecated: false
+        annotations:
+            catalog.cattle.io/certified: partner
+            catalog.cattle.io/display-name: NEF
+            catalog.cattle.io/release-name: nef-nabstract
+            charts.openshift.io/name: nef-nabstract
+        kubeversion: '>= 1.25.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : docker.io/devnio/nef:2.5.7
+        Image certification skipped : registry.redhat.io/rhosdt/opentelemetry-collector-rhel8:0.74.0-4
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
