@@ -2779,6 +2779,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/lacework-lacework-agent-5.4.1/lacework-lacework-agent-5.4.1.tgz
     version: 5.4.1
+  multipolar-bpjstk-service:
+  - annotations:
+      charts.openshift.io/digest: sha256:59170c18b61fac0926d8d12f70914502b282b9fd66b1ab062ab99aabbae7974c
+      charts.openshift.io/lastCertifiedTimestamp: '2023-06-11T12:51:20.439212+07:00'
+      charts.openshift.io/provider: PT. Multipolar Tbk
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-06-11T05:54:24.738943+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: BPJSTK Multichannel Payment Gateway
+    digest: 0d3f151c28fa81ccd206896da8e6ae29d561c6bc27f0201ef69daec7d859a668
+    kubeVersion: '>=1.20.0'
+    name: bpjstk-service
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/multipolar-bpjstk-service-1.0.0/bpjstk-service-1.0.0.tgz
+    version: 1.0.0
   nearby-computing-nearbyone-controller:
   - annotations:
       charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
@@ -5491,4 +5510,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-06-08T21:35:56.365397+00:00'
+generated: '2023-06-11T05:54:24.738943+00:00'
