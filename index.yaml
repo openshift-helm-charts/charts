@@ -3682,6 +3682,7 @@ entries:
       charts.openshift.io/submissionTimestamp: '2023-06-14T15:41:08.067608+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
       charts.openshift.io/testedOpenShiftVersion: '4.12'
+      charts.openshift.io/name: JBoss EAP 7.4
     apiVersion: v2
     appVersion: '7.4'
     dependencies:
