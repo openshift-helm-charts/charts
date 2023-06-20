@@ -2767,6 +2767,45 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/janus-idp-backstage-2.0.3/backstage-2.0.3.tgz
     version: 2.0.3
+  - annotations:
+      charts.openshift.io/digest: sha256:836e867c833c12a1263bb6538af1eb060e5f2680e33abb3745329a2a81c75dc6
+      charts.openshift.io/lastCertifiedTimestamp: '2023-06-20T19:32:57.603527+00:00'
+      charts.openshift.io/provider: Janus IDP
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-06-20T19:33:51.182317+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    - alias: upstream
+      name: backstage
+      repository: https://backstage.github.io/charts
+      version: 1.x.x
+    description: A Helm chart for deploying a Backstage application
+    digest: 27f533268c740995656825752b3b651c69bdcd4befc3a42d82f4bb51a915e6e1
+    home: https://janus-idp.io
+    icon: https://avatars.githubusercontent.com/u/117844786
+    keywords:
+    - backstage
+    - idp
+    - janus-idp
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - name: Janus-IDP
+      url: https://janus-idp.io
+    name: backstage
+    sources:
+    - https://github.com/janus-idp/helm-backstage
+    - https://github.com/janus-idp/backstage-showcase
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/janus-idp-backstage-2.1.0/backstage-2.1.0.tgz
+    version: 2.1.0
   kovair-kovairdevops-helm:
   - annotations:
       charts.openshift.io/digest: sha256:a4c8cc79dbc78fd8d10779d3e7e80518cacde3e4730e00207829d51cfc77b0f4
@@ -5597,4 +5636,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-06-16T18:29:30.665171+00:00'
+generated: '2023-06-20T19:33:51.182317+00:00'
