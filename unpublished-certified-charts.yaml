@@ -739,6 +739,296 @@ entries:
     urls:
     - N/A
     version: 3.0.1800-b17
+  - annotations:
+      charts.openshift.io/digest: sha256:6d0b4e0448a64d7a339caa779eb31d93b3b2cb57a9f2d2477bdf688ddb7efd67
+      charts.openshift.io/lastCertifiedTimestamp: '2023-06-26T11:49:14.731901+02:00'
+      charts.openshift.io/name: MCO Chart
+      charts.openshift.io/provider: Mavenir
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-06-26T10:43:09.105055+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 3.0.1812-b17
+    dependencies:
+    - condition: admin-tools.enabled
+      name: admin-tools
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: arm.enabled
+      name: arm
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: cdma-r
+      condition: cdma-r.enabled
+      name: cdma
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: cdma-t
+      condition: cdma-t.enabled
+      name: cdma
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: cex.enabled
+      name: cex
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: cfgpull.enabled
+      name: cfgpull
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: collector.enabled
+      name: collector
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: cron.enabled
+      name: cron
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: dbfi.enabled
+      name: dbfi
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: dbft.enabled
+      name: dbft
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: dbfm.enabled
+      name: dbfm
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: echos.enabled
+      name: echos
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: gsm-0340-r
+      condition: gsm-0340-r.enabled
+      name: gsm-0340
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: gsm-0340-t
+      condition: gsm-0340-t.enabled
+      name: gsm-0340
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: ifxr.enabled
+      name: ifxr
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: k8sag.enabled
+      name: k8sag
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: kernel.enabled
+      name: kernel
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: lida.enabled
+      name: lida
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: lipa.enabled
+      name: lipa
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: logos.enabled
+      name: logos
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mag.enabled
+      name: mag
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mm1c.enabled
+      name: mm1c
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mm1s.enabled
+      name: mm1s
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mm3c.enabled
+      name: mm3c
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mm3s.enabled
+      name: mm3s
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mm4c.enabled
+      name: mm4c
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mm4s.enabled
+      name: mm4s
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mm7c.enabled
+      name: mm7c
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mm7s.enabled
+      name: mm7s
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mmk.enabled
+      name: mmk
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: mmr.enabled
+      name: mmr
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: msgapi.enabled
+      name: msgapi
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: mtai
+      condition: mtai.enabled
+      name: mta
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: mtao
+      condition: mtao.enabled
+      name: mta
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: hmp.enabled
+      name: hmp
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: msg-t.enabled
+      name: msg-t
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: netconfgw.enabled
+      name: netconfgw
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: nrfag.enabled
+      name: nrfag
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: oamzoo.enabled
+      name: oamzoo
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: orion
+      condition: orion.enabled
+      name: orion
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: pag.enabled
+      name: pag
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: pusa.enabled
+      name: pusa
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: redis-m
+      condition: redis-m.enabled
+      name: redis
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: redis-s
+      condition: redis-s.enabled
+      name: redis
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: restgw.enabled
+      name: restgw
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: scn.enabled
+      name: scn
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: shark.enabled
+      name: shark
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: shredis-m
+      condition: shredis-m.enabled
+      name: redis
+      repository: ''
+      version: 3.0.1812-b17
+    - alias: shredis-s
+      condition: shredis-s.enabled
+      name: redis
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: replicator.enabled
+      name: replicator
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: sgs.enabled
+      name: sgs
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: slc.enabled
+      name: slc
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: smog.enabled
+      name: smog
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: smpp.enabled
+      name: smpp
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: smtp.enabled
+      name: smtp
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: snmpag.enabled
+      name: snmpag
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: sodia.enabled
+      name: sodia
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: sol.enabled
+      name: sol
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: sonas.enabled
+      name: sonas
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: spooler.enabled
+      name: spooler
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: stn.enabled
+      name: stn
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: ucp.enabled
+      name: ucp
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: vesag.enabled
+      name: vesag
+      repository: ''
+      version: 3.0.1812-b17
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: ''
+      version: 3.0.1812-b17
+    description: Helmchart for MCO
+    digest: 2a20f63dd7be814c577fba7138e2f1ef2531e4af92f99a53ff57d8a96a555a1c
+    kubeVersion: '>= 1.17.3-0'
+    name: mco
+    urls:
+    - N/A
+    version: 3.0.1812-b17
   mavenir-mtas:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1679,4 +1969,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-06-05T17:04:41.463578+00:00'
+generated: '2023-06-26T10:43:09.105055+00:00'
