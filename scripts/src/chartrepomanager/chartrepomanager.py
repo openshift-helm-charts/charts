@@ -333,11 +333,16 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
 
     fd = open(os.path.join(dr, chart, "Chart.yaml"))
     data = yaml.load(fd, Loader=Loader)
-    # merge the existing annotations with our new ones, overwriting
-    # values for overlapping keys with our own. |= syntax requires py3.9
-    # Overwriting is important because the chart may contain values that we
-    # must override, such as the providerType which changes in redhat-to-community cases.
-    data["annotations"] |= annotations
+    
+    if "annotations" not in data:
+        data["annotations"] = annotations
+    else:
+        # merge the existing annotations with our new ones, overwriting
+        # values for overlapping keys with our own.
+        # Overwriting is important because the chart may contain values that we
+        # must override, such as the providerType which changes in redhat-to-community cases.
+        # |= syntax requires py3.9
+        data["annotations"] |= annotations
     out = yaml.dump(data, Dumper=Dumper)
     with open(os.path.join(dr, chart, "Chart.yaml"), "w") as fd:
         fd.write(out)
