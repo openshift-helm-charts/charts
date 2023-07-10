@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: haroonrasheeda
 vendor:
   label: gigamon
   name: Gigamon
