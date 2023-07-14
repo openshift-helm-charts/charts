@@ -2687,14 +2687,14 @@ entries:
     version: 0.3.1
   - annotations:
       charts.openshift.io/digest: sha256:a6185cd97e0631fd9c38fa5d243175613e37f2a5935b76ea3e40200c27fc56ab
-      charts.openshift.io/lastCertifiedTimestamp: "2023-07-06T00:22:43.528832+00:00"
+      charts.openshift.io/lastCertifiedTimestamp: '2023-07-06T00:22:43.528832+00:00'
       charts.openshift.io/provider: Infinispan
       charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-07-06T00:23:00.528832+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
-      charts.openshift.io/testedOpenShiftVersion: "4.12"
-      charts.openshift.io/submissionTimestamp: "2023-07-06T00:23:00.528832+00:00"
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
     apiVersion: v2
-    appVersion: "14.0"
+    appVersion: '14.0'
     description: A Helm chart that lets you build and deploy Infinispan clusters.
     home: https://infinispan.org/
     icon: https://design.jboss.org/infinispan/logo/final/PNG/infinispan_icon_rgb_lightbluewhite_256px.png
@@ -4800,6 +4800,46 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-3.1.0/solace-pubsubplus-openshift-3.1.0.tgz
     version: 3.1.0
+  - annotations:
+      charts.openshift.io/digest: sha256:986816ed7535a9e004944eb90e9e16b32626d3c114b9c9f96e028c4beeca55e5
+      charts.openshift.io/lastCertifiedTimestamp: '2023-07-14T22:35:59.640808+00:00'
+      charts.openshift.io/name: PubSub+ Event Broker, non-HA
+      charts.openshift.io/provider: Solace Corporation
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-07-14T23:09:59.174021+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    description: Deploy a single-node non-HA Solace PubSub+ Event Broker Software
+      on OpenShift
+    digest: 2ccb0c7a727e71d420fc0deaa00f16fede3d1712ca35290ab242c026a7b1526e
+    home: https://dev.solace.com
+    icon: https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/images/PubSubPlus.png
+    keywords:
+    - solace
+    - pubsubplus
+    - pubsub+
+    - pubsub
+    - messaging
+    - advanced event broker
+    - event broker
+    - event mesh
+    - event streaming
+    - data streaming
+    - event integration
+    - middleware
+    kubeVersion: '>= 1.10.0-0'
+    maintainers:
+    - name: Solace Community Forum
+      url: https://solace.community/
+    - name: Solace Support
+      url: https://solace.com/support/
+    name: pubsubplus-openshift
+    sources:
+    - https://github.com/SolaceProducts/pubsubplus-kubernetes-helm-quickstart
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-3.3.1/pubsubplus-openshift-3.3.1.tgz
+    version: 3.3.1
   solace-pubsubplus-openshift-dev:
   - annotations:
       charts.openshift.io/digest: sha256:19199b26bcb0740e0643ad6341ae180848f9e73f25bc8e512a5e50e89529eee4
@@ -5847,4 +5887,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-07-06T12:00:00.100000+00:00'
+generated: '2023-07-14T23:09:59.174021+00:00'
