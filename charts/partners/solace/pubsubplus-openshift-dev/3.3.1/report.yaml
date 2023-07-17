@@ -1,0 +1,110 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.12.1
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:3047719831612447623
+        chart-uri: /charts/pubsubplus-openshift-dev/3.3.1/pubsubplus-openshift-dev-3.3.1.tgz
+        digests:
+            chart: sha256:62d193b32a48ace7c97a6fe5302948986f6492324d9fe722e52bc470d5767293
+            package: 6cd39014c6a56390aec7680f777874a488eb75b947e94091fb5b2e8f72c236cf
+        lastCertifiedTimestamp: "2023-07-14T22:37:16.281755+00:00"
+        testedOpenShiftVersion: "4.13"
+        supportedOpenShiftVersions: '>=4.1'
+        webCatalogOnly: false
+    chart:
+        name: pubsubplus-openshift-dev
+        home: https://dev.solace.com
+        sources:
+            - https://github.com/SolaceProducts/pubsubplus-kubernetes-helm-quickstart
+        version: 3.3.1
+        description: Deploy a minimum footprint single-node non-HA Solace PubSub+ Event Broker Software on OpenShift for development purposes
+        keywords:
+            - solace
+            - pubsubplus
+            - pubsub+
+            - pubsub
+            - messaging
+            - advanced event broker
+            - event broker
+            - event mesh
+            - event streaming
+            - data streaming
+            - event integration
+            - middleware
+        maintainers:
+            - name: Solace Community Forum
+              email: ""
+              url: https://solace.community/
+            - name: Solace Support
+              email: ""
+              url: https://solace.com/support/
+        icon: https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/images/PubSubPlus.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: ""
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: PubSub+ Event Broker for Developers
+        kubeversion: '>= 1.10.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : registry.connect.redhat.com/solace/pubsubplus-standard:latest'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+

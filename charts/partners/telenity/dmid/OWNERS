@@ -1,0 +1,10 @@
+chart:
+  name: dmid
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: gurolakman
+vendor:
+  label: telenity
+  name: Telenity Iletisim Sistemleri Sa

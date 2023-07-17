@@ -1,0 +1,105 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.10.1
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:17579788661490364015
+        chart-uri: canvas-platform-3.1.5.tgz
+        digests:
+            chart: sha256:834a104fd3250558a8d838001f54fc398e6e72fda9e282342448738ae849264c
+            package: acead6e0ab12f430aa463b6a31d7f48ebe9cbd825d9f30ce18a4bd626186b4c0
+        lastCertifiedTimestamp: "2023-05-16T17:48:34.588294-04:00"
+        testedOpenShiftVersion: "4.8"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: false
+    chart:
+        name: canvas-platform
+        home: ""
+        sources: []
+        version: 3.1.5
+        description: Canvas Platform Helm Chart
+        keywords: []
+        maintainers:
+            - name: Telenity
+              email: info@telenity.com
+              url: https://www.telenity.com
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 3.0.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Canvas Platform Helm Chart
+            charts.openshift.io/provider: Telenity INC.
+        kubeversion: '>=1.21.0'
+        dependencies:
+            - name: canvas-dmid
+              version: ^3
+              repository: https://nexus.telenity.com/repository/helm-telenity/
+              condition: dmid.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: dmid
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : docker.io/gurolakman/dmid:1.0.9
+        Image is Red Hat certified : docker.io/gurolakman/platform:3.1
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+

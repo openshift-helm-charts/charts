@@ -1,0 +1,101 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.10.1
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:9028740865610745098
+        chart-uri: /charts/charts/partners/i2i/i2i5gcorehelm/1.0.0/i2i5gcorehelm-1.0.0.tgz
+        digests:
+            chart: sha256:e189b295ee18215a63d967e51320316c819a9e59cc0541df4a0eddb917034000
+            package: f718cbb4d15b9fc5bcda42ddc8c457c4617e7d9c01000224907eba4018bb77b7
+            publicKey: d6a5496f8b9e3ecff01efb43420f128b4d9239e8633b6686865fd16a6223c678
+        lastCertifiedTimestamp: "2023-06-02T18:24:33.677172+00:00"
+        testedOpenShiftVersion: "4.12"
+        supportedOpenShiftVersions: "4.12"
+        webCatalogOnly: false
+    chart:
+        name: i2i5gcorehelm
+        home: ""
+        sources: []
+        version: 1.0.0
+        description: A Helm chart for Kubernetes
+        keywords: []
+        maintainers: []
+        icon: https://i2i-systems.com/wp-content/uploads/2020/02/i2i_logo.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.0.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: i2i-5G-Core
+        kubeversion: v1.25.x
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/i2i/nrf-app-ubi9@sha256:a1a8bed55970bf45960514ccf73b0af97a31d9f4fe55efc6edc2abb88cfee581
+        Image is Red Hat certified : quay.io/i2i/nssf-app-ubi9@sha256:51559b3c4abf1fc3a409bc2208863a8e593188592b93016400aea0d1ef76e8e3
+        Image is Red Hat certified : quay.io/i2i/smf-app-ubi9@sha256:8c0838303e74632a864020aea09bc6b43dd5aac57027d038e06afc722ae1070a
+        Image is Red Hat certified : quay.io/i2i/udm-app-ubi9@sha256:76c4e7a77b68a2355282b405922f49420198c58a7897442ac73535f003820bb7
+        Image is Red Hat certified : quay.io/i2i/upf-app-ubi8@sha256:d9dbb83e0fe6a532e5cdb2ced151b9fd088fef8fdf4b46b5e50efe4c6ac0753b
+        Image is Red Hat certified : quay.io/i2i/ausf-app-ubi9@sha256:a1c83f8037c8faeba63e37c090cf66e19e447ef66c900f2d752e51fcfd5f9a81
+        Image is Red Hat certified : quay.io/i2i/pcf-app-ubi9@sha256:da9c7cea3163472bb54067e0cfa6c51cfa003a05d0c39558f9c0e56a4acef717
+        Image is Red Hat certified : quay.io/i2i/udr-app-ubi9@sha256:9f1bcc5bbf499ec5c09f9cce0bae47cf6262aca405cba18417862b7dc7df819a
+        Image is Red Hat certified : registry.access.redhat.com/ubi8/ubi
+        Image is Red Hat certified : quay.io/i2i/amf-app-ubi9@sha256:726b6bf6f126c68c72b3d244ae587b6923504ea4195465049fb23d1515140a80
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: PASS
+      reason: 'Chart is signed : Signature verification passed'
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
