@@ -159,6 +159,37 @@ entries:
     urls:
     - N/A
     version: 4.6.0
+  - annotations:
+      charts.openshift.io/digest: sha256:9c41056bd1106c071bdd31726cc0d190de2707c1e87a9baa5a4e87faa2ed1f14
+      charts.openshift.io/lastCertifiedTimestamp: '2023-07-17T12:35:24.910294+00:00'
+      charts.openshift.io/name: nfvri
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-07-17T12:40:33.577597+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: v4.7.0
+    dependencies:
+    - name: nfvri-agent
+      repository: file://../nfvri-agent
+      version: 4.7.0
+    - name: nfvri-apiserver
+      repository: file://../nfvri-apiserver
+      version: 4.7.0
+    - name: nfvri-orchestrator
+      repository: file://../nfvri-orchestrator
+      version: 4.7.0
+    - name: nfvri-dashboard
+      repository: file://../nfvri-dashboard
+      version: 4.7.0
+    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
+    digest: bb9fee00749c29127a5944ed7298b26938b242cdf566551e0afaa2e788d852ef
+    kubeVersion: '>= 1.20.0'
+    name: nfvri
+    type: application
+    urls:
+    - N/A
+    version: 4.7.0
   mavenir-5gdu:
   - annotations:
       charts.openshift.io/digest: sha256:2c286be0b45a1852634966316cc394bec6ee746e54a991b9caf1ab8c9c39d4e8
@@ -1969,4 +2000,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-06-26T10:43:09.105055+00:00'
+generated: '2023-07-17T12:40:33.577597+00:00'
