@@ -1,0 +1,132 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.0.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: /charts/_build/wavefront-1.13.1.tgz
+        digests:
+            chart: sha256:27d8a54382f1c39c55f9239bc7e17195d4c416742113fcaae1013b93b1689be0
+            package: 16892309c6c0be3f669be955f0ca162e432de28af631ad8e781912dd6f7cead3
+        lastCertifiedTimestamp: "2023-04-14T19:48:53.916688+00:00"
+        testedOpenShiftVersion: "4.9"
+        supportedOpenShiftVersions: '>=4.6'
+        providerControlledDelivery: false
+    chart:
+        name: wavefront
+        home: https://www.wavefront.com
+        sources:
+            - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
+            - https://github.com/wavefrontHQ/wavefront-proxy
+        version: 1.13.1
+        description: Wavefront Collector for Kubernetes
+        keywords:
+            - metric
+            - monitoring
+            - observability
+            - alerting
+        maintainers:
+            - name: akodali18
+              email: akodali@vmware.com
+              url: ""
+            - name: ginwoopak
+              email: pginwoo@vmware.com
+              url: ""
+            - name: iplay88keys
+              email: jalvis@vmware.com
+              url: ""
+            - name: jerrybelmonte
+              email: bjerry@vmware.com
+              url: ""
+            - name: johncornish
+              email: jcornish@vmware.com
+              url: ""
+            - name: josephgee
+              email: jgee@vmware.com
+              url: ""
+            - name: jyuqi
+              email: jyuqi@vmware.com
+              url: ""
+            - name: m25n
+              email: matthewco@vmware.com
+              url: ""
+            - name: mmichael
+              email: mamichael@vmware.com
+              url: ""
+            - name: priyaselvaganesan
+              email: pselvaganesa@vmware.com
+              url: ""
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.16.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: wavefront
+        kubeversion: '>= 1.19'
+        dependencies:
+            - name: kube-state-metrics
+              version: ^4.16.0
+              repository: https://prometheus-community.github.io/helm-charts
+              condition: kubeStateMetrics.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.connect.redhat.com/wavefronthq/proxy:12.3
+        Image is Red Hat certified : registry.connect.redhat.com/seldonio/kubectl
+        Image is Red Hat certified : registry.connect.redhat.com/wavefronthq/wavefront-kubernetes-collector:1.13.0
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful

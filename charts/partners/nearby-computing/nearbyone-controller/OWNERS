@@ -1,0 +1,10 @@
+chart:
+  name: nearbyone-controller
+  shortDescription: Nearby One Controller
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: fenech
+vendor:
+  label: nearby-computing
+  name: Nearby Computing SL

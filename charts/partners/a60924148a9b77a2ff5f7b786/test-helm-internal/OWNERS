@@ -1,6 +1,7 @@
 chart:
   name: test-helm-internal
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:

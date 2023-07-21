@@ -1,10 +1,10 @@
 chart:
   name: cucp
-  shortDescription: null
-publicPgpKey: null
-providerDelivery: True
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: shantanushivanekar123
 vendor:
   label: mavenir
-  name: Mavenir
+  name: Mavenir Systems Inc.

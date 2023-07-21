@@ -1,8 +1,8 @@
 chart:
   name: test-helm-chart-project-2022-12
-  shortDescription: null
-providerDelivery: true
-publicPgpKey: null
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: sawalgiriraj
 vendor:

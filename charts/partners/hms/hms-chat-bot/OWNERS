@@ -1,0 +1,11 @@
+chart:
+  name: hms-chat-bot
+  shortDescription: he hSenid smart chatbot empowers businesses to improve their customer
+    experience and engagement by utlizing the AI  & ML
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: kavishan-thathsara
+vendor:
+  label: hms
+  name: Hsenid Mobile Solutions (Singapore) Pte. Ltd.

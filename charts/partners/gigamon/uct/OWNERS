@@ -1,0 +1,10 @@
+chart:
+  name: uct
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: haroonrasheeda
+vendor:
+  label: gigamon
+  name: Gigamon

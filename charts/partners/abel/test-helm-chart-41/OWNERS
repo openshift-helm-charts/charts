@@ -1,0 +1,9 @@
+chart:
+  name: test-helm-chart-41
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: abel
+  name: Red Hat

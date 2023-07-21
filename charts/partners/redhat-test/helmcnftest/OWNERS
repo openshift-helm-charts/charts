@@ -1,6 +1,7 @@
 chart:
   name: helmcnftest
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:

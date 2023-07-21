@@ -27,6 +27,8 @@ jobs:
 
       - name: get files changed
         id: get_files_changed
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           # get files in PR
           ./ve1/bin/pr-artifact --api-url=${{ github.event.pull_request._links.self.href }} \

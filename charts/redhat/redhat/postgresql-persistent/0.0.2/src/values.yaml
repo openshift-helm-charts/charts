@@ -1,0 +1,11 @@
+database_service_name: postgresql-testing
+memory_limit: 512Mi
+namespace: postgresql-persistent-testing
+volume_capacity: 1Gi
+config:
+  postgresql_database: testdb
+  postgresql_password: testp
+  postgresql_user: testu
+  port: 5432
+image:
+  tag: "latest"

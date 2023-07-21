@@ -1,0 +1,10 @@
+chart:
+  name: i2i5gcorehelm
+  shortDescription: Github i2i 5G Core Repository
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: ozlem.demir.tr@gmail.com
+vendor:
+  label: i2i-5gcore
+  name: i2i Systems

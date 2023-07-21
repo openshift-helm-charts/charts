@@ -1,0 +1,13 @@
+description: |-
+  MariaDB database service, with persistent storage. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/mariadb-container/blob/master/10.3/root/usr/share/container-scripts/mysql/README.md.
+
+  NOTE: Scaling to more than one replica is not supported. You must have persistent volumes available in your cluster to use this template.
+name: mariadb-persistent
+tags: database,mariadb
+version: 0.0.1
+annotations:
+  charts.openshift.io/name: Red Hat MariaDB database service, with persistent storage (experimental).
+apiVersion: v2
+appVersion: 0.0.1
+sources:
+  - https://github.com/sclorg/helm-charts

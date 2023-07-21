@@ -1,0 +1,9 @@
+chart:
+  name: postgresql-persistent
+  description: This is the Red Hat PostgreSQL persistent storage
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat

@@ -6,6 +6,7 @@ import json
 import re
 import subprocess
 import tempfile
+import time
 from datetime import datetime, timezone
 import hashlib
 import urllib.parse
@@ -332,7 +333,16 @@ def update_chart_annotation(category, organization, chart_file_name, chart, repo
 
     fd = open(os.path.join(dr, chart, "Chart.yaml"))
     data = yaml.load(fd, Loader=Loader)
-    data["annotations"] = annotations
+    
+    if "annotations" not in data:
+        data["annotations"] = annotations
+    else:
+        # merge the existing annotations with our new ones, overwriting
+        # values for overlapping keys with our own.
+        # Overwriting is important because the chart may contain values that we
+        # must override, such as the providerType which changes in redhat-to-community cases.
+        # |= syntax requires py3.9
+        data["annotations"] |= annotations
     out = yaml.dump(data, Dumper=Dumper)
     with open(os.path.join(dr, chart, "Chart.yaml"), "w") as fd:
         fd.write(out)
@@ -428,5 +438,6 @@ def main():
         if public_key_file:
             print(f"[INFO] Add key file for release : {current_dir}/{public_key_file}")
             gitutils.add_output("public_key_file",f"{current_dir}/{public_key_file}")
-
+    print("Sleeping for 10 seconds")
+    time.sleep(10)
     update_index_and_push(indexfile,indexdir, args.repository, branch, category, organization, chart, version, chart_url, chart_entry, args.pr_number, web_catalog_only)

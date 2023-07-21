@@ -1,6 +1,7 @@
 chart:
   name: helmtest782
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
