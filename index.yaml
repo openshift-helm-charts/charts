@@ -3394,6 +3394,27 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/rafaysystems-rafay-operator-redhat-0.2.1/rafay-operator-redhat-0.2.1.tgz
     version: 0.2.1
+  - annotations:
+      charts.openshift.io/digest: sha256:8f0eb56841646ced1cc4145ebe64eb758dc81b4f2aad91939282745637206335
+      charts.openshift.io/lastCertifiedTimestamp: '2023-07-22T01:24:27.75999+00:00'
+      charts.openshift.io/name: rafay-operator-redhat
+      charts.openshift.io/provider: Rafay Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-07-22T01:26:45.358319+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 1.16.0
+    description: A Helm chart for Kubernetes
+    digest: d5bf43c7066c1b553f4c547aac68680d9c834d9079d09f2ccd7e4472cd83f001
+    home: https://github.com/RafaySystems/rafay-helm-charts/tree/main/charts/rafay-operator-redhat
+    icon: https://rafay-partner-logos.s3.us-west-1.amazonaws.com/rafay-charts-logo.png
+    kubeVersion: '>= 1.20.0-0'
+    name: rafay-operator-redhat
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/rafaysystems-rafay-operator-redhat-0.2.3/rafay-operator-redhat-0.2.3.tgz
+    version: 0.2.3
   redhat-cryostat:
   - annotations:
       charts.openshift.io/digest: sha256:16c798a6a148c3d5d7a95a1c25fa727f56cd065a2f412d0991781e5939472b64
@@ -5967,4 +5988,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-07-14T23:18:31.265562+00:00'
+generated: '2023-07-22T01:26:45.358319+00:00'
