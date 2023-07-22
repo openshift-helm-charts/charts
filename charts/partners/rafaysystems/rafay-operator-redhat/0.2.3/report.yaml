@@ -12,7 +12,7 @@ metadata:
             chart: sha256:8f0eb56841646ced1cc4145ebe64eb758dc81b4f2aad91939282745637206335
             package: d5bf43c7066c1b553f4c547aac68680d9c834d9079d09f2ccd7e4472cd83f001
         lastCertifiedTimestamp: "2023-07-22T01:07:05.996963+00:00"
-        testedOpenShiftVersion: "1.26"
+        testedOpenShiftVersion: "4.12"
         supportedOpenShiftVersions: '>=4.7'
         webCatalogOnly: false
     chart:
