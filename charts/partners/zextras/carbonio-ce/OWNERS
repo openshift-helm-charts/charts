@@ -1,0 +1,11 @@
+chart:
+  name: carbonio-ce
+  shortDescription: Zextras Carbonio Community Edition - The free and open source
+    email and collaboration
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: M0Rf30
+vendor:
+  label: zextras
+  name: Zextras Srl

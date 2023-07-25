@@ -22,6 +22,6 @@ Refer to [workflow file](../.github/workflows/test.yml) for implementation detai
 
 ![CI Test Logic](../assets/ci_test_logic_pr.png "CI Test Logic (Pull Request)")
 
-For any pull request that updates workflow under `.github/workflows`, dependency scripts under `scripts/src`, or tests under `tests/`, we first sanity checks that the submitter of the PR is listed under `approver` of `OWNERS` file and then run the automated tests. All test branches as well as the releases under the sandbox are cleaned up after the tests are finished.
+For any pull request that updates workflow under `.github/workflows`, dependency scripts under `scripts/src`, or tests under `tests/`, we first check that the submitter of the PR is listed under `approver` of `OWNERS` file and then run the automated tests. All test branches as well as the releases under the sandbox are cleaned up after the tests are finished.
 
 Refer to [workflow file](../.github/workflows/schedule.yml) for implementation details.

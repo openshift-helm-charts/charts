@@ -1,0 +1,10 @@
+chart:
+  name: extchart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: testuserrr
+vendor:
+  label: redhat-test
+  name: Red Hat, Inc.

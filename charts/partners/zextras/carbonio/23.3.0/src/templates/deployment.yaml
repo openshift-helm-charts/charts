@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "carbonio.fullname" . }}
+  labels:
+    {{- include "carbonio.labels" . | nindent 4 }}
+  namespace: carbonio-system
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "carbonio.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "carbonio.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{- toYaml .Values.serviceAccountName | nindent 8 }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          command:
+            - /sbin/init
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          ports:
+            - containerPort: 25
+            - containerPort: 110
+            - containerPort: 443
+            - containerPort: 465
+            - containerPort: 587
+            - containerPort: 6071
+            - containerPort: 7071
+            - containerPort: 8080
+          livenessProbe:
+            exec:
+              command:
+                - /usr/bin/nc
+                - -z
+                - localhost
+                - "389"
+            failureThreshold: 10
+            initialDelaySeconds: 20
+            periodSeconds: 60
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - /usr/bin/nc
+                - -z
+                - localhost
+                - "389"
+            failureThreshold: 10
+            initialDelaySeconds: 20
+            periodSeconds: 60
+            timeoutSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      restartPolicy: Always
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - "carbonio.mail.local"
+            - "carbonio"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+status: {}
+

@@ -16,7 +16,7 @@ def workflow_test():
     yield workflow_test
     workflow_test.cleanup()
 
-@scenario('../features/pr_includes_a_file_which_is_not_chart_related.feature', "A user submits a chart with non chart related file")
+@scenario('../features/HC-05_pr_includes_a_file_which_is_not_chart_related.feature', "[HC-05-001] A user submits a chart with non chart related file")
 def test_user_submits_chart_with_non_related_file():
     """A user submits a chart with non chart related file"""
 

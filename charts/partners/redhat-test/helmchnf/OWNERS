@@ -1,0 +1,9 @@
+chart:
+  name: helmchnf
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: redhat-test
+  name: Red Hat, Inc.

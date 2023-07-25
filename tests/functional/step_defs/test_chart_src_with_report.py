@@ -19,10 +19,10 @@ def workflow_test():
     workflow_test.cleanup()
 
 
-@scenario('../features/report_and_chart_src.feature', "A partner or redhat associate submits an error-free chart source with report")
+@scenario('../features/HC-07_report_and_chart_src.feature', "[HC-07-001] A partner or redhat associate submits an error-free chart source with report")
 def test_partner_or_redhat_user_submits_chart_src_with_report():
     """A partner or redhat associate submits an error-free chart source with report."""
 
-@scenario('../features/report_and_chart_src.feature', "A community user submits an error-free chart source with report")
+@scenario('../features/HC-07_report_and_chart_src.feature', "[HC-07-002] A community user submits an error-free chart source with report")
 def test_community_user_submits_chart_src_with_report():
     """A community user submits an error-free chart source with report"""

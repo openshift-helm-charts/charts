@@ -1,0 +1,9 @@
+chart:
+  name: test2
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: samsung-5gcore
+  name: Red Hat, Inc.

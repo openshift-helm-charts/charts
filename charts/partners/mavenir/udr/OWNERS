@@ -1,0 +1,10 @@
+chart:
+  name: udr
+  shortDescription: Mavenir 5GCore UDR CNF Helm charts
+publicPgpKey: null
+providerDelivery: True
+users:
+- githubUsername: k-anirwan
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

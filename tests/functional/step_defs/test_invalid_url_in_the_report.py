@@ -17,7 +17,7 @@ def workflow_test():
     workflow_test.cleanup()
 
 
-@scenario('../features/invalid_url_in_the_report.feature', "A user submits a report with an invalid url")
+@scenario('../features/HC-04_invalid_url_in_the_report.feature', "[HC-04-001] A user submits a report with an invalid url")
 def test_report_submission_with_invalid_url():
     """A user submits a report with an invalid url."""
 

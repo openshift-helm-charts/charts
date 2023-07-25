@@ -1,0 +1,9 @@
+chart:
+  name: mongo-sed
+  shortDescription: MongoDB Service Endpoint Definition
+publicPgpKey: null
+users:
+- githubUsername: fbm3307
+vendor:
+  label: redhat
+  name: Red Hat

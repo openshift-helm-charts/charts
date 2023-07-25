@@ -1,0 +1,9 @@
+chart:
+  name: oc-helm-devops-app
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: hcl
+  name: HCL America Inc

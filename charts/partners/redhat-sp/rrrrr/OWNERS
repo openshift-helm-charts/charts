@@ -1,0 +1,9 @@
+chart:
+  name: rrrrr
+  shortDescription: null
+publicPgpKey: null
+users:
+- githubUsername: rnargotr
+vendor:
+  label: redhat-sp
+  name: Red Hat, Inc.

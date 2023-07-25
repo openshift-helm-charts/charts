@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cryostat.fullname" . }}-test-connection"
+  labels:
+    {{- include "cryostat.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: curl
+      image: registry.access.redhat.com/ubi8/ubi:latest
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - >
+          dnf install --disableplugin=subscription-manager -yq jq;
+          curl -sSf --retry 10 --retry-connrefused -o /tmp/out.json http://{{ include "cryostat.fullname" . }}:{{ .Values.core.service.httpPort }}/health;
+          cat /tmp/out.json;
+          jq -e {{ printf "(.cryostatVersion | test(\"^%s\")) and .datasourceAvailable == true" .Chart.AppVersion | squote }} /tmp/out.json;
+          curl -sSf --retry 10 --retry-connrefused http://{{ include "cryostat.fullname" . }}-grafana:{{ .Values.grafana.service.port }}/api/health
+  restartPolicy: Never

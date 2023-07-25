@@ -1,0 +1,10 @@
+chart:
+  name: izac-helm-charts
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: https://github.com/arjunkumar999/izacinstaller.git
+vendor:
+  label: whiteklay
+  name: Whiteklay Pvt. Ltd.

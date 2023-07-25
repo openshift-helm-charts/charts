@@ -1,0 +1,12 @@
+chart:
+  name: cast-ai-agent
+  shortDescription: 'CAST AI Repository for helm charts to operate the CAST AI kubernetes
+    automation platform. '
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: zilvinasu
+- githubUsername: CastAIPhil
+vendor:
+  label: castai
+  name: CAST AI

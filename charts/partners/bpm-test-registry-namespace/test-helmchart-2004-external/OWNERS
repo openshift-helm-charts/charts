@@ -1,0 +1,12 @@
+chart:
+  name: test-helmchart-2004-external
+  shortDescription: a
+publicPgpKey: YWFhYQ==
+users:
+- githubUsername: sawalgiriraj
+- githubUsername: abc
+- githubUsername: xyz
+- githubUsername: kkatare
+vendor:
+  label: bpm-test-registry-namespace
+  name: BPM Test Company

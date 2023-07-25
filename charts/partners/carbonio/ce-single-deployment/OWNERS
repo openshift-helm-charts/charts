@@ -1,0 +1,10 @@
+chart:
+  name: ce-single-deployment
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: M0Rf30
+vendor:
+  label: carbonio
+  name: Zextras Srl

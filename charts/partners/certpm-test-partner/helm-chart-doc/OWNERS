@@ -1,0 +1,8 @@
+chart:
+  name: helm-chart-doc
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: certpm-test-partner
+  name: Test Company

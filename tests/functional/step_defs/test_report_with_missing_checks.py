@@ -21,7 +21,7 @@ def workflow_test():
     workflow_test.cleanup()
 
 
-@scenario('../features/report_with_missing_checks.feature', "A user submits a report with missing checks")
+@scenario('../features/HC-11_report_with_missing_checks.feature', "[HC-11-001] A user submits a report with missing checks")
 def test_report_submission_with_missing_checks():
     """A user submits a report with missing checks."""
 

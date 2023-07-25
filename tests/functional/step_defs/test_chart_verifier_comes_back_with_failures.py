@@ -16,11 +16,11 @@ def workflow_test():
     yield workflow_test
     workflow_test.cleanup()
 
-@scenario('../features/chart_verifier_comes_back_with_failures.feature', "A partner or community user submits a chart which does not contain a readme file")
+@scenario('../features/HC-03_chart_verifier_comes_back_with_failures.feature', "[HC-03-001] A partner or community user submits a chart which does not contain a readme file")
 def test_partner_or_community_user_submits_chart_without_readme():
     """A partner or community user submits a chart which does not contain a readme file"""
 
-@scenario('../features/chart_verifier_comes_back_with_failures.feature', "A redhat user submits a chart which does not contain a readme file")
+@scenario('../features/HC-03_chart_verifier_comes_back_with_failures.feature', "[HC-03-002] A redhat user submits a chart which does not contain a readme file")
 def test_redhat_user_submits_chart_without_readme():
     """A redhat user submits a chart which does not contain a readme file"""
 

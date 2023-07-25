@@ -23,7 +23,7 @@ def workflow_test():
     yield workflow_test
     workflow_test.cleanup()
 
-@scenario('../features/check_submitted_charts.feature', "A new Openshift or chart-verifier version is specified either by a cron job or manually")
+@scenario('../features/HC-15_check_submitted_charts.feature', "[HC-15-001] A new Openshift or chart-verifier version is specified either by a cron job or manually")
 def test_submitted_charts():
     """A new Openshift or chart-verifier version is specified either by a cron job or manually."""
 

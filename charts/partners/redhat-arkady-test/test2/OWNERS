@@ -1,0 +1,8 @@
+chart:
+  name: test2
+  shortDescription: unknown
+publicPgpKey: unknown
+users: []
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.

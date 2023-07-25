@@ -6,6 +6,7 @@ import json
 import pathlib
 import shutil
 import logging
+import time
 import uuid
 from tempfile import TemporaryDirectory
 from dataclasses import dataclass
@@ -15,8 +16,8 @@ from pathlib import Path
 import git
 import yaml
 import pytest
-from functional.utils.notifier import create_verification_issue
-
+from functional.utils.notifier import *
+from functional.utils.index import *
 from functional.utils.github import *
 from functional.utils.secret import *
 from functional.utils.set_directory import SetDirectory
@@ -30,6 +31,7 @@ chart:
   name: ${chart_name}
   shortDescription: Test chart for testing chart submission workflows.
 publicPgpKey: null
+providerDelivery: ${provider_delivery}
 users:
 - githubUsername: ${bot_name}
 vendor:
@@ -110,6 +112,8 @@ vendor:
         r = github_api(
             'post', f'repos/{remote_repo}/git/refs', bot_token, json=data)
 
+        logging.info(f'gh-pages branch created: {base_branch}-gh-pages')
+
     def setup_git_context(self, repo: git.Repo):
         self.set_git_username_email(repo, self.secrets.bot_name, GITHUB_ACTIONS_BOT_EMAIL)
         if os.environ.get('WORKFLOW_DEVELOPMENT'):
@@ -130,11 +134,12 @@ vendor:
             pytest.fail(f"error sending pull request, response was: {r.text}")
         return j['number']
 
-    def create_and_push_owners_file(self, chart_directory, base_branch, vendor_name, vendor_type, chart_name,):
+    def create_and_push_owners_file(self, chart_directory, base_branch, vendor_name, vendor_type, chart_name, provider_delivery=False):
         with SetDirectory(Path(self.temp_dir.name)):
             # Create the OWNERS file from the string template
             values = {'bot_name': self.secrets.bot_name,
-                    'vendor': vendor_name, 'chart_name': chart_name}
+                    'vendor': vendor_name, 'chart_name': chart_name,
+                      "provider_delivery" : provider_delivery}
             content = Template(self.secrets.owners_file_content).substitute(values)
             with open(f'{chart_directory}/OWNERS', 'w') as fd:
                 fd.write(content)
@@ -148,42 +153,47 @@ vendor:
             self.temp_repo.git.push(f'https://x-access-token:{self.secrets.bot_token}@github.com/{self.secrets.test_repo}',
                         f'HEAD:refs/heads/{base_branch}', '-f')
 
-    def check_index_yaml(self, base_branch, vendor, chart_name, chart_version, check_provider_type=False, logger=pytest.fail):
+    def check_index_yaml(self,base_branch, vendor, chart_name, chart_version, index_file="index.yaml", check_provider_type=False, logger=pytest.fail):
         old_branch = self.repo.active_branch.name
         self.repo.git.fetch(f'https://github.com/{self.secrets.test_repo}.git',
                     '{0}:{0}'.format(f'{base_branch}-gh-pages'), '-f')
+
         self.repo.git.checkout(f'{base_branch}-gh-pages')
-        with open('index.yaml', 'r') as fd:
+
+        with open(index_file, 'r') as fd:
             try:
                 index = yaml.safe_load(fd)
             except yaml.YAMLError as err:
                 logger(f"error parsing index.yaml: {err}")
                 return False
 
-        entry = vendor + '-' + chart_name
-        if entry not in index['entries']:
-            logger(
-                f"{chart_name} {chart_version} not added to index")
+        if index:
+            entry = f"{vendor}-{chart_name}"
+            if "entries" not in index or entry not in index['entries']:
+                logger(f"{entry} not added in entries to {index_file}")
+                logger(f"Index.yaml entries: {index['entries']}")
+                return False
+
+            version_list = [release['version'] for release in index['entries'][entry]]
+            if chart_version not in version_list:
+                logger(f"{chart_version} not added to {index_file}")
+                logger(f"Index.yaml entry content: {index['entries'][entry]}")
+                return False
+
+            #This check is applicable for charts submitted in redhat path when one of the chart-verifier check fails
+            #Check whether providerType annotations is community in index.yaml when vendor_type is redhat
+            if check_provider_type and self.secrets.vendor_type == 'redhat':
+                provider_type_in_index_yaml = index['entries'][entry][0]['annotations']['charts.openshift.io/providerType']
+                if provider_type_in_index_yaml != 'community':
+                    logger(f"{provider_type_in_index_yaml} is not correct as providerType in index.yaml")
+
+
+            logging.info("Index updated correctly, cleaning up local branch")
+            self.repo.git.checkout(old_branch)
+            self.repo.git.branch('-D', f'{base_branch}-gh-pages')
+            return True
+        else:
             return False
-
-        version_list = [release['version'] for release in index['entries'][entry]]
-        if chart_version not in version_list:
-            logger(
-                f"{chart_name} {chart_version} not added to index")
-            return False
-
-        #This check is applicable for charts submitted in redhat path when one of the chart-verifier check fails
-        #Check whether providerType annotations is community in index.yaml when vendor_type is redhat
-        if check_provider_type and self.secrets.vendor_type == 'redhat':
-            provider_type_in_index_yaml = index['entries'][entry][0]['annotations']['charts.openshift.io/providerType']
-            if provider_type_in_index_yaml != 'community':
-                logger(f"{provider_type_in_index_yaml} is not correct as providerType in index.yaml")
-
-
-        logging.info("Index updated correctly, cleaning up local branch")
-        self.repo.git.checkout(old_branch)
-        self.repo.git.branch('-D', f'{base_branch}-gh-pages')
-        return True
 
     def check_release_result(self, vendor, chart_name, chart_version, chart_tgz, logger=pytest.fail):
         expected_tag = f'{vendor}-{chart_name}-{chart_version}'
@@ -216,35 +226,58 @@ vendor:
             run_id = get_run_id(self.secrets, pr_number)
             conclusion = get_run_result(self.secrets, run_id)
             if conclusion == expect_result:
-                logging.info(f"Workflow run was '{expect_result}' which is expected")
+                logging.info(f"PR{pr_number} Workflow run was '{expect_result}' which is expected")
             else:
                 logger(
-                    f"Workflow run was '{conclusion}' which is unexpected, run id: {run_id}, pr number: {pr_number if pr_number else self.secrets.pr_number}")
+                    f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{conclusion}' which is unexpected, run id: {run_id}")
             return run_id, conclusion
         except Exception as e:
             logger(e)
-            return run_id, conclusion
+            return None, None
 
     # expect_merged: boolean representing whether the PR should be merged
     def check_pull_request_result(self, pr_number, expect_merged: bool, logger=pytest.fail):
         # Check if PR merged
         r = github_api(
             'get', f'repos/{self.secrets.test_repo}/pulls/{pr_number}/merge', self.secrets.bot_token)
+        logging.info(f"PR{pr_number} result status_code : {r.status_code}")
         if r.status_code == 204 and expect_merged:
-            logging.info("PR merged sucessfully as expected")
+            logging.info(f"PR{pr_number} merged sucessfully as expected")
             return True
         elif r.status_code == 404 and not expect_merged:
-            logging.info("PR not merged, which is expected")
+            logging.info(f"PR{pr_number} not merged, which is expected")
             return True
         elif r.status_code == 204 and not expect_merged:
-            logger("Expecting PR not merged but PR was merged")
+            logger(f"PR{pr_number} Expecting not merged but PR was merged")
             return False
         elif r.status_code == 404 and expect_merged:
-            logger("Expecting PR merged but PR was not merged")
+            logger(f"PR{pr_number} Expecting PR merged but PR was not merged")
             return False
         else:
-            logger(f"Got unexpected status code from PR: {r.status_code}")
+            logger(f"PR{pr_number} Got unexpected status code from PR: {r.status_code}")
             return False
+
+    def check_pull_request_labels(self,pr_number,logger=pytest.fail):
+        r = github_api(
+            'get', f'repos/{self.secrets.test_repo}/issues/{pr_number}/labels', self.secrets.bot_token)
+        labels = json.loads(r.text)
+        authorized_request = False
+        content_ok = False
+        for label in labels:
+            logging.info(f"PR{pr_number} found label {label['name']}")
+            if label['name'] == "authorized-request":
+                authorized_request = True
+            if label['name'] == "content-ok":
+                content_ok = True
+
+
+        if authorized_request and content_ok:
+            logging.info(f"PR{pr_number} authorized request and content-ok labels were found as expected")
+            return True
+        else:
+            logger(f"PR{pr_number} authorized request and/or content-ok labels were not found as expected")
+            return False
+
 
     def cleanup_release(self, expected_tag):
         """Cleanup the release and release tag.
@@ -279,7 +312,10 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         # different processes.
         self.uuid = uuid.uuid4().hex
 
-        chart_name, chart_version = self.get_chart_name_version()
+        if self.test_report or self.test_chart:
+            self.secrets.chart_name, self.secrets.chart_version = self.get_chart_name_version()
+            self.chart_directory = f'charts/{self.secrets.vendor_type}/{self.secrets.vendor}/{self.secrets.chart_name}'
+
         bot_name, bot_token = self.get_bot_name_and_token()
         test_repo = TEST_REPO
 
@@ -313,8 +349,8 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         self.secrets.bot_token = bot_token
         self.secrets.base_branch = base_branch
         self.secrets.pr_branch = pr_branch
-        self.secrets.chart_name = chart_name
-        self.secrets.chart_version = chart_version
+        self.secrets.index_file = "index.yaml"
+        self.secrets.provider_delivery = False
 
     def cleanup (self):
         # Cleanup releases and release tags
@@ -396,6 +432,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
         self.secrets.pr_branch = f'{self.secrets.base_branch}-pr-branch'
         self.chart_directory = f'charts/{self.secrets.vendor_type}/{self.secrets.vendor}/{self.secrets.chart_name}'
 
+
     def setup_git_context(self):
         super().setup_git_context(self.repo)
 
@@ -445,7 +482,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                 pytest.fail(f"Failed to remove readme file : {e}")
 
     def process_owners_file(self):
-        super().create_and_push_owners_file(self.chart_directory, self.secrets.base_branch, self.secrets.vendor, self.secrets.vendor_type, self.secrets.chart_name)
+        super().create_and_push_owners_file(self.chart_directory, self.secrets.base_branch, self.secrets.vendor, self.secrets.vendor_type, self.secrets.chart_name,self.secrets.provider_delivery)
 
     def process_chart(self, is_tarball: bool):
         with SetDirectory(Path(self.temp_dir.name)):
@@ -460,7 +497,8 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
 
     def process_report(self, update_chart_sha=False, update_url=False, url=None,
-                       update_versions=False,supported_versions=None,tested_version=None,kube_version=None, missing_check=None):
+                       update_versions=False,supported_versions=None,tested_version=None,kube_version=None,
+                       update_provider_delivery=False, provider_delivery=False, missing_check=None,unset_package_digest=False):
 
         with SetDirectory(Path(self.temp_dir.name)):
             # Copy report to temporary location and push to test_repo:pr_branch
@@ -473,17 +511,16 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
             report_path = f'{self.chart_directory}/{self.secrets.chart_version}/' + self.secrets.test_report.split('/')[-1]
 
-            with open(report_path, 'w') as fd:
-                fd.write(content)
+            try:
+                report = yaml.safe_load(content)
+            except yaml.YAMLError as err:
+                pytest.fail(f"error parsing '{report_path}': {err}")
 
-            if update_chart_sha or update_url or update_versions:
+            if self.secrets.vendor_type != "partners":
+                report["metadata"]["tool"]["profile"]["VendorType"] = self.secrets.vendor_type
+                logging.info(f'VendorType set to {report["metadata"]["tool"]["profile"]["VendorType"]} in report.yaml')
 
-                with open(report_path, 'r') as fd:
-                    try:
-                        report = yaml.safe_load(fd)
-                    except yaml.YAMLError as err:
-                        pytest.fail(f"error parsing '{report_path}': {err}")
-
+            if update_chart_sha or update_url or update_versions or update_provider_delivery or unset_package_digest:
                 #For updating the report.yaml, for chart sha mismatch scenario
                 if update_chart_sha:
                     new_sha_value = 'sha256:5b85ae00b9ca2e61b2d70a59f98fd72136453b1a185676b29d4eb862981c1xyz'
@@ -505,12 +542,18 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                     logging.info(f"Updated supportedOpenShiftVersions value in report: {supported_versions}")
                     logging.info(f"Updated kubeversion value in report: {kube_version}")
 
-                with open(report_path, 'w') as fd:
-                    try:
-                        fd.write(yaml.dump(report))
-                        logging.info("Report updated with new values")
-                    except Exception as e:
-                        pytest.fail("Failed to update report yaml with new values")            
+                if update_provider_delivery:
+                    report['metadata']['tool']['providerControlledDelivery'] = provider_delivery
+
+                if unset_package_digest:
+                    del report['metadata']['tool']['digests']['package']
+
+            with open(report_path, 'w') as fd:
+                try:
+                    fd.write(yaml.dump(report))
+                    logging.info("Report updated with new values")
+                except Exception as e:
+                    pytest.fail("Failed to update report yaml with new values")
 
             #For removing the check for missing check scenario
             if missing_check:
@@ -554,6 +597,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
 
     def send_pull_request(self):
         self.secrets.pr_number = super().send_pull_request(self.secrets.test_repo, self.secrets.base_branch, self.secrets.pr_branch, self.secrets.bot_token)
+        logging.info(f"[INFO] PR number: {self.secrets.pr_number}")
 
     # expect_result: a string representation of expected result, e.g. 'success'
     def check_workflow_conclusion(self, expect_result: str):
@@ -563,6 +607,11 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
     # expect_merged: boolean representing whether the PR should be merged
     def check_pull_request_result(self, expect_merged: bool):
         super().check_pull_request_result(self.secrets.pr_number, expect_merged, pytest.fail)
+
+    # expect_merged: boolean representing whether the PR should be merged
+    def check_pull_request_labels(self):
+        super().check_pull_request_labels(self.secrets.pr_number, pytest.fail)
+
 
     def check_pull_request_comments(self, expect_message: str):
         r = github_api(
@@ -578,7 +627,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
             pytest.fail(f"Was expecting '{expect_message}' in the comment {complete_comment}")
 
     def check_index_yaml(self, check_provider_type=False):
-        super().check_index_yaml(self.secrets.base_branch, self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, check_provider_type, pytest.fail)
+        super().check_index_yaml(self.secrets.base_branch, self.secrets.vendor, self.secrets.chart_name, self.secrets.chart_version, self.secrets.index_file,check_provider_type, pytest.fail)
 
     def check_release_result(self):
         chart_tgz = self.secrets.test_chart.split('/')[-1]
@@ -679,8 +728,7 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
         if notify_id:
             notify_id = [vt.strip() for vt in notify_id.split(',')]
         else:
-            # Default to not override, i.e. use chart owners
-            notify_id = []
+            notify_id = ["dperaza","mmulholla"]
         return notify_id
 
     def get_software_name_version(self):
@@ -688,9 +736,11 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
         if not software_name:
             raise Exception("SOFTWARE_NAME environment variable not defined")
 
-        software_version = os.environ.get("SOFTWARE_VERSION")
+        software_version = os.environ.get("SOFTWARE_VERSION").strip('\"')
         if not software_version:
             raise Exception("SOFTWARE_VERSION environment variable not defined")
+        elif software_version.startswith("sha256"):
+            software_version = software_version[-8:]
 
         return software_name, software_version
 
@@ -712,8 +762,6 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
 
             # Run submission flow test with charts in PROD_REPO:PROD_BRANCH
             self.set_git_username_email(self.temp_repo, self.secrets.bot_name, GITHUB_ACTIONS_BOT_EMAIL)
-            self.temp_repo.git.fetch(
-                f'https://github.com/{PROD_REPO}.git', f'{PROD_BRANCH}:{PROD_BRANCH}', '-f')
             self.temp_repo.git.checkout(PROD_BRANCH, 'charts')
             self.temp_repo.git.restore('--staged', 'charts')
             self.secrets.submitted_charts = get_all_charts(
@@ -723,20 +771,16 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
             self.temp_repo.git.checkout('-b', 'tmp')
 
     def get_owner_ids(self, chart_directory, owners_table):
-        # Don't send notifications on dry runs
-        if not self.secrets.dry_run:
-            if len(self.secrets.notify_id) == 0:
-                with open(f'{chart_directory}/OWNERS', 'r') as fd:
-                    try:
-                        owners = yaml.safe_load(fd)
-                        # Pick owner ids for notification
-                        owners_table[chart_directory] = [
-                            owner.get(['githubUsername'], '') for owner in owners['users']]
-                    except yaml.YAMLError as err:
-                        logging.warning(
-                            f"Error parsing OWNERS of {chart_directory}: {err}")
-            else:
-                owners_table[chart_directory] = self.secrets.notify_id
+
+        with open(f'{chart_directory}/OWNERS', 'r') as fd:
+            try:
+                owners = yaml.safe_load(fd)
+                # Pick owner ids for notification
+                owners_table[chart_directory] = [
+                    owner.get('githubUsername', '') for owner in owners['users']]
+            except yaml.YAMLError as err:
+                logging.warning(
+                    f"Error parsing OWNERS of {chart_directory}: {err}")
 
     def push_chart(self, chart_directory, chart_name, chart_version, vendor_name, vendor_type, pr_branch):
         # Push chart files to test_repo:pr_branch
@@ -746,49 +790,78 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
         self.temp_repo.git.push(f'https://x-access-token:{self.secrets.bot_token}@github.com/{self.secrets.test_repo}',
                     f'HEAD:refs/heads/{pr_branch}', '-f')
 
+    def report_failure(self,chart,chart_owners,failure_type,pr_html_url=None,run_html_url=None):
+
+        os.environ['GITHUB_REPO'] = PROD_REPO.split('/')[1]
+        os.environ['GITHUB_AUTH_TOKEN'] = self.secrets.bot_token
+        if not self.secrets.dry_run:
+            os.environ['GITHUB_REPO'] = PROD_REPO.split('/')[1]
+            os.environ['GITHUB_AUTH_TOKEN'] = self.secrets.bot_token
+            os.environ['GITHUB_ORGANIZATION'] = PROD_REPO.split('/')[0]
+            logging.info(f"Send notification to '{self.secrets.notify_id}' about verification result of '{chart}'")
+            create_verification_issue(chart,  chart_owners, failure_type,self.secrets.notify_id, pr_html_url, run_html_url, self.secrets.software_name,
+                                      self.secrets.software_version, self.secrets.bot_token, self.secrets.dry_run)
+        else:
+            os.environ['GITHUB_ORGANIZATION'] = PROD_REPO.split('/')[0]
+            os.environ['GITHUB_REPO'] = "sandbox"
+            os.environ['GITHUB_AUTH_TOKEN'] = self.secrets.bot_token
+            logging.info(f"Send notification to '{self.secrets.notify_id}' about dry run verification result of '{chart}'")
+            create_verification_issue(chart, chart_owners, failure_type,self.secrets.notify_id, pr_html_url, run_html_url, self.secrets.software_name,
+                                      self.secrets.software_version, self.secrets.bot_token, self.secrets.dry_run)
+            logging.info(f"Dry Run - send sandbox notification to '{chart_owners}' about verification result of '{chart}'")
+
+
     def check_single_chart_result(self, vendor_type, vendor_name, chart_name, chart_version, pr_number, owners_table):
         base_branch = f'{self.secrets.software_name}-{self.secrets.software_version}-{self.secrets.pr_base_branch}-{vendor_type}-{vendor_name}-{chart_name}-{chart_version}'
 
         # Check workflow conclusion
-        chart = f'{vendor_type} {vendor_name} {chart_name} {chart_version}'
+        chart = f'{vendor_name} {chart_name} {chart_version}'
         run_id, conclusion = super().check_workflow_conclusion(pr_number, 'success', logging.warning)
 
-        # Send notification to owner through GitHub issues
-        if not self.secrets.dry_run and run_id and conclusion:
-            r = github_api(
-                'get', f'repos/{self.secrets.test_repo}/actions/runs/{run_id}', self.secrets.bot_token)
-            run = r.json()
-            run_html_url = run['html_url']
-            chart_directory = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
-            chart_owners = owners_table[chart_directory]
-            pass_verification = conclusion == 'success'
-            os.environ['GITHUB_ORGANIZATION'] = PROD_REPO.split('/')[0]
-            os.environ['GITHUB_REPO'] = PROD_REPO.split('/')[1]
-            os.environ['GITHUB_AUTH_TOKEN'] = self.secrets.bot_token
-            logging.info(
-                f"Send notification to '{chart_owners}' about verification result of '{chart}'")
-            create_verification_issue(chart_name, chart_owners, run_html_url, self.secrets.software_name,
-                                    self.secrets.software_version, pass_verification, self.secrets.bot_token)
+        if conclusion and run_id:
+            if conclusion != 'success':
+                # Send notification to owner through GitHub issues
+                r = github_api(
+                    'get', f'repos/{self.secrets.test_repo}/actions/runs/{run_id}', self.secrets.bot_token)
+                run = r.json()
+                run_html_url = run['html_url']
 
-        # Early return on workflow failures
-        if conclusion != 'success':
+                pr = get_pr(self.secrets,pr_number)
+                pr_html_url = pr["html_url"]
+                chart_directory = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
+                chart_owners = owners_table[chart_directory]
+
+                self.report_failure(chart,chart_owners,CHECKS_FAILED,pr_html_url,run_html_url)
+
+                logging.warning(f"PR{pr_number} workflow failed: {vendor_name}, {chart_name}, {chart_version}")
+                return
+            else:
+                logging.info(f"PR{pr_number} workflow passed: {vendor_name}, {chart_name}, {chart_version}")
+        else:
+            logging.warning(f"PR{pr_number} workflow did not complete: {vendor_name}, {chart_name}, {chart_version}")
             return
+
 
         # Check PRs are merged
         if not super().check_pull_request_result(pr_number, True, logging.warning):
+            logging.warning(f"PR{pr_number} pull request was not merged: {vendor_name}, {chart_name}, {chart_version}")
             return
+        logging.info(f"PR{pr_number} pull request was merged: {vendor_name}, {chart_name}, {chart_version}")
 
         # Check index.yaml is updated
-        if not super().check_index_yaml(base_branch, vendor_name, chart_name, chart_version, False, logging.warning):
-            return
+        if not super().check_index_yaml(base_branch, vendor_name, chart_name, chart_version, check_provider_type=False, logger=logging.warning):
+            logging.warning(f"PR{pr_number} - Chart was not found in Index file: {vendor_name}, {chart_name}, {chart_version}")
+        logging.info(f"PR{pr_number} - Chart was found in Index file: {vendor_name}, {chart_name}, {chart_version}")
 
         # Check release is published
         chart_tgz = f'{chart_name}-{chart_version}.tgz'
         if not super().check_release_result(vendor_name, chart_name, chart_version, chart_tgz, logging.warning):
-            return
+            logging.warning(f"PR{pr_number} - Release was not created: {vendor_name}, {chart_name}, {chart_version}")
+        logging.info(f"PR{pr_number} - Release was created: {vendor_name}, {chart_name}, {chart_version}")
 
     def process_single_chart(self, vendor_type, vendor_name, chart_name, chart_version, pr_number_list, owners_table):
         # Get SHA from 'pr_base_branch' branch
+        logging.info(f"Process chart: {vendor_type}/{vendor_name}/{chart_name}/{chart_version}")
         r = github_api(
             'get', f'repos/{self.secrets.test_repo}/git/ref/heads/{self.secrets.pr_base_branch}', self.secrets.bot_token)
         j = json.loads(r.text)
@@ -796,6 +869,7 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
 
         chart_directory = f'charts/{vendor_type}/{vendor_name}/{chart_name}'
         base_branch = f'{self.secrets.software_name}-{self.secrets.software_version}-{self.secrets.pr_base_branch}-{vendor_type}-{vendor_name}-{chart_name}-{chart_version}'
+        base_branch = base_branch.replace(":","-")
         pr_branch = f'{base_branch}-pr-branch'
 
         self.secrets.base_branches.append(base_branch)
@@ -836,8 +910,11 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
         self.push_chart(chart_directory, chart_name, chart_version, vendor_name, vendor_type, pr_branch)
 
         # Create PR from pr_branch to base_branch
+        logging.info("sleep for 5 seconds to avoid secondary api limit")
+        time.sleep(5)
         pr_number = super().send_pull_request(self.secrets.test_repo, base_branch, pr_branch, self.secrets.bot_token)
         pr_number_list.append((vendor_type, vendor_name, chart_name, chart_version, pr_number))
+        logging.info(f"PR{pr_number} created in {self.secrets.test_repo} into {base_branch} from {pr_branch}")
 
         # Record expected release tags
         self.secrets.release_tags.append(f'{vendor_name}-{chart_name}-{chart_version}')
@@ -849,10 +926,36 @@ class ChartCertificationE2ETestMultiple(ChartCertificationE2ETest):
         owners_table = dict()
         pr_number_list = list()
 
+        skip_charts = list()
+
+        logging.info(f"Running tests for : {self.secrets.software_name} {self.secrets.software_version} :")
+        # First look for charts in index.yaml to see if kubeVersion is good:
+        if self.secrets.software_name == "OpenShift":
+            logging.info("check index file for invalid kubeVersions")
+            failed_charts = check_index_entries(self.secrets.software_version)
+            if failed_charts:
+                for chart in failed_charts:
+                    providerDir = chart["providerType"].replace("partner","partners")
+                    chart_directory = f'charts/{providerDir}/{chart["provider"]}/{chart["name"]}'
+                    self.get_owner_ids(chart_directory,owners_table)
+                    chart_owners = owners_table[chart_directory]
+                    chart_id = f'{chart["provider"]} {chart["name"]} {chart["version"]}'
+                    self.report_failure(chart_id,chart_owners,chart["message"],"","")
+                    skip_charts.append(f'{chart["name"]}-{chart["version"]}')
+
+
         # Process test charts and send PRs from temporary directory
         with SetDirectory(Path(self.temp_dir.name)):
             for vendor_type, vendor_name, chart_name, chart_version in self.secrets.submitted_charts:
-                self.process_single_chart(vendor_type, vendor_name, chart_name, chart_version, pr_number_list, owners_table)
+                if f'{chart_name}-{chart_version}' in skip_charts:
+                    logging.info(f"Skip already failed chart: {vendor_type}, {vendor_name}, {chart_name}, {chart_version}")
+                else:
+                    logging.info(f"Process chart: {vendor_type}, {vendor_name}, {chart_name}, {chart_version}")
+                    self.process_single_chart(vendor_type, vendor_name, chart_name, chart_version, pr_number_list, owners_table)
+                    logging.info("sleep for 5 seconds  to avoid secondary api limit")
+                    time.sleep(5)
 
         for vendor_type, vendor_name, chart_name, chart_version, pr_number in pr_number_list:
+            logging.info(f"PR{pr_number} Check result: {vendor_type}, {vendor_name}, {chart_name}, {chart_version}")
             self.check_single_chart_result(vendor_type, vendor_name, chart_name, chart_version, pr_number, owners_table)
+

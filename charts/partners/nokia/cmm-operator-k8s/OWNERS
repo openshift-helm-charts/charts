@@ -1,0 +1,10 @@
+chart:
+  name: cmm-operator-k8s
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: nelsonpraveen
+vendor:
+  label: nokia
+  name: Nokia

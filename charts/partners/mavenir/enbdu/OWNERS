@@ -1,0 +1,10 @@
+chart:
+  name: enbdu
+  shortDescription: 4GDU
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: shantanushivanekar123
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

@@ -1,0 +1,10 @@
+chart:
+  name: rafay-operator-redhat
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: kutumba-rafay
+vendor:
+  label: rafaysystems
+  name: Rafay Systems

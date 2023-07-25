@@ -1,0 +1,9 @@
+chart:
+  name: valid-chart
+  shortDescription: valid-helm-chart
+publicPgpKey: null
+users:
+- githubUsername: dcicertbot
+vendor:
+  label: fredco
+  name: Fredco

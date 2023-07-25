@@ -1,0 +1,9 @@
+chart:
+  name: mariadb-imagestreams
+  description: This is the Red Hat MariaDB imagestreams chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat

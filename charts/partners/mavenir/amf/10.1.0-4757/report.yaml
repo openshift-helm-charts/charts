@@ -1,0 +1,163 @@
+Using config file: ./amf-chart-verifier.yaml
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.0.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: N/A
+        digests:
+            chart: sha256:c9e5119d0e0b9ce4845fc02807b44e0ab19555d584d0d805e32290511eaad1bd
+            package: d3f8a4885cdcf0f9137eb1acb8f90db8c7033caaeabf28d25a502affdd9f62e9
+        lastCertifiedTimestamp: "2022-09-28T11:10:54.803276+00:00"
+        testedOpenShiftVersion: "4.9"
+        supportedOpenShiftVersions: '>=4.4'
+        providerControlledDelivery: true
+    chart:
+        name: amf
+        home: ""
+        sources: []
+        version: 10.1.0-4757
+        description: NF Service template.
+        keywords: []
+        maintainers:
+            - name: Copyright Mavenir Inc 2021
+              email: ""
+              url: https://mavenir.com/
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: "0.1"
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: amf
+        kubeversion: '>= 1.17.0'
+        dependencies:
+            - name: amf-comm
+              version: "0.1"
+              repository: file:///root/amf-comm/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: amf-mt
+              version: "0.1"
+              repository: file:///root/amf-mt/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: amf-gw
+              version: "0.1"
+              repository: file:///root/amf-gw/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: amf-n2iwf
+              version: "0.1"
+              repository: file:///root/amf-n2iwf/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: amf-ee
+              version: "0.1"
+              repository: file:///root/amf-ee/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: amf-slicemgmt
+              version: "0.1"
+              repository: file:///root/amf-slicemgmt/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: amf-gtpciwf
+              version: "0.1"
+              repository: file:///root/amf-gtpciwf/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: amf-pathmgmt
+              version: "0.1"
+              repository: file:///root/amf-pathmgmt/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/m5gcrhcert/amf-n2-iwf:10.1.0-4757-ubi-1-0
+        Image is Red Hat certified : quay.io/m5gcrhcert/amf-slicemanagement:10.1.0-4757-ubi-1-0
+        Image is Red Hat certified : quay.io/m5gcrhcert/amf-comm:10.1.0-4757-ubi-1-0
+        Image is Red Hat certified : quay.io/m5gcrhcert/amf-gtpc-iwf:10.1.0-4757-ubi-1-0
+        Image is Red Hat certified : quay.io/m5gcrhcert/amf-mt:10.1.0-4757-ubi-1-0
+        Image is Red Hat certified : quay.io/m5gcrhcert/amf-pathmgmt:10.1.0-4757-ubi-1-0
+        Image is Red Hat certified : quay.io/m5gcrhcert/cim:21.4.1-1-ubi-1-0
+        Image is Red Hat certified : quay.io/m5gcrhcert/amf-ee:10.1.0-4757-ubi-1-0
+        Image is Red Hat certified : quay.io/m5gcrhcert/amf-ap:10.1.0-4757-ubi-1-0
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-orion-test"
+  labels:
+    {{ include "orion.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  containers:
+    - name: curl
+      image: quay.io/opencloudio/curl:4.2.0-build.8
+      command: 
+        - /bin/sh
+        - /test-script/test.sh
+      volumeMounts:
+        - name: orion-test-script
+          mountPath: /test-script
+  volumes:
+    - name: orion-test-script
+      configMap:
+        name: {{ .Release.Name }}-orion-test
+  restartPolicy: Never

@@ -1,0 +1,10 @@
+chart:
+  name: imc
+  shortDescription: imc helm
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: rameshmav
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

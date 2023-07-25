@@ -11,4 +11,4 @@ users:
 - githubUsername: RagnarPaulson
 vendor:
   label: solace
-  name: Solace Systems
+  name: Solace Corporation

@@ -1,0 +1,9 @@
+chart:
+  name: nedb-service-engine
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: nextevolution
+  name: nextevolution GmbH

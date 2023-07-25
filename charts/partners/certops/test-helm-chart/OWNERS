@@ -1,0 +1,9 @@
+chart:
+  name: test-helm-chart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: certops
+  name: certops

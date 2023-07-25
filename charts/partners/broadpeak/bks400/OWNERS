@@ -1,0 +1,9 @@
+chart:
+  name: bks400
+  shortDescription: Broadpeak BkS400 Edge CDN
+publicPgpKey: null
+users:
+- githubUsername: bpkrichardv
+vendor:
+  label: broadpeak
+  name: Broadpeak

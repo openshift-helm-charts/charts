@@ -1,0 +1,14 @@
+
+Thank you for installing Zextras Carbonio!
+
+Now that you have deployed Carbonio, you should look over the docs on using
+Carbonio with Kubernetes available here:
+
+https://docs.zextras.com/carbonio/html/index.html
+
+
+Your release is named {{ .Release.Name }}. To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get manifest {{ .Release.Name }}
+

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-connection-test"
+  namespace: "{{ .Release.Namespace }}"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    name: {{ .Values.database_service_name }}
+spec:
+  #serviceAccount: {{ .Values.serviceAccount }}
+  containers:
+    - name: "postgresql-{{ .Values.image.tag }}-connection-test"
+      image: "image-registry.openshift-image-registry.svc:5000/{{ .Values.namespace}}/postgresql:{{ .Values.image.tag }}"
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: POSTGRESQL_USER
+          value: "{{ .Values.config.postgresql_user }}"
+        - name: PGPASSWORD
+          value: "{{ .Values.config.postgresql_password }}"
+        - name: POSTGRESQL_DATABASE
+          value: "{{ .Values.config.postgresql_database }}"
+        - name: POSTGRESQL_PORT
+          value: "{{ .Values.config.port }}"
+      command:
+        - /bin/bash
+        - -ec
+        - "PGPASSWORD=$PGPASSWORD /usr/bin/pg_isready -d $POSTGRESQL_DATABASE -h {{ .Values.database_service_name }} -p $POSTGRESQL_PORT -U $POSTGRESQL_USER"
+  lookupPolicy:
+    local: true
+  restartPolicy: Never

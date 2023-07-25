@@ -1,0 +1,10 @@
+chart:
+  name: hcl-launch-server-prod
+  shortDescription: HCL Launch Helm Chart Repository
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: james.carmichael@hcl.com
+vendor:
+  label: hcl
+  name: HCL America Inc

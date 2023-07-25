@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "namespace": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "description": "The name assigned to all of the frontend objects defined in this template."
+        },
+        "memory_limit": {
+            "type": "string",
+            "title": "Memory limit",
+            "form": true,
+            "render": "slider",
+            "sliderMin": 512,
+            "sliderMax": 65536,
+            "sliderUnit": "Mi"
+        },
+        "httpd_version": {
+            "type": "string",
+            "description": "Specify HTTPD imagestream tag",
+            "enum": [ "latest", "2.4-el9", "2.4-el8", "2.4-el7" ]
+        },
+        "application_domain": {
+            "type": "string",
+            "description": "The exposed hostname that will route to the httpd service, if left blank a value will be defaulted."
+        },
+        "context_dir": {
+            "type": "string",
+            "description": "Set this to the relative path to your project if it is not in the root of your repository."
+        }
+    }
+}
+

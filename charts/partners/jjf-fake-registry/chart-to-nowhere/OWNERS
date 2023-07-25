@@ -1,0 +1,9 @@
+chart:
+  name: chart-to-nowhere
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: jjf-fake-registry
+  name: John Francini's Fake Company

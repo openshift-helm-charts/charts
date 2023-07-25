@@ -17,7 +17,7 @@ def workflow_test():
     workflow_test.cleanup()
 
 
-@scenario('../features/report_in_json_format.feature', "An user submits an report in json format")
+@scenario('../features/HC-09_report_in_json_format.feature', "[HC-09-001] An user submits an report in json format")
 def an_user_submits_report_in_json_format():
     """An user submits an report in json format."""
 

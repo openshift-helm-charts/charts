@@ -1,0 +1,13 @@
+description: |-
+  This content is expermental, do not use it in production. Red Hat Apache HTTP Server imagestreams.
+  For more information about HTTPD container see https://github.com/sclorg/httpd-container/.
+annotations:
+  charts.openshift.io/name: Red Hat Apache HTTP Server imagestreams (experimental).
+apiVersion: v2
+appVersion: 0.0.1
+kubeVersion: '>=1.20.0'
+name: httpd-imagestreams
+tags: builder,httpd
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.1

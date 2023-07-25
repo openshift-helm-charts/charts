@@ -1,0 +1,89 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: "true"
+  labels:
+    template: postgresql-persistent-template
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    name: {{ .Values.database_service_name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.database_service_name }}
+    spec:
+      containers:
+      - capabilities: {}
+        env:
+        - name: POSTGRESQL_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: {{ .Values.database_service_name }}
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: {{ .Values.database_service_name }}
+        - name: POSTGRESQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: database-name
+              name: {{ .Values.database_service_name }}
+        image: "postgresql:{{ .Values.image.tag }}"
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /usr/libexec/check-container
+            - --live
+          initialDelaySeconds: 120
+          timeoutSeconds: 10
+        name: "postgresql-{{ .Values.image.tag }}-testing"
+        ports:
+        - containerPort: {{ .Values.config.port }}
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /usr/libexec/check-container
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: {{ .Values.memory_limit }}
+        securityContext:
+          capabilities: {}
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /var/lib/pgsql/data
+          name: {{ .Values.database_service_name }}-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - name: {{ .Values.database_service_name }}-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.database_service_name }}
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - "postgresql-{{ .Values.image.tag }}-testing"
+      from:
+        kind: ImageStreamTag
+        {{- range .Values.image.tag }}
+        name: "postgresql:{{ . }}"
+        {{- end }}
+        namespace: {{ .Values.namespace }}
+      lastTriggeredImage: ""
+    type: ImageChange
+  - type: ConfigChange
+status: {}
