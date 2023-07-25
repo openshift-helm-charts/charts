@@ -1,6 +1,6 @@
 chart:
   name: arkady-chart
-  shortDescription: arkady-chart
+  shortDescription: short-arkady-chart
 providerDelivery: true
 publicPgpKey: unknown
 users:
