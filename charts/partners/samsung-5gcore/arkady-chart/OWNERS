@@ -1,0 +1,10 @@
+chart:
+  name: arkady-chart
+  shortDescription: arkady-chart
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: ansvu
+vendor:
+  label: samsung-5gcore
+  name: Red Hat, Inc.
