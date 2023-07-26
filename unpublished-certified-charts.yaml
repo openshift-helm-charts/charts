@@ -96,6 +96,25 @@ entries:
     urls:
     - N/A
     version: 4.2.0
+  - annotations:
+      charts.openshift.io/digest: sha256:d5ed5cae49a309ec1532fa7d56d8f4944880043f987076a6acada79e297067a1
+      charts.openshift.io/lastCertifiedTimestamp: '2023-07-26T12:21:57.154687+00:00'
+      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-07-26T12:43:17.350469+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: 4.3.0
+    description: A Helm chart of Illumio Core for Kubernetes
+    digest: c98a4098f3246a7bd18278a5ffd8421c4ba65468a0cdcaa16016df52fdf81328
+    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
+    kubeVersion: '>=1.20.0-0'
+    name: illumio
+    type: application
+    urls:
+    - N/A
+    version: 4.3.0
   intracom-telecom-nfvri:
   - annotations:
       charts.openshift.io/digest: sha256:001abb541d0be2cc58a5ab6bf75bf0b05023ef37f40f9129ff677db7cef603e3
@@ -2000,4 +2019,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-07-17T12:40:33.577597+00:00'
+generated: '2023-07-26T12:43:17.350469+00:00'
