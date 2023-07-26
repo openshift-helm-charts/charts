@@ -1,0 +1,9 @@
+chart:
+  name: ddosify-community-edition
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: ddosify
+  name: Ddosify Inc.

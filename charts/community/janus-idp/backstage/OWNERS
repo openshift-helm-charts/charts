@@ -4,6 +4,7 @@ chart:
 publicPgpKey: null
 users:
   - githubUsername: sabre1041
+  - githubUsername: tumido
 vendor:
-  label: redhat
-  name: Backstage
+  label: janus-idp
+  name: Janus IDP

@@ -1,0 +1,10 @@
+chart:
+  name: jm-helm-gpg-test
+  shortDescription: Josh Manning GPG Key Test
+providerDelivery: false
+publicPgpKey: somerandomstring
+users:
+- githubUsername: jsm84
+vendor:
+  label: jmanning
+  name: jmanning-uat1

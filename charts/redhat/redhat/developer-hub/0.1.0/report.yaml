@@ -1,0 +1,131 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.12.0
+        profile:
+            VendorType: redhat
+            version: v1.2
+        reportDigest: uint64:6968490722177852570
+        chart-uri: /mnt/chart/developer-hub-0.1.0.tgz
+        digests:
+            chart: sha256:ef0a0625e0aa4e4c8dd8e1190175c25dac725303d9ed4f08f2dacab6285c9b7a
+            package: f47d79b0999e08d0cd880c9e691bdbe35204d4958ad871bb66cf4ab04b4f65b3
+        lastCertifiedTimestamp: "2023-06-29T15:48:30.903369+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: '>=4.6'
+        webCatalogOnly: false
+    chart:
+        name: developer-hub
+        home: https://red.ht/rhdh
+        sources: []
+        version: 0.1.0
+        description: A Helm chart for deploying Red Hat Developer Hub
+        keywords:
+            - backstage
+            - idp
+            - janus-idp
+            - developer-hub
+            - redhat
+        maintainers:
+            - name: Red Hat
+              email: ""
+              url: https://redhat.com
+        icon: data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='0 0 192 145'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill:%23e00;%7D%3C/style%3E%3C/defs%3E%3Ctitle%3ERedHat-Logo-Hat-Color%3C/title%3E%3Cpath d='M157.77,62.61a14,14,0,0,1,.31,3.42c0,14.88-18.1,17.46-30.61,17.46C78.83,83.49,42.53,53.26,42.53,44a6.43,6.43,0,0,1,.22-1.94l-3.66,9.06a18.45,18.45,0,0,0-1.51,7.33c0,18.11,41,45.48,87.74,45.48,20.69,0,36.43-7.76,36.43-21.77,0-1.08,0-1.94-1.73-10.13Z'/%3E%3Cpath class='cls-1' d='M127.47,83.49c12.51,0,30.61-2.58,30.61-17.46a14,14,0,0,0-.31-3.42l-7.45-32.36c-1.72-7.12-3.23-10.35-15.73-16.6C124.89,8.69,103.76.5,97.51.5,91.69.5,90,8,83.06,8c-6.68,0-11.64-5.6-17.89-5.6-6,0-9.91,4.09-12.93,12.5,0,0-8.41,23.72-9.49,27.16A6.43,6.43,0,0,0,42.53,44c0,9.22,36.3,39.45,84.94,39.45M160,72.07c1.73,8.19,1.73,9.05,1.73,10.13,0,14-15.74,21.77-36.43,21.77C78.54,104,37.58,76.6,37.58,58.49a18.45,18.45,0,0,1,1.51-7.33C22.27,52,.5,55,.5,74.22c0,31.48,74.59,70.28,133.65,70.28,45.28,0,56.7-20.48,56.7-36.65,0-12.72-11-27.16-30.83-35.78'/%3E%3C/svg%3E
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.0-8
+        deprecated: false
+        annotations:
+            artifacthub.io/category: integration-delivery
+            artifacthub.io/license: Apache-2.0
+            artifacthub.io/links: |
+                - name: support
+                  url: https://github.com/janus-idp/helm-backstage/issues
+                - name: Chart Source
+                  url: https://github.com/janus-idp/helm-backstage
+                - name: Default Image Source
+                  url: https://github.com/janus-idp/backstage-showcase
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: Red Hat Developer Hub
+            charts.openshift.io/provider: Red Hat
+            charts.openshift.io/supportURL: https://red.ht/rhdh
+        kubeversion: '>= 1.19.0-0'
+        dependencies:
+            - name: common
+              version: 2.4.0
+              repository: https://charts.bitnami.com/bitnami
+              condition: ""
+              tags:
+                - bitnami-common
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: backstage
+              version: 1.1.2
+              repository: https://backstage.github.io/charts
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: upstream
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : quay.io/rhdh/developer-hub-rhel9:1.0-8
+        Image certification skipped : registry.redhat.io/rhel9/postgresql-15:latest
+        Image certification skipped : registry.redhat.io/ubi9:latest
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: FAIL
+      reason: 'chart Install failure: rendered manifests contain a resource that already exists. Unable to continue with install: ConfigMap "backstage-app-config" in namespace "tcoufal-dev" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: key "meta.helm.sh/release-name" must equal "developer-hub-v25xm9jne4": current value is "developer-hub"'
+
