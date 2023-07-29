@@ -31,7 +31,7 @@ Copy report.yaml to tests/data/HC-04/community/
 ### HC-06
 
 ```
-chart-verifier verify https://github.com/openshift-helm-charts/development/blob/main/tests/data/vault-0.17.0.tgz?raw=true --provider-delivery > report.yaml
+chart-verifier verify https://github.com/openshift-helm-charts/development/blob/main/tests/data/vault-0.17.0.tgz?raw=true --web-catalog-only > report.yaml
 Copy report.yaml to tests/data/HC-06/partner/
 ```
 
