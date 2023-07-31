@@ -1,6 +1,6 @@
 chart:
   name: demochart3
-  shortDescription: unknown
+  shortDescription: This is a short description demochart3!
 providerDelivery: true
 publicPgpKey: unknown
 users:
