@@ -1,0 +1,9 @@
+chart:
+  name: sofy-dx
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: hclsoftware
+  name: HCL America Inc
