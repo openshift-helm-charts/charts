@@ -1,0 +1,9 @@
+chart:
+  name: sofy-unica-campaign
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: hclsoftware
+  name: HCL America Inc
