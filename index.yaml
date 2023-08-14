@@ -5044,46 +5044,6 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-dev-3.3.1/pubsubplus-openshift-dev-3.3.1.tgz
     version: 3.3.1
-  - annotations:
-      charts.openshift.io/digest: sha256:dd7742c2a2f7475a1029d322928e336685f99b4d508b9434ee999af203d5fdd4
-      charts.openshift.io/lastCertifiedTimestamp: '2023-08-14T19:23:25.265065+00:00'
-      charts.openshift.io/name: PubSub+ Event Broker for Developers
-      charts.openshift.io/provider: Solace Corporation
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-08-14T22:12:39.454775+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
-      charts.openshift.io/testedOpenShiftVersion: '4.13'
-    apiVersion: v2
-    description: Deploy a minimum footprint single-node non-HA Solace PubSub+ Event
-      Broker Software on OpenShift for development purposes
-    digest: 482e5e8f13e355180ae8d725ed6eecddaf7facbbf6faa5ec45c92ff874d34bf7
-    home: https://dev.solace.com
-    icon: https://solaceproducts.github.io/pubsubplus-kubernetes-helm-quickstart/images/PubSubPlus.png
-    keywords:
-    - solace
-    - pubsubplus
-    - pubsub+
-    - pubsub
-    - messaging
-    - advanced event broker
-    - event broker
-    - event mesh
-    - event streaming
-    - data streaming
-    - event integration
-    - middleware
-    kubeVersion: '>= 1.10.0-0'
-    maintainers:
-    - name: Solace Community Forum
-      url: https://solace.community/
-    - name: Solace Support
-      url: https://solace.com/support/
-    name: pubsubplus-openshift-dev
-    sources:
-    - https://github.com/SolaceProducts/pubsubplus-kubernetes-helm-quickstart
-    urls:
-    - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-dev-3.3.2/pubsubplus-openshift-dev-3.3.2.tgz
-    version: 3.3.2
   solace-pubsubplus-openshift-ha:
   - annotations:
       charts.openshift.io/digest: sha256:00544736dcad0552b0adb2fa72275c9fd04783464b7c072ae35332ffc456d60f
@@ -5203,6 +5163,46 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-ha-3.3.1/pubsubplus-openshift-ha-3.3.1.tgz
     version: 3.3.1
+  - annotations:
+      charts.openshift.io/digest: sha256:129dd74918d4507afb1b6e0871ee54e4ca47588d8f92484fada5adcc52620d2f
+      charts.openshift.io/lastCertifiedTimestamp: '2023-08-14T20:23:53.492458+00:00'
+      charts.openshift.io/name: PubSub+ Event Broker, HA
+      charts.openshift.io/provider: Solace Corporation
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-08-14T22:16:10.916791+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    description: Deploy an HA redundancy group of Solace PubSub+ Event Broker Software
+      on OpenShift
+    digest: 0c8d5f8293a6d8faf4d2f73e7e80867871bfc99e92360740b4c161fc77c2e3cb
+    home: https://dev.solace.com
+    icon: https://solaceproducts.github.io/pubsubplus-kubernetes-helm-quickstart/images/PubSubPlus.png
+    keywords:
+    - solace
+    - pubsubplus
+    - pubsub+
+    - pubsub
+    - messaging
+    - advanced event broker
+    - event broker
+    - event mesh
+    - event streaming
+    - data streaming
+    - event integration
+    - middleware
+    kubeVersion: '>= 1.10.0-0'
+    maintainers:
+    - name: Solace Community Forum
+      url: https://solace.community/
+    - name: Solace Support
+      url: https://solace.com/support/
+    name: pubsubplus-openshift-ha
+    sources:
+    - https://github.com/SolaceProducts/pubsubplus-kubernetes-helm-quickstart
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-ha-3.3.2/pubsubplus-openshift-ha-3.3.2.tgz
+    version: 3.3.2
   telenity-canvas-dmid:
   - annotations:
       charts.openshift.io/digest: sha256:947a298988ef9d58d9efd7d443f09ea8679dd4f177cdefd92da0fa036cab83e7
@@ -6092,4 +6092,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-08-14T22:12:39.454775+00:00'
+generated: '2023-08-14T22:16:10.916791+00:00'
