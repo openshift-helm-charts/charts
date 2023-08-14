@@ -4885,6 +4885,46 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-3.3.1/pubsubplus-openshift-3.3.1.tgz
     version: 3.3.1
+  - annotations:
+      charts.openshift.io/digest: sha256:a801805c57b3a8a726c41b616b056c18c5982ffe7d25ac844adc34db63a5d177
+      charts.openshift.io/lastCertifiedTimestamp: '2023-08-14T19:22:08.34738+00:00'
+      charts.openshift.io/name: PubSub+ Event Broker, non-HA
+      charts.openshift.io/provider: Solace Corporation
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-08-14T22:03:24.302011+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    description: Deploy a single-node non-HA Solace PubSub+ Event Broker Software
+      on OpenShift
+    digest: 5aed1044cf6a5bef1e0d0e47d16180da2188f689be832818dbddbdb77c6806a5
+    home: https://dev.solace.com
+    icon: https://solaceproducts.github.io/pubsubplus-kubernetes-helm-quickstart/images/PubSubPlus.png
+    keywords:
+    - solace
+    - pubsubplus
+    - pubsub+
+    - pubsub
+    - messaging
+    - advanced event broker
+    - event broker
+    - event mesh
+    - event streaming
+    - data streaming
+    - event integration
+    - middleware
+    kubeVersion: '>= 1.10.0-0'
+    maintainers:
+    - name: Solace Community Forum
+      url: https://solace.community/
+    - name: Solace Support
+      url: https://solace.com/support/
+    name: pubsubplus-openshift
+    sources:
+    - https://github.com/SolaceProducts/pubsubplus-kubernetes-helm-quickstart
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-3.3.2/pubsubplus-openshift-3.3.2.tgz
+    version: 3.3.2
   solace-pubsubplus-openshift-dev:
   - annotations:
       charts.openshift.io/digest: sha256:19199b26bcb0740e0643ad6341ae180848f9e73f25bc8e512a5e50e89529eee4
@@ -6012,4 +6052,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-07-27T09:13:18.325790+00:00'
+generated: '2023-08-14T22:03:24.302011+00:00'
