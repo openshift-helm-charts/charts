@@ -1,5 +1,5 @@
 chart:
-  name: python-imagestreams
+  name: redhat-python-imagestreams
   description: This is the Red Hat Python imagestreams chart
 publicPgpKey: null
 users:
