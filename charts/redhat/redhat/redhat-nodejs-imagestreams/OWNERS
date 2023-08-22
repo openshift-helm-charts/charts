@@ -1,5 +1,5 @@
 chart:
-  name: nodejs-imagestreams
+  name: redhat-nodejs-imagestreams
   description: This is the Red Hat NodeJS imagestreams chart
 publicPgpKey: null
 users:
