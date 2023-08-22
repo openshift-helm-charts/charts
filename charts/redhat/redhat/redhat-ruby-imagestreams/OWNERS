@@ -1,5 +1,5 @@
 chart:
-  name: ruby-imagestreams
+  name: redhat-ruby-imagestreams
   description: This is the Red Hat Ruby imagestreams chart
 publicPgpKey: null
 users:
