@@ -1,5 +1,5 @@
 chart:
-  name: php-imagestreams
+  name: redhat-php-imagestreams
   description: This is the Red Hat PHP imagestreams chart
 publicPgpKey: null
 users:
