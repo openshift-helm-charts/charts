@@ -1,5 +1,5 @@
 chart:
-  name: perl-imagestreams
+  name: redhat-perl-imagestreams
   description: This is the Red Hat Perl imagestreams chart
 publicPgpKey: null
 users:
