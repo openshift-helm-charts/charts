@@ -4670,6 +4670,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-php-imagestreams-0.0.1/redhat-php-imagestreams-0.0.1.tgz
     version: 0.0.1
+  redhat-redhat-python-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:8801644ed1c4da57ced8deae3cf0be56ab94df113c41a7301b9c73d4a85b2ff7
+      charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T11:42:57.80258+00:00'
+      charts.openshift.io/name: Red Hat Python imagestreams (experimental).
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2023-08-24T11:43:31.177357+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is experimental, do not use it in production. Python
+      imagestreams for using on OpenShift 4. For more information about using this
+      builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.11/README.md.
+    digest: b461ad3590796b6b0d2455b94ff37c90a9de98a11a661a198a6fd02c53f6b1a1
+    kubeVersion: '>=1.20.0'
+    name: redhat-python-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,python
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-python-imagestreams-0.0.1/redhat-python-imagestreams-0.0.1.tgz
+    version: 0.0.1
   redhat-redis-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:eae26d4b45e70eb169356246007fb953f87ba84b5133da8e549b0df9f0fe54db
@@ -6250,4 +6274,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-08-24T11:27:15.581118+00:00'
+generated: '2023-08-24T11:43:31.177357+00:00'
