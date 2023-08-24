@@ -4622,6 +4622,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nodejs-imagestreams-0.0.3/redhat-nodejs-imagestreams-0.0.3.tgz
     version: 0.0.3
+  redhat-redhat-perl-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:59e0ea50848a68c1710f8efe5c4451a3afd6bd28cb47eb7dd4590b01faf9d49c
+      charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T10:56:43.308577+00:00'
+      charts.openshift.io/name: Red Hat Perl imagestreams (experimental).
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2023-08-24T10:57:22.185257+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is experimental, do not use it in production. Perl imagestreams
+      for using on OpenShift 4. For more information about using this builder image,
+      including OpenShift considerations, see https://github.com/sclorg/s2i-perl-container/blob/master/5.32/README.md.
+    digest: 46c4585ff0f09be369f51eae3d8be8500b27882aba48677d148917a6d79ea6de
+    kubeVersion: '>=1.20.0'
+    name: redhat-perl-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,perl
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-perl-imagestreams-0.0.1/redhat-perl-imagestreams-0.0.1.tgz
+    version: 0.0.1
   redhat-redis-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:eae26d4b45e70eb169356246007fb953f87ba84b5133da8e549b0df9f0fe54db
@@ -6202,4 +6226,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-08-24T07:54:40.706800+00:00'
+generated: '2023-08-24T10:57:22.185257+00:00'
