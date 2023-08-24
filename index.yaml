@@ -4718,6 +4718,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-ruby-imagestreams-0.0.1/redhat-ruby-imagestreams-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:c4a5d468211bd814e32c27c20a1ae121951129152dbfb7d7ee209bef849801ac
+      charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T12:07:28.147863+00:00'
+      charts.openshift.io/name: Red Hat Ruby imagestreams on UBI (experimental).
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2023-08-24T12:08:01.087937+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: This content is experimental, do not use it in production. Ruby imagestreams
+      on UBI. For more information about using this builder image, including OpenShift
+      considerations, see https://github.com/sclorg/s2i-ruby-container/blob/master/3.0/README.md.
+    digest: 29bc9ed3b52300b47816bedee154a59f6f826b246cfa69641011990381ade881
+    kubeVersion: '>=1.20.0'
+    name: redhat-ruby-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,ruby
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-ruby-imagestreams-0.0.2/redhat-ruby-imagestreams-0.0.2.tgz
+    version: 0.0.2
   redhat-redis-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:eae26d4b45e70eb169356246007fb953f87ba84b5133da8e549b0df9f0fe54db
@@ -6298,4 +6321,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-08-24T12:00:17.036191+00:00'
+generated: '2023-08-24T12:08:01.087937+00:00'
