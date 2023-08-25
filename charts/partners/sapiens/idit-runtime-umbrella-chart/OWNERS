@@ -1,0 +1,10 @@
+chart:
+  name: idit-runtime-umbrella-chart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: Digitalpit
+vendor:
+  label: sapiens
+  name: SAPIENS SOFTWARE SOLUTIONS (IDIT) LTD
