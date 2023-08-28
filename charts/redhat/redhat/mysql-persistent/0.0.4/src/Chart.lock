@@ -1,0 +1,6 @@
+dependencies:
+- name: mysql-imagestreams
+  repository: file://../../../../../redhat/redhat/mysql-imagestreams/0.0.1/src
+  version: 0.0.1
+digest: sha256:55e252090d1e9d37485e7f58f074c83d9a977750ba016dee0f969a2880d65901
+generated: "2023-08-28T10:21:00.84705+02:00"
