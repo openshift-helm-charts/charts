@@ -2,16 +2,16 @@ apiversion: v1
 kind: verify-report
 metadata:
     tool:
-        verifier-version: 1.12.1
+        verifier-version: 1.12.2
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:10800224655124558046
+        reportDigest: uint64:16597227322790631861
         chart-uri: https://idit-artifactory.sapiens.com:443/artifactory/idit-devops-local/chart/idit-runtime/1.0.18/idit-runtime-1.0.18.tgz
         digests:
-            chart: sha256:4f454ed42420a2b89a4ff3c265415556c1c3bc244fe94522eefa295b33c0cc7b
-            package: 1af6f76aa182df2e0b3436aaff8cefaecd950b7c2d1712b7a9e8faf6e5f4ce73
-        lastCertifiedTimestamp: "2023-08-28T12:44:39.471229+00:00"
+            chart: sha256:fab6a4449f61299d573b79079e47fc5c680cb4c5dd4c0721ccf4216ce7816c02
+            package: 7b826512e5ffaa235d68a8b036e360461bc748076a12ed544d1988d13339510a
+        lastCertifiedTimestamp: "2023-08-29T07:41:20.074115+00:00"
         testedOpenShiftVersion: "4.10"
         supportedOpenShiftVersions: 4.10 - 4.13
         webCatalogOnly: false
@@ -32,7 +32,7 @@ metadata:
         annotations:
             app.idit/version: 19.2.0.2
             charts.openshift.io/name: IDITSuite 18.
-        kubeversion: '>= 1.23.0 <= 1.26.3'
+        kubeversion: '>=1.23.0 <=1.26.3'
         dependencies:
             - name: mono
               version: 1.0.15
@@ -69,38 +69,18 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: |-
-        Image is Red Hat certified : euaiditinfracr.azurecr.io/certified/active-mq:ubi-master-slave
-        Image is Red Hat certified : euaiditinfracr.azurecr.io/certified/fluent-bit:2.0.5
-        Image is Red Hat certified : euaiditinfracr.azurecr.io/certified/idit-mono:ubilatest
-        Image is Red Hat certified : euaiditinfracr.azurecr.io/certified/test-connection:ubilatest
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
-    - check: v1.0/required-annotations-present
+    - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
+      reason: CSI objects do not exist
     - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
     - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
@@ -109,20 +89,40 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Values file exist
-    - check: v1.1/has-kubeversion
+    - check: v1.0/required-annotations-present
       type: Mandatory
       outcome: PASS
-      reason: Kubernetes version specified
+      reason: All required annotations present
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : euaiditinfracr.azurecr.io/certified/idit-mono:ubilatest
+        Image is Red Hat certified : euaiditinfracr.azurecr.io/certified/test-connection:ubilatest
+        Image is Red Hat certified : euaiditinfracr.azurecr.io/certified/active-mq:ubi-master-slave
+        Image is Red Hat certified : euaiditinfracr.azurecr.io/certified/fluent-bit:2.0.5
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
-    - check: v1.0/not-contain-csi-objects
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-test
       type: Mandatory
       outcome: PASS
-      reason: CSI objects do not exist
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
 
