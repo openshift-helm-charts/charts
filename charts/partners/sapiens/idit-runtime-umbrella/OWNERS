@@ -1,0 +1,9 @@
+chart:
+  name: idit-runtime-umbrella
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: sapiens
+  name: SAPIENS SOFTWARE SOLUTIONS (IDIT) LTD
