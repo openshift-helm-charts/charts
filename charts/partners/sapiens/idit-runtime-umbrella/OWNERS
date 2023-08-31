@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Digitalpit
 vendor:
   label: sapiens
   name: SAPIENS SOFTWARE SOLUTIONS (IDIT) LTD
