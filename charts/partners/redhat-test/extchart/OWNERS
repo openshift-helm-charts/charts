@@ -1,7 +1,8 @@
 chart:
   name: extchart
-  shortDescription: null
-publicPgpKey: null
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: testuserrr
 vendor:

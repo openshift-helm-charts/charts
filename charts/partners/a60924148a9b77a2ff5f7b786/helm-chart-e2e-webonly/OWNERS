@@ -1,0 +1,10 @@
+chart:
+  name: helm-chart-e2e-webonly
+  shortDescription: null
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: bovem
+vendor:
+  label: a60924148a9b77a2ff5f7b786
+  name: Vikas Mulaje

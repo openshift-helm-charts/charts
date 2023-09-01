@@ -1,0 +1,10 @@
+chart:
+  name: smsf-helm-charts
+  shortDescription: Mavenir SMSF Helm Charts
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: kaitaklam
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

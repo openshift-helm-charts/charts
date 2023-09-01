@@ -1,0 +1,88 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.0.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: https://flomesh-io.github.io/helm-charts/flomesh-console-0.70.0-30-ubi8.tgz
+        digests:
+            chart: sha256:285ad867162027142c056417a3c303867d3f8592c59822577af08f4cdd9b56ec
+            package: 5b1c8194f7c932aebcc7909b629e6d821fa5ef719ee587a233275cfcb636492b
+        lastCertifiedTimestamp: "2022-12-08T08:59:42.572296+08:00"
+        testedOpenShiftVersion: "4.10"
+        supportedOpenShiftVersions: '>=4.6'
+        providerControlledDelivery: false
+    chart:
+        name: flomesh-console
+        home: ""
+        sources: []
+        version: 0.70.0-30-ubi8
+        description: A Helm chart to install flomesh-console on Kubernetes
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.70.0-30-ubi8
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: flomesh-console
+        kubeversion: '>= 1.19'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/flomesh/flomesh-console-ubi8:0.70.0-30
+        Image is Red Hat certified : quay.io/flomesh/pipy-repo-ubi8:0.70.0-46
+        Image is Red Hat certified : quay.io/flomesh/curl-ubi8:7.84.0
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs

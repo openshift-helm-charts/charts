@@ -1,0 +1,10 @@
+chart:
+  name: udsf
+  shortDescription: Mavenir 5GCore UDSF CNF Helm charts
+publicPgpKey: null
+providerDelivery: True
+users:
+- githubUsername: k-anirwan
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

@@ -1,0 +1,9 @@
+chart:
+  name: yanai-test-1
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: ntest
+  name: ypresa-uat1

@@ -1,0 +1,12 @@
+chart:
+  name: semeru-transition
+  shortDescription: null
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: levivic
+- githubUsername: redmark-redhat
+- githubUsername: dale-fu
+vendor:
+  label: abel
+  name: Red Hat

@@ -1,5 +1,6 @@
 import re
 import os
+import os.path
 import sys
 import argparse
 import subprocess
@@ -20,6 +21,9 @@ except ImportError:
 sys.path.append('../')
 from report import report_info
 from report import verifier_report
+from signedchart import signedchart
+from pullrequest import prartifact
+from tools import gitutils
 
 def write_error_log(directory, *msg):
     os.makedirs(directory, exist_ok=True)
@@ -37,20 +41,12 @@ def get_vendor_type(directory):
         sys.exit(1)
     return vendor_type
 
-def get_labels(api_url):
-    # api_url https://api.github.com/repos/<organization-name>/<repository-name>/pulls/1
-    headers = {'Accept': 'application/vnd.github.v3+json'}
-    r = requests.get(api_url, headers=headers)
-    return r.json()["labels"]
-
 def get_modified_charts(directory, api_url):
     print("[INFO] Get modified charts. %s" %directory)
-    files_api_url = f'{api_url}/files'
-    headers = {'Accept': 'application/vnd.github.v3+json'}
-    r = requests.get(files_api_url, headers=headers)
+    files = prartifact.get_modified_files(api_url)
     pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
-    for f in r.json():
-        m = pattern.match(f["filename"])
+    for file_path in files:
+        m = pattern.match(file_path)
         if m:
             category, organization, chart, version = m.groups()
             return category, organization, chart, version
@@ -94,21 +90,24 @@ def check_owners_file_against_directory_structure(directory,username, category, 
 
 def verify_signature(directory, category, organization, chart, version):
     print("[INFO] Verify signature. %s, %s, %s" % (organization, chart, version))
-    data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
-    out = yaml.load(data, Loader=Loader)
-    publickey = out.get('publicPgpKey')
-    if not publickey:
-        return
-    with open("public.key", "w") as fd:
-        fd.write(publickey)
-    out = subprocess.run(["gpg", "--import", "public.key"], capture_output=True)
-    print("[INFO]", out.stdout.decode("utf-8"))
-    print("[WARNING]", out.stderr.decode("utf-8"))
-    report = os.path.join("charts", category, organization, chart, version, "report.yaml")
     sign = os.path.join("charts", category, organization, chart, version, "report.yaml.asc")
-    out = subprocess.run(["gpg", "--verify", sign, report], capture_output=True)
-    print("[INFO]", out.stdout.decode("utf-8"))
-    print("[WARNING]", out.stderr.decode("utf-8"))
+    if os.path.exists(sign):
+        data = open(os.path.join("charts", category, organization, chart, "OWNERS")).read()
+        out = yaml.load(data, Loader=Loader)
+        publickey = out.get('publicPgpKey')
+        if not publickey:
+            return
+        with open("public.key", "w") as fd:
+            fd.write(publickey)
+        out = subprocess.run(["gpg", "--import", "public.key"], capture_output=True)
+        print("[INFO]", out.stdout.decode("utf-8"))
+        print("[WARNING]", out.stderr.decode("utf-8"))
+        report = os.path.join("charts", category, organization, chart, version, "report.yaml")
+        out = subprocess.run(["gpg", "--verify", sign, report], capture_output=True)
+        print("[INFO]", out.stdout.decode("utf-8"))
+        print("[WARNING]", out.stderr.decode("utf-8"))
+    else:
+        print(f"[INFO] Signed report not found: {sign}.")
 
 def match_checksum(directory,generated_report_info_path,category, organization, chart, version):
     print("[INFO] Check digests match. %s, %s, %s" % (organization, chart, version))
@@ -213,7 +212,7 @@ def check_report_success(directory, api_url, report_path, report_info_path, vers
     print("[INFO] Full report: ")
     print(data)
     quoted_data = data.replace("%", "%25").replace("\n", "%0A").replace("\r", "%0D")
-    print(f"::set-output name=report_content::{quoted_data}")
+    gitutils.add_output("report_content",quoted_data)
 
     chart = report_info.get_report_chart(report_path=report_path,report_info_path=report_info_path)
     report_version = chart["version"]
@@ -255,8 +254,7 @@ def check_report_success(directory, api_url, report_path, report_info_path, vers
 
     report = report_info.get_report_results(report_path=report_path,report_info_path=report_info_path,profile_type=vendor_type)
 
-    labels = get_labels(api_url)
-    label_names = [l["name"] for l in labels]
+    label_names = prartifact.get_labels(api_url)
 
     failed = report["failed"]
     passed = report["passed"]
@@ -271,17 +269,17 @@ def check_report_success(directory, api_url, report_path, report_info_path, vers
             msgs.append(f"  - {m}")
         write_error_log(directory, *msgs)
         if vendor_type == "redhat":
-            print(f"::set-output name=redhat_to_community::True")
+            gitutils.add_output("redhat_to_community","True")
         if vendor_type != "redhat" and "force-publish" not in label_names:
             if vendor_type == "community":
                 # requires manual review and approval
-                print(f"::set-output name=community_manual_review_required::True")
+                gitutils.add_output("community_manual_review_required","True")
             sys.exit(1)
 
     if vendor_type == "community" and "force-publish" not in label_names:
         # requires manual review and approval
         print("[INFO] Community submission requires manual approval.")
-        print(f"::set-output name=community_manual_review_required::True")
+        gitutils.add_output("community_manual_review_required","True")
         sys.exit(1)
 
     if failures_in_report or vendor_type == "community":
@@ -344,15 +342,25 @@ def main():
             print(f"[ERROR] {msg}")
             write_error_log(args.directory, msg)
             sys.exit(1)
-        else:
-            print("[INFO] Submitted report passed validity check!")
 
+        print("[INFO] Submitted report passed validity check!")
+        owners_file = os.path.join("charts", category, organization, chart, "OWNERS")
+        pgp_key_in_owners = signedchart.get_pgp_key_from_owners(owners_file)
+        if pgp_key_in_owners:
+            if signedchart.check_report_for_signed_chart(submitted_report_path):
+                if not signedchart.check_pgp_public_key(pgp_key_in_owners,submitted_report_path):
+                    msg = f"PGP key in OWNERS file does not match with key digest in report."
+                    print(f"[ERROR] {msg}")
+                    write_error_log(args.directory, msg)
+                    sys.exit(1)
+                else:
+                    print("[INFO] PGP key in OWNERS file matches with key digest in report.")
 
     report_generated = os.environ.get("REPORT_GENERATED")
     generated_report_path = os.environ.get("GENERATED_REPORT_PATH")
     generated_report_info_path =  os.environ.get("REPORT_SUMMARY_PATH")
     env = Env()
-    provider_delivery = env.bool("PROVIDER_DELIVERY",False)
+    web_catalog_only = env.bool("WEB_CATALOG_ONLY",False)
 
     if os.path.exists(submitted_report_path):
         print("[INFO] Report exists: ", submitted_report_path)
@@ -361,7 +369,7 @@ def main():
         report_info_path = ""
         if report_generated and report_generated == "True":
             match_checksum(args.directory,generated_report_info_path, category, organization, chart, version)
-        elif not provider_delivery:
+        elif not web_catalog_only:
             check_url(args.directory, report_path)
     else:
         print("[INFO] Report does not exist: ", submitted_report_path)

@@ -1,0 +1,14 @@
+description: |-
+  This content is expermental, do not use it in production. Provides a MySQL 8.0 database.
+  For more information about using this database image, including OpenShift considerations,
+  see https://github.com/sclorg/mysql-container/blob/master/README.md.
+annotations:
+  charts.openshift.io/name: Red Hat MySQL database service imagestreams (experimental).
+apiVersion: v2
+appVersion: 0.0.1
+kubeVersion: '>=1.20.0'
+name: mysql-imagestreams
+tags: database,mysql
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.1

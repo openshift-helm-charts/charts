@@ -1,0 +1,12 @@
+chart:
+  name: nobl9-agent
+  shortDescription: Nobl9 Agent - Agent to retrieve SLI metrics from configured data
+    sources and send the data back to the Nobl9 backend.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: triluch
+- githubUsername: alexnauda
+vendor:
+  label: nobl9
+  name: Nobl9

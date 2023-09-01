@@ -1,0 +1,11 @@
+chart:
+  name: opscruise
+  shortDescription: Helm chart for deploying OpsCruise
+providerDelivery: false
+publicPgpKey: null
+users:
+- githubUsername: sudheeshopscruise
+- githubUsername: cesar-quintana-opscruise
+vendor:
+  label: opscruise
+  name: Opscruise, Inc.

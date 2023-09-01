@@ -1,0 +1,11 @@
+chart:
+  name: ai-sensor
+  shortDescription: This is actually temporary - we do not use GitHub at all. Need.
+    to discuss separately.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: miggi
+vendor:
+  label: edgelabs
+  name: AI EdgeLabs

@@ -1,6 +1,7 @@
 chart:
   name: abot-ocp-helm
   shortDescription: abot
+providerDelivery: false
 publicPgpKey: null
 users:
 - githubUsername: suchi-rebaca

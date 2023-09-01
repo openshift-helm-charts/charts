@@ -1,9 +1,10 @@
 chart:
   name: du
-  shortDescription: null
-publicPgpKey: null
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: shantanushivanekar123
 vendor:
   label: mavenir
-  name: Mavenir
+  name: Mavenir Systems Inc.

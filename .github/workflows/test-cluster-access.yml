@@ -1,0 +1,28 @@
+name: Test Cluster Access
+
+# Intended to be used when cluster secrets change (e.g. when transitioning to
+# new clusters), this workflow confirms access to the cluster.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-cluster-access:
+    name: Test Cluster Access
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Install oc
+      uses: redhat-actions/openshift-tools-installer@v1
+      with:
+        oc: latest
+    - name: Read API_SERVER endpoint
+      id: login-params
+      run: |
+        API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
+        echo "API_SERVER=${API_SERVER}" >> $GITHUB_OUTPUT
+    - uses: redhat-actions/oc-login@v1
+      id: oc_login
+      with:
+        openshift_server_url: ${{ steps.login-params.outputs.API_SERVER }}
+        openshift_token: ${{ secrets.CLUSTER_TOKEN }}
+        insecure_skip_tls_verify: true

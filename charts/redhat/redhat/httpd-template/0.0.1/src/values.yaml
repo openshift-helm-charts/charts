@@ -1,0 +1,11 @@
+application_domain: "" # TODO: must define a default value for .application_domain
+context_dir: "" # TODO: must define a default value for .context_dir
+generic_webhook_secret: "SOMETHING" # TODO: must define a default value for .generic_webhook_secret
+github_webhook_secret: "FOOBAR" # TODO: must define a default value for .github_webhook_secret
+httpd_version: 2.4-el8
+memory_limit: 512Mi
+name: httpd
+namespace: openshift
+source_repository_ref: master # TODO: must define a default value for .source_repository_ref
+source_repository_url: https://github.com/sclorg/httpd-ex.git
+expected_str: Welcome to your static httpd application on OpenShift

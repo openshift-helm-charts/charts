@@ -1,0 +1,101 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.9.0
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:76436689547436495
+        chart-uri: https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
+        digests:
+            chart: sha256:6e6edeb0cd098762e8e5c7ffc0c3005bdb61b2af6ed7b3725aeb3d6ac41d4806
+            package: 413e8c1befc0ecabb0a894d774f129a867d594f825c43869a457eb338faeb909
+        lastCertifiedTimestamp: "2022-11-17T10:21:33.625598+05:30"
+        testedOpenShiftVersion: "4.11"
+        supportedOpenShiftVersions: '>=4.4'
+        providerControlledDelivery: false
+    chart:
+        name: yugaware-openshift
+        home: https://www.yugabyte.com
+        sources: []
+        version: 2.14.4
+        description: YugaWare is YugaByte Database's Orchestration and Management console.
+        keywords: []
+        maintainers:
+            - name: Sanketh Indarapu
+              email: sanketh@yugabyte.com
+              url: ""
+            - name: Govardhan Reddy Jalla
+              email: gjalla@yugabyte.com
+              url: ""
+        icon: https://avatars0.githubusercontent.com/u/17074854?s=200&v=4
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.14.4.0-b26
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: yugaware-openshift
+        kubeversion: '>=1.17.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : registry.redhat.io/rhscl/postgresql-13-rhel7:1-88.1661531722 : No images found for Registry/Repository: registry.redhat.io/rhscl/postgresql-13-rhel7
+        Image is not Red Hat certified : registry.redhat.io/openshift4/ose-prometheus:v4.11.0 : No images found for Registry/Repository: registry.redhat.io/openshift4/ose-prometheus
+        Image is Red Hat certified : quay.io/yugabyte/yugaware-ubi:2.14.4.0-b26
+        Image is Red Hat certified : registry.access.redhat.com/ubi8/nginx-120:1-60.1665590917
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+

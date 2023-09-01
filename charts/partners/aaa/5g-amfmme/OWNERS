@@ -1,0 +1,9 @@
+chart:
+  name: 5g-amfmme
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: aaa
+  name: Samsung Electronics Co., Ltd.

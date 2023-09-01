@@ -1,0 +1,10 @@
+chart:
+  name: backstage
+  shortDescription: A Helm chart for Backstage
+publicPgpKey: null
+users:
+  - githubUsername: sabre1041
+  - githubUsername: tumido
+vendor:
+  label: janus-idp
+  name: Janus IDP

@@ -1,0 +1,10 @@
+chart:
+  name: kubetruth
+  shortDescription: CloudTruth KubeTruth kunernetes operator
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: any
+vendor:
+  label: cloudtruth
+  name: CloudTruth

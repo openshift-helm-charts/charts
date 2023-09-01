@@ -1,0 +1,172 @@
+# Default values for carbonio.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access carbonio
+service:
+  # -- service type
+  type: ClusterIP
+  # -- addtional annotations, if required
+  annotations: {}
+
+# -- if a specific service account should be used, it can be configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+  # -- specifies the account name
+serviceAccountName: "sa-with-anyuid"
+
+# Image pull secret to use for registry authentication.
+imagePullSecrets: []
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the carbonio update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- carbonio image name
+    repository: registry.connect.redhat.com/zextras/carbonio
+    # -- tag of the image to be used
+    tag: "23.3.0-single"
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  # -- carbonio resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  # for the autoscaling to make sense, you should configure this.
+  # resources:
+  # limits:
+  # cpu: 100m
+  # memory: 128Mi
+  # requests:
+  # cpu: 100m
+  # memory: 128Mi
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  ## liveness and readiness probes of the carbonio broker, they will be evaluated against the version endpoint
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+  # -- additional sidepods for the deployment, if required
+  sidecars: []
+  # -- additional volumes for the deployment, if required
+  volumes: []
+
+## pod autoscaling configuration, use for automatic scaling of the broker pods
+autoscaling:
+  # -- should autoscaling be enabled for the context broker
+  enabled: false
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- metrics to react on
+  metrics: []
+  # -- List of MetricSpecs to decide whether to scale
+  # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#metricspec-v2beta2-autoscaling
+  # scaler targets to hold average cpu around 80%
+  #- type: Resource
+  #  resource:
+  #    name: cpu
+  #    target:
+  #      type: Utilization
+  #      averageUtilization: 80
+  ## scaler targets to hold average memory around 80%
+  #  - type: Resource
+  #    resource:
+  #      name: memory
+  #      target:
+  #        type: Utilization
+  #        averageUtilization: 80
+
+## openshift specific route definition. Will not work on plain k8s
+route:
+  ## -- should the deployment create openshift routes
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  # host: localhost
+  # -- tls configuration for the route
+  tls: {}
+  # termination: edge
+
+## ingress configuration
+ingress:
+  # -- should there be an ingress to connect carbonio with the public internet
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: "ambassador"
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+  # -- all hosts to be provided
+  hosts:
+    []
+    # -- provide a hosts and the paths that should be available
+    # - host: localhost
+    # paths:
+    # - /
+  # -- configure the ingress' tls
+  tls:
+    []
+    # - secretName: carbonio-tls
+    # hosts:
+    # - carbonio.mail.local
+
+podAnnotations: {}
+
+podSecurityContext: {}
+securityContext:
+  runAsUser: 0
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

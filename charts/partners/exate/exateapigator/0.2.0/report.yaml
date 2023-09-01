@@ -1,0 +1,93 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.9.0
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:4195423915235881051
+        chart-uri: https://charts.test.exate.co/chartrepo/exate-apigator/charts/exateapigator-0.2.0.tgz
+        digests:
+            chart: sha256:ce2cb79a98a59445871080e9d97cd364dd0ae380035bb34a662237184a2a039c
+            package: 1fe6a1654d591af227f39b37bb754e3765e1317a0684c555ed1c96f868f6aac4
+        lastCertifiedTimestamp: "2023-01-19T13:26:43.568612+00:00"
+        testedOpenShiftVersion: "4.6"
+        supportedOpenShiftVersions: '>=4.3'
+        providerControlledDelivery: false
+    chart:
+        name: exateapigator
+        home: https://dev.azure.com/exatetechnology/exatetechnology/
+        sources: []
+        version: 0.2.0
+        description: An eXate APIgator application deployment
+        keywords: []
+        maintainers:
+            - name: eXate Technology
+              email: ""
+              url: ""
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.2.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: exateapigator
+        kubeversion: '>= 1.16.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : oneartifactoryexate.azurecr.io/exateapigator:2.11.00'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present

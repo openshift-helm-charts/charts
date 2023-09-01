@@ -1,0 +1,96 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.0.0
+        profile:
+            VendorType: partner
+            version: v1.1
+        chart-uri: N/A
+        digests:
+            chart: sha256:625230dea241958ee417a302768f0b79ca8199ac3dea19980f92a7908b9aa557
+            package: 85a029e9234ba18bb4694f2d763bf689a25bc22e462301b3e2ddc7c52d5b5bdb
+        lastCertifiedTimestamp: "2022-12-15T21:24:42.990199+00:00"
+        testedOpenShiftVersion: "4.10"
+        supportedOpenShiftVersions: '>=4.3'
+        providerControlledDelivery: true
+    chart:
+        name: hivemetastore
+        home: ""
+        sources: []
+        version: 0.4.5
+        description: Hive Metastore Application
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.4.5
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: hivemetastore
+            charts.openshift.io/provider: Mobileum Inc.
+            charts.openshift.io/supportURL: http://www.mobileum.com
+        kubeversion: '>= 1.16.0-0'
+        dependencies:
+            - name: aip-common
+              version: 0.3.1
+              repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: 'Image is not Red Hat certified : partner.cnfcert.nmlab.com:5000/hivemetastore:0.4.5 : No images found for Registry/Repository: partner.cnfcert.nmlab.com:5000/hivemetastore'
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified

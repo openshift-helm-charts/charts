@@ -1,0 +1,9 @@
+chart:
+  name: mysql-imagestreams
+  description: This is the Red Hat MySQL imagestreams chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat

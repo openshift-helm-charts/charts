@@ -1,0 +1,10 @@
+chart:
+  name: mco
+  shortDescription: Mavenir MCO CNF Helm charts
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: kaitaklam
+vendor:
+  label: mavenir
+  name: Mavenir Systems Inc.

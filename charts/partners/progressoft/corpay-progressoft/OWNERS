@@ -1,0 +1,12 @@
+chart:
+  name: corpay-progressoft
+  shortDescription: "ProgressSoft\u2019s Corporate Banking (PS-CORPay) Suite introduces\
+    \ a solution that enables corporates to manage front-office banking services."
+providerDelivery: true
+publicPgpKey: null
+users:
+- githubUsername: nour-alsatari
+- githubUsername: naelalbashir
+vendor:
+  label: progressoft
+  name: ProgressSoft Corporation

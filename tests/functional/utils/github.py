@@ -10,11 +10,8 @@ from functional.utils.setttings import *
 
 @retry(stop_max_delay=30_000, wait_fixed=1000)
 def get_run_id(secrets, pr_number=None):
-    pr_number = secrets.pr_number if pr_number is None else pr_number
-    r = github_api(
-        'post', f'repos/{secrets.test_repo}/pulls/{pr_number}', secrets.bot_token)
-    pr = json.loads(r.text)
 
+    pr = get_pr(secrets, pr_number)
     r = github_api(
         'get', f'repos/{secrets.test_repo}/actions/runs', secrets.bot_token)
     runs = json.loads(r.text)
@@ -26,7 +23,7 @@ def get_run_id(secrets, pr_number=None):
         raise Exception("Workflow for the submitted PR did not run.")
 
 
-@retry(stop_max_delay=60_000*10, wait_fixed=2000)
+@retry(stop_max_delay=60_000*40, wait_fixed=2000)
 def get_run_result(secrets, run_id):
     r = github_api(
         'get', f'repos/{secrets.test_repo}/actions/runs/{run_id}', secrets.bot_token)
@@ -61,6 +58,15 @@ def get_release_by_tag(secrets, release_tag):
         if release['tag_name'] == release_tag:
             return release
     raise Exception("Release not published")
+
+
+def get_pr(secrets, pr_number=None):
+    pr_number = secrets.pr_number if pr_number is None else pr_number
+    r = github_api(
+        'post', f'repos/{secrets.test_repo}/pulls/{pr_number}', secrets.bot_token)
+    pr = json.loads(r.text)
+    return pr
+
 
 def github_api_get(endpoint, bot_token, headers={}):
     if not headers:

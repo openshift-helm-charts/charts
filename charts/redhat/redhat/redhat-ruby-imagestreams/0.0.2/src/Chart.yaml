@@ -1,0 +1,14 @@
+description: |-
+  This content is experimental, do not use it in production. Ruby imagestreams on UBI.
+  For more information about using this builder image, including OpenShift considerations,
+  see https://github.com/sclorg/s2i-ruby-container/blob/master/3.0/README.md.
+annotations:
+  charts.openshift.io/name: Red Hat Ruby imagestreams on UBI (experimental).
+apiVersion: v2
+appVersion: 0.0.2
+kubeVersion: '>=1.20.0'
+name: redhat-ruby-imagestreams
+tags: builder,ruby
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.2

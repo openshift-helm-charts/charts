@@ -1,0 +1,58 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "database_service_name": {
+            "type": "string",
+            "pattern": "^[a-z0-9-_]+$"
+        },
+        "namespace": {
+            "type": "string"
+        },
+        "config": {
+            "type": "object",
+            "properties": {
+                "postgresql_database": {
+                    "type": "string"
+                },
+                "postgresql_password": {
+                    "type": "string"
+                },
+                "postgresql_user": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
+        "volume_capacity": {
+            "type": "string",
+            "title": "Persistent Volume Size",
+            "form": true,
+            "render": "slider",
+            "sliderMin": 1,
+            "sliderMax": 100,
+            "sliderUnit": "Gi"
+        },
+        "memory_limit": {
+            "type": "string",
+            "title": "Database memory limit",
+            "form": true,
+            "render": "slider",
+            "sliderMin": 512,
+            "sliderMax": 65536,
+            "sliderUnit": "Mi"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "tag": {
+                    "type": "string",
+                    "description": "Specify postgresql imagestream tag",
+                    "enum": ["latest", "13-el9", "13-el8", "13-el7", "12-el8", "12-el7", "12", "10-el8", "10-el7", "10" ]
+                }
+            }
+        }
+    }
+}

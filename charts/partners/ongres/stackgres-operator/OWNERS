@@ -1,12 +1,13 @@
 chart:
   name: stackgres-operator
   shortDescription: null
+providerDelivery: false
 publicPgpKey: null
 users:
-- githubUsername: sebastianwebber
 - githubUsername: ahachete
 - githubUsername: gelias
 - githubUsername: teoincontatto
+- githubUsername: jorsol
 vendor:
   label: ongres
   name: OnGres
