@@ -1,0 +1,110 @@
+No images found for Registry/Repository: quay.io/ss8inc/fluent-bit
+W0831 18:20:22.301787       1 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (containers "fluent-bit", "log-daemon", "ccpag" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (containers "fluent-bit", "log-daemon", "ccpag" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or containers "fluent-bit", "log-daemon", "ccpag" must set securityContext.runAsNonRoot=true), seccompProfile (pod or containers "fluent-bit", "log-daemon", "ccpag" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+W0831 18:20:44.489849       1 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "ccpag-svc-test" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "ccpag-svc-test" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "ccpag-svc-test" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "ccpag-svc-test" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.12.2
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:6593480168568381275
+        chart-uri: N/A
+        digests:
+            chart: sha256:551c968e96c93294041faab7c3281ce9e038c628a2444b24edbe348f7dd6870b
+            package: 7392b6f09c37c5e5f7aaff87b4fa192f7dcaf05edeca2565a252fba5bb583e6d
+        lastCertifiedTimestamp: "2023-08-31T18:20:48.139361+00:00"
+        testedOpenShiftVersion: "4.12"
+        supportedOpenShiftVersions: '>=4.12'
+        webCatalogOnly: true
+    chart:
+        name: xcipio-helm-ccpag
+        home: www.ss8.com
+        sources: []
+        version: 0.1.0
+        description: A Helm chart to deploy SS8 CCPAG micro-services in Kubernetes. SS8 CCPAG is scalable Mediation Communication Content (CC) aggregator function from POIs toward MDF3.
+        keywords:
+            - 5g
+            - mediation
+            - ccpag
+        maintainers:
+            - name: SS8 Networks Inc.
+              email: ""
+              url: https://www.ss8.com/
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.1.1.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: xcipio-helm-ccpag
+        kubeversion: '>= 1.25.0-0'
+        dependencies:
+            - name: ss8-utils
+              version: 0.1.0
+              repository: file://../ss8-utils/
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : quay.io/ss8inc/fluent-bit:2.0.10
+        Image is Red Hat certified : quay.io/ss8inc/ccpag@sha256:d068119306b95975432b1b2d4e9c7e53f47683571b80c30d7495be5724c78b72
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+
