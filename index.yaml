@@ -3027,6 +3027,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/nabstract-nef-nabstract-1.1.0/nef-nabstract-1.1.0.tgz
     version: 1.1.0
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: NEF
+      catalog.cattle.io/release-name: nef-nabstract
+      charts.openshift.io/digest: sha256:ed143d98e9dfb876a512ee7cb485c871306872755ea8e2e14c2b7ed3cea73709
+      charts.openshift.io/lastCertifiedTimestamp: '2023-09-11T12:59:56.214977+00:00'
+      charts.openshift.io/name: nef-nabstract
+      charts.openshift.io/provider: Nabstract Technologies Pvt. Ltd.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-09-11T20:20:58.330352+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 2.5.7
+    description: NABSTRACT NEF deployment Helm chart
+    digest: 493da0bdb2b167b6e81359104e1af1afde93e27b12171c715adb989765582288
+    kubeVersion: '>= 1.25.0'
+    name: nef-nabstract
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/nabstract-nef-nabstract-2.0.0/nef-nabstract-2.0.0.tgz
+    version: 2.0.0
   nearby-computing-nearbyone-controller:
   - annotations:
       charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
@@ -6363,4 +6385,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-08-29T20:09:01.989627+00:00'
+generated: '2023-09-11T20:20:58.330352+00:00'
