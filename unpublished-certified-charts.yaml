@@ -1971,6 +1971,41 @@ entries:
     urls:
     - N/A
     version: 19.0.3
+  sapiens-idit-runtime:
+  - annotations:
+      app.idit/version: 19.2.0.2
+      charts.openshift.io/digest: sha256:fab6a4449f61299d573b79079e47fc5c680cb4c5dd4c0721ccf4216ce7816c02
+      charts.openshift.io/lastCertifiedTimestamp: '2023-09-12T10:00:00.72244+00:00'
+      charts.openshift.io/name: IDITSuite 18.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-09-12T12:11:20.772626+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: 4.10 - 4.13
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 1.16.0
+    dependencies:
+    - name: mono
+      repository: https://harbor.idit.sapiens.com/chartrepo/core
+      version: 1.0.15
+    - name: apache-active-mq
+      repository: https://harbor.idit.sapiens.com/chartrepo/infrastructure
+      version: 1.0.10
+    - condition: sua.enabled
+      name: sua
+      repository: https://harbor.idit.sapiens.com/chartrepo/core
+      version: 1.0.7
+    - condition: sua.enabled
+      name: couchbase-setup
+      repository: https://harbor.idit.sapiens.com/chartrepo/core
+      version: 1.0.5
+    description: A Helm chart for Kubernetes
+    digest: 7b826512e5ffaa235d68a8b036e360461bc748076a12ed544d1988d13339510a
+    kubeVersion: '>=1.23.0 <=1.26.3'
+    name: idit-runtime
+    type: application
+    urls:
+    - N/A
+    version: 1.0.18
   vitagroupag-cdr-core-ehrbase-enterprise:
   - annotations:
       charts.openshift.io/digest: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
@@ -2019,4 +2054,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-07-26T12:43:17.350469+00:00'
+generated: '2023-09-12T12:11:20.772626+00:00'
