@@ -2006,6 +2006,39 @@ entries:
     urls:
     - N/A
     version: 1.0.18
+  ss8inc-xcipio-helm-ccpag-0-1-0:
+  - annotations:
+      charts.openshift.io/digest: sha256:b8f84b535f8c2ffae810fde86685b7b18c38acce57cf3f8cdb0f6a66eb63cc68
+      charts.openshift.io/lastCertifiedTimestamp: '2023-09-13T18:22:08.477333+00:00'
+      charts.openshift.io/name: xcipio-helm-ccpag
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-09-13T18:28:11.837123+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 1.1.1.0
+    dependencies:
+    - name: ss8-utils
+      repository: file://../ss8-utils/
+      version: 0.1.0
+    description: A Helm chart to deploy SS8 CCPAG micro-services in Kubernetes. SS8
+      CCPAG is scalable Mediation Communication Content (CC) aggregator function from
+      POIs toward MDF3.
+    digest: 2f4bb8e7f997d4d126c217691dea3ecc3323a68f7e4d97c97df33d51b1b8adb4
+    home: www.ss8.com
+    keywords:
+    - 5g
+    - mediation
+    - ccpag
+    kubeVersion: '>= 1.25.0-0'
+    maintainers:
+    - name: SS8 Networks Inc.
+      url: https://www.ss8.com/
+    name: xcipio-helm-ccpag-0-1-0
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
   vitagroupag-cdr-core-ehrbase-enterprise:
   - annotations:
       charts.openshift.io/digest: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
@@ -2054,4 +2087,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-09-12T12:11:20.772626+00:00'
+generated: '2023-09-13T18:28:11.837123+00:00'
