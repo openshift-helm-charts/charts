@@ -1,6 +1,3 @@
-W0901 17:02:33.401741       1 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (containers "fluent-bit", "log-daemon", "ccpag" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (containers "fluent-bit", "log-daemon", "ccpag" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or containers "fluent-bit", "log-daemon", "ccpag" must set securityContext.runAsNonRoot=true), seccompProfile (pod or containers "fluent-bit", "log-daemon", "ccpag" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
-W0901 17:02:55.587891       1 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "ccpag-svc-test" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "ccpag-svc-test" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "ccpag-svc-test" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "ccpag-svc-test" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
-No images found for Registry/Repository: quay.io/ss8inc/fluent-bit
 apiversion: v1
 kind: verify-report
 metadata:
@@ -9,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:16626390472653143969
+        reportDigest: uint64:5260882247318741426
         chart-uri: N/A
         digests:
-            chart: sha256:7e0ddf95fd21baf8a7bf4ade3973e410023d6e2960c494a4e03a1d9c4921bc49
-            package: bb4a5b5b0fd9ec1678ac28b1d22ef0e0f961e41bdbdbe75ec40e171c074b0da7
-        lastCertifiedTimestamp: "2023-09-01T17:03:00.972946+00:00"
+            chart: sha256:b8f84b535f8c2ffae810fde86685b7b18c38acce57cf3f8cdb0f6a66eb63cc68
+            package: 2f4bb8e7f997d4d126c217691dea3ecc3323a68f7e4d97c97df33d51b1b8adb4
+        lastCertifiedTimestamp: "2023-09-13T18:22:08.477333+00:00"
         testedOpenShiftVersion: "4.12"
         supportedOpenShiftVersions: '>=4.12'
         webCatalogOnly: true
@@ -53,26 +50,14 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/contains-values-schema
+    - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
-      reason: Values schema file exist
+      reason: API version is V2, used in Helm 3
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
     - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
@@ -81,30 +66,42 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart test files exist
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: FAIL
-      reason: |-
-        Image is not Red Hat certified : quay.io/ss8inc/fluent-bit:2.0.10
-        Image is Red Hat certified : quay.io/ss8inc/ccpag@sha256:d068119306b95975432b1b2d4e9c7e53f47683571b80c30d7495be5724c78b72
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
       reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/ss8inc/ccpag@sha256:d068119306b95975432b1b2d4e9c7e53f47683571b80c30d7495be5724c78b72
+        Image is Red Hat certified : registry.connect.redhat.com/calyptia/fluent-bit@sha256:dc57292fbd061d5fd97c7cccb801b096f78ec87f31c55147ff741b760ee23dff
 
