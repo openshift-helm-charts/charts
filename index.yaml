@@ -6382,6 +6382,33 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.14.4.tgz
     version: 2.14.4
+  - annotations:
+      charts.openshift.io/digest: sha256:ddc9efea3fa5972062bbd15cd74964b6c5eaefa09ee7c1b6f1644b31cb495a45
+      charts.openshift.io/lastCertifiedTimestamp: '2023-09-13T07:48:59.636956+00:00'
+      charts.openshift.io/name: yugaware-openshift
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-09-13T08:03:00.033642+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 2.18.2.1-b1
+    description: YugabyteDB Anywhere provides deployment, orchestration, and monitoring
+      for managing YugabyteDB clusters. YugabyteDB Anywhere can create a YugabyteDB
+      cluster with multiple pods provided by Kubernetes or OpenShift and logically
+      grouped together to form one logical distributed database.
+    digest: 3f2c6c13031abd5148a70f6d2871809067d4e9e8569e503a87636302cd9222d9
+    home: https://www.yugabyte.com
+    icon: https://avatars0.githubusercontent.com/u/17074854?s=200&v=4
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: sanketh@yugabyte.com
+      name: Sanketh Indarapu
+    - email: gjalla@yugabyte.com
+      name: Govardhan Reddy Jalla
+    name: yugaware-openshift
+    urls:
+    - https://charts.yugabyte.com/yugaware-openshift-2.18.2.tgz
+    version: 2.18.2
   zextras-carbonio:
   - annotations:
       charts.openshift.io/digest: sha256:a93c347dd88ce22a68a4c2ecb7d6c05c211db6c297b57cdd912403ee5e578857
@@ -6431,4 +6458,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-09-12T17:06:57.487922+00:00'
+generated: '2023-09-13T08:03:00.033642+00:00'
