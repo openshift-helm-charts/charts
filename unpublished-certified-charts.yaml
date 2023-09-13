@@ -2039,6 +2039,41 @@ entries:
     urls:
     - N/A
     version: 0.1.0
+  ss8inc-xcipio-helm-mdf3-0-1-0:
+  - annotations:
+      charts.openshift.io/digest: sha256:0e6f5dc3a351a25ea1162bd9a45688f3278d02322c3943f69cd4c9e6a567d340
+      charts.openshift.io/lastCertifiedTimestamp: '2023-09-13T19:21:58.456727+00:00'
+      charts.openshift.io/name: xcipio-helm-mdf3
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-09-13T19:25:46.430887+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 9.1.1.0
+    dependencies:
+    - name: ss8-utils
+      repository: file://../ss8-utils/
+      version: 0.1.0
+    description: A Helm chart to deploy SS8 MDF3 micro-services in Kubernetes. SS8
+      MDF3 is scalable Mediation Function Communication Content (CC) processing function.
+    digest: f384c7284f042324c1ba24828f1f69f229485eda05f8380b1f018aab25a56bab
+    home: www.ss8.com
+    keywords:
+    - 5g
+    - mediation
+    - mdf3
+    - loadbalancer
+    - erkupfx3
+    - ccpc
+    kubeVersion: '>= 1.25.0-0'
+    maintainers:
+    - name: SS8 Networks Inc.
+      url: https://www.ss8.com/
+    name: xcipio-helm-mdf3-0-1-0
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
   vitagroupag-cdr-core-ehrbase-enterprise:
   - annotations:
       charts.openshift.io/digest: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
@@ -2087,4 +2122,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-09-13T18:28:11.837123+00:00'
+generated: '2023-09-13T19:25:46.430887+00:00'
