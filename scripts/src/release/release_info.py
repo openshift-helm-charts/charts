@@ -8,12 +8,12 @@ import json
 import os
 
 
-RELEASE_INFO_FILE="release/release_info.json"
+RELEASE_INFO_FILE = "release/release_info.json"
 
 RELEASE_INFOS = {}
 
-def _get_release_info(directory):
 
+def _get_release_info(directory):
     global RELEASE_INFOS
 
     if not directory:
@@ -21,25 +21,26 @@ def _get_release_info(directory):
 
     root_dir = os.path.dirname(f"{os.getcwd()}/{directory}")
 
-    if not root_dir in RELEASE_INFOS:
-
+    if root_dir not in RELEASE_INFOS:
         print(f"Open release_info file: {root_dir}/{RELEASE_INFO_FILE}")
 
-        with open(f"{root_dir}/{RELEASE_INFO_FILE}",'r') as json_file:
+        with open(f"{root_dir}/{RELEASE_INFO_FILE}", "r") as json_file:
             RELEASE_INFOS[root_dir] = json.load(json_file)
 
     return RELEASE_INFOS[root_dir]
 
+
 def get_version(directory):
     info = _get_release_info(directory)
     return info["version"]
+
 
 def get_info(directory):
     info = _get_release_info(directory)
     return info["info"]
 
 
-def get_replaces(from_repo,to_repo,directory):
+def get_replaces(from_repo, to_repo, directory):
     print(f"get replaces for {from_repo} to {to_repo} ")
     info = _get_release_info(directory)
     if from_repo in info:
@@ -49,7 +50,8 @@ def get_replaces(from_repo,to_repo,directory):
     print("no replaces found")
     return []
 
-def get_merges(from_repo,to_repo,directory):
+
+def get_merges(from_repo, to_repo, directory):
     print(f"get merges for {from_repo} to {to_repo}")
     info = _get_release_info(directory)
     if from_repo in info:
@@ -60,7 +62,7 @@ def get_merges(from_repo,to_repo,directory):
     return []
 
 
-def get_ignores(from_repo,to_repo,directory):
+def get_ignores(from_repo, to_repo, directory):
     print(f"get ignores for {from_repo} to {to_repo}")
     info = _get_release_info(directory)
     if from_repo in info:
@@ -72,29 +74,40 @@ def get_ignores(from_repo,to_repo,directory):
 
 
 def main():
-
     print(f"[INFO] Version : {get_version('.')}")
 
-    #from development to charts
-    print(f"[INFO] Dev to charts repo merges : {get_merges('development','charts','.')}")
+    # from development to charts
+    print(
+        f"[INFO] Dev to charts repo merges : {get_merges('development','charts','.')}"
+    )
 
-    print(f"[INFO] Dev to charts repo replace : {get_replaces('development','charts','.')}")
+    print(
+        f"[INFO] Dev to charts repo replace : {get_replaces('development','charts','.')}"
+    )
 
-    print(f"[INFO] Dev to charts repo ignore : {get_ignores('development','charts','.')}")
+    print(
+        f"[INFO] Dev to charts repo ignore : {get_ignores('development','charts','.')}"
+    )
 
-    #from development to stage
+    # from development to stage
     print(f"[INFO] Dev to stage repo merges : {get_merges('development','stage','.')}")
 
-    print(f"[INFO] Dev to stage repo replace : {get_replaces('development','stage','.')}")
+    print(
+        f"[INFO] Dev to stage repo replace : {get_replaces('development','stage','.')}"
+    )
 
     print(f"[INFO] Dev to stage repo ignore : {get_ignores('development','stage','.')}")
 
-    #From charts to development
+    # From charts to development
     print(f"[INFO] Chart to dev repo merges : {get_merges('charts','development','.')}")
 
-    print(f"[INFO] Chart to dev repo replace : {get_replaces('charts','development','.')}")
+    print(
+        f"[INFO] Chart to dev repo replace : {get_replaces('charts','development','.')}"
+    )
 
-    print(f"[INFO] Chart to dev repo ignore : {get_ignores('charts','development','.')}")
+    print(
+        f"[INFO] Chart to dev repo ignore : {get_ignores('charts','development','.')}"
+    )
 
 
 if __name__ == "__main__":

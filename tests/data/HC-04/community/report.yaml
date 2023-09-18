@@ -6,13 +6,13 @@ metadata:
         profile:
             VendorType: community
             version: v1.2
-        reportDigest: uint64:12284475994233296417
+        reportDigest: uint64:12809162393075256090
         chart-uri: tests/data/vault-0.17.0.tgz
         digests:
-            chart: sha256:aba56e4bc68704aa933a180a7a7abb309b73c7020a53020a3f2c17565faf12a3
-            package: 72f8d48aad2df1fe49e864a33a112793d2c8a67874d62a466d94bbe4e5f54fee
-        lastCertifiedTimestamp: "2023-07-26T13:27:49.167072-05:00"
-        testedOpenShiftVersion: "4.12"
+            chart: sha256:d075d16bb33bb33f66cc6fb8af5cce935b647972de4b4af49be385fcce7bed05
+            package: 641f6c03aac5117eb679b341426adaa612829acc546c18e59c58ea1b45b2e513
+        lastCertifiedTimestamp: "2023-09-11T12:24:35.651882-04:00"
+        testedOpenShiftVersion: "4.13"
         supportedOpenShiftVersions: '>=4.2'
         webCatalogOnly: false
     chart:
@@ -47,20 +47,30 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
     - check: v1.0/not-contain-csi-objects
       type: Optional
       outcome: PASS
       reason: CSI objects do not exist
-    - check: v1.1/images-are-certified
+    - check: v1.0/not-contains-crds
       type: Optional
       outcome: PASS
-      reason: |-
-        Image is Red Hat certified : registry.connect.redhat.com/hashicorp/vault-k8s:0.14.0-ubi
-        Image is Red Hat certified : registry.connect.redhat.com/hashicorp/vault:1.8.4-ubi
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
     - check: v1.0/is-helm-v3
       type: Optional
       outcome: PASS
@@ -69,36 +79,26 @@ results:
       type: Optional
       outcome: SKIPPED
       reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/contains-test
-      type: Optional
-      outcome: PASS
-      reason: Chart test files exist
     - check: v1.0/contains-values-schema
       type: Optional
       outcome: PASS
       reason: Values schema file exist
-    - check: v1.0/contains-values
-      type: Optional
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/required-annotations-present
-      type: Optional
-      outcome: PASS
-      reason: All required annotations present
     - check: v1.0/has-readme
       type: Optional
       outcome: PASS
       reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
     - check: v1.1/has-kubeversion
       type: Optional
       outcome: PASS
       reason: Kubernetes version specified
-    - check: v1.0/not-contains-crds
+    - check: v1.1/images-are-certified
       type: Optional
       outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/chart-testing
-      type: Optional
-      outcome: PASS
-      reason: Chart tests have passed
+      reason: |-
+        Image is Red Hat certified : registry.connect.redhat.com/hashicorp/vault-k8s:0.14.0-ubi
+        Image is Red Hat certified : registry.connect.redhat.com/hashicorp/vault:1.8.4-ubi
 

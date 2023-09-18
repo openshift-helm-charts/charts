@@ -11,7 +11,7 @@ jobs:
     if: github.event.pull_request.draft == false && github.actor == 'redhat-mercury-bot'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         
       - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v2
@@ -84,14 +84,14 @@ jobs:
       - name: Approve PR
         id: approve_pr
         if: ${{ steps.check_for_owners.outputs.merge_pr == 'true' }}
-        uses: hmarr/auto-approve-action@v2
+        uses: hmarr/auto-approve-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge PR
         id: merge_pr
         if: ${{ steps.approve_pr.conclusion == 'success' }}
-        uses: pascalgn/automerge-action@v0.13.1
+        uses: pascalgn/automerge-action@v0.15.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_METHOD: squash
