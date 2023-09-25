@@ -1,0 +1,13 @@
+chart:
+  name: trusted-artifact-signer
+  shortDescription: A Helm chart for deploying Red Hat Trusted Artifact Signer
+publicPgpKey: null
+users:
+  - githubUsername: JasonPowr
+  - githubUsername: lance 
+  - githubUsername: sabre1041
+  - githubUsername: sallyom
+  - githubUsername: tommyd450
+vendor:
+  label: redhat
+  name: Red Hat
