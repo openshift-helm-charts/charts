@@ -8,19 +8,29 @@ from pytest_bdd import scenario
 
 from functional.utils.chart_certification import ChartCertificationE2ETestSingle
 
+
 @pytest.fixture
 def workflow_test():
-    test_name = 'Test Chart Submission Without Readme'
-    test_chart = 'tests/data/vault-0.17.0.tgz'
-    workflow_test = ChartCertificationE2ETestSingle(test_name=test_name, test_chart=test_chart)
+    test_name = "Test Chart Submission Without Readme"
+    test_chart = "tests/data/vault-0.17.0.tgz"
+    workflow_test = ChartCertificationE2ETestSingle(
+        test_name=test_name, test_chart=test_chart
+    )
     yield workflow_test
     workflow_test.cleanup()
 
-@scenario('../features/HC-03_chart_verifier_comes_back_with_failures.feature', "[HC-03-001] A partner or community user submits a chart which does not contain a readme file")
+
+@scenario(
+    "../features/HC-03_chart_verifier_comes_back_with_failures.feature",
+    "[HC-03-001] A partner or community user submits a chart which does not contain a readme file",
+)
 def test_partner_or_community_user_submits_chart_without_readme():
     """A partner or community user submits a chart which does not contain a readme file"""
 
-@scenario('../features/HC-03_chart_verifier_comes_back_with_failures.feature', "[HC-03-002] A redhat user submits a chart which does not contain a readme file")
+
+@scenario(
+    "../features/HC-03_chart_verifier_comes_back_with_failures.feature",
+    "[HC-03-002] A redhat user submits a chart which does not contain a readme file",
+)
 def test_redhat_user_submits_chart_without_readme():
     """A redhat user submits a chart which does not contain a readme file"""
-

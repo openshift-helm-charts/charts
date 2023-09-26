@@ -14,7 +14,7 @@ Feature: Chart test takes longer time and exceeds default timeout
 
     Examples:
       | vendor_type  | vendor         | message                                                                                     |
-      | partners     | hashicorp      | * timed out waiting for the condition                                                       |
+      | partners     | hashicorp      | (timeout has expired\|timed out waiting for the condition)                                 |
       | community    | redhat         | Community charts require maintainer review and approval, a review will be conducted shortly |
   
   Scenario Outline: [HC-16-002] A redhat associate submits a chart that takes more than 30 mins

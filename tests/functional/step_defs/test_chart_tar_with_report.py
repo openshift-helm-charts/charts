@@ -9,21 +9,30 @@ from pytest_bdd import scenario
 
 from functional.utils.chart_certification import ChartCertificationE2ETestSingle
 
+
 @pytest.fixture
 def workflow_test():
-    test_name = 'Test Chart Tarball With Report'
-    test_chart = 'tests/data/vault-0.17.0.tgz'
-    test_report = 'tests/data/report.yaml'
-    workflow_test = ChartCertificationE2ETestSingle(test_name=test_name, test_chart=test_chart, test_report=test_report)
+    test_name = "Test Chart Tarball With Report"
+    test_chart = "tests/data/vault-0.17.0.tgz"
+    test_report = "tests/data/report.yaml"
+    workflow_test = ChartCertificationE2ETestSingle(
+        test_name=test_name, test_chart=test_chart, test_report=test_report
+    )
     yield workflow_test
     workflow_test.cleanup()
 
 
-@scenario('../features/HC-08_report_and_chart_tar.feature', "[HC-08-001] A partner or redhat associate submits an error-free chart tarball with report")
+@scenario(
+    "../features/HC-08_report_and_chart_tar.feature",
+    "[HC-08-001] A partner or redhat associate submits an error-free chart tarball with report",
+)
 def test_partners_or_redhat_user_submits_chart_tarball_with_report():
     """A partner or redhat associate submits an error-free chart tarball with report."""
 
-@scenario('../features/HC-08_report_and_chart_tar.feature', "[HC-08-002] A community user submits an error-free chart tarball with report")
+
+@scenario(
+    "../features/HC-08_report_and_chart_tar.feature",
+    "[HC-08-002] A community user submits an error-free chart tarball with report",
+)
 def test_community_user_submits_chart_tarball_with_report():
     """A community user submits an error-free chart tarball with report"""
-

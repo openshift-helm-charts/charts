@@ -1,27 +1,37 @@
 import re
 import argparse
 import os
-import requests
-import json
 import yaml
 import sys
 
 try:
-    from yaml import CLoader as Loader, CDumper as Dumper
+    from yaml import CLoader as Loader
 except ImportError:
-    from yaml import Loader, Dumper
+    from yaml import Loader
 from tools import gitutils
 
-sys.path.append('../')
+sys.path.append("../")
 from pullrequest import prartifact
+
 
 def check_if_ci_only_is_modified(api_url):
     # api_url https://api.github.com/repos/<organization-name>/<repository-name>/pulls/1
 
     files = prartifact.get_modified_files(api_url)
-    workflow_files = [re.compile(r".github/workflows/.*"),re.compile(r"scripts/.*"),re.compile(r"tests/.*")]
-    test_files = [re.compile(r"tests/functional/step_defs/.*_test_.*"),re.compile(r"tests/functional/behave_features/.*.feature")]
-    skip_build_files = [re.compile(r"release/release_info.json"),re.compile(r"README.md"),re.compile(r"docs/([\w-]+)\.md")]
+    workflow_files = [
+        re.compile(r".github/workflows/.*"),
+        re.compile(r"scripts/.*"),
+        re.compile(r"tests/.*"),
+    ]
+    test_files = [
+        re.compile(r"tests/functional/step_defs/.*_test_.*"),
+        re.compile(r"tests/functional/behave_features/.*.feature"),
+    ]
+    skip_build_files = [
+        re.compile(r"release/release_info.json"),
+        re.compile(r"README.md"),
+        re.compile(r"docs/([\w-]+)\.md"),
+    ]
 
     workflow_found = False
     others_found = False
@@ -38,10 +48,10 @@ def check_if_ci_only_is_modified(api_url):
             return False
 
     if others_found and not workflow_found:
-        gitutils.add_output("do-not-build","true")
+        gitutils.add_output("do-not-build", "true")
     elif tests_included:
-        print(f"[INFO] set full_tests_in_pr to true")
-        gitutils.add_output("full_tests_in_pr","true")
+        print("[INFO] set full_tests_in_pr to true")
+        gitutils.add_output("full_tests_in_pr", "true")
 
     return workflow_found
 
@@ -58,33 +68,51 @@ def verify_user(username):
             print(f"[INFO] {username} authorized")
             return True
         else:
-           print(f"[ERROR] {username} cannot run tests")
+            print(f"[ERROR] {username} cannot run tests")
     return False
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-u", "--api-url", dest="api_url", type=str, required=False,
-                                        help="API URL for the pull request")
-    parser.add_argument("-n", "--verify-user", dest="username", type=str, required=True,
-                        help="check if the user can run tests")
+    parser.add_argument(
+        "-u",
+        "--api-url",
+        dest="api_url",
+        type=str,
+        required=False,
+        help="API URL for the pull request",
+    )
+    parser.add_argument(
+        "-n",
+        "--verify-user",
+        dest="username",
+        type=str,
+        required=True,
+        help="check if the user can run tests",
+    )
     args = parser.parse_args()
     if not args.api_url:
         if verify_user(args.username):
-            print(f"[INFO] User authorized for manual invocation - run tests.")
-            gitutils.add_output("run-tests","true")
+            print("[INFO] User authorized for manual invocation - run tests.")
+            gitutils.add_output("run-tests", "true")
         else:
-            print(f"[INFO] User not authorized for manual invocation - do not run tests.")
-            gitutils.add_output("workflow-only-but-not-authorized","true")
+            print(
+                "[INFO] User not authorized for manual invocation - do not run tests."
+            )
+            gitutils.add_output("workflow-only-but-not-authorized", "true")
     elif check_if_ci_only_is_modified(args.api_url):
         if verify_user(args.username):
-            print(f"[INFO] PR is workflow changes only and user is authorized - run tests.")
-            gitutils.add_output("run-tests","true")
+            print(
+                "[INFO] PR is workflow changes only and user is authorized - run tests."
+            )
+            gitutils.add_output("run-tests", "true")
         else:
-            print(f"[INFO] PR is workflow changes only but user is not authorized - do not run tests.")
-            gitutils.add_output("workflow-only-but-not-authorized","true")
+            print(
+                "[INFO] PR is workflow changes only but user is not authorized - do not run tests."
+            )
+            gitutils.add_output("workflow-only-but-not-authorized", "true")
     else:
-        print(f"[INFO] Non workflow changes were found - do not run tests")
+        print("[INFO] Non workflow changes were found - do not run tests")
 
 
 if __name__ == "__main__":

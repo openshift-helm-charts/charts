@@ -14,7 +14,7 @@ jobs:
       github.actor != 'redhat-mercury-bot'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v2
@@ -91,7 +91,7 @@ jobs:
 
       - name: Checkout
         if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -304,14 +304,17 @@ jobs:
       - name: Approve PR
         id: approve_pr
         if: ${{ steps.check_report.conclusion == 'success' }}
-        uses: hmarr/auto-approve-action@v2
+        uses: hmarr/auto-approve-action@v3
         with:
-          github-token: ${{ secrets.BOT_TOKEN }}
+          # The token we use for this changes for the Sandbox repository because the sandbox repository
+          # receives PRs from the openshift-helm-charts-bot, and that same bot cannot approve its own
+          # PRs which breaks workflows. Instead, for the Sandbox repo, we approve with the GHA bot.
+          github-token: ${{ github.repository == 'openshift-helm-charts/sandbox' && secrets.GITHUB_TOKEN || secrets.BOT_TOKEN }}
 
       - name: Merge PR
         id: merge_pr
         if: ${{ steps.approve_pr.conclusion == 'success' }}
-        uses: pascalgn/automerge-action@v0.13.1
+        uses: pascalgn/automerge-action@v0.15.6
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           MERGE_METHOD: squash
