@@ -4045,6 +4045,56 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-developer-hub-0.1.0/developer-hub-0.1.0.tgz
     version: 0.1.0
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: "- name: support\n  url: https://github.com/janus-idp/helm-backstage/issues\n-
+        name: Chart Source\n  url: https://github.com/janus-idp/helm-backstage\n-
+        name: Default Image Source\n  url: https://github.com/janus-idp/backstage-showcase\n"
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:0568c30447cae3c2350432889a99941ca9bb1fd39063eb78acb9d9c59b5d427a
+      charts.openshift.io/lastCertifiedTimestamp: '2023-09-27T20:27:01.486503+00:00'
+      charts.openshift.io/name: Red Hat Developer Hub
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-09-27T20:27:38.479313+00:00'
+      charts.openshift.io/supportURL: https://red.ht/rhdh
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.0-88
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.9.1
+    - alias: upstream
+      name: backstage
+      repository: https://backstage.github.io/charts
+      version: 1.2.0
+    description: A Helm chart for deploying Red Hat Developer Hub
+    digest: 49016336d92efe00b3cdfd09d75bb8b69efd31f36379d443a472f926132cce87
+    home: https://red.ht/rhdh
+    icon: data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1'
+      data-name='Layer 1' viewBox='0 0 192 145'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill:%23e00;%7D%3C/style%3E%3C/defs%3E%3Ctitle%3ERedHat-Logo-Hat-Color%3C/title%3E%3Cpath
+      d='M157.77,62.61a14,14,0,0,1,.31,3.42c0,14.88-18.1,17.46-30.61,17.46C78.83,83.49,42.53,53.26,42.53,44a6.43,6.43,0,0,1,.22-1.94l-3.66,9.06a18.45,18.45,0,0,0-1.51,7.33c0,18.11,41,45.48,87.74,45.48,20.69,0,36.43-7.76,36.43-21.77,0-1.08,0-1.94-1.73-10.13Z'/%3E%3Cpath
+      class='cls-1' d='M127.47,83.49c12.51,0,30.61-2.58,30.61-17.46a14,14,0,0,0-.31-3.42l-7.45-32.36c-1.72-7.12-3.23-10.35-15.73-16.6C124.89,8.69,103.76.5,97.51.5,91.69.5,90,8,83.06,8c-6.68,0-11.64-5.6-17.89-5.6-6,0-9.91,4.09-12.93,12.5,0,0-8.41,23.72-9.49,27.16A6.43,6.43,0,0,0,42.53,44c0,9.22,36.3,39.45,84.94,39.45M160,72.07c1.73,8.19,1.73,9.05,1.73,10.13,0,14-15.74,21.77-36.43,21.77C78.54,104,37.58,76.6,37.58,58.49a18.45,18.45,0,0,1,1.51-7.33C22.27,52,.5,55,.5,74.22c0,31.48,74.59,70.28,133.65,70.28,45.28,0,56.7-20.48,56.7-36.65,0-12.72-11-27.16-30.83-35.78'/%3E%3C/svg%3E
+    keywords:
+    - backstage
+    - idp
+    - janus-idp
+    - developer-hub
+    - redhat
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - name: Red Hat
+      url: https://redhat.com
+    name: developer-hub
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-developer-hub-0.2.0/developer-hub-0.2.0.tgz
+    version: 0.2.0
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -6524,4 +6574,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-09-20T18:44:41.679506+00:00'
+generated: '2023-09-27T20:27:38.479313+00:00'
