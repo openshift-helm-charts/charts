@@ -23,32 +23,36 @@ submit a chart and the report together.
 **Table of Contents:**
 
 <!--ts-->
-* [OpenShift Helm Charts Repository](#openshift-helm-charts-repository)
-   * [Submitting Chart Related Changes](#submitting-chart-related-changes)
-      * [Preparation](#preparation)
-      * [Submitting a Chart without Chart Verification Report](#submitting-a-chart-without-chart-verification-report)
-      * [Submitting a Chart Verification Report without the Chart](#submitting-a-chart-verification-report-without-the-chart)
-      * [Submitting a Chart Verification Report with the Chart](#submitting-a-chart-verification-report-with-the-chart)
-   * [Post Submission Manual Review](#post-submission-manual-review)
-   * [Troubleshooting Pull Request Failures](#troubleshooting-pull-request-failures)
-      * [Error when submitting files not part of any chart](#error-when-submitting-files-not-part-of-any-chart)
-      * [Missing OWNERS file in the chart directory](#missing-owners-file-in-the-chart-directory)
-      * [Pull request author is not part of OWNERS file](#pull-request-author-is-not-part-of-owners-file)
-      * [Vendor label mismatch with the directory structure](#vendor-label-mismatch-with-the-directory-structure)
-      * [Chart name mismatch with the directory structure](#chart-name-mismatch-with-the-directory-structure)
-      * [Error when submitting both chart source and tarball](#error-when-submitting-both-chart-source-and-tarball)
-      * [Error when submitting files not related to any chart](#error-when-submitting-files-not-related-to-any-chart)
-      * [Error when digest in the report is not matching with the chart digest](#error-when-digest-in-the-report-is-not-matching-with-the-chart-digest)
-      * [Error with the chart URL when submitting report](#error-with-the-chart-url-when-submitting-report)
-      * [Chart name and version mismatch errors](#chart-name-and-version-mismatch-errors)
-      * [Report failures](#report-failures)
-      * [Signed chart failures](#signed-chart-failures)
-      * [Web catalog only delivery](#web-catalog-only-delivery)
-   * [Frequently Asked Questions](#frequently-asked-questions)
-      * [Can I test the pull request in my fork before submitting?](#can-i-test-the-pull-request-in-my-fork-before-submitting)
-      * [Can I use any command-line interface to create pull request?](#can-i-use-any-command-line-interface-to-create-pull-request)
-      * [How to update OWNERS file?](#how-to-update-owners-file)
-   * [Support](#support)
+- [OpenShift Helm Charts Repository](#openshift-helm-charts-repository)
+  - [Submitting Chart Related Changes](#submitting-chart-related-changes)
+    - [Preparation](#preparation)
+    - [Submitting a Chart without Chart Verification Report](#submitting-a-chart-without-chart-verification-report)
+    - [Submitting a Chart Verification Report without the Chart](#submitting-a-chart-verification-report-without-the-chart)
+      - [Signed Report](#signed-report)
+      - [Report for a Signed chart](#report-for-a-signed-chart)
+    - [Submitting a Chart Verification Report with the Chart](#submitting-a-chart-verification-report-with-the-chart)
+      - [Signed Report](#signed-report-1)
+      - [Signed Chart](#signed-chart)
+  - [Post Submission Manual Review](#post-submission-manual-review)
+  - [Troubleshooting Pull Request Failures](#troubleshooting-pull-request-failures)
+    - [Error when submitting files not part of any chart](#error-when-submitting-files-not-part-of-any-chart)
+    - [Missing OWNERS file in the chart directory](#missing-owners-file-in-the-chart-directory)
+    - [Pull request author is not part of OWNERS file](#pull-request-author-is-not-part-of-owners-file)
+    - [Vendor label mismatch with the directory structure](#vendor-label-mismatch-with-the-directory-structure)
+    - [Chart name mismatch with the directory structure](#chart-name-mismatch-with-the-directory-structure)
+    - [Error when submitting both chart source and tarball](#error-when-submitting-both-chart-source-and-tarball)
+    - [Error when submitting files not related to any chart](#error-when-submitting-files-not-related-to-any-chart)
+    - [Error when digest in the report is not matching with the chart digest](#error-when-digest-in-the-report-is-not-matching-with-the-chart-digest)
+    - [Error with the chart URL when submitting report](#error-with-the-chart-url-when-submitting-report)
+    - [Chart name and version mismatch errors](#chart-name-and-version-mismatch-errors)
+    - [Report failures](#report-failures)
+  - [Signed chart failures](#signed-chart-failures)
+    - [Web catalog only delivery](#web-catalog-only-delivery)
+  - [Frequently Asked Questions](#frequently-asked-questions)
+    - [Can I test the pull request in my fork before submitting?](#can-i-test-the-pull-request-in-my-fork-before-submitting)
+    - [Can I use any command-line interface to create pull request?](#can-i-use-any-command-line-interface-to-create-pull-request)
+    - [How to update OWNERS file?](#how-to-update-owners-file)
+  - [Support](#support)
 <!--te-->
 
 ---
@@ -357,7 +361,7 @@ If the vendor label in the `OWNERS` file is wrong, you can follow the [partner
 connect documentation][partners] to update the `OWNERS` file.
 
 If the directory structure (organization name) is wrong, please reach out to
-[Technology Partner Success Desk][partner-success-desk].
+[Technology Partner Success Desk][partner-acceleration-desk].
 
 ### Chart name mismatch with the directory structure
 
@@ -372,7 +376,7 @@ If the chart name in the `OWNERS` file is wrong, you can follow the [partner
 connect documentation][partners] to update the `OWNERS` file.
 
 If the directory structure (chart name) is wrong, please reach out to
-[Technology Partner Success Desk][partner-success-desk].
+[Partner Acceleration Desk][partner-acceleration-desk].
 
 ### Error when submitting both chart source and tarball
 
@@ -458,7 +462,7 @@ of [chart-verifier][chart-verifier] tool.
 ```
 
 If the error is still persisting after upgrading to latest chart-verifier,
-please contact [Technology Partner Success Desk][partner-success-desk].
+please contact [Partner Acceleration Desk][partner-acceleration-desk].
 
 If the report has some failure, it will be displayed like this:
 
@@ -515,7 +519,7 @@ There are three methods of distribution for certified helm charts.
 - Web catalog only
   - This submission should be report only using a private chart URL.
 
-For more information on the different Helm Chart Distribution methods, see: [Creating a Helm Chart Certification Project](https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/helm-chart-certification/creating-a-helm-chart-certification-project)
+For more information on the different Helm Chart Distribution methods, see: [Creating a Helm Chart Certification Project](https://access.redhat.com/documentation/en-us/red_hat_software_certification/8.67/html/red_hat_software_certification_workflow_guide/proc_creating-a-helm-chart-project_openshift-sw-cert-workflow-validating-helm-charts-for-certification)
 
 ## Frequently Asked Questions
 
@@ -535,26 +539,27 @@ Yes, you can use the [GitHub CLI to create pull request][gh-cli-pr].
 
 ### How to update OWNERS file?
 
-Partners can refer to the [partner documentation][partners].
+Partners can refer to the [partner documentation for Submitting your Helm chart for certification][owner-file].
 
 For Red Hat and Community charts, submit a PR towards `main` branch with an _OWNERS_ file under your chart directory within your orgranization directory.
 
 ## Support
 
 You can use the issue tracker in this repository to report bugs.  If you are a
-partner, please refer to the [Technology Partner Success Desk
-documentation][partner-success-desk].
+partner, please refer to the [Partner Acceleration Desk
+documentation][partner-acceleration-desk].
 
 ---
 
 [^Top](#openshift-helm-charts-repository)
 
-[partners]: https://redhat-connect.gitbook.io/certification-guides/
+[partners]: https://access.redhat.com/documentation/en-us/red_hat_software_certification/
+[owner-file]: https://access.redhat.com/documentation/en-us/red_hat_software_certification/8.67/html/red_hat_software_certification_workflow_guide/submitting-your-helm-chart-for-certification_openshift-sw-cert-workflow-complete-pre-certification-checklist-for-helmcharts
 [chart-verifier]: https://github.com/redhat-certification/chart-verifier
 [index-url]: https://charts.openshift.io
 [pat]: https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 [encyrpted-secret]: https://docs.github.com/en/actions/reference/encrypted-secrets
 [gh-cli-pr]: https://cli.github.com/manual/gh_pr_create
-[partner-success-desk]: https://redhat-connect.gitbook.io/red-hat-partner-connect-general-guide/managing-your-account/getting-help/technology-partner-success-desk
+[partner-acceleration-desk]: https://access.redhat.com/articles/6463941
 [new-issue]: https://github.com/openshift-helm-charts/repo/issues/new/choose
 [ascii-armor]: https://www.redhat.com/sysadmin/creating-gpg-keypairs
