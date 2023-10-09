@@ -1,7 +1,7 @@
 dependencies:
 - name: mysql-imagestreams
   version: "0.0.1"
-  repository: file://../../../../../redhat/redhat/mysql-imagestreams/0.0.1/src
+  repository: file://mysql-imagestreams
 description: |-
   This content is expermental, do not use it in production. MySQL database service, with persistent storage. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/8.0/root/usr/share/container-scripts/mysql/README.md.
 
