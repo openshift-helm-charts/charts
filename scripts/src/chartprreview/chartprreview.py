@@ -23,6 +23,7 @@ from report import report_info
 from report import verifier_report
 from signedchart import signedchart
 from pullrequest import prartifact
+from reporegex import matchers
 from tools import gitutils
 
 
@@ -45,9 +46,22 @@ def get_vendor_type(directory):
 
 
 def get_modified_charts(directory, api_url):
+    """Get the category, organization, chart name, and new version corresponding to
+    the chart being added.
+
+    Args:
+        directory (str): Local directory in which to write the error logs
+        api_url (str): URL of the GitHub PR
+
+    Returns:
+        (str, str, str, str): category, organization, chart, and version (e.g. partner,
+                              hashicorp, vault, 1.4.0)
+    """
     print("[INFO] Get modified charts. %s" % directory)
     files = prartifact.get_modified_files(api_url)
-    pattern = re.compile(r"charts/(\w+)/([\w-]+)/([\w-]+)/([\w\.-]+)/.*")
+    pattern = re.compile(
+        matchers.submission_path_matcher(strict_categories=False) + r"/.*"
+    )
     for file_path in files:
         m = pattern.match(file_path)
         if m:
@@ -60,6 +74,15 @@ def get_modified_charts(directory, api_url):
 
 
 def verify_user(directory, username, category, organization, chart):
+    """Check that the user that submitted the PR is in the OWNERS file for this chart.
+
+    Args:
+        directory (str): Local directory in which to write the error logs
+        username (str): Github username that submitted the PR.
+        category (str): Type of profile (community, partners, or redhat)
+        organization (str): Name of the organization (ex: hashicorp)
+        chart (str): Name of the chart (ex: vault)
+    """
     print(
         "[INFO] Verify user. %s, %s, %s, %s" % (username, category, organization, chart)
     )
@@ -78,8 +101,21 @@ def verify_user(directory, username, category, organization, chart):
 
 
 def check_owners_file_against_directory_structure(
-    directory, username, category, organization, chart
+    directory, category, organization, chart
 ):
+    """Check that the content of the OWNERS file correspond to the directory structure
+    the chart is under.
+
+    Following assertion must be true:
+    - the chart.name key must correspond to the name of the chart directory
+    - the vendor.label key must correspond to the organization directory
+
+    Args:
+        directory (str): Local directory in which to write the error logs
+        category (str): Type of profile (community, partners, or redhat)
+        organization (str): Name of the organization (ex: hashicorp)
+        chart (str): Name of the chart (ex: vault)
+    """
     print(
         "[INFO] Check owners file against directory structure. %s, %s, %s"
         % (category, organization, chart)
@@ -105,7 +141,15 @@ def check_owners_file_against_directory_structure(
         sys.exit(1)
 
 
-def verify_signature(directory, category, organization, chart, version):
+def verify_signature(category, organization, chart, version):
+    """Verify that the PGP signature (report.yaml.asc) can decrypt report.yaml
+
+    Args:
+        category (str): Type of profile (community, partners, or redhat)
+        organization (str): Name of the organization (ex: hashicorp)
+        chart (str): Name of the chart (ex: vault)
+        version (str): The version of the chart (ex: 1.4.0)
+    """
     print("[INFO] Verify signature. %s, %s, %s" % (organization, chart, version))
     sign = os.path.join(
         "charts", category, organization, chart, version, "report.yaml.asc"
@@ -136,6 +180,18 @@ def verify_signature(directory, category, organization, chart, version):
 def match_checksum(
     directory, generated_report_info_path, category, organization, chart, version
 ):
+    """Check that the provided report and the generated report have the same chart
+    digest
+
+    Args:
+        directory (str): Local directory in which to write the error logs
+        generated_report_info_path (str): Path to the processed JSON report generated
+                                          in the pipeline
+        category (str): Type of profile (community, partners, or redhat)
+        organization (str): Name of the organization (ex: hashicorp)
+        chart (str): Name of the chart (ex: vault)
+        version (str): The version of the chart (ex: 1.4.0)
+    """
     print("[INFO] Check digests match. %s, %s, %s" % (organization, chart, version))
     submitted_report_path = os.path.join(
         "charts", category, organization, chart, version, "report.yaml"
@@ -157,6 +213,13 @@ def match_checksum(
 
 
 def check_url(directory, report_path):
+    """Check that the chart URL provided in report.yaml is valid and that the chart
+    digest matches the one provided in report.yaml
+
+    Args:
+        directory (str): Local directory in which to write the error logs
+        report_path (str): Path to report.yaml
+    """
     print("[INFO] Check chart_url is a valid url. %s" % report_path)
     chart_url = report_info.get_report_chart_url(report_path=report_path)
 
@@ -195,6 +258,17 @@ def check_url(directory, report_path):
 def match_name_and_version(
     directory, category, organization, chart, version, generated_report_path
 ):
+    """Check that the chart name and version in the provided report.yaml and in the
+    report generated in the pipeline match the underlying directory structure.
+
+    Args:
+        directory (str): Local directory in which to write the error logs
+        category (str): Type of profile (community, partners, or redhat)
+        organization (str): Name of the organization (ex: hashicorp)
+        chart (str): Name of the chart (ex: vault)
+        version (str): The version of the chart (ex: 1.4.0)
+        generated_report_path (str): Path to the report generated in the pipeline
+    """
     print(
         "[INFO] Check chart has same name and version as directory structure. %s, %s, %s"
         % (organization, chart, version)
@@ -253,6 +327,24 @@ def match_name_and_version(
 
 
 def check_report_success(directory, api_url, report_path, report_info_path, version):
+    """Check the content of report.yaml
+
+    * Check that the version in the report matches with the directory structure.
+    * Check that the vendor type in the report matches with the directory structure.
+    * Check the presence of the required annotations.
+    * Check that the report doesn't contains failed checks.
+    * Check that the testedOpenShiftVersion and certifiedOpenShiftVersions labels
+      contain SemVer compatible versions.
+
+    Also adds the content of report.yaml to the GITHUB_OUTPUT.
+
+    Args:
+        directory (str): Local directory in which to write the error logs
+        api_url (str): URL of the GitHub PR
+        report_path (str): Path to report.yaml
+        report_info_path (str): Path to processed JSON report
+        version (str): The version of the chart (ex: 1.4.0)
+    """
     print("[INFO] Check report success. %s" % report_path)
     data = open(report_path).read()
     print("[INFO] Full report: ")
@@ -413,19 +505,29 @@ def main():
         help="API URL for the pull request",
     )
     args = parser.parse_args()
+
     category, organization, chart, version = get_modified_charts(
         args.directory, args.api_url
     )
     verify_user(args.directory, args.username, category, organization, chart)
     check_owners_file_against_directory_structure(
-        args.directory, args.username, category, organization, chart
+        args.directory, category, organization, chart
     )
+
+    report_generated = os.environ.get("REPORT_GENERATED")
+    generated_report_path = os.environ.get("GENERATED_REPORT_PATH")
+    generated_report_info_path = os.environ.get("REPORT_SUMMARY_PATH")
+    env = Env()
+    web_catalog_only = env.bool("WEB_CATALOG_ONLY", False)
+
     submitted_report_path = os.path.join(
         "charts", category, organization, chart, version, "report.yaml"
     )
-
     if os.path.exists(submitted_report_path):
-        report_valid, message = verifier_report.validate(submitted_report_path)
+        ocp_version_range = os.environ.get("OCP_VERSION_RANGE")
+        report_valid, message = verifier_report.validate(
+            submitted_report_path, ocp_version_range
+        )
         if not report_valid:
             msg = f"Submitted report is not valid: {message}"
             print(f"[ERROR] {msg}")
@@ -449,15 +551,8 @@ def main():
                         "[INFO] PGP key in OWNERS file matches with key digest in report."
                     )
 
-    report_generated = os.environ.get("REPORT_GENERATED")
-    generated_report_path = os.environ.get("GENERATED_REPORT_PATH")
-    generated_report_info_path = os.environ.get("REPORT_SUMMARY_PATH")
-    env = Env()
-    web_catalog_only = env.bool("WEB_CATALOG_ONLY", False)
-
-    if os.path.exists(submitted_report_path):
         print("[INFO] Report exists: ", submitted_report_path)
-        verify_signature(args.directory, category, organization, chart, version)
+        verify_signature(category, organization, chart, version)
         report_path = submitted_report_path
         report_info_path = ""
         if report_generated and report_generated == "True":

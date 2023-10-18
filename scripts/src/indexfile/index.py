@@ -5,7 +5,6 @@ import semantic_version
 import sys
 
 sys.path.append("../")
-from chartrepomanager import indexannotations
 
 INDEX_FILE = "https://charts.openshift.io/index.yaml"
 
@@ -110,39 +109,3 @@ def get_latest_charts():
             latest_charts.append(chart_in_process)
 
     return latest_charts
-
-
-if __name__ == "__main__":
-    get_chart_info("redhat-dotnet-0.0.1")
-
-    chart_list = get_latest_charts()
-
-    for chart in chart_list:
-        print(f'[INFO] found latest chart : {chart["name"]} {chart["version"]}')
-
-    OCP_VERSION = semantic_version.Version.coerce("4.11")
-
-    for chart in chart_list:
-        if (
-            "supportedOCP" in chart
-            and chart["supportedOCP"] != "N/A"
-            and chart["supportedOCP"] != ""
-        ):
-            if OCP_VERSION in semantic_version.NpmSpec(chart["supportedOCP"]):
-                print(
-                    f'PASS: Chart supported OCP version {chart["supportedOCP"]} includes: {OCP_VERSION}'
-                )
-            else:
-                print(
-                    f'   ERROR: Chart supported OCP version {chart["supportedOCP"]} does not include {OCP_VERSION}'
-                )
-        elif "kubeVersion" in chart and chart["kubeVersion"] != "":
-            supportedOCPVersion = indexannotations.getOCPVersions(chart["kubeVersion"])
-            if OCP_VERSION in semantic_version.NpmSpec(supportedOCPVersion):
-                print(
-                    f'PASS: Chart kubeVersion  {chart["kubeVersion"]} (OCP: {supportedOCPVersion}) includes OCP version: {OCP_VERSION}'
-                )
-            else:
-                print(
-                    f'   ERROR: Chart kubeVersion {chart["kubeVersion"]} (OCP: {supportedOCPVersion}) does not include {OCP_VERSION}'
-                )

@@ -30,6 +30,14 @@ def get_modified_charts(api_url):
 
 
 def get_modified_files(api_url):
+    """Populates and returns the list of files modified by this the PR
+
+    Args:
+        api_url (str): URL of the GitHub PR
+
+    Returns:
+        list[str]: List of modified files
+    """
     if not pr_files:
         page_number = 1
         max_page_size, page_size = 100, 100

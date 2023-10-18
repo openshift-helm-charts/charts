@@ -54,7 +54,6 @@ vendor:
 
 
 def test_check_owners_file_against_directory_structure(tmpdir):
-    original_cwd = os.getcwd()
     p = (
         tmpdir.mkdir("charts")
         .mkdir("partners")
@@ -68,17 +67,15 @@ def test_check_owners_file_against_directory_structure(tmpdir):
     print("new_cwd", new_cwd)
     with pytest.raises(SystemExit):
         check_owners_file_against_directory_structure(
-            "baijum", "partners", "test-org", "test-chart"
+            "partners", "test-org", "test-chart"
         )
     p.write(owners_with_wrong_chart_name)
     with pytest.raises(SystemExit):
         check_owners_file_against_directory_structure(
-            "baijum", "partners", "test-org", "test-chart"
+            "partners", "test-org", "test-chart"
         )
     p.write(owners_with_correct_values)
-    check_owners_file_against_directory_structure(
-        "baijum", "partners", "test-org", "test-chart"
-    )
+    check_owners_file_against_directory_structure("partners", "test-org", "test-chart")
 
 
 def test_write_error_log(tmpdir):

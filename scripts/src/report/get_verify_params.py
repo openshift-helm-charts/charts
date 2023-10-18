@@ -8,14 +8,22 @@ from signedchart import signedchart
 from tools import gitutils
 
 
+def get_report_full_path(category, organization, chart, version):
+    return os.path.join(
+        os.getcwd(), get_report_relative_path(category, organization, chart, version)
+    )
+
+
+def get_report_relative_path(category, organization, chart, version):
+    return os.path.join("charts", category, organization, chart, version, "report.yaml")
+
+
 def generate_verify_options(directory, category, organization, chart, version):
     print("[INFO] Generate verify options. %s, %s, %s" % (organization, chart, version))
     src = os.path.join(
         os.getcwd(), "charts", category, organization, chart, version, "src"
     )
-    report_path = os.path.join(
-        os.getcwd(), "charts", category, organization, chart, version, "report.yaml"
-    )
+    report_path = get_report_full_path(category, organization, chart, version)
     tar = os.path.join(
         os.getcwd(),
         "charts",
@@ -32,14 +40,16 @@ def generate_verify_options(directory, category, organization, chart, version):
 
     flags = f"--set profile.vendortype={category}"
     cluster_needed = True
+    report_provided = False
     if os.path.exists(report_path):
         print("[INFO] report is included")
         flags = f"{flags} -e has-readme"
         cluster_needed = False
+        report_provided = True
 
     if os.path.exists(src) and not os.path.exists(tar):
         print("[INFO] chart src included")
-        return flags, src, True, cluster_needed
+        return flags, src, True, cluster_needed, report_provided
     elif os.path.exists(tar) and not os.path.exists(src):
         print("[INFO] tarball included")
         if not os.path.exists(report_path):
@@ -50,14 +60,14 @@ def generate_verify_options(directory, category, organization, chart, version):
             if signed_flags:
                 print(f"[INFO] include flags for signed chart: {signed_flags}")
                 flags = f"{flags} {signed_flags}"
-        return flags, tar, True, cluster_needed
+        return flags, tar, True, cluster_needed, report_provided
     elif os.path.exists(tar) and os.path.exists(src):
         msg = "[ERROR] Both chart source directory and tarball should not exist"
         chartprreview.write_error_log(directory, msg)
         sys.exit(1)
     else:
         print("[INFO] report only")
-        return "", "", False, False
+        return "", "", False, False, report_provided
 
 
 def main():
@@ -85,8 +95,17 @@ def main():
         args.directory, args.api_url
     )
 
-    flags, chart_uri, report_needed, cluster_needed = generate_verify_options(
-        args.directory, category, organization, chart, version
+    (
+        flags,
+        chart_uri,
+        report_needed,
+        cluster_needed,
+        report_provided,
+    ) = generate_verify_options(args.directory, category, organization, chart, version)
+    gitutils.add_output("report_provided", report_provided)
+    gitutils.add_output(
+        "provided_report_relative_path",
+        get_report_relative_path(category, organization, chart, version),
     )
     gitutils.add_output("report_needed", report_needed)
     gitutils.add_output("cluster_needed", cluster_needed)

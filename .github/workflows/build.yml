@@ -5,9 +5,14 @@ on:
     types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
 
 jobs:
-  chart-certification:
-    name: Chart Certification
+  setup:
+    name: Setup CI
     runs-on: ubuntu-22.04
+    outputs:
+      run_build: ${{ steps.check_build_required.outputs.run-build }}
+      verifier-action-image: ${{ steps.set-env.outputs.verifier-action-image }}
+      insecure_skip_tls_verify: ${{ steps.set-env.outputs.insecure_skip_tls_verify }}
+
     if: |
       github.event.pull_request.draft == false &&
       (github.event.action != 'labeled' || github.event.label.name == 'force-publish') &&
@@ -17,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Python 3.x Part 1
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: "3.9"
 
@@ -25,8 +30,10 @@ jobs:
         run: |
           # set up python
           python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/python3 setup.py install
+          cd ..
 
       - name: Check for CI changes
         id: check_ci_changes
@@ -89,33 +96,65 @@ jobs:
           fi
           echo "insecure_skip_tls_verify=true" >> $GITHUB_OUTPUT
 
+
+  chart-verifier:
+    name: Run chart-verifier
+    runs-on: ubuntu-22.04
+    needs: [setup]
+
+    outputs:
+      report_content: ${{ steps.check_report.outputs.report_content }}
+      redhat_to_community: ${{ steps.check_report.outputs.redhat_to_community }}
+      message_file: ${{ steps.pr_comment.outputs.message-file }}
+      web_catalog_only: ${{ steps.check_pr_content.outputs.web_catalog_only }}
+      chart_entry_name: ${{ steps.check_pr_content.outputs.chart-entry-name }}
+      release_tag: ${{ steps.check_pr_content.outputs.release_tag }}
+
+    steps:
       - name: Checkout
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        uses: actions/checkout@v3
+
+      - name: Checkout PR Branch
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
 
+      - name: Set up Python 3.x Part 1
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/python3 setup.py install
+          cd ..
+
       - name: Check PR Content
         id: check_pr_content
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
         continue-on-error: true
         env:
           GITHUB_REF: ${{ github.ref }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
-           ./ve1/bin/check-pr-content --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
+          ./ve1/bin/check-pr-content --index-branch=${INDEX_BRANCH} --repository=${{ github.repository }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Add 'content-ok' label
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         if: ${{ steps.check_pr_content.outcome == 'success'}}
         continue-on-error: true
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            github.issues.addLabels({
+            github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -123,13 +162,13 @@ jobs:
             })
 
       - name: Remove 'content-ok' label
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         if: ${{ steps.check_pr_content.outcome == 'failure' && contains( github.event.pull_request.labels.*.name, 'content-ok') }}
         continue-on-error: true
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            github.issues.removeLabel({
+            github.rest.issues.removeLabel({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -143,14 +182,14 @@ jobs:
           exit 1
 
       - name: Remove 'authorized-request' label from PR
-        uses: actions/github-script@v3
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' && contains( github.event.pull_request.labels.*.name, 'authorized-request') }}
+        uses: actions/github-script@v6
+        if: ${{ needs.setup.outputs.run_build == 'true' && contains( github.event.pull_request.labels.*.name, 'authorized-request') }}
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var issue_number = ${{ github.event.number }};
-            github.issues.removeLabel({
+            github.rest.issues.removeLabel({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: Number(issue_number),
@@ -162,10 +201,10 @@ jobs:
         with:
           source: github
           skip_cache: true
-          chart-verifier: ${{ steps.set-env.outputs.verifier-action-image }}
+          chart-verifier: "${{ needs.setup.outputs.verifier-action-image }}"
 
       - name: determine verify requirements
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
         id: verify_requires
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
@@ -193,7 +232,7 @@ jobs:
         with:
           openshift_server_url: ${{ steps.login-params.outputs.API_SERVER }}
           openshift_token: ${{ secrets.CLUSTER_TOKEN }}
-          insecure_skip_tls_verify: ${{ steps.set-env.outputs.insecure_skip_tls_verify }}
+          insecure_skip_tls_verify: ${{ needs.setup.outputs.insecure_skip_tls_verify }}
 
       - name: create service account
         id: create_service_account
@@ -206,7 +245,7 @@ jobs:
           echo "delete_namespace=true" >> $GITHUB_OUTPUT
           echo $KUBECONFIG
 
-      - uses: redhat-actions/chart-verifier@v1.1
+      - uses: redhat-actions/chart-verifier@v1
         id: run-verifier
         if: ${{ steps.verify_requires.outputs.report_needed == 'true' }}
         with:
@@ -222,20 +261,53 @@ jobs:
           error_message="The chart verifier returned an error when trying to obtain a verification report for the chart."
           echo "verifier_error_message=$error_message" >> $GITHUB_OUTPUT
 
+      - name: Get profile version set in report provided by the user
+        id: get-profile-version
+        if: ${{ needs.setup.outputs.run_build == 'true' && steps.verify_requires.outputs.report_provided == 'true' }}
+        uses: mikefarah/yq@v4.35.1
+        with:
+          cmd: yq '.metadata.tool.profile.version' ${{ format('./pr-branch/{0}', steps.verify_requires.outputs.provided_report_relative_path) }}
+
+      - name: Get the range of Kubernetes versions set in the report provided by the user
+        id: get-kube-range
+        if: ${{ needs.setup.outputs.run_build == 'true' && steps.verify_requires.outputs.report_provided == 'true' }}
+        continue-on-error: true
+        uses: mikefarah/yq@v4.35.1
+        with:
+          cmd: yq '.metadata.chart.kubeversion' ${{ format('./pr-branch/{0}', steps.verify_requires.outputs.provided_report_relative_path) }}
+
+      - name: Get the corresponding range of OCP versions
+        id: get-ocp-range
+        if: ${{ needs.setup.outputs.run_build == 'true' && steps.verify_requires.outputs.report_provided == 'true' }}
+        continue-on-error: true
+        uses: ./.github/actions/get-ocp-range
+        with:
+          kube-version-range: ${{ steps.get-kube-range.outputs.result }}
+
+      - name: Only ignore errors in get-ocp-range for profile in version v1.0
+        if: ${{ (steps.get-kube-range.outcome == 'failure' || steps.get-ocp-range.outcome == 'failure') && steps.get-profile-version.outputs.result != 'v1.0' }}
+        run: |
+          echo "::error file=.github/workflows/build.yaml::Failure in get-ocp-range, mandatory for profile version ${{ steps.get-profile-version.outputs.result }}"
+          exit 1
+
       - name: Check Report
         id: check_report
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           VENDOR_TYPE: ${{ steps.check_pr_content.outputs.category }}
-          WEB_CATALOG_ONLY: ${{ steps.check_pr_content.outputs.webCatalogOnly }}
+          WEB_CATALOG_ONLY: ${{ steps.check_pr_content.outputs.web_catalog_only }}
           REPORT_GENERATED: ${{ steps.verify_requires.outputs.report_needed }}
           GENERATED_REPORT_PATH: ${{ steps.run-verifier.outputs.report_file }}
           REPORT_SUMMARY_PATH: ${{ steps.run-verifier.outputs.report_info_file }}
           WORKFLOW_WORKING_DIRECTORY: "../pr"
+          OCP_VERSION_RANGE: ${{ steps.get-ocp-range.outputs.ocp-version-range }}
         run: |
           cd pr-branch
-          ../ve1/bin/chart-pr-review --directory=../pr --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+          ../ve1/bin/chart-pr-review \
+            --directory=../pr \
+            --verify-user=${{ github.event.pull_request.user.login }} \
+            --api-url=${{ github.event.pull_request._links.self.href }}
           cd ..
 
       - name: Delete Namespace
@@ -244,19 +316,19 @@ jobs:
           KUBECONFIG: /tmp/ci-kubeconfig
         run: |
           API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
-          oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER} --insecure-skip-tls-verify=${{ steps.set-env.outputs.insecure_skip_tls_verify }}
+          oc login --token=${{ secrets.CLUSTER_TOKEN }} --server=${API_SERVER} --insecure-skip-tls-verify=${{ needs.setup.outputs.insecure_skip_tls_verify }}
           ve1/bin/sa-for-chart-testing --delete charts-${{ github.event.number }}
 
       - name: Save PR artifact
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' }}
         run: |
           ve1/bin/pr-artifact --directory=./pr --pr-number=${{ github.event.number }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Prepare PR comment
         id: pr_comment
-        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_CONTENT_ERROR_MESSAGE: ${{ steps.check_pr_content.outputs.pr-content-error-message }}
@@ -268,15 +340,15 @@ jobs:
           ve1/bin/pr-comment ${{ steps.check_pr_content.outcome }} ${{ steps.run-verifier.outcome }} ${{ steps.check_report.conclusion }}
 
       - name: Comment on PR
-        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' }}
-        uses: actions/github-script@v3
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' }}
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
             var issue_number = ${{ github.event.number }};
             var comment = fs.readFileSync('./pr/comment', {encoding:'utf8', flag:'r'});
-            github.issues.createComment({
+            github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: Number(issue_number),
@@ -284,8 +356,8 @@ jobs:
             });
 
       - name: Add 'authorized-request' label to PR
-        if: ${{ always() && steps.check_pr_content.outcome == 'success' && steps.run-verifier.outcome != 'failure' && steps.check_build_required.outputs.run-build == 'true' }}
-        uses: actions/github-script@v3
+        if: ${{ always() && steps.check_pr_content.outcome == 'success' && steps.run-verifier.outcome != 'failure' && needs.setup.outputs.run_build == 'true' }}
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -294,7 +366,7 @@ jobs:
             var vendor_label = fs.readFileSync('./pr/vendor');
             var chart_name = fs.readFileSync('./pr/chart');
             if (vendor_label.toString() !== "" && chart_name.toString() !== "") {
-              github.issues.addLabels({
+              github.rest.issues.addLabels({
                 issue_number: Number(issue_number),
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -321,35 +393,74 @@ jobs:
           MERGE_LABELS: ""
 
       - name: Check for PR merge
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           ./ve1/bin/check-auto-merge --api-url=${{ github.event.pull_request._links.self.href }}
 
+
+  release:
+    name: Release Chart
+    runs-on: ubuntu-22.04
+    needs: [setup, chart-verifier]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checkout PR Branch
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: "pr-branch"
+
+      - name: Set up Python 3.x Part 1
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/python3 setup.py install
+          cd ..
+
+      - name: install chart verifier for action
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          source: github
+          skip_cache: true
+          chart-verifier: ${{ needs.setup.outputs.verifier-action-image }}
+
       - name: Block until there is no running workflow
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
         uses: softprops/turnstyle@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Release Charts
-        if: ${{ steps.check_build_required.outputs.run-build == 'true' }}
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           GITHUB_REF: ${{ github.ref }}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          REPORT_CONTENT: ${{steps.check_report.outputs.report_content}}
-          CHART_ENTRY_NAME: ${{ steps.check_pr_content.outputs.chart-entry-name }}
-          CHART_NAME_WITH_VERSION: ${{ steps.check_pr_content.outputs.chart-name-with-version }}
-          REDHAT_TO_COMMUNITY: ${{ steps.check_report.outputs.redhat_to_community }}
-          WEB_CATALOG_ONLY: ${{ steps.check_pr_content.outputs.webCatalogOnly }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPORT_CONTENT: ${{ needs.chart-verifier.outputs.report_content }}
+          CHART_ENTRY_NAME: ${{ needs.chart-verifier.outputs.chart_entry_name }}
+          REDHAT_TO_COMMUNITY: ${{ needs.chart-verifier.outputs.redhat_to_community }}
+          WEB_CATALOG_ONLY: ${{ needs.chart-verifier.outputs.web_catalog_only }}
+          OCP_VERSION_RANGE: ${{ steps.get-ocp-range.outputs.ocp-version-range }}
         id: release-charts
         run: |
           tar zxvf ./scripts/dependencies/helm-chart-releaser/chart-releaser_1.2.0_linux_amd64.tar.gz
@@ -357,15 +468,19 @@ jobs:
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
           CWD=`pwd`
           cd pr-branch
-          ../ve1/bin/chart-repo-manager --repository=${{ github.repository }} --index-branch=${INDEX_BRANCH} --api-url=${{ github.event.pull_request._links.self.href }} --pr-number=${{ github.event.number }}
+          ../ve1/bin/chart-repo-manager \
+            --repository=${{ github.repository }} \
+            --index-branch=${INDEX_BRANCH} \
+            --api-url=${{ github.event.pull_request._links.self.href }} \
+            --pr-number=${{ github.event.number }}
           cd ${CWD}
 
       - name: Release
-        if: ${{ steps.release-charts.outputs.tag != '' }}
+        if: ${{ needs.chart-verifier.outputs.web_catalog_only == 'False' }}
         uses: softprops/action-gh-release@v0.1.12
         continue-on-error: true
         with:
-          tag_name: ${{ steps.release-charts.outputs.tag }}
+          tag_name: ${{ needs.chart-verifier.outputs.release_tag }}
           files: |
               ${{ steps.release-charts.outputs.report_file }}
               ${{ steps.release-charts.outputs.public_key_file }}
@@ -374,7 +489,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add metrics
-        if: ${{ always() && steps.check_build_required.outputs.run-build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
@@ -392,7 +507,7 @@ jobs:
               echo "add PR run metric"
               ve1/bin/metrics --write-key="${WRITE_KEY}" \
                               --metric-type="pull_request" \
-                              --message-file="${{ steps.pr_comment.outputs.message-file }}" \
+                              --message-file="${{ needs.chart-verifier.outputs.message_file }}" \
                               --pr-number="${{ github.event.number }}" \
                               --pr-action="${{ github.event.action }}" \
                               --repository="${GITHUB_REPOSITORY}" \

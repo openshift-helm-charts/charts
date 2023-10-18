@@ -1,0 +1,35 @@
+name: 'Get OCP range'
+description: 'Get the range of OCP versions corresponding to the provided range of Kubernetes versions'
+inputs:
+  kube-version-range:
+    description: 'Range of Kubernetes versions'
+    required: true
+outputs:
+  ocp-version-range:
+    description: "Corresponsing range of OCP versions"
+    value: ${{ steps.run-get-ocp-range.outputs.ocp-version-range }}
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '>=1.20'
+
+    - name: Install get-ocp-range
+      shell: bash
+      run: go install github.com/opdev/getocprange/cmd/get-ocp-range@latest
+
+    - name: Run get-ocp-range
+      id: run-get-ocp-range
+      shell: bash
+      run: |
+        echo "::debug::Received kubeVersionRange to translate '${{ inputs.kube-version-range }}'"
+        OCP_VERSION_RANGE=$(get-ocp-range '${{ inputs.kube-version-range }}')
+        echo "ocp-version-range=$OCP_VERSION_RANGE" >> $GITHUB_OUTPUT
+        echo "::debug::Successfully translated kubeVersionRange to OCPVersionRange $OCP_VERSION_RANGE"
+
+    - name: Display error message if get-ocp-range failed
+      if: ${{ failure() && steps.run-get-ocp-range.outcome == 'failure' }}
+      shell: bash
+      run: echo "::error file=.github/actions/get-ocp-range/action.yaml::Error running get-ocp-range"

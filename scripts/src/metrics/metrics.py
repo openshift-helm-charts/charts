@@ -11,8 +11,11 @@ sys.path.append("../")
 from indexfile import index
 from pullrequest import prepare_pr_comment as pr_comment
 from collections import OrderedDict
+from reporegex import matchers
 
-file_pattern = re.compile(r"charts/([\w-]+)/([\w-]+)/([\w\.-]+)/([\w\.-]+)/.*")
+file_pattern = re.compile(
+    matchers.submission_path_matcher(strict_categories=False) + r"/.*"
+)
 chart_downloads_event = "Chart Downloads v1.0"
 ignore_users = [
     "zonggen",
