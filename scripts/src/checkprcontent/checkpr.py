@@ -8,6 +8,8 @@ import requests
 import semver
 import yaml
 
+from reporegex import matchers
+
 try:
     from yaml import CLoader as Loader
 except ImportError:
@@ -20,7 +22,6 @@ from pullrequest import prartifact
 from tools import gitutils
 
 ALLOW_CI_CHANGES = "allow/ci-changes"
-TYPE_MATCH_EXPRESSION = "(partners|redhat|community)"
 
 
 def check_web_catalog_only(report_in_pr, num_files_in_pr, report_file_match):
@@ -90,9 +91,9 @@ def check_web_catalog_only(report_in_pr, num_files_in_pr, report_file_match):
 
     if web_catalog_only:
         print("[INFO] webCatalogOnly/providerDelivery is a go")
-        gitutils.add_output("webCatalogOnly", "True")
+        gitutils.add_output("web_catalog_only", "True")
     else:
-        gitutils.add_output("webCatalogOnly", "False")
+        gitutils.add_output("web_catalog_only", "False")
         print("[INFO] webCatalogOnly/providerDelivery is a no-go")
 
 
@@ -109,15 +110,11 @@ def get_file_match_compiled_patterns():
     charts/partners/hashicorp/vault/0.20.0//report.yaml
     """
 
-    pattern = re.compile(
-        r"charts/" + TYPE_MATCH_EXPRESSION + "/([\w-]+)/([\w-]+)/([\w\.-]+)/.*"
-    )
-    reportpattern = re.compile(
-        r"charts/" + TYPE_MATCH_EXPRESSION + "/([\w-]+)/([\w-]+)/([\w\.-]+)/report.yaml"
-    )
-    tarballpattern = re.compile(
-        r"charts/(partners|redhat|community)/([\w-]+)/([\w-]+)/([\w\.-]+)/(.*\.tgz$)"
-    )
+    base = matchers.submission_path_matcher()
+
+    pattern = re.compile(base + r"/.*")
+    reportpattern = re.compile(base + r"/report.yaml")
+    tarballpattern = re.compile(base + r"/(.*\.tgz$)")
     return pattern, reportpattern, tarballpattern
 
 
@@ -151,7 +148,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
                     _, _, chart_name, chart_version, tar_name = tar_match.groups()
                     expected_tar_name = f"{chart_name}-{chart_version}.tgz"
                     if tar_name != expected_tar_name:
-                        msg = f"[ERROR] the tgz file is named incorrectly. Expected: {expected_tar_name}"
+                        msg = f"[ERROR] the tgz file is named incorrectly. Expected: {expected_tar_name}. Got: {tar_name}"
                         print(msg)
                         gitutils.add_output("pr-content-error-message", msg)
                         exit(1)
@@ -232,7 +229,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
                 sys.exit(1)
 
         tag_name = f"{organization}-{chart}-{version}"
-        gitutils.add_output("chart-name-with-version", tag_name)
+        gitutils.add_output("release_tag", tag_name)
         tag_api = f"https://api.github.com/repos/{repository}/git/ref/tags/{tag_name}"
         headers = {
             "Accept": "application/vnd.github.v3+json",

@@ -104,7 +104,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_BODY: "Test triggered by ${{ github.event.pull_request.html_url }}."
         run: |
-          echo "Full test in pr : {{steps.check_request.outputs.full_tests_in_pr }}"
+          echo "Full test in pr : ${{ steps.check_request.outputs.full_tests_in_pr }}"
           if ${{steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }} ; then
             echo "Release PR from dev to charts, oer PR with new full test, so running full tests"
             ve1/bin/behave tests/functional/behave_features/ --tags=full --logging-level=WARNING --no-capture --no-color

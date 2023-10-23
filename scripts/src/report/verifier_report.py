@@ -34,7 +34,6 @@ except ImportError:
     from yaml import Loader
 
 sys.path.append("../")
-from chartrepomanager import indexannotations
 from report import report_info
 
 MIN_SUPPORTED_OPENSHIFT_VERSION = semantic_version.SimpleSpec(">=4.1.0")
@@ -45,6 +44,15 @@ KUBE_VERSION_ATTRIBUTE = "kubeVersion"
 
 
 def get_report_data(report_path):
+    """Load and returns the report data contained in report.yaml
+
+    Args:
+        report_path (str): Path to the report.yaml file.
+
+    Returns:
+        (bool, dict): A boolean indicating if the loading was successfull and the
+                      content of the report.yaml file.
+    """
     try:
         with open(report_path) as report_data:
             report_content = yaml.load(report_data, Loader=Loader)
@@ -55,6 +63,16 @@ def get_report_data(report_path):
 
 
 def get_result(report_data, check_name):
+    """Parse the report.yaml content for the result of a given check.
+
+    Args:
+        report_data (dict): The content of the report.yaml file.
+        check_name (str): The name of the check to get the result for.
+
+    Returns:
+        (bool, str): a boolean to True if the test passed, false otherwise
+                     and the corresponding "reason" field.
+    """
     outcome = False
     reason = "Not Found"
     for result in report_data["results"]:
@@ -117,6 +135,14 @@ def get_package_digest(report_data):
 
 
 def get_public_key_digest(report_data):
+    """Get the public key digest from report.yaml
+
+    Args:
+        report_data (dict): the report.yaml content
+
+    Returns:
+        str: The public key digest from report.yaml. Set to None if not found.
+    """
     public_key_digest = None
     try:
         digests = report_data["metadata"]["tool"]["digests"]
@@ -129,6 +155,14 @@ def get_public_key_digest(report_data):
 
 
 def report_is_valid(report_data):
+    """Check that the report.yaml contains the expected YAML structure
+
+    Args:
+        dict: The content of report.yaml
+
+    Returns:
+        bool: set to True if the report contains the correct structure, False otherwise.
+    """
     outcome = True
 
     if "kind" not in report_data or report_data["kind"] != "verify-report":
@@ -152,7 +186,25 @@ def report_is_valid(report_data):
     return outcome
 
 
-def validate(report_path):
+def validate(report_path, ocp_version_range):
+    """Validate report.yaml by running a serie of checks.
+
+    * Checks that the report.yaml contains valid YAML.
+    * Checks that the report.yaml contains the correct structure.
+    * Checks that the Chart has been successully tested (result of /chart-testing).
+    * Checks that the profile version used is valid SemVer.
+    * Checks that the expected annotation is present.
+    * Checks that the reported version of OCP and Kubernetes are valid and are coherent.
+
+    Args:
+        report_path (str): Path to the report.yaml file
+        ocp_version_range (str): Range of supported OCP versions
+
+    Returns:
+        (bool, str): if the checks all passed, this returns a bool set to True and an
+                     empty str. Otherwise, this returns a bool set to True and the
+                     corresponding error message.
+    """
     is_valid_yaml, report_data = get_report_data(report_path)
 
     if not is_valid_yaml:
@@ -171,7 +223,7 @@ def validate(report_path):
             v1_0_profile = False
             if profile_version.major == 1 and profile_version.minor == 0:
                 v1_0_profile = True
-        except Exception:
+        except ValueError:
             message = f"Invalid profile version in report : {profile_version_string}"
             print(message)
             return False, message
@@ -203,36 +255,16 @@ def validate(report_path):
 
         has_kubeversion_outcome, _ = get_chart_testing_result(report_data)
         if has_kubeversion_outcome:
-            chart = report_info.get_report_chart(report_path)
-            if KUBE_VERSION_ATTRIBUTE in chart:
-                kube_supported_ocp_versions_string = indexannotations.getOCPVersions(
-                    chart[KUBE_VERSION_ATTRIBUTE]
-                )
-                try:
-                    kube_supported_versions = semantic_version.NpmSpec(
-                        kube_supported_ocp_versions_string
-                    )
-                except ValueError:
-                    if v1_0_profile:
-                        return True, ""
-                    else:
-                        return (
-                            False,
-                            f"Kube Version {chart[KUBE_VERSION_ATTRIBUTE]} translates to an invalid OCP version range {kube_supported_ocp_versions_string}",
-                        )
-            else:
-                if v1_0_profile:
-                    return True, ""
-                else:
-                    return False, f"{KUBE_VERSION_ATTRIBUTE} missing from chart!"
-
-            if tested_version not in kube_supported_versions:
-                return (
-                    False,
-                    f"Tested OpenShift version {str(tested_version)} not within specified kube-versions : {kube_supported_ocp_versions_string}",
-                )
-
             if not v1_0_profile:
+                chart = report_info.get_report_chart(report_path)
+                kube_supported_versions = semantic_version.NpmSpec(ocp_version_range)
+
+                if tested_version not in kube_supported_versions:
+                    return (
+                        False,
+                        f"Tested OpenShift version {str(tested_version)} not within specified kube-versions : {ocp_version_range}",
+                    )
+
                 if SUPPORTED_VERSIONS_ANNOTATION in annotations:
                     supported_versions_string = annotations[
                         SUPPORTED_VERSIONS_ANNOTATION

@@ -66,9 +66,4 @@ def get_users_included(owner_data):
 
 
 def get_pgp_public_key(owner_data):
-    pgp_public_key = "null"
-    try:
-        pgp_public_key = owner_data["publicPgpKey"]
-    except Exception:
-        pass
-    return pgp_public_key
+    return owner_data.get("publicPgpKey", "")
