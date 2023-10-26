@@ -1,0 +1,10 @@
+chart:
+  name: helm-1s-project
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: opcert
+vendor:
+  label: test-ext-helm
+  name: test-user-prod-02
