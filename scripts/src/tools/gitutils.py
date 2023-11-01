@@ -31,6 +31,33 @@ PR_FAILED = "PR_FAILED"
 GITHUB_ACTIONS_BOT_EMAIL = "41898282+github-actions[bot]@users.noreply.github.com"
 
 
+def request_headers(log_if_no_auth_header=True):
+    """request headers to be used with API requests to GitHub.
+
+    Args:
+        log_if_no_auth_header: Whether to emit a log line
+            when there is no token header included. This is
+            intended for visibility in CI, so that callers
+            will be aware of cases where auth was not used
+            but should have been.
+
+    Returns:
+        A map of string to string, amounting to header keys
+        and values.
+    """
+    request_headers = {
+        "Accept": "application/vnd.github.v3+json",
+    }
+    token = os.environ.get("BOT_TOKEN", None)
+    if token is not None:
+        request_headers["Authorization"] = f"Bearer {token}"
+
+    if log_if_no_auth_header and token is None:
+        print("[INFO] No auth header is set for GitHub API requests!")
+
+    return request_headers
+
+
 def set_git_username_email(repo, username, email):
     """
     Parameters:
@@ -170,6 +197,15 @@ def add_changes(repo, skip_files):
     return len(repo.index.diff("HEAD")) > 0
 
 
-def add_output(name, value):
+def add_output(name, value, also_print=True):
+    """Adds the name and value to GitHub Output.
+
+    Args:
+        also_print: If set to True, prints the key=value to
+            stderr for debug purposes.
+
+    """
+    if also_print:
+        print(f"[DEBUG] Adding to GITHUB_OUTPUT: {name}={value}", file=sys.stderr)
     with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
         print(f"{name}={value}", file=fh)
