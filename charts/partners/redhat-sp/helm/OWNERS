@@ -1,9 +1,0 @@
-chart:
-  name: helm
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: khatare
-vendor:
-  label: redhat-sp
-  name: Red Hat INC

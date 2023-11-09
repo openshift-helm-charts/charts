@@ -1,8 +1,0 @@
-chart:
-  name: c3-helm-cassandra-3-11-10-3
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: c3-ai
-  name: C3.AI

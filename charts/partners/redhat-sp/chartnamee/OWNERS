@@ -1,8 +1,0 @@
-chart:
-  name: chartnamee
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: redhat-sp
-  name: Red Hat INC

@@ -1,9 +1,0 @@
-chart:
-  name: prod
-  shortDescription: Short repository description
-publicPgpKey: null
-users:
-- githubUsername: kkatare
-vendor:
-  label: redhat-sp
-  name: Red Hat INC
