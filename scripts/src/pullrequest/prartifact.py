@@ -41,10 +41,7 @@ def get_modified_files(api_url):
     if not pr_files:
         page_number = 1
         max_page_size, page_size = 100, 100
-        headers = {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": f'Bearer {os.environ.get("BOT_TOKEN")}',
-        }
+        headers = gitutils.request_headers()
         files_api_url = f"{api_url}/files"
 
         while page_size == max_page_size:
@@ -73,10 +70,7 @@ def get_modified_files(api_url):
 
 def get_labels(api_url):
     if not pr_labels:
-        headers = {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": f'Bearer {os.environ.get("BOT_TOKEN")}',
-        }
+        headers = gitutils.request_headers()
         r = requests.get(api_url, headers=headers)
         pr_data = r.json()
 
