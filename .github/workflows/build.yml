@@ -106,6 +106,7 @@ jobs:
       report_content: ${{ steps.check_report.outputs.report_content }}
       redhat_to_community: ${{ steps.check_report.outputs.redhat_to_community }}
       message_file: ${{ steps.pr_comment.outputs.message-file }}
+      message_text_base64: ${{ steps.encode_pr_comment.outputs.message-text-base64 }}
       web_catalog_only: ${{ steps.check_pr_content.outputs.web_catalog_only }}
       chart_entry_name: ${{ steps.check_pr_content.outputs.chart-entry-name }}
       release_tag: ${{ steps.check_pr_content.outputs.release_tag }}
@@ -213,6 +214,7 @@ jobs:
           ../ve1/bin/get-verify-params --directory=pr --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Install oc
+        id: install-oc
         if: ${{ steps.verify_requires.outputs.cluster_needed == 'true' }}
         uses: redhat-actions/openshift-tools-installer@v1
         with:
@@ -334,11 +336,20 @@ jobs:
           PR_CONTENT_ERROR_MESSAGE: ${{ steps.check_pr_content.outputs.pr-content-error-message }}
           OWNERS_ERROR_MESSAGE: ${{ steps.check_pr_content.outputs.owners-error-message }}
           COMMUNITY_MANUAL_REVIEW: ${{ steps.check_report.outputs.community_manual_review_required }}
-          OC_INSTALL_RESULT: ${{ steps.install-oc.conclusion }}
+          OC_INSTALL_RESULT: ${{ steps.install-oc.outcome }}
           VERIFIER_ERROR_MESSAGE: ${{ steps.check-verifier-result.outputs.verifier_error_message }}
         run: |
           ve1/bin/pr-comment ${{ steps.check_pr_content.outcome }} ${{ steps.run-verifier.outcome }} ${{ steps.check_report.conclusion }}
 
+      # Note(komish): This step is a temporary fix for the metrics step in the next job
+      # which expects the PR comment to exist at the specified filesystem location.
+      - name: Encode PR Comment for Metrics
+        id: encode_pr_comment
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' }}
+        run: |
+          commentBase64=$(base64 --wrap=0 ${{ steps.pr_comment.outputs.message-file }})
+          echo "message-text-base64=${commentBase64}" | tee -a $GITHUB_OUTPUT
+        
       - name: Comment on PR
         if: ${{ always() && needs.setup.outputs.run_build == 'true' }}
         uses: actions/github-script@v6
@@ -487,6 +498,16 @@ jobs:
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Note(komish): This step is a temporary workaround. Metrics requires the PR comment
+      # to be available, but it is written to the filesystem in the previous job.
+      # This can be removed once the metrics execution is restructured to have access to the PR
+      # comment, or pulled out of the release job entirely.
+      - name: Retrieve PR comment for metrics
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
+        run: |
+          mkdir -p $(dirname ${{ needs.chart-verifier.outputs.message_file }})
+          echo ${{ needs.chart-verifier.outputs.message_text_base64 }} | base64 -d | tee ${{ needs.chart-verifier.outputs.message_file }}
 
       - name: Add metrics
         if: ${{ always() && needs.setup.outputs.run_build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
