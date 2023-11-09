@@ -9,11 +9,8 @@ on:
   workflow_dispatch:
 
 env:
-  # TODO(komish): We probably need to make this configurable or derived. Most places in other workflows set this value
-  # based on the refs value, but we may not have that luxury given that this is expected to function only on PRs to main.
-  PR_DEST_BRANCH_NAME: 'gh-pages'
-  # Commented for documentation. This is expected to come from the repository environment.
-  # LOCK_FILE_URL: 'https://charts.openshift.io/chart-locks.json'
+  PR_DEST_BRANCH_NAME: ${{ vars.TARGET_GH_PAGES_BRANCH || 'gh-pages' }}
+  LOCK_FILE_URL: ${{ vars.LOCK_FILE_URL || 'https://charts.openshift.io/chart-locks.json' }}
 
 concurrency:
   # Prevent parallel executions of this and related tasks.
