@@ -1,0 +1,9 @@
+chart:
+  name: gosnappassredhat
+  shortDescription: Share Passwords Securely 
+publicPgpKey: null
+users:
+- githubUsername: komish
+vendor:
+  label: concerthallredhat
+  name: Concert Hall Red Hat
