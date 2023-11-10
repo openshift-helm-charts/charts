@@ -1,8 +1,0 @@
-chart:
-  name: nginx
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: bcook
-  name: Red Hat

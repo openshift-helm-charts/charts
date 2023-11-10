@@ -1,8 +1,0 @@
-chart:
-  name: gitbook
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: certpm-test-partner
-  name: Test Company

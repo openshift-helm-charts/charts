@@ -1,9 +1,0 @@
-chart:
-  name: helm-chart-internal-1626956383
-  shortDescription: Test Helm Chart Short DESC
-publicPgpKey: MTIzNDU2Nzg5MA==
-users:
-- githubUsername: sawalgiriraj
-vendor:
-  label: bpm-test-registry-namespace
-  name: BPM Test Company
