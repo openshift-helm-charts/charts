@@ -1,0 +1,126 @@
+# This workflow generates the JSON representation of a chart lock if it differs
+# from what's currently at LOCK_FILE_URL and creates a PR to
+# PR_DEST_BRANCH_NAME.
+name: Generate Chart Locks
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+env:
+  PR_DEST_BRANCH_NAME: ${{ vars.TARGET_GH_PAGES_BRANCH || 'gh-pages' }}
+  LOCK_FILE_URL: ${{ vars.LOCK_FILE_URL || 'https://charts.openshift.io/chart-locks.json' }}
+
+concurrency:
+  # Prevent parallel executions of this and related tasks.
+  group: updating-chart-locks
+  cancel-in-progress: false
+
+jobs:
+  generate-chart-locks:
+    outputs:
+      package_locks_b64: ${{ steps.generate-chart-locks.outputs.package_locks_b64 }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - run: |
+          pip install PyYAML
+      - name: Generate lock file JSON from existing charts
+        id: generate-chart-locks
+        run: |
+          set -o pipefail
+          python scripts/src/packagemapping/generatelocks.py | tee /tmp/packagelocks.json
+          base64 -w 0 /tmp/packagelocks.json | tee /tmp/packagelocks.json.b64
+          echo "package_locks_b64=$(cat /tmp/packagelocks.json.b64)" >> $GITHUB_OUTPUT
+      - name: Decode and display lockfile JSON (Sanity Check)
+        run: |
+          set -o pipefail
+          test -n "${{ steps.generate-chart-locks.outputs.package_locks_b64 }}" \
+            || { echo "::error::output package_locks_b64 did not contain base64 content generated from the previous step"; exit 2 ;}
+          echo ${{ steps.generate-chart-locks.outputs.package_locks_b64 }} | base64 -d | jq \
+            || { echo "::error::output package_locks_b64 did not contain valid JSON once decoded" ; exit 3 ;}
+  
+  compare-package-lock-manifests:
+    needs: generate-chart-locks
+    outputs:
+      needs-updating: ${{ steps.compare-package-locks.outputs.needs-updating }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine if package lock entries need updating
+        id: compare-package-locks
+        run: |
+          needsupdating=false
+          wget ${{ env.LOCK_FILE_URL }} -O current-locks.json
+          set -o pipefail
+          test -n "${{ needs.generate-chart-locks.outputs.package_locks_b64 }}" \
+            || { echo "::error::output package_locks_b64 did not contain base64 content generated from the previous step"; exit 2 ;}
+          echo ${{ needs.generate-chart-locks.outputs.package_locks_b64 }} | base64 -d | jq > generated-locks.json \
+            || { echo "::error::output package_locks_b64 did not contain valid JSON once decoded" ; exit 3 ;}
+          jq .packages current-locks.json > current-packages.json
+          jq .packages generated-locks.json > generated-packages.json
+          diff current-packages.json generated-packages.json || needsupdating=true
+          echo needs-updating=${needsupdating} | tee -a $GITHUB_OUTPUT
+
+  craft-pr-to-project:
+    # TODO: This needs a token for a user who isn't the CI bot (e.g. GITHUB_TOKEN) but has commit permissions.
+    needs: 
+    - compare-package-lock-manifests
+    - generate-chart-locks
+    if: needs.compare-package-lock-manifests.outputs.needs-updating == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone ${{ env.PR_DEST_BRANCH_NAME }} branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.PR_DEST_BRANCH_NAME }}
+          # token: tbd
+      - name: Set Git Config
+        # TODO update the user name and email
+        run: |
+          git config user.name "CI Bot Name"
+          git config user.email cibot@example.com
+
+      - name: Create new branch
+        id: create-branch
+        run: |
+          branchuuid=$(uuidgen)
+          branchname=update-locks-${branchuuid}
+          git checkout -b $branchname
+          echo branchname=$branchname >> $GITHUB_OUTPUT
+          
+      - name: Overwrite existing lockfile, Commit, and Push
+        id: commit-and-push
+        run: |
+          set -o pipefail
+          test -n "${{ needs.generate-chart-locks.outputs.package_locks_b64 }}" \
+            || { echo "::error::output package_locks_b64 did not contain base64 content generated from the previous step"; exit 2 ;}
+          echo ${{ needs.generate-chart-locks.outputs.package_locks_b64 }} | base64 -d | jq > chart-locks.json \
+            || { echo "::error::output package_locks_b64 did not contain valid JSON once decoded" ; exit 3 ;}
+          md5sum=$(md5sum chart-locks.json | awk '{ print $1 }' )
+          echo new_lockfile_md5sum=$md5sum >> $GITHUB_OUTPUT
+          git add chart-locks.json
+          git commit -m "updating package lock file"
+          git push origin ${{ steps.create-branch.outputs.branchname }}
+          
+      - name: Create Pull Request
+        # If using the GitHub Actions Token, make sure your repository allows
+        # for write permissions as well as Creating and Merging Pull Requests in
+        # Settings.
+        run: |
+          body=$(echo -e "${{ env.PR_BODY }}\n\nThe generated lockfile's md5sum is: **${{ steps.commit-and-push.outputs.new_lockfile_md5sum }}**\n")
+          gh pr create -B ${{ env.PR_DEST_BRANCH_NAME }} -H ${{ steps.create-branch.outputs.branchname }} --title "${{ env.PR_TITLE }} - ${{ steps.commit-and-push.outputs.new_lockfile_md5sum }}" --body "${body}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+          PR_TITLE: Updating Chart Locks
+          PR_BODY: |
+            _This PR was generated by GitHub Actions_
+          
+            This PR is updating the Chart Locks. The content of this PR was
+            generated based on the current state of the charts directory.
+
+            This PR should be automatically merged by GitHub Actions if there are
+            no merge conflicts.
