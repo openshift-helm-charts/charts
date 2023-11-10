@@ -218,7 +218,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
         else:
             data = {"apiVersion": "v1", "entries": {}}
 
-        entry_name = f"{organization}-{chart}"
+        entry_name = chart
         d = data["entries"].get(entry_name, [])
         gitutils.add_output("chart-entry-name", entry_name)
         for v in d:
