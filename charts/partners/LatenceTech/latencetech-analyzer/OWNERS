@@ -1,0 +1,9 @@
+chart:
+  name: latencetech-analyzer
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: LatenceTech
+  name: Technologies Latence Inc.
