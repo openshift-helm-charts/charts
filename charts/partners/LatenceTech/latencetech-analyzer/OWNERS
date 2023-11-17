@@ -1,9 +1,10 @@
 chart:
   name: latencetech-analyzer
-  shortDescription: unknown
+  shortDescription: Helm Charts for LatenceTech container-based deployment
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: bglatence
 vendor:
   label: LatenceTech
   name: Technologies Latence Inc.
