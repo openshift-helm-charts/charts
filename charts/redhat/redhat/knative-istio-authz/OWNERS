@@ -6,6 +6,8 @@ users:
 - githubUsername: Kaustubh-pande
 - githubUsername: pierDipi
 - githubUsername: rudyredhat1
+- githubUsername: ReToCode
+- githubUsername: mgencur
 vendor:
   label: redhat
   name: Red Hat
