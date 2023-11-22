@@ -6591,6 +6591,34 @@ entries:
     urls:
     - https://charts.yugabyte.com/yugaware-openshift-2.18.2.tgz
     version: 2.18.2
+  - annotations:
+      charts.openshift.io/digest: sha256:ceac9d2cf42a46d3c6272638b368487b774569bff88a3b010c93137a14f2797a
+      charts.openshift.io/lastCertifiedTimestamp: '2023-11-20T07:28:52.616297+00:00'
+      charts.openshift.io/name: yugaware-openshift
+      charts.openshift.io/provider: YugaByte Inc
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-11-22T06:05:32.940211+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 2.18.4.0-b52
+    description: YugabyteDB Anywhere provides deployment, orchestration, and monitoring
+      for managing YugabyteDB clusters. YugabyteDB Anywhere can create a YugabyteDB
+      cluster with multiple pods provided by Kubernetes or OpenShift and logically
+      grouped together to form one logical distributed database.
+    digest: ad40151bb0d411f2c6d74df6bce2be10d079d0a5137dd9f2a1f0b1118815faa4
+    home: https://www.yugabyte.com
+    icon: https://avatars0.githubusercontent.com/u/17074854?s=200&v=4
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: sanketh@yugabyte.com
+      name: Sanketh Indarapu
+    - email: gjalla@yugabyte.com
+      name: Govardhan Reddy Jalla
+    name: yugaware-openshift
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
+    version: 2.18.4
   zextras-carbonio:
   - annotations:
       charts.openshift.io/digest: sha256:a93c347dd88ce22a68a4c2ecb7d6c05c211db6c297b57cdd912403ee5e578857
@@ -6640,4 +6668,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-11-16T22:26:12.823368+00:00'
+generated: '2023-11-22T06:05:32.940211+00:00'
