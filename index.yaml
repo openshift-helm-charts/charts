@@ -2412,6 +2412,40 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.19.tgz?raw=true
     version: 2.2.19
+  - annotations:
+      charts.openshift.io/digest: sha256:666fe7c7fc3f0eca56ae71fac7711a597fafd25f85dde295378408a7499f195d
+      charts.openshift.io/lastCertifiedTimestamp: '2023-11-22T10:24:45.973924+00:00'
+      charts.openshift.io/name: ibm-object-storage-plugin Chart
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-11-22T10:27:36.584625+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 2.2.20
+    description: 'Chart for deploying ibmcloud object storage plugin. IBM Cloud Object
+      Storage is persistent, highly available storage that you can mount to apps that
+      run in a Kubernetes cluster by using the IBM Cloud Object Storage plug-in. The
+      plug-in is a Kubernetes Flex-Volume plug-in that connects Cloud Object Storage
+      buckets to pods in your cluster.  License By installing this product you accept
+      the following license terms: http://www.apache.org/licenses/ and https://www.redhat.com/licenses/EULA_Red_Hat_Universal_Base_Image_English_20190422.pdf'
+    digest: b6f9f26fb5fb24d518ba4fbbffa63922a4bef86064bd2bb5393249f5e891f3e5
+    icon: https://cache.globalcatalog.cloud.ibm.com/static/cache/2461-acb0d10a1725d783/images/uploaded/icons/object-storage.png
+    keywords:
+    - IKS
+    - amd64
+    - Storage
+    - Commercial
+    - Limited
+    - Other
+    - ROKS
+    kubeVersion: '>=1.21.0'
+    maintainers:
+    - email: contsto2@in.ibm.com
+      name: IBM
+    name: ibm-object-storage-plugin
+    urls:
+    - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.20.tgz?raw=true
+    version: 2.2.20
   ibm-ibm-oms-ent-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
@@ -6770,4 +6804,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-11-22T10:22:47.297780+00:00'
+generated: '2023-11-22T10:27:36.584625+00:00'
