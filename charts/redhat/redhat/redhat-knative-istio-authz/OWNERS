@@ -1,5 +1,5 @@
 chart:
-  name: knative-istio-authz
+  name: redhat-knative-istio-authz
   shortDescription: This is the Red Had Openshift Serverless knative-istio-authz chart
 publicPgpKey: null
 users:
