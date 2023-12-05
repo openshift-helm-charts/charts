@@ -23,6 +23,10 @@ def get_failure_comment():
     )
 
 
+def get_comment_header(pr_number):
+    return f"Thank you for submitting PR #{pr_number} for Helm Chart Certification!"
+
+
 def get_verifier_errors_comment():
     return "[ERROR] The submitted chart has failed certification. Reason(s):"
 
@@ -209,7 +213,7 @@ def main():
     community_manual_review = os.environ.get("COMMUNITY_MANUAL_REVIEW", False)
     oc_install_result = os.environ.get("OC_INSTALL_RESULT")
 
-    msg = f"Thank you for submitting PR #{issue_number} for Helm Chart Certification!"
+    msg = get_comment_header(issue_number)
 
     # Assemble the detail separately to control order in which it is added to
     # the overall output.
