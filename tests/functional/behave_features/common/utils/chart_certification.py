@@ -270,28 +270,36 @@ vendor:
         try:
             release = get_release_by_tag(self.secrets, expected_tag)
             logging.info(f"Released '{expected_tag}' successfully")
-
-            required_assets = []
-            if release_type == Release_Type.CHART_ONLY:
-                required_assets.append(chart_tgz)
-            elif release_type == Release_Type.REPORT_ONLY:
-                required_assets.append("report.yaml")
-            elif release_type == Release_Type.CHART_AND_REPORT:
-                required_assets.extend([chart_tgz, "report.yaml"])
-            elif release_type == Release_Type.REPORT_AND_KEY:
-                key_file = chart_name + "-" + chart_version + ".tgz" + ".key"
-                required_assets.extend(["report.yaml", key_file])
-            elif release_type == Release_Type.CHART_PROV_AND_REPORT:
-                prov_file = chart_tgz + ".prov"
-                required_assets.extend([chart_tgz, "report.yaml", prov_file])
-            elif release_type == Release_Type.CHART_REPORT_PROV_AND_KEY:
-                key_file = chart_tgz + ".key"
-                prov_file = chart_tgz + ".prov"
-                required_assets.extend([chart_tgz, "report.yaml", prov_file, key_file])
+        except Exception as e:
+            if failure_type == "error":
+                raise AssertionError(e)
             else:
-                sys.exit("Trying to check wrong release type")
-            logging.info(f"Check '{required_assets}' is in release assets")
-            release_id = release["id"]
+                logging.warning(e)
+                return False
+
+        required_assets = []
+        if release_type == Release_Type.CHART_ONLY:
+            required_assets.append(chart_tgz)
+        elif release_type == Release_Type.REPORT_ONLY:
+            required_assets.append("report.yaml")
+        elif release_type == Release_Type.CHART_AND_REPORT:
+            required_assets.extend([chart_tgz, "report.yaml"])
+        elif release_type == Release_Type.REPORT_AND_KEY:
+            key_file = chart_name + "-" + chart_version + ".tgz" + ".key"
+            required_assets.extend(["report.yaml", key_file])
+        elif release_type == Release_Type.CHART_PROV_AND_REPORT:
+            prov_file = chart_tgz + ".prov"
+            required_assets.extend([chart_tgz, "report.yaml", prov_file])
+        elif release_type == Release_Type.CHART_REPORT_PROV_AND_KEY:
+            key_file = chart_tgz + ".key"
+            prov_file = chart_tgz + ".prov"
+            required_assets.extend([chart_tgz, "report.yaml", prov_file, key_file])
+        else:
+            sys.exit("Trying to check wrong release type")
+
+        logging.info(f"Check '{required_assets}' is in release assets")
+        release_id = release["id"]
+        try:
             check_release_assets(self.secrets, release_id, required_assets)
             return True
         except Exception as e:

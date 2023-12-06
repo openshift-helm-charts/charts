@@ -24,7 +24,7 @@ jobs:
       - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Set up Python 3.x Part 2
         run: |
@@ -32,7 +32,7 @@ jobs:
           python3 -m venv ve1
           cd scripts
           ../ve1/bin/pip3 install -r requirements.txt
-          ../ve1/bin/python3 setup.py install
+          ../ve1/bin/pip3 install .
           cd ..
 
       - name: Check for CI changes
@@ -126,7 +126,7 @@ jobs:
       - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Set up Python 3.x Part 2
         run: |
@@ -134,7 +134,7 @@ jobs:
           python3 -m venv ve1
           cd scripts
           ../ve1/bin/pip3 install -r requirements.txt
-          ../ve1/bin/python3 setup.py install
+          ../ve1/bin/pip3 install .
           cd ..
 
       - name: Check PR Content
@@ -431,7 +431,7 @@ jobs:
       - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Set up Python 3.x Part 2
         run: |
@@ -439,7 +439,7 @@ jobs:
           python3 -m venv ve1
           cd scripts
           ../ve1/bin/pip3 install -r requirements.txt
-          ../ve1/bin/python3 setup.py install
+          ../ve1/bin/pip3 install .
           cd ..
 
       - name: install chart verifier for action
@@ -461,43 +461,77 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Release Charts
+      - name: Prepare Chart Release and index entry
         if: ${{ needs.setup.outputs.run_build == 'true' }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPORT_CONTENT: ${{ needs.chart-verifier.outputs.report_content }}
-          CHART_ENTRY_NAME: ${{ needs.chart-verifier.outputs.chart_entry_name }}
           REDHAT_TO_COMMUNITY: ${{ needs.chart-verifier.outputs.redhat_to_community }}
           WEB_CATALOG_ONLY: ${{ needs.chart-verifier.outputs.web_catalog_only }}
           OCP_VERSION_RANGE: ${{ steps.get-ocp-range.outputs.ocp-version-range }}
-        id: release-charts
+        id: prepare-chart-release
         run: |
-          tar zxvf ./scripts/dependencies/helm-chart-releaser/chart-releaser_1.2.0_linux_amd64.tar.gz
-          sudo cp -f cr /usr/local/bin/cr
-          INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "refs/heads/gh-pages"; else echo "${GITHUB_REF}-gh-pages"; fi)
-          CWD=`pwd`
           cd pr-branch
           ../ve1/bin/chart-repo-manager \
             --repository=${{ github.repository }} \
-            --index-branch=${INDEX_BRANCH} \
             --api-url=${{ github.event.pull_request._links.self.href }} \
-            --pr-number=${{ github.event.number }}
-          cd ${CWD}
 
-      - name: Release
+      # Upload the report file, potentially paired with a public key and, if provided, the chart's tarball and its prov file.
+      # Only the report file is always included.
+      # The release tag format is <organization_name>-<chart_name>-<chart_version>
+      - name: Create GitHub release
         if: ${{ needs.chart-verifier.outputs.web_catalog_only == 'False' }}
-        uses: softprops/action-gh-release@v0.1.12
-        continue-on-error: true
+        uses: softprops/action-gh-release@v0.1.15
         with:
           tag_name: ${{ needs.chart-verifier.outputs.release_tag }}
           files: |
-              ${{ steps.release-charts.outputs.report_file }}
-              ${{ steps.release-charts.outputs.public_key_file }}
+              ${{ steps.prepare-chart-release.outputs.report_file }}
+              ${{ steps.prepare-chart-release.outputs.public_key_file }}
+              ${{ steps.prepare-chart-release.outputs.path_to_chart_tarball }}
+              ${{ steps.prepare-chart-release.outputs.prov_file_name }}
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Helm repository index
+        if: ${{ needs.setup.outputs.run_build == 'true' }}
+        env:
+          CHART_ENTRY_NAME: ${{ needs.chart-verifier.outputs.chart_entry_name }}
+          WEB_CATALOG_ONLY: ${{ needs.chart-verifier.outputs.web_catalog_only }}
+        run: |
+          INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "gh-pages"; else echo "${GITHUB_REF##*/}-gh-pages"; fi)
+
+          echo "[INFO] Creating Git worktree for index branch"
+          INDEX_DIR=$(mktemp -d)
+          git remote add upstream "$GITHUB_SERVER_URL"/"$GITHUB_REPOSITORY"
+          git fetch upstream "$INDEX_BRANCH"
+          git worktree add --detach "$INDEX_DIR" upstream/"$INDEX_BRANCH"
+
+          if [ "$WEB_CATALOG_ONLY" == "True" ]; then
+            INDEX_FILE="unpublished-certified-charts.yaml"
+          else
+            INDEX_FILE="index.yaml"
+          fi
+
+          source ve1/bin/activate
+          cd $INDEX_DIR
+          update-index \
+            --index-branch=${INDEX_BRANCH} \
+            --index-file=${INDEX_FILE} \
+            --repository=${{ github.repository }} \
+            --chart-entry="${{ steps.prepare-chart-release.outputs.chart_entry }}" \
+            --chart-url="${{ steps.prepare-chart-release.outputs.chart_url }}" \
+            --version="${{ steps.prepare-chart-release.outputs.version }}"
+
+          echo "[INFO] Add and commit changes to git"
+          git status
+          git add $INDEX_FILE
+          git status
+          git commit -m "$RELEASE_TAG $INDEX_FILE (${{ github.event.number }})"
+          git status
+          git push \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} \
+            HEAD:refs/heads/${INDEX_BRANCH}
 
       # Note(komish): This step is a temporary workaround. Metrics requires the PR comment
       # to be available, but it is written to the filesystem in the previous job.
@@ -510,7 +544,9 @@ jobs:
           echo ${{ needs.chart-verifier.outputs.message_text_base64 }} | base64 -d | tee ${{ needs.chart-verifier.outputs.message_file }}
 
       - name: Add metrics
+        id: add_metrics
         if: ${{ always() && needs.setup.outputs.run_build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
+        continue-on-error: true
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
@@ -537,3 +573,12 @@ jobs:
           else
               echo "Do not collect metrics, required segment write key is not set"
           fi
+
+      - name: Alert Slack helm_dev on failure to update metrics
+        continue-on-error: true
+        if: steps.add_metrics.outcome == 'failure'
+        uses: archive/github-actions-slack@v2.7.0
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: C02979BDUPL
+          slack-text: Failure! Updating metrics during a chart certification. See '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
