@@ -4135,6 +4135,48 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-cryostat-0.3.1/cryostat-0.3.1.tgz
     version: 0.3.1
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:fe0ba7c4736e7c9d17e3affc9c0d1cc69cc7f19ba27a5e4373af6e4df838360e
+      charts.openshift.io/lastCertifiedTimestamp: '2023-12-07T22:11:45.906485+00:00'
+      charts.openshift.io/name: Red Hat build of Cryostat
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2023-12-07T22:12:55.647530+00:00'
+      charts.openshift.io/supportURL: https://github.com/cryostatio/cryostat-helm
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 2.4.0.redhat
+    description: Securely manage JFR recordings for your containerized Java workloads
+    digest: 60d13f616a0aa4d628fcb31d601a1b7332667ef367ddc8dd897d2a714d4aead5
+    home: https://cryostat.io
+    icon: https://raw.githubusercontent.com/cryostatio/cryostat-helm/main/docs/images/cryostat-icon.svg
+    keywords:
+    - flightrecorder
+    - java
+    - jdk
+    - jfr
+    - jmc
+    - missioncontrol
+    - monitoring
+    - profiling
+    - diagnostic
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - name: The Cryostat Community
+      url: https://groups.google.com/g/cryostat-development
+    name: cryostat
+    sources:
+    - https://github.com/cryostatio/cryostat
+    - https://github.com/cryostatio/cryostat-core
+    - https://github.com/cryostatio/cryostat-web
+    - https://github.com/cryostatio/jfr-datasource
+    - https://github.com/cryostatio/cryostat-grafana-dashboard
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-cryostat-0.4.0/cryostat-0.4.0.tgz
+    version: 0.4.0
   redhat-data-grid:
   - annotations:
       charts.openshift.io/digest: sha256:4a60f63bec9744cc6b6261ae1b81670a96c3e9d95c1bb259894b4b2220a42549
@@ -6891,4 +6933,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-11-27T08:04:04.642450+00:00'
+generated: '2023-12-07T22:12:55.583452+00:00'
