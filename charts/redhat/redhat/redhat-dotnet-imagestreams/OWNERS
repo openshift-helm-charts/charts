@@ -1,0 +1,9 @@
+chart:
+  name: redhat-dotnet-imagestreams
+  description: This is the Red Hat .NET imagestreams chart
+publicPgpKey: null
+users:
+  - githubUsername: tmds
+vendor:
+  label: redhat
+  name: Red Hat
