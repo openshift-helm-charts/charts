@@ -7,6 +7,7 @@ users:
   - githubUsername: christophe-f
   - githubUsername: sabre1041
   - githubUsername: nickboldt
+  - githubUsername: rhdh-bot
 vendor:
   label: redhat
   name: Red Hat
