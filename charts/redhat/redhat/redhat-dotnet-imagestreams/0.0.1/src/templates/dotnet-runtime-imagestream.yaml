@@ -16,7 +16,7 @@ spec:
 
         WARNING: By selecting this tag, your application will automatically update to use the latest version of .NET available on OpenShift, including major version updates.
       iconClass: icon-dotnet
-      tags: runtime,.net-runtime,dotnet-runtime,hidden
+      tags: dotnet-runtime,hidden
       supports: dotnet-runtime
     from:
       kind: ImageStreamTag
@@ -30,7 +30,7 @@ spec:
       description: Run .NET 8 applications on UBI 8. For more information
         about using this image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/8.0/runtime/README.md.
       iconClass: icon-dotnet
-      tags: runtime,.net-runtime,dotnet-runtime,dotnet-runtime80
+      tags: dotnet-runtime
       version: '8.0'
       supports: dotnet-runtime,dotnet-runtime:8.0
     from:
@@ -45,7 +45,7 @@ spec:
       description: Run .NET 8 applications on UBI 8. For more information
         about using this image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/8.0/runtime/README.md.
       iconClass: icon-dotnet
-      tags: runtime,.net-runtime,dotnet-runtime,dotnet-runtime80,hidden
+      tags: dotnet-runtime,hidden
       version: '8.0'
       supports: dotnet-runtime,dotnet-runtime:8.0
     from:
@@ -60,7 +60,7 @@ spec:
       description: Run .NET 7 applications on UBI 8. For more information
         about using this image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/7.0/runtime/README.md.
       iconClass: icon-dotnet
-      tags: runtime,.net-runtime,dotnet-runtime,dotnet-runtime70
+      tags: dotnet-runtime
       version: '7.0'
       supports: dotnet-runtime,dotnet-runtime:7.0
     from:
@@ -75,7 +75,7 @@ spec:
       description: Run .NET 7 applications on UBI 8. For more information
         about using this image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/7.0/runtime/README.md.
       iconClass: icon-dotnet
-      tags: runtime,.net-runtime,dotnet-runtime,dotnet-runtime70,hidden
+      tags: dotnet-runtime,hidden
       version: '7.0'
       supports: dotnet-runtime,dotnet-runtime:7.0
     from:
@@ -90,7 +90,7 @@ spec:
       description: Run .NET 6 applications on UBI 8. For more information
         about using this image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/6.0/runtime/README.md.
       iconClass: icon-dotnet
-      tags: runtime,.net-runtime,dotnet-runtime,dotnet-runtime60
+      tags: dotnet-runtime
       version: '6.0'
       supports: dotnet-runtime,dotnet-runtime:6.0
     from:
@@ -105,7 +105,7 @@ spec:
       description: Run .NET 6 applications on UBI 8. For more information
         about using this image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/6.0/runtime/README.md.
       iconClass: icon-dotnet
-      tags: runtime,.net-runtime,dotnet-runtime,dotnet-runtime60,hidden
+      tags: dotnet-runtime,hidden
       version: '6.0'
       supports: dotnet-runtime,dotnet-runtime:6.0
     from:

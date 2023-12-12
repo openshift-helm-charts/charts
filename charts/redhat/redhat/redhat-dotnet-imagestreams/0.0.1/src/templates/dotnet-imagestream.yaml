@@ -16,7 +16,7 @@ spec:
 
         WARNING: By selecting this tag, your application will automatically update to use the latest version of .NET available on OpenShift, including major version updates.
       iconClass: icon-dotnet
-      tags: builder,.net,dotnet,hidden
+      tags: builder,dotnet,hidden
       supports: dotnet
       sampleRepo: https://github.com/redhat-developer/s2i-dotnetcore-ex
       sampleContextDir: app
@@ -33,7 +33,7 @@ spec:
       description: Build and run .NET 8 applications on UBI 8. For more information
         about using this builder image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/8.0/build/README.md.
       iconClass: icon-dotnet
-      tags: builder,.net,dotnet,dotnet80
+      tags: builder,dotnet
       version: '8.0'
       supports: dotnet,dotnet:8.0
       sampleRepo: https://github.com/redhat-developer/s2i-dotnetcore-ex
@@ -51,7 +51,7 @@ spec:
       description: Build and run .NET 8 applications on UBI 8. For more information
         about using this builder image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/8.0/build/README.md.
       iconClass: icon-dotnet
-      tags: builder,.net,dotnet,dotnet80,hidden
+      tags: builder,dotnet,hidden
       version: '8.0'
       supports: dotnet,dotnet:8.0
       sampleRepo: https://github.com/redhat-developer/s2i-dotnetcore-ex
@@ -69,7 +69,7 @@ spec:
       description: Build and run .NET 7 applications on UBI 8. For more information
         about using this builder image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/7.0/build/README.md.
       iconClass: icon-dotnet
-      tags: builder,.net,dotnet,dotnet70
+      tags: builder,dotnet
       version: '7.0'
       supports: dotnet,dotnet:7.0
       sampleRepo: https://github.com/redhat-developer/s2i-dotnetcore-ex
@@ -87,7 +87,7 @@ spec:
       description: Build and run .NET 7 applications on UBI 8. For more information
         about using this builder image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/7.0/build/README.md.
       iconClass: icon-dotnet
-      tags: builder,.net,dotnet,dotnet70,hidden
+      tags: builder,dotnet,hidden
       version: '7.0'
       supports: dotnet,dotnet:7.0
       sampleRepo: https://github.com/redhat-developer/s2i-dotnetcore-ex
@@ -105,7 +105,7 @@ spec:
       description: Build and run .NET 6 applications on UBI 8. For more information
         about using this builder image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/6.0/build/README.md.
       iconClass: icon-dotnet
-      tags: builder,.net,dotnet,dotnet60
+      tags: builder,dotnet
       version: '6.0'
       supports: dotnet,dotnet:6.0
       sampleRepo: https://github.com/redhat-developer/s2i-dotnetcore-ex
@@ -123,7 +123,7 @@ spec:
       description: Build and run .NET 6 applications on UBI 8. For more information
         about using this builder image, including OpenShift considerations, see https://github.com/redhat-developer/s2i-dotnetcore/tree/main/6.0/build/README.md.
       iconClass: icon-dotnet
-      tags: builder,.net,dotnet,dotnet60,hidden
+      tags: builder,dotnet,hidden
       version: '6.0'
       supports: dotnet,dotnet:6.0
       sampleRepo: https://github.com/redhat-developer/s2i-dotnetcore-ex
