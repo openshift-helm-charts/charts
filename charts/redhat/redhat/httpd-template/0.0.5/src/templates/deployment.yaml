@@ -1,9 +1,19 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   annotations:
     description: Defines how to deploy the application server
     template.alpha.openshift.io/wait-for-ready: "true"
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "{{ .Values.name }}:latest"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
   labels:
     app: httpd-example
     template: httpd-example
@@ -11,9 +21,10 @@ metadata:
 spec:
   replicas: 1
   selector:
-    name: {{ .Values.name }}
+    matchLabels:
+      name: {{ .Values.name }}
   strategy:
-    type: Rolling
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -22,7 +33,7 @@ spec:
     spec:
       containers:
       - env: []
-        image: "{{ .Values.name }}:latest"
+        image: " "
         livenessProbe:
           httpGet:
             path: /
@@ -41,14 +52,3 @@ spec:
         resources:
           limits:
             memory: {{ .Values.memory_limit }}
-  triggers:
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - httpd-example
-      from:
-        kind: ImageStreamTag
-        name: "{{ .Values.name }}:latest"
-        namespace: {{ .Values.namespace }}
-    type: ImageChange
-  - type: ConfigChange
