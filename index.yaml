@@ -4810,6 +4810,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-httpd-template-0.0.4/httpd-template-0.0.4.tgz
     version: 0.0.4
+  - annotations:
+      charts.openshift.io/digest: sha256:bd6768b6ca8b864f0bcd21487d9a710c86c958e1e239df722fa423c116b32b10
+      charts.openshift.io/lastCertifiedTimestamp: '2023-12-12T15:14:29.181183+00:00'
+      charts.openshift.io/name: Red Hat Apache HTTP Server (httpd) application (experimental).
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2023-12-12T15:15:37.167862+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.5
+    description: This content is experimental, do not use it in production. An example
+      Apache HTTP Server (httpd) application that serves static content. For more
+      information about using this template, including OpenShift considerations, see
+      https://github.com/sclorg/httpd-container/blob/master/README.md.
+    digest: 9af615e62716768b800ae479ec5b960830dc05e806979245fa9cbea67638df09
+    kubeVersion: '>=1.20.0'
+    name: httpd-template
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,httpd
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-httpd-template-0.0.5/httpd-template-0.0.5.tgz
+    version: 0.0.5
   redhat-jenkins:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
@@ -7050,4 +7074,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-12-12T10:09:30.153043+00:00'
+generated: '2023-12-12T15:15:37.101461+00:00'
