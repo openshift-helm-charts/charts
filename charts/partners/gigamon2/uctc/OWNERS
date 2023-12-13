@@ -1,0 +1,9 @@
+chart:
+  name: uctc
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: gigamon2
+  name: Gigamon Inc.
