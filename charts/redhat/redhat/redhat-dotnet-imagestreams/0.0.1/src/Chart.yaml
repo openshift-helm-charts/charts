@@ -3,7 +3,7 @@ description: |-
   For more information about using this builder image, including OpenShift considerations,
   see https://github.com/redhat-developer/s2i-dotnetcore.
 annotations:
-  charts.openshift.io/name: Red Hat .NET imagestreams.
+  charts.openshift.io/name: Red Hat .NET imagestreams
   charts.openshift.io/provider: Red Hat
   charts.openshift.io/providerType: redhat
 apiVersion: v2
