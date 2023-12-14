@@ -4811,7 +4811,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:b68723f6010182ddc45093918a4f2474d43895e4468563d57fddebaee0422f1a
       charts.openshift.io/lastCertifiedTimestamp: '2023-07-27T09:12:08.489237+00:00'
-      charts.openshift.io/name: Red Hat Apache HTTP Server (httpd) application (experimental).
+      charts.openshift.io/name: Red Hat Apache HTTP Server (httpd) application (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2023-07-27T09:13:18.325790+00:00'
@@ -4835,7 +4835,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:bd6768b6ca8b864f0bcd21487d9a710c86c958e1e239df722fa423c116b32b10
       charts.openshift.io/lastCertifiedTimestamp: '2023-12-12T15:14:29.181183+00:00'
-      charts.openshift.io/name: Red Hat Apache HTTP Server (httpd) application (experimental).
+      charts.openshift.io/name: Red Hat Apache HTTP Server (httpd) application (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2023-12-12T15:15:37.167862+00:00'
@@ -5253,7 +5253,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:d2203989fc770f8e1c8f4100f86a426b37aa0052016f71ca9bb52647d9c66533
       charts.openshift.io/lastCertifiedTimestamp: '2023-12-12T10:08:30.320767+00:00'
-      charts.openshift.io/name: Red Hat .NET imagestreams.
+      charts.openshift.io/name: Red Hat .NET imagestreams
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2023-12-12T10:09:30.229797+00:00'
@@ -5276,7 +5276,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:b98749a73edd19bcc234e787cf0895657b4fbdd12eaae23a8001b44395ad7ffb
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-23T11:05:14.742572+00:00'
-      charts.openshift.io/name: Red Hat PHP applications on UBI (experimental).
+      charts.openshift.io/name: Red Hat PHP applications on UBI (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
       charts.openshift.io/submissionTimestamp: '2023-08-23T11:05:47.705158+00:00'
@@ -5299,7 +5299,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:378d6a31b0aa64d1c31bb429e0f1d2223a5e0500a51ea0462345ab69cff49e6c
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T07:46:22.327455+00:00'
-      charts.openshift.io/name: Red Hat NodeJS imagestreams (experimental).
+      charts.openshift.io/name: Red Hat NodeJS imagestreams (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: redhat
       charts.openshift.io/submissionTimestamp: '2023-08-24T07:46:56.542093+00:00'
@@ -5322,7 +5322,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:d261dc7b1b54140be0c01bf4ad053cb9596687e53045d6d763eef72c8f869d05
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T07:54:07.26444+00:00'
-      charts.openshift.io/name: Red Hat NodeJS imagestreams (experimental).
+      charts.openshift.io/name: Red Hat NodeJS imagestreams (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: redhat
       charts.openshift.io/submissionTimestamp: '2023-08-24T07:54:40.706800+00:00'
@@ -5346,7 +5346,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:59e0ea50848a68c1710f8efe5c4451a3afd6bd28cb47eb7dd4590b01faf9d49c
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T10:56:43.308577+00:00'
-      charts.openshift.io/name: Red Hat Perl imagestreams (experimental).
+      charts.openshift.io/name: Red Hat Perl imagestreams (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: redhat
       charts.openshift.io/submissionTimestamp: '2023-08-24T10:57:22.185257+00:00'
@@ -5370,7 +5370,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:55db05ca38410f095d81aa5dc1c6ecb5a448b50e4370be26c26084222cc98c24
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T11:26:29.677061+00:00'
-      charts.openshift.io/name: Red Hat PHP imagestreams on UBI (experimental).
+      charts.openshift.io/name: Red Hat PHP imagestreams on UBI (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: redhat
       charts.openshift.io/submissionTimestamp: '2023-08-24T11:27:15.581118+00:00'
@@ -5394,7 +5394,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:8801644ed1c4da57ced8deae3cf0be56ab94df113c41a7301b9c73d4a85b2ff7
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T11:42:57.80258+00:00'
-      charts.openshift.io/name: Red Hat Python imagestreams (experimental).
+      charts.openshift.io/name: Red Hat Python imagestreams (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: redhat
       charts.openshift.io/submissionTimestamp: '2023-08-24T11:43:31.177357+00:00'
@@ -5418,7 +5418,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:9e2def051458896f17ffc65f9b1b65216cb3bedc4da43d4c9781b548a0471f1a
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T11:59:45.440909+00:00'
-      charts.openshift.io/name: Red Hat Ruby imagestreams on UBI (experimental).
+      charts.openshift.io/name: Red Hat Ruby imagestreams on UBI (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: redhat
       charts.openshift.io/submissionTimestamp: '2023-08-24T12:00:17.036191+00:00'
@@ -5441,7 +5441,7 @@ entries:
   - annotations:
       charts.openshift.io/digest: sha256:c4a5d468211bd814e32c27c20a1ae121951129152dbfb7d7ee209bef849801ac
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T12:07:28.147863+00:00'
-      charts.openshift.io/name: Red Hat Ruby imagestreams on UBI (experimental).
+      charts.openshift.io/name: Red Hat Ruby imagestreams on UBI (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: redhat
       charts.openshift.io/submissionTimestamp: '2023-08-24T12:08:01.087937+00:00'
@@ -7096,4 +7096,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-12-14T15:09:38.250178+00:00'
+generated: '2023-12-14T16:40:00.250178+00:00'
