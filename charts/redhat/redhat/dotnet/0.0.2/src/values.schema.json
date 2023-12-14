@@ -52,8 +52,8 @@
                             "description": "Determines if the ImageStreamTag is in the namespace you are releasing to"
                         },
                         "namespace": {
-                            "type": "string",
-                            "description": "The namespace that contains the ImageStreamTag"
+                            "type": ["string", "null"],
+                            "description": "When useReleaseNamespace is 'false', determines the namespace that contains the ImageStreamTag. When unset, 'openshift' is used."
                         }
                     }
                 },

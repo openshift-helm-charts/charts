@@ -20,3 +20,13 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "dotnet.imageName" -}}
 {{ default (include "dotnet.name" .) .Values.image.name }}:{{ .Values.image.tag }}
 {{- end -}}
+
+{{- define "dotnet.imageStreamTagNamespace" -}}
+{{- if .Values.build.imageStreamTag.useReleaseNamespace -}}
+{{ .Release.Namespace }}
+{{- else if .Values.build.imageStreamTag.namespace -}}
+{{ .Values.build.imageStreamTag.namespace }}
+{{- else -}}
+openshift
+{{- end -}}
+{{- end -}}

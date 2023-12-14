@@ -28,11 +28,7 @@ spec:
       from:
         kind: ImageStreamTag
         name: {{ .Values.build.imageStreamTag.name }}
-  {{- if .Values.build.imageStreamTag.useReleaseNamespace }}
-        namespace: {{ .Release.Namespace }}
-  {{- else }}
-        namespace: {{ .Values.build.imageStreamTag.namespace }}
-  {{- end }}
+        namespace: {{ include "dotnet.imageStreamTagNamespace" . }}
   {{- if .Values.build.pullSecret }}
       pullSecret:
         name: {{ .Values.build.pullSecret }}

@@ -26,8 +26,8 @@ build:
     name: dotnet:8.0
     ## Is this ImageStreamTag in the same namespace you are releasing to?
     useReleaseNamespace: false
-    ## Namespace containing the ImageStreamTag, is useReleaseNamespace == false
-    namespace: openshift
+    ## Namespace containing the ImageStreamTag
+    namespace:
 
   ## Specifies where the image will be pushed to once built
   ## More information: https://docs.openshift.com/container-platform/4.6/builds/managing-build-output.html
