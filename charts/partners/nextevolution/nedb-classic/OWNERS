@@ -2,10 +2,11 @@ chart:
   name: nedb-classic
   shortDescription: NE.Databridge Classic Helm Chart
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: selamanse
 - githubUsername: Blitzableiter
+- githubUsername: NE-gaebels
 vendor:
   label: nextevolution
   name: nextevolution GmbH
