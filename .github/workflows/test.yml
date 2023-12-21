@@ -25,11 +25,19 @@ on:
         default: ""
 
 jobs:
+  check-contributor:
+    name: Check contributor
+    uses: ./.github/workflows/check-contributor.yml
+    with:
+      user: ${{ github.event.pull_request.user.login }}
+
   workflow-test:
     name: Workflow Test
+    needs: [check-contributor]
     runs-on: ubuntu-20.04
     if: |
-      github.event.pull_request.draft == false
+      github.event.pull_request.draft == false &&
+      needs.check-contributor.outputs.is-repo-owner == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
