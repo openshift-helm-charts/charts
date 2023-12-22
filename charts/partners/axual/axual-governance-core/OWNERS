@@ -1,0 +1,9 @@
+chart:
+  name: axual-governance-core
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: axual
+  name: Axual B.V.
