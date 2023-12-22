@@ -67,6 +67,55 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/axual-axual-governance-core-0.1.1/axual-governance-core-0.1.1.tgz
     version: 0.1.1
+  - annotations:
+      charts.openshift.io/digest: sha256:6df3b50453e582aab9d6b156fb87f00b75be9eda25b2861cd487cd749c6cb1fc
+      charts.openshift.io/lastCertifiedTimestamp: '2023-12-22T21:40:22.388073+00:00'
+      charts.openshift.io/name: Axual Governance
+      charts.openshift.io/provider: Axual B.V.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-12-22T21:48:18.197938+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 0.1.2
+    dependencies:
+    - condition: global.platform-manager.enabled
+      name: platform-manager
+      repository: oci://registry.axual.io/axual-charts
+      version: 8.0.1
+    - condition: global.organization-mgmt.enabled
+      name: organization-mgmt
+      repository: oci://registry.axual.io/axual-charts
+      version: 0.2.1
+    - condition: global.platform-ui.enabled
+      name: platform-ui
+      repository: oci://registry.axual.io/axual-charts
+      version: 9.1.0
+    - condition: global.api-gateway.enabled
+      name: api-gateway
+      repository: oci://registry.axual.io/axual-charts
+      version: 0.2.1
+    - condition: global.topic-browse.enabled
+      name: topic-browse
+      repository: oci://registry.axual.io/internal-charts
+      version: 0.2.1
+    description: Axual Governance core which installs core Axual components defining
+      the control plane.
+    digest: 6df70c0ae239928b472ff5f970a7b039b75d118ae7e6f656c0d8e8a419d072d3
+    home: https://axual.com
+    icon: https://media.licdn.com/dms/image/C560BAQGNVRrjMGHmxQ/company-logo_200_200/0/1630600168205/axual_logo?e=2147483647&v=beta&t=NlepYScz7uLBwI1tawUVoq-wo1-qZdvA4LCzvH8mf5c
+    keywords:
+    - axual
+    - kafka
+    - messaging
+    - integration
+    - streaming
+    kubeVersion: '>= 1.24.0'
+    name: axual-governance-core
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/axual-axual-governance-core-0.1.2/axual-governance-core-0.1.2.tgz
+    version: 0.1.2
   broadpeak-bks400:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -7139,4 +7188,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-12-22T21:09:39.821188+00:00'
+generated: '2023-12-22T21:48:18.133450+00:00'
