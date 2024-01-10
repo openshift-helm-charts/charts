@@ -1,15 +1,26 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   annotations:
     template.alpha.openshift.io/wait-for-ready: "true"
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "mysql:{{ .Values.mysql_version }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
   labels:
     template: mysql-persistent-template
   name: {{ .Values.database_service_name }}
 spec:
   replicas: 1
   selector:
-    name: {{ .Values.database_service_name }}
+    matchLabels:
+      name: {{ .Values.database_service_name }}
   strategy:
     type: Recreate
   template:
@@ -39,7 +50,7 @@ spec:
             secretKeyRef:
               key: database-name
               name: {{ .Values.database_service_name }}
-        image: "mysql:{{ .Values.mysql_version }}"
+        image: " "
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
@@ -72,14 +83,3 @@ spec:
       - name: {{ .Values.database_service_name }}-data
         persistentVolumeClaim:
           claimName: {{ .Values.database_service_name }}
-  triggers:
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - mysql
-      from:
-        kind: ImageStreamTag
-        name: mysql:{{ .Values.mysql_version }}
-        namespace: {{ .Values.namespace }}
-    type: ImageChange
-  - type: ConfigChange

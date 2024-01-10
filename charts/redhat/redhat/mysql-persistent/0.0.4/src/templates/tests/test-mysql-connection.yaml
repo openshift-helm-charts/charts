@@ -22,6 +22,6 @@ spec:
           value: "{{ .Values.mysql_database }}"
       command:
         - /bin/bash
-        - -ec
-        - "echo \"SELECT 42 as testval\\g\" | mysql --connect-timeout=15 -h {{ .Values.database_service_name }} $MARIADB_DATABASE -u$MARIADB_USER -p$MARIADB_PASSWORD"
+        - -exc
+        - "echo \"SELECT 42 as testval\\g\" | mysql --connect-timeout=15 -h {{ .Values.database_service_name }} $MARIADB_DATABASE -u $MARIADB_USER -p$MARIADB_PASSWORD"
   restartPolicy: Never
