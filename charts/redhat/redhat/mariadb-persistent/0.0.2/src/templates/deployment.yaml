@@ -1,16 +1,28 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   annotations:
     template.alpha.openshift.io/wait-for-ready: "true"
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "mariadb:{{ .Values.mariadb_version }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
   labels:
     app.openshift.io/runtime: mariadb
     template: mariadb-persistent-template
   name: {{ .Values.database_service_name }}
+
 spec:
   replicas: 1
   selector:
-    name: {{ .Values.database_service_name }}
+    matchLabels:
+      name: {{ .Values.database_service_name }}
   strategy:
     type: Recreate
   template:
@@ -73,13 +85,3 @@ spec:
       - name: {{ .Values.database_service_name }}-data
         persistentVolumeClaim:
           claimName: {{ .Values.database_service_name }}
-  triggers:
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - mariadb
-      from:
-        kind: ImageStreamTag
-        name: mariadb:{{ .Values.mariadb_version }}
-    type: ImageChange
-  - type: ConfigChange
