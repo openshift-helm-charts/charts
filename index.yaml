@@ -5075,6 +5075,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mariadb-persistent-0.0.1/mariadb-persistent-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:6a41f4741b554ee31157a058bd79fcb3db12d30c3ab466eb7f82081804e1ca24
+      charts.openshift.io/lastCertifiedTimestamp: '2024-01-10T13:18:51.41548+00:00'
+      charts.openshift.io/name: Red Hat MariaDB database service, with persistent
+        storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-01-10T13:20:09.114157+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: 'This content is expermental, do not use it in production. MariaDB
+      database service, with persistent storage. For more information about using
+      this template, including OpenShift considerations, see https://github.com/sclorg/mariadb-container/blob/master/10.3/root/usr/share/container-scripts/mysql/README.md.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: 0a07865c69bc5d6fd7262c5d00b52f3f1ba7e89b7e4094b7c362ac789dc1e891
+    kubeVersion: '>=1.20.0'
+    name: mariadb-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mariadb
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mariadb-persistent-0.0.2/mariadb-persistent-0.0.2.tgz
+    version: 0.0.2
   redhat-mongo-sed:
   - annotations:
       charts.openshift.io/digest: sha256:0c58aaebf6f6fed25017c33d1a073febbb448d3cb561e3dfc6611a3b2a016cfd
@@ -7239,4 +7265,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-01-10T13:05:52.160558+00:00'
+generated: '2024-01-10T13:20:09.040480+00:00'
