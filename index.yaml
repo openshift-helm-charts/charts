@@ -5356,6 +5356,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-postgresql-persistent-0.0.2/postgresql-persistent-0.0.2.tgz
     version: 0.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:37b561e3952df850f7cd0a36f19b4d644de65e7027305d7836535565cfec05f3
+      charts.openshift.io/lastCertifiedTimestamp: '2024-01-10T14:05:06.946278+00:00'
+      charts.openshift.io/name: Red Hat PostgreSQL database service, with persistent
+        storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-01-10T14:06:10.929624+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.3
+    description: 'This content is expermental, do not use it in production. PostgreSQL
+      database service, with persistent storage. For more information about using
+      this template, including OpenShift considerations, see https://github.com/sclorg/postgresql-container/.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: 90e52d7786735d1629419adbd82b9855ccda155797081b90d2fb8857f90c5fb8
+    name: postgresql-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,postgresql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-postgresql-persistent-0.0.3/postgresql-persistent-0.0.3.tgz
+    version: 0.0.3
   redhat-psql-sed:
   - annotations:
       charts.openshift.io/digest: sha256:9f6343df9aac5a44a06589169f912a9be9582df0e0ff9cb80865b0927e79c452
@@ -7265,4 +7290,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-01-10T13:20:09.040480+00:00'
+generated: '2024-01-10T14:06:10.860150+00:00'
