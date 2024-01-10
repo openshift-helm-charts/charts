@@ -5141,6 +5141,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mysql-persistent-0.0.1/mysql-persistent-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:7064e027feae81a72dc202a895cfb42682cc1984d916294fdc1ccdd8c7b842f0
+      charts.openshift.io/lastCertifiedTimestamp: '2024-01-10T13:04:43.820382+00:00'
+      charts.openshift.io/name: Red Hat MySQL database service, with persistent storage
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-01-10T13:05:52.227372+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.4
+    description: 'This content is expermental, do not use it in production. MySQL
+      database service, with persistent storage. For more information about using
+      this template, including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/8.0/root/usr/share/container-scripts/mysql/README.md.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: 4aec492ed99782f91a864f635b32683972230fdce8f75aacab5671048fc32fcf
+    kubeVersion: '>=1.20.0'
+    name: mysql-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mysql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mysql-persistent-0.0.4/mysql-persistent-0.0.4.tgz
+    version: 0.0.4
   redhat-mysql-sed:
   - annotations:
       charts.openshift.io/digest: sha256:451087463b43fdffa1bd542bdec76f50909355cced7310d8093c4da38a15be48
@@ -7213,4 +7239,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-01-10T11:42:08.683565+00:00'
+generated: '2024-01-10T13:05:52.160558+00:00'
