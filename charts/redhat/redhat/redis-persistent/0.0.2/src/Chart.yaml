@@ -7,6 +7,8 @@ tags: database,redis
 version: 0.0.2
 annotations:
   charts.openshift.io/name: Red Hat Redis in-memory data structure store, with persistent storage (experimental)
+  charts.openshift.io/provider: Red Hat
+  charts.openshift.io/providerType: redhat
 apiVersion: v2
 appVersion: 0.0.2
 kubeVersion: '>=1.20.0'
