@@ -1,17 +1,28 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   annotations:
     template.alpha.openshift.io/wait-for-ready: "true"
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "postgresql:{{ .Values.image.tag }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
   labels:
     template: postgresql-persistent-template
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  name: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
-    name: {{ .Values.database_service_name }}
+    matchLabels:
+      name: {{ .Values.database_service_name }}
   strategy:
     type: Recreate
   template:
@@ -20,8 +31,7 @@ spec:
         name: {{ .Values.database_service_name }}
     spec:
       containers:
-      - capabilities: {}
-        env:
+      - env:
         - name: POSTGRESQL_USER
           valueFrom:
             secretKeyRef:
@@ -37,7 +47,7 @@ spec:
             secretKeyRef:
               key: database-name
               name: {{ .Values.database_service_name }}
-        image: "postgresql:{{ .Values.image.tag }}"
+        image: " "
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
@@ -46,7 +56,7 @@ spec:
             - --live
           initialDelaySeconds: 120
           timeoutSeconds: 10
-        name: "postgresql-{{ .Values.image.tag }}-testing"
+        name: "postgresql-persistent"
         ports:
         - containerPort: {{ .Values.config.port }}
           protocol: TCP
@@ -72,16 +82,4 @@ spec:
       - name: {{ .Values.database_service_name }}-data
         persistentVolumeClaim:
           claimName: {{ .Values.database_service_name }}
-  triggers:
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - "postgresql-{{ .Values.image.tag }}-testing"
-      from:
-        kind: ImageStreamTag
-        name: "postgresql:{{ .Values.image.tag }}"
-        namespace: {{ .Values.namespace }}
-      lastTriggeredImage: ""
-    type: ImageChange
-  - type: ConfigChange
 status: {}

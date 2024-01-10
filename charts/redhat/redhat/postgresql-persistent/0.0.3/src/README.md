@@ -1,79 +1,23 @@
 # PostgreSQL helm chart
 
-This repository contains helm chart for PostgreSQL image build and deployed on OpenShift.
+# MariaDB helm chart
 
-For more information about helm charts see the offical [Helm Charts Documentation](https://helm.sh/).
+A Helm chart for building and deploying a [PostgreSQL](https://github/sclorg/postgresql-container) application on OpenShift.
+
+For more information about helm charts see the official [Helm Charts Documentation](https://helm.sh/).
 
 You need to have access to a cluster for each operation with OpenShift 4, like deploying and testing.
 
-## How to start with helm charts
+## Values
+Below is a table of each value used to configure this chart.
 
-The first download and install Helm. Follow instructions mentioned [here](https://helm.sh/docs/intro/install/).
-
-## Prerequisite for PostgreSQL-persistent helm chart
-Before deploying helm chart to OpenShift, you have to create a package for postgresql-imagestream.
-See details [postgresql-imagestreams](../postgresql-imagestreams/README.md)
-
-
-## How to work with PostgreSQL-persistent helm chart
-
-The default PostgreSQL helm chart configuration is for RHEL7 PostgreSQL version 10.
-
-This can be done by command:
-
-```commandline
-$ helm package ./
-```
-
-that will create a helm package named, `postgresql-persistent-0.0.2.tgz` in this directory.
-
-The next step is to upload Helm Chart to OpenShift. This is done by command:
-
-```commandline
-$ helm install postgresql-persistent postgresql-persistent-0.0.2.tgz
-```
-
-In case you would like to use this helm chart for different versions and even RHEL versions.
-you need to modify installing command.
-
-E.g. For RHEL8
-
-```commandline
-$ helm install postgresql-persistent postgresql-persistent-0.0.2.tgz --set image.repository=registry.redhat.io/rhel8/postgresql-13 --set image.version=13
-```
-The values that can be overwritten are specified in file [values.yaml](./values.yaml)
-
-To test in PostgreSQL helm chart is working properly run command:
-
-```commandline
-$ helm test postgresql-persistent --logs
-```
-that will print output like:
-```commandline
-NAME: postgresql-persistent
-LAST DEPLOYED: Mon Mar 27 09:36:23 2023
-NAMESPACE: pgsql-13
-STATUS: deployed
-REVISION: 1
-TEST SUITE:     postgresql-persistent-connection-test
-Last Started:   Mon Mar 27 09:37:13 2023
-Last Completed: Mon Mar 27 09:37:19 2023
-Phase:          Succeeded
-
-POD LOGS: postgresql-persistent-connection-test
-postgresql-testing:5432 - accepting connections
-```
-## Troubleshooting
-For case you need a computer readable output you can add to command mentioned above option `-o json`.
-
-In case of installation failed for reason like:
-```commandline
-// Error: INSTALLATION FAILED: cannot re-use a name that is still in use
-```
-you have to uninstall previous PostgreSQL Helm Chart by command:
-
-```commandline
-$ helm uninstall postgresql-persistent
-```
-
-
+| Value                                       | Description | Default | Additional Information |
+|---------------------------------------------| ----------- | -- | ---------------------- |
+| `database_service_name`                     | The name of the OpenShift Service exposed for the database. | `postgresql` | - |
+| `postgresql_user`                           | Username for PostgreSQL user that will be used for accessing the database. | - | Expresion like: `user[A-Z0-9]{3}` |
+| `postgresql_database`                       | Name of the PostgreSQL database accessed. | `sampledb` |  |
+| `postgresql_password`                       | Password for the PostgreSQL connection user. |  | Expression like: `[a-zA-Z0-9]{16}` |
+| `postgresql_version`                           | Version of PostgreSQL image to be used (10-el7, 10-el8, or latest). | `10-el8` |  |
+| `namespace`                                 | The OpenShift Namespace where the ImageStream resides. | `openshift` | |
+| `memory_limit`                              | Maximum amount of memory the container can use. | `521Mi` |  |
+| `volume_capacity`                           | Volume space available for data, e.g. 512Mi, 2Gi. | `1Gi` |  |
