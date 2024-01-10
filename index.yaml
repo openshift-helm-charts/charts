@@ -5576,6 +5576,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-persistent-0.0.1/redis-persistent-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:c30d21ed73323e6e098403d868c169f3b2490495aa08f6580340ab8fb46048b5
+      charts.openshift.io/lastCertifiedTimestamp: '2024-01-10T11:40:44.410634+00:00'
+      charts.openshift.io/name: Red Hat Redis in-memory data structure store, with
+        persistent storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-01-10T11:42:08.750700+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: 'This content is expermental, do not use it in production. Redis
+      in-memory data structure store, with persistent storage. For more information
+      about using this template, including OpenShift considerations, see https://github.com/sclorg/redis-container/blob/master/5.  NOTE:
+      You must have persistent volumes available in your cluster to use this template.'
+    digest: d66b9fb58a52a4691c9807d065d01c86d9b74e9e659517880adecb0873cec792
+    kubeVersion: '>=1.20.0'
+    name: redis-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,redis
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-persistent-0.0.2/redis-persistent-0.0.2.tgz
+    version: 0.0.2
   redhat-redis-sed:
   - annotations:
       charts.openshift.io/digest: sha256:639de96ec12341cab72ca4aa1f539dcf475e3a5c82c0871e3798418004fd36c8
@@ -7188,4 +7213,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2023-12-22T21:48:18.133450+00:00'
+generated: '2024-01-10T11:42:08.683565+00:00'
