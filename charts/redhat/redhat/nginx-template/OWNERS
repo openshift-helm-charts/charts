@@ -1,0 +1,9 @@
+chart:
+  name: nginx-template
+  description: This is the Red Hat Nginx server template chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat
