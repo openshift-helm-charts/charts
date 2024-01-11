@@ -8,6 +8,7 @@ users:
 - githubUsername: baba230896
 - githubUsername: bhavin192
 - githubUsername: iSignal
+- githubUsername: yugabyte-ci
 vendor:
   label: yugabytedb
   name: YugaByte Inc
