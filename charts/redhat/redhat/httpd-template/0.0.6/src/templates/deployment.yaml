@@ -52,3 +52,12 @@ spec:
         resources:
           limits:
             memory: {{ .Values.memory_limit }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault

@@ -4,7 +4,7 @@ generic_webhook_secret: "SOMETHING" # TODO: must define a default value for .gen
 github_webhook_secret: "FOOBAR" # TODO: must define a default value for .github_webhook_secret
 httpd_version: 2.4-el8
 memory_limit: 512Mi
-name: httpd
+name: httpd-example
 namespace: openshift
 source_repository_ref: master # TODO: must define a default value for .source_repository_ref
 source_repository_url: https://github.com/sclorg/httpd-ex.git

@@ -1,6 +1,8 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
+  annotations:
+    template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
   labels:
     app: httpd-example
     template: httpd-example
