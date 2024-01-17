@@ -1110,6 +1110,322 @@ entries:
     urls:
     - N/A
     version: 3.0.1812-b17
+  - annotations:
+      charts.openshift.io/digest: sha256:a89d3a91cccb96bb447bfaac1c719eeabdd495d79e0b0c12e30dd7318e4ee91f
+      charts.openshift.io/lastCertifiedTimestamp: '2024-01-17T11:05:23.718653+01:00'
+      charts.openshift.io/name: MCO Chart
+      charts.openshift.io/provider: Mavenir
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-01-17T14:09:28.104933+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 3.0.2000-b11
+    dependencies:
+    - condition: admin-tools.enabled
+      name: admin-tools
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: arm.enabled
+      name: arm
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: cdma-r
+      condition: cdma-r.enabled
+      name: cdma
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: cdma-t
+      condition: cdma-t.enabled
+      name: cdma
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: cex.enabled
+      name: cex
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: cfgpull.enabled
+      name: cfgpull
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: collector.enabled
+      name: collector
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: cron.enabled
+      name: cron
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: dbfi.enabled
+      name: dbfi
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: dbft.enabled
+      name: dbft
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: dbfm.enabled
+      name: dbfm
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: dbfp.enabled
+      name: dbfp
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: echos.enabled
+      name: echos
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: gsm-0340-r
+      condition: gsm-0340-r.enabled
+      name: gsm-0340
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: gsm-0340-t
+      condition: gsm-0340-t.enabled
+      name: gsm-0340
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: ifxr.enabled
+      name: ifxr
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: k8sag.enabled
+      name: k8sag
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: kernel.enabled
+      name: kernel
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: lida.enabled
+      name: lida
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: lipa.enabled
+      name: lipa
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: logos.enabled
+      name: logos
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mag.enabled
+      name: mag
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mm1c.enabled
+      name: mm1c
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mm1s.enabled
+      name: mm1s
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mm3c.enabled
+      name: mm3c
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mm3s.enabled
+      name: mm3s
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mm4c.enabled
+      name: mm4c
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mm4s.enabled
+      name: mm4s
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mm7c.enabled
+      name: mm7c
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mm7s.enabled
+      name: mm7s
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mmk.enabled
+      name: mmk
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: mmr.enabled
+      name: mmr
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: msgapi.enabled
+      name: msgapi
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: mtai
+      condition: mtai.enabled
+      name: mta
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: mtao
+      condition: mtao.enabled
+      name: mta
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: drs.enabled
+      name: drs
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: hmp.enabled
+      name: hmp
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: msg-t.enabled
+      name: msg-t
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: netconfgw.enabled
+      name: netconfgw
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: nrfag.enabled
+      name: nrfag
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: oamzoo.enabled
+      name: oamzoo
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: orion
+      condition: orion.enabled
+      name: orion
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: pag.enabled
+      name: pag
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: pusa.enabled
+      name: pusa
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: cust1
+      condition: cust1.enabled
+      name: pycust
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: cust2
+      condition: cust2.enabled
+      name: pycust
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: fpush.enabled
+      name: fpush
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: redis-m
+      condition: redis-m.enabled
+      name: redis
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: redis-s
+      condition: redis-s.enabled
+      name: redis
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: restgw.enabled
+      name: restgw
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: scn.enabled
+      name: scn
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: shark.enabled
+      name: shark
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: shredis-m
+      condition: shredis-m.enabled
+      name: redis
+      repository: ''
+      version: 3.0.2000-b11
+    - alias: shredis-s
+      condition: shredis-s.enabled
+      name: redis
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: replicator.enabled
+      name: replicator
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: sftp-server.enabled
+      name: sftp-server
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: sgs.enabled
+      name: sgs
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: slc.enabled
+      name: slc
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: smog.enabled
+      name: smog
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: smpp.enabled
+      name: smpp
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: smtp.enabled
+      name: smtp
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: snmpag.enabled
+      name: snmpag
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: sodia.enabled
+      name: sodia
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: sol.enabled
+      name: sol
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: sonas.enabled
+      name: sonas
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: spooler.enabled
+      name: spooler
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: stn.enabled
+      name: stn
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: ucp.enabled
+      name: ucp
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: vesag.enabled
+      name: vesag
+      repository: ''
+      version: 3.0.2000-b11
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: ''
+      version: 3.0.2000-b11
+    description: Helmchart for MCO
+    digest: 0c7eafd7bf9e3fa9b8a799d6f9ea152a3cd32d7785336131cb03dc1d7fb6e94f
+    kubeVersion: '>= 1.17.3-0'
+    name: mco
+    urls:
+    - N/A
+    version: 3.0.2000-b11
   mavenir-mtas:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -2174,4 +2490,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2023-12-18T12:35:41.412109+00:00'
+generated: '2024-01-17T14:09:28.082848+00:00'
