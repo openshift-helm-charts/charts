@@ -54,7 +54,7 @@ Then, browse to the Helm Chart Repository created above and install via OpenShif
 ```
     cd /tmp && mkdir -p chartverifier; \
     podman run --rm -i -e KUBECONFIG=/.kube/config \
-      -v /root/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \
+      -v /home/nboldt/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \
       quay.io/redhat-certification/chart-verifier \
       verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.1-59-CI/charts/redhat/redhat/developer-hub/1.1-59-CI/developer-hub-1.1-59-CI.tgz
     echo 'Report in /tmp/chartverifier/report.yaml'
