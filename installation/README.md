@@ -35,17 +35,17 @@ oc create -f /tmp/my_quay_secret -n <your-rhdh-project>
 
 ### 2. Or, to install from a Helm Chart Repository:
 
-#### a. Run this to create the above chart repo, with .metadata.name = `rhdh-next-ci-repo`:
+. First, run this to create the above chart repo, with .metadata.name = `rhdh-next-ci-repo`:
 
 ```
     oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.1-59-CI/installation/rhdh-next-ci-repo.yaml
 ```
 
-#### b. Browse to the Helm Chart Repository created above and install via OpenShift UI.
+. Then, browse to the Helm Chart Repository created above and install via OpenShift UI.
 
-## Verification
+## Optional Verification
 
-### [OPTIONAL] To verify a chart, use chart-verifier. This is only needed if you'd built your own chart and want to check it passes compliance checks.
+### To verify a chart, use chart-verifier. This is only needed if you built your own chart and want to check it passes compliance checks.
 
 ```
     cd /tmp && mkdir -p chartverifier; \
