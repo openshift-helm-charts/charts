@@ -18,11 +18,11 @@ type: kubernetes.io/dockerconfigjson
 EOF
 ```
 
-Now add the secret to your backstage project:
+Now add the secret to your RHDH/Backstage namespace or project:
 
 ```
-oc new-project `<your-rhdh-project-or-namespace-here>`
-oc create -f /tmp/my_quay_secret -n `<your-rhdh-project-or-namespace-here>`
+oc new-project <your-rhdh-project>
+oc create -f /tmp/my_quay_secret -n <your-rhdh-project>
 ```
 
 ## Installation
@@ -30,7 +30,7 @@ oc create -f /tmp/my_quay_secret -n `<your-rhdh-project-or-namespace-here>`
 ### 1. To install the Helm Chart without a HelmChartRepository, run the following command:
 
 ```
-    helm install -n `<your-rhdh-project-or-namespace-here>` --generate-name https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.1-59-CI/charts/redhat/redhat/developer-hub/1.1-59-CI/developer-hub-1.1-59-CI.tgz
+    helm install -n <your-rhdh-project> --generate-name https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.1-59-CI/charts/redhat/redhat/developer-hub/1.1-59-CI/developer-hub-1.1-59-CI.tgz
 ```
 
 ### 2. Or, to install from a Helm Chart Repository:
