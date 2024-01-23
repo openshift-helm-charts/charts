@@ -1,0 +1,9 @@
+chart:
+  name: django-app-server
+  description: This is the Red Hat Django application server
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat
