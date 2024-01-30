@@ -1,5 +1,5 @@
 chart:
-  name: platform
+  name: axual-governance-core
   shortDescription: Self Service and Governance suite for Apache Kafka
 providerDelivery: false
 publicPgpKey: unknown

@@ -1,0 +1,15 @@
+description: This content is experimental, do not use it in production. An example Apache HTTP Server (httpd) application that serves static
+  content. For more information about using this template, including OpenShift considerations,
+  see https://github.com/sclorg/httpd-container/blob/master/README.md.
+name: httpd-template
+tags: quickstart,httpd
+kubeVersion: '>=1.20.0'
+version: 0.0.6
+annotations:
+  charts.openshift.io/name: Red Hat Apache HTTP Server (httpd) application (experimental)
+  charts.openshift.io/provider: Red Hat
+  charts.openshift.io/providerType: redhat
+apiVersion: v2
+appVersion: 0.0.6
+sources:
+  - https://github.com/sclorg/helm-charts
