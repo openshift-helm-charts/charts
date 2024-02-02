@@ -8,6 +8,7 @@ users:
   - githubUsername: sabre1041
   - githubUsername: nickboldt
   - githubUsername: rhdh-bot
+  - githubUsername: kadel
 vendor:
   label: redhat
   name: Red Hat
