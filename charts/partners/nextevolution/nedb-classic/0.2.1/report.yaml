@@ -6,13 +6,13 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:2396744008119772988
+        reportDigest: uint64:1007979919079793030
         chart-uri: https://redhat-charts:strahc-tahder@chart-proxy.nextevolution.de/repository/helm-releases/nedb-classic-0.2.1.tgz
         digests:
             chart: sha256:cf586675a0e4b2f2c9d7608336434540d5f7a37d8afafa80ad264960f5b58efc
             package: f36a8c84f0da0f2c7d06d9d5385e5a57e9c84b739d013de406828274158e3b18
-            publicKey: 0933a7832743a966ceca8b2c13cc20dc7b41d514cb699f04447a866817b3b8e8
-        lastCertifiedTimestamp: "2024-02-02T11:08:15.562831+00:00"
+            publicKey: d332377b98736a0e4da010d866dcc6ee9ce891dbd7729b07e071f3a8a16f1e22
+        lastCertifiedTimestamp: "2024-02-02T12:12:48.673028+00:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.11 <=4.14'
         webCatalogOnly: false
@@ -71,22 +71,10 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
@@ -95,26 +83,14 @@ results:
       type: Mandatory
       outcome: PASS
       reason: All required annotations present
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: PASS
-      reason: 'Chart is signed : Signature verification passed'
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
       reason: Chart has a README
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
     - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
@@ -123,3 +99,27 @@ results:
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: PASS
+      reason: 'Chart is signed : Signature verification passed'
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
