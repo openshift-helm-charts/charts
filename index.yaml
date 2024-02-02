@@ -3623,6 +3623,45 @@ entries:
     urls:
     - https://registry.nearbycomputing.com/chartrepo/redhat/charts/nearbyone-controller-2.119.1.tgz
     version: 2.119.1
+  nextevolution-nedb-classic:
+  - annotations:
+      category: Integration
+      charts.openshift.io/digest: sha256:cf586675a0e4b2f2c9d7608336434540d5f7a37d8afafa80ad264960f5b58efc
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T12:12:48.673028+00:00'
+      charts.openshift.io/name: NE.Databridge Classic Standalone
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-02-02T12:15:49.429512+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11 <=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: '1.0'
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.x
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 25.10.0
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 7.2.5
+    description: A Helm chart for NE.Databridge Classic Deployments
+    digest: f36a8c84f0da0f2c7d06d9d5385e5a57e9c84b739d013de406828274158e3b18
+    icon: https://www.nextevolution.de/user/themes/nextevolution/images/logo.png
+    kubeVersion: '>= 1.23.15 < 1.28.0'
+    name: nedb-classic
+    type: application
+    urls:
+    - https://redhat-charts:strahc-tahder@chart-proxy.nextevolution.de/repository/helm-releases/nedb-classic-0.2.1.tgz
+    version: 0.2.1
   nirmata-kyverno:
   - annotations:
       charts.openshift.io/digest: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
@@ -7335,4 +7374,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-01-23T19:18:38.218546+00:00'
+generated: '2024-02-02T12:15:49.359618+00:00'
