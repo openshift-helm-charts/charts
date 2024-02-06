@@ -1,0 +1,13 @@
+application_domain: "" # TODO: must define a default value for .application_domain
+context_dir: "" # TODO: must define a default value for .context_dir
+pip_index_url: "" # TODO: must define a default value for .cpan_mirror
+github_webhook_secret: "SOMETHING" # TODO: must define a default value for .github_webhook_secret
+memory_limit: 512Mi
+name: django-example
+namespace: openshift
+django_secret_key: "FOOBAR" # TODO: must define a default value for .perl_apache2_reload
+python_version: 3.11-ubi8
+source_repository_ref: 2.2.x # TODO: must define a default value for .source_repository_ref
+source_repository_url: https://github.com/sclorg/django-ex.git
+app_config: "" # TODO: must define a default value for .app_config
+
