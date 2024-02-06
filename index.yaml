@@ -3974,12 +3974,12 @@ entries:
   redhat-cakephp-application-template:
   - annotations:
       charts.openshift.io/digest: sha256:9216b5e25c0f15c61081455a89c54292a6246ca02a083cc3cc9d4ca0bb9b2b8d
-      charts.openshift.io/lastCertifiedTimestamp: '2024-02-06T11:59:14.408765+00:00'
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-06T12:05:19.300322+00:00'
       charts.openshift.io/name: Red Hat Apache CakePHP application with no database
         (experimental)
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
-      charts.openshift.io/submissionTimestamp: '2024-02-06T12:00:22.523845+00:00'
+      charts.openshift.io/submissionTimestamp: '2024-02-06T12:06:34.232021+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
       charts.openshift.io/testedOpenShiftVersion: N/A
     apiVersion: v2
@@ -3987,7 +3987,7 @@ entries:
     description: This content is experimental, do not use it in production. An example
       CakePHP application with no database. For more information about using this
       template, including OpenShift considerations, see https://github.com/sclorg/cakephp-ex/blob/master/README.md.
-    digest: 9f444c66bdbd5ff9402b369eaf3dfa98f7e4e16db17f6c69bd90fa35d6e9d357
+    digest: 5086bb2468a6711a89b594edcc78fb2efc9eb524a92c556fce8e15ea7455011a
     kubeVersion: '>=1.20.0'
     name: cakephp-application-template
     sources:
@@ -7429,4 +7429,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-02-06T12:00:22.455961+00:00'
+generated: '2024-02-06T12:06:34.164291+00:00'
