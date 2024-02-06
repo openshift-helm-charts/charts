@@ -1,0 +1,60 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "namespace": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "description": "The name assigned to all of the frontend objects defined in this template."
+        },
+        "memory_limit": {
+            "type": "string",
+            "title": "Memory limit",
+            "form": true,
+            "render": "slider",
+            "sliderMin": 512,
+            "sliderMax": 65536,
+            "sliderUnit": "Mi"
+        },
+        "python_version": {
+            "type": "string",
+            "description": "Specify Python imagestream tag",
+            "enum": [ "latest", "2.7-ubi8", "3.6-ubi8", "3.8-ubi8", "3.8-ubi7", "3.9-ubi8", "3.9-ubi9", "3.11-ubi8", "3.11-ubi9" ]
+        },
+        "application_domain": {
+            "type": "string",
+            "description": "The exposed hostname that will route to the httpd service, if left blank a value will be defaulted."
+        },
+        "context_dir": {
+            "type": "string",
+            "description": "Set this to the relative path to your project if it is not in the root of your repository."
+        },
+        "pip_index_url": {
+            "type": "string",
+            "description": "The custom PyPi index URL"
+        },
+        "github_webhook_secret": {
+            "type": "string",
+            "description": "Github trigger secret. A difficult to guess string encoded as part of the webhook URL. Not encrypted."
+        },
+        "app_config": {
+            "type": "string",
+            "description": "Relative path to Gunicorn configuration file (optional)."
+        },
+        "django_secret_key": {
+          "type": "string",
+          "description": "Set this to a long random string."
+        },
+        "source_repository_url": {
+            "type": "string",
+            "description": "The URL of the repository with your application source code."
+        },
+        "source_repository_ref": {
+            "type": "string",
+            "description": "Set this to a branch name, tag or other ref of your repository if you are not using the default branch."
+        }
+    }
+}
+
