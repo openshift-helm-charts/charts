@@ -5374,6 +5374,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nginx-imagestreams-0.0.1/nginx-imagestreams-0.0.1.tgz
     version: 0.0.1
+  redhat-nginx-template:
+  - annotations:
+      charts.openshift.io/digest: sha256:ee927b8a024e7ca2f176397e6ca1d024c9379453e1d704f5566c5bf93e1654a6
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-06T13:52:18.910833+00:00'
+      charts.openshift.io/name: Red Hat Nginx HTTP Server (nginx) application (experimental).
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-02-06T13:53:19.775153+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: An example Nginx HTTP server and a reverse proxy (nginx) application
+      that serves static content. For more information about using this template,
+      including OpenShift considerations, see https://github.com/sclorg/nginx-ex/blob/master/README.md.
+    digest: cf7b8eac1cf56928c8615db21cc51983c57ae19edd31156c1b9de3331109a416
+    kubeVersion: '>=1.20.0'
+    name: nginx-template
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,nginx
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nginx-template-0.0.1/nginx-template-0.0.1.tgz
+    version: 0.0.1
   redhat-nodejs:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -7453,4 +7477,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-02-06T12:48:17.588044+00:00'
+generated: '2024-02-06T13:53:19.707104+00:00'
