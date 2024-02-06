@@ -5428,6 +5428,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nodejs-ex-k-0.2.1/redhat-nodejs-ex-k-0.2.1.tgz
     version: 0.2.1
+  redhat-perl-dancer-template:
+  - annotations:
+      charts.openshift.io/digest: sha256:337febe1599f08feb9f2ca380ee8298e9677f9073fff2b6baa52947ad9832120
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-06T12:47:10.162628+00:00'
+      charts.openshift.io/name: Red Hat Dancer application on UBI (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-02-06T12:48:17.655812+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is experimental, do not use it in production. An example
+      Dancer application with no database. For more information about using this template,
+      including OpenShift considerations,  see https://github.com/sclorg/dancer-ex/blob/master/README.md.
+    digest: 3b92afe579819344980d58ec110883ff2141916d692199d73b0afeafdae88eb9
+    kubeVersion: '>=1.20.0'
+    name: perl-dancer-template
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,perl,dancer
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-perl-dancer-template-0.0.1/perl-dancer-template-0.0.1.tgz
+    version: 0.0.1
   redhat-postgresql-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:fb33002134a2c14de3ea86015565621fa636ae7d6861999dc09157aab17aa7f8
@@ -7429,4 +7453,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-02-06T12:06:34.164291+00:00'
+generated: '2024-02-06T12:48:17.588044+00:00'
