@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Defines how to deploy the application server
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "{{ .Values.name }}:latest"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
+    template.alpha.openshift.io/wait-for-ready: "true"
+  labels:
+    app: cakephp-example
+    template: cakephp-example
+  name: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: {{ .Values.name }}
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.name }}
+      name: {{ .Values.name }}
+    spec:
+      containers:
+      - env:
+        - name: CAKEPHP_SECRET_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: cakephp-secret-token
+              name: {{ .Values.name }}
+        - name: PHP_CLEAR_ENV
+          value: "OFF"
+        - name: CAKEPHP_SECURITY_SALT
+          valueFrom:
+            secretKeyRef:
+              key: cakephp-security-salt
+              name: {{ .Values.name }}
+        - name: OPCACHE_REVALIDATE_FREQ
+          value: "{{ .Values.opcache_revalidate_freq }}"
+        image: " "
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 3
+        name: cakephp-example
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 60
+          timeoutSeconds: 3
+        resources:
+          limits:
+            memory: {{ .Values.memory_limit }}
