@@ -3971,6 +3971,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/rafaysystems-rafay-operator-redhat-0.2.3/rafay-operator-redhat-0.2.3.tgz
     version: 0.2.3
+  redhat-cakephp-application-template:
+  - annotations:
+      charts.openshift.io/digest: sha256:9216b5e25c0f15c61081455a89c54292a6246ca02a083cc3cc9d4ca0bb9b2b8d
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-06T11:59:14.408765+00:00'
+      charts.openshift.io/name: Red Hat Apache CakePHP application with no database
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-02-06T12:00:22.523845+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is experimental, do not use it in production. An example
+      CakePHP application with no database. For more information about using this
+      template, including OpenShift considerations, see https://github.com/sclorg/cakephp-ex/blob/master/README.md.
+    digest: 9f444c66bdbd5ff9402b369eaf3dfa98f7e4e16db17f6c69bd90fa35d6e9d357
+    kubeVersion: '>=1.20.0'
+    name: cakephp-application-template
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,php,cakephp
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-cakephp-application-template-0.0.1/cakephp-application-template-0.0.1.tgz
+    version: 0.0.1
   redhat-cryostat:
   - annotations:
       charts.openshift.io/digest: sha256:16c798a6a148c3d5d7a95a1c25fa727f56cd065a2f412d0991781e5939472b64
@@ -7404,4 +7429,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-02-05T14:56:33.313021+00:00'
+generated: '2024-02-06T12:00:22.455961+00:00'
