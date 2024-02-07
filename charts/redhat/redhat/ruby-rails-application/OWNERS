@@ -1,0 +1,10 @@
+chart:
+  name: ruby-rails-application
+  description: This is the Red Hat quickstart Rails application with no database helm chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat
+
