@@ -164,6 +164,50 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/castai-castai-agent-0.52.0/castai-agent-0.52.0.tgz
     version: 0.52.0
+  ddosify-alaz:
+  - annotations:
+      charts.openshift.io/digest: sha256:eb6cfbb8b5bfbff1501ffe10be92ba913263a124229ed2c6d07274ad91092965
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-08T01:10:04.037839+03:00'
+      charts.openshift.io/name: Alaz is an open-source Ddosify eBPF agent that can
+        inspect and collect Kubernetes (K8s) service traffic without the need for
+        code instrumentation, sidecars, or service restarts. Alaz can create a Service
+        Map that helps identify golden signals and problems like high latencies, 5xx
+        errors, zombie services, SQL queries. Additionally, it can gather system information
+        and resources via the Prometheus Node Exporter, which is readily available
+        on the agent.
+      charts.openshift.io/provider: Ddosify Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-02-07T22:15:47.449765+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+      charts.openshift.io/versions: '>=4.5'
+    apiVersion: v2
+    appVersion: v0.5.2
+    description: Alaz is an open-source Ddosify eBPF agent that can inspect and collect
+      Kubernetes (K8s) service traffic without the need for code instrumentation,
+      sidecars, or service restarts. Alaz can create a Service Map that helps identify
+      golden signals and problems like high latencies, 5xx errors, zombie services,
+      SQL queries. Additionally, it can gather system information and resources via
+      the Prometheus Node Exporter, which is readily available on the agent.
+    digest: df307b6343bbdbbb4ce16bc9186b77f403e41918a17368ce29ba042f6aa99e76
+    home: https://ddosify.com
+    icon: https://d2uj9largygsoq.cloudfront.net/docker/ddosify-square-icon-db.svg
+    keywords:
+    - ebpf
+    - helm
+    - kubernetes
+    - ddosify
+    - alaz
+    - service map
+    - distributed tracing
+    - observability
+    - monitoring
+    kubeVersion: '>=1.16.0-0'
+    name: alaz
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/ddosify-alaz-0.5.0/alaz-0.5.0.tgz
+    version: 0.5.0
   dh2i-dxemssql:
   - annotations:
       charts.openshift.io/digest: sha256:bba38b72bd647ead19350b86ec60253d203d9465d75efd4c25d210110b77d789
@@ -7501,4 +7545,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-02-06T14:58:35.793869+00:00'
+generated: '2024-02-07T22:15:47.379693+00:00'
