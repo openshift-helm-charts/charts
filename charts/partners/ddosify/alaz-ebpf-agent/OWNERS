@@ -1,9 +1,11 @@
 chart:
   name: alaz-ebpf-agent
-  shortDescription: unknown
+  shortDescription: Advanced eBPF Agent for Kubernetes Observability on Ddosify platform
+    (Helm Chart)
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: fatihbaltaci
 vendor:
   label: ddosify
   name: Ddosify Inc.
