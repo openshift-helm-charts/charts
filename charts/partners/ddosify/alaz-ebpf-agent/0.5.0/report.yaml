@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.2
-        reportDigest: uint64:11805519797259064537
-        chart-uri: https://github.com/ddosify/ddosify-helm-charts/releases/download/alaz-0.5.0-redhat/alaz-0.5.0.tgz
+        reportDigest: uint64:15875061762014908507
+        chart-uri: https://github.com/ddosify/ddosify-helm-charts/releases/download/alaz-ebpf-agent-0.5.0-redhat/alaz-ebpf-agent-0.5.0.tgz
         digests:
             chart: sha256:eb6cfbb8b5bfbff1501ffe10be92ba913263a124229ed2c6d07274ad91092965
-            package: c280a871a28d53245e420862a97c5f4bfaba9383f9bac4685598482592fc1c03
-        lastCertifiedTimestamp: "2024-02-08T00:41:34.859421+03:00"
+            package: 50dc182e7eb0b41ee0ee5f19ea9473a4bc89f73e3663a99dae4eb7218ab136f3
+        lastCertifiedTimestamp: "2024-02-08T00:52:47.968844+03:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.3'
         webCatalogOnly: false
@@ -46,10 +46,22 @@ metadata:
         type: application
     chart-overrides: ""
 results:
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
     - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
       reason: Values file exist
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
     - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
@@ -60,43 +72,31 @@ results:
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
     - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/has-readme
+    - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/is-helm-v3
+      reason: Values schema file exist
+    - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
+      reason: Helm lint successful
