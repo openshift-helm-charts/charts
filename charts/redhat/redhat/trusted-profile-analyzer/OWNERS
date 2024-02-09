@@ -1,0 +1,11 @@
+chart:
+  name: trusted-profile-analyzer
+  shortDescription: A Helm chart for deploying Red Hat Trusted Profile Analyzer
+publicPgpKey: null
+users:
+  - githubUsername: desmax74
+  - githubUsername: ctron
+  - githubUsername: mrizzi
+vendor:
+  label: redhat
+  name: Red Hat
