@@ -5952,6 +5952,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-sed-1.0.1/redhat-redis-sed-1.0.1.tgz
     version: 1.0.1
+  redhat-ruby-rails-application:
+  - annotations:
+      charts.openshift.io/digest: sha256:af1720b553c204e54ba3b2bdff5c24421f96a4ff876736dc5f4dcb9045c610d0
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-12T09:40:13.363641+00:00'
+      charts.openshift.io/name: Red Hat Apache Rails application with no database
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-02-12T09:41:18.125303+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is experimental, do not use it in production. An example
+      Rails application with no database. For more information about using this template,
+      including OpenShift considerations, see https://github.com/sclorg/rails-ex/blob/master/README.md.
+    digest: 6130adf24eb378a2a31d82939f422659b84a685fd12f6cfc76d3a645ee2e322e
+    kubeVersion: '>=1.20.0'
+    name: ruby-rails-application
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,ruby,rails
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-ruby-rails-application-0.0.1/ruby-rails-application-0.0.1.tgz
+    version: 0.0.1
   redhat-semeru-transition:
   - annotations:
       charts.openshift.io/digest: sha256:f01d4467137338d7ccc7b6cdeb28df219bfdda77f0384d8adfbfa4059de96703
@@ -7545,4 +7570,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-02-07T22:15:47.379693+00:00'
+generated: '2024-02-12T09:41:18.055055+00:00'
