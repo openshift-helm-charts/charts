@@ -8,7 +8,11 @@ TEST_REPO = "openshift-helm-charts/sandbox"
 PROD_REPO = "openshift-helm-charts/charts"
 # The prod branch where we store all chart files
 PROD_BRANCH = "main"
-# This is used to find chart certification workflow run id
+# (Deprecated) This is used to find chart certification workflow run id
 CERTIFICATION_CI_NAME = "CI"
+# (Replaces the above) The name of the workflow for certification, used to get its ID.
+WORKFLOW_CERTIFICATION_CI = "CI"
+# The name of the workflow for Red Hat OWNERS check submissions, used to get its ID.
+WORKFLOW_REDHAT_OWNERS_CHECK = "Red Hat OWNERS Files"
 # GitHub actions bot email for git email
 GITHUB_ACTIONS_BOT_EMAIL = "41898282+github-actions[bot]@users.noreply.github.com"

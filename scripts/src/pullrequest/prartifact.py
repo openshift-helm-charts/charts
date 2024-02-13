@@ -1,8 +1,8 @@
-import os
-import sys
 import argparse
-import shutil
+import os
 import pathlib
+import shutil
+import sys
 
 import requests
 

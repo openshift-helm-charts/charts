@@ -1,8 +1,12 @@
 import os
+
 import pytest
-from chartprreview.chartprreview import verify_user
-from chartprreview.chartprreview import check_owners_file_against_directory_structure
-from chartprreview.chartprreview import write_error_log
+
+from chartprreview.chartprreview import (
+    check_owners_file_against_directory_structure,
+    verify_user,
+    write_error_log,
+)
 
 
 def test_verify_user():

@@ -1,0 +1,78 @@
+name: Generate Chart Locks
+description: |
+  Generates chart locks at runtime and places the generated contents on the
+  filesystem.
+
+  For pull_request / pull_request_target events, this will pull down the branch
+  receiving the changes as the source of truth.
+
+  In the production repository, this will always pull the main branch, regardless
+  of which branch is receiving the pull request.
+
+  It is expected that the CI scripts have already been installed at call time.
+inputs:
+  to-file:
+    description: Where to write the chart-locks.json file.
+    default: "/tmp/chart-locks.json"
+    required: false
+  generator-cmd-path:
+    description: |
+      The path to the generate-chart-locks command. This action expects CI
+      scripts to be installed by the caller, and so it stands to reason the
+      caller may install scripts at various locations.
+    default: "ve1/bin/generate-chart-locks"
+    required: false
+outputs:
+  lockfile-path:
+    description: |
+      Where the lock file was written. Mostly placed as an output to simplify
+      workflows for callers.
+    value: ${{ steps.generate-chart-locks.outputs.lockfile-path }}
+runs:
+  using: composite
+  steps:
+  - name: Resolve repository ref
+    id: resolve
+    shell: bash
+    run: |
+      set -e
+
+      # PRs to the production repository will always use main.
+      if [ "${GITHUB_REPOSITORY}" == "openshift-helm-charts/charts" ]; then
+        echo "Running in the production repository."
+        echo "The only allowed ref is 'refs/heads/main'."
+        echo "ref=refs/heads/main" | tee -a $GITHUB_OUTPUT
+        exit 0
+      fi
+
+      echo "GITHUB_EVENT_NAME = '${GITHUB_EVENT_NAME}'"
+      echo "GITHUB_BASE_REF = '${GITHUB_BASE_REF}'"
+
+      # GITHUB_BASE_REF is set for pull_requests/pull_requests_targets, but empty for
+      # workflow_dispatch. We'll set it to main if it's not set.
+      resolvedRef="refs/heads/${GITHUB_BASE_REF:-"main"}"
+      echo "ref=${resolvedRef}" | tee -a $GITHUB_OUTPUT
+  - name: Checkout
+    id: clone-repository
+    uses: actions/checkout@v3
+    with:
+      ref: ${{ steps.resolve.outputs.ref }}
+      path: temp-gen-chart-lock-repo
+  - name: Setting up python
+    uses: actions/setup-python@v4
+    with:
+      python-version: "3.10"
+  - name: Generate lock file JSON from existing charts
+    working-directory: temp-gen-chart-lock-repo
+    id: generate-chart-locks
+    shell: bash
+    run: |
+      set -o pipefail
+      ${{ inputs.generator-cmd-path }} | jq | tee ${{ inputs.to-file }}
+      echo "lockfile-path=$(realpath ${{ inputs.to-file }})" | tee -a $GITHUB_OUTPUT
+  - name: Cleanup
+    id: cleanup
+    if: always()
+    shell: bash
+    run: |
+      rm -rf temp-gen-chart-lock-repo

@@ -1,13 +1,12 @@
-import re
-import os
-import sys
 import argparse
 import json
+import os
+import re
+import sys
 
 import requests
 import semver
 import yaml
-
 from reporegex import matchers
 
 try:
@@ -17,8 +16,8 @@ except ImportError:
 
 sys.path.append("../")
 from owners import owners_file
-from report import verifier_report
 from pullrequest import prartifact
+from report import verifier_report
 from tools import gitutils
 
 ALLOW_CI_CHANGES = "allow/ci-changes"

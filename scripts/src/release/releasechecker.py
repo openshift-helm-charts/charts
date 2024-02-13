@@ -22,21 +22,21 @@ results:
         PR_release_image : The name of the image from the version file from main branch.
 """
 
-
-import re
-import os
 import argparse
 import json
-import semver
+import os
+import re
 import sys
-from release import release_info
-from release import releaser
+
+import semver
 from reporegex import matchers
+
+from release import release_info, releaser
 
 sys.path.append("../")
 from owners import checkuser
-from tools import gitutils
 from pullrequest import prartifact
+from tools import gitutils
 
 VERSION_FILE = "release/release_info.json"
 CHARTS_PR_BASE_REPO = gitutils.CHARTS_REPO

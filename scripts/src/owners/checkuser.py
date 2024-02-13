@@ -10,10 +10,11 @@ results:
     exit code 1 if pull request contains restricted files and user is not authorized to modify them.
 """
 
-import re
 import argparse
 import os
+import re
 import sys
+
 import yaml
 
 try:
@@ -23,7 +24,6 @@ except ImportError:
 
 sys.path.append("../")
 from pullrequest import prartifact
-
 
 OWNERS_FILE = "OWNERS"
 VERSION_FILE = "release/release_info.json"

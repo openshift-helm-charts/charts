@@ -1,8 +1,9 @@
-import os
-import sys
-import docker
 import json
+import os
 import subprocess
+import sys
+
+import docker
 
 REPORT_ANNOTATIONS = "annotations"
 REPORT_RESULTS = "results"

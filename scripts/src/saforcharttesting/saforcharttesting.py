@@ -1,12 +1,12 @@
-import sys
-import time
-import os
+import argparse
 import base64
 import json
-import argparse
-import subprocess
-import tempfile
+import os
 import re
+import subprocess
+import sys
+import tempfile
+import time
 from string import Template
 
 namespace_template = """\

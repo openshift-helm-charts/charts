@@ -1,6 +1,6 @@
+import argparse
 import os
 import sys
-import argparse
 
 sys.path.append("../")
 from chartprreview import chartprreview

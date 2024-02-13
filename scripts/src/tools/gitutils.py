@@ -11,10 +11,10 @@ main functions :
 - commit_development_change - directly commits changes to the main branch of the devlopment repository
 """
 
-
+import json
 import os
 import sys
-import json
+
 import requests
 from git import Repo
 

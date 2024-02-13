@@ -19,14 +19,16 @@ Example Usage:
   python push_secrets.py -r openshift-helm-charts/sandbox -s CLUSTER_TOKEN -v <cluster_token_value>
 
 """
-from base64 import b64encode
-from nacl import encoding, public
+
+import argparse
+import json
 import logging
 import os
 import sys
-import json
+from base64 import b64encode
+
 import requests
-import argparse
+from nacl import encoding, public
 
 sys.path.append("../")
 from pullrequest import prartifact

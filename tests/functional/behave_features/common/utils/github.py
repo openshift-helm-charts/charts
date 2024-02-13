@@ -10,16 +10,25 @@ from common.utils.setttings import *
 
 
 @retry(stop_max_delay=30_000, wait_fixed=1000)
-def get_run_id(secrets, pr_number=None):
+def get_run_id(secrets, workflow_name: str, pr_number: str = None):
+    """Queries the GitHub API for the ID of the workflow run associated with a PR.
+
+    Args:
+        secrets: Used to extract the GitHub authentication credentials.
+        workflow_name: The value of the 'name' key in a given GitHub Action.
+        pr_number: The pull request for which to search workflow runs.
+
+    Raises:
+        Exception in cases where a workflow with that name did not run.
+    """
+    logging.debug(f'getting run id for workflow named "{workflow_name}')
     pr = get_pr(secrets, pr_number)
     r = github_api("get", f"repos/{secrets.test_repo}/actions/runs", secrets.bot_token)
     runs = json.loads(r.text)
 
     for run in runs["workflow_runs"]:
-        if (
-            run["head_sha"] == pr["head"]["sha"]
-            and run["name"] == CERTIFICATION_CI_NAME
-        ):
+        if run["head_sha"] == pr["head"]["sha"] and run["name"] == workflow_name:
+            logging.debug(f'workflow found with id "{run["id"]}"')
             return run["id"]
     else:
         raise Exception("Workflow for the submitted PR did not run.")

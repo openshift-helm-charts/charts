@@ -1,17 +1,17 @@
 """
-Used by github actions,specifically as part of the charts auto release process defined in
+Used by github actions, specifically as part of the charts auto release process defined in
 .github/workflow/release.yml.
 
 Used to loosely determine if a submitted report is valid and has not been tampered with.
 
 An invalid valid report:
 - does not load as a yaml file.
-- does not include  a "kind" attribute set the "verify-report" .
+- does not include a "kind" attribute set to "verify-report".
 - does not include sections: "tool.metadata", "tool.chart", "results".
 
 A tampered report is only determined if the chart-testing check has passed:
 - certifiedOpenShiftVersions or testOpenShiftVersion contain valid semantic versions.
-- certifiedOpenShiftVersions or testOpenShiftVersion specify an OCP version with helm support  (>=4.1.0)
+- certifiedOpenShiftVersions or testOpenShiftVersion specify an OCP version with helm support (>=4.1.0)
 - if the has-kubeversion check has also passed
   - v1.0 profile:
     - if a valid kubeVersion is specified in the chart it must include the certifiedOpenShiftVersions
@@ -24,14 +24,14 @@ These are not comprehensive lists - other certification checks will preform furt
 """
 
 import sys
-import semantic_version
 
+import semantic_version
 import yaml
 
 try:
-    from yaml import CLoader as Loader
+    from yaml import CSafeLoader as SafeLoader
 except ImportError:
-    from yaml import Loader
+    from yaml import SafeLoader
 
 sys.path.append("../")
 from report import report_info
@@ -55,7 +55,7 @@ def get_report_data(report_path):
     """
     try:
         with open(report_path) as report_data:
-            report_content = yaml.load(report_data, Loader=Loader)
+            report_content = yaml.load(report_data, Loader=SafeLoader)
         return True, report_content
     except Exception as err:
         print(f"Exception 2 loading file: {err}")
