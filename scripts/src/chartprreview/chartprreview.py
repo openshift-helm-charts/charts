@@ -1,17 +1,16 @@
-import re
+import argparse
+import hashlib
 import os
 import os.path
-import sys
-import argparse
+import re
 import subprocess
-import hashlib
+import sys
 
-from environs import Env
-
-import semver
-import semantic_version
 import requests
+import semantic_version
+import semver
 import yaml
+from environs import Env
 
 try:
     from yaml import CLoader as Loader
@@ -19,11 +18,10 @@ except ImportError:
     from yaml import Loader
 
 sys.path.append("../")
-from report import report_info
-from report import verifier_report
-from signedchart import signedchart
 from pullrequest import prartifact
 from reporegex import matchers
+from report import report_info, verifier_report
+from signedchart import signedchart
 from tools import gitutils
 
 

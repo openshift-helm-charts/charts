@@ -1,15 +1,15 @@
-import sys
-import subprocess
 import base64
 import filecmp
 import os
 import re
+import subprocess
+import sys
 
 sys.path.append("../")
-from report import verifier_report
 from owners import owners_file
 from pullrequest import prartifact
 from reporegex import matchers
+from report import verifier_report
 
 
 def check_and_prepare_signed_chart(api_url, report_path, owner_path, key_file_path):

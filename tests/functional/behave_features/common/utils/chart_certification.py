@@ -329,7 +329,7 @@ vendor:
     ):
         try:
             # Check workflow conclusion
-            run_id = get_run_id(self.secrets, pr_number)
+            run_id = get_run_id(self.secrets, WORKFLOW_CERTIFICATION_CI, pr_number)
             conclusion = get_run_result(self.secrets, run_id)
             if conclusion == expect_result:
                 logging.info(
@@ -735,7 +735,7 @@ class ChartCertificationE2ETestSingle(ChartCertificationE2ETest):
                         with open(path, "w") as fd:
                             fd.write(yaml.dump(chart))
                     except Exception as e:
-                        raise AssertionError("Failed to update version in yaml file")
+                        raise AssertionError(f"Failed to update version in yaml file: {e}")
 
     def remove_readme_file(self):
         with SetDirectory(Path(self.temp_dir.name)):

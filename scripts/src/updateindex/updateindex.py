@@ -6,17 +6,18 @@ import base64
 import hashlib
 import json
 import os
-import requests
 import sys
-import yaml
-
 from datetime import datetime, timezone
+
+import requests
+import yaml
 from environs import Env
 
 try:
-    from yaml import CLoader as Loader, CDumper as Dumper
+    from yaml import CDumper as Dumper
+    from yaml import CLoader as Loader
 except ImportError:
-    from yaml import Loader, Dumper
+    from yaml import Dumper, Loader
 
 
 def _decode_chart_entry(chart_entry_encoded):

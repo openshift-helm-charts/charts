@@ -19,10 +19,12 @@ to the charts and development repositories.
 
 
 """
-import os
+
 import argparse
-import sys
+import os
 import shutil
+import sys
+
 from release import release_info
 
 sys.path.append("../")

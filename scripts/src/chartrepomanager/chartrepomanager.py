@@ -22,30 +22,32 @@ update occurs in a later step.
 import argparse
 import base64
 import json
-import shutil
 import os
-import sys
 import re
+import shutil
 import subprocess
+import sys
 import tempfile
 import time
 import urllib.parse
-from environs import Env
 
 import yaml
+from environs import Env
 
 try:
-    from yaml import CLoader as Loader, CDumper as Dumper
+    from yaml import CDumper as Dumper
+    from yaml import CSafeLoader as SafeLoader
 except ImportError:
-    from yaml import Loader, Dumper
+    from yaml import Dumper, SafeLoader
 
 sys.path.append("../")
-from report import report_info
-from chartrepomanager import indexannotations
-from signedchart import signedchart
 from pullrequest import prartifact
 from reporegex import matchers
+from report import report_info
+from signedchart import signedchart
 from tools import gitutils
+
+from chartrepomanager import indexannotations
 
 
 def _encode_chart_entry(chart_entry):
@@ -271,7 +273,7 @@ def create_index_from_chart(chart_file_name):
     p = out.stdout.decode("utf-8")
     print(p)
     print(out.stderr.decode("utf-8"))
-    crt = yaml.load(p, Loader=Loader)
+    crt = yaml.load(p, Loader=SafeLoader)
     return crt
 
 
@@ -374,7 +376,7 @@ def update_chart_annotation(
         data = open(
             os.path.join("charts", category, organization, chart, "OWNERS")
         ).read()
-        out = yaml.load(data, Loader=Loader)
+        out = yaml.load(data, Loader=SafeLoader)
         vendor_name = out["vendor"]["name"]
         annotations["charts.openshift.io/provider"] = vendor_name
 
@@ -392,7 +394,7 @@ def update_chart_annotation(
     print(out.stderr.decode("utf-8"))
 
     fd = open(os.path.join(dr, chart, "Chart.yaml"))
-    data = yaml.load(fd, Loader=Loader)
+    data = yaml.load(fd, Loader=SafeLoader)
 
     if "annotations" not in data:
         data["annotations"] = annotations

@@ -1,16 +1,18 @@
 import argparse
 import itertools
-import requests
-import sys
-import analytics
 import os
 import re
+import sys
+
+import analytics
+import requests
 from github import Github
 
 sys.path.append("../")
+from collections import OrderedDict
+
 from indexfile import index
 from pullrequest import prepare_pr_comment as pr_comment
-from collections import OrderedDict
 from reporegex import matchers
 
 file_pattern = re.compile(

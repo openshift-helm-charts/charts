@@ -3,9 +3,9 @@ import os
 import yaml
 
 try:
-    from yaml import CLoader as Loader
+    from yaml import CSafeoader as SafeLoader
 except ImportError:
-    from yaml import Loader
+    from yaml import SafeLoader
 
 
 def get_owner_data(category, organization, chart):
@@ -17,7 +17,7 @@ def get_owner_data(category, organization, chart):
 def get_owner_data_from_file(owner_path):
     try:
         with open(owner_path) as owner_data:
-            owner_content = yaml.load(owner_data, Loader=Loader)
+            owner_content = yaml.load(owner_data, Loader=SafeLoader)
         return True, owner_content
     except Exception as err:
         print(f"Exception loading OWNERS file: {err}")
@@ -28,6 +28,15 @@ def get_vendor(owner_data):
     vendor = ""
     try:
         vendor = owner_data["vendor"]["name"]
+    except Exception:
+        pass
+    return vendor
+
+
+def get_vendor_label(owner_data):
+    vendor = ""
+    try:
+        vendor = owner_data["vendor"]["label"]
     except Exception:
         pass
     return vendor

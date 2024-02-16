@@ -1,7 +1,7 @@
-import time
-import sys
 import argparse
 import os
+import sys
+import time
 
 import requests
 

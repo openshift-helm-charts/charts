@@ -1,8 +1,9 @@
 import json
-import requests
-import yaml
-import semantic_version
 import sys
+
+import requests
+import semantic_version
+import yaml
 
 sys.path.append("../")
 
