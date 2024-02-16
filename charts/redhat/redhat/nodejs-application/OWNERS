@@ -1,0 +1,10 @@
+chart:
+  name: nodejs-application
+  description: This is the Red Hat quickstart NodeJS application with no database helm chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat
+
