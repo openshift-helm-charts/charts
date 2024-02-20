@@ -1,0 +1,27 @@
+{{- if ((.Values.pvc).enabled) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "cryostat.fullname" . }}
+  {{- $labels := include "cryostat.labels" $ | nindent 4 }}
+  labels: {{ $labels }}
+  {{- with .Values.pvc.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.pvc.accessModes }}
+  accessModes: 
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.pvc.storage }}
+  {{- if kindIs "string" .Values.pvc.storageClassName }}
+  storageClassName: {{ .Values.pvc.storageClassName | quote }}
+  {{- end }}
+  {{- with .Values.pvc.selector }}
+  selector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
