@@ -1,5 +1,5 @@
 chart:
-  name: cryostat
+  name: redhat-cryostat
   shortDescription: A Helm chart for deploying Cryostat on Kubernetes and OpenShift
 publicPgpKey: null
 users:
