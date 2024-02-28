@@ -1,9 +1,10 @@
 chart:
   name: redteamobile-helm
-  shortDescription: unknown
+  shortDescription: helm of redteamobile
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: redtea-ops
 vendor:
   label: redteamobile
   name: Redtea Mobile PTE. Ltd
