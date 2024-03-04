@@ -4040,7 +4040,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-cakephp-application-template-0.0.1/cakephp-application-template-0.0.1.tgz
     version: 0.0.1
-  redhat-data-grid:
+  redhat-redhat-data-grid:
   - annotations:
       charts.openshift.io/digest: sha256:4a60f63bec9744cc6b6261ae1b81670a96c3e9d95c1bb259894b4b2220a42549
       charts.openshift.io/lastCertifiedTimestamp: '2022-03-01T16:11:36.091647+00:00'
