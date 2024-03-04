@@ -1,5 +1,5 @@
 chart:
-  name: data-grid
+  name: redhat-data-grid
   shortDescription: This is the Red Had Data Grid chart
 publicPgpKey: null
 users:
