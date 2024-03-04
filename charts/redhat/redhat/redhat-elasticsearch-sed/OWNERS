@@ -1,5 +1,5 @@
 chart:
-  name: elasticsearch-sed
+  name: redhat-elasticsearch-sed
   shortDescription: Elasticsearch Service Endpoint Definition
 publicPgpKey: null
 users:
