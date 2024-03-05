@@ -1,6 +1,7 @@
 chart:
   name: external-chart
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
