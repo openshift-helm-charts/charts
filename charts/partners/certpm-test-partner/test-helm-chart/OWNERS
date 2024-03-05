@@ -1,7 +1,8 @@
 chart:
   name: test-helm-chart
   shortDescription: Helm Chart certification Test
-publicPgpKey: null
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: marcorandria+github@gmail.com
 vendor:
