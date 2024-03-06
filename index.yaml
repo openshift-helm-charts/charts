@@ -4364,7 +4364,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-developer-hub-1.0.0-1/developer-hub-1.0.0-1.tgz
     version: 1.0.0-1
-  redhat-dotnet:
+  redhat-redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:483cb0144a3e7838e95da3a04a3df4178dc06b40fb4b3276e7c1c2a3b65555ff
@@ -4590,7 +4590,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-eap8-1.1.2/eap8-1.1.2.tgz
     version: 1.1.2
-  redhat-elasticsearch-sed:
+  redhat-redhat-elasticsearch-sed:
   - annotations:
       charts.openshift.io/digest: sha256:1ac0cba03bf38fe0b83cc96501bc12b4b2e9bd0ea002f2bd3b2d2dd2e5ef8a6b
       charts.openshift.io/lastCertifiedTimestamp: '2022-04-06T06:41:55.034514+00:00'
