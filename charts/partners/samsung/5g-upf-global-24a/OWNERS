@@ -4,7 +4,7 @@ chart:
 providerDelivery: true
 publicPgpKey: unknown
 users:
-- githubUsername: wying3
+- githubUsername: seonghoon-moon
 vendor:
   label: samsung
   name: Samsung Electronics Co., Ltd.
