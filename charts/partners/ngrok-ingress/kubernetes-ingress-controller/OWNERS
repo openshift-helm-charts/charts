@@ -1,0 +1,22 @@
+chart:
+  name: kubernetes-ingress-controller
+  shortDescription: The official ngrok Ingress Controller for Kubernetes
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: russorat
+- githubUsername: jonstacks
+- githubUsername: alex-bezek
+- githubUsername: nikolay-ngrok
+- githubUsername: jrobsonchase
+- githubUsername: euank
+- githubUsername: bobzilladev
+- githubUsername: Abdiramen
+- githubUsername: nijikokun
+- githubUsername: CK-Ward
+- githubUsername: salilsub
+- githubUsername: dthomasngrokker
+- githubUsername: krwenholz
+vendor:
+  label: ngrok-ingress
+  name: ngrok, Inc.
