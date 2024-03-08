@@ -1,5 +1,5 @@
 chart:
-  name: semeru-transition
+  name: redhat-semeru-transition
   shortDescription: This is the helm chart to replace the Java JDK, from OpenJdk 11 to IBM Semeru 11, that is used in a Red Hat product image, such as EAP, .etc. 
 users:
 - githubUsername: levivic
