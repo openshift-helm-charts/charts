@@ -5,5 +5,5 @@ metadata:
 spec:
   connectionConfig:
     url: >-
-      https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-17-CI/installation/index.yaml
+      https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-18-CI/installation/index.yaml
 
