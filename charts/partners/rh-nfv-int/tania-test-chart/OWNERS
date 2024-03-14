@@ -1,10 +1,9 @@
 chart:
   name: tania-test-chart
-  shortDescription: Here is the default 50+ characters image description
+  shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
-users:
-- githubUsername: xusername
+users: []
 vendor:
   label: rh-nfv-int
   name: Fredco
