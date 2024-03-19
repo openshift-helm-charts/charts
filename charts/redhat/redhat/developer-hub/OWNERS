@@ -3,11 +3,9 @@ chart:
   shortDescription: A Helm chart for deploying Red Hat Developer Hub
 publicPgpKey: null
 users:
-  - githubUsername: tumido
-  - githubUsername: christophe-f
-  - githubUsername: sabre1041
-  - githubUsername: nickboldt
   - githubUsername: rhdh-bot
+  - githubUsername: nickboldt
+  - githubUsername: schultzp2020
   - githubUsername: kadel
 vendor:
   label: redhat
