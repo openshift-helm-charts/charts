@@ -2449,6 +2449,28 @@ entries:
     urls:
     - 5g-smf-global-24a-1.240125.8468882.tgz
     version: 1.240125.8468882
+  samsung-5g-upf-global-24a:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:c1ac9649f72e6f437cb39632565c3730a3899e6f919b3e6ab832f44689bc8f51
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T11:08:26.55427-05:00'
+      charts.openshift.io/name: 5g-upf-global-24a
+      charts.openshift.io/provider: Samsung Electronics
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/releaseDate: 24/01/25
+      charts.openshift.io/submissionTimestamp: '2024-03-19T14:52:23.039798+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 24.A.0
+    description: A Helm chart for 5G Core cUPF(24/01/25)
+    digest: c841ce21ae880a42c98035ea39e20ea9cef277976e982993bf5a2c7f889fc3b8
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-upf-global-24a
+    urls:
+    - 5g-upf-global-24a-1.240125.8468882.tgz
+    version: 1.240125.8468882
   sapiens-idit-runtime:
   - annotations:
       app.idit/version: 19.2.0.2
@@ -2600,4 +2622,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2024-03-19T14:45:28.706899+00:00'
+generated: '2024-03-19T14:52:23.014560+00:00'
