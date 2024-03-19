@@ -1,0 +1,57 @@
+name: Chart Lock Generation Sanity Check
+
+# Runs chart generation on every push to main to make
+# sure things are healthy. Alerts maintainers if there
+# are issues.
+#
+# Main should *always* be in a healthy state 
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  ensure-health:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: Set up Python 3.x Part 1
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+    - name: Set up Python 3.x Part 2
+      run: |
+        # set up python
+        python3 -m venv ve1
+        cd scripts
+        ../ve1/bin/pip3 install -r requirements.txt
+        ../ve1/bin/pip3 install .
+        cd ..
+    - name: generate chart locks
+      id: generate
+      uses: ./.github/actions/generate-chart-locks
+    - name: notify maintainers on failure
+      id: notify
+      if: failure() && steps.generate.outcome == 'failure' && github.repository == 'openshift-helm-charts/charts'
+      uses: archive/github-actions-slack@v2.7.0
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+        slack-channel: C02979BDUPL
+        slack-text: |
+          Failing to generate chart locks! '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
+    - name: create issue if notification failure
+      id: allback-notify
+      if: failure() && steps.notify.outcome == 'failure'
+      run: |
+        gh issue create --title "Chart lock generation sanity check is failing" --body "${{ env.COMMENT_BODY }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+        COMMENT_BODY: |
+          While performing a sanity check of the chart generation logic on the main branch, a failure occurred!
+          
+          See workflow: ${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}
+
+          cc @komish @mgoerens

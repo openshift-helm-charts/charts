@@ -198,6 +198,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
             "category", f"{'partner' if category == 'partners' else category}"
         )
         gitutils.add_output("organization", organization)
+        gitutils.add_output("chart-name", chart)
 
         if not semver.VersionInfo.isvalid(version):
             msg = (
@@ -207,6 +208,20 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
             gitutils.add_output("pr-content-error-message", msg)
             sys.exit(1)
 
+        # Red Hat charts must carry the Red Hat prefix.
+        if organization == "redhat":
+            if not chart.startswith("redhat-"):
+                msg = f"[ERROR] Charts provided by Red Hat must have their name begin with the redhat- prefix. I.e. redhat-{chart}"
+                gitutils.add_output("pr-content-error-message", msg)
+                sys.exit(1)
+
+        # Non Red Hat charts must not carry the Red Hat prefix.
+        if organization != "redhat" and chart.startswith("redhat-"):
+            msg = f"[ERROR] The redhat- prefix is reserved for charts provided by Red Hat. Your chart: {chart}"
+            gitutils.add_output("pr-content-error-message", msg)
+            sys.exit(1)
+
+        # Check the index.yaml for the existence of this chart at this version.
         print("Downloading index.yaml", category, organization, chart, version)
         r = requests.get(
             f"https://raw.githubusercontent.com/{repository}/{branch}/index.yaml"
@@ -217,7 +232,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
         else:
             data = {"apiVersion": "v1", "entries": {}}
 
-        entry_name = f"{organization}-{chart}"
+        entry_name = chart
         d = data["entries"].get(entry_name, [])
         gitutils.add_output("chart-entry-name", entry_name)
         for v in d:

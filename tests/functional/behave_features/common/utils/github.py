@@ -31,7 +31,7 @@ def get_run_id(secrets, workflow_name: str, pr_number: str = None):
             logging.debug(f'workflow found with id "{run["id"]}"')
             return run["id"]
     else:
-        raise Exception("Workflow for the submitted PR did not run.")
+        raise Exception(f"Workflow for the submitted PR (#{pr_number}) did not run.")
 
 
 @retry(stop_max_delay=60_000 * 40, wait_fixed=2000)
@@ -117,7 +117,7 @@ def github_api_post(endpoint, bot_token, headers={}, json={}):
     return r
 
 
-def github_api(method, endpoint, bot_token, headers={}, data={}, json={}):
+def github_api(method, endpoint, bot_token, headers={}, json={}):
     if method == "get":
         return github_api_get(endpoint, bot_token, headers=headers)
     elif method == "post":
@@ -125,4 +125,4 @@ def github_api(method, endpoint, bot_token, headers={}, data={}, json={}):
     elif method == "delete":
         return github_api_delete(endpoint, bot_token, headers=headers)
     else:
-        raise ValueError("Github API method not implemented in helper function")
+        raise ValueError(f"Github API method '{method}' not implemented in helper function")

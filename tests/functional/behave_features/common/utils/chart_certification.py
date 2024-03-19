@@ -215,7 +215,7 @@ vendor:
                     return False
 
         if index:
-            entry = f"{vendor}-{chart_name}"
+            entry = chart_name
             if "entries" not in index or entry not in index["entries"]:
                 if failure_type == "error":
                     raise AssertionError(
