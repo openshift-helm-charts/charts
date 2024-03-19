@@ -2361,6 +2361,28 @@ entries:
     urls:
     - 5g-amfmme-global-24a-1.240125.8468882.tgz
     version: 1.240125.8468882
+  samsung-5g-csdb-global-24a:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:231259a7a3b51586a27fab10f2aa1fa1998576239d77a685776fb2920a00ddfc
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T10:40:48.314707-05:00'
+      charts.openshift.io/name: 5g-csdb-global-24a
+      charts.openshift.io/provider: Samsung Electronics
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/releaseDate: 24/01/25
+      charts.openshift.io/submissionTimestamp: '2024-03-19T13:54:22.636427+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 24.A.0
+    description: A Helm chart for 5G Core cCSDB(24/01/25)
+    digest: 53fc5e832e1b9df67d8e9c5fc01d44902f234ddf491eb9ce17e8a9fb76256e8c
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-csdb-global-24a
+    urls:
+    - 5g-csdb-global-24a-1.240125.8468882.tgz
+    version: 1.240125.8468882
   sapiens-idit-runtime:
   - annotations:
       app.idit/version: 19.2.0.2
@@ -2512,4 +2534,4 @@ entries:
     urls:
     - N/A
     version: 0.1.12
-generated: '2024-03-19T02:16:34.546556+00:00'
+generated: '2024-03-19T13:54:22.612028+00:00'
