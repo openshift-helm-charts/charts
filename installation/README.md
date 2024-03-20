@@ -1,32 +1,5 @@
 
 
-## Pull secret setup
-
-To install CI builds published to https://quay.io/organization/rhdh, you need a pull secret.
-
-Copy your secret to a file and set `metadata.name` == `rhdh-pull-secret` (not the default exported from quay.io!!)
-
-```
-cat <<EOF > /tmp/my_quay_secret
-apiVersion: v1
-kind: Secret
-metadata:
-  name: rhdh-pull-secret
-data:
-  .dockerconfigjson: ==your-quay-login-secret-goes-here===
-type: kubernetes.io/dockerconfigjson
-EOF
-```
-
-Now add the secret to your RHDH/Backstage namespace or project:
-
-```
-oc new-project <your-rhdh-project>
-oc create -f /tmp/my_quay_secret -n <your-rhdh-project>
-```
-
-
-
 ## Installation
 
 ### 1. To install the Helm Chart without a HelmChartRepository, run the following command:
