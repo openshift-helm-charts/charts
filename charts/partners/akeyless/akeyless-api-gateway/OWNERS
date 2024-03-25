@@ -1,0 +1,9 @@
+chart:
+  name: akeyless-api-gateway
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: akeyless
+  name: Akeyless
