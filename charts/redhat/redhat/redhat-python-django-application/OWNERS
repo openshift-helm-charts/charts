@@ -1,0 +1,9 @@
+chart:
+  name: redhat-python-django-application
+  description: This is the Red Hat Django application template
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat

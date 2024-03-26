@@ -1,9 +1,0 @@
-chart:
-  name: quarkus
-  shortDescription: This is the Red Hat Quarkus chart
-publicPgpKey: null
-users:
-- githubUsername: dperaza4dustbit
-vendor:
-  label: redhat
-  name: Red Hat
