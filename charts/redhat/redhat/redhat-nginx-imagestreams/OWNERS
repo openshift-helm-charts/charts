@@ -1,0 +1,9 @@
+chart:
+  name: redhat-nginx-imagestreams
+  description: This is the Red Hat Nginx Server imagestream chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat

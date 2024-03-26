@@ -1,9 +1,0 @@
-chart:
-  name: postgresql-imagestreams
-  description: The Red Hat PostgreSQL imagestreams
-publicPgpKey: null
-users:
-  - githubUsername: phracek
-vendor:
-  label: redhat
-  name: Red Hat

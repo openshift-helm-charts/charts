@@ -1,0 +1,9 @@
+chart:
+  name: redhat-cakephp-application-template
+  description: This is the Red Hat quickstart CakePHP application with no database helm chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat

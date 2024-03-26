@@ -1,9 +1,0 @@
-chart:
-  name: nodejs-ex-k
-  shortDescription: This is the Red Hat NodeJs EX K chart
-publicPgpKey: null
-users:
-- githubUsername: dperaza4dustbit
-vendor:
-  label: redhat
-  name: Red Hat

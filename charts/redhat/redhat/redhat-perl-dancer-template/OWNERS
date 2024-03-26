@@ -1,0 +1,9 @@
+chart:
+  name: redhat-perl-dancer-template
+  description: This is the Red Hat quickstart Dancer application helm chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat
