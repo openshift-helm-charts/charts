@@ -1,8 +1,0 @@
-chart:
-  name: helm-chart
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: bcook
-  name: Red Hat
