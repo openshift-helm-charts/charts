@@ -1,0 +1,164 @@
+name: Red Hat OWNERS Files
+
+# On OWNERS file submissions, this workflow will check the path and the
+# contents of the file to make sure it matches expectations for Red Hat
+# submissions.
+
+on:
+  pull_request:
+    paths:
+    - charts/redhat/**/OWNERS
+    - charts/community/redhat/**/OWNERS
+
+env:
+  SUCCESS_LABEL: redhat-owners-content-ok
+
+jobs:
+  gather-metadata:
+    name: Gather Metadata From Path
+    outputs:
+      category: ${{ steps.gather-metadata.outputs.category }}
+      organization: ${{ steps.gather-metadata.outputs.organization }}
+      chartname: ${{ steps.gather-metadata.outputs.chart-name }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Clean up stale label
+        uses: actions/github-script@v3
+        continue-on-error: true
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const successLabel = '${{ env.SUCCESS_LABEL }}';
+            try {
+              await github.issues.removeLabel({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: successLabel,
+              })
+            } catch (error) {
+              // a 404 indicates the label isn't here
+              if (error.status == 404) {
+                console.log('The issue did not have the label');
+                return 0;
+              }
+
+              throw error
+            }
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Python CI tooling
+        working-directory: scripts
+        run: |
+          make venv.tools
+      
+      - name: Gather Metadata
+        id: gather-metadata
+        env:
+          API_URL: ${{ github.event.pull_request._links.self.href }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          ./scripts/venv.tools/bin/extract-metadata-from-pr \
+            --emit-to-github-output \
+            ${{ env.API_URL }}
+  ensure-prefix-in-path:
+    name: Ensure chart name prefix
+    runs-on: ubuntu-22.04
+    needs: [gather-metadata]
+    steps:
+      - name: Confirm Prefix
+        id: confirm-prefix
+        run: echo "${{ needs.gather-metadata.outputs.chartname }}" | grep "^redhat-"
+  ensure-owners-file-contents:
+    name: Ensure OWNERS file contents is valid
+    runs-on: ubuntu-22.04
+    needs: [gather-metadata]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install Python CI tooling
+        working-directory: scripts
+        run: |
+          make venv.tools
+      - name: Assert Owners File Content
+        id: assert-content
+        env:
+          CATEGORY: ${{ needs.gather-metadata.outputs.category }}
+          ORGANIZATION: ${{ needs.gather-metadata.outputs.organization }}
+          CHARTNAME: ${{ needs.gather-metadata.outputs.chartname }}
+        run: |
+          ./scripts/venv.tools/bin/assert-redhat-owners-file-meta \
+            "${CATEGORY}" \
+            "${ORGANIZATION}" \
+            "${CHARTNAME}"
+  notify-on-failure:
+    name: Notify on failure
+    runs-on: ubuntu-22.04
+    needs: [ensure-prefix-in-path, ensure-owners-file-contents]
+    if: failure() && (needs.ensure-prefix-in-path.result == 'failure' || needs.ensure-owners-file-contents.result == 'failure')
+    steps:
+      - name: Send PR Comment
+        uses: actions/github-script@v6
+        env:
+          PREFIX_CHECK_RESULT: ${{ needs.ensure-prefix-in-path.result != '' && needs.ensure-prefix-in-path.result || 'unknown' }}
+          CONTENT_CHECK_RESULT: ${{ needs.ensure-owners-file-contents.result != '' && needs.ensure-owners-file-contents.result || 'unknown' }}
+          BUILD_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prefixCheckResult = '${{ env.PREFIX_CHECK_RESULT }}';   
+            const contentCheckResult = '${{ env.CONTENT_CHECK_RESULT }}';
+            const buildURL='${{ env.BUILD_URL }}';
+
+            var comment = '### :x: Red Hat OWNERS File Content and Path Check';
+
+            if (prefixCheckResult == 'failure') {
+              comment = comment.concat('\n\n', 'The chart name in your submission path looks incorrect!');
+            }
+
+            if (contentCheckResult == 'failure') {
+              comment = comment.concat('\n\n', 'The content of your OWNERS file looks incorrect!');
+            }
+
+            comment = comment.concat('\n\n', `Check your [workflow run](${buildURL}) for more information.`);
+
+            var issue_number = ${{ github.event.number }};
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(issue_number),
+              body: comment
+            });
+  label-on-success:
+    name: Label On Success
+    continue-on-error: true
+    needs: [ensure-prefix-in-path, ensure-owners-file-contents]
+    runs-on: ubuntu-22.04
+    env:
+      PR: ${{ github.event.number }}
+    if: success()
+    steps:
+    - name: Label PR
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const issue_number = ${{ env.PR }};
+          const successLabel = '${{ env.SUCCESS_LABEL }}';
+
+          github.rest.issues.addLabels({
+            issue_number: Number(issue_number),
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: [successLabel],
+          });

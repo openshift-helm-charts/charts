@@ -1,28 +1,33 @@
-name: OWNERS PR Check
+name: Check Chart Lock Status
 
-# Checks OWNERS file additions and modifications submitted by mercury-bot on a
-# partner's behalf, typically in response to a partner updating their project
-# metadata.
+# Checks Red Hat and Community OWNERS file additions against our chart lockfile.
+# 
+# Red Hat and Community OWNERS files are not auto-merged, and require maintainer
+# review and action. This is intended to automate checking lock files.
 #
-# Automatically approves modifications mercury-bot makes. Sanity checks
-# net-new OWNERS files to ensure their addition does not conflict with
-# existing locks.
+# Technically maintainers should re-run this workflow just before merging. This is
+# noted in the comment sent to the PR.
+#
+# This does not fail even if a chart is locked. A modification to an existing chart
+# lock is considered valid, and therefore maintainers will use their discretion
+# to merge modifications.
 
 on:
   pull_request_target:
     types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
     paths:
-    - charts/partners/**/OWNERS
-
+    - charts/community/**/OWNERS
+    - charts/redhat/**/OWNERS
 
 jobs:
   owners-file-check:
     name: OWNERS file PR checker
-    runs-on: ubuntu-20.04
-    if: github.event.pull_request.draft == false && github.actor == 'redhat-mercury-bot'
+    runs-on: ubuntu-22.04
+    if: |
+      github.event.pull_request.draft == false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         
       - name: Set up Python 3.x Part 1
         uses: actions/setup-python@v5
@@ -52,19 +57,19 @@ jobs:
         env:
           pr_files_py: "${{ steps.get_files_changed.outputs.pr_files }}"
         run: |
-          # check if PR contains just one partner OWNERS file
+          # check if PR contains just one redhat/community OWNERS file
           pr_files=($(echo "$pr_files_py" | tr -d '[],'))
           echo "Files in PR: ${pr_files[@]}"
           eval first_file=${pr_files[0]}
           if [ ${#pr_files[@]} == 1 ]; then
             eval first_file=${pr_files[0]}
-            if [[ $first_file == "charts/partners/"*/*"/OWNERS" ]] ; then
+            if [[ $first_file == "charts/redhat/"*/*"/OWNERS" ]] || [[ $first_file == "charts/community/"*/*"/OWNERS" ]] ; then
                 echo "An OWNERS file has been modified or added"
                 echo "merge_pr=true" | tee -a $GITHUB_OUTPUT
             else
-              echo "The file in the PR is not a partner OWNERS file"
+              echo "The file in the PR is not a Red Hat or Community OWNERS file"
               echo "merge_pr=false" | tee -a $GITHUB_OUTPUT
-              echo "msg=ERROR: PR does not include a partner OWNERS file." >> $GITHUB_OUTPUT
+              echo "msg=ERROR: PR does not include a redhat/community OWNERS file." >> $GITHUB_OUTPUT
             fi
           else
             echo "The PR contains multiple files."
@@ -79,7 +84,7 @@ jobs:
       - name: Determine if net-new OWNERS file
         id: populate-file-mod-type
         if: ${{ steps.check_for_owners.outputs.merge_pr == 'true' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -105,7 +110,7 @@ jobs:
 
       # Only used to assert content of the OWNERS file.
       - name: Checkout Pull Request
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -113,9 +118,6 @@ jobs:
           fetch-depth: 0
           path: "pr-branch"
 
-      # TODO: Implemented as a shell script temporarily. Future enhancement
-      # would re-use some existing logic that we have for the Red Hat OWNERS
-      # check, and build something similar for general use.
       - name: Ensure OWNERS content and path content align
         working-directory: "pr-branch"
         id: fact-check
@@ -123,7 +125,7 @@ jobs:
           file=$(echo ${{ steps.get_files_changed.outputs.pr_files }} | yq .0)
           owner_contents_chart_name=$(yq '.chart.name' ${file})
           owner_contents_vendor_label=$(yq '.vendor.label' ${file})
-          echo "Chart Name Comparison: ${owner_contents_chart_name} = ${{ steps.gather-metadata.outputs.chart-name }}"
+          echo "Chart Name Comparison: ${owner_contents_chart_name} = ${{ steps.gather-metadata.outputs.chart-name }}" 
           echo "Vendor Label Comparison: ${owner_contents_vendor_label} = ${{ steps.gather-metadata.outputs.organization }}"
           test "${owner_contents_chart_name}" = "${{ steps.gather-metadata.outputs.chart-name }}"
           test "${owner_contents_vendor_label}" = "${{ steps.gather-metadata.outputs.organization }}"
@@ -150,53 +152,40 @@ jobs:
           chart-name: ${{ steps.gather-metadata.outputs.chart-name }}
           fail-workflow-if-locked: 'false'
 
-      # Do not merge net-new OWNERS files for locked chart names. Allow a
-      # modification to an existing file. The mercury-bot periodically updates
-      # this file as users make changes to their project settings.
-      - name: Determine if should merge and is safe to merge
-        id: safe-to-merge
+      - name: Comment on PR if chart is locked
+        id: comment-if-locked
+        if: steps.determine-lock-status.outputs.chart-is-locked == 'true'
         run: |
-          echo "OWNERS file is net new: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file }}"
-          echo "Chart name is already locked: ${{ steps.determine-lock-status.outputs.chart-is-locked }}"
-          echo "merge_pr=${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && steps.determine-lock-status.outputs.chart-is-locked == 'false') }}" | tee -a $GITHUB_OUTPUT
-
-      - name: Comment on PR
-        if: ${{ steps.check_for_owners.outputs.merge_pr == 'false' }}
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-              var issue_number = ${{ github.event.number }};
-              var comment = "${{ steps.check_for_owners.outputs.msg }}";
-              github.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: Number(issue_number),
-                body: comment
-              });
-
-      - name: Reflect on check for OWNERS file result
-        if: |
-          steps.check_for_owners.outputs.merge_pr == 'false'
-          || steps.safe-to-merge.outputs.merge_pr == 'false'
-        run: |
-          echo "::error: The PR was not for a single partner OWNERS file, or was for a chart name locked to another contributor"
-          exit 1
-
-      - name: Approve PR
-        id: approve_pr
-        if: |
-          steps.check_for_owners.outputs.merge_pr == 'true'
-          && steps.safe-to-merge.outputs.merge_pr == 'true'
-        uses: hmarr/auto-approve-action@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Merge PR
-        id: merge_pr
-        if: ${{ steps.approve_pr.conclusion == 'success' }}
-        uses: pascalgn/automerge-action@v0.16.2
+          gh pr comment ${{ github.event.number }} --body "${{ env.COMMENT_BODY }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_METHOD: squash
-          MERGE_LABELS: ""
+          COMMENT_BODY: |
+            ### :lock: Chart Lock Check
+
+            The OWNERS file contributed here has a chart name that is **LOCKED**!
+
+            | chart name | lock path |
+            | - | - |
+            | ${{ steps.gather-metadata.outputs.chart-name }} | ${{ steps.determine-lock-status.outputs.locked-to-path }} |
+            
+            This OWNERS file is being ${{ steps.populate-file-mod-type.outputs.net-new-owners-file && '**created**' || '**modified**'}} in this pull request.
+
+            _This comment was auto-generated by [GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})._
+
+      - name: Comment on PR if chart is not locked
+        id: comment-if-available
+        if: steps.determine-lock-status.outputs.chart-is-locked == 'false'
+        run: |
+          gh pr comment ${{ github.event.number }} --body "${{ env.COMMENT_BODY }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: |
+            ### :unlock: Maintainers:
+
+            The OWNERS file contributed here has a chart name that is **AVAILABLE**!
+
+            The chart name '${{ steps.gather-metadata.outputs.chart-name }}' does not appear in our lockfile.
+
+            After reviewing this pull request, please re-run this workflow once more before merging.
+
+            _This comment was auto-generated by [GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})._

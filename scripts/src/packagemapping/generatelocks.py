@@ -72,15 +72,15 @@ def main():
             )
             return 20
 
-        ownersContentLoaded, ownersContent = owners_file.get_owners_data_from_file(
+        owners_content_loaded, owners_content = owners_file.get_owner_data_from_file(
             filename
         )
-        if not ownersContentLoaded:
+        if not owners_content_loaded:
             logError(f"Failed to load OWNERS file content. filename: {filename}")
             return 30
 
-        owners_value_chart_name = owners_file.get_chart(ownersContent)
-        owners_value_vendor_label = owners_file.get_vendor_label(ownersContent)
+        owners_value_chart_name = owners_file.get_chart(owners_content)
+        owners_value_vendor_label = owners_file.get_vendor_label(owners_content)
 
         if owners_value_chart_name != chart:
             logError(
