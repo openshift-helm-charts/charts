@@ -1,6 +1,6 @@
 apiVersion: v1
 entries:
-  a10networks-a10tkc:
+  a10tkc:
   - annotations:
       charts.openshift.io/digest: sha256:db2d82c2071a318643b90cda2c74369c4ec587ed21c4f5671d671a8884c4a48a
       charts.openshift.io/lastCertifiedTimestamp: '2023-02-15T14:58:54.11247+05:30'
@@ -24,7 +24,7 @@ entries:
     urls:
     - https://github.com/a10networks/tkc-doc/raw/master/charts/a10tkc-0.2.0.tgz
     version: 0.2.0
-  axual-axual-governance-core:
+  axual-governance-core:
   - annotations:
       charts.openshift.io/digest: sha256:d94592d390a7fad9beb266fab17280abef4463864b21dc06ed55808faf587cfd
       charts.openshift.io/lastCertifiedTimestamp: '2023-12-22T21:04:46.118585+00:00'
@@ -116,7 +116,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/axual-axual-governance-core-0.1.2/axual-governance-core-0.1.2.tgz
     version: 0.1.2
-  broadpeak-bks400:
+  bks400:
   - annotations:
       charts.openshift.io/archs: x86_64
       charts.openshift.io/digest: sha256:d4dd1dc0d01d17f9c9642a59a1ae630d296f5439c19cb1ca0a4d4d316c981f26
@@ -145,7 +145,7 @@ entries:
     urls:
     - https://github.com/Broadpeak-tv/Openshift/raw/main/Certification/bks400-0.2.0.tgz
     version: 0.2.0
-  castai-castai-agent:
+  castai-agent:
   - annotations:
       charts.openshift.io/digest: sha256:b3c7c29c5aa3e15db68cebd0f340385921539d79e6a9afd09756e38ae766913a
       charts.openshift.io/lastCertifiedTimestamp: '2023-02-24T14:39:40.440139+02:00'
@@ -164,7 +164,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/castai-castai-agent-0.52.0/castai-agent-0.52.0.tgz
     version: 0.52.0
-  ddosify-alaz:
+  alaz:
   - annotations:
       charts.openshift.io/digest: sha256:eb6cfbb8b5bfbff1501ffe10be92ba913263a124229ed2c6d07274ad91092965
       charts.openshift.io/lastCertifiedTimestamp: '2024-02-08T01:10:04.037839+03:00'
@@ -208,7 +208,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/ddosify-alaz-0.5.0/alaz-0.5.0.tgz
     version: 0.5.0
-  dh2i-dxemssql:
+  dxemssql:
   - annotations:
       charts.openshift.io/digest: sha256:bba38b72bd647ead19350b86ec60253d203d9465d75efd4c25d210110b77d789
       charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T19:27:13.91183+00:00'
@@ -229,7 +229,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/dh2i-dxemssql-1.0.1/dxemssql-1.0.1.tgz
     version: 1.0.1
-  exate-exateapigator:
+  exateapigator:
   - annotations:
       charts.openshift.io/digest: sha256:2844ec382545ca9657f2a3ae5b0b4f417c5fe40b42cf8bdc11577ea162ecbcfb
       charts.openshift.io/lastCertifiedTimestamp: '2023-01-16T13:52:25.629673+00:00'
@@ -293,7 +293,7 @@ entries:
     urls:
     - https://charts.test.exate.co/chartrepo/exate-apigator/charts/exateapigator-0.3.0.tgz
     version: 0.3.0
-  exfo-uv-helm:
+  uv-helm:
   - annotations:
       charts.openshift.io/digest: sha256:4e7e593c0f1e3fd1d8b984122516d56d5c82035b6da313aac9c8ef12da64173a
       charts.openshift.io/lastCertifiedTimestamp: '2022-09-23T20:35:00.390109+08:00'
@@ -313,7 +313,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/exfo-uv-helm-0.1.3/exfo-uv-helm-0.1.3.tgz
     version: 0.1.3
-  exfo-uverifier:
+  uverifier:
   - annotations:
       charts.openshift.io/digest: sha256:74fa80d28a46d9da1ae7a74bc050449164389a358bd13bd2fb2a23d4770a9206
       charts.openshift.io/lastCertifiedTimestamp: '2022-07-20T16:33:20.993665+08:00'
@@ -333,7 +333,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/exfo-uverifier-0.1.2/exfo-uverifier-0.1.2.tgz
     version: 0.1.2
-  fiware-orion-ld:
+  orion-ld:
   - annotations:
       charts.openshift.io/digest: sha256:7e67553ee7d697bed1b7d40a9d1c3ed1d724e32c7894c43629b5c156718aa3dd
       charts.openshift.io/lastCertifiedTimestamp: '2022-01-19T16:19:54.899727+00:00'
@@ -415,7 +415,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/fiware-orion-ld-1.0.3/fiware-orion-ld-1.0.3.tgz
     version: 1.0.3
-  flomesh-flomesh-console:
+  flomesh-console:
   - annotations:
       charts.openshift.io/digest: sha256:285ad867162027142c056417a3c303867d3f8592c59822577af08f4cdd9b56ec
       charts.openshift.io/lastCertifiedTimestamp: '2022-12-08T08:59:42.572296+08:00'
@@ -434,7 +434,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-flomesh-console-0.70.0-30-ubi8/flomesh-flomesh-console-0.70.0-30-ubi8.tgz
     version: 0.70.0-30-ubi8
-  flomesh-fsm:
+  fsm:
   - annotations:
       charts.openshift.io/digest: sha256:00a7e7d10e098d226b2eaac68e2e51c9468afa2f9a9de9a96991ae94a52400be
       charts.openshift.io/lastCertifiedTimestamp: '2022-12-05T15:47:16.440983+00:00'
@@ -480,7 +480,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-fsm-0.1.8-ubi.6/flomesh-fsm-0.1.8-ubi.6.tgz
     version: 0.1.8-ubi.6
-  flomesh-osm-edge:
+  osm-edge:
   - annotations:
       charts.openshift.io/digest: sha256:d83f822d56f8c4d745edc6b95d974956c49e597a20b9ea5467e9af2228153688
       charts.openshift.io/lastCertifiedTimestamp: '2022-12-06T16:06:40.631021+08:00'
@@ -508,7 +508,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-osm-edge-1.2.1-ubi8/flomesh-osm-edge-1.2.1-ubi8.tgz
     version: 1.2.1-ubi8
-  fortanix-dsm-secrets-injector-chart:
+  dsm-secrets-injector-chart:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:492efc99f1c44f9a854b916859732a067bb1500795856b97f890cd1e0b672ffc
@@ -554,65 +554,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/fortanix-dsm-secrets-injector-chart-2.2-4.6/fortanix-dsm-secrets-injector-chart-2.2-4.6.tgz
     version: 2.2-4.6
-  fredco-samplechart:
-  - annotations:
-      charts.openshift.io/digest: sha256:7eb4836e9b39d05743a44320b4b9d057269409fa0605c6c797a960221a63e214
-      charts.openshift.io/lastCertifiedTimestamp: '2022-07-03T19:10:57.461508+00:00'
-      charts.openshift.io/provider: Fredco
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-07-03T19:12:34.976945+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 1-42
-    description: A Helm chart for Kubernetes
-    digest: 6823ec50ab88b1cf6970bb1ce0ee696a5d78adec5ce8e7f6640b4d8d44944fb5
-    icon: https://www.example.com/chart-icon.png
-    kubeVersion: '>=1.20.0'
-    name: samplechart
-    type: application
-    urls:
-    - https://github.com/openshift-helm-charts/charts/releases/download/fredco-samplechart-0.1.1/fredco-samplechart-0.1.1.tgz
-    version: 0.1.1
-  - annotations:
-      charts.openshift.io/digest: sha256:4abe3a57dcc5865e006b8165507a06b4f165b282a53afb3060a1ff0733c4f2dd
-      charts.openshift.io/lastCertifiedTimestamp: '2022-07-06T01:34:49.552863+00:00'
-      charts.openshift.io/provider: Fredco
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-07-06T01:36:21.837707+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 1-42
-    description: A Helm chart for Kubernetes
-    digest: 83770ebbecceabdfe413e37692c89344f8e1c9951fb4be68f083834815c864f2
-    icon: https://www.example.com/chart-icon.png
-    kubeVersion: '>=1.20.0'
-    name: samplechart
-    type: application
-    urls:
-    - https://github.com/openshift-helm-charts/charts/releases/download/fredco-samplechart-0.1.2/fredco-samplechart-0.1.2.tgz
-    version: 0.1.2
-  - annotations:
-      charts.openshift.io/digest: sha256:ee1cd21270b6e5d6881ae456557d4143efe3f5ddb0117c87f931489ed31a34fc
-      charts.openshift.io/lastCertifiedTimestamp: '2022-08-29T07:55:59.697791+00:00'
-      charts.openshift.io/provider: Fredco
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-08-29T07:57:22.906169+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 1-42
-    description: A Helm chart for Kubernetes
-    digest: c147b2b7518d6631892477c881be12ccca5328837050da371317a4ba06177e65
-    icon: https://www.example.com/chart-icon.png
-    kubeVersion: '>=1.20.0'
-    name: samplechart
-    type: application
-    urls:
-    - https://github.com/openshift-helm-charts/charts/releases/download/fredco-samplechart-0.1.3/fredco-samplechart-0.1.3.tgz
-    version: 0.1.3
-  gigamon2-uctc:
+  uctc:
   - annotations:
       charts.openshift.io/digest: sha256:1bedd401dd5dfaa87aebcc86eea71c577c72197d39a04f80869e471062a76215
       charts.openshift.io/lastCertifiedTimestamp: '2024-01-23T19:09:18.217691+00:00'
@@ -633,7 +575,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/gigamon2-uctc-0.4.0/uctc-0.4.0.tgz
     version: 0.4.0
-  granulate-sagent:
+  sagent:
   - annotations:
       charts.openshift.io/digest: sha256:972947be3ede8321884a9079de17815ce8ca7a1805aea0bf00c1bf661be67b1b
       charts.openshift.io/lastCertifiedTimestamp: '2022-12-06T14:51:36.962455+00:00'
@@ -651,7 +593,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/granulate-sagent-1.0.0-latest/granulate-sagent-1.0.0-latest.tgz
     version: 1.0.0-latest
-  hashicorp-vault:
+  vault:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:ec2c09a0e5994ddb5014eea3db3c8bce41166ffa91471a06101890c6b39df36e
@@ -1255,7 +1197,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/hashicorp-vault-0.27.0/vault-0.27.0.tgz
     version: 0.27.0
-  i2i-i2i5gcorehelm:
+  i2i5gcorehelm:
   - annotations:
       charts.openshift.io/digest: sha256:e189b295ee18215a63d967e51320316c819a9e59cc0541df4a0eddb917034000
       charts.openshift.io/lastCertifiedTimestamp: '2023-06-02T18:24:33.677172+00:00'
@@ -1275,7 +1217,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/i2i-i2i5gcorehelm-1.0.0/i2i5gcorehelm-1.0.0.tgz
     version: 1.0.0
-  ibm-edge-nodered-chart:
+  nodered-chart:
   - annotations:
       charts.openshift.io/archs: x86_64
       charts.openshift.io/digest: sha256:b652b9b97a00c12c2998c690d54b2b974a84093dd3b21d1dfe35fb72eca4c583
@@ -1342,7 +1284,7 @@ entries:
     urls:
     - https://github.com/rhm-samples/edge-helm-charts/blob/master/nodered-chart-0.0.3.tgz?raw=true
     version: 0.0.3
-  ibm-ibm-object-storage-plugin:
+  ibm-object-storage-plugin:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
       charts.openshift.io/digest: sha256:3cda4165a30e77372332c6da2fb81f33ddfd83e1b9294090063c90f712b49ca1
@@ -2671,7 +2613,7 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-object-storage-plugin-2.2.22.tgz?raw=true
     version: 2.2.22
-  ibm-ibm-oms-ent-prod:
+  ibm-oms-ent-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
       charts.openshift.io/digest: sha256:fbc93dd2ebd74901669f133687c757c3559f25a454e8dbf0585f7fa449aa7ed6
@@ -2781,7 +2723,7 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-oms-ent-prod-6.0.2.tgz?raw=true
     version: 6.0.2
-  ibm-ibm-oms-pro-prod:
+  ibm-oms-pro-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
       charts.openshift.io/digest: sha256:e7cacf93d397b58c64f9c113cc0671e6e920022bf4227cab291e18c6e3827954
@@ -2894,7 +2836,7 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-oms-pro-prod-6.0.2.tgz?raw=true
     version: 6.0.2
-  ibm-ibm-operator-catalog-enablement:
+  ibm-operator-catalog-enablement:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
       charts.openshift.io/digest: sha256:ef0b29d3bec01688837bf100eaff492ab153babed118cf96eba3af96a50597b7
@@ -2979,7 +2921,7 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-operator-catalog-enablement-1.2.2.tgz?raw=true
     version: 1.2.2
-  ibm-ibm-spectrum-protect-plus-prod:
+  ibm-spectrum-protect-plus-prod:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
       charts.openshift.io/digest: sha256:bdca5ff578ed63268169e9bf2b0ead107b89c8f9634eaf93492dc63a3234cc17
@@ -3028,7 +2970,7 @@ entries:
     urls:
     - https://github.com/IBM/charts/blob/master/repo/ibm-helm/ibm-spectrum-protect-plus-prod-1.2.1.tgz?raw=true
     version: 1.2.1
-  infinispan-infinispan:
+  infinispan:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: N/A
       charts.openshift.io/digest: sha256:8e03aa2f451e691a0ebeac17ff737136485879273492a0602577aeefcfec6959
@@ -3203,7 +3145,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.3.2/infinispan-0.3.2.tgz
     version: 0.3.2
-  intracom-telecom-nfvri:
+  nfvri:
   - annotations:
       charts.openshift.io/digest: sha256:590d7a20414c751498c355163f48bf312481726fc617f9a034bbcd682e802477
       charts.openshift.io/lastCertifiedTimestamp: '2022-04-20T10:33:50.894848+00:00'
@@ -3235,7 +3177,7 @@ entries:
     urls:
     - https://europe-docker.pkg.dev/nfv-ri/rh-helm-charts/nfvri
     version: 4.3.0
-  janus-idp-backstage:
+  backstage:
   - annotations:
       charts.openshift.io/digest: sha256:8b39a5f3ea491cf8d3623a24b73d811324a33620672bef4ee7ebaf358d7b187c
       charts.openshift.io/lastCertifiedTimestamp: '2023-05-25T14:03:05.890056+00:00'
@@ -3477,7 +3419,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/janus-idp-backstage-2.4.0/backstage-2.4.0.tgz
     version: 2.4.0
-  kovair-kovairdevops-helm:
+  kovairdevops-helm:
   - annotations:
       charts.openshift.io/digest: sha256:a4c8cc79dbc78fd8d10779d3e7e80518cacde3e4730e00207829d51cfc77b0f4
       charts.openshift.io/lastCertifiedTimestamp: '2022-06-01T18:56:54.811673+00:00'
@@ -3499,7 +3441,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/kovair-kovairdevops-helm-0.1.0/kovair-kovairdevops-helm-0.1.0.tgz
     version: 0.1.0
-  lacework-lacework-agent:
+  lacework-agent:
   - annotations:
       charts.openshift.io/digest: sha256:fdc6f7c21a4f42349848a970de8a1d4a548c58e3f1366b0d3f84705a3b979a31
       charts.openshift.io/lastCertifiedTimestamp: '2022-03-15T17:49:54.212404+00:00'
@@ -3528,7 +3470,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/lacework-lacework-agent-5.4.1/lacework-lacework-agent-5.4.1.tgz
     version: 5.4.1
-  multipolar-bpjstk-service:
+  bpjstk-service:
   - annotations:
       charts.openshift.io/digest: sha256:59170c18b61fac0926d8d12f70914502b282b9fd66b1ab062ab99aabbae7974c
       charts.openshift.io/lastCertifiedTimestamp: '2023-06-11T12:51:20.439212+07:00'
@@ -3547,7 +3489,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/multipolar-bpjstk-service-1.0.0/bpjstk-service-1.0.0.tgz
     version: 1.0.0
-  nabstract-nef-nabstract:
+  nef-nabstract:
   - annotations:
       charts.openshift.io/digest: sha256:f17a0108bde61a2e532b1a4dc9f1608acfd1450267d7828bc2b9e872e6e6803f
       charts.openshift.io/lastCertifiedTimestamp: '2023-06-11T20:02:27.729265+00:00'
@@ -3588,7 +3530,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/nabstract-nef-nabstract-2.0.0/nef-nabstract-2.0.0.tgz
     version: 2.0.0
-  nearby-computing-nearbyone-controller:
+  nearbyone-controller:
   - annotations:
       charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
       charts.openshift.io/lastCertifiedTimestamp: '2023-04-27T16:16:08.079605+00:00'
@@ -3667,7 +3609,7 @@ entries:
     urls:
     - https://registry.nearbycomputing.com/chartrepo/redhat/charts/nearbyone-controller-2.119.1.tgz
     version: 2.119.1
-  nextevolution-nedb-classic:
+  nedb-classic:
   - annotations:
       category: Integration
       charts.openshift.io/digest: sha256:cf586675a0e4b2f2c9d7608336434540d5f7a37d8afafa80ad264960f5b58efc
@@ -3706,7 +3648,7 @@ entries:
     urls:
     - https://redhat-charts:strahc-tahder@chart-proxy.nextevolution.de/repository/helm-releases/nedb-classic-0.2.1.tgz
     version: 0.2.1
-  nirmata-kyverno:
+  kyverno:
   - annotations:
       charts.openshift.io/digest: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
       charts.openshift.io/lastCertifiedTimestamp: '2021-12-14T05:34:57.758331+00:00'
@@ -3799,7 +3741,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/nirmata-kyverno-2.6.5/kyverno-2.6.5.tgz
     version: 2.6.5
-  opscruise-opscruise:
+  opscruise:
   - annotations:
       charts.openshift.io/digest: sha256:3936a9deac923380aa2dd842f19da07d32030a867ebd05eea48dd38b895b82c0
       charts.openshift.io/lastCertifiedTimestamp: '2023-02-10T02:29:23.721977+00:00'
@@ -3975,7 +3917,7 @@ entries:
     urls:
     - https://opscruise-helm.bitbucket.io/opscruise-0.35.100.tgz.gzip
     version: 0.35.100
-  rafaysystems-rafay-operator-redhat:
+  rafay-operator-redhat:
   - annotations:
       charts.openshift.io/digest: sha256:e90ed52496459379a844f3c7e258f6e71f024ab6ed0a8530be643f84003d5987
       charts.openshift.io/lastCertifiedTimestamp: '2023-03-29T19:54:50.3391+00:00'
@@ -5216,7 +5158,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
     version: 0.0.3
-  redhat-redhat-cryostat:
+  redhat-cryostat:
   - annotations:
       charts.openshift.io/digest: sha256:16c798a6a148c3d5d7a95a1c25fa727f56cd065a2f412d0991781e5939472b64
       charts.openshift.io/lastCertifiedTimestamp: '2022-05-10T16:51:05.300078+00:00'
@@ -5616,7 +5558,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-cryostat-0.4.0+1/redhat-cryostat-0.4.0+1.tgz
     version: 0.4.0+1
-  redhat-redhat-data-grid:
+  redhat-data-grid:
   - annotations:
       charts.openshift.io/digest: sha256:4a60f63bec9744cc6b6261ae1b81670a96c3e9d95c1bb259894b4b2220a42549
       charts.openshift.io/lastCertifiedTimestamp: '2022-03-01T16:11:36.091647+00:00'
@@ -5745,7 +5687,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-data-grid-8.4.3/data-grid-8.4.3.tgz
     version: 8.4.3
-  redhat-redhat-dotnet:
+  redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
       charts.openshift.io/digest: sha256:483cb0144a3e7838e95da3a04a3df4178dc06b40fb4b3276e7c1c2a3b65555ff
@@ -5786,7 +5728,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-dotnet-0.0.2/dotnet-0.0.2.tgz
     version: 0.0.2
-  redhat-redhat-dotnet-imagestreams:
+  redhat-dotnet-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:d2203989fc770f8e1c8f4100f86a426b37aa0052016f71ca9bb52647d9c66533
       charts.openshift.io/lastCertifiedTimestamp: '2023-12-12T10:08:30.320767+00:00'
@@ -5809,7 +5751,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-dotnet-imagestreams-0.0.1/redhat-dotnet-imagestreams-0.0.1.tgz
     version: 0.0.1
-  redhat-redhat-elasticsearch-sed:
+  redhat-elasticsearch-sed:
   - annotations:
       charts.openshift.io/digest: sha256:1ac0cba03bf38fe0b83cc96501bc12b4b2e9bd0ea002f2bd3b2d2dd2e5ef8a6b
       charts.openshift.io/lastCertifiedTimestamp: '2022-04-06T06:41:55.034514+00:00'
@@ -5828,7 +5770,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-elasticsearch-sed-1.0.0/redhat-elasticsearch-sed-1.0.0.tgz
     version: 1.0.0
-  redhat-redhat-nodejs-imagestreams:
+  redhat-nodejs-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:b98749a73edd19bcc234e787cf0895657b4fbdd12eaae23a8001b44395ad7ffb
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-23T11:05:14.742572+00:00'
@@ -5898,7 +5840,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nodejs-imagestreams-0.0.3/redhat-nodejs-imagestreams-0.0.3.tgz
     version: 0.0.3
-  redhat-redhat-perl-imagestreams:
+  redhat-perl-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:59e0ea50848a68c1710f8efe5c4451a3afd6bd28cb47eb7dd4590b01faf9d49c
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T10:56:43.308577+00:00'
@@ -5922,7 +5864,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-perl-imagestreams-0.0.1/redhat-perl-imagestreams-0.0.1.tgz
     version: 0.0.1
-  redhat-redhat-php-imagestreams:
+  redhat-php-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:55db05ca38410f095d81aa5dc1c6ecb5a448b50e4370be26c26084222cc98c24
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T11:26:29.677061+00:00'
@@ -5946,7 +5888,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-php-imagestreams-0.0.1/redhat-php-imagestreams-0.0.1.tgz
     version: 0.0.1
-  redhat-redhat-python-imagestreams:
+  redhat-python-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:8801644ed1c4da57ced8deae3cf0be56ab94df113c41a7301b9c73d4a85b2ff7
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T11:42:57.80258+00:00'
@@ -5970,7 +5912,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-python-imagestreams-0.0.1/redhat-python-imagestreams-0.0.1.tgz
     version: 0.0.1
-  redhat-redhat-ruby-imagestreams:
+  redhat-ruby-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:9e2def051458896f17ffc65f9b1b65216cb3bedc4da43d4c9781b548a0471f1a
       charts.openshift.io/lastCertifiedTimestamp: '2023-08-24T11:59:45.440909+00:00'
@@ -6017,7 +5959,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-ruby-imagestreams-0.0.2/redhat-ruby-imagestreams-0.0.2.tgz
     version: 0.0.2
-  redhat-redhat-springboot-rest:
+  redhat-springboot-rest:
   - annotations:
       charts.openshift.io/digest: sha256:cadf8065ae7c55c20218ac7e0c6fddfafe943a870fa2dee2d84663806751f7cc
       charts.openshift.io/lastCertifiedTimestamp: '2024-03-11T07:22:17.822141+00:00'
@@ -6335,7 +6277,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-wildfly-1.5.5/redhat-wildfly-1.5.5.tgz
     version: 1.5.5
-  solace-pubsubplus-openshift:
+  pubsubplus-openshift:
   - annotations:
       charts.openshift.io/digest: sha256:088b96c259efc2e3338a491a23904533fe94c49334c3c305b54a44987bd3eb4d
       charts.openshift.io/lastCertifiedTimestamp: '2022-02-04T18:24:20.678551+00:00'
@@ -6494,7 +6436,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-3.3.2/pubsubplus-openshift-3.3.2.tgz
     version: 3.3.2
-  solace-pubsubplus-openshift-dev:
+  pubsubplus-openshift-dev:
   - annotations:
       charts.openshift.io/digest: sha256:19199b26bcb0740e0643ad6341ae180848f9e73f25bc8e512a5e50e89529eee4
       charts.openshift.io/lastCertifiedTimestamp: '2022-02-04T19:16:20.999165+00:00'
@@ -6653,7 +6595,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-dev-3.3.2/pubsubplus-openshift-dev-3.3.2.tgz
     version: 3.3.2
-  solace-pubsubplus-openshift-ha:
+  pubsubplus-openshift-ha:
   - annotations:
       charts.openshift.io/digest: sha256:00544736dcad0552b0adb2fa72275c9fd04783464b7c072ae35332ffc456d60f
       charts.openshift.io/lastCertifiedTimestamp: '2022-02-07T12:23:57.040776+00:00'
@@ -6812,7 +6754,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-ha-3.3.2/pubsubplus-openshift-ha-3.3.2.tgz
     version: 3.3.2
-  telenity-canvas-dmid:
+  canvas-dmid:
   - annotations:
       charts.openshift.io/digest: sha256:947a298988ef9d58d9efd7d443f09ea8679dd4f177cdefd92da0fa036cab83e7
       charts.openshift.io/lastCertifiedTimestamp: '2023-05-10T15:05:16.249174+00:00'
@@ -6834,7 +6776,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-canvas-dmid-3.0.1/canvas-dmid-3.0.1.tgz
     version: 3.0.1
-  telenity-canvas-oamportal:
+  canvas-oamportal:
   - annotations:
       charts.openshift.io/digest: sha256:66b9a3f252e9a46fe7b1b6af68bc9d24798e85eb75280fdcaa02c23a6982ea5b
       charts.openshift.io/lastCertifiedTimestamp: '2023-05-10T19:35:01.511479+00:00'
@@ -6856,7 +6798,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-canvas-oamportal-3.0.24-SNAPSHOT/canvas-oamportal-3.0.24-SNAPSHOT.tgz
     version: 3.0.24-SNAPSHOT
-  telenity-canvas-platform:
+  canvas-platform:
   - annotations:
       charts.openshift.io/digest: sha256:834a104fd3250558a8d838001f54fc398e6e72fda9e282342448738ae849264c
       charts.openshift.io/lastCertifiedTimestamp: '2023-05-16T17:48:34.588294-04:00'
@@ -6884,7 +6826,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-canvas-platform-3.1.5/canvas-platform-3.1.5.tgz
     version: 3.1.5
-  wavefronthq-wavefront:
+  wavefront:
   - annotations:
       charts.openshift.io/digest: sha256:663b50a03cf0adac0485f8731a1e0c8cb729b216f75ce9e43d1f09ffbe2faa1a
       charts.openshift.io/lastCertifiedTimestamp: '2021-12-20T22:13:45.725332+00:00'
@@ -7627,7 +7569,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/wavefronthq-wavefront-1.13.1/wavefront-1.13.1.tgz
     version: 1.13.1
-  yugabytedb-yugaware-openshift:
+  yugaware-openshift:
   - annotations:
       charts.openshift.io/digest: sha256:6e6edeb0cd098762e8e5c7ffc0c3005bdb61b2af6ed7b3725aeb3d6ac41d4806
       charts.openshift.io/lastCertifiedTimestamp: '2022-11-17T10:21:33.625598+05:30'
@@ -7707,7 +7649,7 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-  zextras-carbonio:
+  carbonio:
   - annotations:
       charts.openshift.io/digest: sha256:a93c347dd88ce22a68a4c2ecb7d6c05c211db6c297b57cdd912403ee5e578857
       charts.openshift.io/lastCertifiedTimestamp: '2023-03-23T16:45:33.120585+01:00'
@@ -7756,4 +7698,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zextras-carbonio-23.3.0/carbonio-23.3.0.tgz
     version: 23.3.0
-generated: '2024-03-18T19:29:21.115790+00:00'
+generated: '2024-03-26T00:00:00.115790+00:00'
