@@ -1,9 +1,0 @@
-chart:
-  name: vnflcm
-  shortDescription: unknown
-providerDelivery: true
-publicPgpKey: unknown
-users: []
-vendor:
-  label: zte
-  name: ZTE Corporation
