@@ -5,7 +5,7 @@
 ### 1. To install the Helm Chart without a HelmChartRepository, run the following command:
 
 ```
-    helm install -n <your-rhdh-project> --generate-name https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-31-CI/charts/redhat/redhat/developer-hub/1.2-31-CI/developer-hub-1.2-31-CI.tgz
+    helm install -n <your-rhdh-project> --generate-name https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-32-CI/charts/redhat/redhat/developer-hub/1.2-32-CI/developer-hub-1.2-32-CI.tgz
 ```
 
 ### 2. Or, to install from a Helm Chart Repository:
@@ -13,7 +13,7 @@
 First, run this to create the above chart repo, with .metadata.name = `rhdh-next-ci-repo`:
 
 ```
-    oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-31-CI/installation/rhdh-next-ci-repo.yaml
+    oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-32-CI/installation/rhdh-next-ci-repo.yaml
 ```
 
 Then, browse to the Helm Chart Repository created above and install via OpenShift UI.
@@ -29,7 +29,7 @@ Then, browse to the Helm Chart Repository created above and install via OpenShif
     podman run --rm -i -e KUBECONFIG=/.kube/config \
       -v /root/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \
       quay.io/redhat-certification/chart-verifier \
-      verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-31-CI/charts/redhat/redhat/developer-hub/1.2-31-CI/developer-hub-1.2-31-CI.tgz
+      verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-32-CI/charts/redhat/redhat/developer-hub/1.2-32-CI/developer-hub-1.2-32-CI.tgz
     echo 'Report in /tmp/chartverifier/report.yaml'
 ```    
 
