@@ -4479,6 +4479,34 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-data-grid-8.4.3/data-grid-8.4.3.tgz
     version: 8.4.3
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:626121ee18bab4920d9713247d4916b876ab11c413fbceb3454f476a1dab7067
+      charts.openshift.io/lastCertifiedTimestamp: '2024-03-27T14:33:35.234169+00:00'
+      charts.openshift.io/name: Data Grid
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-03-27T14:34:52.896299+00:00'
+      charts.openshift.io/supportURL: https://github.com/infinispan/infinispan-helm-charts
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: '8.4'
+    description: A Helm chart that lets you build and deploy Red Hat Data Grid clusters.
+    digest: 22c514c6ad64d84275d3b86a503bd6f22c32c1023dadcd214334fba4398ec049
+    home: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.4
+    icon: https://access.redhat.com/webassets/avalon/d/red-hat-data-grid/images/rhdg-icon.png
+    maintainers:
+    - name: Red Hat
+      url: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.4
+    name: redhat-data-grid
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-data-grid-8.4.7/redhat-data-grid-8.4.7.tgz
+    version: 8.4.7
   redhat-developer-hub:
   - annotations:
       artifacthub.io/category: integration-delivery
@@ -7751,4 +7779,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-03-27T08:12:25.157419+00:00'
+generated: '2024-03-27T14:34:52.823033+00:00'
