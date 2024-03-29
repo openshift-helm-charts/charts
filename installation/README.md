@@ -35,7 +35,7 @@ to
 ```
     cd /tmp && mkdir -p chartverifier; \
     podman run --rm -i -e KUBECONFIG=/.kube/config \
-      -v /home/nboldt/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \
+      -v /root/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \
       quay.io/redhat-certification/chart-verifier \
       verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-33-CI/charts/redhat/redhat/developer-hub/1.2-33-CI/developer-hub-1.2-33-CI.tgz
     echo 'Report in /tmp/chartverifier/report.yaml'
