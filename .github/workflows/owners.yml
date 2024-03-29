@@ -14,19 +14,21 @@ jobs:
       SEGMENT_TEST_WRITE_KEY: ${{ secrets.SEGMENT_TEST_WRITE_KEY }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.x Part 1
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@4
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Set up Python 3.x Part 2
         run: |
           # set up python
           python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
 
       - uses: jitterbit/get-changed-files@v1
         id: filesChangedOrModified

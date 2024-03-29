@@ -1,0 +1,10 @@
+chart:
+  name: sofy-dx
+  shortDescription: HCL Digital Experience helm repository
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: ravish.rana@hcl.com
+vendor:
+  label: hclsoftware
+  name: HCL America Inc

@@ -1,0 +1,77 @@
+name: Check Contributor
+
+# Checks that the input user exists in the approvers section
+# of a given OWNERS file.
+#
+# Returns true/false at the is-repo-owner output.
+#
+# Can be configured to fail altogether for contexts where it makes sense,
+# but in cases where this needs to return a green check mark, it is the
+# the caller's responsibility to evaluate the is-repo-owner output to inform
+# whether to proceed with subsequent tasks.
+#
+# Intended for use with workflows triggered by pull_request_target (or similar)
+# events.
+
+on:
+  workflow_call:
+    inputs:
+      user:
+        type: string
+        required: true
+        description: 
+          the user to evaluate
+      fail-workflow-if-not:
+        type: boolean
+        required: false
+        default: false
+        description: |
+          fails this workflow if the contributor is not an owner, 
+          or the evaluation fails for any other reason
+    outputs:
+      is-repo-owner: # 'true' / 'false'
+        description: whether the input user is a repo owner
+        value: ${{ jobs.check-contributor.outputs.is-repo-owner }}
+jobs:
+  check-contributor:
+    outputs:
+      is-repo-owner: ${{ steps.populate-output.outputs.is-repo-owner }}
+    name: Contributor is repo owner
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository base
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      
+      - name: Install CI Scripts
+        run: |
+          # set up python scripts
+          echo "set up python script in $PWD"
+          python3 -m venv ve1
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
+      
+      - name: Check contributor
+        # The return code from this script is what's important in this workflow.
+        id: check-contributor
+        continue-on-error: true
+        run: |
+          ./ve1/bin/user-is-repo-owner ${{ inputs.user }}
+      
+      - name: Add result to output
+        id: populate-output
+        # Outcome is the result of the workflow before continue-on-error is applied.
+        run: |
+          echo "is-repo-owner=${{ steps.check-contributor.outcome == 'success' }}" >> $GITHUB_OUTPUT
+      
+      - name: Fail if requested and the user is not a repo owner
+        if: inputs.fail-workflow-if-not && steps.populate-output.outputs.is-repo-owner != 'true'
+        run: |
+          echo "::error::Workflow is failing at the caller's request."
+          exit -1

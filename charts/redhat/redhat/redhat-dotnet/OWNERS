@@ -1,0 +1,11 @@
+chart:
+  name: redhat-dotnet
+  description: This is the Red Hat .NET application chart
+publicPgpKey: null
+users:
+  - githubUsername: aslicerh
+  - githubUsername: omajid
+  - githubUsername: tmds
+vendor:
+  label: redhat
+  name: Red Hat

@@ -1,0 +1,63 @@
+name: Check For Lock
+description: |
+  Checks for the existence of chart-name in a given chart lock file. If a chart
+  is found to be locked at the URL searched, the lockpath is returned should the
+  caller need it for further evaluation.
+
+  Designed to work with OWNERS file merges to prevent chart naming conflicts.
+inputs:
+  # e.g. vault
+  chart-name:
+    required: true
+    description:
+      Check the lock status of this chart by name.
+  fail-workflow-if-locked:
+    required: false
+    default: 'false'
+    description: |
+      Forces a failure of this action when the chart is locked. Must explicitly
+      be set to the value 'true'. All other values (even a boolean true) are
+      considered false.
+outputs:
+  # e.g. true/false
+  chart-is-locked:
+    description: Whether the chart provided via the chart-name input is locked
+    value: ${{ steps.set-lock-state.outputs.chart-is-locked }}
+  # e.g. charts/category/vendor/chartname if package-is-locked is true, else null
+  locked-to-path:
+    description: The path to which a locked chart is locked.
+    value: ${{ steps.check-for-chart-lock.outputs.locked-to-path }}
+runs:
+  using: composite
+  steps:
+  - name: Generate Locks
+    id: generate-locks
+    uses: ./.github/actions/generate-chart-locks
+  - name: Check lockfile for chart lock
+    id: check-for-chart-lock
+    shell: bash
+    run: |
+      set -e
+      echo "Ensuring expected key exists in lock JSON."
+      jq --exit-status .packages < ${{ steps.generate-locks.outputs.lockfile-path }}
+
+      echo "Checking if chart '${{ inputs.chart-name }}' is locked."
+      LOCK_PATH=$(jq -r '.packages."${{ inputs.chart-name }}"' < ${{ steps.generate-locks.outputs.lockfile-path }})
+
+      echo "locked-to-path=${LOCK_PATH}" | tee -a $GITHUB_OUTPUT
+
+  # Defaults to a locked state as a safeguard.
+  - name: Set lock state output
+    shell: bash
+    id: set-lock-state
+    run: |
+      echo "chart-is-locked=${{ steps.check-for-chart-lock.outputs.locked-to-path != 'null' }}" | tee -a $GITHUB_OUTPUT
+
+  - name: Fail if requested and the chart is locked
+    shell: bash
+    if: |
+      inputs.fail-workflow-if-locked == 'true' &&
+      steps.set-lock-state.outputs.chart-is-locked == 'true'
+    run: |
+      echo "::error::Workflow is failing at the caller's request."
+      exit -1

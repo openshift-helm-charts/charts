@@ -83,7 +83,7 @@ jobs:
 
       - name: Checkout software-version branch
         if: steps.check_repo.outputs.check-version == 'true'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: "software-version"
           repository: ${{ github.repository }}
@@ -150,7 +150,7 @@ jobs:
       - name: Checkout main branch
         if: |
           steps.check_test.outputs.run_tests == 'true'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: "main"
           token: ${{ secrets.BOT_TOKEN }}
@@ -159,9 +159,9 @@ jobs:
       - name: Set up Python 3.x Part 1
         if: |
           steps.check_test.outputs.run_tests == 'true'
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Set up Python 3.x Part 2
         if: |
@@ -169,8 +169,10 @@ jobs:
         run: |
           # set up python
           python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
 
       - name: (Manual) Run tests on existing charts
         if: |
@@ -218,7 +220,7 @@ jobs:
       - name: Send message to helm_dev slack channel
         id: notify_dev
         if: ${{ always() && github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true' && steps.run-schedule-tests.conclusion != 'success' }}
-        uses: archive/github-actions-slack@v2.0.0
+        uses: archive/github-actions-slack@v2.8.0
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C02979BDUPL
@@ -231,7 +233,7 @@ jobs:
       - name: Send message to helm_notify slack channel
         id: notify
         if: ${{ always() && github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true' && steps.run-schedule-tests.conclusion == 'success' }}
-        uses: archive/github-actions-slack@v2.0.0
+        uses: archive/github-actions-slack@v2.8.0
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C04K1ARMH8A
@@ -286,7 +288,7 @@ jobs:
 
       - name: Checkout software-version branch
         if: steps.check_repo.outputs.check-version == 'true'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: "software-version"
           repository: ${{ github.repository }}
@@ -355,7 +357,7 @@ jobs:
       - name: Checkout charts main branch
         if: |
           steps.check_test.outputs.run_tests == 'true'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: "main"
           token: ${{ secrets.BOT_TOKEN }}
@@ -364,9 +366,9 @@ jobs:
       - name: Set up Python 3.x Part 1
         if: |
           steps.check_test.outputs.run_tests == 'true'
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Set up Python 3.x Part 2
         if: |
@@ -375,8 +377,10 @@ jobs:
           # set up python
           pwd
           python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
 
       - name: (Manual) Run tests on existing charts
         if: |
@@ -425,7 +429,7 @@ jobs:
       - name: Send message to helm_dev slack channel
         id: notify_dev
         if: ${{ always() && github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true' && steps.run-schedule-tests.conclusion != 'success' }}
-        uses: archive/github-actions-slack@v2.0.0
+        uses: archive/github-actions-slack@v2.8.0
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C02979BDUPL
@@ -438,7 +442,7 @@ jobs:
       - name: Send message to helm_notify slack channel
         id: notify
         if: ${{ always() && github.event_name == 'schedule' && steps.check_test.outputs.run_tests == 'true' && steps.run-schedule-tests.conclusion == 'success' }}
-        uses: archive/github-actions-slack@v2.0.0
+        uses: archive/github-actions-slack@v2.8.0
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C04K1ARMH8A

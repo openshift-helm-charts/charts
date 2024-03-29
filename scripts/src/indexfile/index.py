@@ -1,14 +1,14 @@
-
 import json
-import requests
-import yaml
-import semantic_version
 import sys
 
-sys.path.append('../')
-from chartrepomanager import indexannotations
+import requests
+import semantic_version
+import yaml
+
+sys.path.append("../")
 
 INDEX_FILE = "https://charts.openshift.io/index.yaml"
+
 
 def _make_http_request(url, body=None, params={}, headers={}, verbose=False):
     response = requests.get(url, params=params, headers=headers, json=body)
@@ -19,10 +19,12 @@ def _make_http_request(url, body=None, params={}, headers={}, verbose=False):
         print(response.text)
     return response.text
 
+
 def _load_index_yaml():
     yaml_text = _make_http_request(INDEX_FILE)
     dct = yaml.safe_load(yaml_text)
     return dct
+
 
 def get_chart_info(tar_name):
     index_dct = _load_index_yaml()
@@ -30,13 +32,16 @@ def get_chart_info(tar_name):
         if tar_name.startswith(entry):
             for chart in charts:
                 index_tar_name = f"{entry}-{chart['version']}"
-                if tar_name == index_tar_name :
+                if tar_name == index_tar_name:
                     print(f"[INFO] match found: {tar_name}")
-                    providerType = chart["annotations"]["charts.openshift.io/providerType"]
+                    providerType = chart["annotations"][
+                        "charts.openshift.io/providerType"
+                    ]
                     provider = chart["annotations"]["charts.openshift.io/provider"]
                     return providerType, provider, chart["name"], chart["version"]
     print(f"[INFO] match not found: {tar_name}")
-    return "","","",""
+    return "", "", "", ""
+
 
 def get_charts_info():
     chart_info_list = []
@@ -45,48 +50,53 @@ def get_charts_info():
     for entry, charts in index_dct["entries"].items():
         for chart in charts:
             chart_info = {}
-            chart_info["name"] = chart['name']
+            chart_info["name"] = chart["name"]
             chart_info["version"] = chart["version"]
-            chart_info["providerType"] = chart["annotations"]["charts.openshift.io/providerType"]
-            chart_info["provider"] =  entry.removesuffix(f'-{chart["name"]}')
-            #print(f'[INFO] found chart : {chart_info["provider"]} {chart["name"]} {chart["version"]} ')
-            if 'charts.openshift.io/supportedOpenShiftVersions' in chart["annotations"]:
-                chart_info["supportedOCP"] = chart["annotations"]["charts.openshift.io/supportedOpenShiftVersions"]
+            chart_info["providerType"] = chart["annotations"][
+                "charts.openshift.io/providerType"
+            ]
+            chart_info["provider"] = entry.removesuffix(f'-{chart["name"]}')
+            # print(f'[INFO] found chart : {chart_info["provider"]} {chart["name"]} {chart["version"]} ')
+            if "charts.openshift.io/supportedOpenShiftVersions" in chart["annotations"]:
+                chart_info["supportedOCP"] = chart["annotations"][
+                    "charts.openshift.io/supportedOpenShiftVersions"
+                ]
             else:
                 chart_info["supportedOCP"] = ""
             if "kubeVersion" in chart:
                 chart_info["kubeVersion"] = chart["kubeVersion"]
             else:
-                chart_info["kubeVersion"] =""
+                chart_info["kubeVersion"] = ""
             chart_info_list.append(chart_info)
 
     return chart_info_list
+
 
 def get_latest_charts():
     chart_list = get_charts_info()
 
     print(f"{len(chart_list)} charts found in Index file")
 
-    chart_in_process = {"name" : ""}
+    chart_in_process = {"name": ""}
     chart_latest_version = ""
     latest_charts = []
 
-    for index,chart in enumerate(chart_list):
+    for index, chart in enumerate(chart_list):
         chart_name = chart["name"]
-        #print(f'[INFO] look for latest chart : {chart_name} {chart["version"]}')
+        # print(f'[INFO] look for latest chart : {chart_name} {chart["version"]}')
         if chart_name == chart_in_process["name"]:
             new_version = semantic_version.Version.coerce(chart["version"])
-            #print(f'   [INFO] compare chart versions : {new_version}({chart["version"]}) : {chart_latest_version}')
+            # print(f'   [INFO] compare chart versions : {new_version}({chart["version"]}) : {chart_latest_version}')
             if new_version > chart_latest_version:
-                #print(f'   [INFO] a new latest chart version : {new_version}')
+                # print(f'   [INFO] a new latest chart version : {new_version}')
                 chart_latest_version = new_version
                 chart_in_process = chart
         else:
             if chart_in_process["name"] != "":
-                #print(f'   [INFO] chart completed : {chart_in_process["name"]} {chart_in_process["version"]}')
+                # print(f'   [INFO] chart completed : {chart_in_process["name"]} {chart_in_process["version"]}')
                 latest_charts.append(chart_in_process)
 
-                #print(f'[INFO] new  chart found : {chart_name} {chart["version"]}')
+                # print(f'[INFO] new  chart found : {chart_name} {chart["version"]}')
                 chart_in_process = chart
                 chart_version = chart["version"]
                 if chart_version.startswith("v"):
@@ -95,40 +105,8 @@ def get_latest_charts():
             else:
                 chart_in_process = chart
 
-        if index+1 == len(chart_list):
-            #print(f'   [INFO] last chart completed : {chart_in_process["name"]} {chart_in_process["version"]}')
+        if index + 1 == len(chart_list):
+            # print(f'   [INFO] last chart completed : {chart_in_process["name"]} {chart_in_process["version"]}')
             latest_charts.append(chart_in_process)
 
     return latest_charts
-
-
-if __name__ == "__main__":
-    get_chart_info("redhat-dotnet-0.0.1")
-
-    chart_list = get_latest_charts()
-
-    for chart in chart_list:
-        print(f'[INFO] found latest chart : {chart["name"]} {chart["version"]}')
-
-
-    OCP_VERSION = semantic_version.Version.coerce("4.11")
-
-    for chart in chart_list:
-        if "supportedOCP" in chart and chart["supportedOCP"] != "N/A" and chart["supportedOCP"] != "":
-            if OCP_VERSION in semantic_version.NpmSpec(chart["supportedOCP"]):
-                print(f'PASS: Chart supported OCP version {chart["supportedOCP"]} includes: {OCP_VERSION}')
-            else:
-                print(f'   ERROR: Chart supported OCP version {chart["supportedOCP"]} does not include {OCP_VERSION}')
-        elif "kubeVersion" in chart and chart["kubeVersion"] != "":
-            supportedOCPVersion = indexannotations.getOCPVersions(chart["kubeVersion"])
-            if OCP_VERSION in semantic_version.NpmSpec(supportedOCPVersion):
-                print(f'PASS: Chart kubeVersion  {chart["kubeVersion"]} (OCP: {supportedOCPVersion}) includes OCP version: {OCP_VERSION}')
-            else:
-                print(f'   ERROR: Chart kubeVersion {chart["kubeVersion"]} (OCP: {supportedOCPVersion}) does not include {OCP_VERSION}')
-
-
-
-
-
-
-

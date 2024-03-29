@@ -1,0 +1,12 @@
+chart:
+  name: redhat-developer-hub
+  shortDescription: A Helm chart for deploying Red Hat Developer Hub
+publicPgpKey: null
+users:
+  - githubUsername: rhdh-bot
+  - githubUsername: nickboldt
+  - githubUsername: schultzp2020
+  - githubUsername: kadel
+vendor:
+  label: redhat
+  name: Red Hat

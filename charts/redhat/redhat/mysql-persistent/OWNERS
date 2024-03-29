@@ -1,9 +1,0 @@
-chart:
-  name: mysql-persistent
-  description: This is the Red Hat MySQL persistent storage chart
-publicPgpKey: null
-users:
-  - githubUsername: phracek
-vendor:
-  label: redhat
-  name: Red Hat

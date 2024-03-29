@@ -1,0 +1,191 @@
+name: Check Chart Lock Status
+
+# Checks Red Hat and Community OWNERS file additions against our chart lockfile.
+# 
+# Red Hat and Community OWNERS files are not auto-merged, and require maintainer
+# review and action. This is intended to automate checking lock files.
+#
+# Technically maintainers should re-run this workflow just before merging. This is
+# noted in the comment sent to the PR.
+#
+# This does not fail even if a chart is locked. A modification to an existing chart
+# lock is considered valid, and therefore maintainers will use their discretion
+# to merge modifications.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
+    paths:
+    - charts/community/**/OWNERS
+    - charts/redhat/**/OWNERS
+
+jobs:
+  owners-file-check:
+    name: OWNERS file PR checker
+    runs-on: ubuntu-22.04
+    if: |
+      github.event.pull_request.draft == false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Set up Python 3.x Part 1
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Set up Python 3.x Part 2
+        run: |
+          # set up python
+          python3 -m venv ve1
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
+
+      - name: get files changed
+        id: get_files_changed
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          # get files in PR
+          ./ve1/bin/pr-artifact --api-url=${{ github.event.pull_request._links.self.href }} \
+                                --get-files
+
+      - name: check if only an OWNERS file is pushed
+        id: check_for_owners
+        env:
+          pr_files_py: "${{ steps.get_files_changed.outputs.pr_files }}"
+        run: |
+          # check if PR contains just one redhat/community OWNERS file
+          pr_files=($(echo "$pr_files_py" | tr -d '[],'))
+          echo "Files in PR: ${pr_files[@]}"
+          eval first_file=${pr_files[0]}
+          if [ ${#pr_files[@]} == 1 ]; then
+            eval first_file=${pr_files[0]}
+            if [[ $first_file == "charts/redhat/"*/*"/OWNERS" ]] || [[ $first_file == "charts/community/"*/*"/OWNERS" ]] ; then
+                echo "An OWNERS file has been modified or added"
+                echo "merge_pr=true" | tee -a $GITHUB_OUTPUT
+            else
+              echo "The file in the PR is not a Red Hat or Community OWNERS file"
+              echo "merge_pr=false" | tee -a $GITHUB_OUTPUT
+              echo "msg=ERROR: PR does not include a redhat/community OWNERS file." >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "The PR contains multiple files."
+            echo "msg=ERROR: PR contains multiple files." >> $GITHUB_OUTPUT
+            echo "merge_pr=false" | tee -a $GITHUB_OUTPUT
+          fi
+
+      # We know that only one file was modified at this point, and it seems
+      # mergeable. Determine if that file was created or modified here.
+      #
+      # This step only checks the first file for its modification type!
+      - name: Determine if net-new OWNERS file
+        id: populate-file-mod-type
+        if: ${{ steps.check_for_owners.outputs.merge_pr == 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const resp = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const ownersFile = resp.data[0];
+            console.log(`Modified file "${ownersFile.filename} has a status of ${ownersFile.status}`);
+            console.log(`setting output: net-new-owners-file=${ownersFile.status == 'added'}`);
+            core.setOutput('net-new-owners-file', ownersFile.status == 'added');
+
+      - name: Add category/organization/chart-name from modified file to GITHUB_OUTPUT
+        id: gather-metadata
+        env:
+          API_URL: ${{ github.event.pull_request._links.self.href }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          ./ve1/bin/extract-metadata-from-pr \
+            --emit-to-github-output \
+            ${{ env.API_URL }}
+
+      # Only used to assert content of the OWNERS file.
+      - name: Checkout Pull Request
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          token: ${{ secrets.BOT_TOKEN }}
+          fetch-depth: 0
+          path: "pr-branch"
+
+      - name: Ensure OWNERS content and path content align
+        working-directory: "pr-branch"
+        id: fact-check
+        run: |
+          file=$(echo ${{ steps.get_files_changed.outputs.pr_files }} | yq .0)
+          owner_contents_chart_name=$(yq '.chart.name' ${file})
+          owner_contents_vendor_label=$(yq '.vendor.label' ${file})
+          echo "Chart Name Comparison: ${owner_contents_chart_name} = ${{ steps.gather-metadata.outputs.chart-name }}" 
+          echo "Vendor Label Comparison: ${owner_contents_vendor_label} = ${{ steps.gather-metadata.outputs.organization }}"
+          test "${owner_contents_chart_name}" = "${{ steps.gather-metadata.outputs.chart-name }}"
+          test "${owner_contents_vendor_label}" = "${{ steps.gather-metadata.outputs.organization }}"
+
+      - name: Comment on PR if facts are mismatched
+        id: comment-if-fact-check-failure
+        if: failure() && steps.fact-check.outcome == 'failure'
+        run: |
+          gh pr comment ${{ github.event.number }} --body "${{ env.COMMENT_BODY }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: |
+            ### Submission Facts Mismatch
+
+            The content of the OWNERS file and your submission path do not seem to match. Double check that
+            your vendor label and chart name values in your OWNERS file match with your submission path.
+
+            _This comment was auto-generated by [GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})._
+
+      - name: Check if chart name is locked
+        id: determine-lock-status
+        uses: ./.github/actions/check-chart-locks
+        with:
+          chart-name: ${{ steps.gather-metadata.outputs.chart-name }}
+          fail-workflow-if-locked: 'false'
+
+      - name: Comment on PR if chart is locked
+        id: comment-if-locked
+        if: steps.determine-lock-status.outputs.chart-is-locked == 'true'
+        run: |
+          gh pr comment ${{ github.event.number }} --body "${{ env.COMMENT_BODY }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: |
+            ### :lock: Chart Lock Check
+
+            The OWNERS file contributed here has a chart name that is **LOCKED**!
+
+            | chart name | lock path |
+            | - | - |
+            | ${{ steps.gather-metadata.outputs.chart-name }} | ${{ steps.determine-lock-status.outputs.locked-to-path }} |
+            
+            This OWNERS file is being ${{ steps.populate-file-mod-type.outputs.net-new-owners-file && '**created**' || '**modified**'}} in this pull request.
+
+            _This comment was auto-generated by [GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})._
+
+      - name: Comment on PR if chart is not locked
+        id: comment-if-available
+        if: steps.determine-lock-status.outputs.chart-is-locked == 'false'
+        run: |
+          gh pr comment ${{ github.event.number }} --body "${{ env.COMMENT_BODY }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: |
+            ### :unlock: Maintainers:
+
+            The OWNERS file contributed here has a chart name that is **AVAILABLE**!
+
+            The chart name '${{ steps.gather-metadata.outputs.chart-name }}' does not appear in our lockfile.
+
+            After reviewing this pull request, please re-run this workflow once more before merging.
+
+            _This comment was auto-generated by [GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})._

@@ -1,0 +1,29 @@
+name: Python Style
+
+on:
+  pull_request:
+    paths:
+    # Only trigger on core script changes
+    - 'scripts/**.py'
+
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Python 3.x Part 1
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+    - name: Install style tooling
+      working-directory: scripts
+      run: make venv.codestyle
+    - name: Run formatter
+      working-directory: scripts
+      run: make ci.format
+      # Temporarily auto-pass linting until we are able to manually review and
+      # address.
+    - name: Run linter
+      working-directory: scripts
+      run: make lint || true

@@ -1,0 +1,10 @@
+chart:
+  name: idit-runtime
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: Digitalpit
+vendor:
+  label: sapiens
+  name: SAPIENS SOFTWARE SOLUTIONS (IDIT) LTD

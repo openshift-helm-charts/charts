@@ -25,14 +25,22 @@ on:
         default: ""
 
 jobs:
+  check-contributor:
+    name: Check contributor
+    uses: ./.github/workflows/check-contributor.yml
+    with:
+      user: ${{ github.event.pull_request.user.login }}
+
   workflow-test:
     name: Workflow Test
+    needs: [check-contributor]
     runs-on: ubuntu-20.04
     if: |
-      github.event.pull_request.draft == false
+      github.event.pull_request.draft == false &&
+      needs.check-contributor.outputs.is-repo-owner == 'true'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
@@ -40,16 +48,18 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python 3.x Part 1
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Set up Python 3.x Part 2
         run: |
           # set up python requirements and scripts
           python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
 
       - name: Check Request
         id: check_request
@@ -104,7 +114,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_BODY: "Test triggered by ${{ github.event.pull_request.html_url }}."
         run: |
-          echo "Full test in pr : {{steps.check_request.outputs.full_tests_in_pr }}"
+          echo "Full test in pr : ${{ steps.check_request.outputs.full_tests_in_pr }}"
           if ${{steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }} ; then
             echo "Release PR from dev to charts, oer PR with new full test, so running full tests"
             ve1/bin/behave tests/functional/behave_features/ --tags=full --logging-level=WARNING --no-capture --no-color
@@ -137,14 +147,14 @@ jobs:
       - name: Approve PR
         id: approve_pr
         if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
-        uses: hmarr/auto-approve-action@v2
+        uses: hmarr/auto-approve-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge PR
         id: merge_pr
         if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
-        uses: pascalgn/automerge-action@v0.13.1
+        uses: pascalgn/automerge-action@v0.16.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_METHOD: squash

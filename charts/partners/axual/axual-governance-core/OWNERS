@@ -1,0 +1,11 @@
+chart:
+  name: axual-governance-core
+  shortDescription: Self Service and Governance suite for Apache Kafka
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: richard-axual
+- githubUsername: xsreality
+vendor:
+  label: axual
+  name: Axual B.V.

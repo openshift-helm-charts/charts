@@ -3,10 +3,12 @@ chart:
   shortDescription: 'Use YugabyteDB Anywhere''s orchestration and monitoring to manage
     YugabyteDB universes. '
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: baba230896
 - githubUsername: bhavin192
+- githubUsername: iSignal
+- githubUsername: yugabyte-ci
 vendor:
   label: yugabytedb
   name: YugaByte Inc

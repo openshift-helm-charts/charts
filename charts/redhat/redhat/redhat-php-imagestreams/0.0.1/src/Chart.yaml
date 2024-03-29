@@ -1,0 +1,14 @@
+description: |-
+  This content is expermental, do not use it in production. Import PHP imagestreams to OpenShift 4.
+  For more information about using this builder image, including OpenShift considerations,
+  see https://github.com/sclorg/s2i-php-container/blob/master/8.1/README.md.
+annotations:
+  charts.openshift.io/name: Red Hat PHP imagestreams on UBI (experimental).
+apiVersion: v2
+appVersion: 0.0.1
+kubeVersion: '>=1.20.0'
+name: redhat-php-imagestreams
+tags: builder,php
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.1

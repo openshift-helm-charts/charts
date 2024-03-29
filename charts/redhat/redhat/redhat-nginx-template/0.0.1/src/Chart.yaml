@@ -1,0 +1,15 @@
+description: An example Nginx HTTP server and a reverse proxy (nginx) application
+  that serves static content. For more information about using this template, including
+  OpenShift considerations, see https://github.com/sclorg/nginx-ex/blob/master/README.md.
+name: nginx-template
+tags: quickstart,nginx
+version: 0.0.1
+kubeVersion: '>=1.20.0'
+annotations:
+  charts.openshift.io/name: Red Hat Nginx HTTP Server (nginx) application (experimental).
+  charts.openshift.io/provider: Red Hat
+  charts.openshift.io/providerType: redhat
+apiVersion: v2
+appVersion: 0.0.1
+sources:
+  - https://github.com/sclorg/helm-charts
