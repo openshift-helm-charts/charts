@@ -6338,6 +6338,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/gigamon2-uctc-0.4.0/uctc-0.4.0.tgz
     version: 0.4.0
+  ussigw-configuration:
+  - annotations:
+      charts.openshift.io/digest: sha256:e4bd2265c6b318edbbc8d98b1fde2e974d15b4b5077f12b84a885aa099b7c8fc
+      charts.openshift.io/lastCertifiedTimestamp: '2024-03-29T16:15:40.102251-04:00'
+      charts.openshift.io/name: USSI Gateway Configuration Helm Chart
+      charts.openshift.io/provider: Telenity Iletisim Sistemleri Sa
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-03-30T22:20:54.221665+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 1.0.1
+    description: ussigw-configuration
+    digest: 88fd4b36225a3a67bfc054cd49d7fd7f40595c87ecb4577667bed1b9110d3ccf
+    kubeVersion: '>=v1.21.0'
+    maintainers:
+    - email: info@telenity.com
+      name: Telenity
+      url: https://www.telenity.com
+    name: ussigw-configuration
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/telenity-ussigw-configuration-1.0.4/ussigw-configuration-1.0.4.tgz
+    version: 1.0.4
   uv-helm:
   - annotations:
       charts.openshift.io/digest: sha256:4e7e593c0f1e3fd1d8b984122516d56d5c82035b6da313aac9c8ef12da64173a
@@ -7805,4 +7828,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-03-28T13:28:03.519349+00:00'
+generated: '2024-03-30T22:20:54.150093+00:00'
