@@ -6361,6 +6361,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-ussigw-configuration-1.0.4/ussigw-configuration-1.0.4.tgz
     version: 1.0.4
+  ussigw-core:
+  - annotations:
+      charts.openshift.io/digest: sha256:384bb3691d0ea7a68efedc8bc410d39019ed759fe76ae6e15a6a2203f3e6e3e7
+      charts.openshift.io/lastCertifiedTimestamp: '2024-03-29T16:14:15.599133-04:00'
+      charts.openshift.io/name: USSI Gateway Core Helm Chart
+      charts.openshift.io/provider: Telenity Iletisim Sistemleri Sa
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-03-30T22:32:40.235585+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 1.0.1
+    description: ussigw-core
+    digest: e3a899feb890c96f4897fc60ba61d73534bbb06481d7bb1a47e7ffc4f04e53b0
+    kubeVersion: '>=v1.21.0'
+    maintainers:
+    - email: info@telenity.com
+      name: Telenity
+      url: https://www.telenity.com
+    name: ussigw-core
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/telenity-ussigw-core-1.0.4/ussigw-core-1.0.4.tgz
+    version: 1.0.4
   uv-helm:
   - annotations:
       charts.openshift.io/digest: sha256:4e7e593c0f1e3fd1d8b984122516d56d5c82035b6da313aac9c8ef12da64173a
@@ -7828,4 +7851,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-03-30T22:20:54.150093+00:00'
+generated: '2024-03-30T22:32:40.164638+00:00'
