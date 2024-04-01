@@ -6317,6 +6317,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/granulate-sagent-1.0.0-latest/granulate-sagent-1.0.0-latest.tgz
     version: 1.0.0-latest
+  smsf-configuration:
+  - annotations:
+      charts.openshift.io/digest: sha256:ce5cc09b428dc1ad70481e71843c4b367243fba77cde4900d6671c597d227e38
+      charts.openshift.io/lastCertifiedTimestamp: '2024-04-01T11:24:18.878562-04:00'
+      charts.openshift.io/name: SMSF Configuration Helm Chart
+      charts.openshift.io/provider: Telenity Iletisim Sistemleri Sa
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-04-01T15:41:02.008818+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: smsf-configuration
+    digest: b8e3c93368b43e38bc75c04f2389f75d888e09a4708e429d67d91269f732d027
+    kubeVersion: '>=v1.21.0'
+    maintainers:
+    - email: info@telenity.com
+      name: Telenity
+      url: https://www.telenity.com
+    name: smsf-configuration
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/telenity-smsf-configuration-1.0.4/smsf-configuration-1.0.4.tgz
+    version: 1.0.4
   uctc:
   - annotations:
       charts.openshift.io/digest: sha256:1bedd401dd5dfaa87aebcc86eea71c577c72197d39a04f80869e471062a76215
@@ -7851,4 +7874,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-03-30T22:32:40.164638+00:00'
+generated: '2024-04-01T15:41:01.939013+00:00'
