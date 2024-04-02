@@ -6340,6 +6340,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-smsf-configuration-1.0.4/smsf-configuration-1.0.4.tgz
     version: 1.0.4
+  smsf-momt:
+  - annotations:
+      charts.openshift.io/digest: sha256:5b2de726b547d3ea639ee07895e026403752f47c1cf2038cc8b94084a88829b1
+      charts.openshift.io/lastCertifiedTimestamp: '2024-04-01T11:22:08.16511-04:00'
+      charts.openshift.io/name: SMSF MOMT Helm Chart
+      charts.openshift.io/provider: Telenity Iletisim Sistemleri Sa
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-04-02T15:06:54.076265+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: smsf-momt
+    digest: 8fa06ff390fc31fd27a6ea8cd9f1f7b5a1659547856b902ad3692060145a2bb1
+    kubeVersion: '>=v1.21.0'
+    maintainers:
+    - email: info@telenity.com
+      name: Telenity
+      url: https://www.telenity.com
+    name: smsf-momt
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/telenity-smsf-momt-1.0.4/smsf-momt-1.0.4.tgz
+    version: 1.0.4
   uctc:
   - annotations:
       charts.openshift.io/digest: sha256:1bedd401dd5dfaa87aebcc86eea71c577c72197d39a04f80869e471062a76215
@@ -7874,4 +7897,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-04-01T15:41:01.939013+00:00'
+generated: '2024-04-02T15:06:54.007236+00:00'
