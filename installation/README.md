@@ -7,7 +7,7 @@
 First, run this to create the above chart repo, with .metadata.name = `rhdh-next-ci-repo`:
 
 ```
-    oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-34-CI/installation/rhdh-next-ci-repo.yaml
+    oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-35-CI/installation/rhdh-next-ci-repo.yaml
 ```
 
 Then, following the [standard installation guide](https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.1/html-single/administration_guide_for_red_hat_developer_hub/index#proc-install-rhdh-helm_admin-rhdh):
@@ -35,9 +35,9 @@ to
 ```
     cd /tmp && mkdir -p chartverifier; \
     podman run --rm -i -e KUBECONFIG=/.kube/config \
-      -v /home/nboldt/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \
+      -v /root/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \
       quay.io/redhat-certification/chart-verifier \
-      verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-34-CI/charts/redhat/redhat/developer-hub/1.2-34-CI/developer-hub-1.2-34-CI.tgz
+      verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-35-CI/charts/redhat/redhat/developer-hub/1.2-35-CI/developer-hub-1.2-35-CI.tgz
     echo 'Report in /tmp/chartverifier/report.yaml'
 ```    
 
