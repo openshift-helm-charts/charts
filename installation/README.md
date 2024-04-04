@@ -16,12 +16,12 @@ curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/deve
 
 The [install](./install.sh) script follows the [standard installation guide](https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.1/html-single/administration_guide_for_red_hat_developer_hub/index#proc-install-rhdh-helm_admin-rhdh) and automates these steps:
 
-* Go to `Developer` perspective in your cluster
-* Select your namespace or project
-* Click `+Add`, scroll down and select `Helm Chart`
-* Filter out the default charts and just select the `Rhdh Next Ci Repo`
+1. Go to `Developer` perspective in your cluster
+1. Select your namespace or project (eg., `rhdh-helm` or `rhdh-1-2-39-ci`)
+1. Click `+Add`, scroll down and select `Helm Chart`
+1. Filter out the default charts and just select the `Rhdh Next Ci Repo`
 
-* **IMPORTANT**: In the chart's YAML view, change the following line to the correct value for your cluster. For example, change
+1. **IMPORTANT**: In the chart's YAML view, change the following line to the correct value for your cluster. For example, change
 ```
   clusterRouterBase: apps.example.com
 ```
@@ -29,8 +29,8 @@ to
 ```
   clusterRouterBase: apps.ci-my-cluster-goes-here.com
 ```
-* Click `Create` and watch the deployment happen from the `Topology` view.
-* open the `Route` once it's available to see your deployed RHDH instance.
+6. Click `Create` and watch the deployment happen from the `Topology` view.
+1. open the `Route` once it's available to see your deployed RHDH instance.
 
 ## Optional Verification
 
