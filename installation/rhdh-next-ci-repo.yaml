@@ -6,4 +6,3 @@ spec:
   connectionConfig:
     url: >-
       https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-1.2-39-CI/installation/index.yaml
-
