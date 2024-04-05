@@ -1,0 +1,122 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.3
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:3527924603390235143
+        chart-uri: N/A
+        digests:
+            chart: sha256:8b73bea424da935fb8b2d4f3c85689d3f92cf49bd1bb28d3b148632e3694c20f
+            package: be3180e0c26ba5cd58c6d074d474b9e1dfa1e5acf1c42d88189bd2723bf4e622
+        lastCertifiedTimestamp: "2024-04-05T13:14:07.330485+00:00"
+        testedOpenShiftVersion: "4.13"
+        supportedOpenShiftVersions: '>=4.9'
+        webCatalogOnly: true
+    chart:
+        name: nfvri
+        home: ""
+        sources: []
+        version: 5.1.0
+        description: A Helm chart for Kubernetes to deploy the NFV-RI stack
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: v5.1.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: nfvri
+        kubeversion: '>= 1.22.0'
+        dependencies:
+            - name: nfvri-agent
+              version: 5.1.0
+              repository: file://../nfvri-agent
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: nfvri-apiserver
+              version: 5.1.0
+              repository: file://../nfvri-apiserver
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: nfvri-orchestrator
+              version: 5.1.0
+              repository: file://../nfvri-orchestrator
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: nfvri-dashboard
+              version: 5.1.0
+              repository: file://../nfvri-dashboard
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
