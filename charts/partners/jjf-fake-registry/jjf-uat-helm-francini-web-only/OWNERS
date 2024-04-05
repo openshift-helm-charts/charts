@@ -1,9 +1,10 @@
 chart:
   name: jjf-uat-helm-francini-web-only
-  shortDescription: unknown
+  shortDescription: A test repository.
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: jfrancin
 vendor:
   label: jjf-fake-registry
   name: John Francini's Fake Company
