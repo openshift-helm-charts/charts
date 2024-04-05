@@ -5,7 +5,7 @@ publicPgpKey: null
 users:
   - githubUsername: jduimovich
   - githubUsername: otaviof
-  - githubUsername: roming22
+  - githubUsername: Roming22
 vendor:
   label: redhat
   name: Red Hat
