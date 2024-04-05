@@ -5,6 +5,7 @@ providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: jfrancin
+- githubUsername: francini
 vendor:
   label: jjf-fake-registry
   name: John Francini's Fake Company
