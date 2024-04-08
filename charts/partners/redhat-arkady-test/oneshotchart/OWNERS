@@ -1,11 +1,9 @@
 chart:
   name: oneshotchart
-  shortDescription: This is a test for one shot automation together with container,
-    chart-verifier and helmchart-pr
+  shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
-users:
-- githubUsername: ansvu
+users: []
 vendor:
   label: redhat-arkady-test
   name: Red Hat, Inc.
