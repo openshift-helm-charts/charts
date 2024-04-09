@@ -24,6 +24,26 @@ entries:
     urls:
     - https://github.com/a10networks/tkc-doc/raw/master/charts/a10tkc-0.2.0.tgz
     version: 0.2.0
+  akeyless-api-gateway:
+  - annotations:
+      charts.openshift.io/digest: sha256:35f918ae91e10db00705a0f2adffd8d7dedb77d14a384177eea44bed5c37ef61
+      charts.openshift.io/lastCertifiedTimestamp: '2024-04-09T21:15:55.518689+03:00'
+      charts.openshift.io/name: akeyless-api-gateway
+      charts.openshift.io/provider: Akeyless
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-04-09T18:34:04.659873+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.10'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: 4.4.1
+    description: A Helm chart for Kubernetes that deploys akeyless-api-gateway
+    digest: a7e0520fda85e5d623a92f937145deac8a2dc12a636723067c2226887b695328
+    kubeVersion: '>= 1.23-0'
+    name: akeyless-api-gateway
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/akeyless-akeyless-api-gateway-1.41.2/akeyless-api-gateway-1.41.2.tgz
+    version: 1.41.2
   alaz:
   - annotations:
       charts.openshift.io/digest: sha256:eb6cfbb8b5bfbff1501ffe10be92ba913263a124229ed2c6d07274ad91092965
@@ -8104,4 +8124,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-04-09T14:35:41.301516+00:00'
+generated: '2024-04-09T18:34:04.586268+00:00'
