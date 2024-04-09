@@ -1,8 +1,0 @@
-chart:
-  name: helm-testing
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: not-a-real-company
-  name: Daphne Test Company

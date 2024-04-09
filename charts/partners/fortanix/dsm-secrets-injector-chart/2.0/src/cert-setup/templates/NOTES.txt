@@ -1,3 +1,0 @@
-Job to create TLS certificates using Kubernetes apiserver has been deployed successfully.
-
-Generated TLS certificates are stored in secret.

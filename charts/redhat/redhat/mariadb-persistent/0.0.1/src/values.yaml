@@ -1,9 +1,0 @@
-database_service_name: mariadb
-mariadb_version: 10.3-el8
-memory_limit: 512Mi
-mysql_database: testdb
-mysql_password: testu
-mysql_root_password: testur
-mysql_user: testu
-namespace: openshift
-volume_capacity: 1Gi

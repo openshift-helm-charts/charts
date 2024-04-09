@@ -1,6 +1,0 @@
-dependencies:
-- name: fortanix-cert-setup
-  repository: file://cert-setup
-  version: "1.1"
-digest: sha256:07a87ec9e979541d13257c8bb24ebdcfaf3c840c5c1f02dc5061c0ccd395461f
-generated: "2021-08-11T11:23:04.320866317+05:30"

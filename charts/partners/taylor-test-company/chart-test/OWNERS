@@ -1,8 +1,0 @@
-chart:
-  name: chart-test
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: taylor-test-company
-  name: Taylor's Test Company

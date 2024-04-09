@@ -1,9 +1,0 @@
-chart:
-  name: infinispan
-  shortDescription: This is the Infinispan chart
-publicPgpKey: null
-users:
-- githubUsername: ryanemerson
-vendor:
-  label: infinispan
-  name: Infinispan

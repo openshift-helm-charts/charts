@@ -1,8 +1,0 @@
-chart:
-  name: prodtest
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: bpm-test-registry-namespace
-  name: BPM Test Company

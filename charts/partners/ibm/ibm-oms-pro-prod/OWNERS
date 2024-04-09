@@ -1,9 +1,0 @@
-chart:
-  name: ibm-oms-pro-prod
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: ntinvo
-vendor:
-  label: ibm
-  name: IBM

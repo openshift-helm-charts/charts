@@ -1,8 +1,0 @@
-chart:
-  name: ibm-connect-direct
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: ibm
-  name: IBM

@@ -1,9 +1,0 @@
-chart:
-  name: gitlab
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: hickey
-vendor:
-  label: gitlab
-  name: GitLab

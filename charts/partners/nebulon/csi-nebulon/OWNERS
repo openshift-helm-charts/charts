@@ -1,9 +1,0 @@
-chart:
-  name: csi-nebulon
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: arun@nebulon.com
-vendor:
-  label: nebulon
-  name: Nebulon Inc.

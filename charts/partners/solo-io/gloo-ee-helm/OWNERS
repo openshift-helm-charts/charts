@@ -1,9 +1,0 @@
-chart:
-  name: gloo-ee-helm
-  shortDescription: Gloo Edge Enterprise Helm Chart
-publicPgpKey: null
-users:
-- githubUsername: djannot
-vendor:
-  label: solo-io
-  name: Solo.io

@@ -1,9 +1,0 @@
-chart:
-  name: mariadb-persistent
-  description: This is the Red Hat MariaDB persistent storage
-publicPgpKey: null
-users:
-  - githubUsername: phracek
-vendor:
-  label: redhat
-  name: Red Hat

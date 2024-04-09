@@ -1,9 +1,0 @@
-chart:
-  name: ibm-spectrum-protect-plus-prod
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: emcollin
-vendor:
-  label: ibm
-  name: IBM

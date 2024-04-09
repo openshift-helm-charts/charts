@@ -1,8 +1,0 @@
-chart:
-  name: iomesh-csidriver
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: iomesh
-  name: SmartX

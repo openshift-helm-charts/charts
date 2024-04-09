@@ -1,8 +1,0 @@
-chart:
-  name: chartname-cnf
-  shortDescription: unknown
-publicPgpKey: unknown
-users: []
-vendor:
-  label: test
-  name: Oceanic

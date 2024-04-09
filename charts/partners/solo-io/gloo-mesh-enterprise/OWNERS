@@ -1,9 +1,0 @@
-chart:
-  name: gloo-mesh-enterprise
-  shortDescription: Gloo Mesh Enterprise Helm Chart
-publicPgpKey: null
-users:
-- githubUsername: djannot
-vendor:
-  label: solo-io
-  name: Solo.io

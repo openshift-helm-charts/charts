@@ -1,9 +1,0 @@
-chart:
-  name: cmm-operator-k8s
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: NA
-vendor:
-  label: nokia-cmm
-  name: Nokia Networks - LTTH

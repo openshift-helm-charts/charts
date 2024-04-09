@@ -1,9 +1,0 @@
-chart:
-  name: chart-external-prod
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: sawalgiriraj
-vendor:
-  label: bpm-test-registry-namespace
-  name: BPM Test Company
