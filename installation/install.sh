@@ -34,7 +34,7 @@ if [[ $# -lt 1 ]]; then usage; fi
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     '-r'|'--chartrepo') chartrepo=1;;
-    '-n'|'--namspace') namespace="$2"; shift 1;;
+    '-n'|'--namespace') namespace="$2"; shift 1;;
     '-h') usage;;
     *) CV="$1";;
   esac
@@ -44,8 +44,8 @@ done
 if [[ ! $CV ]]; then usage; fi
 
 
-tmpfile=/tmp/developer-hub.chart.values.yml
-CHART_URL="https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-${CV}/charts/redhat/redhat/developer-hub/${CV}/developer-hub-${CV}.tgz"
+tmpfile=/tmp/redhat-developer-hub.chart.values.yml
+CHART_URL="https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-${CV}/charts/redhat/redhat/redhat-developer-hub/${CV}/redhat-developer-hub-${CV}.tgz"
 
 # choose namespace for the install (or create if non-existant)
 oc new-project "$namespace" || oc project "$namespace"
@@ -53,18 +53,18 @@ oc new-project "$namespace" || oc project "$namespace"
 # if a CI chart, create a chart repo
 if [[ $CV == *"-CI" ]]; then chartrepo=1; fi
 if [[ $chartrepo -eq 1 ]]; then
-    oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/developer-hub-${CV}/installation/rhdh-next-ci-repo.yaml
+    oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-${CV}/installation/rhdh-next-ci-repo.yaml
 fi
 
 # 1. install (or upgrade)
-helm upgrade developer-hub -i "${CHART_URL}"
+helm upgrade redhat-developer-hub -i "${CHART_URL}"
 
 # 2. collect values
-PASSWORD=$(kubectl get secret developer-hub-postgresql -o jsonpath="{.data.password}" | base64 -d)
+PASSWORD=$(kubectl get secret redhat-developer-hub-postgresql -o jsonpath="{.data.password}" | base64 -d)
 CLUSTER_ROUTER_BASE=$(oc get route console -n openshift-console -o=jsonpath='{.spec.host}' | sed 's/^[^.]*\.//')
 
 # 3. change values
-helm upgrade developer-hub -i "${CHART_URL}" \
+helm upgrade redhat-developer-hub -i "${CHART_URL}" \
     --set global.clusterRouterBase="${CLUSTER_ROUTER_BASE}" \
     --set global.postgresql.auth.password="$PASSWORD"
 
@@ -73,5 +73,5 @@ rm -f "$tmpfile"
 
 echo "
 Once deployed, Developer Hub $CV will be available at
-https://developer-hub-${namespace}.${CLUSTER_ROUTER_BASE}
+https://redhat-developer-hub-${namespace}.${CLUSTER_ROUTER_BASE}
 "
