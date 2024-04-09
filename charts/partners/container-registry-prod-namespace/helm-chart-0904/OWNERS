@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: bovem
 vendor:
   label: container-registry-prod-namespace
   name: Connect Test Company
