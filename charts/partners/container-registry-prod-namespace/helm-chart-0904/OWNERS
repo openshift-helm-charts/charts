@@ -1,0 +1,9 @@
+chart:
+  name: helm-chart-0904
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: container-registry-prod-namespace
+  name: Connect Test Company
