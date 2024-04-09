@@ -839,6 +839,40 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-fsm-0.1.8-ubi.6/flomesh-fsm-0.1.8-ubi.6.tgz
     version: 0.1.8-ubi.6
+  helm-chart-0904:
+  - annotations:
+      charts.openshift.io/digest: sha256:7ed36a7902d87282a3551a2c1a12e051757c334f0e33a8219bb2b26b8aa0d591
+      charts.openshift.io/lastCertifiedTimestamp: '2024-04-09T14:34:20.027276+00:00'
+      charts.openshift.io/name: testing-e2e-helm-chart
+      charts.openshift.io/provider: Connect Test Company
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-04-09T14:35:41.381113+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 1.15.2
+    description: Official HashiCorp Vault Chart
+    digest: 4ed3ff3c578a23851d0b03aa8b87610c7c98075afb8b4291cf26f9f2e4f5374c
+    home: https://www.vaultproject.io
+    icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+    keywords:
+    - vault
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.27.0-0'
+    name: helm-chart-0904
+    sources:
+    - https://github.com/hashicorp/vault
+    - https://github.com/hashicorp/vault-helm
+    - https://github.com/hashicorp/vault-k8s
+    - https://github.com/hashicorp/vault-csi-provider
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/container-registry-prod-namespace-helm-chart-0904-0.0.2/helm-chart-0904-0.0.2.tgz
+    version: 0.0.2
   i2i5gcorehelm:
   - annotations:
       charts.openshift.io/digest: sha256:e189b295ee18215a63d967e51320316c819a9e59cc0541df4a0eddb917034000
@@ -8070,4 +8104,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-04-09T05:28:26.750577+00:00'
+generated: '2024-04-09T14:35:41.301516+00:00'
