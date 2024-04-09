@@ -1,6 +1,6 @@
 chart:
   name: akeyless-api-gateway
-  shortDescription: unknown
+  shortDescription: A Helm chart for Kubernetes that deploys akeyless-api-gateway
 providerDelivery: false
 publicPgpKey: unknown
 users:
