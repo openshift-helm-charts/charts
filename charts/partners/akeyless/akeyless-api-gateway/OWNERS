@@ -3,7 +3,13 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: niv-ez
+- githubUsername: omriezra
+- githubUsername: OriBenHur-akeyless
+- githubUsername: michelsk
+- githubUsername: OriMankali
+- githubUsername: AngelRefael
 vendor:
   label: akeyless
   name: Akeyless
