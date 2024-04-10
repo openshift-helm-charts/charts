@@ -1,0 +1,10 @@
+chart:
+  name: yingoneshotchart
+  shortDescription: This is a test for one shot automation together with container+chart+helmchart-pr
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: ansvu
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.
