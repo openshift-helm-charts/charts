@@ -1,245 +1,137 @@
 apiVersion: v1
 entries:
-  illumio:
+  5g-amfmme-global-24a:
   - annotations:
-      charts.openshift.io/digest: sha256:86e18df54395641a1a5866bb801df5b0b79e86f992dc72cc395c47387f633389
-      charts.openshift.io/lastCertifiedTimestamp: '2022-06-29T19:28:05.160154+00:00'
-      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:a16dc9241185b9aa75d364e9ef28309e6a4a7eaef6a7239ea84196aee97c6f9b
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T11:16:18.918226-05:00'
+      charts.openshift.io/name: 5g-amfmme-global-24a
+      charts.openshift.io/provider: Samsung Electronics
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-06-30T14:55:21.273307+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 1.0.0
-    description: A Helm chart of Illumio Core for Kubernetes
-    digest: 2c4d9506b899577a79173adcb657d5948782b6fed208e84cedf37f2f2c3968ab
-    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
-    kubeVersion: '>=1.20.0'
-    name: illumio
-    type: application
-    urls:
-    - N/A
-    version: 1.0.0
-  - annotations:
-      charts.openshift.io/digest: sha256:c02d46c17728a4e503e2ab65247920a4d5f204a44d735fa41d297078d3d2b7ad
-      charts.openshift.io/lastCertifiedTimestamp: '2022-11-21T15:21:08.548747+00:00'
-      charts.openshift.io/name: Illumio Core for Kubernetes
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-11-21T15:44:26.481822+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.11'
-    apiVersion: v2
-    appVersion: 3.1.0
-    description: A Helm chart of Illumio Core for Kubernetes
-    digest: 95c90c0f751c7f4c97233bcb9a8115e8749b6997d7292e7a2bdf09538bb94e1b
-    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
-    kubeVersion: '>=1.20.0-0'
-    name: illumio
-    type: application
-    urls:
-    - N/A
-    version: 3.1.0
-  - annotations:
-      charts.openshift.io/digest: sha256:7b56401ba5858f1178bc2a67fc72468512e2d47041505d90320540e4325cc138
-      charts.openshift.io/lastCertifiedTimestamp: '2023-01-23T21:35:01.18158+00:00'
-      charts.openshift.io/name: Illumio Core for Kubernetes
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-01-23T21:39:23.607630+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.11'
-    apiVersion: v2
-    appVersion: 4.0.0
-    description: A Helm chart of Illumio Core for Kubernetes
-    digest: b9ecf4d4133d8b3e272ab21a252bf1c555e4cd9f67f9dcac86ec38ac4236932a
-    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
-    kubeVersion: '>=1.20.0-0'
-    name: illumio
-    type: application
-    urls:
-    - N/A
-    version: 4.0.0
-  - annotations:
-      charts.openshift.io/digest: sha256:3bf47dd767c297b800554094e4752e250c49dfd4d616ce6e351f01b628afccbc
-      charts.openshift.io/lastCertifiedTimestamp: '2023-03-29T12:13:35.423207+00:00'
-      charts.openshift.io/name: Illumio Core for Kubernetes
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-03-29T13:01:19.879216+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/releaseDate: 24/01/25
+      charts.openshift.io/submissionTimestamp: '2024-03-19T02:16:34.570141+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
       charts.openshift.io/testedOpenShiftVersion: '4.12'
     apiVersion: v2
-    appVersion: 4.1.0
-    description: A Helm chart of Illumio Core for Kubernetes
-    digest: 28cfdcfe0acaf79e7254db9af5618ac38a22f9fc7917d914497dfcf6aee954f4
-    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
-    kubeVersion: '>=1.20.0-0'
-    name: illumio
-    type: application
+    appVersion: 24.A.0
+    description: A Helm chart for 5G Core cAMFMME(24/01/25)
+    digest: a8f5cd044c18c504117ae4d3e47d88a3d63e0a61ba8278c213c5818139b5fece
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-amfmme-global-24a
     urls:
-    - N/A
-    version: 4.1.0
+    - 5g-amfmme-global-24a-1.240125.8468882.tgz
+    version: 1.240125.8468882
+  5g-csdb-global-24a:
   - annotations:
-      charts.openshift.io/digest: sha256:69b0a14cead335d9f1828fec2993067c49a62d78e7e92f1924a2a62d9757a5e9
-      charts.openshift.io/lastCertifiedTimestamp: '2023-05-10T10:08:37.606684+00:00'
-      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:231259a7a3b51586a27fab10f2aa1fa1998576239d77a685776fb2920a00ddfc
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T10:40:48.314707-05:00'
+      charts.openshift.io/name: 5g-csdb-global-24a
+      charts.openshift.io/provider: Samsung Electronics
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-05-10T10:26:53.261200+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/releaseDate: 24/01/25
+      charts.openshift.io/submissionTimestamp: '2024-03-19T13:54:22.636427+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
       charts.openshift.io/testedOpenShiftVersion: '4.12'
     apiVersion: v2
-    appVersion: 4.2.0
-    description: A Helm chart of Illumio Core for Kubernetes
-    digest: f2d44f3b3018fcfa8dd53e095b3ff424b8c6c664da268eb44f062ca5c803115b
-    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
-    kubeVersion: '>=1.20.0-0'
-    name: illumio
-    type: application
+    appVersion: 24.A.0
+    description: A Helm chart for 5G Core cCSDB(24/01/25)
+    digest: 53fc5e832e1b9df67d8e9c5fc01d44902f234ddf491eb9ce17e8a9fb76256e8c
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-csdb-global-24a
     urls:
-    - N/A
-    version: 4.2.0
+    - 5g-csdb-global-24a-1.240125.8468882.tgz
+    version: 1.240125.8468882
+  5g-nrf-global-24a:
   - annotations:
-      charts.openshift.io/digest: sha256:d5ed5cae49a309ec1532fa7d56d8f4944880043f987076a6acada79e297067a1
-      charts.openshift.io/lastCertifiedTimestamp: '2023-07-26T12:21:57.154687+00:00'
-      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:dd1547957fbd5d7e88ec07617241b29ec7923b21f5f7cd2d6d9d47df5db4c312
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-01T20:51:59.539619-05:00'
+      charts.openshift.io/name: 5g-nrf-global-24a
+      charts.openshift.io/provider: Samsung Electronics
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-07-26T12:43:17.350469+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.13'
+      charts.openshift.io/releaseDate: 24/01/25
+      charts.openshift.io/submissionTimestamp: '2024-03-19T14:15:00.182497+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
     apiVersion: v2
-    appVersion: 4.3.0
-    description: A Helm chart of Illumio Core for Kubernetes
-    digest: c98a4098f3246a7bd18278a5ffd8421c4ba65468a0cdcaa16016df52fdf81328
-    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
-    kubeVersion: '>=1.20.0-0'
-    name: illumio
-    type: application
+    appVersion: 24.A.0
+    description: A Helm chart for 5G Core cNRF(24/01/25)
+    digest: 02f75d0bb092c0ff239b134e2b459210dcfe4a46a0c0f1e7c5805eb9620cdc54
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-nrf-global-24a
     urls:
-    - N/A
-    version: 4.3.0
-  nfvri:
+    - 5g-nrf-global-24a-1.240125.8468882.tgz
+    version: 1.240125.8468882
+  5g-nssf-global-24a:
   - annotations:
-      charts.openshift.io/digest: sha256:001abb541d0be2cc58a5ab6bf75bf0b05023ef37f40f9129ff677db7cef603e3
-      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T09:24:59.061544+00:00'
-      charts.openshift.io/name: nfvri
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:6789fcaa91dcd255760443560c0999deaffdef48f7ec8dd267de98595d72b335
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T10:50:01.259546-05:00'
+      charts.openshift.io/name: 5g-nssf-global-24a
+      charts.openshift.io/provider: Samsung Electronics
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-10-20T16:17:09.330740+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
+      charts.openshift.io/releaseDate: 24/01/25
+      charts.openshift.io/submissionTimestamp: '2024-03-19T14:27:30.508577+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
     apiVersion: v2
-    appVersion: v4.4.0
-    dependencies:
-    - name: nfvri-agent
-      repository: file://../nfvri-agent
-      version: 4.4.0
-    - name: nfvri-apiserver
-      repository: file://../nfvri-apiserver
-      version: 4.4.0
-    - name: nfvri-orchestrator
-      repository: file://../nfvri-orchestrator
-      version: 4.4.0
-    - name: nfvri-dashboard
-      repository: file://../nfvri-dashboard
-      version: 4.4.0
-    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
-    digest: a65ca1921a21c3a90cda7849ebe7355aed87a6dde755d5231bb4a314f2ee1ae1
-    kubeVersion: '>= 1.20.0'
-    name: nfvri
-    type: application
+    appVersion: 24.A.0
+    description: A Helm chart for 5G Core cNSSF(24/01/25)
+    digest: a9cf16cdfc7003833d81bac6c89cd129edae7d0840e0ff4505037b3b654b2d54
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-nssf-global-24a
     urls:
-    - https://europe-docker.pkg.dev/nfv-ri/helm-charts/nfvri
-    version: 4.4.0
+    - 5g-nssf-global-24a-1.240125.8468882.tgz
+    version: 1.240125.8468882
+  5g-smf-global-24a:
   - annotations:
-      charts.openshift.io/digest: sha256:038f5bdcec66e6c8787e6f66ae23a291be56fddf397bd51f6fac6cc0394596d3
-      charts.openshift.io/lastCertifiedTimestamp: '2023-04-27T12:43:38.197495+00:00'
-      charts.openshift.io/name: nfvri
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:7956aa89a35a9b8db2c8398b63acbfe6c2284d1761f7a6761fd6e57ef10b338c
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T11:00:33.225278-05:00'
+      charts.openshift.io/name: 5g-smf-global-24a
+      charts.openshift.io/provider: Samsung Electronics
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-04-27T12:46:00.071187+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.11'
+      charts.openshift.io/releaseDate: 24/01/25
+      charts.openshift.io/submissionTimestamp: '2024-03-19T14:45:28.734968+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
     apiVersion: v2
-    appVersion: v4.6.0
-    dependencies:
-    - name: nfvri-agent
-      repository: file://../nfvri-agent
-      version: 4.6.0
-    - name: nfvri-apiserver
-      repository: file://../nfvri-apiserver
-      version: 4.6.0
-    - name: nfvri-orchestrator
-      repository: file://../nfvri-orchestrator
-      version: 4.6.0
-    - name: nfvri-dashboard
-      repository: file://../nfvri-dashboard
-      version: 4.6.0
-    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
-    digest: e0a08e4a400ea3255e4d69a7a163a055b0f3a76f89d2795b0ec53b97c88055d9
-    kubeVersion: '>= 1.20.0'
-    name: nfvri
-    type: application
+    appVersion: 24.A.0
+    description: A Helm chart for 5G Core cSMF(24/01/25)
+    digest: fb277ddf9b6fb84b47cae40cd6d12071666847ab9bb627d329836948c9bebb12
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-smf-global-24a
     urls:
-    - N/A
-    version: 4.6.0
+    - 5g-smf-global-24a-1.240125.8468882.tgz
+    version: 1.240125.8468882
+  5g-upf-global-24a:
   - annotations:
-      charts.openshift.io/digest: sha256:9c41056bd1106c071bdd31726cc0d190de2707c1e87a9baa5a4e87faa2ed1f14
-      charts.openshift.io/lastCertifiedTimestamp: '2023-07-17T12:35:24.910294+00:00'
-      charts.openshift.io/name: nfvri
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:c1ac9649f72e6f437cb39632565c3730a3899e6f919b3e6ab832f44689bc8f51
+      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T11:08:26.55427-05:00'
+      charts.openshift.io/name: 5g-upf-global-24a
+      charts.openshift.io/provider: Samsung Electronics
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-07-17T12:40:33.577597+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.13'
+      charts.openshift.io/releaseDate: 24/01/25
+      charts.openshift.io/submissionTimestamp: '2024-03-19T14:52:23.039798+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
     apiVersion: v2
-    appVersion: v4.7.0
-    dependencies:
-    - name: nfvri-agent
-      repository: file://../nfvri-agent
-      version: 4.7.0
-    - name: nfvri-apiserver
-      repository: file://../nfvri-apiserver
-      version: 4.7.0
-    - name: nfvri-orchestrator
-      repository: file://../nfvri-orchestrator
-      version: 4.7.0
-    - name: nfvri-dashboard
-      repository: file://../nfvri-dashboard
-      version: 4.7.0
-    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
-    digest: bb9fee00749c29127a5944ed7298b26938b242cdf566551e0afaa2e788d852ef
-    kubeVersion: '>= 1.20.0'
-    name: nfvri
-    type: application
+    appVersion: 24.A.0
+    description: A Helm chart for 5G Core cUPF(24/01/25)
+    digest: c841ce21ae880a42c98035ea39e20ea9cef277976e982993bf5a2c7f889fc3b8
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-upf-global-24a
     urls:
-    - N/A
-    version: 4.7.0
-  - annotations:
-      charts.openshift.io/digest: sha256:48490cd2c86eaa448ecafdf7677d9e340d0a1dec2778c03bc48f29db80e43213
-      charts.openshift.io/lastCertifiedTimestamp: '2023-12-18T11:33:07.940373+00:00'
-      charts.openshift.io/name: nfvri
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-12-18T12:35:41.432839+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
-      charts.openshift.io/testedOpenShiftVersion: '4.13'
-    apiVersion: v2
-    appVersion: v5.0.0
-    dependencies:
-    - name: nfvri-agent
-      repository: file://../nfvri-agent
-      version: 5.0.0
-    - name: nfvri-apiserver
-      repository: file://../nfvri-apiserver
-      version: 5.0.0
-    - name: nfvri-orchestrator
-      repository: file://../nfvri-orchestrator
-      version: 5.0.0
-    - name: nfvri-dashboard
-      repository: file://../nfvri-dashboard
-      version: 5.0.0
-    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
-    digest: f9ddbc25c94bdb38a710282a2e63e84c67e86658474cf9927bb4d07e0cb20b91
-    kubeVersion: '>= 1.25.0'
-    name: nfvri
-    type: application
-    urls:
-    - N/A
-    version: 5.0.0
+    - 5g-upf-global-24a-1.240125.8468882.tgz
+    version: 1.240125.8468882
   5gdu:
   - annotations:
       charts.openshift.io/digest: sha256:2c286be0b45a1852634966316cc394bec6ee746e54a991b9caf1ab8c9c39d4e8
@@ -261,6 +153,28 @@ entries:
     urls:
     - N/A
     version: 5.0.1-563
+  alerter:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:9f78ab56f85f878c5e13e7120cbf6a0bcb78085c87641dc83cbf3bcaafd2fa86
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T18:21:46.051372+00:00'
+      charts.openshift.io/name: alerter
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:49:20.448564+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart for RCEM Alerter
+    digest: bce7e7e969e264781434470d246ca4acd06c35158441e360be135d61895da2c4
+    kubeVersion: '>=1.16.0-0'
+    name: alerter
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
   amf:
   - annotations:
       charts.openshift.io/digest: sha256:c9e5119d0e0b9ce4845fc02807b44e0ab19555d584d0d805e32290511eaad1bd
@@ -307,6 +221,326 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  caddy015:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:37e7d634146d7fe2250eb21460d4e33d2ad45e47bd6f774552a84a6ff9326ed4
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T13:15:12.777089+00:00'
+      charts.openshift.io/name: Reverse Proxy
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T13:43:59.400741+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.1.5
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: AIP - Reverse proxy component
+    digest: 4e3933814b7f8159f16c8d78cf1f4b425e4d1a824fb17dbab4cea077f0a6be6d
+    kubeVersion: '>=1.16.0-0'
+    name: caddy015
+    type: application
+    urls:
+    - N/A
+    version: 0.1.5
+  cdr-core-ehrbase-enterprise:
+  - annotations:
+      charts.openshift.io/digest: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
+      charts.openshift.io/lastCertifiedTimestamp: '2022-11-16T16:24:03.450919+00:00'
+      charts.openshift.io/name: EHRBase Enterprise
+      charts.openshift.io/provider: vitagroup AG
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-11-17T16:01:25.049348+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 0.1.8
+    dependencies:
+    - condition: postgresql-ha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.4.1
+    - condition: yugabyte.enabled
+      name: yugabyte
+      repository: https://charts.yugabyte.com
+      version: 2.14.1
+    description: A Helm chart for Kubernetes
+    digest: 0e8b0937e1e2089546f647bdfe1186b3b60fb01e5fc0321cc80c3f9e9dd0a26e
+    kubeVersion: ^1.20.0
+    name: cdr-core-ehrbase-enterprise
+    type: application
+    urls:
+    - N/A
+    version: 0.1.8
+  cmm-operator-k8s:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:dd31da96f7bec0897f1a95ff2d4215e06af672db659daef999b8945c4467a920
+      charts.openshift.io/lastCertifiedTimestamp: '2022-09-27T16:58:55.142046+00:00'
+      charts.openshift.io/name: Nokia CMM
+      charts.openshift.io/provider: Nokia
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-09-27T17:25:10.464758+00:00'
+      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: 4.7 - 4.11
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    description: A Helm chart for CMM in Kubernetes using operators
+    digest: 67e6cdc1422911f1556546ba85554f02b0e5db8220e81efe08581d397366919a
+    icon: https://www.nokia.com/chart-icon.png
+    kubeVersion: 1.20.0 - 1.24.0
+    name: cmm-operator-k8s
+    type: application
+    urls:
+    - N/A
+    version: 22.5.0-p4
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:53a425fc94f395e1a0fff94e3ed55cfa95d1db5cc81774b74a37954b569e03e2
+      charts.openshift.io/lastCertifiedTimestamp: '2023-02-09T16:08:16.797839+00:00'
+      charts.openshift.io/name: Nokia CMM
+      charts.openshift.io/provider: Nokia
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-22T21:47:38.287845+00:00'
+      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: 4.7 - 4.11
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    description: A Helm chart for CMM in Kubernetes using operators
+    digest: 8e89167feeb1b2479e1e527f15d4b5957dce24bbdcbe15f42ffe7074b9d13883
+    icon: https://www.nokia.com/chart-icon.png
+    kubeVersion: 1.20.0 - 1.24.0
+    name: cmm-operator-k8s
+    type: application
+    urls:
+    - N/A
+    version: 23.2.0-p1
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:29b1d193b74e65da34d2378a1ebd124b2865cb7a418c8668319a9c377d927614
+      charts.openshift.io/lastCertifiedTimestamp: '2023-06-05T17:02:09.629013+00:00'
+      charts.openshift.io/name: Nokia CMM
+      charts.openshift.io/provider: Nokia
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-06-05T17:04:41.463578+00:00'
+      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    description: A Helm chart for CMM in Kubernetes using operators
+    digest: ac3cb007107868eb2c1acaade989c3c1d23cdfc2e93e79792ef35b9e5842fba8
+    icon: https://www.nokia.com/chart-icon.png
+    kubeVersion: '>= 1.20.0-0'
+    name: cmm-operator-k8s
+    type: application
+    urls:
+    - N/A
+    version: 23.5.0-p1
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:98083133d771c719bbda2992decd5c4919e43c514bdbd87cdf27a02a0c31d00d
+      charts.openshift.io/lastCertifiedTimestamp: '2023-12-01T16:35:03.385988+00:00'
+      charts.openshift.io/name: Nokia CMM
+      charts.openshift.io/provider: Nokia
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-12-04T17:18:08.484080+00:00'
+      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    description: A Helm chart for CMM in Kubernetes using operators
+    digest: 1a89cb8d8e887418bf674417fca7a3cca5daa021a6da28fb76c7327e28d4a184
+    icon: https://www.nokia.com/chart-icon.png
+    kubeVersion: '>= 1.20.0-0'
+    name: cmm-operator-k8s
+    type: application
+    urls:
+    - N/A
+    version: 23.8.0-p1
+  corpay-progressoft:
+  - annotations:
+      charts.openshift.io/digest: sha256:39b7fdecbc249d5570a769e0814575f7d3d65a99445c0d43be5459ca05dbfc75
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-27T17:31:03.429214+03:00'
+      charts.openshift.io/name: corpay-progressoft
+      charts.openshift.io/provider: ProgressSoft Corporation
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-12-27T15:45:36.415351+00:00'
+      charts.openshift.io/supportURL: https://www.progressoft.com/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 19.0.3
+    dependencies:
+    - condition: global.keycloak_enabled
+      name: keycloak
+      repository: ''
+    - condition: global.mq_rest_api_enabled
+      name: mq-rest-api
+      repository: ''
+    - condition: global.data_management_enabled
+      name: data-management
+      repository: ''
+    - condition: global.beneficiary_enabled
+      name: beneficiary
+      repository: ''
+    - condition: global.bi_dashboard_enabled
+      name: bi-dashboard
+      repository: ''
+    - condition: global.payments_enabled
+      name: payments
+      repository: ''
+    - condition: global.template_engine_enabled
+      name: template-engine
+      repository: ''
+    - condition: global.corporate_ui_shell_enabled
+      name: corporate-ui-shell
+      repository: ''
+    - condition: global.bank_frontend_shell_enabled
+      name: bank-frontend-shell
+      repository: ''
+    - condition: global.ecc_sync_enabled
+      name: ecc-sync
+      repository: ''
+    - condition: global.onus_sync_enabled
+      name: onus-sync
+      repository: ''
+    - condition: global.eccapi_mock_enabled
+      name: eccapi-mock
+      repository: ''
+    - condition: global.cash_management_enabled
+      name: cash-management
+      repository: ''
+    - condition: global.bc_enabled
+      name: bc
+      repository: ''
+    - condition: global.corpay_utility_enabled
+      name: corpay-utility
+      repository: ''
+    - condition: global.sib_corporate_shell_enabled
+      name: sib-corporate-shell
+      repository: ''
+    - condition: global.nic_bcn_integration_enabled
+      name: nic-bcn-integration
+      repository: ''
+    - condition: global.uae_sib_integration_enabled
+      name: uae-sib-integration
+      repository: ''
+    - condition: global.qib_integration_enabled
+      name: qib-integration
+      repository: ''
+    - condition: global.oracledb_enabled
+      name: oracledb
+      repository: ''
+    - condition: global.sib_corporate_profile_enabled
+      name: sib-corporate-profile
+      repository: ''
+    - condition: global.tf_config_service_enabled
+      name: tf-config-service
+      repository: ''
+    - condition: global.idm_enabled
+      name: idm
+      repository: ''
+    - condition: global.checks_enabled
+      name: checks
+      repository: ''
+    - condition: global.zuul_gateway_enabled
+      name: zuul-gateway
+      repository: ''
+    - condition: global.sib_checks_mngt_enabled
+      name: sib-checks-mngt
+      repository: ''
+    - condition: global.mailhog_enabled
+      name: mailhog
+      repository: ''
+    - condition: global.operator_ui_shell_enabled
+      name: operator-ui-shell
+      repository: ''
+    - condition: global.bnft_bank_shell_enabled
+      name: bnft-bank-shell
+      repository: ''
+    - condition: global.sib_bank_shell_enabled
+      name: sib-bank-shell
+      repository: ''
+    - condition: global.artemis_enabled
+      name: artemis
+      repository: ''
+    - condition: global.artemis_ha_enabled
+      name: artemis-ha
+      repository: ''
+    - condition: global.ecc_simulator_enabled
+      name: ecc-simulator
+      repository: ''
+    - condition: global.payment_file_parser_enabled
+      name: payment-file-parser
+      repository: ''
+    - condition: global.bc_enabled
+      name: bc
+      repository: ''
+    - condition: global.lg_enabled
+      name: lg
+      repository: ''
+    - condition: global.gc_enabled
+      name: gc
+      repository: ''
+    - condition: global.lc_enabled
+      name: lc
+      repository: ''
+    - condition: global.retail_ui_shell_enabled
+      name: retail-ui-shell
+      repository: ''
+    - condition: global.corpay_integration_enabled
+      name: corpay-integration
+      repository: ''
+    - condition: global.oab_integration_enabled
+      name: oab-integration
+      repository: ''
+    - condition: global.corpay_castlemock_enabled
+      name: corpay-castlemock
+      repository: ''
+    - condition: global.chatbot_enabled
+      name: chatbot
+      repository: ''
+    - condition: global.main_shell_enabled
+      name: main-shell
+      repository: ''
+    - condition: global.fixed_deposits_and_loans_enabled
+      name: fixed-deposits-and-loans
+      repository: ''
+    - condition: global.docs_enabled
+      name: docs
+      repository: ''
+    - condition: global.iccs_api_enabled
+      name: iccs-api
+      repository: ''
+    - condition: global.cloud_gateway_enabled
+      name: cloud-gateway
+      repository: ''
+    - condition: global.file_parser_enabled
+      name: file-parser
+      repository: ''
+    - condition: global.correspondence_enabled
+      name: correspondence
+      repository: ''
+    - condition: global.ibmmq_enabled
+      name: ibmmq
+      repository: ''
+    - condition: global.hazelcast_enabled
+      name: hazelcast
+      repository: ''
+    - condition: global.events_store_enabled
+      name: events-store
+      repository: ''
+    description: corpay team helm chart
+    digest: 356344e13ba47e2a7c7187803ebe1da430c22bd4e420620b1ca988956ba827d3
+    kubeVersion: '> 1.19.0'
+    name: corpay-progressoft
+    urls:
+    - N/A
+    version: 19.0.3
   cucp:
   - annotations:
       charts.openshift.io/digest: sha256:fda1fa17c6802bcb0fe1bdc46ab95a3f7e4c26f105a0a3d2313e329e4f5fb4f9
@@ -506,6 +740,25 @@ entries:
     urls:
     - N/A
     version: 5.0.590-67
+  ehrbase:
+  - annotations:
+      charts.openshift.io/digest: sha256:556215013f4816d6ec8ee3233ff65944d7bebc4b1e3b0346eac2727408d57289
+      charts.openshift.io/lastCertifiedTimestamp: '2023-01-11T15:32:49.944127+00:00'
+      charts.openshift.io/name: EHRBase Enterprise
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-01-11T15:35:20.617241+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 0.1.12
+    description: A Helm chart for Kubernetes
+    digest: 7e52cee0d93ab7df5fb01394db892025eb159771e9ac4bf82e26054ed89c7a94
+    kubeVersion: ^1.20.0
+    name: ehrbase
+    type: application
+    urls:
+    - N/A
+    version: 0.1.12
   enbdu:
   - annotations:
       charts.openshift.io/digest: sha256:c5531ba17e271ab8a4a946dc8b0655024af784a228d2c2e7dd985e1ed677b3c3
@@ -528,6 +781,213 @@ entries:
     urls:
     - N/A
     version: 4.10.26-11
+  hivemetastore:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:625230dea241958ee417a302768f0b79ca8199ac3dea19980f92a7908b9aa557
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T21:24:42.990199+00:00'
+      charts.openshift.io/name: hivemetastore
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T13:37:45.802864+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.4.5
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: Hive Metastore Application
+    digest: 85a029e9234ba18bb4694f2d763bf689a25bc22e462301b3e2ddc7c52d5b5bdb
+    kubeVersion: '>= 1.16.0-0'
+    name: hivemetastore
+    type: application
+    urls:
+    - N/A
+    version: 0.4.5
+  idit-runtime:
+  - annotations:
+      app.idit/version: 19.2.0.2
+      charts.openshift.io/digest: sha256:fab6a4449f61299d573b79079e47fc5c680cb4c5dd4c0721ccf4216ce7816c02
+      charts.openshift.io/lastCertifiedTimestamp: '2023-09-12T10:00:00.72244+00:00'
+      charts.openshift.io/name: IDITSuite 18.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-09-12T12:11:20.772626+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: 4.10 - 4.13
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 1.16.0
+    dependencies:
+    - name: mono
+      repository: https://harbor.idit.sapiens.com/chartrepo/core
+      version: 1.0.15
+    - name: apache-active-mq
+      repository: https://harbor.idit.sapiens.com/chartrepo/infrastructure
+      version: 1.0.10
+    - condition: sua.enabled
+      name: sua
+      repository: https://harbor.idit.sapiens.com/chartrepo/core
+      version: 1.0.7
+    - condition: sua.enabled
+      name: couchbase-setup
+      repository: https://harbor.idit.sapiens.com/chartrepo/core
+      version: 1.0.5
+    description: A Helm chart for Kubernetes
+    digest: 7b826512e5ffaa235d68a8b036e360461bc748076a12ed544d1988d13339510a
+    kubeVersion: '>=1.23.0 <=1.26.3'
+    name: idit-runtime
+    type: application
+    urls:
+    - N/A
+    version: 1.0.18
+  ignite:
+  - annotations:
+      category: Infrastructure
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:021abbc02e78cf0c57ce87d9a2af38da9d9a45cb74c691bf9139fb720c5fbac5
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T14:59:20.243663+00:00'
+      charts.openshift.io/name: KV Storage
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:12:55.113973+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.3.3
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: Apache Ignite is a distributed database management system for high-performance
+      computing.
+    digest: 96729e204ca52c29e29d429234c7cdf0e67da473d2bf738bbda5ae366d78a2de
+    keywords:
+    - apache
+    - ignite
+    - aip
+    kubeVersion: '>=1.16.0-0'
+    name: ignite
+    urls:
+    - N/A
+    version: 0.3.3
+  illumio:
+  - annotations:
+      charts.openshift.io/digest: sha256:86e18df54395641a1a5866bb801df5b0b79e86f992dc72cc395c47387f633389
+      charts.openshift.io/lastCertifiedTimestamp: '2022-06-29T19:28:05.160154+00:00'
+      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-06-30T14:55:21.273307+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart of Illumio Core for Kubernetes
+    digest: 2c4d9506b899577a79173adcb657d5948782b6fed208e84cedf37f2f2c3968ab
+    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
+    kubeVersion: '>=1.20.0'
+    name: illumio
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
+  - annotations:
+      charts.openshift.io/digest: sha256:c02d46c17728a4e503e2ab65247920a4d5f204a44d735fa41d297078d3d2b7ad
+      charts.openshift.io/lastCertifiedTimestamp: '2022-11-21T15:21:08.548747+00:00'
+      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-11-21T15:44:26.481822+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 3.1.0
+    description: A Helm chart of Illumio Core for Kubernetes
+    digest: 95c90c0f751c7f4c97233bcb9a8115e8749b6997d7292e7a2bdf09538bb94e1b
+    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
+    kubeVersion: '>=1.20.0-0'
+    name: illumio
+    type: application
+    urls:
+    - N/A
+    version: 3.1.0
+  - annotations:
+      charts.openshift.io/digest: sha256:7b56401ba5858f1178bc2a67fc72468512e2d47041505d90320540e4325cc138
+      charts.openshift.io/lastCertifiedTimestamp: '2023-01-23T21:35:01.18158+00:00'
+      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-01-23T21:39:23.607630+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 4.0.0
+    description: A Helm chart of Illumio Core for Kubernetes
+    digest: b9ecf4d4133d8b3e272ab21a252bf1c555e4cd9f67f9dcac86ec38ac4236932a
+    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
+    kubeVersion: '>=1.20.0-0'
+    name: illumio
+    type: application
+    urls:
+    - N/A
+    version: 4.0.0
+  - annotations:
+      charts.openshift.io/digest: sha256:3bf47dd767c297b800554094e4752e250c49dfd4d616ce6e351f01b628afccbc
+      charts.openshift.io/lastCertifiedTimestamp: '2023-03-29T12:13:35.423207+00:00'
+      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-03-29T13:01:19.879216+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 4.1.0
+    description: A Helm chart of Illumio Core for Kubernetes
+    digest: 28cfdcfe0acaf79e7254db9af5618ac38a22f9fc7917d914497dfcf6aee954f4
+    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
+    kubeVersion: '>=1.20.0-0'
+    name: illumio
+    type: application
+    urls:
+    - N/A
+    version: 4.1.0
+  - annotations:
+      charts.openshift.io/digest: sha256:69b0a14cead335d9f1828fec2993067c49a62d78e7e92f1924a2a62d9757a5e9
+      charts.openshift.io/lastCertifiedTimestamp: '2023-05-10T10:08:37.606684+00:00'
+      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-05-10T10:26:53.261200+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.12'
+    apiVersion: v2
+    appVersion: 4.2.0
+    description: A Helm chart of Illumio Core for Kubernetes
+    digest: f2d44f3b3018fcfa8dd53e095b3ff424b8c6c664da268eb44f062ca5c803115b
+    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
+    kubeVersion: '>=1.20.0-0'
+    name: illumio
+    type: application
+    urls:
+    - N/A
+    version: 4.2.0
+  - annotations:
+      charts.openshift.io/digest: sha256:d5ed5cae49a309ec1532fa7d56d8f4944880043f987076a6acada79e297067a1
+      charts.openshift.io/lastCertifiedTimestamp: '2023-07-26T12:21:57.154687+00:00'
+      charts.openshift.io/name: Illumio Core for Kubernetes
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-07-26T12:43:17.350469+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: 4.3.0
+    description: A Helm chart of Illumio Core for Kubernetes
+    digest: c98a4098f3246a7bd18278a5ffd8421c4ba65468a0cdcaa16016df52fdf81328
+    icon: https://www.illumio.com/sites/default/files/2021-05/illumio_Logo_2019_0_OPT.svg
+    kubeVersion: '>=1.20.0-0'
+    name: illumio
+    type: application
+    urls:
+    - N/A
+    version: 4.3.0
   imc:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -551,6 +1011,32 @@ entries:
     urls:
     - N/A
     version: 11.0.2-2a
+  keycloak040:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:8bab7186c7e40052846ebd225242f51abe7c6b1d659ab2ffb9040cf3bcc8f645
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-14T18:23:37.154027+00:00'
+      charts.openshift.io/name: Keycloak SSO
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:01:57.761150+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.4.0
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: A Helm chart for keycloak 1.0
+    digest: 751705b84c96d18cbbc5da21363489a7047157efaf58faaa6163b8cff2f3e8f4
+    kubeVersion: '>=1.21.0-0'
+    name: keycloak040
+    type: application
+    urls:
+    - N/A
+    version: 0.4.0
   mco:
   - annotations:
       charts.openshift.io/digest: sha256:7483cdcc70e3465afc7e9d6d38239c398a71f78aff0e24958fb39b6bf1b35a3a
@@ -1475,6 +1961,131 @@ entries:
     urls:
     - N/A
     version: 22.3.1
+  nfvri:
+  - annotations:
+      charts.openshift.io/digest: sha256:001abb541d0be2cc58a5ab6bf75bf0b05023ef37f40f9129ff677db7cef603e3
+      charts.openshift.io/lastCertifiedTimestamp: '2022-10-19T09:24:59.061544+00:00'
+      charts.openshift.io/name: nfvri
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2022-10-20T16:17:09.330740+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: v4.4.0
+    dependencies:
+    - name: nfvri-agent
+      repository: file://../nfvri-agent
+      version: 4.4.0
+    - name: nfvri-apiserver
+      repository: file://../nfvri-apiserver
+      version: 4.4.0
+    - name: nfvri-orchestrator
+      repository: file://../nfvri-orchestrator
+      version: 4.4.0
+    - name: nfvri-dashboard
+      repository: file://../nfvri-dashboard
+      version: 4.4.0
+    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
+    digest: a65ca1921a21c3a90cda7849ebe7355aed87a6dde755d5231bb4a314f2ee1ae1
+    kubeVersion: '>= 1.20.0'
+    name: nfvri
+    type: application
+    urls:
+    - https://europe-docker.pkg.dev/nfv-ri/helm-charts/nfvri
+    version: 4.4.0
+  - annotations:
+      charts.openshift.io/digest: sha256:038f5bdcec66e6c8787e6f66ae23a291be56fddf397bd51f6fac6cc0394596d3
+      charts.openshift.io/lastCertifiedTimestamp: '2023-04-27T12:43:38.197495+00:00'
+      charts.openshift.io/name: nfvri
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-04-27T12:46:00.071187+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: v4.6.0
+    dependencies:
+    - name: nfvri-agent
+      repository: file://../nfvri-agent
+      version: 4.6.0
+    - name: nfvri-apiserver
+      repository: file://../nfvri-apiserver
+      version: 4.6.0
+    - name: nfvri-orchestrator
+      repository: file://../nfvri-orchestrator
+      version: 4.6.0
+    - name: nfvri-dashboard
+      repository: file://../nfvri-dashboard
+      version: 4.6.0
+    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
+    digest: e0a08e4a400ea3255e4d69a7a163a055b0f3a76f89d2795b0ec53b97c88055d9
+    kubeVersion: '>= 1.20.0'
+    name: nfvri
+    type: application
+    urls:
+    - N/A
+    version: 4.6.0
+  - annotations:
+      charts.openshift.io/digest: sha256:9c41056bd1106c071bdd31726cc0d190de2707c1e87a9baa5a4e87faa2ed1f14
+      charts.openshift.io/lastCertifiedTimestamp: '2023-07-17T12:35:24.910294+00:00'
+      charts.openshift.io/name: nfvri
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-07-17T12:40:33.577597+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: v4.7.0
+    dependencies:
+    - name: nfvri-agent
+      repository: file://../nfvri-agent
+      version: 4.7.0
+    - name: nfvri-apiserver
+      repository: file://../nfvri-apiserver
+      version: 4.7.0
+    - name: nfvri-orchestrator
+      repository: file://../nfvri-orchestrator
+      version: 4.7.0
+    - name: nfvri-dashboard
+      repository: file://../nfvri-dashboard
+      version: 4.7.0
+    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
+    digest: bb9fee00749c29127a5944ed7298b26938b242cdf566551e0afaa2e788d852ef
+    kubeVersion: '>= 1.20.0'
+    name: nfvri
+    type: application
+    urls:
+    - N/A
+    version: 4.7.0
+  - annotations:
+      charts.openshift.io/digest: sha256:48490cd2c86eaa448ecafdf7677d9e340d0a1dec2778c03bc48f29db80e43213
+      charts.openshift.io/lastCertifiedTimestamp: '2023-12-18T11:33:07.940373+00:00'
+      charts.openshift.io/name: nfvri
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-12-18T12:35:41.432839+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.13'
+    apiVersion: v2
+    appVersion: v5.0.0
+    dependencies:
+    - name: nfvri-agent
+      repository: file://../nfvri-agent
+      version: 5.0.0
+    - name: nfvri-apiserver
+      repository: file://../nfvri-apiserver
+      version: 5.0.0
+    - name: nfvri-orchestrator
+      repository: file://../nfvri-orchestrator
+      version: 5.0.0
+    - name: nfvri-dashboard
+      repository: file://../nfvri-dashboard
+      version: 5.0.0
+    description: A Helm chart for Kubernetes to deploy the NFV-RI stack
+    digest: f9ddbc25c94bdb38a710282a2e63e84c67e86658474cf9927bb4d07e0cb20b91
+    kubeVersion: '>= 1.25.0'
+    name: nfvri
+    type: application
+    urls:
+    - N/A
+    version: 5.0.0
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -1540,6 +2151,63 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  portal:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:7d67e0e03cd9133a1121fac9b2cf808185c975cb8dca20b6b69a3714a1a6787c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T23:01:04.869067+00:00'
+      charts.openshift.io/name: Portal
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:09:26.481047+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.3
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: Mobileum portal integration all the products together on a single
+      UI
+    digest: 57061e704df16bee8249ba778aacb788f7d5afa4dd08ddcf5f7c8a308eb47aee
+    keywords:
+    - portal
+    kubeVersion: '>=1.16.0-0'
+    name: portal
+    type: application
+    urls:
+    - N/A
+    version: 0.5.3
+  rafm:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:12752c5979aa7f7a8440e653eed45f5639bf44b99dcf70cc0722b1b00d70707c
+      charts.openshift.io/lastCertifiedTimestamp: '2022-11-08T15:17:11.24113+00:00'
+      charts.openshift.io/name: RAID Revenue Assurance and Fraud Management
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:56:38.455103+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.3
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: RAFM backend product
+    digest: 8e062a2550852cf172ce2ff57fc7bd0729e3e9dbec5724078a49a2d527c39432
+    keywords:
+    - rafm
+    kubeVersion: '>=1.16.0-0'
+    name: rafm
+    type: application
+    urls:
+    - /home/partner/Music/newcharts/rafm
+    version: 0.5.3
   smf:
   - annotations:
       charts.openshift.io/digest: sha256:08fd5c4cd8c86180336734a698c65fd85bf0f28ae76c669f6c028fc67998f0ab
@@ -1586,6 +2254,85 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  sparkjobmanager:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:e2a3a3063baf1591087b28e4ee8b05c45b60069a06bea16faad7e200d061028a
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T12:16:49.584668+00:00'
+      charts.openshift.io/name: Sparkjob Manager
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:27:20.697258+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.4
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.3
+    description: Spark JobManager is a middleware proxy that enables users to launch
+      data processing jobs as a service.
+    digest: 44c568172665d310e3de01f9fb776ab624b7545b27a52e75549c549595f6c185
+    keywords:
+    - apache
+    - spark
+    - aip
+    - sparkjobmanager
+    kubeVersion: '>=1.16.0-0'
+    name: sparkjobmanager
+    urls:
+    - N/A
+    version: 0.5.4
+  tracer:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:672682c2b807d5f1d4e11e292aea42b616b2dc7634749e369e214c292066416e
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T16:43:11.203255+00:00'
+      charts.openshift.io/name: tracer
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T14:41:47.617458+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: A Helm chart for Tracer
+    digest: 709221f0e6b2a104bd799d72d8e2de46c0e8b4c648c59bc119167126e6c74865
+    kubeVersion: '>=1.16.0-0'
+    name: tracer
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
+  trinodb:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:6f9aef2444426e3cf5ed3292197016e45c7a6c3e7a5901df5b4cffb9ddc96857
+      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T12:55:16.191558+00:00'
+      charts.openshift.io/name: dqe
+      charts.openshift.io/provider: Mobileum Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2023-02-09T13:23:34.443765+00:00'
+      charts.openshift.io/supportURL: http://www.mobileum.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 0.5.2
+    dependencies:
+    - name: aip-common
+      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+      version: 0.3.1
+    description: AIP Query Engine
+    digest: 05dc36cadb084e3628e3adbfa06f698cdc4aed8825aa34cd5fa49702442df4d3
+    kubeVersion: '>= 1.16.0-0'
+    name: trinodb
+    type: application
+    urls:
+    - N/A
+    version: 0.5.2
   uag:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1779,273 +2526,6 @@ entries:
     urls:
     - N/A
     version: 4.10.16-0
-  alerter:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:9f78ab56f85f878c5e13e7120cbf6a0bcb78085c87641dc83cbf3bcaafd2fa86
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T18:21:46.051372+00:00'
-      charts.openshift.io/name: alerter
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T14:49:20.448564+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 1.0.0
-    description: A Helm chart for RCEM Alerter
-    digest: bce7e7e969e264781434470d246ca4acd06c35158441e360be135d61895da2c4
-    kubeVersion: '>=1.16.0-0'
-    name: alerter
-    type: application
-    urls:
-    - N/A
-    version: 0.1.0
-  caddy015:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:37e7d634146d7fe2250eb21460d4e33d2ad45e47bd6f774552a84a6ff9326ed4
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T13:15:12.777089+00:00'
-      charts.openshift.io/name: Reverse Proxy
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T13:43:59.400741+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 0.1.5
-    dependencies:
-    - name: aip-common
-      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
-      version: 0.3.1
-    description: AIP - Reverse proxy component
-    digest: 4e3933814b7f8159f16c8d78cf1f4b425e4d1a824fb17dbab4cea077f0a6be6d
-    kubeVersion: '>=1.16.0-0'
-    name: caddy015
-    type: application
-    urls:
-    - N/A
-    version: 0.1.5
-  hivemetastore:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:625230dea241958ee417a302768f0b79ca8199ac3dea19980f92a7908b9aa557
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T21:24:42.990199+00:00'
-      charts.openshift.io/name: hivemetastore
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T13:37:45.802864+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 0.4.5
-    dependencies:
-    - name: aip-common
-      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
-      version: 0.3.1
-    description: Hive Metastore Application
-    digest: 85a029e9234ba18bb4694f2d763bf689a25bc22e462301b3e2ddc7c52d5b5bdb
-    kubeVersion: '>= 1.16.0-0'
-    name: hivemetastore
-    type: application
-    urls:
-    - N/A
-    version: 0.4.5
-  ignite:
-  - annotations:
-      category: Infrastructure
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:021abbc02e78cf0c57ce87d9a2af38da9d9a45cb74c691bf9139fb720c5fbac5
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T14:59:20.243663+00:00'
-      charts.openshift.io/name: KV Storage
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T14:12:55.113973+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 0.3.3
-    dependencies:
-    - name: aip-common
-      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
-      version: 0.3.1
-    description: Apache Ignite is a distributed database management system for high-performance
-      computing.
-    digest: 96729e204ca52c29e29d429234c7cdf0e67da473d2bf738bbda5ae366d78a2de
-    keywords:
-    - apache
-    - ignite
-    - aip
-    kubeVersion: '>=1.16.0-0'
-    name: ignite
-    urls:
-    - N/A
-    version: 0.3.3
-  keycloak040:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:8bab7186c7e40052846ebd225242f51abe7c6b1d659ab2ffb9040cf3bcc8f645
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-14T18:23:37.154027+00:00'
-      charts.openshift.io/name: Keycloak SSO
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T14:01:57.761150+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 0.4.0
-    dependencies:
-    - name: aip-common
-      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
-      version: 0.3.1
-    description: A Helm chart for keycloak 1.0
-    digest: 751705b84c96d18cbbc5da21363489a7047157efaf58faaa6163b8cff2f3e8f4
-    kubeVersion: '>=1.21.0-0'
-    name: keycloak040
-    type: application
-    urls:
-    - N/A
-    version: 0.4.0
-  portal:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:7d67e0e03cd9133a1121fac9b2cf808185c975cb8dca20b6b69a3714a1a6787c
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-15T23:01:04.869067+00:00'
-      charts.openshift.io/name: Portal
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T14:09:26.481047+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 0.5.3
-    dependencies:
-    - name: aip-common
-      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
-      version: 0.3.1
-    description: Mobileum portal integration all the products together on a single
-      UI
-    digest: 57061e704df16bee8249ba778aacb788f7d5afa4dd08ddcf5f7c8a308eb47aee
-    keywords:
-    - portal
-    kubeVersion: '>=1.16.0-0'
-    name: portal
-    type: application
-    urls:
-    - N/A
-    version: 0.5.3
-  rafm:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:12752c5979aa7f7a8440e653eed45f5639bf44b99dcf70cc0722b1b00d70707c
-      charts.openshift.io/lastCertifiedTimestamp: '2022-11-08T15:17:11.24113+00:00'
-      charts.openshift.io/name: RAID Revenue Assurance and Fraud Management
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T14:56:38.455103+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 0.5.3
-    dependencies:
-    - name: aip-common
-      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
-      version: 0.3.1
-    description: RAFM backend product
-    digest: 8e062a2550852cf172ce2ff57fc7bd0729e3e9dbec5724078a49a2d527c39432
-    keywords:
-    - rafm
-    kubeVersion: '>=1.16.0-0'
-    name: rafm
-    type: application
-    urls:
-    - /home/partner/Music/newcharts/rafm
-    version: 0.5.3
-  sparkjobmanager:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:e2a3a3063baf1591087b28e4ee8b05c45b60069a06bea16faad7e200d061028a
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T12:16:49.584668+00:00'
-      charts.openshift.io/name: Sparkjob Manager
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T14:27:20.697258+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 0.5.4
-    dependencies:
-    - name: aip-common
-      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
-      version: 0.3.3
-    description: Spark JobManager is a middleware proxy that enables users to launch
-      data processing jobs as a service.
-    digest: 44c568172665d310e3de01f9fb776ab624b7545b27a52e75549c549595f6c185
-    keywords:
-    - apache
-    - spark
-    - aip
-    - sparkjobmanager
-    kubeVersion: '>=1.16.0-0'
-    name: sparkjobmanager
-    urls:
-    - N/A
-    version: 0.5.4
-  tracer:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:672682c2b807d5f1d4e11e292aea42b616b2dc7634749e369e214c292066416e
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T16:43:11.203255+00:00'
-      charts.openshift.io/name: tracer
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T14:41:47.617458+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 1.0.0
-    description: A Helm chart for Tracer
-    digest: 709221f0e6b2a104bd799d72d8e2de46c0e8b4c648c59bc119167126e6c74865
-    kubeVersion: '>=1.16.0-0'
-    name: tracer
-    type: application
-    urls:
-    - N/A
-    version: 0.1.0
-  trinodb:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:6f9aef2444426e3cf5ed3292197016e45c7a6c3e7a5901df5b4cffb9ddc96857
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-16T12:55:16.191558+00:00'
-      charts.openshift.io/name: dqe
-      charts.openshift.io/provider: Mobileum Inc.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-09T13:23:34.443765+00:00'
-      charts.openshift.io/supportURL: http://www.mobileum.com
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.3'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 0.5.2
-    dependencies:
-    - name: aip-common
-      repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
-      version: 0.3.1
-    description: AIP Query Engine
-    digest: 05dc36cadb084e3628e3adbfa06f698cdc4aed8825aa34cd5fa49702442df4d3
-    kubeVersion: '>= 1.16.0-0'
-    name: trinodb
-    type: application
-    urls:
-    - N/A
-    version: 0.5.2
   wafplatform:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -2074,438 +2554,6 @@ entries:
     urls:
     - /home/partner/Music/Music/aip10/wafplatform-053/wafplatform-0.5.3.tgz
     version: 0.5.3
-  cmm-operator-k8s:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:dd31da96f7bec0897f1a95ff2d4215e06af672db659daef999b8945c4467a920
-      charts.openshift.io/lastCertifiedTimestamp: '2022-09-27T16:58:55.142046+00:00'
-      charts.openshift.io/name: Nokia CMM
-      charts.openshift.io/provider: Nokia
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-09-27T17:25:10.464758+00:00'
-      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
-      charts.openshift.io/supportedOpenShiftVersions: 4.7 - 4.11
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    description: A Helm chart for CMM in Kubernetes using operators
-    digest: 67e6cdc1422911f1556546ba85554f02b0e5db8220e81efe08581d397366919a
-    icon: https://www.nokia.com/chart-icon.png
-    kubeVersion: 1.20.0 - 1.24.0
-    name: cmm-operator-k8s
-    type: application
-    urls:
-    - N/A
-    version: 22.5.0-p4
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:53a425fc94f395e1a0fff94e3ed55cfa95d1db5cc81774b74a37954b569e03e2
-      charts.openshift.io/lastCertifiedTimestamp: '2023-02-09T16:08:16.797839+00:00'
-      charts.openshift.io/name: Nokia CMM
-      charts.openshift.io/provider: Nokia
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-02-22T21:47:38.287845+00:00'
-      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
-      charts.openshift.io/supportedOpenShiftVersions: 4.7 - 4.11
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    description: A Helm chart for CMM in Kubernetes using operators
-    digest: 8e89167feeb1b2479e1e527f15d4b5957dce24bbdcbe15f42ffe7074b9d13883
-    icon: https://www.nokia.com/chart-icon.png
-    kubeVersion: 1.20.0 - 1.24.0
-    name: cmm-operator-k8s
-    type: application
-    urls:
-    - N/A
-    version: 23.2.0-p1
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:29b1d193b74e65da34d2378a1ebd124b2865cb7a418c8668319a9c377d927614
-      charts.openshift.io/lastCertifiedTimestamp: '2023-06-05T17:02:09.629013+00:00'
-      charts.openshift.io/name: Nokia CMM
-      charts.openshift.io/provider: Nokia
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-06-05T17:04:41.463578+00:00'
-      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    description: A Helm chart for CMM in Kubernetes using operators
-    digest: ac3cb007107868eb2c1acaade989c3c1d23cdfc2e93e79792ef35b9e5842fba8
-    icon: https://www.nokia.com/chart-icon.png
-    kubeVersion: '>= 1.20.0-0'
-    name: cmm-operator-k8s
-    type: application
-    urls:
-    - N/A
-    version: 23.5.0-p1
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:98083133d771c719bbda2992decd5c4919e43c514bdbd87cdf27a02a0c31d00d
-      charts.openshift.io/lastCertifiedTimestamp: '2023-12-01T16:35:03.385988+00:00'
-      charts.openshift.io/name: Nokia CMM
-      charts.openshift.io/provider: Nokia
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-12-04T17:18:08.484080+00:00'
-      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.14'
-    apiVersion: v2
-    description: A Helm chart for CMM in Kubernetes using operators
-    digest: 1a89cb8d8e887418bf674417fca7a3cca5daa021a6da28fb76c7327e28d4a184
-    icon: https://www.nokia.com/chart-icon.png
-    kubeVersion: '>= 1.20.0-0'
-    name: cmm-operator-k8s
-    type: application
-    urls:
-    - N/A
-    version: 23.8.0-p1
-  corpay-progressoft:
-  - annotations:
-      charts.openshift.io/digest: sha256:39b7fdecbc249d5570a769e0814575f7d3d65a99445c0d43be5459ca05dbfc75
-      charts.openshift.io/lastCertifiedTimestamp: '2022-12-27T17:31:03.429214+03:00'
-      charts.openshift.io/name: corpay-progressoft
-      charts.openshift.io/provider: ProgressSoft Corporation
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-12-27T15:45:36.415351+00:00'
-      charts.openshift.io/supportURL: https://www.progressoft.com/
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.10'
-    apiVersion: v2
-    appVersion: 19.0.3
-    dependencies:
-    - condition: global.keycloak_enabled
-      name: keycloak
-      repository: ''
-    - condition: global.mq_rest_api_enabled
-      name: mq-rest-api
-      repository: ''
-    - condition: global.data_management_enabled
-      name: data-management
-      repository: ''
-    - condition: global.beneficiary_enabled
-      name: beneficiary
-      repository: ''
-    - condition: global.bi_dashboard_enabled
-      name: bi-dashboard
-      repository: ''
-    - condition: global.payments_enabled
-      name: payments
-      repository: ''
-    - condition: global.template_engine_enabled
-      name: template-engine
-      repository: ''
-    - condition: global.corporate_ui_shell_enabled
-      name: corporate-ui-shell
-      repository: ''
-    - condition: global.bank_frontend_shell_enabled
-      name: bank-frontend-shell
-      repository: ''
-    - condition: global.ecc_sync_enabled
-      name: ecc-sync
-      repository: ''
-    - condition: global.onus_sync_enabled
-      name: onus-sync
-      repository: ''
-    - condition: global.eccapi_mock_enabled
-      name: eccapi-mock
-      repository: ''
-    - condition: global.cash_management_enabled
-      name: cash-management
-      repository: ''
-    - condition: global.bc_enabled
-      name: bc
-      repository: ''
-    - condition: global.corpay_utility_enabled
-      name: corpay-utility
-      repository: ''
-    - condition: global.sib_corporate_shell_enabled
-      name: sib-corporate-shell
-      repository: ''
-    - condition: global.nic_bcn_integration_enabled
-      name: nic-bcn-integration
-      repository: ''
-    - condition: global.uae_sib_integration_enabled
-      name: uae-sib-integration
-      repository: ''
-    - condition: global.qib_integration_enabled
-      name: qib-integration
-      repository: ''
-    - condition: global.oracledb_enabled
-      name: oracledb
-      repository: ''
-    - condition: global.sib_corporate_profile_enabled
-      name: sib-corporate-profile
-      repository: ''
-    - condition: global.tf_config_service_enabled
-      name: tf-config-service
-      repository: ''
-    - condition: global.idm_enabled
-      name: idm
-      repository: ''
-    - condition: global.checks_enabled
-      name: checks
-      repository: ''
-    - condition: global.zuul_gateway_enabled
-      name: zuul-gateway
-      repository: ''
-    - condition: global.sib_checks_mngt_enabled
-      name: sib-checks-mngt
-      repository: ''
-    - condition: global.mailhog_enabled
-      name: mailhog
-      repository: ''
-    - condition: global.operator_ui_shell_enabled
-      name: operator-ui-shell
-      repository: ''
-    - condition: global.bnft_bank_shell_enabled
-      name: bnft-bank-shell
-      repository: ''
-    - condition: global.sib_bank_shell_enabled
-      name: sib-bank-shell
-      repository: ''
-    - condition: global.artemis_enabled
-      name: artemis
-      repository: ''
-    - condition: global.artemis_ha_enabled
-      name: artemis-ha
-      repository: ''
-    - condition: global.ecc_simulator_enabled
-      name: ecc-simulator
-      repository: ''
-    - condition: global.payment_file_parser_enabled
-      name: payment-file-parser
-      repository: ''
-    - condition: global.bc_enabled
-      name: bc
-      repository: ''
-    - condition: global.lg_enabled
-      name: lg
-      repository: ''
-    - condition: global.gc_enabled
-      name: gc
-      repository: ''
-    - condition: global.lc_enabled
-      name: lc
-      repository: ''
-    - condition: global.retail_ui_shell_enabled
-      name: retail-ui-shell
-      repository: ''
-    - condition: global.corpay_integration_enabled
-      name: corpay-integration
-      repository: ''
-    - condition: global.oab_integration_enabled
-      name: oab-integration
-      repository: ''
-    - condition: global.corpay_castlemock_enabled
-      name: corpay-castlemock
-      repository: ''
-    - condition: global.chatbot_enabled
-      name: chatbot
-      repository: ''
-    - condition: global.main_shell_enabled
-      name: main-shell
-      repository: ''
-    - condition: global.fixed_deposits_and_loans_enabled
-      name: fixed-deposits-and-loans
-      repository: ''
-    - condition: global.docs_enabled
-      name: docs
-      repository: ''
-    - condition: global.iccs_api_enabled
-      name: iccs-api
-      repository: ''
-    - condition: global.cloud_gateway_enabled
-      name: cloud-gateway
-      repository: ''
-    - condition: global.file_parser_enabled
-      name: file-parser
-      repository: ''
-    - condition: global.correspondence_enabled
-      name: correspondence
-      repository: ''
-    - condition: global.ibmmq_enabled
-      name: ibmmq
-      repository: ''
-    - condition: global.hazelcast_enabled
-      name: hazelcast
-      repository: ''
-    - condition: global.events_store_enabled
-      name: events-store
-      repository: ''
-    description: corpay team helm chart
-    digest: 356344e13ba47e2a7c7187803ebe1da430c22bd4e420620b1ca988956ba827d3
-    kubeVersion: '> 1.19.0'
-    name: corpay-progressoft
-    urls:
-    - N/A
-    version: 19.0.3
-  5g-amfmme-global-24a:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:a16dc9241185b9aa75d364e9ef28309e6a4a7eaef6a7239ea84196aee97c6f9b
-      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T11:16:18.918226-05:00'
-      charts.openshift.io/name: 5g-amfmme-global-24a
-      charts.openshift.io/provider: Samsung Electronics
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/releaseDate: 24/01/25
-      charts.openshift.io/submissionTimestamp: '2024-03-19T02:16:34.570141+00:00'
-      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    appVersion: 24.A.0
-    description: A Helm chart for 5G Core cAMFMME(24/01/25)
-    digest: a8f5cd044c18c504117ae4d3e47d88a3d63e0a61ba8278c213c5818139b5fece
-    kubeVersion: '>= 1.21.0-0'
-    name: 5g-amfmme-global-24a
-    urls:
-    - 5g-amfmme-global-24a-1.240125.8468882.tgz
-    version: 1.240125.8468882
-  5g-csdb-global-24a:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:231259a7a3b51586a27fab10f2aa1fa1998576239d77a685776fb2920a00ddfc
-      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T10:40:48.314707-05:00'
-      charts.openshift.io/name: 5g-csdb-global-24a
-      charts.openshift.io/provider: Samsung Electronics
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/releaseDate: 24/01/25
-      charts.openshift.io/submissionTimestamp: '2024-03-19T13:54:22.636427+00:00'
-      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    appVersion: 24.A.0
-    description: A Helm chart for 5G Core cCSDB(24/01/25)
-    digest: 53fc5e832e1b9df67d8e9c5fc01d44902f234ddf491eb9ce17e8a9fb76256e8c
-    kubeVersion: '>= 1.21.0-0'
-    name: 5g-csdb-global-24a
-    urls:
-    - 5g-csdb-global-24a-1.240125.8468882.tgz
-    version: 1.240125.8468882
-  5g-nrf-global-24a:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:dd1547957fbd5d7e88ec07617241b29ec7923b21f5f7cd2d6d9d47df5db4c312
-      charts.openshift.io/lastCertifiedTimestamp: '2024-02-01T20:51:59.539619-05:00'
-      charts.openshift.io/name: 5g-nrf-global-24a
-      charts.openshift.io/provider: Samsung Electronics
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/releaseDate: 24/01/25
-      charts.openshift.io/submissionTimestamp: '2024-03-19T14:15:00.182497+00:00'
-      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    appVersion: 24.A.0
-    description: A Helm chart for 5G Core cNRF(24/01/25)
-    digest: 02f75d0bb092c0ff239b134e2b459210dcfe4a46a0c0f1e7c5805eb9620cdc54
-    kubeVersion: '>= 1.21.0-0'
-    name: 5g-nrf-global-24a
-    urls:
-    - 5g-nrf-global-24a-1.240125.8468882.tgz
-    version: 1.240125.8468882
-  5g-nssf-global-24a:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:6789fcaa91dcd255760443560c0999deaffdef48f7ec8dd267de98595d72b335
-      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T10:50:01.259546-05:00'
-      charts.openshift.io/name: 5g-nssf-global-24a
-      charts.openshift.io/provider: Samsung Electronics
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/releaseDate: 24/01/25
-      charts.openshift.io/submissionTimestamp: '2024-03-19T14:27:30.508577+00:00'
-      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    appVersion: 24.A.0
-    description: A Helm chart for 5G Core cNSSF(24/01/25)
-    digest: a9cf16cdfc7003833d81bac6c89cd129edae7d0840e0ff4505037b3b654b2d54
-    kubeVersion: '>= 1.21.0-0'
-    name: 5g-nssf-global-24a
-    urls:
-    - 5g-nssf-global-24a-1.240125.8468882.tgz
-    version: 1.240125.8468882
-  5g-smf-global-24a:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:7956aa89a35a9b8db2c8398b63acbfe6c2284d1761f7a6761fd6e57ef10b338c
-      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T11:00:33.225278-05:00'
-      charts.openshift.io/name: 5g-smf-global-24a
-      charts.openshift.io/provider: Samsung Electronics
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/releaseDate: 24/01/25
-      charts.openshift.io/submissionTimestamp: '2024-03-19T14:45:28.734968+00:00'
-      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    appVersion: 24.A.0
-    description: A Helm chart for 5G Core cSMF(24/01/25)
-    digest: fb277ddf9b6fb84b47cae40cd6d12071666847ab9bb627d329836948c9bebb12
-    kubeVersion: '>= 1.21.0-0'
-    name: 5g-smf-global-24a
-    urls:
-    - 5g-smf-global-24a-1.240125.8468882.tgz
-    version: 1.240125.8468882
-  5g-upf-global-24a:
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:c1ac9649f72e6f437cb39632565c3730a3899e6f919b3e6ab832f44689bc8f51
-      charts.openshift.io/lastCertifiedTimestamp: '2024-02-02T11:08:26.55427-05:00'
-      charts.openshift.io/name: 5g-upf-global-24a
-      charts.openshift.io/provider: Samsung Electronics
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/releaseDate: 24/01/25
-      charts.openshift.io/submissionTimestamp: '2024-03-19T14:52:23.039798+00:00'
-      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    appVersion: 24.A.0
-    description: A Helm chart for 5G Core cUPF(24/01/25)
-    digest: c841ce21ae880a42c98035ea39e20ea9cef277976e982993bf5a2c7f889fc3b8
-    kubeVersion: '>= 1.21.0-0'
-    name: 5g-upf-global-24a
-    urls:
-    - 5g-upf-global-24a-1.240125.8468882.tgz
-    version: 1.240125.8468882
-  idit-runtime:
-  - annotations:
-      app.idit/version: 19.2.0.2
-      charts.openshift.io/digest: sha256:fab6a4449f61299d573b79079e47fc5c680cb4c5dd4c0721ccf4216ce7816c02
-      charts.openshift.io/lastCertifiedTimestamp: '2023-09-12T10:00:00.72244+00:00'
-      charts.openshift.io/name: IDITSuite 18.
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-09-12T12:11:20.772626+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: 4.10 - 4.13
-      charts.openshift.io/testedOpenShiftVersion: '4.12'
-    apiVersion: v2
-    appVersion: 1.16.0
-    dependencies:
-    - name: mono
-      repository: https://harbor.idit.sapiens.com/chartrepo/core
-      version: 1.0.15
-    - name: apache-active-mq
-      repository: https://harbor.idit.sapiens.com/chartrepo/infrastructure
-      version: 1.0.10
-    - condition: sua.enabled
-      name: sua
-      repository: https://harbor.idit.sapiens.com/chartrepo/core
-      version: 1.0.7
-    - condition: sua.enabled
-      name: couchbase-setup
-      repository: https://harbor.idit.sapiens.com/chartrepo/core
-      version: 1.0.5
-    description: A Helm chart for Kubernetes
-    digest: 7b826512e5ffaa235d68a8b036e360461bc748076a12ed544d1988d13339510a
-    kubeVersion: '>=1.23.0 <=1.26.3'
-    name: idit-runtime
-    type: application
-    urls:
-    - N/A
-    version: 1.0.18
   xcipio-helm-ccpag-0-1-0:
   - annotations:
       charts.openshift.io/digest: sha256:b8f84b535f8c2ffae810fde86685b7b18c38acce57cf3f8cdb0f6a66eb63cc68
@@ -2574,52 +2622,27 @@ entries:
     urls:
     - N/A
     version: 0.1.0
-  cdr-core-ehrbase-enterprise:
+  yingoneshotchart:
   - annotations:
-      charts.openshift.io/digest: sha256:19b9c77e0e1d74314c5f847f1079e608182e8f621279e8c373b1024b18aa9b44
-      charts.openshift.io/lastCertifiedTimestamp: '2022-11-16T16:24:03.450919+00:00'
-      charts.openshift.io/name: EHRBase Enterprise
-      charts.openshift.io/provider: vitagroup AG
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:962f472f51fcd531a42d4e169f6df4520b8b6843c84c652eca5128cc83411c3e
+      charts.openshift.io/lastCertifiedTimestamp: '2024-04-10T22:23:40.160527+00:00'
+      charts.openshift.io/name: RedHat Test
+      charts.openshift.io/provider: RedHat
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2022-11-17T16:01:25.049348+00:00'
+      charts.openshift.io/submissionTimestamp: '2024-04-10T22:26:16.065790+00:00'
+      charts.openshift.io/supportURL: https://github.com/ansvu/yingoneshotchart
       charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.11'
+      charts.openshift.io/testedOpenShiftVersion: 4.14.12
     apiVersion: v2
-    appVersion: 0.1.8
-    dependencies:
-    - condition: postgresql-ha.enabled
-      name: postgresql-ha
-      repository: https://charts.bitnami.com/bitnami
-      version: 9.4.1
-    - condition: yugabyte.enabled
-      name: yugabyte
-      repository: https://charts.yugabyte.com
-      version: 2.14.1
+    appVersion: 1-22
     description: A Helm chart for Kubernetes
-    digest: 0e8b0937e1e2089546f647bdfe1186b3b60fb01e5fc0321cc80c3f9e9dd0a26e
-    kubeVersion: ^1.20.0
-    name: cdr-core-ehrbase-enterprise
+    digest: b47ca815fa36132eacca0c893962c0b236bcc77d6b0802cc57ef89314f8ba89b
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.20.0'
+    name: yingoneshotchart
     type: application
     urls:
     - N/A
-    version: 0.1.8
-  ehrbase:
-  - annotations:
-      charts.openshift.io/digest: sha256:556215013f4816d6ec8ee3233ff65944d7bebc4b1e3b0346eac2727408d57289
-      charts.openshift.io/lastCertifiedTimestamp: '2023-01-11T15:32:49.944127+00:00'
-      charts.openshift.io/name: EHRBase Enterprise
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2023-01-11T15:35:20.617241+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.11'
-    apiVersion: v2
-    appVersion: 0.1.12
-    description: A Helm chart for Kubernetes
-    digest: 7e52cee0d93ab7df5fb01394db892025eb159771e9ac4bf82e26054ed89c7a94
-    kubeVersion: ^1.20.0
-    name: ehrbase
-    type: application
-    urls:
-    - N/A
-    version: 0.1.12
-generated: '2024-03-26T00:00:00.014560+00:00'
+    version: 0.1.5
+generated: '2024-04-10T22:26:16.040301+00:00'
