@@ -6297,6 +6297,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-trusted-application-pipeline-0.2.0/redhat-trusted-application-pipeline-0.2.0.tgz
     version: 0.2.0
+  - annotations:
+      charts.openshift.io/digest: sha256:3273efa651752511d0a21e89da6dcdd46958238497e60ba82da1c464eca87841
+      charts.openshift.io/lastCertifiedTimestamp: '2024-04-15T18:30:34.009327+00:00'
+      charts.openshift.io/name: Trusted Application Pipeline
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-04-15T18:31:47.531254+00:00'
+      charts.openshift.io/supportURL: https://github.com/redhat-appstudio/rhtap-installer/issues
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.1.0
+    description: A Helm chart for deploying Red Hat Trusted Application Pipeline
+    digest: 91560bd9f9bdcd377660887be2d8c8f513b9d1961e180b69f6c8fe605e216ad5
+    kubeVersion: '>= 1.25.0-0'
+    maintainers:
+    - name: Red Hat Trusted Application Pipeline Team
+      url: https://github.com/redhat-appstudio/rhtap-installer
+    name: redhat-trusted-application-pipeline
+    sources:
+    - https://github.com/redhat-appstudio/rhtap-installer
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-trusted-application-pipeline-0.3.0/redhat-trusted-application-pipeline-0.3.0.tgz
+    version: 0.3.0
   redhat-trusted-profile-analyzer:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -8149,4 +8174,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-04-12T13:17:10.393403+00:00'
+generated: '2024-04-15T18:31:47.458792+00:00'
