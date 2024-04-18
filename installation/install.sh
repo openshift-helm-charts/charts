@@ -18,8 +18,8 @@ usage ()
   echo "Usage: $0 CHART_VERSION [-n namespace]
 
 Examples:
-  $0 1.1.0 
-  $0 1.0-201-CI -n rhdh-ci
+  $0 1.1.1 
+  $0 1.2-43-CI -n rhdh-ci
 
 Options:
   -n, --namespace   Project or namespace into which to install specified chart; default: $namespace

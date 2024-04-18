@@ -45,7 +45,7 @@ To verify a chart, use chart-verifier. This is only needed if you built your own
 ```
 cd /tmp && mkdir -p chartverifier; \\
 podman run --rm -i -e KUBECONFIG=/.kube/config \\
-  -v /home/nboldt/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \\
+  -v /root/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \\
   quay.io/redhat-certification/chart-verifier \\
   verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-1.2-43-CI/charts/redhat/redhat/redhat-developer-hub/1.2-43-CI/redhat-developer-hub-1.2-43-CI.tgz
 echo 'Report in /tmp/chartverifier/report.yaml'
