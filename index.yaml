@@ -6580,6 +6580,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-smsf-dispatcher-1.0.4/smsf-dispatcher-1.0.4.tgz
     version: 1.0.4
+  - annotations:
+      charts.openshift.io/digest: sha256:eb6d666021a4d8bdc5a7495928bdbe0f9fa01357590e9735ff0671863726368b
+      charts.openshift.io/lastCertifiedTimestamp: '2024-04-22T17:43:19.132344-04:00'
+      charts.openshift.io/name: SMSF Dispatcher Helm Chart
+      charts.openshift.io/provider: Telenity Iletisim Sistemleri Sa
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-04-23T14:32:09.545789+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: smsf-dispatcher
+    digest: 7bcdaf2745e69296ef89b7471cc4b6ba230205bfafc43d9ce39aaac2a4029603
+    kubeVersion: '>=v1.21.0'
+    maintainers:
+    - email: info@telenity.com
+      name: Telenity
+      url: https://www.telenity.com
+    name: smsf-dispatcher
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/telenity-smsf-dispatcher-1.0.4-pvc/smsf-dispatcher-1.0.4-pvc.tgz
+    version: 1.0.4-pvc
   smsf-momt:
   - annotations:
       charts.openshift.io/digest: sha256:5b2de726b547d3ea639ee07895e026403752f47c1cf2038cc8b94084a88829b1
@@ -8213,4 +8235,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.18.4/yugaware-openshift-2.18.4.tgz
     version: 2.18.4
-generated: '2024-04-22T19:03:59.892167+00:00'
+generated: '2024-04-23T14:32:09.470960+00:00'
