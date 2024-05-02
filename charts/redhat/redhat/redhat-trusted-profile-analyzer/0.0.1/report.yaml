@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: redhat
             version: v1.3
-        reportDigest: uint64:1925808838182636847
+        reportDigest: uint64:2540650363975740972
         chart-uri: ./redhat-trusted-profile-analyzer-0.0.1.tgz
         digests:
-            chart: sha256:1f3b611fe107ed3858d8135be22f9576c2eb4c1aa71860a9157157766f9ffb88
-            package: 556d54694e1817024ba6975a382ef4d3cfb1b401a545ec76b3e4b29d6b02c992
-        lastCertifiedTimestamp: "2024-05-02T10:54:55.128491+02:00"
+            chart: sha256:c7fc254d1e14ed85d80aed9d4ce5077962c83a6998339c858aa11fd95c944105
+            package: 44faa77b4d8cb0aa8399eb205851b7d8168ecaae69884a9965a91a9cb954b1d3
+        lastCertifiedTimestamp: "2024-05-02T11:46:36.278809+02:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.12'
         webCatalogOnly: false
@@ -42,60 +42,60 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
     - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
       reason: Values file exist
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.0/has-notes
-      type: Optional
-      outcome: PASS
-      reason: Chart does contain NOTES.txt
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: No images to certify
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
 
