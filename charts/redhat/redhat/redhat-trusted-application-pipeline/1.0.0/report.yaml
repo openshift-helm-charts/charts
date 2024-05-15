@@ -1,0 +1,97 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.3
+        profile:
+            VendorType: redhat
+            version: v1.2
+        reportDigest: uint64:11909867160483348597
+        chart-uri: /workspace/tmp/charts/redhat-trusted-application-pipeline-1.0.0.tgz
+        digests:
+            chart: sha256:bb3b2f45e9033c37c27524b5870ec38d6e32c26d66329712aaf30ef34a66fc2c
+            package: 4ab84a1c3e790d783123dd848474ff6e25acd85710b2fb5d6f682a186cea33be
+        lastCertifiedTimestamp: "2024-05-15T18:23:28.928832+00:00"
+        testedOpenShiftVersion: "4.15"
+        supportedOpenShiftVersions: '>=4.12'
+        webCatalogOnly: false
+    chart:
+        name: redhat-trusted-application-pipeline
+        home: ""
+        sources:
+            - https://github.com/redhat-appstudio/rhtap-installer
+        version: 1.0.0
+        description: A Helm chart for deploying Red Hat Trusted Application Pipeline
+        keywords: []
+        maintainers:
+            - name: Red Hat Trusted Application Pipeline Team
+              email: ""
+              url: https://github.com/redhat-appstudio/rhtap-installer
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.1.x
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Trusted Application Pipeline
+            charts.openshift.io/provider: Red Hat
+            charts.openshift.io/supportURL: https://github.com/redhat-appstudio/rhtap-installer/issues
+        kubeversion: '>= 1.25.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: FAIL
+      reason: Values schema file does not exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+
