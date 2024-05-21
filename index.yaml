@@ -3028,6 +3028,44 @@ entries:
     urls:
     - https://redhat-charts:strahc-tahder@chart-proxy.nextevolution.de/repository/helm-releases/nedb-classic-0.2.1.tgz
     version: 0.2.1
+  - annotations:
+      category: Integration
+      charts.openshift.io/digest: sha256:75b9ca6dcffee5d99afe55bb494e01047d85457a7f14d0e0e5b5c8ffdd372931
+      charts.openshift.io/lastCertifiedTimestamp: '2024-05-21T09:24:54.284812+00:00'
+      charts.openshift.io/name: NE.Databridge Classic Standalone
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-05-21T09:43:02.915773+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
+      charts.openshift.io/testedOpenShiftVersion: '4.15'
+    apiVersion: v2
+    appVersion: '1.0'
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.x
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 25.x.x
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 7.x.x
+    description: A Helm chart for NE.Databridge Classic Deployments
+    digest: f6bec217d5b768f0089d97dad0b1eccdbe803964845e131c82057b1b95d362a2
+    icon: https://www.nextevolution.de/user/themes/nextevolution/images/logo.png
+    kubeVersion: '>= 1.23.15 < 1.30.0'
+    name: nedb-classic
+    type: application
+    urls:
+    - https://redhat-charts:strahc-tahder@chart-proxy.nextevolution.de/repository/helm-releases/nedb-classic-0.3.1.tgz
+    version: 0.3.1
   nef-nabstract:
   - annotations:
       charts.openshift.io/digest: sha256:f17a0108bde61a2e532b1a4dc9f1608acfd1450267d7828bc2b9e872e6e6803f
@@ -8553,4 +8591,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.20.3/yugaware-openshift-2.20.3.tgz
     version: 2.20.3
-generated: '2024-05-17T07:20:37.369920+00:00'
+generated: '2024-05-21T09:43:02.838378+00:00'
