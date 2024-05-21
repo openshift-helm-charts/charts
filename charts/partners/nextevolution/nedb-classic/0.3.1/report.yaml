@@ -1,0 +1,129 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.3
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:14129642774981500172
+        chart-uri: https://redhat-charts:strahc-tahder@chart-proxy.nextevolution.de/repository/helm-releases/nedb-classic-0.3.1.tgz
+        digests:
+            chart: sha256:75b9ca6dcffee5d99afe55bb494e01047d85457a7f14d0e0e5b5c8ffdd372931
+            package: f6bec217d5b768f0089d97dad0b1eccdbe803964845e131c82057b1b95d362a2
+            publicKey: d332377b98736a0e4da010d866dcc6ee9ce891dbd7729b07e071f3a8a16f1e22
+        lastCertifiedTimestamp: "2024-05-21T09:24:54.284812+00:00"
+        testedOpenShiftVersion: "4.15"
+        supportedOpenShiftVersions: '>=4.11'
+        webCatalogOnly: false
+    chart:
+        name: nedb-classic
+        home: ""
+        sources: []
+        version: 0.3.1
+        description: A Helm chart for NE.Databridge Classic Deployments
+        keywords: []
+        maintainers: []
+        icon: https://www.nextevolution.de/user/themes/nextevolution/images/logo.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: "1.0"
+        deprecated: false
+        annotations:
+            category: Integration
+            charts.openshift.io/name: NE.Databridge Classic Standalone
+        kubeversion: '>= 1.23.15 < 1.30.0'
+        dependencies:
+            - name: common
+              version: 2.x.x
+              repository: https://charts.bitnami.com/bitnami
+              condition: ""
+              tags:
+                - bitnami-common
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: postgresql
+              version: 15.x
+              repository: https://charts.bitnami.com/bitnami
+              condition: postgresql.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: prometheus
+              version: 25.x.x
+              repository: https://prometheus-community.github.io/helm-charts
+              condition: prometheus.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: grafana
+              version: 7.x.x
+              repository: https://grafana.github.io/helm-charts
+              condition: grafana.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: PASS
+      reason: 'Chart is signed : Signature verification passed'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
