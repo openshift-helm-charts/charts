@@ -3034,7 +3034,7 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2024-05-21T09:24:54.284812+00:00'
       charts.openshift.io/name: NE.Databridge Classic Standalone
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2024-05-21T09:43:02.915773+00:00'
+      charts.openshift.io/submissionTimestamp: '2024-05-21T09:44:30.644856+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
       charts.openshift.io/testedOpenShiftVersion: '4.15'
     apiVersion: v2
@@ -8591,4 +8591,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.20.3/yugaware-openshift-2.20.3.tgz
     version: 2.20.3
-generated: '2024-05-21T09:43:02.838378+00:00'
+generated: '2024-05-21T09:44:30.568996+00:00'
