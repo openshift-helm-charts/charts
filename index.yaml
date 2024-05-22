@@ -8591,4 +8591,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.20.3/yugaware-openshift-2.20.3.tgz
     version: 2.20.3
-generated: '2024-05-21T09:44:30.568996+00:00'
+  - annotations:
+      charts.openshift.io/digest: sha256:1213a9902af34b93f82f5115740c7749ecbe3bf6da203414e437ea574a9f5e34
+      charts.openshift.io/lastCertifiedTimestamp: '2024-05-22T14:14:47.051424+00:00'
+      charts.openshift.io/name: yugaware-openshift
+      charts.openshift.io/provider: YugaByte Inc
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-05-22T14:17:14.766992+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.4'
+      charts.openshift.io/testedOpenShiftVersion: '4.11'
+    apiVersion: v2
+    appVersion: 2.21.0.0-b545
+    description: YugabyteDB Anywhere provides deployment, orchestration, and monitoring
+      for managing YugabyteDB clusters. YugabyteDB Anywhere can create a YugabyteDB
+      cluster with multiple pods provided by Kubernetes or OpenShift and logically
+      grouped together to form one logical distributed database.
+    digest: 300fbc8328dd558ea9acac05a853698b40d3dd814fa15318c33519990cb368fd
+    home: https://www.yugabyte.com
+    icon: https://avatars0.githubusercontent.com/u/17074854?s=200&v=4
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: sanketh@yugabyte.com
+      name: Sanketh Indarapu
+    - email: gjalla@yugabyte.com
+      name: Govardhan Reddy Jalla
+    name: yugaware-openshift
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.21.0/yugaware-openshift-2.21.0.tgz
+    version: 2.21.0
+generated: '2024-05-22T14:17:14.688508+00:00'
