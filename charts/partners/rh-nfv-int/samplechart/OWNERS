@@ -1,10 +1,9 @@
 chart:
   name: samplechart
-  shortDescription: Fredco Samplechart
+  shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users:
-- githubUsername: dcicertbot
+users: []
 vendor:
   label: rh-nfv-int
   name: Fredco
