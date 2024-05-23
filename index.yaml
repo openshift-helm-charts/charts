@@ -6862,6 +6862,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/granulate-sagent-1.0.0-latest/granulate-sagent-1.0.0-latest.tgz
     version: 1.0.0-latest
+  samplechart:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:4abe3a57dcc5865e006b8165507a06b4f165b282a53afb3060a1ff0733c4f2dd
+      charts.openshift.io/lastCertifiedTimestamp: '2024-05-23T12:11:01.492121+00:00'
+      charts.openshift.io/name: RedHat Test
+      charts.openshift.io/provider: Fredco
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-05-23T12:15:06.841411+00:00'
+      charts.openshift.io/supportURL: https://github.com/dperaza4dustbit/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: 4.15.14
+    apiVersion: v2
+    appVersion: 1-42
+    description: A Helm chart for Kubernetes
+    digest: 99851fc4b33bd35a28d77018603987f3af5ffcb25ee7b34d3f5d3a7780323e3f
+    icon: https://www.example.com/chart-icon.png
+    kubeVersion: '>=1.20.0'
+    name: samplechart
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/rh-nfv-int-samplechart-0.1.2/samplechart-0.1.2.tgz
+    version: 0.1.2
   smsf-configuration:
   - annotations:
       charts.openshift.io/digest: sha256:ce5cc09b428dc1ad70481e71843c4b367243fba77cde4900d6671c597d227e38
@@ -8619,4 +8642,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.21.0/yugaware-openshift-2.21.0.tgz
     version: 2.21.0
-generated: '2024-05-22T14:17:14.688508+00:00'
+generated: '2024-05-23T12:15:06.760614+00:00'
