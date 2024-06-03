@@ -5,7 +5,7 @@ name: Red Hat OWNERS Files
 # submissions.
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
     - charts/redhat/**/OWNERS
     - charts/community/redhat/**/OWNERS
@@ -23,10 +23,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Clean up stale label
-        uses: actions/github-script@v3
+        uses: actions/github-script@v7
         continue-on-error: true
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const successLabel = '${{ env.SUCCESS_LABEL }}';
             try {
@@ -46,10 +46,10 @@ jobs:
               throw error
             }
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
@@ -81,23 +81,35 @@ jobs:
     needs: [gather-metadata]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
       - name: Install Python CI tooling
         working-directory: scripts
         run: |
           make venv.tools
+
+      # Only used to assert content of the OWNERS file.
+      - name: Checkout Pull Request
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          token: ${{ secrets.BOT_TOKEN }}
+          fetch-depth: 0
+          path: "pr-branch"
+
       - name: Assert Owners File Content
         id: assert-content
+        working-directory: pr-branch
         env:
           CATEGORY: ${{ needs.gather-metadata.outputs.category }}
           ORGANIZATION: ${{ needs.gather-metadata.outputs.organization }}
           CHARTNAME: ${{ needs.gather-metadata.outputs.chartname }}
         run: |
-          ./scripts/venv.tools/bin/assert-redhat-owners-file-meta \
+          ../scripts/venv.tools/bin/assert-redhat-owners-file-meta \
             "${CATEGORY}" \
             "${ORGANIZATION}" \
             "${CHARTNAME}"
@@ -108,7 +120,7 @@ jobs:
     if: failure() && (needs.ensure-prefix-in-path.result == 'failure' || needs.ensure-owners-file-contents.result == 'failure')
     steps:
       - name: Send PR Comment
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         env:
           PREFIX_CHECK_RESULT: ${{ needs.ensure-prefix-in-path.result != '' && needs.ensure-prefix-in-path.result || 'unknown' }}
           CONTENT_CHECK_RESULT: ${{ needs.ensure-owners-file-contents.result != '' && needs.ensure-owners-file-contents.result || 'unknown' }}
@@ -149,7 +161,7 @@ jobs:
     if: success()
     steps:
     - name: Label PR
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |

@@ -135,9 +135,15 @@ vendor:
         logging.debug(f"PR_BODY Content: {pr_body}")
         logging.info(f"Create PR from '{remote_repo}:{pr_branch}'")
         r = github_api("post", f"repos/{remote_repo}/pulls", bot_token, json=data)
-        j = json.loads(r.text)
+
+        try:
+            j = json.loads(r.text)
+        except json.JSONDecodeError as e:
+            raise AssertionError(f"error decoding GitHub response: {r.__dict__}") from e
+
         if "number" not in j:
             raise AssertionError(f"error sending pull request, response was: {r.text}")
+
         return j["number"]
 
     def create_and_push_owners_file(
@@ -333,7 +339,7 @@ vendor:
             conclusion = get_run_result(self.secrets, run_id)
             if conclusion == expect_result:
                 logging.info(
-                    f"PR{pr_number} Workflow run was '{expect_result}' which is expected"
+                    f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{expect_result}' which is expected"
                 )
             else:
                 if failure_type == "warning":

@@ -31,7 +31,9 @@ def get_run_id(secrets, workflow_name: str, pr_number: str = None):
             logging.debug(f'workflow found with id "{run["id"]}"')
             return run["id"]
     else:
-        raise Exception(f"Workflow for the submitted PR (#{pr_number}) did not run.")
+        raise Exception(
+            f"Workflow for the submitted PR (#{pr_number if pr_number else secrets.pr_number}) did not run."
+        )
 
 
 @retry(stop_max_delay=60_000 * 40, wait_fixed=2000)

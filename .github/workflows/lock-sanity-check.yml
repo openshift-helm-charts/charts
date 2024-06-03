@@ -36,7 +36,7 @@ jobs:
     - name: notify maintainers on failure
       id: notify
       if: failure() && steps.generate.outcome == 'failure' && github.repository == 'openshift-helm-charts/charts'
-      uses: archive/github-actions-slack@v2.7.0
+      uses: archive/github-actions-slack@v2.8.0
       with:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
         slack-channel: C02979BDUPL
