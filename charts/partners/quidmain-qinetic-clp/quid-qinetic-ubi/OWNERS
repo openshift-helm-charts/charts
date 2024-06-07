@@ -1,0 +1,9 @@
+chart:
+  name: quid-qinetic-ubi
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: quidmain-qinetic-clp
+  name: QUID INFORMATICA SPA
