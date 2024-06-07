@@ -14,7 +14,7 @@ metadata:
         lastCertifiedTimestamp: "2024-06-06T11:59:31.87636+02:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.7'
-        webCatalogOnly: false
+        webCatalogOnly: true
     chart:
         name: quid-qinetic-ubi
         home: ""
