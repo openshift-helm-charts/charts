@@ -1,0 +1,13 @@
+description: |-
+  Red Hat PostgreSQL database service imagestreams.
+  For more information about PostgreSQL container see https://github.com/sclorg/postgresql-container/.
+annotations:
+  charts.openshift.io/name: Red Hat PostgreSQL database service imagestreams.
+apiVersion: v2
+appVersion: 0.0.1
+kubeVersion: '>=1.20.0'
+name: postgresql-imagestreams
+tags: database,postgresql
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.1
