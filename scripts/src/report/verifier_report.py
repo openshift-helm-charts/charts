@@ -43,6 +43,10 @@ SUPPORTED_VERSIONS_ANNOTATION = "charts.openshift.io/supportedOpenShiftVersions"
 KUBE_VERSION_ATTRIBUTE = "kubeVersion"
 
 
+class ConfigKeyMissing(Exception):
+    pass
+
+
 def get_report_data(report_path):
     """Load and returns the report data contained in report.yaml
 
@@ -105,20 +109,41 @@ def get_profile_version(report_data):
     return profile_version
 
 
-def get_web_catalog_only(report_data):
+def get_web_catalog_only(report_data, raise_if_missing=False):
+    """Check the delivery method set in the report data.
+
+    Args:
+        report_data (dict): Content of the report file. Typically this is the return value of the
+            get_report_data function.
+        raise_if_missing (bool, optional): Whether to raise an Exception if the delivery method is
+            not set in the report data. If set to False, the function returns False.
+
+    Raises:
+        ConfigKeyMissing: if the key is not found in OWNERS and raise_if_missing is set to True
+
+    """
+    keyFound = False
     web_catalog_only = False
     try:
         if "webCatalogOnly" in report_data["metadata"]["tool"]:
             web_catalog_only = report_data["metadata"]["tool"]["webCatalogOnly"]
+            keyFound = True
         if "providerControlledDelivery" in report_data["metadata"]["tool"]:
             web_catalog_only = report_data["metadata"]["tool"][
                 "providerControlledDelivery"
             ]
+            keyFound = True
     except Exception as err:
         print(
             f"Exception getting webCatalogOnly/providerControlledDelivery {err=}, {type(err)=}"
         )
         pass
+
+    if not keyFound and raise_if_missing:
+        raise ConfigKeyMissing(
+            "Neither webCatalogOnly nor providerControlledDelivery keys were set"
+        )
+
     return web_catalog_only
 
 

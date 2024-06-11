@@ -113,7 +113,7 @@ def get_file_match_compiled_patterns():
 
     pattern = re.compile(base + r"/.*")
     reportpattern = re.compile(base + r"/report.yaml")
-    tarballpattern = re.compile(base + r"/(.*\.tgz$)")
+    tarballpattern = re.compile(base + r"/(.*\.tgz)")
     return pattern, reportpattern, tarballpattern
 
 

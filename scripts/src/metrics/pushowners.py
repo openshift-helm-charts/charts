@@ -7,6 +7,10 @@ sys.path.append("../")
 from owners import owners_file
 
 
+def bool_to_yes_no(my_bool):
+    return "Yes" if my_bool else "No"
+
+
 def getVendorType(changed_file):
     path_as_list = changed_file.split("/")
     for i in range(len(path_as_list) - 1):
@@ -16,27 +20,24 @@ def getVendorType(changed_file):
 
 
 def getFileContent(changed_file):
-    status, owner_data = owners_file.get_owner_data_from_file(changed_file)
-    if status is True:
-        users_included = owners_file.get_users_included(owner_data)
-        web_catalog_only = owners_file.get_web_catalog_only(owner_data)
-        if not web_catalog_only:
-            web_catalog_only_string = "No"
-        else:
-            web_catalog_only_string = "Yes"
-        vendor_name = owners_file.get_vendor(owner_data)
-        chart_name = owners_file.get_chart(owner_data)
-        vendor_type = getVendorType(changed_file)
-        return (
-            users_included,
-            web_catalog_only_string,
-            vendor_name,
-            chart_name,
-            vendor_type,
-        )
-    else:
-        print("Exception loading OWNERS file")
+    try:
+        owner_data = owners_file.get_owner_data_from_file(changed_file)
+    except owners_file.OwnersFileError as e:
+        print("Exception loading OWNERS file: {e}")
         return "", "", "", "", ""
+
+    users_included = owners_file.get_users_included(owner_data)
+    web_catalog_only = owners_file.get_web_catalog_only(owner_data)
+    vendor_name = owners_file.get_vendor(owner_data)
+    chart_name = owners_file.get_chart(owner_data)
+    vendor_type = getVendorType(changed_file)
+    return (
+        bool_to_yes_no(users_included),
+        bool_to_yes_no(web_catalog_only),
+        vendor_name,
+        chart_name,
+        vendor_type,
+    )
 
 
 def process_pr(added_file, modified_file):
