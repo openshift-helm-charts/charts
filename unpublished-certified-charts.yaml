@@ -2232,6 +2232,229 @@ entries:
     urls:
     - N/A
     version: 0.5.3
+  quid-qinetic-ubi:
+  - annotations:
+      charts.openshift.io/digest: sha256:931eff533b849105a92a6423d2cc1c53ec4744e05b0a09fa7e74978d19200059
+      charts.openshift.io/lastCertifiedTimestamp: '2024-06-06T11:59:31.87636+02:00'
+      charts.openshift.io/name: Quid Qinetic UBI Chart
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-06-12T15:55:05.909483+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 1.16.0
+    dependencies:
+    - name: access-rights-fe
+      repository: ''
+    - name: ace-server-fe
+      repository: ''
+    - name: am-tools
+      repository: ''
+    - name: am-tools-fe
+      repository: ''
+    - name: application-form-fe
+      repository: ''
+    - name: assets-fe
+      repository: ''
+    - name: bankingsupervision-fe
+      repository: ''
+    - name: checklist-fe
+      repository: ''
+    - name: cqs
+      repository: ''
+    - name: cqs-claims
+      repository: ''
+    - name: cqs-claims-fe
+      repository: ''
+    - name: cqs-fe
+      repository: ''
+    - name: cqs-qaas
+      repository: ''
+    - name: custom-batch-postselling
+      repository: ''
+    - name: dashboard-fe
+      repository: ''
+    - name: i18n-fe
+      repository: ''
+    - name: io-api
+      repository: ''
+    - name: io-bpm
+      repository: ''
+    - name: io-bpm-fe
+      repository: ''
+    - name: ledger-fe
+      repository: ''
+    - name: lender
+      repository: ''
+    - name: lender-fe
+      repository: ''
+    - name: loans
+      repository: ''
+    - name: loans-fe
+      repository: ''
+    - name: loans-mobile
+      repository: ''
+    - name: loans-qaas
+      repository: ''
+    - name: login-fe
+      repository: ''
+    - name: masterdata-fe
+      repository: ''
+    - name: messages-fe
+      repository: ''
+    - name: monitoring-fe
+      repository: ''
+    - name: multi-product
+      repository: ''
+    - name: multi-product-fe
+      repository: ''
+    - name: notification-adapter
+      repository: ''
+    - name: npl-fe
+      repository: ''
+    - name: paper
+      repository: ''
+    - name: paper-fe
+      repository: ''
+    - name: payment-fe
+      repository: ''
+    - name: postsales-fe
+      repository: ''
+    - name: postselling-fe
+      repository: ''
+    - name: pricing-fe
+      repository: ''
+    - name: publisher-fe
+      repository: ''
+    - name: purplo-fe
+      repository: ''
+    - name: qinetic-access-rights
+      repository: ''
+    - name: qinetic-ace
+      repository: ''
+    - name: qinetic-bankingsupervision
+      repository: ''
+    - name: qinetic-batch
+      repository: ''
+    - name: qinetic-batch-abs
+      repository: ''
+    - name: qinetic-batch-ace
+      repository: ''
+    - name: qinetic-batch-coge
+      repository: ''
+    - name: qinetic-batch-collection
+      repository: ''
+    - name: qinetic-batch-datapreparation
+      repository: ''
+    - name: qinetic-batch-dealer
+      repository: ''
+    - name: qinetic-batch-dwh
+      repository: ''
+    - name: qinetic-batch-lender
+      repository: ''
+    - name: qinetic-batch-letters
+      repository: ''
+    - name: qinetic-batch-manager
+      repository: ''
+    - name: qinetic-batch-masterdata
+      repository: ''
+    - name: qinetic-batch-payment
+      repository: ''
+    - name: qinetic-batch-postselling
+      repository: ''
+    - name: qinetic-batch-pricing
+      repository: ''
+    - name: qinetic-batch-quotation
+      repository: ''
+    - name: qinetic-batch-vig
+      repository: ''
+    - name: qinetic-be
+      repository: ''
+    - name: qinetic-be-theme
+      repository: ''
+    - name: qinetic-cbe
+      repository: ''
+    - name: qinetic-checklist
+      repository: ''
+    - name: qinetic-configurator
+      repository: ''
+    - name: qinetic-doq
+      repository: ''
+    - name: qinetic-extra-01
+      repository: ''
+    - name: qinetic-extra-02
+      repository: ''
+    - name: qinetic-extra-03
+      repository: ''
+    - name: qinetic-extra-04
+      repository: ''
+    - name: qinetic-extra-05
+      repository: ''
+    - name: qinetic-extra-06
+      repository: ''
+    - name: qinetic-extra-07
+      repository: ''
+    - name: qinetic-extra-08
+      repository: ''
+    - name: qinetic-extra-09
+      repository: ''
+    - name: qinetic-extra-10
+      repository: ''
+    - name: qinetic-forms
+      repository: ''
+    - name: qinetic-io
+      repository: ''
+    - name: qinetic-io-cde
+      repository: ''
+    - name: qinetic-ledger
+      repository: ''
+    - name: qinetic-lender
+      repository: ''
+    - name: qinetic-letters
+      repository: ''
+    - name: qinetic-masterdata
+      repository: ''
+    - name: qinetic-messages
+      repository: ''
+    - name: qinetic-monitoring
+      repository: ''
+    - name: qinetic-npl
+      repository: ''
+    - name: qinetic-ocs-integration
+      repository: ''
+    - name: qinetic-payment
+      repository: ''
+    - name: qinetic-postselling
+      repository: ''
+    - name: qinetic-pricing
+      repository: ''
+    - name: qinetic-publisher
+      repository: ''
+    - name: qinetic-quotation
+      repository: ''
+    - name: qinetic-router
+      repository: ''
+    - name: qinetic-security
+      repository: ''
+    - name: qinetic-survey
+      repository: ''
+    - name: qinetic-wizard
+      repository: ''
+    - name: router-fe
+      repository: ''
+    - name: self-digital-fe
+      repository: ''
+    - name: survey-fe
+      repository: ''
+    description: A Helm chart for Kubernetes
+    digest: ed3ccdab3a43f1a268c4bf17d13bf135b22338b9470d0cccc57e567a32f92268
+    icon: https://quid.eu/https://quid.eu/wp-content/uploads/2023/04/Quid_logo_white_pink.svg
+    kubeVersion: '>1.20.0-0'
+    name: quid-qinetic-ubi
+    type: application
+    urls:
+    - quid-qinetic-ubi-2.9.14-ubi.tgz
+    version: 2.9.14-ubi
   rafm:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -2697,4 +2920,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2024-05-01T14:37:21.396613+00:00'
+generated: '2024-06-12T15:55:05.883811+00:00'
