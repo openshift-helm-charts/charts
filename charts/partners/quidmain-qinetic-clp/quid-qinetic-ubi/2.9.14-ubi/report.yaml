@@ -1,0 +1,903 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.4
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:17918118281409735704
+        chart-uri: quid-qinetic-ubi-2.9.14-ubi.tgz
+        digests:
+            chart: sha256:931eff533b849105a92a6423d2cc1c53ec4744e05b0a09fa7e74978d19200059
+            package: ed3ccdab3a43f1a268c4bf17d13bf135b22338b9470d0cccc57e567a32f92268
+        lastCertifiedTimestamp: "2024-06-06T11:59:31.87636+02:00"
+        testedOpenShiftVersion: "4.14"
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: true
+    chart:
+        name: quid-qinetic-ubi
+        home: ""
+        sources: []
+        version: 2.9.14-ubi
+        description: A Helm chart for Kubernetes
+        keywords: []
+        maintainers: []
+        icon: https://quid.eu/https://quid.eu/wp-content/uploads/2023/04/Quid_logo_white_pink.svg
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.16.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Quid Qinetic UBI Chart
+        kubeversion: '>1.20.0-0'
+        dependencies:
+            - name: access-rights-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: ace-server-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: am-tools
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: am-tools-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: application-form-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: assets-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: bankingsupervision-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: checklist-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cqs
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cqs-claims
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cqs-claims-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cqs-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: cqs-qaas
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: custom-batch-postselling
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: dashboard-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: i18n-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: io-api
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: io-bpm
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: io-bpm-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: ledger-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: lender
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: lender-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: loans
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: loans-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: loans-mobile
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: loans-qaas
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: login-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: masterdata-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: messages-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: monitoring-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: multi-product
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: multi-product-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: notification-adapter
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: npl-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: paper
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: paper-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: payment-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: postsales-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: postselling-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: pricing-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: publisher-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: purplo-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-access-rights
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-ace
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-bankingsupervision
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-abs
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-ace
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-coge
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-collection
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-datapreparation
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-dealer
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-dwh
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-lender
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-letters
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-manager
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-masterdata
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-payment
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-postselling
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-pricing
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-quotation
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-batch-vig
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-be
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-be-theme
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-cbe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-checklist
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-configurator
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-doq
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-01
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-02
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-03
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-04
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-05
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-06
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-07
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-08
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-09
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-extra-10
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-forms
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-io
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-io-cde
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-ledger
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-lender
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-letters
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-masterdata
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-messages
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-monitoring
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-npl
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-ocs-integration
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-payment
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-postselling
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-pricing
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-publisher
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-quotation
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-router
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-security
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-survey
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: qinetic-wizard
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: router-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: self-digital-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+            - name: survey-fe
+              version: ""
+              repository: ""
+              condition: ""
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : registry.access.redhat.com/ubi8/nginx-122'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+
