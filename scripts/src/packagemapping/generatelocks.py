@@ -72,11 +72,12 @@ def main():
             )
             return 20
 
-        owners_content_loaded, owners_content = owners_file.get_owner_data_from_file(
-            filename
-        )
-        if not owners_content_loaded:
-            logError(f"Failed to load OWNERS file content. filename: {filename}")
+        try:
+            owners_content = owners_file.get_owner_data_from_file(filename)
+        except owners_file.OwnersFileError as of_err:
+            logError(
+                f"Failed to load OWNERS file content. filename: {filename} with error {of_err}"
+            )
             return 30
 
         owners_value_chart_name = owners_file.get_chart(owners_content)
