@@ -266,7 +266,7 @@ jobs:
       - name: Get profile version set in report provided by the user
         id: get-profile-version
         if: ${{ needs.setup.outputs.run_build == 'true' && steps.verify_requires.outputs.report_provided == 'true' }}
-        uses: mikefarah/yq@v4
+        uses: mikefarah/yq@master
         with:
           cmd: yq '.metadata.tool.profile.version' ${{ format('./pr-branch/{0}', steps.verify_requires.outputs.provided_report_relative_path) }}
 
@@ -274,7 +274,7 @@ jobs:
         id: get-kube-range
         if: ${{ needs.setup.outputs.run_build == 'true' && steps.verify_requires.outputs.report_provided == 'true' }}
         continue-on-error: true
-        uses: mikefarah/yq@v4
+        uses: mikefarah/yq@master
         with:
           cmd: yq '.metadata.chart.kubeversion' ${{ format('./pr-branch/{0}', steps.verify_requires.outputs.provided_report_relative_path) }}
 
@@ -481,7 +481,7 @@ jobs:
       # The release tag format is <organization_name>-<chart_name>-<chart_version>
       - name: Create GitHub release
         if: ${{ needs.chart-verifier.outputs.web_catalog_only == 'False' }}
-        uses: softprops/action-gh-release@v0.1.15
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.chart-verifier.outputs.release_tag }}
           files: |
@@ -533,19 +533,36 @@ jobs:
             https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} \
             HEAD:refs/heads/${INDEX_BRANCH}
 
+      - name: Add a GitHub comment if release has failed
+        uses: actions/github-script@v7
+        if: ${{ failure() && github.repository != 'openshift-helm-charts/sandbox' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `### Release job failed
+
+              An error occured while updating the Helm repository index.
+
+              cc @komish @mgoerens`
+            });
+
       # Note(komish): This step is a temporary workaround. Metrics requires the PR comment
       # to be available, but it is written to the filesystem in the previous job.
       # This can be removed once the metrics execution is restructured to have access to the PR
       # comment, or pulled out of the release job entirely.
       - name: Retrieve PR comment for metrics
-        if: ${{ always() && needs.setup.outputs.run_build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' && github.repository != 'openshift-helm-charts/sandbox' }}
         run: |
           mkdir -p $(dirname ${{ needs.chart-verifier.outputs.message_file }})
           echo ${{ needs.chart-verifier.outputs.message_text_base64 }} | base64 -d | tee ${{ needs.chart-verifier.outputs.message_file }}
 
       - name: Add metrics
         id: add_metrics
-        if: ${{ always() && needs.setup.outputs.run_build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' && github.repository != 'openshift-helm-charts/sandbox' }}
         continue-on-error: true
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}

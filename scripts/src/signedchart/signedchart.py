@@ -65,19 +65,14 @@ def is_chart_signed(api_url, report_path):
     return False
 
 
-def key_in_owners_match_report(owner_path, report_path):
-    owner_key = get_pgp_key_from_owners(owner_path)
-    if not owner_key:
-        return True
-    return check_pgp_public_key(owner_key, report_path)
-
-
 def get_pgp_key_from_owners(owner_path):
-    found, owner_data = owners_file.get_owner_data_from_file(owner_path)
-    if found:
-        pgp_key = owners_file.get_pgp_public_key(owner_data)
-        return pgp_key
-    return ""
+    try:
+        owner_data = owners_file.get_owner_data_from_file(owner_path)
+    except owners_file.OwnersFileError:
+        return ""
+
+    pgp_key = owners_file.get_pgp_public_key(owner_data)
+    return pgp_key
 
 
 def check_report_for_signed_chart(report_path):
