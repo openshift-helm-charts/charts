@@ -535,7 +535,7 @@ jobs:
 
       - name: Add a GitHub comment if release has failed
         uses: actions/github-script@v7
-        if: ${{ failure() && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
+        if: ${{ failure() && github.repository != 'openshift-helm-charts/sandbox' }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -555,14 +555,14 @@ jobs:
       # This can be removed once the metrics execution is restructured to have access to the PR
       # comment, or pulled out of the release job entirely.
       - name: Retrieve PR comment for metrics
-        if: ${{ always() && needs.setup.outputs.run_build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' && github.repository != 'openshift-helm-charts/sandbox' }}
         run: |
           mkdir -p $(dirname ${{ needs.chart-verifier.outputs.message_file }})
           echo ${{ needs.chart-verifier.outputs.message_text_base64 }} | base64 -d | tee ${{ needs.chart-verifier.outputs.message_file }}
 
       - name: Add metrics
         id: add_metrics
-        if: ${{ always() && needs.setup.outputs.run_build == 'true' && env.GITHUB_REPOSITORY != 'openshift-helm-charts/sandbox' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' && github.repository != 'openshift-helm-charts/sandbox' }}
         continue-on-error: true
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
