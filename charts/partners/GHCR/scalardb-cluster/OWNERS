@@ -1,0 +1,10 @@
+chart:
+  name: scalardb-cluster
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: feeblefakie
+vendor:
+  label: GHCR
+  name: Scalar Labs
