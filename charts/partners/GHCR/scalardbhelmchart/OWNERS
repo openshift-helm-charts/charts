@@ -1,0 +1,9 @@
+chart:
+  name: scalardbhelmchart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: GHCR
+  name: Scalar Labs
