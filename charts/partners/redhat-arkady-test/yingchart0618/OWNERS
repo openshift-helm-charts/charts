@@ -1,0 +1,10 @@
+chart:
+  name: yingchart0618
+  shortDescription: This is a short description testchartprrrrrrrrrrrrrrrr
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: email
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.
