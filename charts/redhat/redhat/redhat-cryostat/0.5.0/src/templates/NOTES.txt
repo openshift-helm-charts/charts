@@ -47,10 +47,10 @@
   ```
 {{- if .Values.core.route.enabled }}
   echo {{ ternary "https" "http" .Values.core.route.tls.enabled }}://$(oc get route -n {{ .Release.Namespace }} {{ include "cryostat.fullname" . }} -o jsonpath="{.status.ingress[0].host}")
-{{- else if .Values.core.ingress.enabled -}}
+{{- else if .Values.core.ingress.enabled }}
 {{- range $host := .Values.core.ingress.hosts -}}
-  {{- range .paths -}}
-  {{ ternary "https" "http" .Values.core.ingress.tls }}://{{ $host.host }}{{ .path }}
+  {{- range .paths }}
+  {{ ternary "http" "https" (empty $.Values.core.ingress.tls) }}://{{ $host.host }}{{ .path }}
   {{- end }}
 {{- end }}
 {{- else if contains "NodePort" .Values.core.service.type }}

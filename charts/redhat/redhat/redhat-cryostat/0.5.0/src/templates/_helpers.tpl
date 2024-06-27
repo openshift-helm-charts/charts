@@ -31,7 +31,7 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
-Common labels
+Common labels.
 */}}
 {{- define "cryostat.labels" -}}
 helm.sh/chart: {{ include "cryostat.chart" . }}
@@ -43,7 +43,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Selector labels
+Selector labels.
 */}}
 {{- define "cryostat.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "cryostat.name" . }}
@@ -51,7 +51,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
+Create the name of the service account to use.
 */}}
 {{- define "cryostat.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
@@ -62,31 +62,31 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Get or generate a default connection key for database
+Get or generate a default connection key for database.
 */}}
 {{- define "cryostat.databaseConnectionKey" -}}
 {{- $secret := (lookup "v1" "Secret" .Release.Namespace (printf "%s-db" .Release.Name)) -}}
 {{- if $secret -}}
 {{/*
-   Use current key. Do not regenerate
+   Use current key. Do not regenerate.
 */}}
 {{- $secret.data.CONNECTION_KEY -}}
 {{- else -}}
 {{/*
-    Generate new key
+    Generate new key.
 */}}
 {{- (randAlphaNum 32) | b64enc | quote -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Get or generate a default encryption key for database
+Get or generate a default encryption key for database.
 */}}
 {{- define "cryostat.databaseEncryptionKey" -}}
 {{- $secret := (lookup "v1" "Secret" .Release.Namespace (printf "%s-db" .Release.Name)) -}}
 {{- if $secret -}}
 {{/*
-   Use current key. Do not regenerate
+   Use current key. Do not regenerate.
 */}}
 {{- $secret.data.ENCRYPTION_KEY -}}
 {{- else -}}
@@ -98,13 +98,13 @@ Get or generate a default encryption key for database
 {{- end -}}
 
 {{/*
-Get or generate a default secret key for object storage
+Get or generate a default secret key for object storage.
 */}}
 {{- define "cryostat.objectStorageSecretKey" -}}
 {{- $secret := (lookup "v1" "Secret" .Release.Namespace (printf "%s-storage" .Release.Name)) -}}
 {{- if $secret -}}
 {{/*
-   Use current secret. Do not regenerate
+   Use current secret. Do not regenerate.
 */}}
 {{- $secret.data.SECRET_KEY -}}
 {{- else -}}
@@ -135,7 +135,7 @@ Generate or retrieve a default value for cookieSecret.
 {{- end }}
 
 {{/*
-    Get sanitized list or defaults (if not disabled) as comma-separated list
+    Get sanitized list or defaults (if not disabled) as comma-separated list.
 */}}
 {{- define "cryostat.commaSepList" -}}
 {{- $l := index . 0 -}}
@@ -144,5 +144,5 @@ Generate or retrieve a default value for cookieSecret.
 {{- if and (not $l) (not $disableDefaults) -}}
 {{- $l = list $default -}}
 {{- end -}}
-{{- join "," (default list $l | compact | uniq)  | quote -}}
+{{- join "," (default list $l | compact | uniq) | quote -}}
 {{- end -}}

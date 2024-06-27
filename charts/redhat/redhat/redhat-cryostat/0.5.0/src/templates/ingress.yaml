@@ -1,4 +1,4 @@
-{{- define "createIngress" }}
+{{- define "cryostat.createIngress" }}
 {{- $svcName := index . 0 }}
 {{- $svcPort := index . 1 }}
 {{- $ := index . 2 }}
@@ -66,5 +66,5 @@ spec:
 
 {{- $fullName := include "cryostat.fullname" . -}}
 {{- if .Values.core.ingress.enabled }}
-{{- include "createIngress" (list $fullName .Values.core.service.httpPort $ .Values.core)}}
+{{- include "cryostat.createIngress" (list $fullName .Values.core.service.httpPort $ .Values.core)}}
 {{- end }}

@@ -1,7 +1,10 @@
-{{- define "openshiftOauthProxy" }}
+{{/*
+Create OpenShift OAuth Proxy container.
+*/}}
+{{- define "cryostat.openshiftOauthProxy" -}}
 - name: {{ printf "%s-%s" .Chart.Name "authproxy" }}
   securityContext:
-    {{- toYaml .Values.openshiftOauthProxy.securityContext | nindent 12 }}
+    {{- toYaml .Values.openshiftOauthProxy.securityContext | nindent 4 }}
   image: "{{ .Values.openshiftOauthProxy.image.repository }}:{{ .Values.openshiftOauthProxy.image.tag }}"
   args:
     - --skip-provider-button={{ not .Values.authentication.basicAuth.enabled }}

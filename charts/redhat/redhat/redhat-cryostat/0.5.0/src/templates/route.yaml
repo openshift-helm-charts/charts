@@ -1,4 +1,4 @@
-{{- define "createRoute" }}
+{{- define "cryostat.createRoute" }}
 {{- $svcName := index . 0 }}
 {{- $targetPort := index . 1 }}
 {{- $ := index . 2 }}
@@ -46,5 +46,5 @@ spec:
 
 {{- $fullName := include "cryostat.fullname" . -}}
 {{- if .Values.core.route.enabled }}
-{{- include "createRoute" (list $fullName 4180 $ .Values.core)}}
+{{- include "cryostat.createRoute" (list $fullName 4180 $ .Values.core)}}
 {{- end }}

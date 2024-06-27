@@ -1,4 +1,4 @@
-{{- define "createRole" -}}
+{{- define "cryostat.createRole" -}}
 {{- $ns := index .  0 -}}
 {{- with index . 1 -}}
 ---
@@ -56,6 +56,6 @@ rules:
 {{- $watchNs = list .Release.Namespace -}}
 {{- end -}}
 {{- range $ns := $watchNs }}
-{{ include "createRole" (list $ns $) }}
+{{ include "cryostat.createRole" (list $ns $) }}
 {{- end -}}
 {{- end -}}

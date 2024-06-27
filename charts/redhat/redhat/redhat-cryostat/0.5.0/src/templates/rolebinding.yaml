@@ -1,4 +1,4 @@
-{{- define "createRolebinding" -}}
+{{- define "cryostat.createRolebinding" -}}
 {{- $ns := index .  0 -}}
 {{- with index . 1 -}}
 ---
@@ -26,6 +26,6 @@ subjects:
 {{- $watchNs = list .Release.Namespace -}}
 {{- end -}}
 {{- range $ns := $watchNs }}
-{{ include "createRolebinding" (list $ns $) }}
+{{ include "cryostat.createRolebinding" (list $ns $) }}
 {{- end -}}
 {{- end -}}
