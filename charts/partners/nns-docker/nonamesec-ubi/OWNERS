@@ -1,0 +1,10 @@
+chart:
+  name: nonamesec-ubi
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: devopsnns
+vendor:
+  label: nns-docker
+  name: Noname Security
