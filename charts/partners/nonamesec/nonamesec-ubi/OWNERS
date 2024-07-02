@@ -1,0 +1,11 @@
+chart:
+  name: nonamesec-ubi
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: devopsnns
+- githubUsername: itzhak-alayev-nonamesec
+vendor:
+  label: nonamesec
+  name: Noname Security
