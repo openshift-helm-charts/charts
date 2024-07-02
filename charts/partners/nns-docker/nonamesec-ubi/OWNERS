@@ -5,6 +5,7 @@ providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: devopsnns
+- githubUsername: itzhak-alayev-nonamesec
 vendor:
   label: nns-docker
   name: Noname Security
