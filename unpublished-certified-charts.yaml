@@ -2138,57 +2138,6 @@ entries:
     urls:
     - N/A
     version: 5.1.0
-  nonamesec-ubi:
-  - annotations:
-      charts.openshift.io/digest: sha256:5907d919fa690b5813a98b021b214601dc46c3636dd1d0a3745c44f40f191c28
-      charts.openshift.io/lastCertifiedTimestamp: '2024-07-01T16:47:47.552785+00:00'
-      charts.openshift.io/name: Remote Engine
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2024-07-01T16:56:56.616075+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
-      charts.openshift.io/testedOpenShiftVersion: '4.8'
-    apiVersion: v2
-    appVersion: 3.32.3
-    dependencies:
-    - condition: global.noname.enabled
-      name: noname
-      repository: file://charts/noname
-      version: 0.1.0
-    - condition: global.engine.enabled
-      name: engine
-      repository: file://charts/engine
-      version: 0.1.0
-    - condition: global.active.enabled
-      name: active
-      repository: file://charts/active
-      version: 0.1.0
-    - condition: global.platform.enabled
-      name: platform
-      repository: file://charts/platform
-      version: 0.1.0
-    - condition: global.router.enabled
-      name: router
-      repository: file://charts/router
-      version: 0.1.0
-    - condition: global.telemetry.enabled
-      name: telemetry
-      repository: file://charts/telemetry
-      version: 0.1.0
-    - condition: noagentapi.enabled
-      name: noagentapi
-      repository: file://charts/noagentapi
-      version: 0.1.0
-    - condition: global.noname.enabled,global.rabbitmq.enabled
-      name: rabbitmq
-      repository: file://charts/rabbitmq
-      version: 12.5.6
-    description: Noname Helm on k8s
-    digest: 100e9b6de0383355a0305c986e0853765703238a6f5ebf3ea73562b7fd4892c9
-    kubeVersion: '>=1.0.0-0'
-    name: nonamesec-ubi
-    urls:
-    - N/A
-    version: 3.32.3
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -2971,4 +2920,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2024-07-01T16:56:56.587810+00:00'
+generated: '2024-07-03T17:26:18.832341+00:00'
