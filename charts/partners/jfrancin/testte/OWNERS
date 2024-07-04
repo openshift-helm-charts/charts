@@ -1,0 +1,9 @@
+chart:
+  name: testte
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: jfrancin
+  name: RED HAT, INC.
