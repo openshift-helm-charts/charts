@@ -4437,18 +4437,18 @@ entries:
   - annotations:
       charts.openshift.io/archs: x86_64, aarch64
       charts.openshift.io/digest: sha256:11f62f8d9eba06aa22b8d2f24dd1fed50903cda9520135e56ac0f3a8eb5b4d88
-      charts.openshift.io/lastCertifiedTimestamp: '2024-07-08T15:00:31.665366+00:00'
+      charts.openshift.io/lastCertifiedTimestamp: '2024-07-08T14:58:45.813451+00:00'
       charts.openshift.io/name: Red Hat build of Cryostat
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: redhat
-      charts.openshift.io/submissionTimestamp: '2024-07-08T15:04:40.374753+00:00'
+      charts.openshift.io/submissionTimestamp: '2024-07-08T15:05:53.639564+00:00'
       charts.openshift.io/supportURL: https://github.com/cryostatio/cryostat-helm
       charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
       charts.openshift.io/testedOpenShiftVersion: '4.14'
     apiVersion: v2
     appVersion: 3.0.0.redhat
     description: Securely manage JFR recordings for your containerized Java workloads
-    digest: 4acbf0e6c4aac630641c3cf07a82a13c9930b7cd74905252691d3d52fc6f8603
+    digest: 38dd3e0aa9a2796f68595ef8d93f9d7304db524c1d0fb97e8e74e8e4b654092b
     home: https://cryostat.io
     icon: https://raw.githubusercontent.com/cryostatio/cryostat-helm/main/docs/images/cryostat-icon.svg
     keywords:
@@ -9200,4 +9200,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.21.1/yugaware-openshift-2.21.1.tgz
     version: 2.21.1
-generated: '2024-07-08T15:04:40.291918+00:00'
+generated: '2024-07-08T15:05:53.545696+00:00'
