@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-alpha-config
+data:
+  alpha_config.yaml: |-
+    server:
+      BindAddress: http://0.0.0.0:4180
+    upstreamConfig:
+      proxyRawPath: true
+      upstreams:
+        - id: cryostat
+          path: /
+          uri: http://localhost:8181
+        - id: grafana
+          path: /grafana/
+          uri: http://localhost:3000
+        - id: storage
+          path: ^/storage/(.*)$
+          rewriteTarget: /$1
+          uri: http://localhost:8333
+          passHostHeader: false
+          proxyWebSockets: false
+    providers:
+      - id: dummy
+        name: Unused - Sign In Below
+        clientId: CLIENT_ID
+        clientSecret: CLIENT_SECRET
+        provider: google
