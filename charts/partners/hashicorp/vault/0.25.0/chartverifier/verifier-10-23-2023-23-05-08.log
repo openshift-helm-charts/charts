@@ -1,0 +1,205 @@
+name: Chart Verifier Log
+time: 10-23-2023-23-05-08
+log:
+    - Entry: '[INFO] [2023-October-23 23:5:8.284606000] : Chart Verifer 1.13.0.'
+    - Entry: '[INFO] [2023-October-23 23:5:8.284609000] : Verify : ./src'
+    - Entry: '[INFO] [2023-October-23 23:5:8.284612000] : Client timeout: 30s'
+    - Entry: '[INFO] [2023-October-23 23:5:8.284613000] : Helm Install timeout: 5m0s'
+    - Entry: '[INFO] [2023-October-23 23:5:8.286193000] : Profile in use: partner v1.2'
+    - Entry: '[INFO] [2023-October-23 23:5:8.294470000] : Check: not-contains-crds:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:8.294554000] : Check: not-contain-csi-objects:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:8.294584000] : Check: contains-values:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:8.294592000] : Check: has-readme:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:8.541935000] : Search url: https://catalog.redhat.com/api/containers/v1/repositories/registry/registry.connect.redhat.com/repository/hashicorp/vault-k8s/images, tag: 1.2.1-ubi, sha:  '
+    - Entry: '[INFO] [2023-October-23 23:5:9.562876000] : page: 0, page_size: 100, total: 24'
+    - Entry: '[INFO] [2023-October-23 23:5:9.562886000] : tag found: 1.2.1-ubi'
+    - Entry: '[INFO] [2023-October-23 23:5:9.562898000] : Search url: https://catalog.redhat.com/api/containers/v1/repositories/registry/registry.connect.redhat.com/repository/hashicorp/vault/images, tag: 1.14.0-ubi, sha:  '
+    - Entry: '[INFO] [2023-October-23 23:5:11.82261000] : page: 0, page_size: 100, total: 90'
+    - Entry: '[INFO] [2023-October-23 23:5:11.82283000] : tag found: 1.14.0-ubi'
+    - Entry: '[INFO] [2023-October-23 23:5:11.82297000] : Check: images-are-certified:v1.1 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:11.82365000] : Check: contains-values-schema:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:11.82379000] : Check: required-annotations-present:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:11.82451000] : Check: has-kubeversion:v1.1 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:11.82465000] : Check: contains-test:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:11.82477000] : Check: signature-is-valid:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:11.82494000] : Check: is-helm-v3:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:11.129393000] : Check: helm-lint:v1.0 result : true'
+    - Entry: '[INFO] [2023-October-23 23:5:11.129405000] : Start chart install and test check'
+    - Entry: '[INFO] [2023-October-23 23:5:11.131312000] : Execute helm install. namespace: default, release: vault-urpin9e3fm chart: /Users/bishop/Library/Caches/helm/repository/chart-verifier/__src/vault'
+    - Entry: '[INFO] [2023-October-23 23:5:11.133957000] : Start install with timeout 5m0s'
+    - Entry: '[INFO] [2023-October-23 23:5:13.745965000] : creating [13] resource(s)'
+    - Entry: '[INFO] [2023-October-23 23:5:13.999290000] : beginning wait for [13 300000000000] resources with timeout of %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:14.122711000] : Deployment is not ready: [default vault-urpin9e3fm-agent-injector %!s(int32=0) %!s(int32=1)]/%!s(MISSING). %!d(MISSING) out of %!d(MISSING) expected pods are ready'
+    - Entry: '[INFO] [2023-October-23 23:5:14.204823000] : Deployment is not ready: [default vault-urpin9e3fm-agent-injector %!s(int32=0) %!s(int32=1)]/%!s(MISSING). %!d(MISSING) out of %!d(MISSING) expected pods are ready'
+    - Entry: '[INFO] [2023-October-23 23:5:16.280717000] : Deployment is not ready: [default vault-urpin9e3fm-agent-injector %!s(int32=0) %!s(int32=1)]/%!s(MISSING). %!d(MISSING) out of %!d(MISSING) expected pods are ready'
+    - Entry: '[INFO] [2023-October-23 23:5:18.288857000] : Deployment is not ready: [default vault-urpin9e3fm-agent-injector %!s(int32=0) %!s(int32=1)]/%!s(MISSING). %!d(MISSING) out of %!d(MISSING) expected pods are ready'
+    - Entry: '[INFO] [2023-October-23 23:5:20.307149000] : StatefulSet skipped ready check: [default vault-urpin9e3fm OnDelete]/%!s(MISSING). updateStrategy is %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:20.382402000] : Helm install complete'
+    - Entry: '[INFO] [2023-October-23 23:5:20.382423000] : Start wait for workloads resources. --timeout time left: 20.746991291s '
+    - Entry: '[INFO] [2023-October-23 23:5:20.426083000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:20.426092000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:21.474267000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:21.474274000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:22.518090000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:22.518102000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:23.566331000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:23.566346000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:24.611743000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:24.611757000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:25.661718000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:25.661733000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:26.708407000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:26.708415000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:27.751870000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:27.751876000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:28.799287000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:28.799303000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:29.845464000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:29.845480000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:30.894123000] : Wait for 1 workload resources:'
+    - Entry: '[INFO] [2023-October-23 23:5:30.894134000] :     - StatefulSet vault-urpin9e3fm with 1 unavailable pods'
+    - Entry: '[INFO] [2023-October-23 23:5:31.936365000] : Finish wait for workload resources, --timeout time left 9.193060666s'
+    - Entry: |-
+        [INFO] [2023-October-23 23:5:31.936656000] : Execute helm test. namespace: default, release: vault-urpin9e3fm, args: map[global:map[enabled:true externalVaultAddr: imagePullSecrets:[] openshift:true psp:map[annotations:seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default,runtime/default
+        apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
+        seccomp.security.alpha.kubernetes.io/defaultProfileName:  runtime/default
+        apparmor.security.beta.kubernetes.io/defaultProfileName:  runtime/default
+         enable:false] serverTelemetry:map[prometheusOperator:false] tlsDisable:true] injector:map[affinity:podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ template "vault.name" . }}-agent-injector
+                  app.kubernetes.io/instance: "{{ .Release.Name }}"
+                  component: webhook
+              topologyKey: kubernetes.io/hostname
+         agentDefaults:map[cpuLimit:500m cpuRequest:250m memLimit:128Mi memRequest:64Mi template:map templateConfig:map[exitOnRetryFailure:true staticSecretRenderInterval:]] agentImage:map[repository:registry.connect.redhat.com/hashicorp/vault tag:1.14.0-ubi] annotations:map[] authPath:auth/kubernetes certs:map[caBundle: certName:tls.crt keyName:tls.key secretName:<nil>] enabled:- externalVaultAddr: extraEnvironmentVars:map[] extraLabels:map[] failurePolicy:Ignore hostNetwork:false image:map[pullPolicy:IfNotPresent repository:registry.connect.redhat.com/hashicorp/vault-k8s tag:1.2.1-ubi] leaderElector:map[enabled:true] livenessProbe:map[failureThreshold:2 initialDelaySeconds:5 periodSeconds:2 successThreshold:1 timeoutSeconds:5] logFormat:standard logLevel:info metrics:map[enabled:false] namespaceSelector:map[] nodeSelector:map[] objectSelector:map[] podDisruptionBudget:map[] port:8080 priorityClassName: readinessProbe:map[failureThreshold:2 initialDelaySeconds:5 periodSeconds:2 successThreshold:1 timeoutSeconds:5] replicas:1 resources:map[] revokeOnShutdown:false securityContext:map[container:map[] pod:map[]] service:map[annotations:map[]] serviceAccount:map[annotations:map[]] startupProbe:map[failureThreshold:12 initialDelaySeconds:5 periodSeconds:5 successThreshold:1 timeoutSeconds:5] strategy:map[] tolerations:[] topologySpreadConstraints:[] webhook:map[annotations:map[] failurePolicy:Ignore matchPolicy:Exact namespaceSelector:map[] objectSelector:matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+          - {{ template "vault.name" . }}-agent-injector
+         timeoutSeconds:30] webhookAnnotations:map[]] server:map[affinity:podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ template "vault.name" . }}
+                  app.kubernetes.io/instance: "{{ .Release.Name }}"
+                  component: server
+              topologyKey: kubernetes.io/hostname
+         annotations:map[] auditStorage:map[accessMode:ReadWriteOnce annotations:map[] enabled:false mountPath:/vault/audit size:10Gi storageClass:<nil>] authDelegator:map[enabled:true] dataStorage:map[accessMode:ReadWriteOnce annotations:map[] enabled:true mountPath:/vault/data size:10Gi storageClass:<nil>] dev:map[devRootToken:root enabled:false] enabled:- enterpriseLicense:map[secretKey:license secretName:] extraArgs: extraContainers:<nil> extraEnvironmentVars:map[] extraInitContainers:<nil> extraLabels:map[] extraPorts:<nil> extraSecretEnvironmentVars:[] extraVolumes:[] ha:map[apiAddr:<nil> clusterAddr:<nil> config:ui = true
+
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+        storage "consul" {
+          path = "vault"
+          address = "HOST_IP:8500"
+        }
+
+        service_registration "kubernetes" {}
+
+        # Example configuration for using auto-unseal, using Google Cloud KMS. The
+        # GKMS keys must already exist, and the cluster must have a service account
+        # that is authorized to access GCP KMS.
+        #seal "gcpckms" {
+        #   project     = "vault-helm-dev-246514"
+        #   region      = "global"
+        #   key_ring    = "vault-helm-unseal-kr"
+        #   crypto_key  = "vault-helm-unseal-key"
+        #}
+
+        # Example configuration for enabling Prometheus metrics.
+        # If you are using Prometheus Operator you can enable a ServiceMonitor resource below.
+        # You may wish to enable unauthenticated metrics in the listener block above.
+        #telemetry {
+        #  prometheus_retention_time = "30s"
+        #  disable_hostname = true
+        #}
+         disruptionBudget:map[enabled:true maxUnavailable:<nil>] enabled:false raft:map[config:ui = true
+
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+          # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+          #telemetry {
+          #  unauthenticated_metrics_access = "true"
+          #}
+        }
+
+        storage "raft" {
+          path = "/vault/data"
+        }
+
+        service_registration "kubernetes" {}
+         enabled:false setNodeId:false] replicas:3] hostNetwork:false image:map[pullPolicy:IfNotPresent repository:registry.connect.redhat.com/hashicorp/vault tag:1.14.0-ubi] ingress:map[activeService:true annotations:map[] enabled:false extraPaths:[] hosts:[map[host:chart-example.local paths:[]]] ingressClassName: labels:map[] pathType:Prefix tls:[]] livenessProbe:map[enabled:false failureThreshold:2 initialDelaySeconds:60 path:/v1/sys/health?standbyok=true periodSeconds:5 port:8200 successThreshold:1 timeoutSeconds:3] logFormat: logLevel: networkPolicy:map[egress:[] enabled:false] nodeSelector:map[] postStart:[] preStopSleepSeconds:5 priorityClassName: readinessProbe:map[enabled:true failureThreshold:2 initialDelaySeconds:5 path:/v1/sys/health?uninitcode=204 periodSeconds:5 port:8200 successThreshold:1 timeoutSeconds:3] resources:map[] route:map[activeService:true annotations:map[] enabled:false host:chart-example.local labels:map[] tls:map[termination:passthrough]] service:map[active:map[enabled:true] annotations:map[] enabled:true externalTrafficPolicy:Cluster instanceSelector:map[enabled:true] port:8200 publishNotReadyAddresses:true standby:map[enabled:true] targetPort:8200] serviceAccount:map[annotations:map[] create:true extraLabels:map[] name: serviceDiscovery:map[enabled:true]] shareProcessNamespace:false standalone:map[config:ui = true
+
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+          # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+          #telemetry {
+          #  unauthenticated_metrics_access = "true"
+          #}
+        }
+        storage "file" {
+          path = "/vault/data"
+        }
+
+        # Example configuration for using auto-unseal, using Google Cloud KMS. The
+        # GKMS keys must already exist, and the cluster must have a service account
+        # that is authorized to access GCP KMS.
+        #seal "gcpckms" {
+        #   project     = "vault-helm-dev"
+        #   region      = "global"
+        #   key_ring    = "vault-helm-unseal-kr"
+        #   crypto_key  = "vault-helm-unseal-key"
+        #}
+
+        # Example configuration for enabling Prometheus metrics in your config.
+        #telemetry {
+        #  prometheus_retention_time = "30s"
+        #  disable_hostname = true
+        #}
+         enabled:-] statefulSet:map[annotations:map[] securityContext:map[container:map[] pod:map[]]] terminationGracePeriodSeconds:10 tolerations:[] topologySpreadConstraints:[] updateStrategyType:OnDelete volumeMounts:<nil> volumes:<nil>]]
+    - Entry: '[INFO] [2023-October-23 23:5:32.18793000] : Starting delete for ["vault-urpin9e3fm-server-test" "Pod"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.37630000] : Ignoring delete failure for ["vault-urpin9e3fm-server-test" "/v1, Kind=Pod" "pods \"vault-urpin9e3fm-server-test\" not found"] %!s(MISSING): %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.158649000] : creating [1] resource(s)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.183527000] : Watching for changes to [Pod vault-urpin9e3fm-server-test 9.192757125s] %!s(MISSING) with timeout of %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.200882000] : Add/Modify event for [vault-urpin9e3fm-server-test ADDED]: %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.200887000] : Pod [vault-urpin9e3fm-server-test] pending'
+    - Entry: '[INFO] [2023-October-23 23:5:32.209920000] : Add/Modify event for [vault-urpin9e3fm-server-test MODIFIED]: %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.209921000] : Pod [vault-urpin9e3fm-server-test] pending'
+    - Entry: '[INFO] [2023-October-23 23:5:32.214898000] : Add/Modify event for [vault-urpin9e3fm-server-test MODIFIED]: %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.214901000] : Pod [vault-urpin9e3fm-server-test] pending'
+    - Entry: '[INFO] [2023-October-23 23:5:32.240019000] : Add/Modify event for [vault-urpin9e3fm-server-test MODIFIED]: %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.240022000] : Pod [vault-urpin9e3fm-server-test] pending'
+    - Entry: '[INFO] [2023-October-23 23:5:32.731815000] : Add/Modify event for [vault-urpin9e3fm-server-test MODIFIED]: %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:32.731824000] : Pod [vault-urpin9e3fm-server-test] pending'
+    - Entry: '[INFO] [2023-October-23 23:5:33.655089000] : Add/Modify event for [vault-urpin9e3fm-server-test MODIFIED]: %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:33.655106000] : Pod [vault-urpin9e3fm-server-test] pending'
+    - Entry: '[INFO] [2023-October-23 23:5:35.662699000] : Add/Modify event for [vault-urpin9e3fm-server-test MODIFIED]: %!v(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:35.662723000] : Pod [vault-urpin9e3fm-server-test] succeeded'
+    - Entry: '[INFO] [2023-October-23 23:5:35.747962000] : Helm test complete'
+    - Entry: '[INFO] [2023-October-23 23:5:35.747981000] : Execute helm uninstall. namespace: default, release: vault-urpin9e3fm'
+    - Entry: '[INFO] [2023-October-23 23:5:35.793822000] : uninstall: Deleting [vault-urpin9e3fm]'
+    - Entry: '[INFO] [2023-October-23 23:5:35.922807000] : uninstall: given cascade value: [], defaulting to delete propagation background'
+    - Entry: '[INFO] [2023-October-23 23:5:35.922826000] : Starting delete for ["vault-urpin9e3fm" "Service"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:35.922832000] : Starting delete for ["vault-urpin9e3fm-agent-injector-svc" "Service"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:35.922838000] : Starting delete for ["vault-urpin9e3fm-internal" "Service"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:35.994879000] : Starting delete for ["vault-urpin9e3fm" "StatefulSet"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.14290000] : Starting delete for ["vault-urpin9e3fm-agent-injector" "Deployment"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.35452000] : Starting delete for ["vault-urpin9e3fm-server-binding" "ClusterRoleBinding"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.35465000] : Starting delete for ["vault-urpin9e3fm-agent-injector-binding" "ClusterRoleBinding"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.75107000] : Starting delete for ["vault-urpin9e3fm-agent-injector-clusterrole" "ClusterRole"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.106665000] : Starting delete for ["vault-urpin9e3fm-config" "ConfigMap"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.127591000] : Starting delete for ["vault-urpin9e3fm" "ServiceAccount"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.127589000] : Starting delete for ["vault-urpin9e3fm-agent-injector" "ServiceAccount"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.155210000] : Starting delete for ["vault-urpin9e3fm-agent-injector" "NetworkPolicy"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.184209000] : Starting delete for ["vault-urpin9e3fm-agent-injector-cfg" "MutatingWebhookConfiguration"] %!s(MISSING)'
+    - Entry: '[INFO] [2023-October-23 23:5:36.223574000] : purge requested for [vault-urpin9e3fm]'
+    - Entry: '[INFO] [2023-October-23 23:5:36.277638000] : Delete release complete'
+    - Entry: '[INFO] [2023-October-23 23:5:36.293536000] : End chart install and test check'
+    - Entry: '[INFO] [2023-October-23 23:5:36.293559000] : Check: chart-testing:v1.0 result : true'
