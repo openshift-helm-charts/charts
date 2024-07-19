@@ -446,7 +446,7 @@ def check_report_success(directory, api_url, report_path, report_info_path, vers
 
     if "charts.openshift.io/certifiedOpenShiftVersions" in annotations:
         full_version = annotations["charts.openshift.io/certifiedOpenShiftVersions"]
-        if not semver.VersionInfo.isvalid(full_version):
+        if not semver.VersionInfo.is_valid(full_version):
             msg = f"[ERROR] certified OpenShift version not conforming to SemVer spec: {full_version}"
             write_error_log(directory, msg)
             sys.exit(1)

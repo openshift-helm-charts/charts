@@ -104,7 +104,7 @@ def check_if_dev_release_branch(sender, pr_branch, pr_body, api_url, pr_head_rep
         return False
 
     version = pr_branch.removeprefix(releaser.DEV_PR_BRANCH_NAME_PREFIX)
-    if not semver.VersionInfo.isvalid(version):
+    if not semver.VersionInfo.is_valid(version):
         print(
             f"Release part ({version}) of branch name {pr_branch} is not a valid semantic version."
         )
@@ -139,7 +139,7 @@ def check_if_charts_release_branch(sender, pr_branch, pr_body, api_url, pr_head_
         return False
 
     version = pr_branch.removeprefix(releaser.CHARTS_PR_BRANCH_NAME_PREFIX)
-    if not semver.VersionInfo.isvalid(version):
+    if not semver.VersionInfo.is_valid(version):
         print(
             f"Release part ({version}) of branch name {pr_branch} is not a valid semantic version."
         )
