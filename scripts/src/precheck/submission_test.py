@@ -618,3 +618,137 @@ def test_is_valid_web_catalog_only(test_scenario):
             test_scenario.input_submission.is_valid_web_catalog_only(repo_path=temp_dir)
             == test_scenario.expected_output
         )
+
+
+def create_new_index(charts: list[submission.Chart] = []):
+    """Create the JSON representation of a Helm chart index containing the provided list of charts
+
+    The resulting index only contains the required information for the check_index to work.
+
+    """
+    index = {"apiVersion": "v1", "entries": {}}
+
+    for chart in charts:
+        chart_entries = index["entries"].get(chart.name, [])
+        chart_entries.append(
+            {
+                "name": f"{chart.name}",
+                "version": f"{chart.version}",
+            }
+        )
+
+        index["entries"][chart.name] = chart_entries
+
+    return index
+
+
+@dataclass
+class CheckIndexScenario:
+    chart: submission.Chart = field(
+        default_factory=lambda: submission.Chart(
+            category=expected_category,
+            organization=expected_organization,
+            name=expected_name,
+            version=expected_version,
+        )
+    )
+    index: dict = field(default_factory=lambda: create_new_index())
+    excepted_exception: contextlib.ContextDecorator = field(
+        default_factory=lambda: contextlib.nullcontext()
+    )
+
+
+scenarios_check_index = [
+    # Chart is not present in the index
+    CheckIndexScenario(
+        index=create_new_index([submission.Chart(name="not-awesome", version="0.42")])
+    ),
+    # Chart is present but does not contain submitted version
+    CheckIndexScenario(
+        index=create_new_index([submission.Chart(name=expected_name, version="0.42")])
+    ),
+    # Submitted version is present in index
+    CheckIndexScenario(
+        index=create_new_index(
+            [submission.Chart(name=expected_name, version=expected_version)]
+        ),
+        excepted_exception=pytest.raises(
+            submission.HelmIndexError,
+            match="Helm chart release already exists in the index.yaml",
+        ),
+    ),
+    # Index is empty
+    CheckIndexScenario(),
+    # Index is an empty dict
+    CheckIndexScenario(
+        index={},
+        excepted_exception=pytest.raises(
+            submission.HelmIndexError, match="Malformed index"
+        ),
+    ),
+]
+
+
+@pytest.mark.parametrize("test_scenario", scenarios_check_index)
+def test_check_index(test_scenario):
+    with test_scenario.excepted_exception:
+        test_scenario.chart.check_index(test_scenario.index)
+
+
+@dataclass
+class CheckReleaseTagScenario:
+    chart: submission.Chart = field(
+        default_factory=lambda: submission.Chart(
+            category=expected_category,
+            organization=expected_organization,
+            name=expected_name,
+            version=expected_version,
+        )
+    )
+    exising_tags: list[str] = field(default_factory=lambda: list())
+    excepted_exception: contextlib.ContextDecorator = field(
+        default_factory=lambda: contextlib.nullcontext()
+    )
+
+
+scenarios_check_release_tag = [
+    # A release doesn't exist for this org
+    CheckReleaseTagScenario(exising_tags=["notacme-notawesome-0.42"]),
+    # A release exist for this org, but not for this chart
+    CheckReleaseTagScenario(exising_tags=[f"{expected_organization}-notawesome-0.42"]),
+    # A release exist for this Chart but not in this version
+    CheckReleaseTagScenario(
+        exising_tags=[f"{expected_organization}-{expected_name}-0.42"],
+    ),
+    # A release exist for this Chart in this version
+    CheckReleaseTagScenario(
+        exising_tags=[f"{expected_organization}-{expected_name}-{expected_version}"],
+        excepted_exception=pytest.raises(
+            submission.ReleaseTagError,
+            match="Helm chart release already exists in the GitHub Release/Tag",
+        ),
+    ),
+]
+
+
+@pytest.mark.parametrize("test_scenario", scenarios_check_release_tag)
+@responses.activate
+def test_check_release_tag(test_scenario):
+    chart_release_tag = test_scenario.chart.get_release_tag()
+
+    if chart_release_tag not in test_scenario.exising_tags:
+        responses.head(
+            f"https://api.github.com/repos/my-fake-org/my-fake-repo/git/ref/tags/{chart_release_tag}",
+            # json=[{"filename": file} for file in test_scenario.modified_files],
+            status=404,
+        )
+
+    for tag in test_scenario.exising_tags:
+        # Mock GitHub API
+        responses.head(
+            f"https://api.github.com/repos/my-fake-org/my-fake-repo/git/ref/tags/{tag}",
+            # json=[{"filename": file} for file in test_scenario.modified_files],
+        )
+
+    with test_scenario.excepted_exception:
+        test_scenario.chart.check_release_tag(repository="my-fake-org/my-fake-repo")
