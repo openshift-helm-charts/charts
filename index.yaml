@@ -4662,6 +4662,34 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-data-grid-8.4.7/redhat-data-grid-8.4.7.tgz
     version: 8.4.7
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:7f005c87fc612834eef9e881785eaf5956b53f67da9ff83fbfdbc9dedab0dd6f
+      charts.openshift.io/lastCertifiedTimestamp: '2024-07-23T05:05:37.910738+00:00'
+      charts.openshift.io/name: Data Grid
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-07-23T05:06:46.790858+00:00'
+      charts.openshift.io/supportURL: https://github.com/infinispan/infinispan-helm-charts
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: '4.16'
+    apiVersion: v2
+    appVersion: '8.5'
+    description: A Helm chart that lets you build and deploy Red Hat Data Grid clusters.
+    digest: 6a8fc88860a09315ec450e0692cc705b136351c48255375176d5de098e55f841
+    home: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.5
+    icon: https://access.redhat.com/webassets/avalon/d/red-hat-data-grid/images/rhdg-icon.png
+    maintainers:
+    - name: Red Hat
+      url: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.5
+    name: redhat-data-grid
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-data-grid-8.5.0/redhat-data-grid-8.5.0.tgz
+    version: 8.5.0
   redhat-developer-hub:
   - annotations:
       artifacthub.io/category: integration-delivery
@@ -9343,4 +9371,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.20.5/yugaware-openshift-2.20.5.tgz
     version: 2.20.5
-generated: '2024-07-18T14:41:00.536565+00:00'
+generated: '2024-07-23T05:06:46.704109+00:00'
