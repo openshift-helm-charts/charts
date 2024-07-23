@@ -200,7 +200,7 @@ def ensure_only_chart_is_modified(api_url, repository, branch):
         gitutils.add_output("organization", organization)
         gitutils.add_output("chart-name", chart)
 
-        if not semver.VersionInfo.isvalid(version):
+        if not semver.VersionInfo.is_valid(version):
             msg = (
                 f"[ERROR] Helm chart version is not a valid semantic version: {version}"
             )

@@ -1,6 +1,13 @@
 import os
 import re
+import requests
 import semver
+import yaml
+
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
 
 from dataclasses import dataclass, field
 
@@ -36,6 +43,14 @@ class WebCatalogOnlyError(SubmissionError):
     pass
 
 
+class HelmIndexError(SubmissionError):
+    pass
+
+
+class ReleaseTagError(SubmissionError):
+    pass
+
+
 @dataclass
 class Chart:
     """Represents a Helm Chart
@@ -59,7 +74,7 @@ class Chart:
             msg = "[ERROR] A PR must contain only one chart. Current PR includes files for multiple charts."
             raise DuplicateChartError(msg)
 
-        if not semver.VersionInfo.isvalid(version):
+        if not semver.VersionInfo.is_valid(version):
             msg = (
                 f"[ERROR] Helm chart version is not a valid semantic version: {version}"
             )
@@ -72,6 +87,53 @@ class Chart:
 
     def get_owners_path(self):
         return f"charts/{self.category}/{self.organization}/{self.name}/OWNERS"
+
+    def get_release_tag(self):
+        return f"{self.organization}-{self.name}-{self.version}"
+
+    def check_index(self, index):
+        """Check if the chart is present in the Helm index
+
+        Args:
+            index (dict): Content of the Helm repo index
+
+        Raise:
+            HelmIndexError if:
+            * The provided index is malformed
+            * The Chart is already present in the index
+
+        """
+        try:
+            chart_entry = index["entries"].get(self.name, [])
+        except KeyError as e:
+            raise HelmIndexError(f"Malformed index {index}") from e
+
+        for chart in chart_entry:
+            if chart["version"] == self.version:
+                msg = f"[ERROR] Helm chart release already exists in the index.yaml: {self.version}"
+                raise HelmIndexError(msg)
+
+    def check_release_tag(self, repository: str):
+        """Check for the existence of the chart's release tag on the provided repository.
+
+        Args:
+            repository (str): Name of the GitHub repository to check for existing tag.
+                              (e.g. "openshift-helm-charts/charts")
+
+        Raise: ReleaseTagError if the tag already exists in the GitHub repo.
+
+        """
+        tag_name = self.get_release_tag()
+        tag_api = f"https://api.github.com/repos/{repository}/git/ref/tags/{tag_name}"
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f'Bearer {os.environ.get("BOT_TOKEN")}',
+        }
+        print(f"[INFO] checking tag: {tag_api}")
+        r = requests.head(tag_api, headers=headers)
+        if r.status_code == 200:
+            msg = f"[ERROR] Helm chart release already exists in the GitHub Release/Tag: {tag_name}"
+            raise ReleaseTagError(msg)
 
 
 @dataclass
@@ -439,3 +501,17 @@ def get_file_type(file_path):
             return "owners", owners_match
 
     return "unknwown", None
+
+
+def download_index_data(repository, branch="gh_pages"):
+    """Download the helm repository index"""
+    r = requests.get(
+        f"https://raw.githubusercontent.com/{repository}/{branch}/index.yaml"
+    )
+
+    if r.status_code == 200:
+        data = yaml.load(r.text, Loader=Loader)
+    else:
+        data = {}
+
+    return data
