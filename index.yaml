@@ -6683,6 +6683,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nodejs-imagestreams-0.0.4/redhat-nodejs-imagestreams-0.0.4.tgz
     version: 0.0.4
+  - annotations:
+      charts.openshift.io/digest: sha256:813943323476a4d22b841ee922e326f85e5e65d85243e0e11a501e1522c08ef8
+      charts.openshift.io/lastCertifiedTimestamp: '2024-08-05T19:40:15.590232+00:00'
+      charts.openshift.io/name: Red Hat NodeJS applications on UBI (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2024-08-05T19:41:30.472112+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.16'
+    apiVersion: v2
+    appVersion: 0.0.5
+    description: This content is experimental, do not use it in production. Build
+      and run NodeJS applications on UBI. For more information about using this builder
+      image, including OpenShift considerations, see https://github.com/sclorg/s2i-nodejs-container/blob/master/20/README.md.
+    digest: 953648813af930119079998be2b421c968dd2921d6e20bf4555cb003a03a1e67
+    kubeVersion: '>=1.20.0'
+    name: redhat-nodejs-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,nodejs
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nodejs-imagestreams-0.0.5/redhat-nodejs-imagestreams-0.0.5.tgz
+    version: 0.0.5
   redhat-perl-dancer-template:
   - annotations:
       charts.openshift.io/digest: sha256:337febe1599f08feb9f2ca380ee8298e9677f9073fff2b6baa52947ad9832120
@@ -9636,4 +9659,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.1.1/yugaware-openshift-2024.1.1.tgz
     version: 2024.1.1
-generated: '2024-08-05T11:00:42.657076+00:00'
+generated: '2024-08-05T19:41:30.386296+00:00'
