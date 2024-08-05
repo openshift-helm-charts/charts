@@ -7,10 +7,10 @@ annotations:
   charts.openshift.io/provider: Red Hat
   charts.openshift.io/providerType: redhat
 apiVersion: v2
-appVersion: 0.0.1
+appVersion: 0.0.2
 kubeVersion: '>=1.20.0'
 name: redhat-python-imagestreams
 tags: builder,python
 sources:
   - https://github.com/sclorg/helm-charts
-version: 0.0.1
+version: 0.0.2
