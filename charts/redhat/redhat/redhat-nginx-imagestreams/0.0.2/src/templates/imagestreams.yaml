@@ -25,10 +25,86 @@ spec:
         tags: 'builder,nginx'
       from:
         kind: ImageStreamTag
-        name: 1.20-ubi8
+        name: 1.24-ubi8
       referencePolicy:
         type: Local
       name: latest
+    - annotations:
+        description: >-
+          Build and serve static content via Nginx HTTP server and a reverse
+          proxy (nginx) on RHEL 9. For more information about using this builder
+          image, including OpenShift considerations, see
+          https://github.com/sclorg/nginx-container/blob/master/1.24/README.md.
+        iconClass: icon-nginx
+        openshift.io/display-name: Nginx HTTP server and a reverse proxy 1.24 (UBI 9)
+        openshift.io/provider-display-name: 'Red Hat, Inc.'
+        sampleRepo: 'https://github.com/sclorg/nginx-ex.git'
+        supports: nginx
+        tags: 'builder,nginx'
+        version: '1.22'
+      from:
+        kind: DockerImage
+        name: 'registry.redhat.io/ubi9/nginx-124:latest'
+      referencePolicy:
+        type: Local
+      name: 1.24-ubi9
+    - annotations:
+        description: >-
+          Build and serve static content via Nginx HTTP server and a reverse
+          proxy (nginx) on RHEL 8. For more information about using this builder
+          image, including OpenShift considerations, see
+          https://github.com/sclorg/nginx-container/blob/master/1.24/README.md.
+        iconClass: icon-nginx
+        openshift.io/display-name: Nginx HTTP server and a reverse proxy 1.24 (UBI 8)
+        openshift.io/provider-display-name: 'Red Hat, Inc.'
+        sampleRepo: 'https://github.com/sclorg/nginx-ex.git'
+        supports: nginx
+        tags: 'builder,nginx'
+        version: '1.24'
+      from:
+        kind: DockerImage
+        name: 'registry.redhat.io/ubi8/nginx-124:latest'
+      referencePolicy:
+        type: Local
+      name: 1.24-ubi8
+    - annotations:
+        description: >-
+          Build and serve static content via Nginx HTTP server and a reverse
+          proxy (nginx) on RHEL 9. For more information about using this builder
+          image, including OpenShift considerations, see
+          https://github.com/sclorg/nginx-container/blob/master/1.22/README.md.
+        iconClass: icon-nginx
+        openshift.io/display-name: Nginx HTTP server and a reverse proxy 1.22 (UBI 9)
+        openshift.io/provider-display-name: 'Red Hat, Inc.'
+        sampleRepo: 'https://github.com/sclorg/nginx-ex.git'
+        supports: nginx
+        tags: 'builder,nginx'
+        version: '1.22'
+      from:
+        kind: DockerImage
+        name: 'registry.redhat.io/ubi9/nginx-122:latest'
+      referencePolicy:
+        type: Local
+      name: 1.22-ubi9
+    - annotations:
+        description: >-
+          Build and serve static content via Nginx HTTP server and a reverse
+          proxy (nginx) on RHEL 8. For more information about using this builder
+          image, including OpenShift considerations, see
+          https://github.com/sclorg/nginx-container/blob/master/1.22/README.md.
+        iconClass: icon-nginx
+        openshift.io/display-name: Nginx HTTP server and a reverse proxy 1.22 (UBI 8)
+        openshift.io/provider-display-name: 'Red Hat, Inc.'
+        sampleRepo: 'https://github.com/sclorg/nginx-ex.git'
+        supports: nginx
+        tags: 'builder,nginx'
+        version: '1.22'
+      from:
+        kind: DockerImage
+        name: 'registry.redhat.io/ubi8/nginx-122:latest'
+      referencePolicy:
+        type: Local
+      name: 1.22-ubi8
     - annotations:
         description: >-
           Build and serve static content via Nginx HTTP server and a reverse
@@ -53,6 +129,25 @@ spec:
           Build and serve static content via Nginx HTTP server and a reverse
           proxy (nginx) on RHEL 8. For more information about using this builder
           image, including OpenShift considerations, see
+          https://github.com/sclorg/nginx-container/blob/master/1.22/README.md.
+        iconClass: icon-nginx
+        openshift.io/display-name: Nginx HTTP server and a reverse proxy 1.22 (UBI 8)
+        openshift.io/provider-display-name: 'Red Hat, Inc.'
+        sampleRepo: 'https://github.com/sclorg/nginx-ex.git'
+        supports: nginx
+        tags: 'builder,nginx'
+        version: '1.22'
+      from:
+        kind: DockerImage
+        name: 'registry.redhat.io/ubi8/nginx-122:latest'
+      referencePolicy:
+        type: Local
+      name: 1.22-ubi8
+    - annotations:
+        description: >-
+          Build and serve static content via Nginx HTTP server and a reverse
+          proxy (nginx) on RHEL 8. For more information about using this builder
+          image, including OpenShift considerations, see
           https://github.com/sclorg/nginx-container/blob/master/1.20/README.md.
         iconClass: icon-nginx
         openshift.io/display-name: Nginx HTTP server and a reverse proxy 1.20 (UBI 8)
@@ -67,22 +162,3 @@ spec:
       referencePolicy:
         type: Local
       name: 1.20-ubi8
-    - annotations:
-        description: >-
-          Build and serve static content via Nginx HTTP server and a reverse
-          proxy (nginx) on RHEL 7. For more information about using this builder
-          image, including OpenShift considerations, see
-          https://github.com/sclorg/nginx-container/blob/master/1.20/README.md.
-        iconClass: icon-nginx
-        openshift.io/display-name: Nginx HTTP server and a reverse proxy 1.20 (UBI 7)
-        openshift.io/provider-display-name: 'Red Hat, Inc.'
-        sampleRepo: 'https://github.com/sclorg/nginx-ex.git'
-        supports: nginx
-        tags: 'builder,nginx'
-        version: '1.20'
-      from:
-        kind: DockerImage
-        name: 'registry.redhat.io/ubi7/nginx-120:latest'
-      referencePolicy:
-        type: Local
-      name: 1.20-ubi7
