@@ -6348,6 +6348,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mysql-imagestreams-0.0.1/mysql-imagestreams-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:28cfd95acdee4c6db05469fbe52822f78f0963c130b1b73a4a684b71927d9bad
+      charts.openshift.io/lastCertifiedTimestamp: '2024-08-05T08:08:44.496777+00:00'
+      charts.openshift.io/name: Red Hat MySQL database service imagestreams (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-08-05T08:09:46.698500+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.16'
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: This content is experimental, do not use it in production. Provides
+      a MySQL 8.0 database. For more information about using this database image,
+      including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/README.md.
+    digest: b14678cb8e34ac5c55ad55e06270a911c32e0bc289c7217768ab14221e7a0a51
+    kubeVersion: '>=1.20.0'
+    name: redhat-mysql-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mysql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-mysql-imagestreams-0.0.2/redhat-mysql-imagestreams-0.0.2.tgz
+    version: 0.0.2
   redhat-mysql-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:d315b1ffbd9d286c3ac8e31da7500fe1ff32dfb3569d52a49ad05cb4b57c41c2
@@ -9497,4 +9520,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.1.1/yugaware-openshift-2024.1.1.tgz
     version: 2024.1.1
-generated: '2024-08-05T08:00:08.814313+00:00'
+generated: '2024-08-05T08:09:46.614526+00:00'
