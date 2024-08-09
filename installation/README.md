@@ -8,8 +8,8 @@ cd /tmp
 # Create or select a namespace
 # Install the chart repo
 # Install the chart, then update the clusterRouterBase
-curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.3-58-CI/installation/install.sh && chmod +x install.sh
-./install.sh 1.3-58-CI --namespace rhdh-1-3-58-ci --chartrepo
+curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.3-59-CI/installation/install.sh && chmod +x install.sh
+./install.sh 1.3-59-CI --namespace rhdh-1-3-59-ci --chartrepo
 ```
 
 That's it! 
@@ -21,10 +21,10 @@ The [install](./install.sh) script creates a chart repo, then follows the [stand
 
 1. Create a chart repo, with .metadata.name = `rhdh-next-ci-repo`
 ```
-oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-1.3-58-CI/installation/rhdh-next-ci-repo.yaml
+oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-1.3-59-CI/installation/rhdh-next-ci-repo.yaml
 ```
 2. Go to `Developer` perspective in your cluster
-1. Select your namespace or project (eg., `rhdh-helm` or `rhdh-1-3-58-ci`)
+1. Select your namespace or project (eg., `rhdh-helm` or `rhdh-1-3-59-ci`)
 1. Click `+Add`, scroll down and select `Helm Chart`
 1. Filter out the default charts and just select the `Rhdh Next Ci Repo`
 1. **IMPORTANT**: In the chart's YAML view, change the following line to the correct value for your cluster. For example, change
@@ -47,6 +47,6 @@ cd /tmp && mkdir -p chartverifier; \\
 podman run --rm -i -e KUBECONFIG=/.kube/config \\
   -v /root/.kube:/.kube:z -v /tmp/chartverifier:/app/chartverifier:z \\
   quay.io/redhat-certification/chart-verifier \\
-  verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-1.3-58-CI/charts/redhat/redhat/redhat-developer-hub/1.3-58-CI/redhat-developer-hub-1.3-58-CI.tgz
+  verify --write-to-file https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-1.3-59-CI/charts/redhat/redhat/redhat-developer-hub/1.3-59-CI/redhat-developer-hub-1.3-59-CI.tgz
 echo 'Report in /tmp/chartverifier/report.yaml'
 ```  
