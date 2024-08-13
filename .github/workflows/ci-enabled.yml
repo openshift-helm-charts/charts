@@ -18,7 +18,7 @@ name: Ensure CI is Enabled
 #
 #   next_task:
 #     needs: ensure_ci_enabled
-#     runs-on: ubuntu-latest
+#     runs-on: ubuntu-22.04
 #     steps:
 #     - ...
 
@@ -31,7 +31,7 @@ on:
 
 jobs:
   fail_if_ci_disabled:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Check enablement value
       run: |

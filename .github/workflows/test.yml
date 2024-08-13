@@ -34,7 +34,7 @@ jobs:
   workflow-test:
     name: Workflow Test
     needs: [check-contributor]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: |
       github.event.pull_request.draft == false &&
       needs.check-contributor.outputs.is-repo-owner == 'true'
@@ -147,7 +147,7 @@ jobs:
       - name: Approve PR
         id: approve_pr
         if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
-        uses: hmarr/auto-approve-action@v3
+        uses: hmarr/auto-approve-action@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
