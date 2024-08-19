@@ -4,11 +4,6 @@ on:
   pull_request_target:
     types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
 
-env:
-  # Temporary workaround. See
-  # https://github.com/redhat-actions/openshift-tools-installer/issues/105
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
-
 jobs:
   setup:
     name: Setup CI
@@ -392,7 +387,7 @@ jobs:
       - name: Approve PR
         id: approve_pr
         if: ${{ steps.check_report.conclusion == 'success' }}
-        uses: hmarr/auto-approve-action@v3
+        uses: hmarr/auto-approve-action@v4
         with:
           # The token we use for this changes for the Sandbox repository because the sandbox repository
           # receives PRs from the openshift-helm-charts-bot, and that same bot cannot approve its own
@@ -456,9 +451,9 @@ jobs:
 
       - name: Block until there is no running workflow
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: softprops/turnstyle@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/turnstyle@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
         if: ${{ needs.setup.outputs.run_build == 'true' }}
@@ -486,17 +481,16 @@ jobs:
       # The release tag format is <organization_name>-<chart_name>-<chart_version>
       - name: Create GitHub release
         if: ${{ needs.chart-verifier.outputs.web_catalog_only == 'False' }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ needs.chart-verifier.outputs.release_tag }}
           files: |
               ${{ steps.prepare-chart-release.outputs.report_file }}
               ${{ steps.prepare-chart-release.outputs.public_key_file }}
               ${{ steps.prepare-chart-release.outputs.path_to_chart_tarball }}
               ${{ steps.prepare-chart-release.outputs.prov_file_name }}
-          fail_on_unmatched_files: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_unmatched_files: true 
 
       - name: Update Helm repository index
         if: ${{ needs.setup.outputs.run_build == 'true' }}

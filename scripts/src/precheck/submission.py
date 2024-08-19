@@ -51,6 +51,10 @@ class ReleaseTagError(SubmissionError):
     pass
 
 
+class ChartError(Exception):
+    pass
+
+
 @dataclass
 class Chart:
     """Represents a Helm Chart
@@ -79,6 +83,17 @@ class Chart:
                 f"[ERROR] Helm chart version is not a valid semantic version: {version}"
             )
             raise VersionError(msg)
+
+        # Red Hat charts must carry the Red Hat prefix.
+        if organization == "redhat":
+            if not name.startswith("redhat-"):
+                msg = f"[ERROR] Charts provided by Red Hat must have their name begin with the redhat- prefix. I.e. redhat-{name}"
+                raise ChartError(msg)
+
+        # Non Red Hat charts must not carry the Red Hat prefix.
+        if organization != "redhat" and name.startswith("redhat-"):
+            msg = f"[ERROR] The redhat- prefix is reserved for charts provided by Red Hat. Your chart: {name}"
+            raise ChartError(msg)
 
         self.category = category
         self.organization = organization
