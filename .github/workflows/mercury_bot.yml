@@ -18,7 +18,7 @@ on:
 jobs:
   owners-file-check:
     name: OWNERS file PR checker
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: github.event.pull_request.draft == false && github.actor == 'redhat-mercury-bot'
     steps:
       - name: Checkout
@@ -188,7 +188,7 @@ jobs:
         if: |
           steps.check_for_owners.outputs.merge_pr == 'true'
           && steps.safe-to-merge.outputs.merge_pr == 'true'
-        uses: hmarr/auto-approve-action@v3
+        uses: hmarr/auto-approve-action@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 

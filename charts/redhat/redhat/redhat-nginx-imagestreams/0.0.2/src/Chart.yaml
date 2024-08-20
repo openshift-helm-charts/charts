@@ -1,0 +1,13 @@
+description: |-
+  This content is experimental, do not use it in production. Build and serve static content via Nginx HTTP server
+  and a reverse proxy (nginx) on RHEL. https://github.com/sclorg/nginx-container/blob/master/README.md.
+annotations:
+  charts.openshift.io/name: Red Hat Nginx HTTP server and a reverse proxy (nginx) (experimental)
+apiVersion: v2
+appVersion: 0.0.2
+kubeVersion: '>=1.20.0'
+name: redhat-nginx-imagestreams
+tags: builder,nginx
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.2

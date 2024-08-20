@@ -221,6 +221,22 @@ scenarios_submission_init = [
         ],
         excepted_exception=pytest.raises(submission.VersionError),
     ),
+    # Invalid PR references a Chart from redhat without the "redhat-" prefix
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/103",
+        modified_files=[
+            f"charts/{expected_category}/redhat/{expected_name}/{expected_version}/report.yaml"
+        ],
+        excepted_exception=pytest.raises(submission.ChartError),
+    ),
+    # Invalid PR references a Chart with the "redhat-" prefix from another organization
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/103",
+        modified_files=[
+            f"charts/{expected_category}/{expected_organization}/redhat-{expected_name}/{expected_version}/report.yaml"
+        ],
+        excepted_exception=pytest.raises(submission.ChartError),
+    ),
 ]
 
 
