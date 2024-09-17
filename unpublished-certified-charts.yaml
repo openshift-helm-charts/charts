@@ -2347,6 +2347,52 @@ entries:
     urls:
     - N/A
     version: 3.34.2
+  - annotations:
+      charts.openshift.io/digest: sha256:466730c6655f057358fad68351e694b79bea790c39ebfd4c7015cb7846a825ef
+      charts.openshift.io/lastCertifiedTimestamp: '2024-09-17T10:18:46.015248+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-09-17T10:21:51.112014+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 555.555.555-ubi-test
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: noagentapi.enabled
+      name: noagentapi
+      repository: file://charts/noagentapi
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 12.5.6
+    description: Noname Helm on k8s
+    digest: 94e79394a1f6f5c68bbcfc21b516b4390873824e72d9b668d90cfa71eccbd0e4
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 555.555.555-ubi-test
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -3129,4 +3175,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2024-09-17T07:27:31.643962+00:00'
+generated: '2024-09-17T10:21:51.082173+00:00'
