@@ -1,0 +1,132 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.7
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:16210440137353917745
+        chart-uri: N/A
+        digests:
+            chart: sha256:7a38cbf6fc5ac0d305eb69255d83527614ad88326d09e1ff44701dea42a9bac8
+            package: 52c0ba9fe44658b071d29ffe854d74d19d42c3a336b7117ac2a67df2f3a3f2dc
+        lastCertifiedTimestamp: "2024-09-17T09:19:11.05871+00:00"
+        testedOpenShiftVersion: "4.14"
+        supportedOpenShiftVersions: N/A
+        webCatalogOnly: true
+    chart:
+        name: strimzi-kafka-operator
+        home: https://strimzi.io/
+        sources:
+            - https://github.com/strimzi/strimzi-kafka-operator
+        version: 1.1.0-b79
+        description: 'Strimzi: Apache Kafka running on Kubernetes'
+        keywords:
+            - kafka
+            - queue
+            - stream
+            - event
+            - messaging
+            - datastore
+            - topic
+        maintainers:
+            - name: Frawless
+              email: ""
+              url: ""
+            - name: ppatierno
+              email: ""
+              url: ""
+            - name: samuel-hawker
+              email: ""
+              url: ""
+            - name: scholzj
+              email: ""
+              url: ""
+            - name: tombentley
+              email: ""
+              url: ""
+            - name: sknot-rh
+              email: ""
+              url: ""
+            - name: PaulRMellor
+              email: ""
+              url: ""
+            - name: im-konge
+              email: ""
+              url: ""
+            - name: see-quick
+              email: ""
+              url: ""
+        icon: https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/main/documentation/logo/strimzi_logo.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.1.0-b79
+        deprecated: false
+        annotations: {}
+        kubeversion: ""
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: FAIL
+      reason: Chart contains CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: FAIL
+      reason: 'Missing required annotations: [charts.openshift.io/name]'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: FAIL
+      reason: Values schema file does not exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: FAIL
+      reason: Kubernetes version is not specified
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : type: string : repository not found: type
+        Image is not Red Hat certified : type: string
+        Image is not Red Hat certified : container.repository.cloudera.com/cloudera/kafka-operator:0.41.0.1.1.0-b79
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: FAIL
+      reason: Chart test files do not exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+
