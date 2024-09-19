@@ -4505,6 +4505,51 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-cryostat-1.0.0/redhat-cryostat-1.0.0.tgz
     version: 1.0.0
+  - annotations:
+      charts.openshift.io/archs: x86_64, aarch64
+      charts.openshift.io/digest: sha256:d5848a998e2279f73d50178d52976d4fdcdd007301dabf04533fce81c85c8c74
+      charts.openshift.io/lastCertifiedTimestamp: '2024-09-19T18:36:52.668452+00:00'
+      charts.openshift.io/name: Red Hat build of Cryostat
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2024-09-19T18:37:58.582715+00:00'
+      charts.openshift.io/supportURL: https://github.com/cryostatio/cryostat-helm
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.16'
+    apiVersion: v2
+    appVersion: 3.0.1.redhat
+    description: Securely manage JFR recordings for your containerized Java workloads
+    digest: a72b0239e2877466ebaaa25299b8af7f18d68c699d6c611abd3ae43526d87116
+    home: https://cryostat.io
+    icon: https://raw.githubusercontent.com/cryostatio/cryostat-helm/main/docs/images/cryostat-icon.svg
+    keywords:
+    - flightrecorder
+    - java
+    - jdk
+    - jfr
+    - jmc
+    - missioncontrol
+    - monitoring
+    - profiling
+    - diagnostic
+    kubeVersion: '>= 1.25.0-0'
+    maintainers:
+    - name: The Cryostat Community
+      url: https://groups.google.com/g/cryostat-development
+    name: redhat-cryostat
+    sources:
+    - https://github.com/cryostatio/cryostat3
+    - https://github.com/cryostatio/cryostat-core
+    - https://github.com/cryostatio/cryostat-web
+    - https://github.com/cryostatio/jfr-datasource
+    - https://github.com/cryostatio/cryostat-grafana-dashboard
+    - https://github.com/cryostatio/cryostat-db
+    - https://github.com/cryostatio/cryostat-storage
+    - https://github.com/cryostatio/openshift-oauth-proxy
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-cryostat-1.0.1/redhat-cryostat-1.0.1.tgz
+    version: 1.0.1
   redhat-data-grid:
   - annotations:
       charts.openshift.io/digest: sha256:4a60f63bec9744cc6b6261ae1b81670a96c3e9d95c1bb259894b4b2220a42549
@@ -9848,4 +9893,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.23.0/yugaware-openshift-2.23.0.tgz
     version: 2.23.0
-generated: '2024-09-13T20:22:14.257674+00:00'
+generated: '2024-09-19T18:37:58.472279+00:00'
