@@ -6,6 +6,7 @@ providerDelivery: false
 publicPgpKey: unknown
 users:
 - githubUsername: tvoran
+- githubUsername: calvn
 vendor:
   label: hashicorp
   name: HashiCorp
