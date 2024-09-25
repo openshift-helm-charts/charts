@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:346099284578681243
+        reportDigest: uint64:4767502064977631355
         chart-uri: N/A
         digests:
-            chart: sha256:b2d61faa568728fc6f62c4afd6e3c077b1d366ce31c3789537ea49e13eb0af96
-            package: 5036a2a57ccbbd222def2adcd9ef8b2ba47b778ef5f71e0a43bde93a8b4da176
-        lastCertifiedTimestamp: "2024-09-17T07:24:37.486184+00:00"
+            chart: sha256:5682eac824e02e31382e5b4467af341f92a1cb5fb3c3f7c642cf9735d33f1ac9
+            package: 9300f77b82ad7e8abf2700a193363a5cbdafa59fbe7dcdc76e297e5c165ceb7c
+        lastCertifiedTimestamp: "2024-09-25T11:03:40.414342+00:00"
         testedOpenShiftVersion: "4.8"
         supportedOpenShiftVersions: '>=4.1'
         webCatalogOnly: true
@@ -36,10 +36,54 @@ metadata:
         type: application
     chart-overrides: ""
 results:
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: FAIL
+      reason: Chart does not contain NOTES.txt
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
     - check: v1.0/contains-test
       type: Mandatory
       outcome: PASS
       reason: Chart test files exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/noname-sensor:3.3.24-rhel'
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
@@ -48,47 +92,3 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/has-notes
-      type: Optional
-      outcome: FAIL
-      reason: Chart does not contain NOTES.txt
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: 'Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/noname-sensor:3.3.24-rhel'
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
