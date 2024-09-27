@@ -1,0 +1,9 @@
+chart:
+  name: veritas-netbackupkops-100
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: veritas-technologies
+  name: Veritas Technologies LLC
