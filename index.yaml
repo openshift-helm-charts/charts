@@ -567,6 +567,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-canvas-oamportal-3.0.24-SNAPSHOT/canvas-oamportal-3.0.24-SNAPSHOT.tgz
     version: 3.0.24-SNAPSHOT
+  - annotations:
+      charts.openshift.io/digest: sha256:0fd9bcca0ecebe9a603ccb18970f283cb0037a154ca20ce51fafe0cc4a86ca5e
+      charts.openshift.io/lastCertifiedTimestamp: '2024-10-08T13:24:54.136569-04:00'
+      charts.openshift.io/name: Canvas OAM Portal Helm Chart
+      charts.openshift.io/provider: Telenity Iletisim Sistemleri Sa
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-10-08T17:29:38.501951+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.8'
+    apiVersion: v2
+    appVersion: 4.0.0
+    description: Canvas OAM Portal Helm Chart
+    digest: 2f8aed199aab223973b029aa500f9f669e5d77c71726a4aa461a58fa6ec3c5fe
+    icon: https://www.telenity.com/wp-content/themes/telenity-theme/assets/img/logo.svg
+    kubeVersion: '>=1.21.0'
+    maintainers:
+    - email: info@telenity.com
+      name: Telenity
+      url: https://www.telenity.com
+    name: canvas-oamportal
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/telenity-canvas-oamportal-4.0.0/canvas-oamportal-4.0.0.tgz
+    version: 4.0.0
   canvas-platform:
   - annotations:
       charts.openshift.io/digest: sha256:834a104fd3250558a8d838001f54fc398e6e72fda9e282342448738ae849264c
@@ -10051,4 +10074,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2.20.7/yugaware-openshift-2.20.7.tgz
     version: 2.20.7
-generated: '2024-10-02T15:48:55.246080+00:00'
+generated: '2024-10-08T17:29:38.406916+00:00'
