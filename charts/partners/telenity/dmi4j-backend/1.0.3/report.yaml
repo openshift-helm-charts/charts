@@ -1,0 +1,99 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.7
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:5179329530526473978
+        chart-uri: dmi4j-backend-1.0.3.tgz
+        digests:
+            chart: sha256:a7c10b9d2d28940415344100838b8611d7e5d407357f6b6a1752ed52e2410783
+            package: 8698f92014c534002ba73b273fb2f2afde668d1975d1020300964a2a3e5b61ac
+        lastCertifiedTimestamp: "2024-10-08T14:03:18.901564-04:00"
+        testedOpenShiftVersion: "4.8"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: false
+    chart:
+        name: dmi4j-backend
+        home: ""
+        sources: []
+        version: 1.0.3
+        description: DMI4J Backend Helm Chart
+        keywords: []
+        maintainers:
+            - name: Telenity
+              email: info@telenity.com
+              url: https://www.telenity.com
+        icon: https://www.telenity.com/wp-content/themes/telenity-theme/assets/img/logo.svg
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.0.3
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: DMI4J Backend Helm Chart
+            charts.openshift.io/provider: Telenity INC.
+        kubeversion: '>=1.21.0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: FAIL
+      reason: Chart does not contain NOTES.txt
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: FAIL
+      reason: Chart does not have a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+
