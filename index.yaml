@@ -6513,6 +6513,24 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-knative-istio-authz-1.33.0/redhat-knative-istio-authz-1.33.0.tgz
     version: 1.33.0
+  - annotations:
+      charts.openshift.io/digest: sha256:8a403b10ba2702e80729cdb1cf0ec2e3f08978e2f642545a7b538b6f186e3775
+      charts.openshift.io/lastCertifiedTimestamp: '2024-10-17T11:33:15.931631+00:00'
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-10-17T11:34:13.730745+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.34.0
+    description: Helm chart to onboard a set of authorization-based isolated namespaces
+      to Knative when using Istio.
+    digest: fc54a435fbea2e308dec89fcd9ccdbc3707e509d9018d1561fae92d9542b27d2
+    name: redhat-knative-istio-authz
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-knative-istio-authz-1.34.0/redhat-knative-istio-authz-1.34.0.tgz
+    version: 1.34.0
   redhat-mariadb-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:0fe49f099fee528eb2ce20421087b04a2a6008f8c81686e9de102f905a5171b6
@@ -10195,4 +10213,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.1.3/yugaware-openshift-2024.1.3.tgz
     version: 2024.1.3
-generated: '2024-10-16T06:14:53.269419+00:00'
+generated: '2024-10-17T11:34:13.640666+00:00'
