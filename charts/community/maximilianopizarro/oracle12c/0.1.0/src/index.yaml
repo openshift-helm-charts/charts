@@ -1,0 +1,23 @@
+apiVersion: v1
+entries:
+  oracle12c:
+  - apiVersion: v1
+    appVersion: 12.2.0.1
+    created: "2024-03-27T14:50:27.579354139Z"
+    description: Oracle 12c Database Server
+    digest: 80389c915911fe058546cdc2230bfa855aecb91fe6b32ddcd41f6504ab81f91a
+    home: https://maximilianopizarro.github.io/oracle-helm-charts/
+    icon: https://raw.githubusercontent.com/maximilianoPizarro/oracle-helm-charts/main/oracle-icon.png
+    keywords:
+    - oracle
+    - database
+    - openshift
+    maintainers:
+    - email: maximiliano.pizarro.5@gmail.com
+      name: Maximiliano Pizarro
+      url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+    name: oracle12c
+    urls:
+    - charts/oracle12c-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-03-27T14:50:27.578480615Z"
