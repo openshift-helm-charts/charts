@@ -1,0 +1,9 @@
+chart:
+  name: oracle12c
+  shortDescription: Helm Chart for Installing Oracle 12C Database Single Instance
+publicPgpKey: null
+users:
+  - githubUsername: maximilianoPizarro
+vendor:
+  label: maximilianoPizarro
+  name: Maximiliano Pizarro
