@@ -5,5 +5,5 @@ publicPgpKey: null
 users:
   - githubUsername: maximilianoPizarro
 vendor:
-  label: maximilianoPizarro
+  label: datastar
   name: Maximiliano Pizarro
