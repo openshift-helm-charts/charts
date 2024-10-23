@@ -1,11 +1,13 @@
 # Copyright (c) 2020, Oracle Corporation and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
-apiVersion: v1
+annotations:
+  charts.openshift.io/name: Oracle 12c Database Server
+  charts.openshift.io/provider: Maximiliano Pizarro
+  charts.openshift.io/supportURL: https://access.redhat.com/support
+apiVersion: v2
 description: Oracle 12c Database Server
 home: https://maximilianopizarro.github.io/oracle-helm-charts/
 name: oracle12c
-vendor:
-  - label: Maximiliano Pizarro
 version: 0.1.0
 appVersion: "12.2.0.1"
 keywords:
