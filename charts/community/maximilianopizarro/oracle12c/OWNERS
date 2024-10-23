@@ -5,5 +5,5 @@ publicPgpKey: null
 users:
   - githubUsername: maximilianoPizarro
 vendor:
-  label: maximilianopizarro
-  name: oracle12c
+  label: oracle12c
+  name: Maximiliano Pizarro
