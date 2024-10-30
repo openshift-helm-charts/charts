@@ -7306,6 +7306,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-postgresql-persistent-0.0.3/postgresql-persistent-0.0.3.tgz
     version: 0.0.3
+  - annotations:
+      charts.openshift.io/digest: sha256:63dfa06b20f5278dd69cf4cceb7c43292df0cdd87a15779671a470c5ee9d97dd
+      charts.openshift.io/lastCertifiedTimestamp: '2024-10-30T08:06:38.367116+00:00'
+      charts.openshift.io/name: Red Hat PostgreSQL database service, with persistent
+        storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-10-30T08:07:49.068427+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.4
+    description: 'This content is expermental, do not use it in production. PostgreSQL
+      database service, with persistent storage. For more information about using
+      this template, including OpenShift considerations, see https://github.com/sclorg/postgresql-container/.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: cb2b365de754c0dbf6b3b7dcf776084da1ecfbefc63e234887a340613857c8cc
+    name: redhat-postgresql-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,postgresql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-postgresql-persistent-0.0.4/redhat-postgresql-persistent-0.0.4.tgz
+    version: 0.0.4
   redhat-psql-sed:
   - annotations:
       charts.openshift.io/digest: sha256:9f6343df9aac5a44a06589169f912a9be9582df0e0ff9cb80865b0927e79c452
@@ -10221,4 +10246,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.1.3/yugaware-openshift-2024.1.3.tgz
     version: 2024.1.3
-generated: '2024-10-30T08:02:46.877533+00:00'
+generated: '2024-10-30T08:07:48.978713+00:00'
