@@ -23,7 +23,7 @@ spec:
         tags: 'database,postgresql'
       from:
         kind: ImageStreamTag
-        name: 13-el8
+        name: 16-el8
       referencePolicy:
         type: Local
     - name: 16-el9
