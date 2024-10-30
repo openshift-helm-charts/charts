@@ -7213,6 +7213,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-postgresql-imagestreams-0.0.3/redhat-postgresql-imagestreams-0.0.3.tgz
     version: 0.0.3
+  - annotations:
+      charts.openshift.io/digest: sha256:afa8072bb0dd78221e18527abf19afb78c2bade6b8ae4d110a5030be962a3633
+      charts.openshift.io/lastCertifiedTimestamp: '2024-10-30T08:01:49.384008+00:00'
+      charts.openshift.io/name: Red Hat PostgreSQL database service imagestreams (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-10-30T08:02:46.966614+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.16'
+    apiVersion: v2
+    appVersion: 0.0.4
+    description: This content is experimental, do not use it in production. Red Hat
+      PostgreSQL database service imagestreams. For more information about PostgreSQL
+      container see https://github.com/sclorg/postgresql-container/.
+    digest: 497374483bed0e59d0450909de91abe7628caf50eb95f4401bb35a93e46a834a
+    kubeVersion: '>=1.20.0'
+    name: redhat-postgresql-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,postgresql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-postgresql-imagestreams-0.0.4/redhat-postgresql-imagestreams-0.0.4.tgz
+    version: 0.0.4
   redhat-postgresql-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:5a5917cd30b564e9a5b5c5b691d7d814c542f0fd53491e66dfa024ff29095009
@@ -10198,4 +10221,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.1.3/yugaware-openshift-2024.1.3.tgz
     version: 2024.1.3
-generated: '2024-10-18T00:26:25.705251+00:00'
+generated: '2024-10-30T08:02:46.877533+00:00'
