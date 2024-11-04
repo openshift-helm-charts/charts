@@ -6,6 +6,7 @@ annotations:
   charts.openshift.io/name: Red Hat .NET imagestreams.
   charts.openshift.io/provider: Red Hat
   charts.openshift.io/providerType: redhat
+  charts.openshift.io/supportURL: https://github.com/redhat-developer/s2i-dotnetcore
 apiVersion: v2
 appVersion: "9.0"
 kubeVersion: '>=1.20.0'
