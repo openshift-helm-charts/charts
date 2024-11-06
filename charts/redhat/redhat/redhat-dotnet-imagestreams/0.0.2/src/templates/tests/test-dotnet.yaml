@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-imagestream-test"
+  namespace: "{{ .Release.Namespace }}"
+  annotations:
+    "helm.sh/hook": test
+    "alpha.image.policy.openshift.io/resolve-names": '*'
+spec:
+  containers:
+    # - name: runtime-latest
+    #   image: dotnet-runtime:latest
+    #   imagePullPolicy: IfNotPresent
+    #   command:
+    #     - '/bin/bash'
+    #     - '-ec'
+    #     - 'dotnet --version | grep -F 9.0. && [[ -z $(dotnet --list-sdks) ]]'
+    # - name: runtime-90
+    #   image: dotnet-runtime:9.0
+    #   imagePullPolicy: IfNotPresent
+    #   command:
+    #     - '/bin/bash'
+    #     - '-ec'
+    #     - 'dotnet --version | grep -F 9.0. && [[ -z $(dotnet --list-sdks) ]]'
+    # - name: runtime-90-ubi8
+    #   image: dotnet-runtime:9.0-ubi8
+    #   imagePullPolicy: IfNotPresent
+    #   command:
+    #     - '/bin/bash'
+    #     - '-ec'
+    #     - 'dotnet --version | grep -F 9.0. && [[ -z $(dotnet --list-sdks) ]]'
+    - name: runtime-80
+      image: dotnet-runtime:8.0
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --version | grep -F 8.0. && [[ -z $(dotnet --list-sdks) ]]'
+    - name: runtime-80-ubi8
+      image: dotnet-runtime:8.0-ubi8
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --version | grep -F 8.0. && [[ -z $(dotnet --list-sdks) ]]'
+    - name: runtime-60
+      image: dotnet-runtime:6.0
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --version | grep -F 6.0. && [[ -z $(dotnet --list-sdks) ]]'
+    - name: runtime-60-ubi8
+      image: dotnet-runtime:6.0-ubi8
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --version | grep -F 6.0. && [[ -z $(dotnet --list-sdks) ]]'
+    # - name: sdk-latest
+    #   image: dotnet:latest
+    #   imagePullPolicy: IfNotPresent
+    #   command:
+    #     - '/bin/bash'
+    #     - '-ec'
+    #     - 'dotnet --list-sdks | grep -F 9.0.'
+    # - name: sdk-90
+    #   image: dotnet:9.0
+    #   imagePullPolicy: IfNotPresent
+    #   command:
+    #     - '/bin/bash'
+    #     - '-ec'
+    #     - 'dotnet --list-sdks | grep -F 9.0.'
+    # - name: sdk-90-ubi8
+    #   image: dotnet:9.0-ubi8
+    #   imagePullPolicy: IfNotPresent
+    #   command:
+    #     - '/bin/bash'
+    #     - '-ec'
+    #     - 'dotnet --list-sdks | grep -F 9.0.'
+    - name: sdk-80
+      image: dotnet:8.0
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --list-sdks | grep -F 8.0.'
+    - name: sdk-80-ubi8
+      image: dotnet:8.0-ubi8
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --list-sdks | grep -F 8.0.'
+    - name: sdk-60
+      image: dotnet:6.0
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --list-sdks | grep -F 6.0.'
+    - name: sdk-60-ubi8
+      image: dotnet:6.0-ubi8
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --list-sdks | grep -F 6.0.'
+  restartPolicy: Never
