@@ -53,7 +53,7 @@ spec:
       supports: dotnet-runtime,dotnet-runtime:{{ $version }}
     from:
       kind: DockerImage
-      name: {{ $info.sdkrepository }}
+      name: {{ $info.runtimerepository }}
     referencePolicy:
       type: Local
   {{- end }}
