@@ -497,6 +497,7 @@ jobs:
         env:
           CHART_ENTRY_NAME: ${{ needs.chart-verifier.outputs.chart_entry_name }}
           WEB_CATALOG_ONLY: ${{ needs.chart-verifier.outputs.web_catalog_only }}
+          RELEASE_TAG: ${{ needs.chart-verifier.outputs.release_tag }}
         run: |
           INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "gh-pages"; else echo "${GITHUB_REF##*/}-gh-pages"; fi)
 

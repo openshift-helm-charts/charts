@@ -15,7 +15,7 @@ import tempfile
 
 from dataclasses import dataclass, field
 
-from precheck import submission
+from submission import submission
 
 # Define assets that are being reused accross tests
 expected_category = "partners"
@@ -281,6 +281,7 @@ class CertificationScenario:
     input_submission: submission.Submission
     expected_is_valid_certification: bool
     expected_reason: str = ""
+    ignore_owners: bool = False
 
 
 scenarios_certification_submission = [
@@ -303,6 +304,26 @@ scenarios_certification_submission = [
         expected_is_valid_certification=False,
         expected_reason="[ERROR] Send OWNERS file by itself in a separate PR.",
     ),
+    # Invalid certification Submission contains OWNERS and report file, but ignore_owners is set to True
+    CertificationScenario(
+        input_submission=submission.Submission(
+            api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/1",
+            modified_files=[
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/report.yaml"
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS"
+            ],
+            modified_owners=[
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS"
+            ],
+            report=submission.Report(
+                found=True,
+                signed=False,
+                path=f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/report.yaml",
+            ),
+        ),
+        expected_is_valid_certification=True,
+        ignore_owners=True,
+    ),
     # Invalid certification Submission contains unknown files
     CertificationScenario(
         input_submission=submission.Submission(
@@ -319,7 +340,9 @@ scenarios_certification_submission = [
 @pytest.mark.parametrize("test_scenario", scenarios_certification_submission)
 def test_is_valid_certification(test_scenario):
     is_valid_certification, reason = (
-        test_scenario.input_submission.is_valid_certification_submission()
+        test_scenario.input_submission.is_valid_certification_submission(
+            test_scenario.ignore_owners
+        )
     )
     assert test_scenario.expected_is_valid_certification == is_valid_certification
     assert test_scenario.expected_reason in reason
@@ -415,7 +438,8 @@ scenarios_web_catalog_only = [
         owners_web_catalog_only="true",
         report_web_catalog_only="false",
         excepted_exception=pytest.raises(
-            submission.WebCatalogOnlyError, match="doesn't match the value"
+            submission.WebCatalogOnlyError,
+            match="The web catalog distribution method is set for the chart but is not set in the report.",
         ),
     ),
     # Submission contains a report file with WebCatalogOnly set to False, not matching the content of OWNERS
@@ -424,7 +448,8 @@ scenarios_web_catalog_only = [
         owners_web_catalog_only="false",
         report_web_catalog_only="true",
         excepted_exception=pytest.raises(
-            submission.WebCatalogOnlyError, match="doesn't match the value"
+            submission.WebCatalogOnlyError,
+            match="Report indicates web catalog only but the distribution method set for the chart is not web catalog only.",
         ),
     ),
     # Submission doesn't relate to an existing OWNERS
@@ -445,18 +470,25 @@ scenarios_web_catalog_only = [
             submission.WebCatalogOnlyError, match="Failed to get report data"
         ),
     ),
-    # The OWNERS file for this chart doesn't contain the WebCatalogOnly key
+    # The OWNERS file for this chart doesn't contain the WebCatalogOnly key, defaulting to False, and matching the report value
     WebCatalogOnlyScenario(
         input_submission=make_new_report_only_submission(),
-        owners_web_catalog_only=None,
+        owners_web_catalog_only="false",
         report_web_catalog_only="false",
+        expected_output=False,
+    ),
+    # The OWNERS file for this chart doesn't contain the WebCatalogOnly key, defaulting to False, and not matching the report value
+    WebCatalogOnlyScenario(
+        input_submission=make_new_report_only_submission(),
+        owners_web_catalog_only="false",
+        report_web_catalog_only="true",
         excepted_exception=pytest.raises(submission.WebCatalogOnlyError),
     ),
     # Submission contains a report, that doesn't contain the WebCatalogOnly key
     WebCatalogOnlyScenario(
         input_submission=make_new_report_only_submission(),
-        owners_web_catalog_only=None,
-        report_web_catalog_only="false",
+        owners_web_catalog_only="false",
+        report_web_catalog_only=None,
         excepted_exception=pytest.raises(submission.WebCatalogOnlyError),
     ),
     # Submission doesn't contain a report, OWNERS file has WebCatalogOnly set to True
@@ -547,7 +579,8 @@ class IsWebCatalogOnlyScenario:
     input_submission: submission.Submission
     create_report: bool = True
     report_has_digest: bool = None
-    expected_output: bool = None
+    expected_is_valid_web_catalog_only: bool = None
+    expected_reason: str = ""
 
 
 scenarios_is_web_catalog_only = [
@@ -555,19 +588,21 @@ scenarios_is_web_catalog_only = [
     IsWebCatalogOnlyScenario(
         input_submission=make_new_report_only_submission(),
         report_has_digest=True,
-        expected_output=True,
+        expected_is_valid_web_catalog_only=True,
     ),
     # Submission contains only a report, but report contains no digest
     IsWebCatalogOnlyScenario(
         input_submission=make_new_report_only_submission(),
         report_has_digest=False,
-        expected_output=False,
+        expected_is_valid_web_catalog_only=False,
+        expected_reason="The web catalog distribution method requires a package digest in the report.",
     ),
     # Submission contains no report
     IsWebCatalogOnlyScenario(
         input_submission=make_new_tarball_only_submission(),
         create_report=False,
-        expected_output=False,
+        expected_is_valid_web_catalog_only=False,
+        expected_reason="The web catalog distribution method requires the pull request to contain a report.",
     ),
     # Submission contains a report and other files
     IsWebCatalogOnlyScenario(
@@ -590,7 +625,8 @@ scenarios_is_web_catalog_only = [
             ),
         ),
         report_has_digest=True,
-        expected_output=False,
+        expected_is_valid_web_catalog_only=False,
+        expected_reason="The web catalog distribution method requires the pull request to be report only.",
     ),
 ]
 
@@ -630,10 +666,14 @@ def test_is_valid_web_catalog_only(test_scenario):
                 )
             report_file.close()
 
-        assert (
+        is_valid_web_catalog_only, reason = (
             test_scenario.input_submission.is_valid_web_catalog_only(repo_path=temp_dir)
-            == test_scenario.expected_output
         )
+        assert (
+            test_scenario.expected_is_valid_web_catalog_only
+            == is_valid_web_catalog_only
+        )
+        assert test_scenario.expected_reason in reason
 
 
 def create_new_index(charts: list[submission.Chart] = []):
