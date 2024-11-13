@@ -1,7 +1,6 @@
 import json
 
-from precheck import serializer
-from precheck import submission
+from submission import serializer, submission
 
 submission_json = """
 {

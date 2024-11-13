@@ -60,9 +60,6 @@ def prepare_failure_comment():
         msg = append_to(msg, get_verifier_errors_comment())
         msg = append_to(msg, errors)
         msg = append_to(msg, get_verifier_errors_trailer())
-        gitutils.add_output("error-message", errors)
-    else:
-        gitutils.add_output("error-message", get_failure_comment())
     return msg
 
 
@@ -80,17 +77,14 @@ def prepare_pr_content_failure_comment():
     pr_content_error_msg = os.environ.get("PR_CONTENT_ERROR_MESSAGE", "")
     owners_error_msg = os.environ.get("OWNERS_ERROR_MESSAGE", "")
     if pr_content_error_msg:
-        gitutils.add_output("error-message", pr_content_error_msg)
         msg = append_to(msg, f"{pr_content_error_msg}")
     if owners_error_msg:
-        gitutils.add_output("error-message", owners_error_msg)
         msg = append_to(msg, f"{owners_error_msg}")
     return msg
 
 
 def prepare_run_verifier_failure_comment():
     verifier_error_msg = os.environ.get("VERIFIER_ERROR_MESSAGE", "")
-    gitutils.add_output("error-message", verifier_error_msg)
     msg = verifier_error_msg
     msg = append_to(msg, get_look_at_job_output_comment())
     return msg

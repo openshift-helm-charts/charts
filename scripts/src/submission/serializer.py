@@ -8,7 +8,7 @@ contains nested classes.
 import copy
 import json
 
-from precheck import submission
+from submission import submission
 
 
 class SubmissionEncoder(json.JSONEncoder):
