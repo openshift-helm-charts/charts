@@ -3,7 +3,6 @@ chart:
   shortDescription: Chatbot AI Software Template
 publicPgpKey: null
 users:
-- githubUsername: gabemontero
 - githubUsername: johnmcollier
 - githubUsername: elsony
 - githubUsername: thepetk
