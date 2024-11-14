@@ -1,6 +1,6 @@
 chart:
-  name: chatbot-ai-software-template
-  shortDescription: Chatbot AI Software Template
+  name: chatbot-ai-sample
+  shortDescription: Chatbot AI Sample
 publicPgpKey: null
 users:
 - githubUsername: johnmcollier
