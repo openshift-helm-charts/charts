@@ -12,4 +12,4 @@ users:
 - githubUsername: Jdubrick
 vendor:
   label: ai-lab
-  name: RedHat AI Development
+  name: AI Development
