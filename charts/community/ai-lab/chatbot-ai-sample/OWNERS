@@ -1,0 +1,15 @@
+chart:
+  name: chatbot-ai-sample
+  shortDescription: Chatbot AI Sample
+publicPgpKey: null
+users:
+- githubUsername: johnmcollier
+- githubUsername: elsony
+- githubUsername: thepetk
+- githubUsername: michael-valdron
+- githubUsername: yangcao77
+- githubUsername: maysunfaisal
+- githubUsername: Jdubrick
+vendor:
+  label: ai-lab
+  name: AI Development
