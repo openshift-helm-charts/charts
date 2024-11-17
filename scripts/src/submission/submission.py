@@ -68,7 +68,29 @@ class Chart:
     name: str = None
     version: str = None
 
-    def register_chart_info(self, category, organization, name, version):
+    def register_chart_info(
+        self, category: str, organization: str, name: str, version: str = None
+    ):
+        """Initialize the chart's category, organization, name and version
+
+        Providing a version is not mandatory. In case of a Submission that only contains an OWNERS
+        file, a version is not present.
+
+        This function ensures that once set, the chart's information are not modified, as a PR must
+        only relate to a unique chart.
+
+        Args:
+            category (str): Type of profile (community, partners, or redhat)
+            organization (str): Name of the organization (ex: hashicorp)
+            chart (str): Name of the chart (ex: vault)
+            version (str): The version of the chart (ex: 1.4.0)
+
+        Raises:
+            DuplicateChartError if the caller attempts to modify the chart's information
+            ChartError if the redhat prefix is incorrectly set
+            VersionError if the provided version is not semver compatible
+
+        """
         if (
             (self.category and self.category != category)
             or (self.organization and self.organization != organization)
@@ -77,12 +99,6 @@ class Chart:
         ):
             msg = "[ERROR] A PR must contain only one chart. Current PR includes files for multiple charts."
             raise DuplicateChartError(msg)
-
-        if not semver.VersionInfo.is_valid(version):
-            msg = (
-                f"[ERROR] Helm chart version is not a valid semantic version: {version}"
-            )
-            raise VersionError(msg)
 
         # Red Hat charts must carry the Red Hat prefix.
         if organization == "redhat":
@@ -98,10 +114,22 @@ class Chart:
         self.category = category
         self.organization = organization
         self.name = name
-        self.version = version
+
+        if version:
+            if not semver.VersionInfo.is_valid(version):
+                msg = f"[ERROR] Helm chart version is not a valid semantic version: {version}"
+                raise VersionError(msg)
+
+            self.version = version
 
     def get_owners_path(self):
         return f"charts/{self.category}/{self.organization}/{self.name}/OWNERS"
+
+    def get_vendor_type(self) -> str:
+        """Derive the vendor type from the chart's category."""
+        if self.category == "partners":
+            return "partner"
+        return self.category
 
     def get_release_tag(self):
         return f"{self.organization}-{self.name}-{self.version}"
@@ -332,13 +360,20 @@ class Submission:
         else:
             self.modified_unknown.append(file_path)
 
-    def is_valid_certification_submission(self):
+    def is_valid_certification_submission(
+        self, ignore_owners: bool = False
+    ) -> tuple[bool, str]:
         """Check wether the files in this Submission are valid to attempt to certify a Chart
 
         We expect the user to provide either:
         * Only a report file
         * Only a chart - either as source or tarball
         * Both the report and the chart
+
+        Note: While an OWNERS file should never be present in this type of submission, the case of
+        an invalid Submission containing a mix of OWNERS and other files is handled in the
+        is_valid_owners_submission method. The flag "ignore_owners" allows for skipping this
+        speficic check.
 
         Returns False if:
         * The user attempts to create the OWNERS file for its project.
@@ -347,7 +382,7 @@ class Submission:
         Returns True in all other cases
 
         """
-        if self.modified_owners:
+        if self.modified_owners and not ignore_owners:
             return False, "[ERROR] Send OWNERS file by itself in a separate PR."
 
         if self.modified_unknown:
@@ -380,7 +415,7 @@ class Submission:
 
         return False, msg
 
-    def parse_web_catalog_only(self, repo_path=""):
+    def parse_web_catalog_only(self, repo_path: str = ""):
         """Set the web_catalog_only attribute
 
         This is achieved by:
@@ -417,10 +452,15 @@ class Submission:
             owners_web_catalog_only = owners_file.get_web_catalog_only(
                 owners_data, raise_if_missing=True
             )
-        except owners_file.ConfigKeyMissing as e:
-            raise WebCatalogOnlyError(
-                f"Failed to find webCatalogOnly key in OWNERS data at {owners_path}"
-            ) from e
+        except owners_file.ConfigKeyMissing:
+            print(
+                f"[INFO] webCatalogOnly key not found in OWNERS data at {owners_path}. Assuming False"
+            )
+            owners_web_catalog_only = False
+        else:
+            print(
+                f"[INFO] webCatalogOnly/providerDelivery from OWNERS : {owners_web_catalog_only}"
+            )
 
         if self.report.found:
             report_path = os.path.join(repo_path, self.report.path)
@@ -442,13 +482,18 @@ class Submission:
             )
 
             if not owners_web_catalog_only == report_web_catalog_only:
-                raise WebCatalogOnlyError(
-                    f"Value of web_catalog_only in OWNERS ({owners_web_catalog_only}) doesn't match the value in report ({report_web_catalog_only})"
-                )
+                if owners_web_catalog_only:
+                    raise WebCatalogOnlyError(
+                        "[ERROR] The web catalog distribution method is set for the chart but is not set in the report."
+                    )
+                if report_web_catalog_only:
+                    raise WebCatalogOnlyError(
+                        "[ERROR] Report indicates web catalog only but the distribution method set for the chart is not web catalog only."
+                    )
 
         self.is_web_catalog_only = owners_web_catalog_only
 
-    def is_valid_web_catalog_only(self, repo_path=""):
+    def is_valid_web_catalog_only(self, repo_path: str = "") -> tuple[bool, str]:
         """Verify that the submission is coherent with being a WebCatalogOnly submission
 
         A valid web_catalog_only submission must:
@@ -459,24 +504,36 @@ class Submission:
             repo_path (str): path under which the repo has been cloned on the local filesystem
 
         Returns:
-            bool: set to True if the submission is a valid WebCatalogOnly submission.
+            (bool, str): set to True if the submission is a valid WebCatalogOnly submission.
+                         set to False otherwise, with the corresponding error message.
 
         Raise:
             WebCatalogOnlyError if the submitted report cannot be found or read at the expected path.
 
         """
+        # (mgoerens) There are currently no end to end tests that checks for this scenario
         if not self.report.found:
-            return False
+            return (
+                False,
+                "[ERROR] The web catalog distribution method requires the pull request to contain a report.",
+            )
 
         if len(self.modified_files) > 1:
-            return False
+            msg = "[ERROR] The web catalog distribution method requires the pull request to be report only."
+            return False, msg
 
         report_path = os.path.join(repo_path, self.report.path)
         found, report_data = verifier_report.get_report_data(report_path)
         if not found:
             raise WebCatalogOnlyError(f"Failed to get report data at {report_path}")
 
-        return verifier_report.get_package_digest(report_data) is not None
+        if verifier_report.get_package_digest(report_data) is None:
+            return (
+                False,
+                "[ERROR] The web catalog distribution method requires a package digest in the report.",
+            )
+
+        return True, ""
 
 
 def get_file_type(file_path):
@@ -518,15 +575,37 @@ def get_file_type(file_path):
     return "unknwown", None
 
 
-def download_index_data(repository, branch="gh_pages"):
-    """Download the helm repository index"""
-    r = requests.get(
-        f"https://raw.githubusercontent.com/{repository}/{branch}/index.yaml"
-    )
+def download_index_data(
+    repository: str, branch: str = "gh-pages", ignore_missing: bool = False
+) -> dict:
+    """Download the helm repository index
 
-    if r.status_code == 200:
-        data = yaml.load(r.text, Loader=Loader)
+    Args:
+        repository (str): Name of the GitHub repository to download the index file from.
+                            (e.g. "openshift-helm-charts/charts")
+        branch (str): GitHub branch to download the index file from. Defaults to "gh-pages".
+        ignore_missing (bool): Set to True to return a valid empty index, in the case the
+                            download of index.yaml fails.
+
+    Returns:
+        dict: The helm repository index
+
+    Raise:
+        HelmIndexError if the download fails. If not on the production repository, doesn't raise
+            and returns an empty index file instead.
+        HelmIndexError if the index file is not valid YAML.
+
+    """
+    index_url = f"https://raw.githubusercontent.com/{repository}/{branch}/index.yaml"
+    r = requests.get(index_url)
+
+    data = {"apiVersion": "v1", "entries": {}}
+    if r.status_code != 200 and not ignore_missing:
+        raise HelmIndexError(f"Error retrieving index file at {index_url}")
     else:
-        data = {}
+        try:
+            data = yaml.load(r.text, Loader=Loader)
+        except yaml.YAMLError as e:
+            raise HelmIndexError(f"Error parsing index file at {index_url}") from e
 
     return data

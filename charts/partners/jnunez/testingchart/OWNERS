@@ -1,0 +1,9 @@
+chart:
+  name: testingchart
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: jnunez
+  name: Red Hat
