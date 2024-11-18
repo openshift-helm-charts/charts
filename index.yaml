@@ -739,6 +739,25 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/castai-castai-agent-0.52.0/castai-agent-0.52.0.tgz
     version: 0.52.0
+  chatbot-ai-sample:
+  - annotations:
+      charts.openshift.io/digest: sha256:4e98be9c658a1128ba5252d27440f4ce645f66365b179892106e4c5c48915bc9
+      charts.openshift.io/lastCertifiedTimestamp: '2024-11-15T23:11:09.552357+00:00'
+      charts.openshift.io/name: Chatbot AI Sample
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2024-11-18T16:16:35.712306+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.15'
+    apiVersion: v2
+    description: A Helm chart for the Chatbot AI Sample app. For more information
+      please check https://github.com/redhat-ai-dev/ai-lab-helm-charts.git
+    digest: 83b5e956fccf0a4a2dd64ec16bb4ce43ce035944df87635c8265b7b5bf9875c3
+    kubeVersion: '>= 1.27.0-0'
+    name: chatbot-ai-sample
+    tags: chatbot,llama.cpp,ai-lab
+    urls:
+    - https://github.com/redhat-ai-dev/ai-lab-helm-charts/releases/download/v0.1.1/chatbot-ai-sample-0.1.1.tgz
+    version: 0.1.1
   dmi4j-backend:
   - annotations:
       charts.openshift.io/digest: sha256:77fb8ce001a77f9e2f12528599afa7370c0cfbf09795ba404cfcb81e89870917
@@ -10399,4 +10418,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.1.3/yugaware-openshift-2024.1.3.tgz
     version: 2024.1.3
-generated: '2024-11-18T15:42:24.707954+00:00'
+generated: '2024-11-18T16:16:35.613657+00:00'
