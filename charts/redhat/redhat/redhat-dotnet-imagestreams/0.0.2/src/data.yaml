@@ -1,0 +1,20 @@
+latestversion: '9.0'
+releases:
+  '9.0':
+    platform: 'UBI 8'
+    sdkdoc: 'https://github.com/redhat-developer/s2i-dotnetcore/tree/main/9.0/build/README.md'
+    sdkrepository: 'registry.access.redhat.com/ubi8/dotnet-90:9.0'
+    runtimedoc: 'https://github.com/redhat-developer/s2i-dotnetcore/tree/main/9.0/runtime/README.md'
+    runtimerepository: 'registry.access.redhat.com/ubi8/dotnet-90-runtime:9.0'
+  '8.0':
+    platform: 'UBI 8'
+    sdkdoc: 'https://github.com/redhat-developer/s2i-dotnetcore/tree/main/8.0/build/README.md'
+    sdkrepository: 'registry.access.redhat.com/ubi8/dotnet-80:8.0'
+    runtimedoc: 'https://github.com/redhat-developer/s2i-dotnetcore/tree/main/8.0/runtime/README.md'
+    runtimerepository: 'registry.access.redhat.com/ubi8/dotnet-80-runtime:8.0'
+  '6.0':
+    platform: 'UBI 8'
+    sdkdoc: 'https://github.com/redhat-developer/s2i-dotnetcore/tree/main/6.0/build/README.md'
+    sdkrepository: 'registry.access.redhat.com/ubi8/dotnet-60:6.0'
+    runtimedoc: 'https://github.com/redhat-developer/s2i-dotnetcore/tree/main/6.0/runtime/README.md'
+    runtimerepository: 'registry.access.redhat.com/ubi8/dotnet-60-runtime:6.0'
