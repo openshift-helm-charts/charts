@@ -1,0 +1,8 @@
+apiVersion: helm.openshift.io/v1beta1
+kind: HelmChartRepository
+metadata:
+  name: rhdh-next-ci-repo
+spec:
+  connectionConfig:
+    url: >-
+      https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-1.4-105-CI/installation/index.yaml
