@@ -1,0 +1,9 @@
+chart:
+  name: exporter
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: perfectscale
+  name: PerfectScale.io
