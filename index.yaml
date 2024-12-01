@@ -914,6 +914,31 @@ entries:
     urls:
     - https://charts.test.exate.co/chartrepo/exate-apigator/charts/exateapigator-0.3.0.tgz
     version: 0.3.0
+  exporter:
+  - annotations:
+      charts.openshift.io/digest: sha256:c6b3dcc6b99336093626f5b79314134031791cecb1ef1ccddc8935324fc2658c
+      charts.openshift.io/lastCertifiedTimestamp: '2024-11-30T00:45:53.297123-05:00'
+      charts.openshift.io/name: exporter
+      charts.openshift.io/provider: PerfectScale.io
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2024-12-01T02:38:53.702274+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.15'
+    apiVersion: v2
+    appVersion: 1.0.0
+    dependencies:
+    - condition: settings.deployKubeStateMetrics
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 5.13.0
+    description: PerfectScale data exporter
+    digest: 14db3c251dfc4cfb6dcb9d004b2ce84f067e2d41470d882e1bae9a93e07fab08
+    kubeVersion: '>=1.21.0-0'
+    name: exporter
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/perfectscale-exporter-1.0.47/exporter-1.0.47.tgz
+    version: 1.0.47
   flomesh-console:
   - annotations:
       charts.openshift.io/digest: sha256:285ad867162027142c056417a3c303867d3f8592c59822577af08f4cdd9b56ec
@@ -10502,4 +10527,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.1.3/yugaware-openshift-2024.1.3.tgz
     version: 2024.1.3
-generated: '2024-11-25T10:55:45.706833+00:00'
+generated: '2024-12-01T02:38:53.609472+00:00'
