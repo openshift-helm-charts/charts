@@ -1,0 +1,10 @@
+chart:
+  name: chart-122
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: test
+vendor:
+  label: Test^%$^
+  name: prod-test-user-04
