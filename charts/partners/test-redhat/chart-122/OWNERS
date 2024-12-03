@@ -1,0 +1,9 @@
+chart:
+  name: chart-122
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: test-redhat
+  name: prod-test-user-04

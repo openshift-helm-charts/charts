@@ -1,9 +1,10 @@
 chart:
   name: exporter
-  shortDescription: unknown
+  shortDescription: Helm chart for the Perfectscale Exporter
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: oveleten
 vendor:
   label: perfectscale
   name: PerfectScale.io
