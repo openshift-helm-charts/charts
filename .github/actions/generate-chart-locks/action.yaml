@@ -58,10 +58,8 @@ runs:
     with:
       ref: ${{ steps.resolve.outputs.ref }}
       path: temp-gen-chart-lock-repo
-  - name: Setting up python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.10"
+  - name: Set up Python
+    uses: ./.github/actions/setup-python
   - name: Generate lock file JSON from existing charts
     working-directory: temp-gen-chart-lock-repo
     id: generate-chart-locks
