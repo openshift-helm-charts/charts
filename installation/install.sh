@@ -19,7 +19,7 @@ usage ()
 
 Examples:
   $0 1.1.1 
-  $0 1.5-31-CI -n rhdh-ci
+  $0 1.5-32-CI -n rhdh-ci
 
 Options:
   -n, --namespace   Project or namespace into which to install specified chart; default: $namespace
