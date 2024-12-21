@@ -1,7 +1,6 @@
 from behave import fixture, use_fixture
 from common.utils.owner_file_submission import OwnersFileSubmissionsE2ETest
 from common.utils.chart_certification import ChartCertificationE2ETestSingle
-from common.utils.chart_certification import ChartCertificationE2ETestMultiple
 
 
 @fixture
@@ -9,13 +8,6 @@ def workflow_test(context):
     context.workflow_test = ChartCertificationE2ETestSingle(test_name=context.test_name)
     yield context.workflow_test
     context.workflow_test.cleanup()
-
-
-@fixture
-def submitted_chart_test(context):
-    context.chart_test = ChartCertificationE2ETestMultiple()
-    yield context.chart_test
-    context.chart_test.cleanup()
 
 @fixture
 def owners_file_test(context):
@@ -25,10 +17,7 @@ def owners_file_test(context):
 
 def before_scenario(context, scenario):
     context.test_name = scenario.name.split("@")[0][:-4].split("]")[1]
-    if "version-change" in scenario.tags:
-        print("[INFO] Using submitted charts fixture")
-        use_fixture(submitted_chart_test, context)
-    elif 'owners' in scenario.tags:
+    if 'owners' in scenario.tags:
         # TODO(komish): This if/else logic doesn't scale nicely when E2E context
         # are added OTHER than simply "chart certification". Right now, if I had
         # a feature file that had both a chart certification AND an OWNERS file

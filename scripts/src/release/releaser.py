@@ -12,8 +12,6 @@ parameters :
 Performs these action.
 - Gets a list of updates to perform from the pr_dir releases/release_info.json file. These updates are then made
 to the charts and development repositories.
-- Adds the cron job to .github/worklfows/schedule.yml and changes the verifier image used in .github/worklfows/schedule.yml
-  to latest, as required. The charts repo is updated from development repo which necessitates these update.
 - Create a PR against the charts repo containing the workflow updates. This requires manual merge.
 - Directly commits to the development main branch any new charts added to the charts repo since the last update.
 
@@ -30,7 +28,6 @@ from release import release_info
 sys.path.append("../")
 from tools import gitutils
 
-VERSION_CHECK_YAML_FILE = ".github/workflows/version_check.yml"
 BUILD_YAML_FILE = ".github/workflows/build.yml"
 DEV_PR_BRANCH_BODY_PREFIX = "Charts workflow version"
 DEV_PR_BRANCH_NAME_PREFIX = "Auto-Release-"
@@ -38,31 +35,6 @@ CHARTS_PR_BRANCH_BODY_PREFIX = "Workflow and script updates from development rep
 CHARTS_PR_BRANCH_NAME_PREFIX = "Release-"
 STAGE_PR_BRANCH_BODY_PREFIX = "Workflow and script updates from development repository"
 STAGE_PR_BRANCH_NAME_PREFIX = "Release-"
-
-SCHEDULE_INSERT = [
-    "  # Daily trigger to check updates",
-    "  schedule:",
-    '    - cron: "0 0 * * *"',
-]
-
-
-def update_workflow():
-    lines = []
-    with open(VERSION_CHECK_YAML_FILE, "r") as schedule_file:
-        lines = schedule_file.readlines()
-
-        for line in lines:
-            if line.strip() == "on:":
-                insert_location = lines.index(line) + 1
-                if SCHEDULE_INSERT[0] not in lines[insert_location].rstrip():
-                    print("[INFO] add cron job to schedule.yaml")
-                    lines.insert(insert_location, f"{SCHEDULE_INSERT[0]}\n")
-                    lines.insert(insert_location + 1, f"{SCHEDULE_INSERT[1]}\n")
-                    lines.insert(insert_location + 2, f"{SCHEDULE_INSERT[2]}\n")
-                    break
-
-    with open(VERSION_CHECK_YAML_FILE, "w") as schedule_file:
-        schedule_file.write("".join(lines))
 
 
 def make_required_changes(release_info_dir, origin, destination):
@@ -112,12 +84,19 @@ def make_required_changes(release_info_dir, origin, destination):
     ignores = release_info.get_ignores(from_repository, to_repository, release_info_dir)
     for ignore in ignores:
         ignore_this = f"{destination}/{ignore}"
-        if os.path.isdir(ignore_this):
-            print(f"Ignore/delete directory {ignore_this}")
-            shutil.rmtree(ignore_this)
-        else:
-            print(f"Ignore/delete file {ignore_this}")
-            os.remove(ignore_this)
+        try:
+            if os.path.isdir(ignore_this):
+                print(f"Ignore/delete directory {ignore_this}")
+                shutil.rmtree(ignore_this)
+            else:
+                print(f"Ignore/delete file {ignore_this}")
+                os.remove(ignore_this)
+        except FileNotFoundError as e:
+            print(
+                f"[INFO] path {ignore_this} is explicitly ignored but was not found when syncing {from_repository} to {to_repository}."
+                + "This file can be removed from the ignore section of release_info.json"
+            )
+            continue
 
 
 def main():
@@ -208,7 +187,6 @@ def main():
 
     print("edit files in charts")
     os.chdir(args.charts_dir)
-    update_workflow()
 
     organization = args.target_repository.split("/")[0]
     charts_repository = f"{organization}{gitutils.CHARTS_REPO}"
