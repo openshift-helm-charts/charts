@@ -12,10 +12,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Set up Python 3.x Part 1
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
+    - name: Set up Python
+      uses: ./.github/actions/setup-python
     - name: Install style tooling
       working-directory: scripts
       run: make venv.codestyle
