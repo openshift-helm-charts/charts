@@ -5,4 +5,4 @@ metadata:
 spec:
   connectionConfig:
     url: >-
-      https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-1.5-83-CI/installation/index.yaml
+      https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-1.5-84-CI/installation/index.yaml
