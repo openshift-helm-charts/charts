@@ -12,7 +12,6 @@
 # default namespace if none set
 namespace="rhdh-helm"
 chartrepo=0 # by default don't create a new chart repo unless the version chart version includes "CI" suffix
-github=0 # by default don't use the Github repo unless the chart doesn't exist in the OCI registry
 
 usage ()
 {
@@ -24,9 +23,8 @@ Examples:
 
 Options:
   -n, --namespace   Project or namespace into which to install specified chart; default: $namespace
-      --github-repo If set will use the deprecated github repository to install the helm chart instead of the OCI registry.
   -r, --chartrepo   If set, a Helm Chart Repo will be applied to the cluster, based on the chart version.
-                    If CHART_VERSION ends in CI and --github-repo is set, this is done by default.
+                    If CHART_VERSION ends in CI, this is done by default.
 "
   exit
 }
@@ -38,7 +36,6 @@ while [[ "$#" -gt 0 ]]; do
     '-r'|'--chartrepo') chartrepo=1;;
     '-n'|'--namespace') namespace="$2"; shift 1;;
     '-h') usage;;
-    '--github-repo') github=1;;
     *) CV="$1";;
   esac
   shift 1
@@ -48,33 +45,26 @@ if [[ ! $CV ]]; then usage; fi
 
 
 tmpfile=/tmp/redhat-developer-hub.chart.values.yml
-CHART_URL="oci://quay.io/rhdh/chart"
-
-if ! helm show chart $CHART_URL --version $CV &> /dev/null; then github=1; fi
-if [[ $github -eq 1 ]]; then
-  # If a Github CI chart, create a chart repo
-  if [[ $CV == *"-CI" ]]; then chartrepo=1; fi
-  CHART_URL="https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-${CV}/charts/redhat/redhat/redhat-developer-hub/${CV}/redhat-developer-hub-${CV}.tgz"
-fi
-
-echo "Using ${CHART_URL} to install Helm chart"
+CHART_URL="https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-${CV}/charts/redhat/redhat/redhat-developer-hub/${CV}/redhat-developer-hub-${CV}.tgz"
 
 # choose namespace for the install (or create if non-existant)
 oc new-project "$namespace" || oc project "$namespace"
 
+# if a CI chart, create a chart repo
+if [[ $CV == *"-CI" ]]; then chartrepo=1; fi
 if [[ $chartrepo -eq 1 ]]; then
     oc apply -f https://github.com/rhdh-bot/openshift-helm-charts/raw/redhat-developer-hub-${CV}/installation/rhdh-next-ci-repo.yaml
 fi
 
 # 1. install (or upgrade)
-helm upgrade redhat-developer-hub -i "${CHART_URL}" --version $CV
+helm upgrade redhat-developer-hub -i "${CHART_URL}"
 
 # 2. collect values
 PASSWORD=$(kubectl get secret redhat-developer-hub-postgresql -o jsonpath="{.data.password}" | base64 -d)
 CLUSTER_ROUTER_BASE=$(oc get route console -n openshift-console -o=jsonpath='{.spec.host}' | sed 's/^[^.]*\.//')
 
 # 3. change values
-helm upgrade redhat-developer-hub -i "${CHART_URL}" --version $CV \
+helm upgrade redhat-developer-hub -i "${CHART_URL}" \
     --set global.clusterRouterBase="${CLUSTER_ROUTER_BASE}" \
     --set global.postgresql.auth.password="$PASSWORD"
 

@@ -1,7 +1,3 @@
-## DEPRECATION ANNOUNCEMENT
-
-This repository is being deprecated and there will be no more updates in Github after March 31st.
-Our new CI Helm charts will be accessible at quay.io/rhdh/chart. The scripted installation has been updated to reflect this change.
 
 ## Scripted installation
 
@@ -20,8 +16,6 @@ That's it!
 
 
 ## Manual installation
-
-Disclaimer: This installation method will no longer be applicable once the migration to OCI Helm charts is complete!
 
 The [install](./install.sh) script creates a chart repo, then follows the [standard installation guide](https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.1/html-single/administration_guide_for_red_hat_developer_hub/index#proc-install-rhdh-helm_admin-rhdh) and automates these steps:
 
