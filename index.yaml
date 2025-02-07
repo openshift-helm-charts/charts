@@ -811,6 +811,34 @@ entries:
     urls:
     - https://github.com/redhat-ai-dev/ai-lab-helm-charts/releases/download/v0.1.1/chatbot-ai-sample-0.1.1.tgz
     version: 0.1.1
+  - annotations:
+      charts.openshift.io/digest: sha256:f41e2487e7b74660368f2742c9b3c4674a125ad6e1dcd7963f108e4173814e7c
+      charts.openshift.io/lastCertifiedTimestamp: '2025-02-05T17:30:50.743167+00:00'
+      charts.openshift.io/name: Chatbot AI Sample
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-02-07T16:09:31.494564+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.15'
+    apiVersion: v2
+    description: This Helm Chart deploys a Large Language Model (LLM)-enabled [chat
+      bot application](https://github.com/redhat-ai-dev/ai-lab-samples/tree/main/chatbot).
+    digest: c200cfd45a7d905d80396d39203cc8892c2c4b7a8ab3a5f8c6001b28ffb1a025
+    home: https://github.com/redhat-ai-dev/ai-lab-helm-charts
+    keywords:
+    - chatbot
+    - llama.cpp
+    - ai-lab
+    kubeVersion: '>= 1.27.0-0'
+    maintainers:
+    - name: Red Hat AI Development Team
+      url: https://github.com/redhat-ai-dev
+    name: chatbot-ai-sample
+    sources:
+    - https://github.com/redhat-ai-dev/ai-lab-template
+    type: application
+    urls:
+    - https://github.com/redhat-ai-dev/ai-lab-helm-charts/releases/download/v0.1.5/chatbot-ai-sample-0.1.5.tgz
+    version: 0.1.5
   dmi4j-backend:
   - annotations:
       charts.openshift.io/digest: sha256:77fb8ce001a77f9e2f12528599afa7370c0cfbf09795ba404cfcb81e89870917
@@ -11033,4 +11061,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-02-06T16:05:05.983620+00:00'
+generated: '2025-02-07T16:09:31.392900+00:00'
