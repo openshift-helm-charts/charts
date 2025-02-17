@@ -6,4 +6,5 @@ users:
   - githubUsername: maximilianoPizarro
 vendor:
   label: jhipster
-  name: WildFly
+  name: JHipster Online
+
