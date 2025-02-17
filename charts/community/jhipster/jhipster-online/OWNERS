@@ -5,5 +5,5 @@ publicPgpKey: null
 users:
 - githubUsername: maximilianoPizarro
 vendor:
-  label: jhipster
-  name: Stack with JHipster Online
+  label: jhipster-online
+  name: jhipster-online
