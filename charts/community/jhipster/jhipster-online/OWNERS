@@ -1,9 +1,0 @@
-chart:
-  name: jhipster-online
-  shortDescription: Stack with the JHipster Online
-publicPgpKey: null
-users:
-- githubUsername: maximilianoPizarro
-vendor:
-  label: jhipster
-  name: JHipster Online
