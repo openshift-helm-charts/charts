@@ -1,9 +1,0 @@
-chart:
-  name: jhipster-online
-  shortDescription: Stack with JHipster Online on Red Hat OpenShift.
-publicPgpKey: null
-users:
-- githubUsername: maximilianoPizarro
-vendor:
-  label: jhipster-online
-  name: jhipster-online
