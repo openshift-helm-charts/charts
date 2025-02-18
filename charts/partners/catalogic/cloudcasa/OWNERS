@@ -1,9 +1,0 @@
-chart:
-  name: cloudcasa
-  shortDescription: CloudCasa is a data protection and migration service for Kubernetes and cloud native applications.
-publicPgpKey: null
-users:
-- githubUsername: bobadair
-vendor:
-  label: catalogic
-  name: Catalogic Software
