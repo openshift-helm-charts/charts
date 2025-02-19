@@ -1,0 +1,9 @@
+chart:
+  name: cloudcasa
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: catalogicsoftware
+  name: Catalogic Software
