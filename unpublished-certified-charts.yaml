@@ -3757,6 +3757,26 @@ entries:
     urls:
     - N/A
     version: 4.10.16-0
+  vsr:
+  - annotations:
+      charts.openshift.io/digest: sha256:0505e0601e67ad3a33905d233c72d0302160a6b77a2835fa43e083d0418ed9e9
+      charts.openshift.io/lastCertifiedTimestamp: '2025-02-20T14:48:12.400568+00:00'
+      charts.openshift.io/name: vsr
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-02-20T16:12:38.843487+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.16'
+      charts.openshift.io/testedOpenShiftVersion: '4.17'
+    apiVersion: v2
+    appVersion: 3.999.0
+    description: A Helm chart for 6WIND VSR
+    digest: 88b67f9dba59bc9195bbaffe59dd5ff016df9f98afd5d4592308a0068d3e8d2a
+    home: https://www.6wind.com
+    kubeVersion: '>= 1.29-0'
+    name: vsr
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
   wafplatform:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -3876,4 +3896,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-02-10T14:09:02.880074+00:00'
+generated: '2025-02-20T16:12:38.805972+00:00'
