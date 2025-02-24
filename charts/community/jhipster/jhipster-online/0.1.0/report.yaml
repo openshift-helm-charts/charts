@@ -1,0 +1,101 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.9
+        profile:
+            VendorType: community
+            version: v1.1
+        reportDigest: uint64:13453921566988124749
+        chart-uri: https://maximilianopizarro.github.io/jhipster-online-helm-chart/charts/jhipster-online-0.1.0.tgz
+        digests:
+            chart: sha256:9805ab0e19fcd18f072ff796a563637b2b4bd0e7e9c65920d19480fa75111b4b
+            package: 7e6db97c8dfd521928ed65f5c0f8baf493e7721ee1b07307def3ff650a7c3aaf
+        lastCertifiedTimestamp: "2025-02-24T16:53:27.845738+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: false
+    chart:
+        name: jhipster-online
+        home: https://maximilianopizarro.github.io/jhipster-online-helm-chart/
+        sources:
+            - https://github.com/maximilianoPizarro/jhipster-online-helm-chart
+            - https://github.com/redhat-developer-demos/jhipster-online
+        version: 0.1.0
+        description: 'Stack with JHipster Online on Red Hat OpenShift. This Artifact include: - JHipster 8.8.0. for generate Spring Boot 3.4.1 projects. - generator-jhipster-quarkus 3.4.0 for generate Quarkus 3.11.1 projects. - JDL Studio for add JDL models files by PR on your repo.'
+        keywords:
+            - jhipster
+            - spring
+            - openshift
+        maintainers:
+            - name: Maximiliano Pizarro
+              email: maximiliano.pizarro.5@gmail.com
+              url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+        icon: https://raw.githubusercontent.com/maximilianoPizarro/jhipster-online-helm-chart/main/rethat-jhipster.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.33.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: JHipster Online
+        kubeversion: '>=1.20.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: FAIL
+      reason: 'invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable'
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/images-are-certified
+      type: Optional
+      outcome: FAIL
+      reason: |-
+        Failed to certify images : quay.io/maximilianopizarro/jhipster-online:quarkus : No images found for Registry/Repository: quay.io/maximilianopizarro/jhipster-online
+        Failed to certify images : quay.io/maximilianopizarro/jdl-studio : No images found for Registry/Repository: quay.io/maximilianopizarro/jdl-studio
+        Image is not Red Hat certified : >- : repository not found: >-
+        Image is not Red Hat certified : >-
+        Image is not Red Hat certified : busybox : repository not found: busybox
+        Image is not Red Hat certified : busybox
+    - check: v1.0/has-readme
+      type: Optional
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: PASS
+      reason: Kubernetes version specified
+
