@@ -4,7 +4,7 @@ chart:
 publicPgpKey: null
 providerDelivery: False
 users:
-  - githubUsername: maximilianopizarro
+  - githubUsername: maximilianoPizarro
 vendor:
   label: jhipster
   name: JHipster Online.
