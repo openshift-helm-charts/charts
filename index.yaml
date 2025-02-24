@@ -3076,6 +3076,41 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.4.2/infinispan-0.4.2.tgz
     version: 0.4.2
+  jhipster-online:
+  - annotations:
+      charts.openshift.io/digest: sha256:9805ab0e19fcd18f072ff796a563637b2b4bd0e7e9c65920d19480fa75111b4b
+      charts.openshift.io/lastCertifiedTimestamp: '2025-02-24T16:53:27.845738+00:00'
+      charts.openshift.io/name: JHipster Online
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-02-24T17:14:25.240619+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 2.33.0
+    description: 'Stack with JHipster Online on Red Hat OpenShift. This Artifact include:
+      - JHipster 8.8.0. for generate Spring Boot 3.4.1 projects. - generator-jhipster-quarkus
+      3.4.0 for generate Quarkus 3.11.1 projects. - JDL Studio for add JDL models
+      files by PR on your repo.'
+    digest: 7e6db97c8dfd521928ed65f5c0f8baf493e7721ee1b07307def3ff650a7c3aaf
+    home: https://maximilianopizarro.github.io/jhipster-online-helm-chart/
+    icon: https://raw.githubusercontent.com/maximilianoPizarro/jhipster-online-helm-chart/main/rethat-jhipster.png
+    keywords:
+    - jhipster
+    - spring
+    - openshift
+    kubeVersion: '>=1.20.0'
+    maintainers:
+    - email: maximiliano.pizarro.5@gmail.com
+      name: Maximiliano Pizarro
+      url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+    name: jhipster-online
+    sources:
+    - https://github.com/maximilianoPizarro/jhipster-online-helm-chart
+    - https://github.com/redhat-developer-demos/jhipster-online
+    type: application
+    urls:
+    - https://maximilianopizarro.github.io/jhipster-online-helm-chart/charts/jhipster-online-0.1.0.tgz
+    version: 0.1.0
   kovairdevops-helm:
   - annotations:
       charts.openshift.io/digest: sha256:a4c8cc79dbc78fd8d10779d3e7e80518cacde3e4730e00207829d51cfc77b0f4
@@ -11170,4 +11205,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-02-19T17:54:04.981562+00:00'
+generated: '2025-02-24T17:14:25.144620+00:00'
