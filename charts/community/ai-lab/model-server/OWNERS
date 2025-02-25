@@ -1,0 +1,15 @@
+chart:
+  name: model-server-sample
+  shortDescription: Model Server Sample
+publicPgpKey: null
+users:
+- githubUsername: johnmcollier
+- githubUsername: elsony
+- githubUsername: thepetk
+- githubUsername: michael-valdron
+- githubUsername: yangcao77
+- githubUsername: maysunfaisal
+- githubUsername: Jdubrick
+vendor:
+  label: ai-lab
+  name: AI Development
