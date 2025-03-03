@@ -1,0 +1,10 @@
+chart:
+  name: cloudcasa
+  shortDescription: CloudCasa agent Helm chart
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: bobadair
+vendor:
+  label: catalogicsoftware
+  name: Catalogic Software
