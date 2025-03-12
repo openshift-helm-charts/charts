@@ -1,0 +1,9 @@
+chart:
+  name: cloudlens-sensor-6-10-1
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: loadcore
+  name: KEYSIGHT TECHNOLOGIES
