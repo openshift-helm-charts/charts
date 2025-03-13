@@ -5082,6 +5082,34 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-data-grid-8.5.1/redhat-data-grid-8.5.1.tgz
     version: 8.5.1
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:97ce812a14a64e97f0bc9157ae6b5c60c5ee9dad079efcbf07458f435d16c99f
+      charts.openshift.io/lastCertifiedTimestamp: '2025-03-13T10:32:29.795046+00:00'
+      charts.openshift.io/name: Data Grid
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-03-13T10:33:48.739458+00:00'
+      charts.openshift.io/supportURL: https://github.com/infinispan/infinispan-helm-charts
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: '4.17'
+    apiVersion: v2
+    appVersion: '8.5'
+    description: A Helm chart that lets you build and deploy Red Hat Data Grid clusters.
+    digest: 114dd0adc9d979cf6b759e17ed84ae681932d2e2d6b91b2a30a1bc9b37dd386e
+    home: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.5
+    icon: https://access.redhat.com/webassets/avalon/d/red-hat-data-grid/images/rhdg-icon.png
+    maintainers:
+    - name: Red Hat
+      url: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.5
+    name: redhat-data-grid
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-data-grid-8.5.3/redhat-data-grid-8.5.3.tgz
+    version: 8.5.3
   redhat-developer-hub:
   - annotations:
       artifacthub.io/category: integration-delivery
@@ -11256,4 +11284,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-02-27T16:37:04.177838+00:00'
+generated: '2025-03-13T10:33:48.632340+00:00'
