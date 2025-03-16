@@ -3250,6 +3250,52 @@ entries:
     urls:
     - N/A
     version: 3.44.6
+  - annotations:
+      charts.openshift.io/digest: sha256:8f7a4a25c2fb3c6a2f24d38f3ed6787076a7481740f9fc9e3ecdbfc70b893797
+      charts.openshift.io/lastCertifiedTimestamp: '2025-03-16T11:18:34.87052+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-03-16T11:21:51.231384+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.45.0
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: noagentapi.enabled
+      name: noagentapi
+      repository: file://charts/noagentapi
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 12.5.6
+    description: Noname Helm on k8s
+    digest: 09a72070f8ee74c2a48465a9b546569a02c42fea636a07b2a976d0fbf668af5f
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.45.0
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -4052,4 +4098,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-03-12T17:35:13.475125+00:00'
+generated: '2025-03-16T11:21:51.180877+00:00'
