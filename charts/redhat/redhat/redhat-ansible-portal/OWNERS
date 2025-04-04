@@ -1,0 +1,12 @@
+chart:
+  name: redhat-ansible-portal
+  shortDescription: A Helm chart for deploying Ansible Portal
+publicPgpKey: null
+users:
+  - githubUsername: abhikdps
+  - githubUsername: alisonlhart
+  - githubUsername: audgirka
+  - githubUsername: ganeshrn
+vendor:
+  label: redhat
+  name: Red Hat
