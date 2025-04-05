@@ -3506,6 +3506,28 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/nabstract-nef-nabstract-2.0.0/nef-nabstract-2.0.0.tgz
     version: 2.0.0
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: NEF
+      catalog.cattle.io/release-name: nef-nabstract
+      charts.openshift.io/digest: sha256:c366827938b838aeb58eeaaf9d5b85ba6799bbd8a2b70d09092db301af4e08cf
+      charts.openshift.io/lastCertifiedTimestamp: '2025-04-03T13:40:31.047334+00:00'
+      charts.openshift.io/name: nef-nabstract
+      charts.openshift.io/provider: Nabstract Technologies Pvt. Ltd.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-04-05T08:28:30.628267+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.17'
+    apiVersion: v2
+    appVersion: 2.2.46
+    description: NABSTRACT NEF deployment Helm chart
+    digest: a6efe71bc104eef1ee19512ee7d7c5e6e38dbad029665bb194d1e865c100be00
+    kubeVersion: '>= 1.25.0'
+    name: nef-nabstract
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/nabstract-nef-nabstract-2.2.46/nef-nabstract-2.2.46.tgz
+    version: 2.2.46
   nfvri:
   - annotations:
       charts.openshift.io/digest: sha256:590d7a20414c751498c355163f48bf312481726fc617f9a034bbcd682e802477
@@ -11571,4 +11593,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-04-03T15:50:04.652025+00:00'
+generated: '2025-04-05T08:28:30.528798+00:00'
