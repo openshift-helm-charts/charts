@@ -1,0 +1,10 @@
+chart:
+  name: 5g-nssf-global-25a
+  shortDescription: 'This is 5gcore CNF NSSF helmchart 5g-nssf-global-25a'
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: SanghyunLee
+vendor:
+  label: samsung
+  name: Samsung Electronics Co., Ltd.
