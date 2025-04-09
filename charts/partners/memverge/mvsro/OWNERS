@@ -3,7 +3,9 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: xiongzubiao
+- githubUsername: memverge-build
 vendor:
   label: memverge
   name: MemVerge
