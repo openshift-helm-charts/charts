@@ -1,6 +1,6 @@
 chart:
   name: mvsro
-  shortDescription: unknown
+  shortDescription: Helm Chart of MemVerge Stateful Resume Operator
 providerDelivery: false
 publicPgpKey: unknown
 users:
