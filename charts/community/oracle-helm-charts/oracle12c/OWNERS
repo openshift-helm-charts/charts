@@ -6,5 +6,5 @@ providerDelivery: False
 users:
   - githubUsername: maximilianoPizarro
 vendor:
-  label: oracle-community
+  label: oracle-helm-charts
   name: Oracle 12c
