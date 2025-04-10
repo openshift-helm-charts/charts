@@ -610,6 +610,36 @@ entries:
     urls:
     - https://github.com/Broadpeak-tv/Openshift/raw/main/Certification/bks400-0.2.0.tgz
     version: 0.2.0
+  botpress:
+  - annotations:
+      charts.openshift.io/digest: sha256:c0133ab8e613663002f930f62b2b5b8ed50cc54c46510dba36cc092ce3349de8
+      charts.openshift.io/lastCertifiedTimestamp: '2025-04-10T17:20:10.573752+00:00'
+      charts.openshift.io/name: Botpress Server v12
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-04-10T18:59:35.539938+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: botpress-server-v12
+    description: A Botpress Community Helm chart for OpenShift
+    digest: 35a28ff8ed079540491ed8e8e79e27083aeae5caeffe9c0fbd9b0a8318dd746a
+    home: https://maximilianopizarro.github.io/botpress-helm-chart/
+    icon: https://raw.githubusercontent.com/maximilianoPizarro/botpress-helm-chart/main/botpress_fabicon.png
+    keywords:
+    - botpress
+    - nodejs
+    kubeVersion: '>=1.20.0'
+    maintainers:
+    - email: maximiliano.pizarro.5@gmail.com
+      name: Maximiliano Pizarro
+      url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+    name: botpress
+    sources:
+    - https://github.com/maximilianoPizarro/botpress-helm-chart
+    type: application
+    urls:
+    - https://maximilianopizarro.github.io/botpress-helm-chart/charts/botpress-0.1.1.tgz
+    version: 0.1.1
   bpjstk-service:
   - annotations:
       charts.openshift.io/digest: sha256:59170c18b61fac0926d8d12f70914502b282b9fd66b1ab062ab99aabbae7974c
@@ -11638,4 +11668,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-04-09T17:29:13.499813+00:00'
+generated: '2025-04-10T18:59:35.436402+00:00'
