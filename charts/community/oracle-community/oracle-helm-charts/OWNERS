@@ -1,5 +1,5 @@
 chart:
-  name: oracle-helm-charts
+  name: oracle12c
   shortDescription: Oracle 12c Database Server Community
 publicPgpKey: null
 providerDelivery: False
