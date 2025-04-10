@@ -1,0 +1,93 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.10
+        profile:
+            VendorType: community
+            version: v1.1
+        reportDigest: uint64:14882289921759039391
+        chart-uri: https://maximilianopizarro.github.io/oracle-helm-charts/charts/oracle12c-0.1.0.tgz
+        digests:
+            chart: sha256:6ac4b391a48c2c3c148c4a9153f72440a262c25230711e765fc018a6f8c9e944
+            package: 4af332e304e091f2abc32363cb23439f85760690eed16c16ce5eb3d8b78d5581
+        lastCertifiedTimestamp: "2025-04-10T14:06:13.237029+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: false
+    chart:
+        name: oracle12c
+        home: https://maximilianopizarro.github.io/oracle-helm-charts/
+        sources: []
+        version: 0.1.0
+        description: Oracle 12c Database Server
+        keywords:
+            - oracle
+            - database
+            - openshift
+        maintainers:
+            - name: Maximiliano Pizarro
+              email: maximiliano.pizarro.5@gmail.com
+              url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+        icon: https://raw.githubusercontent.com/maximilianoPizarro/oracle-helm-charts/main/oracle-icon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 12.2.0.1
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Oracle 12c
+        kubeversion: '>=1.20.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: FAIL
+      reason: 'invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable'
+    - check: v1.0/images-are-certified
+      type: Optional
+      outcome: FAIL
+      reason: 'Failed to certify images : quay.io/maximilianopizarro/oracle12c : No images found for Registry/Repository: quay.io/maximilianopizarro/oracle12c'
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/has-readme
+      type: Optional
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: PASS
+      reason: Chart does not contain CRDs
+
