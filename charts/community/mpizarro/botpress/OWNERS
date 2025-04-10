@@ -1,0 +1,9 @@
+chart:
+  name: botpress
+  shortDescription: A Botpress Community Helm chart for OpenShift
+publicPgpKey: null
+users:
+- githubUsername: maximilianoPizarro
+vendor:
+  label: mpizarro
+  name: Maximiliano Pizarro
