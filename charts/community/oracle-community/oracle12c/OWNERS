@@ -1,10 +1,10 @@
 chart:
   name: oracle12c
-  shortDescription: Oracle 12c Database Server
+  shortDescription: Oracle 12c Database Server Community
 publicPgpKey: null
 providerDelivery: False
 users:
   - githubUsername: maximilianoPizarro
 vendor:
-  label: oracle
+  label: oracle-community
   name: Oracle 12c
