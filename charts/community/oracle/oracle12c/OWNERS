@@ -1,0 +1,10 @@
+chart:
+  name: oracle12c
+  shortDescription: Oracle 12c Database Server
+publicPgpKey: null
+providerDelivery: False
+users:
+  - githubUsername: maximilianoPizarro
+vendor:
+  label: oracle
+  name: Oracle 12c
