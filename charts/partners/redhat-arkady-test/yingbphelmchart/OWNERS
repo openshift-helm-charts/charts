@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: wying3
 vendor:
   label: redhat-arkady-test
   name: Red Hat, Inc.
