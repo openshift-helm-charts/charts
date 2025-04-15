@@ -1,0 +1,13 @@
+redis:
+  auth:
+    enabled: true
+    password: ""
+
+  architecture: standalone
+
+  replica:
+    replicaCount: 1
+
+  master:
+    persistence:
+      size: 1Gi
