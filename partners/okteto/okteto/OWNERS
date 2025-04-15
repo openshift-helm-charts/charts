@@ -1,13 +1,23 @@
+# See the OWNERS docs: https://git.k8s.io/community/contributors/guide/owners.md
+
 approvers:
-  - jdavidson-okteto
-  - rberrelleza
+- komish
+- jsm84
+- jomkz
+- baijum
+- mmulholla
+- jasperchui
+- dperaza4dustbit
+- openshift-helm-charts-bot
+- tisutisu
+- Kartikey-star
 
 reviewers:
-  - jdavidson-okteto
-  - rberrelleza
-
-maintainers:
-  - name: Joey Davidson
-    email: joey@okteto.com
-  - name: Ramiro Berrelleza
-    email: ramiro@okteto.com
+- komish
+- jsm84
+- jomkz
+- baijum
+- mmulholla
+- jasperchui
+- dperaza4dustbit
+- Kartikey-star
