@@ -1,0 +1,10 @@
+chart:
+  name: 5g-amfmme-global
+  shortDescription: 'Samsung 5G core CNF amfmme global version 25A  helm chart, '
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: shlee519
+vendor:
+  label: samsung
+  name: Samsung Electronics Co., Ltd.
