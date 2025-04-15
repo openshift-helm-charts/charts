@@ -1,22 +1,3 @@
-apiVersion: v2
-name: okteto
-description: Helm chart for deploying the Okteto Platform
-type: application
-version: 1.31.0
-appVersion: "1.31.0"
-home: https://www.okteto.com
-sources:
-  - https://github.com/okteto/okteto
-keywords:
-  - dev environments
-  - kubernetes
-  - remote development
-maintainers:
-  - name: Joey Davidson
-    email: joey@okteto.com
-  - name: Ramiro Berrelleza
-    email: ramiro@okteto.com
-
 annotations:
   artifacthub.io/changes: |
     - The changelog is available at https://www.okteto.com/docs/release-notes
