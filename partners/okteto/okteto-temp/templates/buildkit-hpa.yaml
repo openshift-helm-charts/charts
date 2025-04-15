@@ -1,0 +1,28 @@
+{{- if and .Values.buildkit.enabled .Values.buildkit.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ include "okteto.buildkitname" . }}"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: "{{ include "okteto.buildkitname" . }}"
+  minReplicas: {{ .Values.buildkit.hpa.min }}
+  maxReplicas: {{ .Values.buildkit.hpa.max }}
+  metrics:
+  {{- if .Values.buildkit.hpa.metrics }}
+    {{- toYaml .Values.buildkit.hpa.metrics | nindent 4 }}
+  {{- else }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.buildkit.hpa.cpu }}
+  {{- end }}
+  {{- if .Values.buildkit.hpa.behavior }}
+  behavior:
+    {{- toYaml .Values.buildkit.hpa.behavior | nindent 4 }}
+  {{- end }}
+{{- end }}

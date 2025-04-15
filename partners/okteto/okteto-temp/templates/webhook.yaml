@@ -1,0 +1,333 @@
+{{- $mutatingWebhookConfigurationInternalCertificate := (include "okteto.internalCertificate.data" .) -}}
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: {{ include "okteto.webhook" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/component: "webhook"
+    app.kubernetes.io/name: "{{ include "okteto.webhook" . }}"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- if .Values.webhook.internalCertificate.annotations }}
+  annotations:
+    {{- toYaml .Values.webhook.internalCertificate.annotations | nindent 4 }}
+  {{- end }}
+
+stringData: {{ $mutatingWebhookConfigurationInternalCertificate | nindent 2 }}
+---
+{{- $mutatingWebhookConfigurationCaBundle := index ($mutatingWebhookConfigurationInternalCertificate | fromYaml) "ca.crt" | b64enc }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: "{{ include "okteto.webhook" . }}"
+  labels:
+    app.kubernetes.io/name: "{{ include "okteto.webhook" . }}"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+webhooks:
+  - name: ingress.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/ingress"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE", "UPDATE" ]
+        apiGroups: ["extensions"]
+        apiVersions: ["v1beta1"]
+        resources: ["ingresses"]
+      - operations: [ "CREATE", "UPDATE" ]
+        apiGroups: ["networking.k8s.io"]
+        apiVersions: ["v1beta1", "v1"]
+        resources: ["ingresses"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+  - name: service.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/service"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE", "UPDATE", "DELETE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["services"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+{{- if .Values.virtualServices.enabled }}
+  - name: virtualservice.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/virtualservice"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE", "UPDATE"]
+        apiGroups: ["networking.istio.io"]
+        apiVersions: ["v1beta1", "v1alpha3"]
+        resources: ["virtualservices"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+{{- if .Values.virtualServices.namespaceSelector }}
+  - name: extra-virtualservice.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    failurePolicy: Ignore
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/virtualservice"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE", "UPDATE"]
+        apiGroups: ["networking.istio.io"]
+        apiVersions: ["v1beta1", "v1alpha3"]
+        resources: ["virtualservices"]
+    namespaceSelector:
+      matchLabels:
+{{ toYaml .Values.virtualServices.namespaceSelector | indent 8 }}
+{{- end }}
+{{- end }}
+  - name: deployment.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/deployment"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE", "UPDATE"]
+        apiGroups: ["apps"]
+        apiVersions: ["v1"]
+        resources: ["deployments"]
+      - operations: [ "CREATE", "UPDATE"]
+        apiGroups: ["extensions"]
+        apiVersions: ["v1beta1"]
+        resources: ["deployments"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+  - name: statefulset.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/statefulset"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE", "UPDATE"]
+        apiGroups: ["apps"]
+        apiVersions: ["v1"]
+        resources: ["statefulsets"]
+      - operations: [ "CREATE", "UPDATE"]
+        apiGroups: ["extensions"]
+        apiVersions: ["v1beta1"]
+        resources: ["statefulsets"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+  - name: pod.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/pod"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+
+  - name: pvc.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/pvc"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE", "DELETE", "UPDATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["persistentvolumeclaims"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+  {{- if .Values.unsupported.restrictGroupUserRoleBindings }}
+  - name: rolebinding.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/rolebinding"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: [ "CREATE", "UPDATE"]
+        apiGroups: ["rbac.authorization.k8s.io"]
+        apiVersions: ["v1"]
+        resources: ["rolebindings"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+{{- end }}
+  - name: cronjob.webhook.okteto.com
+    admissionReviewVersions: ["v1", "v1beta1"]
+    failurePolicy: Ignore
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/cronjob"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: ["UPDATE"]
+        apiGroups: ["batch"]
+        apiVersions: ["v1", "v1beta1"]
+        resources: ["cronjobs"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+  - name: config-map.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Ignore
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/config-map"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["configmaps"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+  - name: namespace.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Ignore
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/namespace"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: ["UPDATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["namespaces"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+  - name: daemonset.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Ignore
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/daemonset"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: ["apps"]
+        apiVersions: ["v1"]
+        resources: ["daemonsets"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+{{- if or (eq (include "okteto.externalResources.enabled" .) "true") (.Values.crds.install) }}
+  - name: externalresources.webhook.okteto.com
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Ignore
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.webhook" . }}"
+        path: "/mutate/externalresources"
+        namespace: "{{ .Release.Namespace }}"
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ $mutatingWebhookConfigurationCaBundle }}
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: ["dev.okteto.com"]
+        apiVersions: ["v1"]
+        resources: ["externals"]
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"
+{{- end}}

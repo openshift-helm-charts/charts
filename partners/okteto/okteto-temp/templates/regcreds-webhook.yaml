@@ -1,0 +1,58 @@
+{{- $cert := (include "okteto.regcredsCertificate.data" .) -}}
+{{- $caBundle := index ($cert | fromYaml) "ca.crt" | b64enc }}
+
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: "{{ include "okteto.fullname" . }}-regcreds"
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/component: "regcreds"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-regcreds"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- if .Values.regcredsManager.internalCertificate.annotations }}
+  annotations:
+    {{- toYaml .Values.regcredsManager.internalCertificate.annotations | nindent 4 }}
+  {{- end }}
+
+stringData: {{ $cert | nindent 2 }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ include "okteto.fullname" . }}-regcreds
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/component: "regcreds"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-regcreds"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+webhooks:
+  - name: pullsecret.regcreds.okteto.com
+    failurePolicy: Ignore
+    admissionReviewVersions: ["v1"]
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: {{ .Values.regcredsManager.webhookTimeout }}
+    clientConfig:
+      service:
+        name: "{{ include "okteto.fullname" . }}-regcreds"
+        path: "/validate/pullsecret"
+        namespace: "{{ .Release.Namespace }}"
+      caBundle: {{ $caBundle }}
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["secrets"]
+    objectSelector:
+      matchLabels:
+        space.okteto.com/managed: "{{ .Values.namespaceDevLabelValue }}"
+    namespaceSelector:
+      matchLabels:
+        dev.okteto.com: "{{ .Values.namespaceDevLabelValue }}"

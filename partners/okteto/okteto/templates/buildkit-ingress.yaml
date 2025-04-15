@@ -1,0 +1,42 @@
+{{- if .Values.buildkit.enabled }}
+{{- if eq (include "okteto.buildkit.ingress.enabled" . ) "true" }}
+{{- if not .Values.openshift.enabled }}
+{{- $buildkitURL := include "okteto.buildkit" . -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "okteto.fullname" . }}-buildkit
+  labels:
+    app.kubernetes.io/name: {{ include "okteto.fullname" . }}-buildkit
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/component: "buildkit"
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- range $key, $value := .Values.buildkit.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ include "okteto.oktetoIngressClass" . }}
+  tls:
+  - hosts:
+    - {{ $buildkitURL }}
+    secretName: {{ include "okteto.buildkit.tlsSecret" . }}
+  rules:
+    - host: {{ $buildkitURL }}
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "okteto.fullname" . }}-buildkit
+                port:
+                  number: {{ .Values.buildkit.service.port }}
+{{- end }}
+{{- end }}
+{{- end }}

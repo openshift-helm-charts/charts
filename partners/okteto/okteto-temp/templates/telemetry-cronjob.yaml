@@ -1,0 +1,26 @@
+{{- if .Values.telemetry.enabled }}
+apiVersion: {{ template "okteto.cronJob.apiVersion" . }}
+kind: CronJob
+metadata:
+  name: "{{ include "okteto.fullname" . }}-telemetry"
+  labels:
+    app.kubernetes.io/component: "telemetry"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-telemetry"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  schedule: "@daily"
+  jobTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/component: "telemetry"
+        app.kubernetes.io/part-of: "okteto"
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+    spec:
+      ttlSecondsAfterFinished: {{ .Values.globals.jobs.ttlSecondsAfterFinished }}
+      template:
+{{ include "okteto.telemetryJobSpecTemplate" . | indent 8 -}}
+{{- end}}

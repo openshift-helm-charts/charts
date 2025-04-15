@@ -1,0 +1,21 @@
+{{- if eq (include "okteto.privateEndpoints.enabled" .) "true" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "okteto.fullname" . }}-private-endpoints"
+  labels:
+    app.kubernetes.io/component: "private-endpoints"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: {{ include "okteto.fullname" . }}-private-endpoints
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.privateEndpoints.port }}
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "okteto.fullname" . }}-private-endpoints
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

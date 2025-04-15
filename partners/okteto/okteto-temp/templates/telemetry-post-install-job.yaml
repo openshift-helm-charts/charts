@@ -1,0 +1,20 @@
+{{- if .Values.telemetry.enabled }}
+apiVersion: {{ template "okteto.cronJob.apiVersion" . }}
+kind: Job
+metadata:
+  name: "{{ include "okteto.fullname" . }}-telemetry-post-install"
+  labels:
+    app.kubernetes.io/component: "telemetry"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-telemetry-post-install"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: {{ .Values.globals.jobs.ttlSecondsAfterFinished }}
+  template:
+{{ include "okteto.telemetryJobSpecTemplate" . | indent 4 -}}
+{{- end}}

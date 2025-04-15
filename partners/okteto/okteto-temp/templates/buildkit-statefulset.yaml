@@ -1,0 +1,288 @@
+{{- if .Values.buildkit.enabled }}
+{{- $publicUrl := include "okteto.public" . -}}
+{{- $registryUrl :=  include "okteto.registry"  . }}
+{{- $networkMode := include "okteto.buildkit.network.mode" . -}} 
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "{{ include "okteto.buildkitname" . }}"
+  labels:
+    app.kubernetes.io/component: "buildkit"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.buildkitname" . }}"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    secret.reloader.stakater.com/reload: "{{ include "okteto.tlsSecretsToReload" . }}"
+spec:
+  {{- if not .Values.buildkit.hpa.enabled }}
+  replicas: {{ .Values.buildkit.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "okteto.buildkitname" . }}"
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  serviceName: {{ include "okteto.fullname" . }}-buildkit
+  podManagementPolicy: {{ .Values.buildkit.podManagementPolicy }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ include "okteto.buildkitname" . }}"
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "buildkit"
+        app.kubernetes.io/part-of: "okteto"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+{{- end }}
+{{- if .Values.buildkit.labels }}
+{{ toYaml .Values.buildkit.labels | indent 8 }}
+{{- end }}
+{{- if or .Values.podAnnotations .Values.buildkit.annotations (and .Values.buildkit.rootless.enabled (eq (include "okteto.KubeVersionGreaterThan1.29" . ) "false")) }}
+      annotations:
+  {{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.buildkit.annotations }}
+{{ toYaml .Values.buildkit.annotations | indent 8 }}
+  {{- end }}
+  {{- if and .Values.buildkit.rootless.enabled (eq (include "okteto.KubeVersionGreaterThan1.29" . ) "false") }}
+        container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
+  {{- end }}
+{{- end }}
+    spec:
+      {{- if .Values.unsupported.buildkitMetrics.enabled }}
+      shareProcessNamespace: true
+      {{- end }}
+      affinity:
+        nodeAffinity:
+          {{- include "okteto.oktetoAffinity" . | nindent 10 }}
+        podAntiAffinity:
+          {{- if .Values.affinity.required }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - "{{ include "okteto.buildkitname" . }}"
+              topologyKey: kubernetes.io/hostname
+          {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - "{{ include "okteto.buildkitname" . }}"
+                topologyKey: kubernetes.io/hostname
+          {{- end }}
+      serviceAccountName: "{{ .Values.buildkit.serviceAccount.name }}"
+      {{- include "okteto.tolerations" (dict "globalsTolerations" ( .Values.buildkit.tolerations | default .Values.globals.tolerations.okteto ) "poolTolerations" ( .Values.tolerations.buildPool | default .Values.tolerations.oktetoPool) ) | nindent 6 }}
+      {{- include "okteto.nodeSelectors" (dict "poolTolerations" ( .Values.tolerations.buildPool | default .Values.tolerations.oktetoPool) "nodeSelectors" ( .Values.buildkit.nodeSelectors | default .Values.globals.nodeSelectors.okteto) ) | nindent 6 }}
+      volumes:
+        - name: tls-certs
+          secret:
+            defaultMode: 420
+            secretName: {{ include "okteto.ingress.tlsSecret" . }}
+        {{- if eq "true" (include "okteto.privateca.enabled" .) }}
+        - name: ca-pemstore
+          secret:
+            defaultMode: 420
+            secretName: {{ include "okteto.privateca.secretname" . }}
+        {{- end }}
+        {{- if not .Values.buildkit.persistence.enabled }}
+        - name: storage
+          emptyDir:
+            sizeLimit: 12Gi
+        {{- end }}
+        - name: host-volume
+          emptyDir: {}
+        {{- if .Values.unsupported.buildkitMetrics.enabled }}
+        - name: run-runc
+          emptyDir: {}
+        - name: runc-bin
+          emptyDir: {}
+        {{- end }}
+      priorityClassName: {{ .Values.buildkit.priorityClassName | default .Values.globals.priorityClassName }}
+      initContainers:
+      - name: etc-hosts
+        image: {{ include "okteto.image.buildkit" . }}
+        imagePullPolicy: {{ .Values.pullPolicy }}
+        {{- if .Values.buildkit.rootless.enabled }}
+        securityContext:
+          runAsNonRoot: true
+        {{- end }}
+        command: ["/bin/sh", "-c"]
+        args:
+          - set -e;
+            echo $OKTETO_INGRESS_INTERNAL_IP $PUBLIC_URL > /data/hosts;
+            echo $OKTETO_INGRESS_INTERNAL_IP $REGISTRY_URL >> /data/hosts;
+            echo 127.0.0.1 $OKTETO_BUILDKITD_LOCAL_URL >> /data/hosts;
+            echo "prepared /etc/hosts file for buildkit";
+            cat /data/hosts;
+        env:
+          - name: OKTETO_INGRESS_INTERNAL_IP
+            value: "{{ include "okteto.ingressprivateip" . }}"
+          - name: PUBLIC_URL
+            value: "{{ $publicUrl }}"
+          - name: REGISTRY_URL
+            value: "{{ $registryUrl }}"
+          - name: OKTETO_BUILDKITD_LOCAL_URL
+            value: local-buildkitd.{{ .Values.subdomain }}
+        volumeMounts:
+        - name: host-volume
+          mountPath: /data
+      {{- if .Values.unsupported.buildkitMetrics.enabled }}
+      - name: copy-bin
+        image: {{ include "okteto.image.buildkit" . }}
+        command:
+        - sh
+        - -c
+        - |
+          if [ -f "/usr/bin/buildkit-runc" ]; then
+            cp "/usr/bin/buildkit-runc" /shared-bin/buildkit-runc
+            chmod +x /shared-bin/buildkit-runc            
+            echo "Copied buildkit-runc to shared volume"
+            exit 0
+          fi
+          echo "Could not find buildkit-runc binary"
+          exit 1
+        volumeMounts:
+          - name: runc-bin
+            mountPath: /shared-bin
+      {{- end }}
+      containers:
+      - name: buildkitd
+        image: {{ include "okteto.image.buildkit" . }}
+        imagePullPolicy: {{ .Values.pullPolicy }}
+        args:
+          - --addr=tcp://0.0.0.0:1234
+          - --oci-worker-gc
+          - --oci-worker-gc-keepstorage={{ include "okteto.buildkit.persistence.cache" . }}
+          - --tlscert=/run/secrets/tls/tls.crt
+          - --tlskey=/run/secrets/tls/tls.key
+          - --authorization-endpoint=https://{{ $publicUrl }}/auth/buildkit
+          - --oci-worker-net={{ $networkMode }}
+          {{- if .Values.buildkit.rootless.enabled }}
+          - --oci-worker-no-process-sandbox
+          {{- end }}
+        {{- if .Values.buildkit.extraEnv }}
+        env:
+          {{ toYaml .Values.buildkit.extraEnv | nindent 10 }}
+        {{- end }}
+        ports:
+        - containerPort: 1234
+          protocol: TCP
+        securityContext:
+          {{- if .Values.buildkit.rootless.enabled }}
+          runAsNonRoot: true
+          seccompProfile:
+            type: Unconfined
+          {{- if eq (include "okteto.KubeVersionGreaterThan1.29" . ) "true"  }}
+          appArmorProfile:
+            type: Unconfined
+          {{- end }}
+          {{- else }}
+          privileged: true
+          {{- end }}
+        readinessProbe:
+          tcpSocket:
+            port: 1234
+          periodSeconds: 60
+        startupProbe:
+          tcpSocket:
+            port: 1234
+          failureThreshold: 300
+          periodSeconds: 1
+        livenessProbe:
+          tcpSocket:
+            port: 1234
+          periodSeconds: 60
+        volumeMounts:
+          - name: "storage"
+            subPath: data
+            {{- if .Values.buildkit.rootless.enabled }}
+            mountPath: /home/user/.local/share/buildkit
+            {{- else }}
+            mountPath: /var/lib/buildkit
+            {{- end }}
+          - name: tls-certs
+            mountPath: /run/secrets/tls
+            readOnly: true
+            {{- if eq "true" (include "okteto.privateca.enabled" .) }}
+          - name: ca-pemstore
+            mountPath: /etc/ssl/certs/okteto-private-ca.crt
+            subPath: {{ include "okteto.privateca.secretkey" . }}
+            readOnly: true
+            {{- end }}
+          - name: host-volume
+            mountPath: /etc/hosts
+            subPath: hosts
+          {{- if .Values.unsupported.buildkitMetrics.enabled }}
+          - name: run-runc
+            mountPath: /run/runc
+          {{- end }}
+        resources:
+          {{ toYaml .Values.buildkit.resources | nindent 10 }}
+
+      {{- if .Values.unsupported.buildkitMetrics.enabled }}
+      # Metrics sidecar container
+      - name: metrics
+        image: {{ include "okteto.image.backend" . }}
+        args: ["buildkit-metrics-sidecar"]
+        imagePullPolicy: {{ .Values.pullPolicy }}
+        ports:
+          - containerPort: 8080
+            name: metrics
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          {{ toYaml .Values.unsupported.buildkitMetrics.resources | nindent 10 }}
+        volumeMounts:
+          - name: run-runc
+            mountPath: /run/runc
+            readOnly: true
+          - name: runc-bin
+            mountPath: /usr/bin/buildkit-runc
+            subPath: buildkit-runc
+        securityContext:
+          privileged: true
+          # make it run as user 0 or root
+          runAsUser: 0
+      {{- end }}
+
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      {{- if .Values.buildkit.rootless.enabled }}
+      securityContext:
+        fsGroup: 1000
+      {{- end }}
+      terminationGracePeriodSeconds: 30
+  {{- if .Values.buildkit.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: "storage"
+      spec:
+        accessModes: {{ .Values.buildkit.persistence.accessModes}}
+        resources:
+          requests:
+            storage: {{ .Values.buildkit.persistence.size }}
+        {{- if .Values.buildkit.persistence.class }}
+        storageClassName: {{ .Values.buildkit.persistence.class }}
+       {{- end }}
+  {{- end }}
+{{- end }}

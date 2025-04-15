@@ -1,0 +1,20 @@
+# OKTETO_CLI_VERSION is the okteto cli version that will be used in this chart
+# when executing installer jobs.
+# This is the value displayed in the admin panel. It needs to be updated
+# whenever a new version of the cli is needed/wanted for the installer.
+
+OKTETO_CLI_VERSION: 3.6.0
+################################################################################
+# READ ONLY
+################################################################################
+
+# OKTETO_VERSION is the current okteto chart version.
+# In most of the cases, this value should match the version in Chart.yaml. The
+# exception to this is if an umbrella chart is used from which .Chart.Version is
+# computed. For this reason .Chart.Version cannot be trusted and this version
+# should always be used instead.
+# This is the version displayed in the admin panel and the version reported in
+# telemetry
+# This value is updated in the release process and packaged alongside the chart
+# There is no need to touch this value unless you know what you are doing
+OKTETO_VERSION: 1.31.0

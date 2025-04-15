@@ -1,0 +1,15 @@
+{{- if or (index .Values "ingress-nginx" "enabled") (index .Values "okteto-ingress" "enabled") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: okteto-ingress-config
+  labels:
+    app.kubernetes.io/component: "defaultbackend"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "okteto-ingress-config"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  defaultbackendservice: "{{ include "okteto.defaultBackendName" . }}"
+{{- end }}

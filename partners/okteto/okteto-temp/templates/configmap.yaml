@@ -1,0 +1,344 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "okteto"
+  name: "{{ include "okteto.fullname" . }}"
+  namespace: {{ .Release.Namespace }}
+data:
+  {{ include "okteto.allVersion" . | nindent 2 }}
+  "OKTETO_LOG_LEVEL": "{{ .Values.logLevel }}"
+  "OKTETO_CONFIGMAP_NAME": "{{ include "okteto.fullname" . }}"
+  "OKTETO_SERVICE_ACCOUNT_NAME": "{{ include "okteto.fullname" . }}"
+  "OKTETO_CLOUD_PROVIDER": "{{ include "okteto.registry.storage.cloudProvider" . }}"
+  "OKTETO_AUTH_PROVIDER": "{{ include "okteto.authProvider" . }}"
+  "OKTETO_LICENSE_HARD_LIMITS_ENABLED": "{{ .Values.licenseHardLimits.enabled }}"
+  "OKTETO_RELEASE_NAME": "{{ .Release.Name }}"
+  "CLUSTER_PUBLIC_ENDPOINT": "{{ include "okteto.clusterEndpoint" . }}"
+  "SKIP_CA_IN_CREDENTIALS_QUERY": "{{ include "okteto.skipCAInCredentialsQuery" . }}"
+  "OKTETO_SSH_SECRET_NAME": "{{ .Values.installer.sshSecretName }}"
+  "OKTETO_PULL_POLICY": "{{ .Values.pullPolicy }}"
+  "OKTETO_BASE_DOMAIN": "{{ .Values.subdomain }}"
+  "OKTETO_BASE_DOMAIN_PORT": "443"
+  "OKTETO_GLOBAL_DEV_CLUSTER_ROLE": {{ include "okteto.clusterrolebinding" . | quote }}
+  "OKTETO_NAMESPACES_CLUSTER_ROLE": {{ include "okteto.namespacesclusterroles" . }}
+  "OKTETO_PREVIEWS_CLUSTER_ROLE": {{ include "okteto.previewsclusterroles" . }}
+  "OKTETO_SHOW_VOLUMES_ENABLED": "{{ .Values.unsupported.showVolumes }}"
+  "OKTETO_FORCE_PODS_IN_VOLUME_ZONE": "{{ .Values.unsupported.forcePodsInVolumeZone }}"
+  "OKTETO_FORCE_NODE_TO_PODS_WITH_SAME_PVCS": "{{ .Values.unsupported.forceNodeToPodsWithSamePVCs }}"
+  "OKTETO_PUBLIC_URL": "{{ include "okteto.public" . }}"
+  "OKTETO_PUBLIC_OVERRIDE": "{{ .Values.publicOverride }}"
+  "OKTETO_USER_DEFINED_NAMESPACES": "{{ .Values.userDefinedNamespaces }}"
+  "OKTETO_INGRESS_RELOAD_DELAY": "{{ .Values.unsupported.ingressReloadDelay }}"
+  "OKTETO_VIRTUAL_SERVICE_ENDPOINTS": "{{ or .Values.virtualServices.enabled .Values.unsupported.virtualServiceEndpoints }}"
+  "OKTETO_OPENSHIFT_SUPPORT_ENABLED": "{{ .Values.openshift.enabled }}"
+  "OKTETO_INGRESS_CLASS": "{{ include "okteto.ingress.class" . }}"
+  "OKTETO_CONTROL_PLANE_INGRESS_CLASS": "{{ include "okteto.oktetoIngressClass" . }}"
+  "OKTETO_INGRESS_MODE": "{{ include "okteto.ingress.mode" . }}"
+  "OKTETO_INGRESS_FORCE_CLASS": "{{ .Values.ingress.forceIngressClass }}"
+  "OKTETO_INGRESS_FORCE_SUBDOMAIN": "{{ .Values.ingress.forceIngressSubdomain }}"
+  "OKTETO_INGRESS_IP": "{{ .Values.ingress.ip }}"
+  "OKTETO_NAMESPACE_ANNOTATIONS": {{ .Values.namespace.annotations | toJson | quote }}
+  "OKTETO_NAMESPACE_LABELS": {{ .Values.namespace.labels | toJson | quote }}
+  "OKTETO_NAMESPACE_INGRESS_ANNOTATIONS": {{ .Values.namespace.ingress.annotations | toJson | quote }}
+  "OKTETO_NAMESPACE_INGRESS_LABELS": {{ .Values.namespace.ingress.labels | toJson | quote }}
+  "OKTETO_NAMESPACE_AUTO_ROLE_BINDING_ENABLED": "{{ .Values.namespace.autoRoleBinding.enabled }}"
+  "OKTETO_LOADBALANCER_CONVERSION_ENABLED": "{{ .Values.convertLoadBalancedServices.enabled }}"
+  "OKTETO_COOKIE_HASH": "{{ .Values.cookie.hash }}"
+  "OKTETO_DEFAULT_BACKEND": "{{ include "okteto.defaultBackendName" . }}.{{ .Release.Namespace }}"
+  "OKTETO_BIN_IMAGE": "{{ .Values.backend.bin.image }}"
+  "OKTETO_PIPELINE_INSTALLER_IMAGE": "{{ include "okteto.image.backend" . }}"
+  "OKTETO_CLI_IMAGE": "{{ include "okteto.formatRegistryAndRepo" .Values.cli.image }}:{{ include "okteto.cliVersion" . }}"
+  "OKTETO_PIPELINE_RUNNER_IMAGE": "{{ include "okteto.image.installerrunner" . }}"
+  "OKTETO_PIPELINE_RUNNER_ANNOTATIONS": {{ .Values.installer.annotations | toJson | quote }}
+  "OKTETO_PIPELINE_RUNNER_LABELS": {{ .Values.installer.labels | toJson | quote }}
+  "OKTETO_PIPELINE_RUNNER_ENV": {{ .Values.installer.extraEnv | toJson | quote }}
+  "OKTETO_PIPELINE_RUNNER_RESOURCES": {{ .Values.installer.resources | toJson | quote }}
+{{- if eq "true" (include "okteto.privateca.enabled" .) }}
+  "OKTETO_PRIVATECA_SECRET_NAME": "{{ include "okteto.privateca.secretname" . }}"
+  "OKTETO_PRIVATECA_SECRET_KEY": "{{ include "okteto.privateca.secretkey" . }}"
+{{- end }}
+{{- if .Values.telemetry.token }}
+  "OKTETO_TELEMETRY_TOKEN": "{{ .Values.telemetry.token }}"
+{{- end }}
+  "OKTETO_TELEMETRY_ENABLED": "{{ .Values.telemetry.enabled }}"
+  "OKTETO_PRIVATEREGISTRY_SECRET_NAME": "{{ include "okteto.fullname" . }}-dockerconfig-static"
+{{- if .Values.auth.google.enabled }}
+  "GOOGLE_CLIENTID": "{{ .Values.auth.google.clientId }}"
+  "OKTETO_GOOGLE_ALLOW_DOMAINS": "{{ include "okteto.joinListWithComma" .Values.auth.google.allowDomains }}"
+{{- else if .Values.auth.github.enabled }}
+  "GITHUB_CLIENTID": "{{ .Values.auth.github.clientId }}"
+  "GITHUB_ORGANIZATION": "{{ .Values.auth.github.organization }}"
+  "OKTETO_GITHUB_ALLOW_LIST": "{{ include "okteto.joinListWithComma" .Values.auth.github.allowList }}"
+{{- else if .Values.auth.bitbucket.enabled }}
+  "BITBUCKET_CLIENTID": "{{ .Values.auth.bitbucket.clientId }}"
+  "BITBUCKET_WORKSPACE": "{{ .Values.auth.bitbucket.workspace }}"
+{{- else if .Values.auth.openid.enabled }}
+  "OPENID_ISSUER": "{{ .Values.auth.openid.endpoints.issuer }}"
+  "OPENID_CLIENTID": "{{ .Values.auth.openid.clientId }}"
+  "OPENID_GROUP": "{{ .Values.auth.openid.group }}"
+  "OPENID_RESOURCE": "{{ .Values.auth.openid.resource }}"
+  "OPENID_AUDIENCE": "{{ .Values.auth.openid.audience }}"
+  "OPENID_MAPPING_EXTERNALID": "{{ .Values.auth.openid.mapping.externalIDKey }}"
+  "OPENID_MAPPING_NAME": "{{ .Values.auth.openid.mapping.nameKey }}"
+  "OPENID_MAPPING_EMAIL": "{{ .Values.auth.openid.mapping.emailKey }}"
+  "OPENID_MAPPING_PICTURE": "{{ .Values.auth.openid.mapping.pictureKey }}"
+  "OPENID_MAPPING_GROUPS": "{{ .Values.auth.openid.mapping.groupsKey }}"
+{{- end}}
+  "OKTETO_DEFAULT_PLAN": "{{ .Values.unsupported.defaultPlan }}"
+  "OKTETO_POOL": "{{ .Values.tolerations.oktetoPool }}"
+  "OKTETO_BUILD_POOL": "{{ .Values.tolerations.buildPool }}"
+  "OKTETO_DEV_POOL": "{{ .Values.tolerations.devPool }}"
+  "OKTETO_GLOBAL_OKTETO_TOLERATIONS": {{ .Values.globals.tolerations.okteto | toJson | quote }}
+  "OKTETO_GLOBAL_DEV_TOLERATIONS": {{ .Values.globals.tolerations.dev | toJson | quote }}
+  "OKTETO_GLOBAL_NODE_SELECTORS": {{ .Values.globals.nodeSelectors | toJson | quote }}
+{{- if or .Values.affinity.devPool ((.Values.affinities).devPool) }}
+  "OKTETO_DEV_AFFINITY": {{ or .Values.affinity.devPool ((.Values.affinities).devPool) | toJson | quote }}
+{{- end}}
+{{- if .Values.affinity.upPool }}
+  "OKTETO_UP_AFFINITY": {{ .Values.affinity.upPool | toJson | quote }}
+{{- end}}
+{{- if .Values.affinity.installerPool }}
+  "OKTETO_INSTALLER_AFFINITY": {{ .Values.affinity.installerPool | toJson | quote }}
+{{- end}}
+  "OKTETO_PULLALWAYS_ENABLED":  "{{ .Values.pullAlways.enabled }}"
+  "OKTETO_SERVICE_EXTERNAL_NAMES_ENABLED":  "{{ .Values.externalNames.enabled }}"
+  "OKTETO_NETWORK_POLICIES_ENABLED":  "{{ .Values.networkPolicies.enabled }}"
+{{- if .Values.networkPolicies.enabled }}
+  "OKTETO_NETWORK_POLICIES_BLOCKED_CIDRS": {{ .Values.networkPolicies.blockedCIDRs | toJson | quote }}
+  "OKTETO_NETWORK_POLICIES_INGRESS_RULES": {{ .Values.networkPolicies.ingress | toJson | quote }}
+  "OKTETO_NETWORK_POLICIES_EGRESS_RULES": {{ .Values.networkPolicies.egress | toJson | quote }}
+{{- end }}
+  "OKTETO_INGRESS_LIMITS_ENABLED":  "{{ .Values.ingressLimits.enabled }}"
+{{- if .Values.ingressLimits.enabled }}
+  "OKTETO_INGRESS_LIMITS_CONNECTIONS": "{{ .Values.ingressLimits.connections }}"
+  "OKTETO_INGRESS_LIMITS_RPS": "{{ .Values.ingressLimits.rps }}"
+  "OKTETO_INGRESS_LIMITS_RPM": "{{ .Values.ingressLimits.rpm }}"
+{{- end }}
+  "OKTETO_INGRESS_PROXY_BODY_SIZE": "{{ .Values.unsupported.ingressProxyBodySize }}"
+  "OKTETO_GC_ENABLED":  "{{ .Values.gc.enabled }}"
+  "OKTETO_DEBUG_SERVER":  "{{ .Values.debugServer.enabled }}"
+{{- if .Values.gc.enabled }}
+  "OKTETO_GC_SCALE_TO_ZERO_PERIOD": "{{ .Values.gc.scaleToZeroPeriod }}"
+  "OKTETO_GC_DELETE_NAMESPACE_PERIOD": "{{ .Values.gc.deleteNamespacePeriod }}"
+{{- end }}
+  "OKTETO_AUTOSCALER_ENABLED":  "{{ .Values.autoscaler.enabled }}"
+{{- if .Values.autoscaler.enabled }}
+  "OKTETO_AUTOSCALER_IMAGE": "{{ include "okteto.image.autoscaler" . }}"
+  "OKTETO_AUTOSCALER_SCHEDULE": "{{ .Values.autoscaler.schedule }}"
+  "OKTETO_AUTOSCALER_CPU_UP": "{{ or .Values.autoscaler.up .Values.autoscaler.cpu.up }}"
+  "OKTETO_AUTOSCALER_CPU_DOWN": "{{ or .Values.autoscaler.down .Values.autoscaler.cpu.down  }}"
+  "OKTETO_AUTOSCALER_MEMORY_UP": "{{ or .Values.autoscaler.up .Values.autoscaler.memory.up }}"
+  "OKTETO_AUTOSCALER_MEMORY_DOWN": "{{ or .Values.autoscaler.down .Values.autoscaler.memory.down }}"
+  "OKTETO_AUTOSCALER_PODS_UP": "{{ .Values.autoscaler.pods.up }}"
+  "OKTETO_AUTOSCALER_PODS_DOWN": "{{ .Values.autoscaler.pods.down }}"
+  "OKTETO_AUTOSCALER_VOLUMES_UP": "{{ .Values.autoscaler.volumes.up }}"
+  "OKTETO_AUTOSCALER_VOLUMES_DOWN": "{{ .Values.autoscaler.volumes.down }}"
+  "OKTETO_AUTOSCALER_NODES_INCREMENT": "{{ or .Values.autoscaler.increment .Values.autoscaler.nodes.increment }}"
+  "OKTETO_AUTOSCALER_NODES_MIN": "{{ or .Values.autoscaler.min .Values.autoscaler.nodes.min }}"
+  "OKTETO_AUTOSCALER_NODES_MAX": "{{ or .Values.autoscaler.max .Values.autoscaler.nodes.max }}"
+  "OKTETO_AUTOSCALER_NODES_POOL_LABEL": "{{ or .Values.autoscaler.nodePoolLabel .Values.autoscaler.nodes.poolLabel }}"
+{{- end }}
+  "OKTETO_AUTOWAKE_ENABLED":  "{{ .Values.autowake.enabled }}"
+  "OKTETO_VOLUME_SNAPSHOTS_ENABLED":  "{{ .Values.volumeSnapshots.enabled }}"
+{{- if .Values.volumeSnapshots.enabled }}
+  "OKTETO_VOLUME_SNAPSHOTS_DRIVER": "{{ .Values.volumeSnapshots.driver }}"
+  "OKTETO_VOLUME_SNAPSHOTS_CLASS": "{{ .Values.volumeSnapshots.class }}"
+  "OKTETO_VOLUME_SNAPSHOTS_STORAGE_CLASS": "{{ .Values.volumeSnapshots.storageClass }}"
+  "OKTETO_VOLUME_SNAPSHOTS_NAMESPACE_ACCESS_VALIDATION_ENABLED": "{{ .Values.volumeSnapshots.enableNamespaceAccessValidation }}"
+  "OKTETO_VOLUME_SNAPSHOTS_ID_ALLOWED": "{{ .Values.volumeSnapshots.allowIDAnnotation }}"
+{{- end }}
+  "OKTETO_QUOTAS_RESOURCES_ENABLED":  "{{ .Values.quotas.resources.enabled }}"
+{{- if .Values.quotas.resources.enabled }}
+  "OKTETO_QUOTAS_RESOURCES_MAX_NAMESPACES": "{{ .Values.quotas.resources.maxNamespaces }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_PODS": "{{ .Values.quotas.resources.maxPods }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_SERVICES": "{{ .Values.quotas.resources.maxServices }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_LOAD_BALANCERS": "{{ .Values.quotas.resources.maxLoadBalancers }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_NODE_PORTS": "{{ .Values.quotas.resources.maxNodePorts }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_JOBS": "{{ .Values.quotas.resources.maxJobs }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_CRONJOBS": "{{ .Values.quotas.resources.maxCronjobs }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_REPlICATION_CONTROLLERS": "{{ .Values.quotas.resources.maxReplicationControllers }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_SECRETS": "{{ .Values.quotas.resources.maxSecrets }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_CONFIGMAPS": "{{ .Values.quotas.resources.maxConfigMaps }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_PVCS":  "{{ .Values.quotas.resources.maxPVCs }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_VOLUME_SNAPSHOTS": "{{ .Values.quotas.resources.maxVolumeSnapshots }}"
+  "OKTETO_QUOTAS_RESOURCES_MAX_INGRESSES": "{{ .Values.quotas.resources.maxIngresses }}"
+{{- end }}
+  "OKTETO_QUOTAS_BANDWIDTH_ENABLED":  "{{ .Values.quotas.bandwidth.enabled }}"
+{{- if .Values.quotas.bandwidth.enabled }}
+  "OKTETO_QUOTAS_BANDWIDTH_INGRESS": "{{ .Values.quotas.bandwidth.ingress }}"
+  "OKTETO_QUOTAS_BANDWIDTH_EGRESS": "{{ .Values.quotas.bandwidth.egress }}"
+{{- end }}
+  "OKTETO_QUOTAS_BANDWIDTH_UP_ENABLED":  "{{ .Values.quotas.bandwidth.up.enabled }}"
+{{- if .Values.quotas.bandwidth.up.enabled }}
+  "OKTETO_QUOTAS_BANDWIDTH_UP_INGRESS": "{{ .Values.quotas.bandwidth.up.ingress }}"
+  "OKTETO_QUOTAS_BANDWIDTH_UP_EGRESS": "{{ .Values.quotas.bandwidth.up.egress }}"
+{{- end }}
+  "OKTETO_QUOTAS_REQUESTS_ENABLED":  "{{ .Values.quotas.requests.enabled }}"
+  "OKTETO_AUTOSET_DEFAULT_LIMITS":  "{{ .Values.unsupported.autoSetDefaultLimits }}"
+{{- if .Values.quotas.requests.enabled }}
+  "OKTETO_QUOTAS_REQUESTS_CPU": "{{ .Values.quotas.requests.cpu }}"
+  "OKTETO_QUOTAS_REQUESTS_MEMORY": "{{ .Values.quotas.requests.memory }}"
+  "OKTETO_QUOTAS_REQUESTS_STORAGE": "{{ .Values.quotas.requests.storage }}"
+{{- end }}
+  "OKTETO_QUOTAS_LIMITS_ENABLED":  "{{ .Values.quotas.limits.enabled }}"
+{{- if .Values.quotas.limits.enabled }}
+  "OKTETO_QUOTAS_LIMITS_CPU": "{{ .Values.quotas.limits.cpu }}"
+  "OKTETO_QUOTAS_LIMITS_MEMORY": "{{ .Values.quotas.limits.memory }}"
+  "OKTETO_QUOTAS_LIMITS_STORAGE": "{{ .Values.quotas.limits.storage }}"
+{{- end }}
+  "OKTETO_QUOTAS_LIMITRANGES_MAX_ENABLED":  "{{ .Values.quotas.limitranges.max.enabled }}"
+{{- if .Values.quotas.limitranges.max.enabled }}
+  "OKTETO_QUOTAS_LIMITRANGES_MAX_CPU": "{{ .Values.quotas.limitranges.max.cpu }}"
+  "OKTETO_QUOTAS_LIMITRANGES_MAX_MEMORY": "{{ .Values.quotas.limitranges.max.memory }}"
+{{- end }}
+  "OKTETO_QUOTAS_LIMITRANGES_REQUESTS_ENABLED":  "{{ .Values.quotas.limitranges.requests.enabled }}"
+{{- if .Values.quotas.limitranges.requests.enabled }}
+  "OKTETO_QUOTAS_LIMITRANGES_LIMIT_REQUEST_RATIO":  "{{ .Values.quotas.limitranges.requests.limitRequestRatio }}"
+  "OKTETO_QUOTAS_LIMITRANGES_REQUESTS_CPU": "{{ .Values.quotas.limitranges.requests.cpu }}"
+  "OKTETO_QUOTAS_LIMITRANGES_REQUESTS_MEMORY": "{{ .Values.quotas.limitranges.requests.memory }}"
+{{- end }}
+  "OKTETO_QUOTAS_LIMITRANGES_LIMITS_ENABLED":  "{{ .Values.quotas.limitranges.limits.enabled }}"
+{{- if .Values.quotas.limitranges.limits.enabled }}
+  "OKTETO_QUOTAS_LIMITRANGES_LIMITS_CPU": "{{ .Values.quotas.limitranges.limits.cpu }}"
+  "OKTETO_QUOTAS_LIMITRANGES_LIMITS_MEMORY": "{{ .Values.quotas.limitranges.limits.memory }}"
+{{- end }}
+  "OKTETO_REGISTRY_ENABLED": "{{ .Values.registry.enabled }}"
+{{- if .Values.registry.enabled }}
+  "OKTETO_REGISTRY_URL": "{{ include "okteto.registry"  . }}"
+  "OKTETO_REGISTRY_PULLPOLICY": "{{ .Values.registry.pullPolicy }}"
+{{- end }}
+{{- if .Values.registry.gc.metrics.enabled }}
+  "OKTETO_REGISTRY_GC_METRICS_PUSHGATEWAY_ADDR": "{{ .Values.registry.gc.metrics.pushgatewayAddr }}"
+{{- end }}
+{{- if .Values.buildkit.enabled }}
+  "OKTETO_BUILDKIT_ENABLED": "true"
+  "OKTETO_BUILDKIT_PERSISTENCE_ENABLED": "{{ .Values.buildkit.persistence.enabled }}"
+  "OKTETO_BUILDKIT_URL": "tcp://{{ include "okteto.buildkit"  . }}:{{ .Values.buildkit.service.port }}"
+  "OKTETO_BUILDKIT_INSTANCE_NAME": "{{ include "okteto.buildkitname" . }}"
+{{- end }}
+{{- if .Values.unsupported.opentracing.enabled }}
+  "JAEGER_AGENT_HOST": "{{ .Values.unsupported.opentracing.agent.host }}"
+  "JAEGER_AGENT_PORT": "{{ .Values.unsupported.opentracing.agent.port }}"
+  "JAEGER_SAMPLER_TYPE": "{{ .Values.unsupported.opentracing.sampler.type }}"
+  "JAEGER_SAMPLER_PARAM": "{{ .Values.unsupported.opentracing.sampler.param }}"
+{{- end}}
+{{- if eq (include "okteto.privateEndpoints.enabled" .) "true" }}
+  "OKTETO_PRIVATE_ENDPOINTS": "https://{{ include "okteto.privateEndpoints" . }}"
+  "PRIVATE_ENDPOINTS_CLIENTID": "{{ .Values.privateEndpoints.clientId }}"
+{{- end }}
+  "OKTETO_GITHUB_INTEGRATION_ENABLED": "{{ .Values.github.enabled }}"
+{{- if .Values.github.enabled }}
+  "GITHUB_INTEGRATION_CLIENTID": "{{ .Values.github.clientId }}"
+  "GITHUB_INTEGRATION_APP_ID": "{{ .Values.github.appId }}"
+  "GITHUB_INTEGRATION_INSTALLATION_URL": "{{ .Values.github.installationUrl }}"
+{{- end }}
+  "OKTETO_NODE_READINESS_CHECKER_ENABLED":  "{{ .Values.nodeReadinessChecker.enabled }}"
+{{- if .Values.nodeReadinessChecker.enabled }}
+  "OKTETO_NODE_READINESS_COMPONENTS": "{{ include "okteto.joinListWithComma" .Values.nodeReadinessChecker.components }}"
+{{- end}}
+  "OKTETO_MAX_PERSONAL_ACCESS_TOKEN": "{{ .Values.store.personalAccessToken.max }}"
+  "OKTETO_GCP_STORE_ENABLED": "{{ .Values.store.provider.gcp.enabled }}"
+  "OKTETO_GIT_SSH_USER": "{{ .Values.installer.gitSSHUser }}"
+  "OKTETO_DEV_STORAGE_CLASS_ENABLED": "{{ .Values.devStorageClass.enabled }}"
+{{- if .Values.devStorageClass.enabled }}
+  "OKTETO_DEFAULT_DEV_STORAGE_CLASS": "{{ .Values.devStorageClass.storageClass }}"
+{{- end}}
+  "OKTETO_NODE_STATIC_IP_ENABLED": "{{ .Values.unsupported.staticIPs }}"
+  "OKTETO_VALIDATE_PVC_ENABLED": "{{ .Values.volumes.validate.enabled }}"
+{{- if .Values.volumes.validate.enabled }}
+  "OKTETO_SUPPORTED_STORAGE_CLASSES": "{{ include "okteto.joinListWithComma" .Values.volumes.validate.supportedStorageClasses }}"
+  "OKTETO_FORCE_STORAGE_CLASS": "{{ .Values.volumes.validate.forceStorageClass }}"
+  "OKTETO_SUPPORTED_ACCESS_MODES": "{{ include "okteto.joinListWithComma" .Values.volumes.validate.supportedAccessModes }}"
+{{- end}}
+  "OKTETO_JOBS_TTL_SECONDS_AFTER_FINISHED": "{{ .Values.globals.jobs.ttlSecondsAfterFinished }}"
+  "OKTETO_GIT_INSTALLER_ACTIVE_DEADLINE_SECONDS": "{{ .Values.installer.activeDeadlineSeconds }}"
+  "OKTETO_AUTO_ADMIN_ENABLED": "{{ .Values.autoAdmin.enabled }}"
+  "OKTETO_SCALE_DOWN_PERSISTENT_RESOURCES": "{{ .Values.unsupported.scaleDownPersistentResources }}"
+  "OKTETO_NAMESPACE_DESTROY_ALL_JOB_IMAGE": "{{ include "okteto.image.backend" . }}"
+  "OKTETO_NAMESPACE_WAKE_ALL_JOB_IMAGE": "{{ include "okteto.image.backend" . }}"
+  "OKTETO_NAMESPACE_SLEEP_JOB_IMAGE": "{{ include "okteto.image.backend" . }}"
+{{- if .Values.unsupported.metrics.enabled}}
+  "OKTETO_METRICS_URL": "{{ .Values.unsupported.metrics.url }}"
+  "OKTETO_METRICS_HEADERS": {{ .Values.unsupported.metrics.headers | toJson | b64enc | quote }}
+  "OKTETO_METRICS_EVENTS": {{ .Values.unsupported.metrics.events | toJson | b64enc | quote }}
+{{- end}}
+  "OKTETO_PROMETHEUS_ENABLED": "{{ .Values.api.prometheus.enabled }}"
+  "OKTETO_INSIGHTS_ENABLED": "{{ .Values.insights.enabled }}"
+  "OKTETO_INSIGHTS_BEARER_SECRET_NAME": "{{ .Values.insights.bearerSecret.name }}"
+  "OKTETO_INSIGHTS_BEARER_SECRET_KEY": "{{ .Values.insights.bearerSecret.key }}"
+  "MAX_TERMINATION_GRACE_PERIOD_SECONDS_ENABLED":  "{{ .Values.maxTerminationGracePeriodSeconds.enabled }}"
+{{- if .Values.maxTerminationGracePeriodSeconds.enabled }}
+  "MAX_TERMINATION_GRACE_PERIOD_SECONDS_LIMIT": "{{ .Values.maxTerminationGracePeriodSeconds.limit }}"
+{{- end }}
+  "OKTETO_USER_POD_AFFINITY": "{{ .Values.userPodAffinity.enabled }}"
+  "OKTETO_USER_POD_ANTI_AFFINITY": "{{ .Values.userPodAffinity.antiAffinity.enabled }}"
+  "OKTETO_ALLOW_DAEMONSETS_FOR_USERS": "{{ .Values.unsupported.allowDaemonsetsForUsers }}"
+  "OKTETO_DISABLE_SYSTEM_EVENTS": "{{ .Values.unsupported.disableSystemEvents }}"
+  "OKTETO_EXTRA_ROLEBINDINGS": {{ include "okteto.serviceaccountsextrarolebindings" . | quote }}
+  "OKTETO_KUBECLIENT_HOST": "{{ .Values.unsupported.kubeclient.host }}"
+  "OKTETO_KUBECLIENT_INSECURE": "{{ .Values.unsupported.kubeclient.insecure }}"
+  "OKTETO_SERVICEACCOUNT_ANNOTATIONS": {{ include "okteto.serviceaccountsannotations" . | quote }}
+  "OKTETO_SERVICEACCOUNT_LABELS": {{ include "okteto.serviceaccountslabels" . | quote }}
+  "OKTETO_NAMESPACE_DEV_LABEL_VALUE": "{{ .Values.namespaceDevLabelValue }}"
+  "OKTETO_NAMESPACES_PREFIX": "{{ .Values.unsupported.namespacesPrefix }}"
+  "OKTETO_ALLOW_DEV_PUSH_TO_GLOBAL_REGISTRY": "{{ .Values.unsupported.allowDevPushToGlobalRegistry.enabled }}"
+  "OKTETO_INSTALLATION_BOARD_ENABLED": "{{ .Values.unsupported.installationBoard.enabled }}"
+  "OKTETO_WILDCARD_CERTIFICATE_CREATED": "{{ .Values.wildcardCertificate.create }}"
+  "OKTETO_WEBHOOK_SKIP_NS_ANNOTATION_IF_NO_CHANGES": "{{ .Values.unsupported.webhook.skipNsAnnotationIfNoChanges }}"
+  "OKTETO_WILDCARD_CERTIFICATE_PRIVATE_CA_ENABLED": "{{ .Values.wildcardCertificate.privateCA.enabled }}"
+  "OKTETO_EXTERNAL_ID_MAPPING_ENABLED": "{{ .Values.unsupported.externalIdMapping.enabled }}"
+{{- if .Values.unsupported.externalIdMapping.enabled }}
+  "OKTETO_EXTERNAL_ID_MAPPING_MAPPING": {{ .Values.unsupported.externalIdMapping.mapping | toJson | quote }}
+{{- end }}
+  "OKTETO_EMULATE_POD_SECURITY_POLICIES": "{{ .Values.unsupported.emulatePodSecurityPolicies.enabled }}"
+{{- if .Values.unsupported.emulatePodSecurityPolicies.enabled }}
+  "OKTETO_EMULATE_POD_SECURITY_POLICIES_ALLOW_HOST_PATHS": {{ .Values.unsupported.emulatePodSecurityPolicies.allowHostPaths | toJson | quote }}
+  "OKTETO_EMULATE_POD_SECURITY_POLICIES_ALLOW_PRIVILEGED": "{{ .Values.unsupported.emulatePodSecurityPolicies.allowPrivileged }}"
+{{- end }}
+  "OKTETO_ALLOW_CAPABILITIES": {{ .Values.allowcap | toJson | quote }}
+  "OKTETO_CINDY_ENABLED": "{{ .Values.unsupported.cindy.enabled }}"
+{{- if .Values.unsupported.cindy.enabled}}
+  "OKTETO_CINDY_IMAGE": "{{ include "okteto.image.cindy" . }}"
+  "OKTETO_CINDY_SANDBOX_IMAGE": "{{ include "okteto.image.sandbox" . }}"
+{{- end }}
+  "OKTETO_SLEEPING_INGRESS_CLASS_ENABLED": "{{ .Values.unsupported.sleepingIngressClass.enabled }}"
+  "OKTETO_SLEEPING_INGRESS_CLASS_NAME": "{{ .Values.unsupported.sleepingIngressClass.name }}"
+  "OKTETO_INGRESS_TLS_SECRET_NAME": "{{ include "okteto.ingress.tlsSecret" . }}"
+  "OKTETO_KUBETOKEN_LIFETIME_SECONDS": "{{ .Values.kubetoken.lifetimeSeconds }}"
+  "OKTETO_BUILDKIT_INGRESS_ENABLED": "{{ .Values.buildkit.ingress.enabled }}"
+  "OKTETO_DAEMONSET_INSTALLED": "{{ include "okteto.installDaemonset" . }}"
+  "GC_UP_SESSION_BY_LAST_SYNCED_FILE": "{{ .Values.gc.upSessionByLastSyncedFile }}"
+  "OKTETO_BOT_USER": "{{ .Values.oktetoBotUser }}"
+  "OKTETO_RESTRICT_GROUP_USER_ROLE_BINDINGS": "{{ .Values.unsupported.restrictGroupUserRoleBindings }}"
+  "PULLSECRETS_ENABLED": "{{ .Values.regcredsManager.pullSecrets.enabled }}"
+  "AUTOSCALER_AGENT_PRIORITY_CLASS_NAME": "{{ .Values.globals.priorityClassName }}"
+  "INSTALLER_PRIORITY_CLASS_NAME": "{{ .Values.installer.priorityClassName | default .Values.globals.priorityClassName }}"
+  "OKTETO_INSTALLER_SECURITY_CONTEXT": {{ .Values.installer.securityContext | toJson | quote }}
+  "NAMESPACE_DESTROY_ALL_PRIORITY_CLASS_NAME": "{{ .Values.namespaceDestroyAll.priorityClassName | default .Values.globals.priorityClassName }}"
+  "NAMESPACE_SLEEP_PRIORITY_CLASS_NAME": "{{ .Values.globals.priorityClassName }}"
+  "NAMESPACE_WAKE_ALL_PRIORITY_CLASS_NAME": "{{ .Values.globals.priorityClassName }}"
+  "OKTETO_EXTERNAL_ENDPOINTS": {{ .Values.unsupported.externalEndpoints | toJson | quote }}
+  "OKTETO_INSIGHTS_EVENTS_EXPORTER_METRICS_ENABLED": {{ .Values.insights.enabled | quote }}
+  {{- if .Values.insights.enabled }}
+  "OKTETO_EVENTS_EXPORTER_METRICS_SERVICE_NAME": {{ printf "%s-eventsexporter" (include "okteto.fullname" . ) | quote }}
+  {{- end }}
+  "OKTETO_RESOURCE_MANAGER_ENABLED": "{{ .Values.resourceManager.enabled }}"
+  {{- if .Values.resourceManager.enabled }}
+  "OKTETO_RESOURCE_MANAGER_RECOMMENDATIONS_WEIGHT": "{{ include "okteto.resourceManager.recommendations.weight" . }}"
+  "OKTETO_RESOURCE_MANAGER_RECOMMENDATIONS_CORRECTION": "{{ include "okteto.resourceManager.recommendations.correction" . }}"
+  "OKTETO_RESOURCE_MANAGER_RECOMMENDATIONS_MIN_CPU": "{{ include "okteto.resourceManager.recommendations.min.cpu" . }}"
+  "OKTETO_RESOURCE_MANAGER_RECOMMENDATIONS_MIN_MEMORY": "{{ include "okteto.resourceManager.recommendations.min.memory" . }}"
+  "OKTETO_RESOURCE_MANAGER_DELETE_PERIOD_DAYS": "{{ include "okteto.resourceManager.deletePeriodDays" . }}"
+  "OKTETO_REDIS_ENDPOINT": "{{ include "okteto.resourceManager.redisEndpoint" . }}"
+  {{- end }}
+  {{- if .Values.installer.sshSecretName }}
+  "OKTETO_SSH_AGENT_PORT": "{{ .Values.sshAgent.port }}"
+  {{- end }}
+  "OKTETO_OIDC_STRICT_ISSUER_CHECK": "{{ .Values.oidc.strictIssuerCheck.enabled }}"
+  "OKTETO_MIGRATION_USE_INGRESS_CLASS_LABEL": "{{ .Values.unsupported.migrationUseIngressClassLabel }}"

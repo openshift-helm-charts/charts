@@ -1,0 +1,62 @@
+{{/* Validation for GitHub Oauth and GitHub App clientId and clientSecret */}}
+{{- if and .Values.auth.github.enabled .Values.github.enabled -}}
+  {{- if ne (default "" .Values.auth.github.clientId) (default "" .Values.github.clientId) -}}
+    {{- fail "github.clientId and auth.github.clientId must be equal" -}}
+  {{- end -}}
+  
+  {{- if ne (default "" .Values.auth.github.clientSecret) (default "" .Values.github.clientSecret) -}}
+    {{- fail "github.clientSecret and auth.github.clientSecret must be equal" -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if eq .Values.subdomain "localtest.me" }}
+  {{- if ne (include "okteto.authToken.enabled" .) "true" -}}
+    {{- fail "'localtest.me' subdomain only supported with the auth token provider" -}}
+  {{- end -}}
+  {{- if not .Values.wildcardCertificate.create -}}
+    {{- fail "'localtest.me' subdomain only supported with self-signed certificates" -}}
+  {{- end -}}
+{{- end }}
+
+{{/*
+  This validation checks that the length of the installation name does not exceed the specified maximum length.
+  If the name is longer than the allowed number of characters, the chart installation fails.
+
+  $maxInstallationNameLength is calculated based on kubernetes own resource name limitations.
+  For example, CronJob names must be no more than 52 characters long and Service names must be no more than 63 characters long.
+
+  As the default backend is the service with the longest name, we use it to calculate the maximum length of the installation name.
+  If the user decides to override the default backend name, we then allow extra chars for the installation name.
+*/}}
+{{- $maxServiceNameLength := 63 -}}
+{{- $longestSuffixLength := len "-ingress-nginx-defaultbackend" }}
+{{- $maxInstallationNameLength := sub $maxServiceNameLength $longestSuffixLength -}}
+{{- if .Values.defaultBackend.nameOverride }}
+  {{- if gt (len (include "okteto.defaultBackendName" .)) $maxServiceNameLength -}}
+    {{- fail (printf "The default backend name '%s' exceeds the max length of %d characters. Try shortening the release name or use 'defaultBackend.nameOverride'." (include "okteto.defaultBackendName" .) $maxServiceNameLength) -}}
+  {{- end -}}
+  {{- $maxInstallationNameLength = 40 -}}
+{{- end }}
+{{- if .Values.fullnameOverride }}
+  {{- if gt (len .Values.fullnameOverride) $maxInstallationNameLength -}}
+    {{- fail (printf "'fullnameOverride' '%s' exceeds the max length of %d characters. Try shortening its value." .Values.fullnameOverride $maxInstallationNameLength) -}}
+  {{- end -}}
+{{- else }}
+  {{- if .Values.nameOverride }}
+    {{- if contains .Values.nameOverride .Release.Name }}
+      {{- if gt (len .Release.Name) $maxInstallationNameLength -}}
+        {{- fail (printf "Release name '%s' exceeds the max length of %d characters. Try shortening the release name or the 'nameOverride', or alternatively use 'fullnameOverride'." .Release.Name $maxInstallationNameLength) -}}
+      {{- end -}}
+    {{- else }}
+      {{- $fullName := printf "%s-%s" .Release.Name .Values.nameOverride -}}
+      {{- if gt (len $fullName) $maxInstallationNameLength -}}
+        {{- fail (printf "Release name '%s' exceeds the max length of %d characters. Try shortening the release name or the 'nameOverride', or alternatively use 'fullnameOverride'." $fullName $maxInstallationNameLength) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else }}
+    {{- $fullName := printf "%s-%s" .Release.Name .Chart.Name -}}
+    {{- if gt (len $fullName) $maxInstallationNameLength -}}
+      {{- fail (printf "Release name '%s' exceeds the max length of %d characters. Try shortening the release name or use 'fullnameOverride' or 'nameOverride'." $fullName $maxInstallationNameLength) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end }}

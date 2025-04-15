@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ include "okteto.webhook" . }}"
+  labels:
+    app.kubernetes.io/component: "webhook"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.webhook" . }}"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    secret.reloader.stakater.com/reload: "{{ include "okteto.webhook" . }},{{ .Values.cloud.secret.name }}"
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+  replicas: {{ .Values.webhook.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "okteto.webhook" . }}"
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ include "okteto.webhook" . }}"
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "webhook"
+        app.kubernetes.io/part-of: "okteto"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+{{- end }}
+{{- if .Values.webhook.labels }}
+{{ toYaml .Values.webhook.labels | indent 8 }}
+{{- end }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secrets: {{ include (print $.Template.BasePath "/webhook.yaml") . | sha256sum }}
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+{{- if .Values.webhook.annotations }}
+{{ toYaml .Values.webhook.annotations | indent 8 }}
+{{- end }}
+    spec:
+      affinity:
+        nodeAffinity:
+{{ include "okteto.oktetoAffinity" . | indent 10 }}
+        podAntiAffinity:
+          {{- if .Values.affinity.required }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - "{{ include "okteto.webhook" . }}"
+              topologyKey: kubernetes.io/hostname
+          {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - "{{ include "okteto.webhook" . }}"
+                topologyKey: kubernetes.io/hostname
+          {{- end }}
+      serviceAccountName: {{ include "okteto.fullname" . }}
+      {{- include "okteto.tolerations" (dict "globalsTolerations" .Values.globals.tolerations.okteto "poolTolerations" .Values.tolerations.oktetoPool ) | nindent 6 }}
+      {{- include "okteto.nodeSelectors" (dict "poolTolerations" .Values.tolerations.oktetoPool "nodeSelectors" .Values.globals.nodeSelectors.okteto ) | nindent 6 }}
+      volumes:
+        - name: webhook-tls-certs
+          secret:
+            defaultMode: 420
+            secretName: {{ include "okteto.webhook" . }}
+      hostNetwork: {{ .Values.webhook.hostNetwork }}
+      priorityClassName: {{ .Values.webhook.priorityClassName | default .Values.globals.priorityClassName }}
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: server
+          image: {{ include "okteto.image.backend" . }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: 8443
+            - name: http
+              containerPort: 8080
+          args: [ "webhook" ]
+          env:
+            - name: OKTETO_INGRESS_INTERNAL_IP
+              value: "{{ include "okteto.ingressprivateip" . }}"
+            - name: OKTETO_BUILDKIT_INTERNAL_IP
+              value: "{{ include "okteto.buildkitprivateip" . }}"
+            - name: PORT
+              value: "8443"
+{{- if .Values.webhook.extraEnv }}
+{{ toYaml .Values.webhook.extraEnv | indent 12 }}
+{{- end }}
+          envFrom:
+          - configMapRef:
+              name: "{{ include "okteto.fullname" . }}"
+          - secretRef:
+              name: {{ include "okteto.fullname" . }}
+          - secretRef:
+              name: "{{ .Values.cloud.secret.name }}"
+              optional: true
+          volumeMounts:
+            - name: webhook-tls-certs
+              mountPath: /run/secrets/tls
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /readiness
+              port: https
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /healthz
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 3
+            timeoutSeconds: 10
+          resources:
+{{ toYaml .Values.webhook.resources | indent 12 }}

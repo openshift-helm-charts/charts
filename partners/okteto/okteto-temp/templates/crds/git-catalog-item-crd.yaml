@@ -1,0 +1,66 @@
+{{- if .Values.crds.install }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    {{- if .Values.crds.keep }}
+    "helm.sh/resource-policy": keep
+    {{- end }}
+    {{- with .Values.crds.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: catalogitems.git.okteto.com
+  name: catalogitems.git.okteto.com
+spec:
+  group: git.okteto.com
+  names:
+    kind: CatalogItem
+    listKind: CatalogItemList
+    plural: catalogitems
+    singular: catalogitem
+    shortNames:
+    - ci
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: CatalogItem is the schema for the git based catalog items which stores the needed information for each element
+        type: object
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            type: object
+            required:
+              - name
+              - repositoryUrl
+            properties:
+              name:
+                type: string
+              repositoryUrl:
+                type: string
+              branch:
+                type: string
+              manifestPath:
+                type: string
+              variables:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+    served: true
+    storage: true
+{{- end }}

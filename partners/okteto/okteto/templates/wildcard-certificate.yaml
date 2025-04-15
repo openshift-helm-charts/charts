@@ -1,0 +1,21 @@
+{{- if .Values.wildcardCertificate.create }}
+{{- $wildcardCertificate := (include "okteto.wildcardCertificate.data" .) -}}
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: {{ include "okteto.tlsSecret" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/part-of: "okteto"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    dev.okteto.com/fqdns: {{ (include "okteto.fqdns" .) | quote }}
+  {{- if .Values.wildcardCertificate.annotations }}
+    {{- toYaml .Values.wildcardCertificate.annotations | nindent 4 }}
+  {{- end }}
+
+stringData: {{ $wildcardCertificate | nindent 2 }}
+{{- end}}

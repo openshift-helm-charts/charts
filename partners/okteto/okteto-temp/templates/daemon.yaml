@@ -1,0 +1,181 @@
+{{- if eq (include "okteto.installDaemonset" .) "true" }}
+{{- $publicUrl := include "okteto.public" . -}}
+{{- $registryUrl :=  include "okteto.registry"  . }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: "{{ include "okteto.fullname" . }}-daemon"
+  labels:
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-daemon"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/component: "daemon"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- if .Values.wildcardCertificate.privateCA.enabled }}
+  annotations:
+    secret.reloader.stakater.com/reload: "{{ .Values.wildcardCertificate.privateCA.secret.name }}"
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-daemon"
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 100%
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-daemon"
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "daemon"
+        app.kubernetes.io/part-of: "okteto"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+{{- end }}
+      annotations:
+        app.kubernetes.io/version: "{{ .Release.Name }}-{{ .Chart.Name }}-{{ include "okteto.version" . }}"
+        {{- if .Values.wildcardCertificate.create }}
+        checksum/certs: {{ include (print $.Template.BasePath "/wildcard-certificate.yaml") . | sha256sum }}
+        {{- end }}
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+    spec:
+      hostPID: true
+      terminationGracePeriodSeconds: 0
+      serviceAccountName: {{ include "okteto.fullname" . }}
+      priorityClassName: {{ .Values.daemonset.priorityClassName | default .Values.globals.priorityClassName }}
+      {{- include "okteto.tolerations" (dict "globalsTolerations" .Values.globals.tolerations.dev "poolTolerations" .Values.tolerations.devPool ) | nindent 6 }}
+      {{- include "okteto.nodeSelectors" (dict "poolTolerations" .Values.tolerations.devPool "nodeSelectors" .Values.globals.nodeSelectors.dev ) | nindent 6 }}
+      {{- if .Values.backend.bin.image }}
+      - name: bin
+        image: {{ .Values.backend.bin.image }}
+        securityContext:
+          privileged: true
+        command:
+          - /bin/sh
+          - -c
+          - "cp /usr/local/bin/* /var/okteto/bin"
+        volumeMounts:
+          - mountPath: /var/okteto/bin
+            name: okteto-bin
+      {{- end }}
+      containers:
+      - name: daemon
+        image: {{ include "okteto.image.daemonset" . }}
+        imagePullPolicy: {{ .Values.pullPolicy }}
+        securityContext:
+          privileged: true
+        env:
+          - name: UPDATE_HOSTS_DISABLED
+            value: "{{ not .Values.overrideRegistryResolution.enabled }}"
+          - name: UPDATE_HOSTS_INGRESS_INTERNAL_IP
+            value: "{{ include "okteto.ingressprivateip" . }}"
+          - name: UPDATE_HOSTS_REGISTRY_URL
+            value: "{{ $registryUrl }}"
+          - name: UPDATE_HOSTS_OKTETO_URL
+            value: "{{ $publicUrl }}"
+          - name: PRIVATE_REGISTRY_CREDENTIALS_DISABLED
+            value: "{{ or .Values.regcredsManager.pullSecrets.enabled (not .Values.daemonset.configurePrivateRegistriesInNodes.enabled) }}"
+          - name: PRIVATE_REGISTRY_CREDENTIALS_ROOT_SECRET_NAME
+            value: "{{ include "okteto.fullname" . }}-dockerconfig-static"
+          - name: PRIVATE_REGISTRY_CREDENTIALS_DESTINATION_PATH
+            value: "{{ include "okteto.daemonset.privateRegistryDestinationPath" . }}"
+          - name: PRIVATE_REGISTRY_CREDENTIALS_SECRET_NAME
+            value: "{{ include "okteto.fullname" . }}-dockerconfig"
+          - name: SYSCTL_CONFIG_DISABLED
+            value: "{{ not .Values.overrideFileWatchers.enabled }}"
+          - name: SYSCTL_CONFIG_MAX_USER_WATCHES
+            value: "{{ int .Values.overrideFileWatchers.maxUserWatches }}"
+          - name: SYSCTL_CONFIG_MAX_MAP_COUNT
+            value: "{{ int .Values.overrideFileWatchers.maxMapCount }}"
+          - name: SYSCTL_CONFIG_AIO_MAX_NR
+            value: "{{ int .Values.overrideFileWatchers.aioMaxNR }}"
+          - name: COPY_BIN_DISABLED
+            value: "true"
+          - name: COPY_CLOUDBIN_DISABLED
+            value: "true"
+          - name: CHECK_CNI_PLUGIN_DISABLED
+            value: "{{ not .Values.checkCNIPodHealth.enabled }}"
+          - name: CHECK_CNI_PLUGIN_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          {{- if .Values.checkCNIPodHealth.enabled }}
+          - name: CHECK_CNI_PLUGIN_RESTART_COUNT_THRESHOLD
+            value: "{{ .Values.checkCNIPodHealth.restartCountThreshold }}"
+          - name: CHECK_CNI_PLUGIN_SLACK_WEBHOOK
+            value: "{{ .Values.checkCNIPodHealth.slackWebhook }}"
+          - name: CHECK_CNI_PLUGIN_PUBLIC_DOMAIN
+            value: "{{ include "okteto.public" . }}"
+          - name: CHECK_CNI_PLUGIN_BACK_OFF_INTERNAL_IN_MINUTES
+            value: "{{ .Values.checkCNIPodHealth.backOffIntervalInMinutes }}"
+          {{- end }}
+          - name: PRIVATE_CA_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: PRIVATE_CA_REGISTRY_URL
+            value: "{{ $registryUrl }}"
+          - name: PRIVATE_CA_DISABLED
+            value: "{{ eq "false" (include "okteto.privateca.enabled" .) }}"
+{{- if .Values.daemonset.extraEnv }}
+{{ toYaml .Values.daemonset.extraEnv | indent 10 }}
+{{- end }}
+        volumeMounts:
+          {{- if .Values.overrideRegistryResolution.enabled }}
+          - name: hostalias
+            mountPath: /etc/hosts
+          {{- end }}
+          {{- if or (not .Values.regcredsManager.pullSecrets.enabled) .Values.daemonset.configurePrivateRegistriesInNodes.enabled }}
+          - name: kubelet-conf
+            mountPath: /var/lib/kubelet
+          {{- end }}
+          {{- if .Values.overrideFileWatchers.enabled }}
+          - name: proc-volume
+            mountPath: /proc-aux
+          {{- end }}
+          {{- if eq "true" (include "okteto.privateca.enabled" .) }}
+          - name: host-etc
+            mountPath: /host/etc
+          - name: ca-pemstore
+            mountPath: /etc/ssl/certs/okteto-private-ca.crt
+            subPath: {{ include "okteto.privateca.secretkey" . }}
+            readOnly: true
+          {{- end }}
+        resources:
+{{ toYaml .Values.daemonset.resources | indent 12 }}
+      volumes:
+      {{- if .Values.backend.bin.image }}
+      - name: okteto-bin
+        hostPath:
+          path: /var/okteto/bin
+      {{- end }}
+      {{- if or (not .Values.regcredsManager.pullSecrets.enabled) .Values.daemonset.configurePrivateRegistriesInNodes.enabled }}
+      - name: kubelet-conf
+        hostPath:
+          path: /var/lib/kubelet
+      {{- end }}
+      {{- if .Values.overrideRegistryResolution.enabled }}
+      - name: hostalias
+        hostPath:
+          path: /etc/hosts
+      {{- end }}
+      {{- if .Values.overrideFileWatchers.enabled }}
+      - name: proc-volume
+        hostPath:
+          path: /proc
+      {{- end }}
+      {{- if eq "true" (include "okteto.privateca.enabled" .) }}
+      - name: host-etc
+        hostPath:
+          path: /etc
+      - name: ca-pemstore
+        secret:
+          defaultMode: 420
+          secretName: {{ include "okteto.privateca.secretname" . }}
+      {{- end }}
+{{- end}}

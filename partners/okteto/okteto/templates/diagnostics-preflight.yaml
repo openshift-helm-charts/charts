@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: okteto-preflight
+  namespace: {{ .Release.Namespace }}
+  labels:
+    troubleshoot.sh/kind: preflight
+    app.kubernetes.io/component: "diagnostics"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-preflight"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  preflight-spec: {{ include "okteto.diagnostics.preflightSpec" . | toYaml | nindent 4 -}}

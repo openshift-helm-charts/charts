@@ -1,0 +1,19 @@
+{{- if not .Values.cluster.endpoint }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "okteto.fullname" . }}-cluster-endpoint"
+  labels:
+    app.kubernetes.io/component: "cluster-endpoint"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-cluster-endpoint"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ExternalName
+  externalName: kubernetes.default.svc.cluster.local
+  ports:
+    - protocol: TCP
+      port: 443
+{{- end }}

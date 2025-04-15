@@ -1,0 +1,241 @@
+{{- if .Values.registry.enabled }}
+{{- $publicUrl := include "okteto.public" . -}}
+{{- $provider := include "okteto.registry.storage.provider" . | trim | nindent 2 | fromYaml -}}
+{{- $secret := include "okteto.registry.secret" . | trim | nindent 2 | fromYaml -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ include "okteto.fullname" . }}-registry"
+  labels:
+    app.kubernetes.io/component: "registry"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-registry"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    secret.reloader.stakater.com/reload: "{{ include "okteto.tlsSecretsToReload" . }},{{ .Values.cloud.secret.name }}"
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+  replicas: {{ .Values.registry.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-registry"
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-registry"
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "registry"
+        app.kubernetes.io/part-of: "okteto"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+{{- end }}
+{{- if .Values.registry.labels }}
+{{ toYaml .Values.registry.labels | indent 8 }}
+{{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/registry-config.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/registry-http-secret.yaml") . | sha256sum }}
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+{{- if .Values.registry.annotations }}
+{{ toYaml .Values.registry.annotations | indent 8 }}
+{{- end }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 1000
+      affinity:
+        nodeAffinity:
+{{ include "okteto.oktetoAffinity" . | indent 10 }}
+        podAntiAffinity:
+          {{- if .Values.affinity.required }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - "{{ include "okteto.fullname" . }}-registry"
+              topologyKey: kubernetes.io/hostname
+          {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - "{{ include "okteto.fullname" . }}-registry"
+                topologyKey: kubernetes.io/hostname
+          {{- end }}
+      serviceAccountName: "{{ include "okteto.registry.serviceAccountName" . }}"
+      {{- include "okteto.tolerations" (dict "globalsTolerations" .Values.globals.tolerations.okteto "poolTolerations" ( .Values.tolerations.buildPool | default .Values.tolerations.oktetoPool ) ) | nindent 6 }}
+      {{- include "okteto.nodeSelectors" (dict "poolTolerations" ( .Values.tolerations.buildPool | default .Values.tolerations.oktetoPool ) "nodeSelectors" .Values.globals.nodeSelectors.okteto ) | nindent 6 }}
+      volumes:
+  {{- if eq (include "okteto.registry.storage.filesystem.enabled" .) "true" }}
+        - name: data
+    {{- if .Values.registry.storage.filesystem.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "okteto.fullname" . }}-registry
+    {{- else }}
+          emptyDir: {}
+    {{- end }}
+  {{- end }}
+        - name: config
+          configMap:
+            name: {{ template "okteto.fullname" . }}-registry-config
+        - name: tls-certs
+          secret:
+            defaultMode: 420
+            secretName: {{ include "okteto.registry.tlsSecret" . }}
+  {{- if $provider.gcp.enabled }}
+    {{- if not $provider.gcp.workloadIdentity.enabled }}
+        - name: gcs-account
+          secret:
+            defaultMode: 420
+            secretName: {{ $secret.name }}
+    {{- end }}
+  {{- end }}
+        - name: hosts
+          emptyDir: {}
+      priorityClassName: {{ .Values.registry.priorityClassName | default .Values.globals.priorityClassName }}
+      initContainers:
+        - name: init-hosts
+          image:  {{ include "okteto.image.registry" . }}
+          command:
+            - sh
+            - -c
+            - "cat /etc/hosts > /data/hosts && echo $OKTETO_INGRESS_INTERNAL_IP {{ $publicUrl }} >> /data/hosts"
+          env:
+            - name: OKTETO_INGRESS_INTERNAL_IP
+              value: "{{ include "okteto.ingressprivateip" . }}"
+          volumeMounts:
+            - name: hosts
+              mountPath: /data
+      containers:
+        - name: registry
+          image: {{ include "okteto.image.registry" . }}
+          imagePullPolicy: {{ .Values.pullPolicy}}
+          command:
+          - sh
+          - -c
+          - "/bin/registry serve /etc/docker/registry/config.yml"
+          ports:
+            - name: registry
+              containerPort: {{ .Values.registry.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.registry.port }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.registry.port }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sleep", "45"]
+          env:
+            - name: OKTETO_INGRESS_INTERNAL_IP
+              value: "{{ include "okteto.ingressprivateip" . }}"
+            - name: REGISTRY_HTTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "okteto.fullname" . }}-registry-http-secret
+                  key: haShared
+            - name: REGISTRY_STORAGE_DELETE_ENABLED
+              value: "true"
+            - name: REGISTRY_AUTH_TOKEN_REALM
+              value: "https://{{ $publicUrl }}/auth/registry"
+            - name: REGISTRY_AUTH_TOKEN_SERVICE
+              value: "okteto-registry"
+            - name: REGISTRY_AUTH_TOKEN_ISSUER
+              value: "okteto-registry"
+            - name: REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE
+              value: "/run/secrets/tls/tls.crt"
+
+  {{- if eq (include "okteto.registry.storage.filesystem.enabled" .) "true" }}
+            - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+              value: "/var/lib/registry"
+  {{- else }}
+    {{- if $provider.gcp.enabled }}
+            - name: REGISTRY_STORAGE_GCS_BUCKET
+              value: {{ required "A valid .Values.registry.storage.provider.gcp.bucket is required" $provider.gcp.bucket }}
+      {{- if not $provider.gcp.workloadIdentity.enabled }}
+            - name: REGISTRY_STORAGE_GCS_KEYFILE
+              value: /run/secrets/gcs/key
+      {{- end}}
+    {{- else if $provider.azure.enabled }}
+            - name: REGISTRY_STORAGE_AZURE_CONTAINER
+              value: {{ required "A valid .Values.registry.storage.provider.azure.storage.container is required" $provider.azure.storage.container }}
+            - name: REGISTRY_STORAGE_AZURE_ACCOUNTNAME
+              value: {{ required "A valid .Values.registry.storage.provider.azure.storage.accountName is required" $provider.azure.storage.accountName }}
+            - name: REGISTRY_STORAGE_AZURE_ACCOUNTKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secret.name }}
+                  key: {{ $secret.secretKey }}
+    {{- else if $provider.aws.enabled }}
+            - name: REGISTRY_STORAGE_S3_BUCKET
+              value: {{ required "A valid .Values.registry.storage.provider.aws.bucket is required" $provider.aws.bucket }}
+            - name: REGISTRY_STORAGE_S3_REGION
+              value: {{ $provider.aws.region }}
+      {{- if $provider.aws.iam.accessKeyID }}
+            - name: REGISTRY_STORAGE_S3_ACCESSKEY
+              value: {{ $provider.aws.iam.accessKeyID }}
+            - name: REGISTRY_STORAGE_S3_SECRETKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secret.name }}
+                  key: {{ $secret.secretKey }}
+      {{- end }}
+    {{- else if $provider.digitalocean.enabled }}
+            - name: REGISTRY_STORAGE_S3_BUCKET
+              value: {{ required "A valid .Values.registry.storage.provider.digitalocean.space.name is required" $provider.digitalocean.space.name }}
+            - name: REGISTRY_STORAGE_S3_REGION
+              value: {{ $provider.digitalocean.region  }}
+            - name: REGISTRY_STORAGE_S3_REGIONENDPOINT
+              value: {{ $provider.digitalocean.region }}.digitaloceanspaces.com
+            - name: REGISTRY_STORAGE_S3_ACCESSKEY
+              value: {{ $provider.digitalocean.space.accessKeyID }}
+            - name: REGISTRY_STORAGE_S3_SECRETKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secret.name }}
+                  key: {{ $secret.secretKey }}
+    {{- end }}
+  {{- end }}
+{{- if .Values.registry.extraEnv }}
+{{ toYaml .Values.registry.extraEnv | indent 12 }}
+{{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: "/etc/docker/registry"
+              readOnly: true
+            - name: tls-certs
+              mountPath: /run/secrets/tls
+              readOnly: true
+            {{- if eq (include "okteto.registry.storage.filesystem.enabled" .) "true" }}
+            - name: data
+              mountPath: /var/lib/registry/
+            {{- end }}
+            {{- if and $provider.gcp.enabled (not $provider.gcp.workloadIdentity.enabled) }}
+            - name: gcs-account
+              mountPath: /run/secrets/gcs/
+              readOnly: true
+            {{- end }}
+            - name: hosts
+              mountPath: /etc/hosts
+              subPath: hosts
+          resources:
+{{ toYaml .Values.registry.resources | indent 12 }}
+{{- end }}

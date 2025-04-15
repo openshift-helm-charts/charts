@@ -1,0 +1,56 @@
+{{- $name := include "okteto.fullNameCronJob" (dict "context" . "suffix" "destroy-all-checker") }}
+
+apiVersion: {{ template "okteto.cronJob.apiVersion" . }}
+kind: CronJob
+metadata:
+  name: "{{ $name }}"
+  labels:
+    app.kubernetes.io/component: "namespace-destroy-all"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ $name }}"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 120
+  schedule: "{{ .Values.namespaceDestroyAll.checker.schedule }}"
+  jobTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/component: "namespace-destroy-all"
+        app.kubernetes.io/part-of: "okteto"
+    spec:
+      activeDeadlineSeconds: {{ .Values.namespaceDestroyAll.checker.timeoutInSeconds }}
+      ttlSecondsAfterFinished: {{ .Values.globals.jobs.ttlSecondsAfterFinished }}
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/component: "namespace-destroy-all"
+            app.kubernetes.io/part-of: "okteto"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 12 }}
+{{- end }}
+{{- if .Values.podAnnotations }}
+        annotations:
+{{ toYaml .Values.podAnnotations | indent 12 }}
+{{- end }}
+        spec:
+          affinity:
+            nodeAffinity:
+{{ include "okteto.oktetoAffinity" . | indent 14 }}
+          serviceAccountName: {{ include "okteto.fullname" . }}
+          {{- include "okteto.tolerations" (dict "globalsTolerations" .Values.globals.tolerations.okteto "poolTolerations" .Values.tolerations.oktetoPool ) | nindent 10 }}
+          {{- include "okteto.nodeSelectors" (dict "poolTolerations" .Values.tolerations.oktetoPool "nodeSelectors" .Values.globals.nodeSelectors.okteto ) | nindent 10 }}
+          restartPolicy: Never
+          priorityClassName: {{ .Values.namespaceDestroyAll.checker.priorityClassName | default .Values.globals.priorityClassName }}
+          securityContext:
+            runAsNonRoot: true
+          containers:
+            - name: checker
+              image: "{{ include "okteto.image.backend" . }}"
+              imagePullPolicy: {{ .Values.pullPolicy }}
+              args: [ "check-namespace-destroy-all"]
+              envFrom:
+                - configMapRef:
+                    name: "{{ include "okteto.fullname" . }}"

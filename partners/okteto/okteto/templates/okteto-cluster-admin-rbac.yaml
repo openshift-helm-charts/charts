@@ -1,0 +1,53 @@
+{{- $serviceName := include "okteto.fullname" . -}}
+{{- $rolebinding := include "okteto.clusterrolebinding" . -}}
+{{- if $rolebinding -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: okteto-cluster-admin
+  labels:
+    app: {{ $serviceName }}
+    chart: "{{ .Chart.Name }}-{{ include "okteto.version" . }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ $rolebinding }}
+subjects:
+- kind: ServiceAccount
+  name: okteto-cluster-admin
+  namespace: {{ .Release.Namespace }}
+
+---
+{{- end}}
+
+{{- $extrarolebindings := (include "okteto.serviceaccountsextrarolebindings" . | fromJson) -}}
+{{- $version := include "okteto.version" . -}}
+{{- if $extrarolebindings -}}
+{{- range $namespace, $roles := $extrarolebindings }}
+{{- range $role := $roles }}
+{{- $name := uuidv4 -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}
+  namespace: {{ $namespace }}
+  labels:
+    app: {{ $serviceName }}
+    chart: "{{ $.Chart.Name }}-{{ $version }}"
+    release: "{{ $.Release.Name }}"
+    heritage: "{{ $.Release.Service }}"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ $role }}
+subjects:
+- kind: ServiceAccount
+  name: okteto-cluster-admin
+  namespace: {{ $.Release.Namespace }}
+
+---
+{{- end -}}
+{{- end -}}
+{{- end -}}

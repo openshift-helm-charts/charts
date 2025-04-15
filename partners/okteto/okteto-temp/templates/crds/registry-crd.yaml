@@ -1,0 +1,160 @@
+{{- if .Values.crds.install }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    {{- if .Values.crds.keep }}
+    "helm.sh/resource-policy": keep
+    {{- end }}
+    {{- with .Values.crds.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: registries.admin.okteto.com
+  name: registries.admin.okteto.com
+spec:
+  group: admin.okteto.com
+  scope: Namespaced
+  names:
+    kind: Registry
+    listKind: RegistryList
+    plural: registries
+    singular: registry
+    shortNames:
+    - r
+    - reg
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - jsonPath: .metadata.creationTimestamp
+          description: CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+          name: Age
+          type: date
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              oneOf:
+                - properties:
+                  required:
+                    - static
+                - properties:
+                  required:
+                    - awsIamUser
+                - properties:
+                  required:
+                    - awsIamRole
+              properties:
+                static:
+                  type: object
+                  oneOf:
+                    - properties:
+                      required:
+                        - user
+                        - passwordSecretRef
+                    - properties:
+                      required:
+                        - userSecretRef
+                        - passwordSecretRef
+                  properties:
+                    port:
+                      type: integer
+                      description: "port to be used for the registry (optional)"
+                    user:
+                      description: "the user used to authenticate against the registry"
+                      type: string
+                    userSecretRef:
+                      description: "the opaque secret that holds the user used to authenticate against the registry"
+                      type: object
+                      required:
+                      - name
+                      - key
+                      properties:
+                        name:
+                          description: "the name of the secret"
+                          type: string
+                        key:
+                          description: "the key in the secret data from where to read the password"
+                          type: string
+                    passwordSecretRef:
+                      description: "the opaque secret that holds the password"
+                      type: object
+                      required:
+                      - name
+                      - key
+                      properties:
+                        name:
+                          description: "the name of the secret"
+                          type: string
+                        key:
+                          description: "the key in the secret data from where to read the password"
+                          type: string
+
+
+                awsIamUser:
+                  type: object
+                  oneOf:
+                    - properties:
+                      required:
+                        - accessKeyID
+                        - secretAccessKeySecretRef
+                    - properties:
+                      required:
+                        - accessKeyIDSecretRef
+                        - secretAccessKeySecretRef
+                  properties:
+                    accessKeyID:
+                      description: "the IAM user access key ID"
+                      type: string
+                    accessKeyIDSecretRef:
+                      description: "the opaque secret that holds the access key ID"
+                      type: object
+                      required:
+                      - name
+                      - key
+                      properties:
+                        name:
+                          description: "the name of the secret"
+                          type: string
+                        key:
+                          description: "the key in the secret data from where to read the access key id"
+                          type: string
+                    secretAccessKeySecretRef:
+                      description: "the opaque secret that holds the secret access key"
+                      type: object
+                      required:
+                      - name
+                      - key
+                      properties:
+                        name:
+                          description: "the name of the secret"
+                          type: string
+                        key:
+                          description: "the key in the secret data from where to read the secret access key"
+                          type: string
+                awsIamRole:
+                  type: object
+                  required:
+                    - roleARN
+                    - audience
+                  properties:
+                    roleARN:
+                      description: "the ARN role idetifier used to exchange credentials"
+                      type: string
+                    audience:
+                      description: "the audience for the token registry credentials"
+                      type: string
+status:
+  acceptedNames:
+    kind: Registry
+    listKind: RegistryList
+    plural: registries
+    singular: registry
+  conditions: []
+  storedVersions: []
+{{- end }}

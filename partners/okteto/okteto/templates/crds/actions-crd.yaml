@@ -1,0 +1,89 @@
+{{- if .Values.crds.install }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    {{- with .Values.crds.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: actions.git.okteto.com
+  name: actions.git.okteto.com
+spec:
+  group: git.okteto.com
+  names:
+    kind: Action
+    listKind: ActionList
+    plural: actions
+    singular: action
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: Action represents a pending execution of a gitDeploy operation
+        type: object
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            type: object
+            required:
+              - pipelineName
+              - operation
+              - status
+              - repository
+            properties:
+              pipelineName:
+                type: string
+              operation:
+                type: string
+              status:
+                type: string
+              installationID:
+                type: integer
+              repository:
+                type: string
+              fallbackRepository:
+                type: string
+              branch:
+                type: string
+              githubCommentId:
+                type: string
+              commitSha:
+                type: string
+              source:
+                type: string
+              belongsToPreview:
+                type: boolean
+              filename:
+                type: string
+              variables:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+              destroyVolumes:
+                type: boolean
+              forceDestroy:
+                type: boolean
+              catalogItemId:
+                type: string
+              labels:
+                type: array
+                items:
+                  type: string
+    served: true
+    storage: true
+{{- end }}

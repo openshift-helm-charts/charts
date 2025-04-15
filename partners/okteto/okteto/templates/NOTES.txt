@@ -1,0 +1,110 @@
+{{- $public := include "okteto.public" . -}}
+{{- $buildkit := include "okteto.buildkit" . -}}
+{{- $wildcard := include "okteto.wildcard" . -}}
+{{- $loginPath := "" }}
+{{- $tokenFlag := "" }}
+{{- $insecureFlag := "" }}
+{{- if eq (include "okteto.authToken.enabled" .) "true" }}
+    {{- $loginPath = printf "/login#token=%s" (include "okteto.authToken" .) -}}
+    {{- $tokenFlag = printf " --token %s" (include "okteto.authToken" .) -}}
+{{- end }}
+
+Congratulations! Okteto is successfully installed!
+
+{{- if .Values.openshift.enabled }}
+
+Access your Okteto instance at https://{{ $public }}{{ $loginPath }}
+
+{{- else }}
+   {{- if eq $public "okteto.localtest.me" }}
+   {{- $insecureFlag = " --insecure-skip-tls-verify" }}
+
+Follow these steps to access your Okteto instance:
+
+1. Start a port-forward to the ingress service by running:
+
+   $ sudo kubectl port-forward service/{{ .Release.Name }}-ingress-nginx-controller 443:443 --namespace {{ .Release.Namespace }}
+
+2. Access your Okteto instance at https://{{ $public }}{{ $loginPath }}
+
+   {{- else }}
+      {{- if .Values.wildcardCertificate.create }}
+         {{- $insecureFlag = " --insecure-skip-tls-verify" }}
+      {{- end }}
+
+Follow these steps to complete your domain configuration:
+
+1. Create a wildcard A record "{{ $wildcard }}", pointing it to the Okteto NGINX ingress controller External-IP:
+
+   $ kubectl get service -l=app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/component=controller --namespace={{ .Release.Namespace }}
+
+2. Access your Okteto instance at https://{{ $public }}{{ $loginPath }}
+
+   {{- end }}
+{{- end }}
+
+Follow these steps to configure the Okteto CLI:
+
+1. Install the Okteto CLI:
+
+   $ curl https://get.okteto.com -sSfL | sh
+
+2. Configure the Okteto CLI context:
+
+   $ okteto context use https://{{ $public }}{{ $tokenFlag }}{{ $insecureFlag }}
+
+   {{- if and .Values.wildcardCertificate.create (ne $public "okteto.localtest.me") }}
+   Omit the usage of --insecure-skip-tls-verify if you are exposing Okteto through a proxy with certificates you already trust.
+   {{- end }}
+
+3. You're all set to complete our getting started guide:
+
+   https://www.okteto.com/docs/get-started/deploy-your-app/
+
+Happy coding!
+
+{{- if semverCompare ">=1.33.0-0" .Capabilities.KubeVersion.Version }}
+
+[WARNING] kubeVersion is not supported, please use kubeVersion "1.30-0 - 1.32-0" instead
+{{- end }}
+
+{{- if eq (include "okteto.cloud.provider.isEnabled" . ) "true" }}
+
+[WARNING] `.Values.cloud.provider` is deprecated, please use `.Values.registry.storage` to configure cloud storage for the registry
+[WARNING] registry deployment secret is set by `.Values.cloud.secret`, please use `.Values.registry.storage` to enable cloud storage for the registry and set the secret with `.Values.registry.secret`
+{{- end -}}
+
+{{- if or ( .Values.tolerations.devPool ) ( .Values.tolerations.oktetoPool ) ( .Values.tolerations.buildPool ) }}
+
+[WARNING] .Values.tolerations.[oktetoPool, devPool, buildPool] is deprecated and will be removed in Okteto Chart 2.0. 
+Please check out this community post to successfully migrate to our new tolerations and node selectors functionality: https://community.okteto.com/t/important-update-migrating-to-new-implementation-of-okteto-pod-tolerations-and-node-selectors/1281
+{{- end -}}
+
+{{- if .Values.clusterRole }}
+
+[WARNING] .Values.clusterRole is deprecated and will be removed in Okteto Chart 2.0. 
+Please use instead .Values.serviceAccounts.roleBindings.namespaces to specify the cluster role to bind to developer's service account within namespaces
+{{- end -}}
+
+{{- if .Values.globalClusterRole }}
+[WARNING] .Values.globalClusterRole is deprecated and will be removed in Okteto Chart 2.0. 
+Please use instead .Values.serviceAccounts.clusterRoleBinding to specify the cluster role to bind to developer's service accounts
+{{- end -}}
+
+{{- $user := .Values.user | default dict }}
+{{- $serviceaccounts := $user.serviceAccount | default dict }}
+
+{{- if $serviceaccounts.annotations }}
+[WARNING] .Values.user.serviceAccount.annotations is deprecated and will be removed in Okteto Chart 2.0. 
+Please use instead .Values.serviceAccounts.annotations to specify custom annotations to be added to every service account
+{{- end -}}
+
+{{- if $serviceaccounts.labels }}
+[WARNING] .Values.user.serviceAccount.labels is deprecated and will be removed in Okteto Chart 2.0. 
+Please use instead .Values.serviceAccounts.labels to specify custom labels to be added to every service account
+{{- end -}}
+
+{{- if $user.extraRoleBindings }}
+[WARNING] .Values.user.extraRoleBindings is deprecated and will be removed in Okteto Chart 2.0. 
+Please use instead .Values.serviceAccounts.extraRoleBindings to specify custom role bindings to created on user's service accounts for the specific namespaces
+{{- end -}}

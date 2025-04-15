@@ -1,0 +1,66 @@
+{{- if .Values.privateRegistry }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ include "okteto.fullname" . }}-regcreds-migration"
+  labels:
+    app.kubernetes.io/component: "regcreds"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-regcreds-migration"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  activeDeadlineSeconds: 1800
+  ttlSecondsAfterFinished: {{ .Values.globals.jobs.ttlSecondsAfterFinished }}
+  completions: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: "regcreds-migration"
+        app.kubernetes.io/part-of: "okteto"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+{{- end }}
+{{- if .Values.podAnnotations }}
+      annotations:
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+{{- end }}
+    spec:
+      affinity:
+        nodeAffinity:
+{{ include "okteto.oktetoAffinity" . | indent 10 }}
+      serviceAccountName: {{ include "okteto.fullname" . }}
+      {{- include "okteto.tolerations" (dict "globalsTolerations" .Values.globals.tolerations.okteto "poolTolerations" .Values.tolerations.oktetoPool ) | nindent 6 }}
+      {{- include "okteto.nodeSelectors" (dict "poolTolerations" .Values.tolerations.oktetoPool "nodeSelectors" .Values.globals.nodeSelectors.okteto ) | nindent 6 }}
+      volumes:
+      - name: tls-certs
+        secret:
+          defaultMode: 420
+          secretName: {{ include "okteto.ingress.tlsSecret" . }}
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: privateregistry
+          image: {{ include "okteto.image.backend" . }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          args: [ "private-registry-migration" ]
+          envFrom:
+            - configMapRef:
+                name: "{{ include "okteto.fullname" . }}"
+            - secretRef:
+                name: {{ include "okteto.fullname" . }}
+            - secretRef:
+                name: "{{ .Values.cloud.secret.name }}"
+                optional: true
+          volumeMounts:
+            - name: tls-certs
+              mountPath: /run/secrets/tls
+              readOnly: true
+{{- end }}

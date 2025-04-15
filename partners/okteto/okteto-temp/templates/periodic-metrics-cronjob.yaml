@@ -1,0 +1,71 @@
+{{- if .Values.telemetry.enabled }}
+{{- $name := include "okteto.fullNameCronJob" (dict "context" . "suffix" "periodic-metrics") }}
+apiVersion: {{ template "okteto.cronJob.apiVersion" . }}
+kind: CronJob
+metadata:
+  name: "{{ $name }}"
+  labels:
+    app.kubernetes.io/component: "periodic-metrics"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ $name }}"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 120
+  schedule: "@hourly"
+  jobTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/component: "periodic-metrics"
+        app.kubernetes.io/part-of: "okteto"
+    spec:
+      ttlSecondsAfterFinished: {{ .Values.globals.jobs.ttlSecondsAfterFinished }}
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/component: "periodic-metrics"
+            app.kubernetes.io/part-of: "okteto"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 12 }}
+{{- end }}
+{{- if .Values.periodicMetrics.labels }}
+{{ toYaml .Values.periodicMetrics.labels | indent 12 }}
+{{- end }}
+{{- if or .Values.podAnnotations .Values.periodicMetrics.annotations }}
+          annotations:
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 12 }}
+{{- end }}
+{{- if .Values.periodicMetrics.annotations }}
+{{ toYaml .Values.periodicMetrics.annotations | indent 12 }}
+{{- end }}
+{{- end }}
+        spec:
+          affinity:
+            nodeAffinity:
+{{ include "okteto.oktetoAffinity" . | indent 14 }}
+          serviceAccountName: {{ include "okteto.fullname" . }}
+          {{- include "okteto.tolerations" (dict "globalsTolerations" .Values.globals.tolerations.okteto "poolTolerations" .Values.tolerations.oktetoPool ) | nindent 10 }}
+          {{- include "okteto.nodeSelectors" (dict "poolTolerations" .Values.tolerations.oktetoPool "nodeSelectors" .Values.globals.nodeSelectors.okteto ) | nindent 10 }}
+          restartPolicy: Never
+          priorityClassName: {{ .Values.periodicMetrics.priorityClassName | default .Values.globals.priorityClassName }}
+          securityContext:
+            runAsNonRoot: true
+          containers:
+            - name: gather
+              image: {{ include "okteto.image.backend" . }}
+              imagePullPolicy: {{ .Values.pullPolicy }}
+              args: [ "periodic-metrics"]
+              resources:
+                {{ toYaml .Values.periodicMetrics.resources | nindent 16 }}
+              envFrom:
+                - configMapRef:
+                    name: "{{ include "okteto.fullname" . }}"
+                - secretRef:
+                    name: {{ include "okteto.fullname" . }}
+                - secretRef:
+                    name: "{{ .Values.cloud.secret.name }}"
+                    optional: true
+{{- end }}

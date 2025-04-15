@@ -1,0 +1,37 @@
+{{- if (get .Values "okteto-nginx").enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "okteto.fullname" . }}-wildcard
+  labels:
+    app.kubernetes.io/name: {{ include "okteto.name" . }}
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/component: "api"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-ssl-server-name: "on"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.unsupported.ingressProxyBodySize }}"
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ include "okteto.oktetoIngressClass" . }}
+  tls:
+  - hosts:
+    - "*.{{ .Values.subdomain }}"
+    secretName: {{ include "okteto.ingress.tlsSecret" . }}
+  rules:
+    - host: "*.{{ .Values.subdomain }}"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-okteto-nginx-controller
+                port:
+                  number: 443
+{{- end -}}

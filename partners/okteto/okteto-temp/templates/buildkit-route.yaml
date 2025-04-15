@@ -1,0 +1,27 @@
+{{- if .Values.buildkit.enabled }}
+{{- if .Values.openshift.enabled }}
+{{- $buildkitURL := include "okteto.buildkit" . -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "okteto.fullname" . }}-buildkit
+  labels:
+    app.kubernetes.io/name: {{ include "okteto.fullname" . }}-buildkit
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/component: "buildkit"
+spec:
+  host: {{ $buildkitURL }}
+  port:
+    targetPort: buildkit
+  tls:
+    termination: passthrough
+  to:
+    kind: Service
+    name: {{ include "okteto.fullname" . }}-buildkit
+    weight: 100
+  wildcardPolicy: None  
+{{- end }}
+{{- end }}

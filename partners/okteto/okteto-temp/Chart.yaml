@@ -1,0 +1,59 @@
+apiVersion: v2
+name: okteto
+description: Helm chart for deploying the Okteto Platform
+type: application
+version: 1.31.0
+appVersion: "1.31.0"
+home: https://www.okteto.com
+sources:
+  - https://github.com/okteto/okteto
+keywords:
+  - dev environments
+  - kubernetes
+  - remote development
+maintainers:
+  - name: Joey Davidson
+    email: joey@okteto.com
+  - name: Ramiro Berrelleza
+    email: ramiro@okteto.com
+
+annotations:
+  artifacthub.io/changes: |
+    - The changelog is available at https://www.okteto.com/docs/release-notes
+apiVersion: v2
+appVersion: 68266a617
+dependencies:
+- condition: ingress-nginx.enabled
+  name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.12.1
+- alias: okteto-nginx
+  condition: okteto-nginx.enabled
+  name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.12.1
+- condition: reloader.enabled
+  name: reloader
+  repository: https://stakater.github.io/stakater-charts
+  version: v1.2.1
+- condition: resourceManager.enabled
+  name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.6.3
+description: Development platform for Kubernetes applications
+home: https://okteto.com
+icon: https://okteto.com/okteto-symbol-circle-inverse-1.1.png
+keywords:
+- okteto
+- development
+- team collaboration
+kubeVersion: '>=1.30.0-0'
+maintainers:
+- email: ramiro@okteto.com
+  name: Ramiro Berrelleza
+- email: pablo@okteto.com
+  name: Pablo Chico de Guzman
+- email: irespaldiza@okteto.com
+  name: Iñaki Respaldiza
+name: okteto
+version: 1.31.0

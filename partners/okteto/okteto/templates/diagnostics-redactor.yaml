@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: okteto-redactor
+  namespace: {{ .Release.Namespace }}
+  labels:
+    troubleshoot.sh/kind: support-bundle
+    app.kubernetes.io/component: "diagnostics"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-redactor"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  redactor-spec: {{ include "okteto.diagnostics.redactorSpec" . | toYaml | nindent 4 -}}

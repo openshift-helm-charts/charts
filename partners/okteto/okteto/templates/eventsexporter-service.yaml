@@ -1,0 +1,22 @@
+{{- if .Values.insights.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "okteto.fullname" . }}-eventsexporter"
+  labels:
+    app.kubernetes.io/component: "eventsexporter"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-eventsexporter"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 8080
+      port: 8080
+      name: http
+  selector:
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-eventsexporter"
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

@@ -1,0 +1,40 @@
+{{- if .Values.networkPolicies.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: "{{ include "okteto.fullname" . }}-installer"
+spec:
+  egress:
+  - ports:
+    - port: 53
+      protocol: UDP
+    to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+          {{- range .Values.networkPolicies.blockedCIDRs }}
+          - {{ . }}
+          {{- end }}
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/instance: {{ .Release.Name }}
+          app.kubernetes.io/component: "buildkit"
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/instance: {{ .Release.Name }}
+          app.kubernetes.io/component: "controller"
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: "installer"
+      app.kubernetes.io/part-of: "okteto"
+  policyTypes:
+  - Egress
+{{- end }}

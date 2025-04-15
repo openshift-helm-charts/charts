@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ include "okteto.fullname" . }}-frontend"
+  labels:
+    app.kubernetes.io/component: "frontend"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-frontend"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-frontend"
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-frontend"
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "frontend"
+        app.kubernetes.io/part-of: "okteto"
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+{{- end }}
+{{- if .Values.frontend.labels }}
+{{ toYaml .Values.frontend.labels | indent 8 }}
+{{- end }}
+{{- if or .Values.podAnnotations .Values.frontend.annotations }}
+      annotations:
+  {{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+  {{- end }}
+  {{- if .Values.frontend.annotations }}
+{{ toYaml .Values.frontend.annotations | indent 8 }}
+  {{- end }}
+{{- end }}
+    spec:
+      affinity:
+        nodeAffinity:
+{{ include "okteto.oktetoAffinity" . | indent 10 }}
+        podAntiAffinity:
+          {{- if .Values.affinity.required }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - "{{ include "okteto.fullname" . }}-frontend"
+              topologyKey: kubernetes.io/hostname
+          {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - "{{ include "okteto.fullname" . }}-frontend"
+                topologyKey: kubernetes.io/hostname
+          {{- end }}
+      serviceAccountName: default
+      securityContext:
+        runAsNonRoot: true
+      priorityClassName: {{ .Values.frontend.priorityClassName | default .Values.globals.priorityClassName }}
+      {{- include "okteto.tolerations" (dict "globalsTolerations" .Values.globals.tolerations.okteto "poolTolerations" .Values.tolerations.oktetoPool ) | nindent 6 }}
+      {{- include "okteto.nodeSelectors" (dict "poolTolerations" .Values.tolerations.oktetoPool "nodeSelectors" .Values.globals.nodeSelectors.okteto ) | nindent 6 }}
+      containers:
+        - name: frontend
+          image: {{ include "okteto.image.frontend" . }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.frontend.port }}
+              protocol: TCP
+          env:
+            - name: OKTETO_BASE_DOMAIN
+              value: {{ .Values.subdomain }}
+            - name: THEME_PRIMARY
+              value: {{ .Values.theme.primary }}
+            - name: THEME_SECONDARY
+              value: {{ .Values.theme.secondary }}
+            - name: THEME_LOGO
+              value: {{ .Values.theme.logo }}
+          {{- if ne (include "okteto.version" .) "0.0.0" }}
+            - name: OKTETO_CHART_VERSION
+              value: {{ include "okteto.version" . }}
+          {{- end }}
+          {{- if .Values.auth.google.enabled }}
+            - name: GOOGLE_CLIENTID
+              value: {{ .Values.auth.google.clientId }}
+          {{- else if .Values.auth.github.enabled }}
+            - name: GITHUB_CLIENTID
+              value: {{ .Values.auth.github.clientId }}
+            - name: GITHUB_SCOPE
+            {{- if .Values.auth.github.organization }}
+              value: "user:email,read:org"
+            {{- else }}
+              value: "user:email"
+            {{- end }}
+          {{- else if .Values.auth.bitbucket.enabled }}
+            - name: BITBUCKET_CLIENTID
+              value: {{ .Values.auth.bitbucket.clientId }}
+          {{- else if .Values.auth.openid.enabled }}
+            - name: OPENID_AUTH_ENDPOINT
+              value: {{ .Values.auth.openid.endpoints.authorization }}
+            - name: OPENID_CLIENTID
+              value: {{ .Values.auth.openid.clientId }}
+            {{- if .Values.auth.openid.resource }}
+            - name: OPENID_RESOURCE
+              value: {{ .Values.auth.openid.resource }}
+            {{- end}}
+            {{- if .Values.auth.openid.audience }}
+            - name: OPENID_AUDIENCE
+              value: {{ .Values.auth.openid.audience }}
+            {{- end}}
+          {{- else if eq (include "okteto.authToken.enabled" .) "true" }}
+            - name: OKTETO_AUTH_TOKEN
+              value: "true"
+          {{- end }}
+            - name: MIXPANEL_TOKEN
+              value: {{ .Values.telemetry.token }}
+          {{- if .Values.unsupported.frontend.sentry.enabled }}
+            - name: SENTRY_DSN
+              value: {{ .Values.unsupported.frontend.sentry.dsn }}
+            - name: SENTRY_ENV
+              value: {{ .Values.unsupported.frontend.sentry.env }}
+          {{- end }}
+          {{- if .Values.unsupported.grafana.enabled }}
+            - name: GRAFANA_ENDPOINT
+              value: {{ .Values.unsupported.grafana.endpoint }}
+          {{- end }}
+            - name: OKTETO_CINDY_ENABLED
+              value: {{ .Values.unsupported.cindy.enabled | quote }}
+{{- if .Values.frontend.extraEnv }}
+{{ toYaml .Values.frontend.extraEnv | indent 12 }}
+{{- end }}
+          readinessProbe:
+            httpGet:
+              path: /index.html
+              port: {{ .Values.frontend.port }}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 1
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sleep", "45"]
+          resources:
+{{ toYaml .Values.frontend.resources | indent 12 }}

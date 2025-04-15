@@ -1,0 +1,22 @@
+{{- if eq (include "okteto.defaultBackend.enabled" .) "true" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "okteto.defaultBackendName" . }}
+  labels:
+    app.kubernetes.io/component: default-backend
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: {{ include "okteto.defaultBackendName" . }}
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      name: http
+      targetPort: {{ .Values.defaultBackend.port }}
+  selector:
+    app.kubernetes.io/name: {{ include "okteto.defaultBackendName" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

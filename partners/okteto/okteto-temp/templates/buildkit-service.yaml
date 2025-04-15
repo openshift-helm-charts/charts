@@ -1,0 +1,45 @@
+{{- if .Values.buildkit.enabled }}
+{{- $provider := include "okteto.registry.storage.provider" . | trim | nindent 2 | fromYaml -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "okteto.fullname" . }}-buildkit"
+  labels:
+    app.kubernetes.io/component: "buildkit"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.fullname" . }}-buildkit"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- if .Values.buildkit.service.labels }}
+{{ toYaml .Values.buildkit.service.labels | indent 4 }}
+    {{- end }}
+  {{- if .Values.buildkit.service.annotations }}
+  annotations:
+{{ toYaml .Values.buildkit.service.annotations | indent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.buildkit.service.type }}
+  {{- if .Values.buildkit.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.buildkit.service.loadBalancerIP }}
+  {{- end }}
+  {{- if eq .Values.buildkit.service.type "ClusterIP" }}
+    {{- if .Values.buildkit.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.buildkit.service.sessionAffinity }}
+    {{- else }}
+  sessionAffinity: ClientIP
+    {{- end }}
+  {{- else }}
+    {{- if .Values.buildkit.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.buildkit.service.sessionAffinity }}
+    {{- end }}
+  {{- end }}
+  
+  ports:
+    - port: {{ .Values.buildkit.service.port }}
+      targetPort: 1234
+      name: buildkit
+  selector:
+    app.kubernetes.io/name: "{{ include "okteto.buildkitname" . }}"
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

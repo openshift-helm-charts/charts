@@ -1,0 +1,21 @@
+{{- if .Values.installer.sshSecretName }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "okteto.sshAgent" . }}"
+  labels:
+    app.kubernetes.io/component: "ssh-agent"
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/name: "{{ include "okteto.sshAgent" . }}"
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.sshAgent.port }}
+      name: controller
+  selector:
+    app.kubernetes.io/name: "{{ include "okteto.sshAgent" . }}"
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

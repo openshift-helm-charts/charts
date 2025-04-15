@@ -1,0 +1,40 @@
+{{- if .Values.registry.enabled }}
+{{- if .Values.registry.ingress.enabled }}
+{{- $registryURL := include "okteto.registry" . -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "okteto.fullname" . }}-registry
+  labels:
+    app.kubernetes.io/name: {{ include "okteto.fullname" . }}-registry
+    helm.sh/chart: {{ include "okteto.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: "okteto"
+    app.kubernetes.io/component: "registry"
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- range $key, $value := .Values.registry.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ include "okteto.oktetoIngressClass" . }}
+  tls:
+  - hosts:
+    - {{ $registryURL }}
+    secretName: {{ include "okteto.registry.tlsSecret" . }}
+  rules:
+    - host: {{ $registryURL }}
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "okteto.fullname" . }}-registry
+                port:
+                  number: {{ .Values.registry.port }}
+{{- end }}
+{{- end }}

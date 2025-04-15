@@ -1,0 +1,13 @@
+approvers:
+  - jdavidson-okteto
+  - rberrelleza
+
+reviewers:
+  - jdavidson-okteto
+  - rberrelleza
+
+maintainers:
+  - name: Joey Davidson
+    email: joey@okteto.com
+  - name: Ramiro Berrelleza
+    email: ramiro@okteto.com
