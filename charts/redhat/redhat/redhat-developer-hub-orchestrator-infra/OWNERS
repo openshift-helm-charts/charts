@@ -5,7 +5,6 @@ publicPgpKey: null
 users:
   - githubUsername: rhdh-bot
   - githubUsername: nickboldt
-  - githubUsername: schultzp2020
   - githubUsername: kadel
   - githubUsername: rm3l
   - githubUsername: Fortune-Ndlovu
