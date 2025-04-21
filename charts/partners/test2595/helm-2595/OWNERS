@@ -1,0 +1,10 @@
+chart:
+  name: helm-2595
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: aurne
+vendor:
+  label: test2595
+  name: prod-test-user-021
