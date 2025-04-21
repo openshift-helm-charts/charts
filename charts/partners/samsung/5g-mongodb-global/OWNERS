@@ -1,0 +1,11 @@
+chart:
+  name: 5g-mongodb-global
+  shortDescription: Samsung 5G core  mongodb for csdb global version  helm chart for
+    K8s
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: shlee519
+vendor:
+  label: samsung
+  name: Samsung Electronics Co., Ltd.
