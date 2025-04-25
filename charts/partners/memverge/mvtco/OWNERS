@@ -1,0 +1,9 @@
+chart:
+  name: mvtco
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: memverge
+  name: MemVerge
