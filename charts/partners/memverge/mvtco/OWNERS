@@ -1,6 +1,6 @@
 chart:
   name: mvtco
-  shortDescription: unknown
+  shortDescription: Helm Chart of MemVerge Transparent Checkpoint Operator
 providerDelivery: false
 publicPgpKey: unknown
 users:
