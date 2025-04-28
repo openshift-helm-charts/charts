@@ -1,13 +1,11 @@
 import argparse
 import os
-import pathlib
-import shutil
 import sys
 
 import requests
 
 sys.path.append("../")
-from checkprcontent import checkpr
+from reporegex import matchers
 from tools import gitutils
 
 pr_files = []
@@ -19,7 +17,7 @@ xRateRemain = "X-RateLimit-Remaining"
 # TODO(baijum): Move this code under chartsubmission.chart module
 def get_modified_charts(api_url):
     files = get_modified_files(api_url)
-    pattern, _, _ = checkpr.get_file_match_compiled_patterns()
+    pattern, _, _ = matchers.get_file_match_compiled_patterns()
     for file in files:
         match = pattern.match(file)
         if match:
@@ -95,24 +93,6 @@ def get_labels(api_url):
     return pr_labels
 
 
-def save_metadata(directory, vendor_label, chart, number):
-    with open(os.path.join(directory, "vendor"), "w") as fd:
-        print(f"add {directory}/vendor as {vendor_label}")
-        fd.write(vendor_label)
-
-    with open(os.path.join(directory, "chart"), "w") as fd:
-        print(f"add {directory}/chart as {chart}")
-        fd.write(chart)
-
-    with open(os.path.join(directory, "NR"), "w") as fd:
-        fd.write(number)
-
-    if os.path.exists("report.yaml"):
-        shutil.copy("report.yaml", directory)
-    else:
-        pathlib.Path(os.path.join(directory, "report.yaml")).touch()
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -148,10 +128,6 @@ def main():
         pr_files = get_modified_files(args.api_url)
         print(f"[INFO] files in pr: {pr_files}")
         gitutils.add_output("pr_files", pr_files)
-    else:
-        os.makedirs(args.directory, exist_ok=True)
-        category, organization, chart, version = get_modified_charts(args.api_url)
-        save_metadata(args.directory, organization, chart, args.number)
 
 
 if __name__ == "__main__":

@@ -44,7 +44,10 @@ class WorkflowRepoManager:
                 "Unable to initialize git repository. Is the current directory a git repo?"
             ) from e
 
-        self.original_branch = self.repo.active_branch.name
+        try:
+            self.original_branch = self.repo.active_branch.name
+        except TypeError:
+            self.original_branch = self.repo.git.rev_parse("--short", "HEAD")
 
     def set_auth_token(self, token: str):
         """Sets the github API token."""
