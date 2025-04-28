@@ -3339,6 +3339,36 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/lacework-lacework-agent-5.4.1/lacework-lacework-agent-5.4.1.tgz
     version: 5.4.1
+  model-server-sample:
+  - annotations:
+      charts.openshift.io/digest: sha256:e9aada8de77b6588a67292ecbfd488d141c77383e9f7bf5f0840969805d10dd2
+      charts.openshift.io/lastCertifiedTimestamp: '2025-04-28T14:44:05.230189+00:00'
+      charts.openshift.io/name: Model Server Sample
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-04-28T15:35:41.519031+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.16'
+    apiVersion: v2
+    description: This Helm Chart deploys a model server. While no application is configured,
+      this model server can be utilized in other applications.
+    digest: 4eb2dbed8c838191941813df8a93ca691d81c828cc0e6df013c96cc2b8a25653
+    home: https://github.com/redhat-ai-dev/ai-lab-helm-charts
+    keywords:
+    - modelserver
+    - vllm
+    - llama.cpp
+    - ai-lab
+    kubeVersion: '>= 1.27.0-0'
+    maintainers:
+    - name: Red Hat AI Development Team
+      url: https://github.com/redhat-ai-dev
+    name: model-server-sample
+    sources:
+    - https://github.com/redhat-ai-dev/ai-lab-template
+    type: application
+    urls:
+    - https://github.com/redhat-ai-dev/ai-lab-helm-charts/releases/download/v0.1.6/model-server-sample-0.1.6.tgz
+    version: 0.1.6
   nearbyone-controller:
   - annotations:
       charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
@@ -11695,4 +11725,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-04-14T15:54:23.499992+00:00'
+generated: '2025-04-28T15:35:41.407663+00:00'
