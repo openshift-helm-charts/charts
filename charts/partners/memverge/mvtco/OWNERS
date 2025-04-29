@@ -1,11 +1,9 @@
 chart:
   name: mvtco
-  shortDescription: Helm Chart of MemVerge Transparent Checkpoint Operator
-providerDelivery: false
+  shortDescription: unknown
+providerDelivery: true
 publicPgpKey: unknown
-users:
-- githubUsername: xiongzubiao
-- githubUsername: memverge-build
+users: []
 vendor:
   label: memverge
   name: MemVerge
