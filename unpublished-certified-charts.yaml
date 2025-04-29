@@ -2210,6 +2210,25 @@ entries:
     urls:
     - N/A
     version: 22.3.1
+  mvtco:
+  - annotations:
+      charts.openshift.io/digest: sha256:20fd41beceedfbe4e64a85d0ec603669ae63b1b6dc1e3f486e4c2b7bcd7cf656
+      charts.openshift.io/lastCertifiedTimestamp: '2025-04-28T15:46:26.254293+00:00'
+      charts.openshift.io/name: mvtco
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-04-29T15:00:15.648076+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: v0.4.0-rc.1
+    description: Install MemVerge Transparent Checkpoint Operator
+    digest: 1824c649fe3d02e250be8ddd70bdeed52b93f9514fb216878544e645770d520c
+    kubeVersion: '>= 1.28.0-0'
+    name: mvtco
+    type: application
+    urls:
+    - N/A
+    version: 0.4.0-rc.1
   nfvri:
   - annotations:
       charts.openshift.io/digest: sha256:001abb541d0be2cc58a5ab6bf75bf0b05023ef37f40f9129ff677db7cef603e3
@@ -4508,4 +4527,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-04-27T14:10:34.466840+00:00'
+generated: '2025-04-29T15:00:15.599397+00:00'
