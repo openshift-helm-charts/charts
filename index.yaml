@@ -929,6 +929,36 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/catalogicsoftware-cloudcasa-3.4.3/cloudcasa-3.4.3.tgz
     version: 3.4.3
+  - annotations:
+      charts.openshift.io/digest: sha256:8a6a2ef9150703219f27624c2eb88fe99eba2e6ee76220fead97aa65536caeb6
+      charts.openshift.io/lastCertifiedTimestamp: '2025-05-02T12:36:54.011796-04:00'
+      charts.openshift.io/name: CloudCasa Agent
+      charts.openshift.io/provider: Catalogic Software
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-05-02T16:50:35.622590+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.1.0
+    description: CloudCasa backup and migration service agent for Kubernetes
+    digest: a9f81d889c97da9d0c52edc26bb9aac251b1c0146512f870aaf0f55934adb4c0
+    home: https://cloudcasa.io
+    icon: https://raw.githubusercontent.com/catalogicsoftware/cloudcasa-helmchart/gh-pages/logo.png
+    keywords:
+    - backup
+    - restore
+    - migration
+    - catalogic
+    - cloudcasa
+    - velero
+    kubeVersion: '>=1.20.0-0'
+    maintainers:
+    - email: support@cloudcasa.io
+      name: CloudCasa Support
+    name: cloudcasa
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/catalogicsoftware-cloudcasa-3.4.4-rh/cloudcasa-3.4.4-rh.tgz
+    version: 3.4.4-rh
   dmi4j-backend:
   - annotations:
       charts.openshift.io/digest: sha256:77fb8ce001a77f9e2f12528599afa7370c0cfbf09795ba404cfcb81e89870917
@@ -11725,4 +11755,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-04-28T15:35:41.407663+00:00'
+generated: '2025-05-02T16:50:35.519084+00:00'
