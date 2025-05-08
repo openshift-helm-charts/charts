@@ -3771,6 +3771,52 @@ entries:
     urls:
     - N/A
     version: 3.45.9
+  - annotations:
+      charts.openshift.io/digest: sha256:b1a39ad045dbdc1ecc4db19c3edd41647fb82e4c4bda2ee602fd9e9f793479ed
+      charts.openshift.io/lastCertifiedTimestamp: '2025-05-08T15:09:06.679623+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-05-08T15:13:41.375525+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.46.6
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: noagentapi.enabled
+      name: noagentapi
+      repository: file://charts/noagentapi
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 15.3.3
+    description: Noname Helm on k8s
+    digest: 92f7fde7c2dc6e28b638a197c5ce6e8c43bad93881033b1873ab08581387e7fb
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.46.6
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -4573,4 +4619,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-04-29T16:48:03.564797+00:00'
+generated: '2025-05-08T15:13:41.326465+00:00'
