@@ -1,6 +1,7 @@
 import os
 import sys
 
+from submission import validate
 from tools import gitutils
 
 
@@ -201,9 +202,12 @@ def main():
     pr_content_result = sys.argv[1]
     run_verifier_result = sys.argv[2]
     verify_result = sys.argv[3]
-    issue_number = open("./pr/NR").read().strip()
-    vendor_label = open("./pr/vendor").read().strip()
-    chart_name = open("./pr/chart").read().strip()
+
+    submission_path = os.environ.get("SUBMISSION_PATH")
+    s = validate.read_submission_from_file(articact_path=submission_path)
+    issue_number = s.get_pr_number()
+    vendor_label = s.chart.organization
+    chart_name = s.chart.name
 
     community_manual_review = os.environ.get("COMMUNITY_MANUAL_REVIEW", False)
     oc_install_result = os.environ.get("OC_INSTALL_RESULT")
@@ -280,6 +284,7 @@ def main():
     print(msg)
     print("*" * 30)
 
+    os.makedirs("pr", exist_ok=True)
     with open("./pr/comment", "w") as fd:
         fd.write(msg)
         gitutils.add_output("message-file", fd.name)

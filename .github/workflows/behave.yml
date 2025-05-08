@@ -103,7 +103,7 @@ jobs:
     needs: [get-features]
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 2
       matrix: 
         feature-file: ${{ fromJson(needs.get-features.outputs.features) }}
     steps:
