@@ -7004,6 +7004,56 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-1.4.3/redhat-developer-hub-1.4.3.tgz
     version: 1.4.3
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: "- name: support\n  url: https://issues.redhat.com/browse/RHIDP\n-
+        name: Chart Source\n  url: https://github.com/redhat-developer/rhdh-chart\n-
+        name: Default Image Source\n  url: https://github.com/janus-idp/backstage-showcase\n"
+      charts.openshift.io/digest: sha256:8dc95096941fb1ccda60340abd11093254c64b53f3f2cbe3f33268b7d93ed3fa
+      charts.openshift.io/lastCertifiedTimestamp: '2025-05-14T18:31:48.908822+00:00'
+      charts.openshift.io/name: Backstage
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-05-14T18:33:29.894583+00:00'
+      charts.openshift.io/supportURL: https://issues.redhat.com/browse/RHIDP
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.6.0
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.27.0
+    - alias: upstream
+      name: backstage
+      repository: https://backstage.github.io/charts
+      version: 2.4.1
+    description: 'A Helm chart for deploying Red Hat Developer Hub.  The telemetry
+      data collection feature is enabled by default. Red Hat Developer Hub sends telemetry
+      data to Red Hat by using the `backstage-plugin-analytics-provider-segment` plugin.
+      To disable this and to learn what data is being collected, see https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.5/html-single/telemetry_data_collection/index '
+    digest: 5a92a959941ba7280b6bc98dab15482373dcc2582e41a1fb694d3261932a81df
+    home: https://redhat-developer.github.io/rhdh-chart/
+    icon: https://avatars.githubusercontent.com/u/117844786
+    keywords:
+    - backstage
+    - idp
+    - janus-idp
+    kubeVersion: '>= 1.25.0-0'
+    maintainers:
+    - name: Red Hat Developer Hub Team
+      url: https://github.com/redhat-developer/rhdh-chart
+    name: redhat-developer-hub
+    sources:
+    - https://github.com/redhat-developer/rhdh-chart
+    - https://github.com/redhat-developer/rhdh
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-1.6.0/redhat-developer-hub-1.6.0.tgz
+    version: 1.6.0
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -11830,4 +11880,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-05-06T16:23:02.328683+00:00'
+generated: '2025-05-14T18:33:29.785652+00:00'
