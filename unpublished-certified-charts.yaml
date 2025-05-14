@@ -88,6 +88,58 @@ entries:
     urls:
     - 5g-csdb-global-24a-1.240125.8468882.tgz
     version: 1.240125.8468882
+  5g-lb-global:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:4181b486f05a2af31e403ab274bc219e36b1a942e6085cccc0b15e40809da639
+      charts.openshift.io/lastCertifiedTimestamp: '2025-04-18T06:25:01.17004+00:00'
+      charts.openshift.io/name: 5g-lb-global
+      charts.openshift.io/provider: Samsung Electronics
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/releaseDate: 25/02/17
+      charts.openshift.io/submissionTimestamp: '2025-05-14T20:42:58.266445+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 4.6.13
+    dependencies:
+    - condition: cnlb-crd.enabled
+      name: cnlb-crd
+      repository: ''
+      version: 0.0.1
+    - condition: aws-resources.enabled
+      name: aws-resources
+      repository: ''
+      version: 0.0.1
+    - condition: clusterwide-resources.enabled
+      name: clusterwide-resources
+      repository: ''
+      version: 0.0.1
+    - condition: control-plane.enabled
+      name: control-plane
+      repository: ''
+      version: 0.0.1
+    - condition: raas.enabled
+      name: raas
+      repository: ''
+      version: 0.0.1
+    - condition: webhookconfig.enabled
+      name: webhookconfig
+      repository: ''
+      version: 0.0.1
+    - condition: network-attachment-definitions.enabled
+      name: network-attachment-definitions
+      repository: ''
+      version: 0.0.1
+    description: Kubernetes Load Balancer as a service
+    digest: a1fc64328cd97581359ac35b46139b6e7a1524e86f04f439025c7d3d41753ddd
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-lb-global
+    type: application
+    urls:
+    - N/A
+    version: 4.6.13
   5g-mongodb-global:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -4686,4 +4738,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-05-13T09:38:31.435073+00:00'
+generated: '2025-05-14T20:42:58.216855+00:00'
