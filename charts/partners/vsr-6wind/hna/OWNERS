@@ -1,0 +1,9 @@
+chart:
+  name: hna
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: vsr-6wind
+  name: 6WIND
