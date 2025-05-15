@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: 6hchraiti
 vendor:
   label: vsr-6wind
   name: 6WIND
