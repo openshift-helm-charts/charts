@@ -1129,6 +1129,26 @@ entries:
     urls:
     - N/A
     version: 0.4.5
+  hna:
+  - annotations:
+      charts.openshift.io/digest: sha256:30d607aa7104b1bba689a9abb8cacfae5af41adb6e77998c282f0e9637e5cbd4
+      charts.openshift.io/lastCertifiedTimestamp: '2025-05-15T12:06:13.740215+00:00'
+      charts.openshift.io/name: 6WIND HNA
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-05-15T14:03:09.341394+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.16'
+      charts.openshift.io/testedOpenShiftVersion: '4.17'
+    apiVersion: v2
+    appVersion: 3.10.1
+    description: A Helm chart for 6WIND HNA
+    digest: 84b6f4e613fb9c4959d517cb2f1801ad119df062161f0661c14227503b0e4b22
+    home: https://www.6wind.com
+    kubeVersion: '>= 1.29-0'
+    name: hna
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
   idit-runtime:
   - annotations:
       app.idit/version: 19.2.0.2
@@ -4788,4 +4808,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-05-15T10:09:57.399418+00:00'
+generated: '2025-05-15T14:03:09.289426+00:00'
