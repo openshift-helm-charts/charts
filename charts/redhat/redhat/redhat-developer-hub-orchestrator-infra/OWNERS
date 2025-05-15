@@ -1,0 +1,13 @@
+chart:
+  name: redhat-developer-hub-orchestrator-infra
+  shortDescription: A Helm chart for deploying Red Hat Developer Hub Orchestrator Infra
+publicPgpKey: null
+users:
+  - githubUsername: rhdh-bot
+  - githubUsername: nickboldt
+  - githubUsername: kadel
+  - githubUsername: rm3l
+  - githubUsername: Fortune-Ndlovu
+vendor:
+  label: redhat
+  name: Red Hat

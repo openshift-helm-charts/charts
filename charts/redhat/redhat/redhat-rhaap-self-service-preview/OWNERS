@@ -1,0 +1,12 @@
+chart:
+  name: redhat-rhaap-self-service-preview
+  shortDescription: "AAP Technical Preview: Self-service automation"
+publicPgpKey: null
+users:
+  - githubUsername: abhikdps
+  - githubUsername: alisonlhart
+  - githubUsername: audgirka
+  - githubUsername: ganeshrn
+vendor:
+  label: redhat
+  name: Red Hat

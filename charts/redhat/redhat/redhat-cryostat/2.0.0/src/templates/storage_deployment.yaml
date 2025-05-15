@@ -1,0 +1,112 @@
+{{- $fullName := include "cryostat.fullname" . -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cryostat.deploymentName" . }}-storage
+  labels:
+    {{- include "cryostat.labels" . | nindent 4 }}
+    app.kubernetes.io/component: storage
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "cryostat.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: storage
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.storage.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cryostat.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: storage
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ printf "%s-%s" .Chart.Name "storage" }}
+          securityContext:
+            {{- toYaml (.Values.storage).securityContext | nindent 12 }}
+          image: "{{ (.Values.storage).image.repository }}:{{ (.Values.storage).image.tag }}"
+          imagePullPolicy: {{ (.Values.storage).image.pullPolicy }}
+          env:
+          - name: CRYOSTAT_BUCKETS
+            value: archivedrecordings,archivedreports,eventtemplates,probes
+          - name: CRYOSTAT_ACCESS_KEY
+            value: cryostat
+          - name: CRYOSTAT_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (printf "%s-storage-secret" .Release.Name) .Values.storage.storageSecretName }}
+                key: STORAGE_ACCESS_KEY
+                optional: false
+          - name: DATA_DIR
+            value: /data
+          - name: IP_BIND
+            value: 0.0.0.0
+          - name: REST_ENCRYPTION_ENABLE
+            value: "{{ .Values.storage.encryption.enabled | ternary 1 0 }}"
+          ports:
+            - containerPort: 8333
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /data
+            name: {{ .Chart.Name }}-storage
+            subPath: seaweed
+          startupProbe:
+            httpGet:
+              path: "/status"
+              port: 8333
+            periodSeconds: 10
+            failureThreshold: 9
+          livenessProbe:
+            httpGet:
+              path: "/status"
+              port: 8333
+            periodSeconds: 10
+            failureThreshold: 2
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - echo s3.bucket.list | weed shell | [[ "$(</dev/stdin)" == *"archivedrecordings"* ]]
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml (.Values.storage).resources | nindent 12 }}
+      {{- with (default .Values.nodeSelector .Values.storage.nodeSelector) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.affinity .Values.storage.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.tolerations .Values.storage.tolerations) }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if ((.Values.storage.pvc).enabled) }}
+      - name: {{ .Chart.Name }}-storage
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-storage
+      {{- end }}
+      {{- if not ((.Values.storage.pvc).enabled) }}
+      - name: {{ .Chart.Name }}-storage
+        emptyDir: {}
+      {{- end }}

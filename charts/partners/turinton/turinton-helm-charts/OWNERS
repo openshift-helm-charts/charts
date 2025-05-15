@@ -1,0 +1,9 @@
+chart:
+  name: turinton-helm-charts
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: turinton
+  name: Turinton Inc

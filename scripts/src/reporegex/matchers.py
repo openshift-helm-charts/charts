@@ -1,3 +1,6 @@
+import re
+
+
 def submission_path_matcher(
     base_dir="charts", strict_categories=True, include_version_matcher=True
 ):
@@ -39,3 +42,24 @@ def submission_path_matcher(
         matcher += rf"/({versionMatcher})"
 
     return matcher
+
+
+def get_file_match_compiled_patterns():
+    """Return a tuple of patterns, where the first can be used to match any file in a chart PR
+    and the second can be used to match a valid report file within a chart PR. The patterns
+    match based on the relative path of a file to the base repository
+
+    Both patterns capture chart type, chart vendor, chart name and chart version from the file path..
+
+    Examples of valid file paths are:
+
+    charts/partners/hashicorp/vault/0.20.0/<file>
+    charts/partners/hashicorp/vault/0.20.0//report.yaml
+    """
+
+    base = submission_path_matcher()
+
+    pattern = re.compile(base + r"/.*")
+    reportpattern = re.compile(base + r"/report.yaml")
+    tarballpattern = re.compile(base + r"/(.*\.tgz)")
+    return pattern, reportpattern, tarballpattern

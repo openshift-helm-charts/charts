@@ -253,6 +253,7 @@ def test_submission_init(test_scenario):
 
     with test_scenario.excepted_exception:
         s = submission.Submission(api_url=test_scenario.api_url)
+        s.parse_modified_files()
         assert s == test_scenario.expected_submission
 
 
