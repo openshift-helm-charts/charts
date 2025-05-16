@@ -4,7 +4,7 @@ chart:
 providerDelivery: true
 publicPgpKey: unknown
 users:
-- githubUsername: test
+- githubUsername: 6hchraiti
 vendor:
   label: vsr-6wind
   name: 6WIND
