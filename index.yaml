@@ -9407,6 +9407,33 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-trusted-profile-analyzer-1.0.0/redhat-trusted-profile-analyzer-1.0.0.tgz
     version: 1.0.0
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:3ceafa81f2fb3e3b718bde77000eb19832318e8b2a8e778e947cbe9b1f2a0c12
+      charts.openshift.io/lastCertifiedTimestamp: '2025-05-16T17:56:44.137075+02:00'
+      charts.openshift.io/name: Red Hat Trusted Profile Analyzer
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2025-05-19T11:03:56.005154+00:00'
+      charts.openshift.io/supportURL: https://access.redhat.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 2.0.1
+    description: An Helm chart for deploying Red Hat Trusted Profile Analyzer (RHTPA)
+    digest: 8e5beedddef4b1956191ce4c769f3e862c3714beb99e9ea07db7381d929975ca
+    home: https://access.redhat.com/products/red-hat-trusted-profile-analyzer
+    icon: data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjM4IiBoZWlnaHQ9IjM4IiB2aWV3Qm94PSIwIDAgMzggMzgiPjxkZWZzPjxzdHlsZT4uZHtmaWxsOiNlMDA7fS5le2ZpbGw6I2ZmZjt9LmZ7ZmlsbDojZTBlMGUwO308L3N0eWxlPjwvZGVmcz48ZyBpZD0iYSI+PHJlY3QgY2xhc3M9ImUiIHg9IjEiIHk9IjEiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgcng9IjkiIHJ5PSI5Ii8+PHBhdGggY2xhc3M9ImYiIGQ9Im0yOCwyLjI1YzQuMjczNCwwLDcuNzUsMy40NzY2LDcuNzUsNy43NXYxOGMwLDQuMjczNC0zLjQ3NjYsNy43NS03Ljc1LDcuNzVIMTBjLTQuMjczNCwwLTcuNzUtMy40NzY2LTcuNzUtNy43NVYxMGMwLTQuMjczNCwzLjQ3NjYtNy43NSw3Ljc1LTcuNzVoMThtMC0xLjI1SDEwQzUuMDI5NCwxLDEsNS4wMjk0LDEsMTB2MThjMCw0Ljk3MDYsNC4wMjk0LDksOSw5aDE4YzQuOTcwNiwwLDktNC4wMjk0LDktOVYxMGMwLTQuOTcwNi00LjAyOTQtOS05LTloMFoiLz48L2c+PGcgaWQ9ImIiPjxwYXRoIGNsYXNzPSJkIiBkPSJtMjguNDQyNCwyNy41NTgxbC00LjgxODUtNC44MTg1Yy43MTM1LS42OTQ2LDEuMjc3Ni0xLjU1MjcsMS42MjMyLTIuNTMxNi4xMTUyLS4zMjUyLS4wNTU3LS42ODIxLS4zODA5LS43OTc0LS4zMjIzLS4xMTYyLS42ODI2LjA1NTItLjc5NjkuMzgxMy0uNzU3OCwyLjE0MzEtMi43OTQ5LDMuNTgzLTUuMDY5MywzLjU4My0yLjk2MzksMC01LjM3NS0yLjQxMTEtNS4zNzUtNS4zNzVzMi40MTExLTUuMzc1LDUuMzc1LTUuMzc1Yy4zNDQ3LDAsLjYyNS0uMjc5OC42MjUtLjYyNXMtLjI4MDMtLjYyNS0uNjI1LS42MjVjLTMuNjUzMywwLTYuNjI1LDIuOTcyMi02LjYyNSw2LjYyNXMyLjk3MTcsNi42MjUsNi42MjUsNi42MjVjMS4zMjUxLDAsMi41Nzc3LS40MDc0LDMuNjM2Mi0xLjEwNDVsNC45MjE0LDQuOTIxNGMuMTIyMS4xMjIxLjI4MjIuMTgzMS40NDI0LjE4MzFzLjMyMDMtLjA2MS40NDI0LS4xODMxYy4yNDMyLS4yNDQxLjI0MzItLjYzOTYsMC0uODgzOFoiLz48cGF0aCBkPSJtMjAuNDQyNCwyNy41NTgxbC0yLTJjLS4yNDQxLS4yNDQxLS42NDA2LS4yNDQxLS44ODQ4LDAtLjI0MzIuMjQ0MS0uMjQzMi42Mzk2LDAsLjg4MzhsLjkwNjIuOTA1OWMtNC45MTkxLS4yODA0LTguODM4OC00LjM1OTQtOC44Mzg4LTkuMzQ3OCwwLTUuMTY5NCw0LjIwNjEtOS4zNzUsOS4zNzUtOS4zNzUuMzQ0NywwLC42MjUtLjI3OTguNjI1LS42MjVzLS4yODAzLS42MjUtLjYyNS0uNjI1Yy01Ljg1ODQsMC0xMC42MjUsNC43NjY2LTEwLjYyNSwxMC42MjUsMCw1LjY5NDksNC41MDc3LDEwLjM0NDUsMTAuMTQwNiwxMC42MDA1bC0uOTU3OS45NTc2Yy0uMjQzMi4yNDQxLS4yNDMyLjYzOTYsMCwuODgzOC4xMjIxLjEyMjEuMjgyMi4xODMxLjQ0MjQuMTgzMXMuMzIwMy0uMDYxLjQ0MjQtLjE4MzFsMi0yYy4yNDMyLS4yNDQxLjI0MzItLjYzOTYsMC0uODgzOFoiLz48cGF0aCBkPSJtMjUuNSwxNy42MjVjLTIuMjc0NCwwLTQuMTI1LTEuODUwNi00LjEyNS00LjEyNXYtNC4wMjg4YzAtLjI5NDkuMjA2MS0uNTQ5OC40OTUxLS42MTEzbDMuNS0uNzQ0MWMuMDg1OS0uMDE4Ni4xNzM4LS4wMTg2LjI1OTgsMGwzLjUuNzQ0MWMuMjg5MS4wNjEuNDk1MS4zMTY0LjQ5NTEuNjExM3Y0LjAyODhjMCwyLjI3NDQtMS44NTA2LDQuMTI1LTQuMTI1LDQuMTI1Wm0tMi44NzUtNy42NDc5djMuNTIyOWMwLDEuNTg1NCwxLjI5LDIuODc1LDIuODc1LDIuODc1czIuODc1LTEuMjg5NiwyLjg3NS0yLjg3NXYtMy41MjI5bC0yLjg3NS0uNjEwOC0yLjg3NS42MTA4WiIvPjxwYXRoIGNsYXNzPSJkIiBkPSJtMjUsMTQuMzUyMWMtLjE2MDIsMC0uMzIwMy0uMDYxLS40NDI0LS4xODMxbC0xLTFjLS4yNDMyLS4yNDQxLS4yNDMyLS42Mzk2LDAtLjg4MzguMjQ0MS0uMjQ0MS42NDA2LS4yNDQxLjg4NDgsMGwuNTU3Ni41NTgxLDEuNTU3Ni0xLjU1ODFjLjI0NDEtLjI0NDEuNjQwNi0uMjQ0MS44ODQ4LDAsLjI0MzIuMjQ0MS4yNDMyLjYzOTYsMCwuODgzOGwtMiwyYy0uMTIyMS4xMjIxLS4yODIyLjE4MzEtLjQ0MjQuMTgzMVoiLz48L2c+PC9zdmc+
+    kubeVersion: ^1.25.0
+    maintainers:
+    - email: rhtpa-support@redhat.com
+      name: Red Hat
+      url: https://www.redhat.com
+    name: redhat-trusted-profile-analyzer
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-trusted-profile-analyzer-1.0.1/redhat-trusted-profile-analyzer-1.0.1.tgz
+    version: 1.0.1
   redhat-vertx:
   - annotations:
       charts.openshift.io/digest: sha256:3331fdb13510b38a2e420a370716e542a31dc764c02976659e653213b2e764ee
@@ -11880,4 +11907,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-05-14T18:33:29.785652+00:00'
+generated: '2025-05-19T11:03:55.899120+00:00'
