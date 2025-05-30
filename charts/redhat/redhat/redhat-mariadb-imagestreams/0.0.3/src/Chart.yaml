@@ -1,0 +1,14 @@
+description: |-
+  This content is experimental, do not use it in production. Provides a Red Hat MariaDB database.
+  For more information about using this database image, including OpenShift considerations,
+  see https://github.com/sclorg/mariadb-container/blob/master/README.md.
+annotations:
+  charts.openshift.io/name: Red Hat MariaDB database service imagestreams (experimental)
+apiVersion: v2
+appVersion: 0.0.2
+kubeVersion: '>=1.20.0'
+name: redhat-mariadb-imagestreams
+tags: database,mariadb
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.2
