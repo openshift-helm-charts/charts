@@ -7474,11 +7474,11 @@ entries:
     version: 0.0.2
   - annotations:
       charts.openshift.io/digest: sha256:d83e3be8c028d135849dd5eddeda775777e10ce20d3a571ea0faa1e27c26faad
-      charts.openshift.io/lastCertifiedTimestamp: '2025-05-30T08:26:59.870284+00:00'
+      charts.openshift.io/lastCertifiedTimestamp: '2025-05-30T08:27:37.08724+00:00'
       charts.openshift.io/name: Red Hat Apache HTTP Server imagestreams (experimental).
       charts.openshift.io/provider: Red Hat
       charts.openshift.io/providerType: community
-      charts.openshift.io/submissionTimestamp: '2025-05-30T08:28:32.094673+00:00'
+      charts.openshift.io/submissionTimestamp: '2025-05-30T08:29:07.122344+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
       charts.openshift.io/testedOpenShiftVersion: '4.17'
     apiVersion: v2
@@ -7486,7 +7486,7 @@ entries:
     description: This content is experimental, do not use it in production. Red Hat
       Apache HTTP Server imagestreams. For more information about HTTPD container
       see https://github.com/sclorg/httpd-container/.
-    digest: a5a11e3035c186a1ba3f7d127d50c0f9c0db1dc3cc41ee472097ec340424f329
+    digest: be302da2b4b5a5664afcffe611fce741a67878df509f9bc5788dee66f8faf253
     kubeVersion: '>=1.20.0'
     name: redhat-httpd-imagestreams
     sources:
@@ -11981,4 +11981,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-05-30T08:28:31.991391+00:00'
+generated: '2025-05-30T08:29:07.014663+00:00'
