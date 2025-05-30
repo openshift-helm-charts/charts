@@ -21,7 +21,23 @@ spec:
       sampleRepo: https://github.com/sclorg/dancer-ex.git
     from:
       kind: ImageStreamTag
-      name: 5.32-ubi8
+      name: 5.32-ubi9
+    referencePolicy:
+      type: Local
+  - name: 5.40-ubi10
+    annotations:
+      openshift.io/display-name: Perl 5.40 (UBI 10)
+      openshift.io/provider-display-name: Red Hat, Inc.
+      description: Build and run Perl 5.40 applications on UBI 9. For more information
+        about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-perl-container/blob/master/5.40/README.md.
+      iconClass: icon-perl
+      tags: builder,perl
+      supports: perl:5.40,perl
+      version: '5.40'
+      sampleRepo: https://github.com/sclorg/dancer-ex.git
+    from:
+      kind: DockerImage
+      name: registry.redhat.io/ubi10/perl-540:latest
     referencePolicy:
       type: Local
   - name: 5.32-ubi9
