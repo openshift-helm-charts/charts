@@ -8111,6 +8111,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nginx-imagestreams-0.0.2/redhat-nginx-imagestreams-0.0.2.tgz
     version: 0.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:9e0d570557cb3f9dc2a4b7eff644fdda45557fb5aee381b453bdee01df4ac1b1
+      charts.openshift.io/lastCertifiedTimestamp: '2025-05-30T09:13:40.742012+00:00'
+      charts.openshift.io/name: Red Hat Nginx HTTP server and a reverse proxy (nginx)
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-05-30T09:15:16.866930+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.17'
+    apiVersion: v2
+    appVersion: 0.0.3
+    description: This content is experimental, do not use it in production. Build
+      and serve static content via Nginx HTTP server and a reverse proxy (nginx) on
+      RHEL. https://github.com/sclorg/nginx-container/blob/master/README.md.
+    digest: 0fa8ff5f20e11afb2b026a12cb638959b4d598519cfb95d9dcba0681787a16bc
+    kubeVersion: '>=1.20.0'
+    name: redhat-nginx-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,nginx
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nginx-imagestreams-0.0.3/redhat-nginx-imagestreams-0.0.3.tgz
+    version: 0.0.3
   redhat-nginx-template:
   - annotations:
       charts.openshift.io/digest: sha256:ee927b8a024e7ca2f176397e6ca1d024c9379453e1d704f5566c5bf93e1654a6
@@ -12027,4 +12051,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-05-30T08:53:11.698540+00:00'
+generated: '2025-05-30T09:15:16.761307+00:00'
