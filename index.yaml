@@ -7835,6 +7835,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-mariadb-imagestreams-0.0.2/redhat-mariadb-imagestreams-0.0.2.tgz
     version: 0.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:db2b0a2c7e0212f1e5abd7ca1498cc2cb8e52b99f072f89e1f75bdf8fcfc6139
+      charts.openshift.io/lastCertifiedTimestamp: '2025-05-30T08:43:54.988981+00:00'
+      charts.openshift.io/name: Red Hat MariaDB database service imagestreams (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-05-30T08:45:31.422109+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.17'
+    apiVersion: v2
+    appVersion: 0.0.3
+    description: This content is experimental, do not use it in production. Provides
+      a Red Hat MariaDB database. For more information about using this database image,
+      including OpenShift considerations, see https://github.com/sclorg/mariadb-container/blob/master/README.md.
+    digest: 13933b29336df8c214852944d871c60eb7dd9d60c4c8401fea93bc3b6d1d49fd
+    kubeVersion: '>=1.20.0'
+    name: redhat-mariadb-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mariadb
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-mariadb-imagestreams-0.0.3/redhat-mariadb-imagestreams-0.0.3.tgz
+    version: 0.0.3
   redhat-mariadb-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:1bbf7597694b67ac7e9fae4a3eccd997b1b45d45a16ea6ccca6f5ee7cb7436ba
@@ -11981,4 +12004,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-05-30T08:29:07.014663+00:00'
+generated: '2025-05-30T08:45:31.315914+00:00'
