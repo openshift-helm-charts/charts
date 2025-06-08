@@ -2705,7 +2705,7 @@ entries:
       charts.openshift.io/lastCertifiedTimestamp: '2025-06-08T07:57:50.674792+00:00'
       charts.openshift.io/name: noname-security-sensor
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2025-06-08T08:02:06.857043+00:00'
+      charts.openshift.io/submissionTimestamp: '2025-06-08T08:03:20.870790+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.9'
       charts.openshift.io/testedOpenShiftVersion: '4.18'
     apiVersion: v2
@@ -5017,4 +5017,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-06-08T08:02:06.802093+00:00'
+generated: '2025-06-08T08:03:20.817538+00:00'
