@@ -1,0 +1,10 @@
+chart:
+  name: te-signaling
+  shortDescription: Signaling Stack CNF
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: li.a.zhang@tietoevry.com
+vendor:
+  label: tenp
+  name: Tieto Corporation
