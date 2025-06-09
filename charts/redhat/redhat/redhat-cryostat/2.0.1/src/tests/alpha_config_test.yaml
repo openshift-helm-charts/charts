@@ -1,0 +1,45 @@
+suite: test alpha_config.yaml
+templates:
+  - templates/alpha_config.yaml
+
+tests:
+  - it: should create configmap with correct alpha configurations
+    asserts:
+      - matchRegex:
+          path: data['alpha_config.yaml']
+          pattern: "server:\\s*BindAddress: http://0.0.0.0:4180"
+      - matchRegex:
+          path: data['alpha_config.yaml']
+          pattern: "upstreamConfig:\\s*proxyRawPath: true\\s*upstreams:\\s*- id: cryostat\\s*path: /\\s*uri: http://localhost:8181"
+      - matchRegex:
+          path: data['alpha_config.yaml']
+          pattern: "- id: grafana\\s*path: /grafana/\\s*uri: http://localhost:3000"
+      - matchRegex:
+          path: data['alpha_config.yaml']
+          pattern: "providers:\\s*- id: dummy\\s*name: Unused - Sign In Below\\s*clientId: CLIENT_ID\\s*clientSecret: CLIENT_SECRET\\s*provider: google"
+
+  - it: should create configmap with correct alpha configurations when self-signed TLS is enabled
+    set:
+      oauth2Proxy.tls.selfSigned.enabled: true
+    asserts:
+      - matchRegex:
+          path: data['alpha_config.yaml']
+          pattern: "server:\\s*BindAddress: http://0.0.0.0:4180\\s*SecureBindAddress: https://0.0.0.0:8443"
+      - matchRegex:
+          path: data['alpha_config.yaml']
+          pattern: "upstreamConfig:\\s*proxyRawPath: true\\s*upstreams:\\s*- id: cryostat\\s*path: /\\s*uri: http://localhost:8181"
+      - matchRegex:
+          path: data['alpha_config.yaml']
+          pattern: "- id: grafana\\s*path: /grafana/\\s*uri: http://localhost:3000"
+      - matchRegex:
+          path: data['alpha_config.yaml']
+          pattern: "providers:\\s*- id: dummy\\s*name: Unused - Sign In Below\\s*clientId: CLIENT_ID\\s*clientSecret: CLIENT_SECRET\\s*provider: google"
+
+  - it: should not create alpha_config when openshift authentication is enabled
+    set:
+      authentication:
+        openshift:
+          enabled: true
+    asserts:
+      - hasDocuments:
+          count: 0
