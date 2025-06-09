@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:1787952027423033151
+        reportDigest: uint64:15045569445907973295
         chart-uri: N/A
         digests:
             chart: sha256:cf673d8598568a23862a583832e4cb77231c4f979868ad5185178003d4aec4d0
             package: 7790a2fba247c7720d1babd77b2e778034ec5d1c0b9ca7d6e681ee9534e3f7e4
-        lastCertifiedTimestamp: "2025-06-09T11:53:15.026515+00:00"
+        lastCertifiedTimestamp: "2025-06-09T13:06:28.289918+00:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.1'
         webCatalogOnly: true
@@ -100,69 +100,69 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
-    - check: v1.0/has-notes
-      type: Optional
-      outcome: PASS
-      reason: Chart does contain NOTES.txt
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
     - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
       reason: |-
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/light-engine:v3.46.12-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/heavy-engine:v3.46.12-lts-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nogate:v3.46.12-lts-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/platform-integrations:v3.46.12-lts-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/rhel8/postgresql-15:1-66.1716485364
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/router:v3.46.12-lts-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nginx:v3.46.12-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nats-jetstream:2.10.24-custom-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/cloud-metadata:v3.46.12-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/heavy-engine:v3.46.12-lts-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/integrations-adapter:v3.46.12-lts-ubi
-    - check: v1.0/not-contains-crds
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/router:v3.46.12-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nats-jetstream:2.10.24-custom-ubi
+    - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/chart-testing
+      reason: Values schema file exist
+    - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/contains-test
-      type: Mandatory
+      reason: Values file exist
+    - check: v1.0/has-notes
+      type: Optional
       outcome: PASS
-      reason: Chart test files exist
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
+      reason: Chart does contain NOTES.txt
     - check: v1.0/signature-is-valid
       type: Mandatory
       outcome: SKIPPED
       reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
