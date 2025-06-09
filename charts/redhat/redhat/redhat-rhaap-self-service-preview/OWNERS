@@ -3,6 +3,7 @@ chart:
   shortDescription: "AAP Technical Preview: Self-service automation"
 publicPgpKey: null
 users:
+  - githubUsername: aap-portal-bot
   - githubUsername: abhikdps
   - githubUsername: alisonlhart
   - githubUsername: audgirka
