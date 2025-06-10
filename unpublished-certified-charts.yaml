@@ -4217,10 +4217,10 @@ entries:
     version: 3.46.12
   - annotations:
       charts.openshift.io/digest: sha256:cf673d8598568a23862a583832e4cb77231c4f979868ad5185178003d4aec4d0
-      charts.openshift.io/lastCertifiedTimestamp: '2025-06-09T13:06:28.289918+00:00'
+      charts.openshift.io/lastCertifiedTimestamp: '2025-06-10T08:50:30.775424+00:00'
       charts.openshift.io/name: Remote Engine
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2025-06-09T13:12:33.979550+00:00'
+      charts.openshift.io/submissionTimestamp: '2025-06-10T08:54:46.197505+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
       charts.openshift.io/testedOpenShiftVersion: '4.14'
     apiVersion: v2
@@ -5067,4 +5067,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-06-09T13:12:33.925125+00:00'
+generated: '2025-06-10T08:54:46.143852+00:00'
