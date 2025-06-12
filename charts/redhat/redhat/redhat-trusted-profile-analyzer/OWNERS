@@ -6,6 +6,7 @@ users:
   - githubUsername: desmax74
   - githubUsername: ctron
   - githubUsername: mrizzi
+  - githubUsername: m-brophy
 vendor:
   label: redhat
   name: Red Hat
