@@ -4,7 +4,7 @@ chart:
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: li.a.zhang@tietoevry.com
+- githubUsername: zhanglji
 vendor:
   label: tenp
   name: Tieto Corporation
