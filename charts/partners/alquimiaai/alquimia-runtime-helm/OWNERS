@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: jlcruzfiveit
 vendor:
   label: alquimiaai
   name: Alquimia S.A.
