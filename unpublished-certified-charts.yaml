@@ -4687,6 +4687,68 @@ entries:
     urls:
     - N/A
     version: 0.5.4
+  te-signaling:
+  - annotations:
+      charts.openshift.io/description: Script and configuration for containerizing
+        signaling DCS 1001029 (Docker and K8s)
+      charts.openshift.io/digest: sha256:0635678ca2cfa59742428a98efe9397ccbaedc4324cb9e052bca0d7f1fac32ed
+      charts.openshift.io/lastCertifiedTimestamp: '2025-06-24T02:15:27.719531-04:00'
+      charts.openshift.io/name: Containerizing signaling DCS 1001029
+      charts.openshift.io/provider: Tietoevry
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-06-27T01:48:29.667907+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 6.2.0
+    dependencies:
+    - name: te-common
+      repository: http://10.41.104.108/repository/helm-hosted
+      version: 1.2.0-0
+    - condition: te-signaling-sm.enabled
+      name: te-signaling-sm
+      repository: file://../te-signaling-sm
+      version: 0.1.0
+    - condition: te-signaling-oam.enabled
+      name: te-signaling-oam
+      repository: file://../te-signaling-oam
+      version: 0.1.0
+    - name: te-signaling-logd
+      repository: file://../te-signaling-logd
+      version: 0.1.0
+    - condition: te-signaling-nmm.enabled
+      name: te-signaling-nmm
+      repository: file://../te-signaling-nmm
+      version: 0.1.0
+    - condition: te-signaling-be.enabled
+      name: te-signaling-be
+      repository: file://../te-signaling-be
+      version: 0.1.0
+    - condition: te-signaling-sip.enabled
+      name: te-signaling-sip
+      repository: file://../te-signaling-sip
+      version: 0.1.0
+    - condition: te-signaling-sctp.enabled
+      name: te-signaling-sctp
+      repository: file://../te-signaling-sctp
+      version: 0.1.0
+    - condition: te-signaling-sigsysmon.enabled
+      name: te-signaling-sigsysmon
+      repository: file://../te-signaling-sigsysmon
+      version: 0.1.0
+    - condition: te-signaling-sftp-service.enabled
+      name: te-signaling-sftp-service
+      repository: file://../te-signaling-sftp-service
+      version: 0.1.0
+    description: The Helm integration chart to deploy Tietoevry Signaling stack in
+      Kubernetes
+    digest: 7628224d1b4670b7dac62b32ef5fca32125c82238baf4096400e2bdc4c9d9b95
+    kubeVersion: '>= 1.20.1'
+    name: te-signaling
+    type: application
+    urls:
+    - N/A
+    version: 6.2.0-0
   tracer:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -5067,4 +5129,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-06-12T10:50:50.489790+00:00'
+generated: '2025-06-27T01:48:29.613042+00:00'
