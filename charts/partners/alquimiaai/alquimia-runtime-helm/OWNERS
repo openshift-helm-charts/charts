@@ -1,6 +1,6 @@
 chart:
   name: alquimia-runtime-helm
-  shortDescription: unknown
+  shortDescription: This Helm chart deploys the Alquimia Runtime application, including its event-driven components using Knative Eventing and Knative Serving.  
 providerDelivery: false
 publicPgpKey: unknown
 users:
