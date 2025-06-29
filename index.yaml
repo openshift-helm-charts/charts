@@ -88,6 +88,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/ddosify-alaz-0.5.0/alaz-0.5.0.tgz
     version: 0.5.0
+  alquimia-runtime-helm:
+  - annotations:
+      charts.openshift.io/description: A Helm chart for OpenShift
+      charts.openshift.io/digest: sha256:d03fb8851c3620ffc4d675b43021e62daef3883c02520b2189abc4803ec2fa50
+      charts.openshift.io/lastCertifiedTimestamp: '2025-06-29T22:50:20.636883+00:00'
+      charts.openshift.io/name: alquimia-runtime-helm
+      charts.openshift.io/provider: Alquimia S.A.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-06-29T22:56:45.762603+00:00'
+      charts.openshift.io/supportURL: https://www.alquimia.ai/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
+      charts.openshift.io/testedOpenShiftVersion: '4.15'
+    apiVersion: v2
+    appVersion: 1.16.0
+    description: A Helm chart for Kubernetes
+    digest: 4004249ae3992cb384d5ee6ae6c326e07176207956aa5c6835e69d51932ff591
+    icon: https://www.alquimia.ai/favicon.ico
+    kubeVersion: '>=1.24.0'
+    name: alquimia-runtime-helm
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/alquimiaai-alquimia-runtime-helm-0.1.0/alquimia-runtime-helm-0.1.0.tgz
+    version: 0.1.0
   axual-governance-core:
   - annotations:
       charts.openshift.io/digest: sha256:d94592d390a7fad9beb266fab17280abef4463864b21dc06ed55808faf587cfd
@@ -12330,4 +12353,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-06-19T05:22:42.955973+00:00'
+generated: '2025-06-29T22:56:45.653069+00:00'
