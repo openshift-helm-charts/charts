@@ -1,0 +1,11 @@
+chart:
+  name: alquimia-runtime-helm
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: jlcruzfiveit
+- githubUsername: joseluiscruz-alquimiaai
+vendor:
+  label: alquimiaai
+  name: Alquimia S.A.
