@@ -4568,6 +4568,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-cakephp-application-template-0.0.1/cakephp-application-template-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:89fcb5f629938913e95e9fb6e187f550545745b0885041175810d6b5a2ec94f3
+      charts.openshift.io/lastCertifiedTimestamp: '2025-06-30T10:57:31.549322+00:00'
+      charts.openshift.io/name: Red Hat Apache CakePHP application with no database
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-06-30T10:59:05.365148+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: This content is experimental, do not use it in production. An example
+      CakePHP application with no database. For more information about using this
+      template, including OpenShift considerations, see https://github.com/sclorg/cakephp-ex/blob/master/README.md.
+    digest: 14ceaefb0aa2bccd7a77419f8a66a0786b2336514a2e8473c576d34829441e18
+    kubeVersion: '>=1.20.0'
+    name: redhat-cakephp-application-template
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,php,cakephp
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-cakephp-application-template-0.0.2/redhat-cakephp-application-template-0.0.2.tgz
+    version: 0.0.2
   redhat-cryostat:
   - annotations:
       charts.openshift.io/digest: sha256:16c798a6a148c3d5d7a95a1c25fa727f56cd065a2f412d0991781e5939472b64
@@ -12376,4 +12400,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-06-30T10:47:04.504964+00:00'
+generated: '2025-06-30T10:59:05.253968+00:00'
