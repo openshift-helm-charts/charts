@@ -13,7 +13,7 @@
         "php_version": {
             "type": "string",
             "description": "Version of PHP image to be used (8.1-ubi9 by default).",
-            "enum": [ "latest", "8.0-ubi8", "8.1-ubi9",  "8.0-ubi9" ]
+            "enum": [ "latest", "7.4-ubi8", "8.0-ubi8", "8.2-ubi8", "8.0-ubi9", "8.2-ubi9", "8.3-ubi9", "8.3-ubi10" ]
         },
         "memory_limit": {
             "type": "string",
@@ -57,6 +57,26 @@
         "opcache_revalidate_freq": {
             "type": "string",
             "description": "How often to check script timestamps for updates, in seconds. 0 will result in OPcache checking for updates on every request."
+        },
+        "registry": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of registry that will be used for pushing built image."
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "The namespace of registry that will be used for pushing built image."
+                },
+                "push_secret": {
+                    "type": "string",
+                    "description": "The push secret to push image to registry."
+                }
+            }
         }
     }
 }

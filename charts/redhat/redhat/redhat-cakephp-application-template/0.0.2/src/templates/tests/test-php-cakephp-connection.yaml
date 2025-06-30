@@ -10,11 +10,11 @@ metadata:
 spec:
   containers:
     - name: "{{ .Release.Name }}-connection-test"
-      image: "registry.redhat.io/ubi8/ubi:latest"
+      image: "registry.redhat.io/ubi9/ubi:latest"
       imagePullPolicy: IfNotPresent
       command:
         - '/bin/bash'
         - '-exc'
         - >
-          curl {{ .Values.name }}.{{ .Release.Namespace }}:8080 | grep "Welcome to CakePHP 4.5"
+          curl {{ .Values.name }}.{{ .Release.Namespace }}:8080 | grep "Welcome to CakePHP"
   restartPolicy: Never

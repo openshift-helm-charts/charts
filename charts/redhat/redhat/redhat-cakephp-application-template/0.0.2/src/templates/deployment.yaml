@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   annotations:
     description: Defines how to deploy the application server
+    {{ if not .Values.registry.enabled }}
     image.openshift.io/triggers: |-
       [
         {
@@ -13,6 +14,7 @@ metadata:
           "fieldPath": "spec.template.spec.containers[0].image"
         }
       ]
+    {{ end }}
     template.alpha.openshift.io/wait-for-ready: "true"
   labels:
     app: cakephp-example
@@ -47,7 +49,11 @@ spec:
               name: {{ .Values.name }}
         - name: OPCACHE_REVALIDATE_FREQ
           value: "{{ .Values.opcache_revalidate_freq }}"
+        {{ if .Values.registry.enabled }}
+        image: "{{ .Values.registry.name }}/{{ .Values.registry.namespace }}/{{ .Values.name }}:latest"
+        {{ else }}
         image: " "
+        {{ end }}
         livenessProbe:
           httpGet:
             path: /
