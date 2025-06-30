@@ -1,0 +1,13 @@
+application_domain: "" # TODO: must define a default value for .application_domain
+cakephp_secret_token: "" # TODO: must define a default value for .cakephp_secret_token
+cakephp_security_salt: "" # TODO: must define a default value for .cakephp_security_salt
+composer_mirror: "" # TODO: must define a default value for .composer_mirror
+context_dir: "" # TODO: must define a default value for .context_dir
+github_webhook_secret: "SOMETHING" # TODO: must define a default value for .github_webhook_secret
+memory_limit: 512Mi
+name: cakephp-example
+namespace: openshift
+opcache_revalidate_freq: "2"
+php_version: 8.1-ubi9
+source_repository_ref: "4.X" # TODO: must define a default value for .source_repository_ref
+source_repository_url: https://github.com/sclorg/cakephp-ex.git
