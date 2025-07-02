@@ -2,19 +2,19 @@ apiversion: v1
 kind: verify-report
 metadata:
     tool:
-        verifier-version: 1.9.0
+        verifier-version: 1.12.2
         profile:
             VendorType: community
-            version: v1.1
-        reportDigest: uint64:6188835510583069887
+            version: v1.2
+        reportDigest: uint64:2311548969647311891
         chart-uri: https://github.com/openshift-helm-charts/development/blob/main/tests/data/vault-0.17.0.tgz?raw=true
         digests:
-            chart: sha256:f01dd362d81fe4b1ef99bb7fa5be268fa94dc96f3009d28bc93a18517aa1ef7a
-            package: 9cb7e3a5d82537f512319c754ccd6e9a4be08118b34849609d0fc261934d062a
-        lastCertifiedTimestamp: "2022-10-10T15:07:06.610015+05:30"
-        testedOpenShiftVersion: "4.11"
+            chart: sha256:d075d16bb33bb33f66cc6fb8af5cce935b647972de4b4af49be385fcce7bed05
+            package: 641f6c03aac5117eb679b341426adaa612829acc546c18e59c58ea1b45b2e513
+        lastCertifiedTimestamp: "2023-09-11T12:27:30.198044-04:00"
+        testedOpenShiftVersion: "4.13"
         supportedOpenShiftVersions: '>=4.2'
-        providerControlledDelivery: false
+        webCatalogOnly: false
     chart:
         name: vault
         home: https://www.vaultproject.io
@@ -47,50 +47,54 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-    - check: v1.0/is-helm-v3
+    - check: v1.0/signature-is-valid
       type: Optional
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/not-contains-crds
-      type: Optional
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/contains-test
-      type: Optional
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/not-contain-csi-objects
-      type: Optional
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.1/has-kubeversion
-      type: Optional
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/required-annotations-present
-      type: Optional
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/contains-values-schema
-      type: Optional
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.0/contains-values
-      type: Optional
-      outcome: PASS
-      reason: Values file exist
-    - check: v1.0/images-are-certified
-      type: Optional
-      outcome: PASS
-      reason: |-
-        Image is Red Hat certified : registry.connect.redhat.com/hashicorp/vault:1.8.4-ubi
-        Image is Red Hat certified : registry.connect.redhat.com/hashicorp/vault-k8s:0.14.0-ubi
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
     - check: v1.0/chart-testing
       type: Optional
       outcome: PASS
       reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/images-are-certified
+      type: Optional
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.connect.redhat.com/hashicorp/vault-k8s:0.14.0-ubi
+        Image is Red Hat certified : registry.connect.redhat.com/hashicorp/vault:1.8.4-ubi
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: PASS
+      reason: Chart does not contain CRDs
     - check: v1.0/has-readme
       type: Optional
       outcome: PASS
       reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
 

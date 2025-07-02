@@ -1,0 +1,10 @@
+chart:
+  name: arcorch
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: lakshman-arrcus
+vendor:
+  label: arrcus
+  name: Arrcus Inc.

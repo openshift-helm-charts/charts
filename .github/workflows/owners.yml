@@ -7,26 +7,26 @@ on:
 jobs:
   owners-metrics:
     name: Send Owner Metrics
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: github.actor == 'redhat-mercury-bot'
     env:
       SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
       SEGMENT_TEST_WRITE_KEY: ${{ secrets.SEGMENT_TEST_WRITE_KEY }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Python 3.x Part 1
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
+      - name: Set up Python
+        uses: ./.github/actions/setup-python
 
       - name: Set up Python 3.x Part 2
         run: |
           # set up python
           python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
 
       - uses: jitterbit/get-changed-files@v1
         id: filesChangedOrModified

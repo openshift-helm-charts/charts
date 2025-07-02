@@ -1,0 +1,13 @@
+chart:
+  name: noname-security-sensor-ubi
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: devopsnns
+- githubUsername: itzhak-alayev-nonamesec
+- githubUsername: ramikrel2
+- githubUsername: chiffenish
+vendor:
+  label: nonamesec
+  name: Noname Security

@@ -1,0 +1,11 @@
+chart:
+  name: redhat-trusted-application-pipeline
+  shortDescription: A Helm chart for deploying Red Hat Trusted Application Pipeline
+publicPgpKey: null
+users:
+  - githubUsername: jduimovich
+  - githubUsername: otaviof
+  - githubUsername: Roming22
+vendor:
+  label: redhat
+  name: Red Hat

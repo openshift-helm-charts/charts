@@ -1,0 +1,10 @@
+chart:
+  name: bpjstk-service
+  shortDescription: BPJSTK Multichannel Payment Gateway
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: andrianrf
+vendor:
+  label: multipolar
+  name: PT. Multipolar Tbk

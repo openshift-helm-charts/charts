@@ -1,0 +1,150 @@
+name: Behave Testing
+
+# Behave Testing will run the repository's Behave testing with each feature file
+# getting its own runner. All feature files found within the specific path are
+# included.
+
+on:
+  workflow_call:
+    inputs:
+      tags:
+        type: string
+        required: true
+        description: |
+          The behave tags to use. E.g "full". Multiple tags should be specified
+          separated by a comma, e.g. "owners,redhat".
+      pr-body:
+        type: string
+        required: true
+        description: |
+          Every pull request created by this automation will have this pr-body.
+      behave-logging-level:
+        type: string
+        required: false
+        default: WARNING
+        description: |
+          Value passed to behave's --logging-level flag.
+      # actions/checkout related inputs used for testing. In some cases behave
+      # calls will use the PR branch instead of the main branch. E.g. when doing
+      # release testing
+      checkout-fetch-depth:
+        type: number
+        required: false
+        default: 1 # aligns with actions/checkout default.
+        description: |
+          fetch-depth flag to actions/checkout.
+          
+          If setting to a pull request, caller is responsible 
+          for verifying the user is a trusted user.
+      checkout-repository:
+        type: string
+        required: false
+        default: ""
+        description: |
+          repository flag to actions/checkout
+          
+          If setting to a pull request, caller is responsible 
+          for verifying the user is a trusted user.
+      checkout-ref:
+        type: string
+        required: false
+        default: ""
+        description: |
+          ref flag to actions/checkout
+          
+          If setting to a pull request, caller is responsible 
+          for verifying the user is a trusted user.
+    secrets:
+      # bot-name is not technically secret, but must be listed as a secret
+      # because you can't pass the ${{ secrets }} context as an input in the
+      # calling workflow, and our repos have this configured as a secret.
+      bot-name:
+        required: true
+        description: |
+          The name of the GitHub user that will send pull requests.
+      bot-token:
+        description: |
+          A GitHub token for the bot user that will initiate pull 
+          requests for testing. Should NOT be set to GITHUB_TOKEN.
+        required: true
+jobs:
+  get-features:
+    runs-on: ubuntu-latest
+    outputs:
+      features: ${{ steps.find-features.outputs.features }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checkout-ref }}
+          repository: ${{ inputs.checkout-repository }}
+          fetch-depth: ${{ inputs.checkout-fetch-depth }}
+      - name: find features
+        # Find the feature files currently defined in repo. We expect to find at
+        # least 15 files, though that number is arbitrarily chosen at a figure
+        # below the actual count at the time of this writing (19).
+        #
+        # The expectation is that all behave tests are expected to exist at this
+        # path.
+        id: find-features
+        run: |
+          set -e
+          cd tests/functional/behave_features
+          features=$(find . -name '*.feature' | sed -e 's%\./%%g' | jq -R -s -c 'split("\n") | del(.[] | select(length == 0))')
+          [ "${features}" == "" ] && { echo "The feature file variable was empty"; exit 1 ;}
+          echo "Found feature files: ${features}"
+          echo "Running sanity checks."
+          echo -n "File list correctly formatted into an array: "; echo "${features}" | jq --exit-status 'type == "array"'
+          echo -n "A sufficient number of feature files were found: "; echo "${features}" | jq --exit-status 'length > 15'
+          echo "Sanity checks done."
+          echo "features=${features}" | tee -a $GITHUB_OUTPUT
+  run-tests:
+    runs-on: ubuntu-latest
+    needs: [get-features]
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix: 
+        feature-file: ${{ fromJson(needs.get-features.outputs.features) }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.bot-token }}
+          ref: ${{ inputs.checkout-ref }}
+          repository: ${{ inputs.checkout-repository }}
+          fetch-depth: ${{ inputs.checkout-fetch-depth }}
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-python
+
+      - name: Set up CI scripts
+        run: |
+          # set up python scripts
+          echo "set up python script in $PWD"
+          python3 -m venv ve1
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
+
+        # Pull request numbers are included in generated chart names in E2E, so it's included
+        # as an environment variable which E2E consumes.
+      - name: Populate PR_NUMBER environment variable
+        if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
+        run: |
+          echo "PR_NUMBER=${{ github.event.pull_request.number }}" | tee $GITHUB_ENV
+      
+      - name: Run Tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+          BOT_NAME: ${{ secrets.bot-name }}
+          BOT_TOKEN: ${{ secrets.bot-token }}
+          PR_BODY: ${{ inputs.pr-body }}
+        run: |
+          ve1/bin/behave tests/functional/behave_features/ \
+            --include ${{ matrix.feature-file }} \
+            --tags=${{ inputs.tags }} \
+            --logging-level=${{ inputs.behave-logging-level }} \
+            --no-capture \
+            --no-color

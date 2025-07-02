@@ -1,0 +1,9 @@
+chart:
+  name: secgw
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: vsr-6wind
+  name: 6WIND

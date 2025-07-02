@@ -1,0 +1,10 @@
+chart:
+  name: yingbphelmchart
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: wying3
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.

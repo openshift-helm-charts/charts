@@ -1,0 +1,9 @@
+chart:
+  name: soha-api-manager
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: soha
+  name: Soha Tech And Software Solutions inc.

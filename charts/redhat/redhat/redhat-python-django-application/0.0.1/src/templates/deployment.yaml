@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Defines how to deploy the application server
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "{{ .Values.name }}:latest"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
+    template.alpha.openshift.io/wait-for-ready: "true"
+  labels:
+    app: django-example
+    template: django-example
+  name: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: {{ .Values.name }}
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.name }}
+      name: {{ .Values.name }}
+    spec:
+      containers:
+      - env:
+        - name: APP_CONFIG
+          value: {{ .Values.app_config }}
+        - name: DJANGO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: django-secret-key
+              name: {{ .Values.name }}
+        image: ' '
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+        name: django-example
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 3
+          timeoutSeconds: 3
+        resources:
+          limits:
+            memory: {{ .Values.memory_limit }}

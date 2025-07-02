@@ -1,0 +1,7 @@
+ignore = [
+    "E402", # import ordering (komish): import ordering isn't handled by Black so we need to handle this manually.
+    "E501", # line length (komish): line length is not enforced by Black so we need to handle these manually.
+]
+
+# Enable the isort rules.
+extend-select = ["I"]

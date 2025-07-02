@@ -1,0 +1,10 @@
+chart:
+  name: testchart1pr
+  shortDescription: This is a short description for creating helmchart with 1 PR
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: email
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.

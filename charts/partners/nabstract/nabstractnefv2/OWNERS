@@ -1,0 +1,10 @@
+chart:
+  name: nabstractnefv2
+  shortDescription: Nabstract NEF - 5G Network APIs
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: parasjani
+vendor:
+  label: nabstract
+  name: Nabstract Technologies Pvt. Ltd.

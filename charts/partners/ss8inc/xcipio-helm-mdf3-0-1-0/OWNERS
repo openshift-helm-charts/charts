@@ -1,0 +1,10 @@
+chart:
+  name: xcipio-helm-mdf3-0-1-0
+  shortDescription: Helm Chart For SS8 MDF3
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: ss8inc
+vendor:
+  label: ss8inc
+  name: SS8 Networks, Inc.

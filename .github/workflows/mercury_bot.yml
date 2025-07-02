@@ -1,32 +1,45 @@
 name: OWNERS PR Check
 
+# Checks OWNERS file additions and modifications submitted by mercury-bot on a
+# partner's behalf, typically in response to a partner updating their project
+# metadata.
+#
+# Automatically approves modifications mercury-bot makes. Sanity checks
+# net-new OWNERS files to ensure their addition does not conflict with
+# existing locks.
+
 on:
   pull_request_target:
     types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
+    paths:
+    - charts/partners/**/OWNERS
+
 
 jobs:
   owners-file-check:
     name: OWNERS file PR checker
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: github.event.pull_request.draft == false && github.actor == 'redhat-mercury-bot'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         
-      - name: Set up Python 3.x Part 1
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
+      - name: Set up Python
+        uses: ./.github/actions/setup-python
 
       - name: Set up Python 3.x Part 2
         run: |
           # set up python
           python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
 
       - name: get files changed
         id: get_files_changed
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           # get files in PR
           ./ve1/bin/pr-artifact --api-url=${{ github.event.pull_request._links.self.href }} \
@@ -45,21 +58,109 @@ jobs:
             eval first_file=${pr_files[0]}
             if [[ $first_file == "charts/partners/"*/*"/OWNERS" ]] ; then
                 echo "An OWNERS file has been modified or added"
-                echo "merge_pr=true" >> $GITHUB_OUTPUT
+                echo "merge_pr=true" | tee -a $GITHUB_OUTPUT
             else
               echo "The file in the PR is not a partner OWNERS file"
-              echo "merge_pr=false" >> $GITHUB_OUTPUT
+              echo "merge_pr=false" | tee -a $GITHUB_OUTPUT
               echo "msg=ERROR: PR does not include a partner OWNERS file." >> $GITHUB_OUTPUT
             fi
           else
             echo "The PR contains multiple files."
             echo "msg=ERROR: PR contains multiple files." >> $GITHUB_OUTPUT
-            echo "merge_pr=false" >> $GITHUB_OUTPUT
+            echo "merge_pr=false" | tee -a $GITHUB_OUTPUT
           fi
+
+      # We know that only one file was modified at this point, and it seems
+      # mergeable. Determine if that file was created or modified here.
+      #
+      # This step only checks the first file for its modification type!
+      - name: Determine if net-new OWNERS file
+        id: populate-file-mod-type
+        if: ${{ steps.check_for_owners.outputs.merge_pr == 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const resp = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const ownersFile = resp.data[0];
+            console.log(`Modified file "${ownersFile.filename} has a status of ${ownersFile.status}`);
+            console.log(`setting output: net-new-owners-file=${ownersFile.status == 'added'}`);
+            core.setOutput('net-new-owners-file', ownersFile.status == 'added');
+
+      - name: Add category/organization/chart-name from modified file to GITHUB_OUTPUT
+        id: gather-metadata
+        env:
+          API_URL: ${{ github.event.pull_request._links.self.href }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          ./ve1/bin/extract-metadata-from-pr \
+            --emit-to-github-output \
+            ${{ env.API_URL }}
+
+      # Only used to assert content of the OWNERS file.
+      - name: Checkout Pull Request
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          token: ${{ secrets.BOT_TOKEN }}
+          fetch-depth: 0
+          path: "pr-branch"
+
+      # TODO: Implemented as a shell script temporarily. Future enhancement
+      # would re-use some existing logic that we have for the Red Hat OWNERS
+      # check, and build something similar for general use.
+      - name: Ensure OWNERS content and path content align
+        working-directory: "pr-branch"
+        id: fact-check
+        run: |
+          file=$(echo ${{ steps.get_files_changed.outputs.pr_files }} | yq .0)
+          owner_contents_chart_name=$(yq '.chart.name' ${file})
+          owner_contents_vendor_label=$(yq '.vendor.label' ${file})
+          echo "Chart Name Comparison: ${owner_contents_chart_name} = ${{ steps.gather-metadata.outputs.chart-name }}"
+          echo "Vendor Label Comparison: ${owner_contents_vendor_label} = ${{ steps.gather-metadata.outputs.organization }}"
+          test "${owner_contents_chart_name}" = "${{ steps.gather-metadata.outputs.chart-name }}"
+          test "${owner_contents_vendor_label}" = "${{ steps.gather-metadata.outputs.organization }}"
+
+      - name: Comment on PR if facts are mismatched
+        id: comment-if-fact-check-failure
+        if: failure() && steps.fact-check.outcome == 'failure'
+        run: |
+          gh pr comment ${{ github.event.number }} --body "${{ env.COMMENT_BODY }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: |
+            ### Submission Facts Mismatch
+
+            The content of the OWNERS file and your submission path do not seem to match. Double check that
+            your vendor label and chart name values in your OWNERS file match with your submission path.
+
+            _This comment was auto-generated by [GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})._
+
+      - name: Check if chart name is locked
+        id: determine-lock-status
+        uses: ./.github/actions/check-chart-locks
+        with:
+          chart-name: ${{ steps.gather-metadata.outputs.chart-name }}
+          fail-workflow-if-locked: 'false'
+
+      # Do not merge net-new OWNERS files for locked chart names. Allow a
+      # modification to an existing file. The mercury-bot periodically updates
+      # this file as users make changes to their project settings.
+      - name: Determine if should merge and is safe to merge
+        id: safe-to-merge
+        run: |
+          echo "OWNERS file is net new: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file }}"
+          echo "Chart name is already locked: ${{ steps.determine-lock-status.outputs.chart-is-locked }}"
+          echo "merge_pr=${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && steps.determine-lock-status.outputs.chart-is-locked == 'false') }}" | tee -a $GITHUB_OUTPUT
 
       - name: Comment on PR
         if: ${{ steps.check_for_owners.outputs.merge_pr == 'false' }}
-        uses: actions/github-script@v3
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -73,26 +174,27 @@ jobs:
               });
 
       - name: Reflect on check for OWNERS file result
-        if: ${{ steps.check_for_owners.outputs.merge_pr == 'false' }}
+        if: |
+          steps.check_for_owners.outputs.merge_pr == 'false'
+          || steps.safe-to-merge.outputs.merge_pr == 'false'
         run: |
-          # exit with failure if PR is not for a single partner OWNERS file
-          echo "The PR was not for a single partner OWNERS file."
+          echo "::error: The PR was not for a single partner OWNERS file, or was for a chart name locked to another contributor"
           exit 1
 
       - name: Approve PR
         id: approve_pr
-        if: ${{ steps.check_for_owners.outputs.merge_pr == 'true' }}
-        uses: hmarr/auto-approve-action@v2
+        if: |
+          steps.check_for_owners.outputs.merge_pr == 'true'
+          && steps.safe-to-merge.outputs.merge_pr == 'true'
+        uses: hmarr/auto-approve-action@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge PR
         id: merge_pr
         if: ${{ steps.approve_pr.conclusion == 'success' }}
-        uses: pascalgn/automerge-action@v0.13.1
+        uses: pascalgn/automerge-action@v0.16.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_METHOD: squash
           MERGE_LABELS: ""
-
-

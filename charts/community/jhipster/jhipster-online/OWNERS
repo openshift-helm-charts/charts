@@ -1,0 +1,10 @@
+chart:
+  name: jhipster-online
+  shortDescription: A Helm chart for JHipster Online on Developer Sandbox
+publicPgpKey: null
+providerDelivery: False
+users:
+  - githubUsername: maximilianoPizarro
+vendor:
+  label: jhipster
+  name: JHipster Online

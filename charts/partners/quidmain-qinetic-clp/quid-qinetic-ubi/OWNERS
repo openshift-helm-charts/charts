@@ -1,0 +1,10 @@
+chart:
+  name: quid-qinetic-ubi
+  shortDescription: Qinetic platform chart repository
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: mvarotto-quid
+vendor:
+  label: quidmain-qinetic-clp
+  name: QUID INFORMATICA SPA

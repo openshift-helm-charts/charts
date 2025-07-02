@@ -1,0 +1,94 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.8
+        profile:
+            VendorType: community
+            version: v1.3
+        reportDigest: uint64:1865926354967317866
+        chart-uri: https://github.com/redhat-ai-dev/ai-lab-helm-charts/releases/download/v0.1.1/chatbot-ai-sample-0.1.1.tgz
+        digests:
+            chart: sha256:4e98be9c658a1128ba5252d27440f4ce645f66365b179892106e4c5c48915bc9
+            package: 83b5e956fccf0a4a2dd64ec16bb4ce43ce035944df87635c8265b7b5bf9875c3
+        lastCertifiedTimestamp: "2024-11-15T23:11:09.552357+00:00"
+        testedOpenShiftVersion: "4.15"
+        supportedOpenShiftVersions: '>=4.14'
+        webCatalogOnly: false
+    chart:
+        name: chatbot-ai-sample
+        home: ""
+        sources: []
+        version: 0.1.1
+        description: A Helm chart for the Chatbot AI Sample app. For more information please check https://github.com/redhat-ai-dev/ai-lab-helm-charts.git
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: chatbot,llama.cpp,ai-lab
+        appversion: ""
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Chatbot AI Sample
+        kubeversion: '>= 1.27.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/signature-is-valid
+      type: Optional
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.1/images-are-certified
+      type: Optional
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Optional
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist

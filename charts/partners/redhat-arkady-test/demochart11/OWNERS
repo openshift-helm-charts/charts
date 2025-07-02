@@ -1,0 +1,10 @@
+chart:
+  name: demochart11
+  shortDescription: This is a short description demochart11!
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: ansvu
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.

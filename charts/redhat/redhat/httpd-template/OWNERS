@@ -1,9 +1,0 @@
-chart:
-  name: httpd-template
-  description: This is the Red Hat Apache HTTP Server template chart
-publicPgpKey: null
-users:
-  - githubUsername: phracek
-vendor:
-  label: redhat
-  name: Red Hat

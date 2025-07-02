@@ -1,0 +1,106 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.9
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:7951924898462488388
+        chart-uri: N/A
+        digests:
+            chart: sha256:db15b4c7718e57a40f74a62d23829743304554a15a231f9874b434c3838fa965
+            package: 445ec9293e0a760241f8d009fd62f8254412d72d66746a28518360e6404389be
+        lastCertifiedTimestamp: "2025-04-21T23:46:13.800146+00:00"
+        testedOpenShiftVersion: "4.14"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: true
+    chart:
+        name: 5g-mongodb-global
+        home: ""
+        sources: []
+        version: 25.20250331.9564847
+        description: A Helm chart for 5G Core MongoDB(25/03/31)
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 25.A.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: 5g-mongodb-global
+            charts.openshift.io/provider: Samsung Electronics
+            charts.openshift.io/releaseDate: 25/03/31
+            charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+        kubeversion: '>= 1.21.0-0'
+        dependencies:
+            - name: mdbm
+              version: 12.3.3
+              repository: ""
+              condition: mdbm.enabled
+              tags: []
+              enabled: false
+              importvalues: []
+              alias: ""
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: FAIL
+      reason: Chart does not contain NOTES.txt

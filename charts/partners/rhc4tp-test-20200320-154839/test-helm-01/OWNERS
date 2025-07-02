@@ -1,0 +1,9 @@
+chart:
+  name: test-helm-01
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: rhc4tp-test-20200320-154839
+  name: RHC4TP Test Company

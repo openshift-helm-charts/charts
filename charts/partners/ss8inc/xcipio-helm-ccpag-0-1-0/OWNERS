@@ -1,0 +1,10 @@
+chart:
+  name: xcipio-helm-ccpag-0-1-0
+  shortDescription: Helm Chart For SS8 CCPAG
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: ss8inc
+vendor:
+  label: ss8inc
+  name: SS8 Networks, Inc.

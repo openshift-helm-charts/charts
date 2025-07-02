@@ -1,0 +1,9 @@
+chart:
+  name: csi-wekafs
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: weka
+  name: WekaIO, Inc.

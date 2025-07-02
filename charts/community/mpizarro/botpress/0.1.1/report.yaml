@@ -1,0 +1,96 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.10
+        profile:
+            VendorType: community
+            version: v1.1
+        reportDigest: uint64:11170037921264822349
+        chart-uri: https://maximilianopizarro.github.io/botpress-helm-chart/charts/botpress-0.1.1.tgz
+        digests:
+            chart: sha256:c0133ab8e613663002f930f62b2b5b8ed50cc54c46510dba36cc092ce3349de8
+            package: 35a28ff8ed079540491ed8e8e79e27083aeae5caeffe9c0fbd9b0a8318dd746a
+        lastCertifiedTimestamp: "2025-04-10T17:20:10.573752+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: false
+    chart:
+        name: botpress
+        home: https://maximilianopizarro.github.io/botpress-helm-chart/
+        sources:
+            - https://github.com/maximilianoPizarro/botpress-helm-chart
+        version: 0.1.1
+        description: A Botpress Community Helm chart for OpenShift
+        keywords:
+            - botpress
+            - nodejs
+        maintainers:
+            - name: Maximiliano Pizarro
+              email: maximiliano.pizarro.5@gmail.com
+              url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+        icon: https://raw.githubusercontent.com/maximilianoPizarro/botpress-helm-chart/main/botpress_fabicon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: botpress-server-v12
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Botpress Server v12
+        kubeversion: '>=1.20.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/has-readme
+      type: Optional
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/images-are-certified
+      type: Optional
+      outcome: FAIL
+      reason: |-
+        Failed to certify images : quay.io/maximilianopizarro/botpress-server-v12:latest : No images found for Registry/Repository: quay.io/maximilianopizarro/botpress-server-v12
+        Image is not Red Hat certified : busybox : repository not found: busybox
+        Image is not Red Hat certified : busybox
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: FAIL
+      reason: Values schema file does not exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: FAIL
+      reason: 'invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable'
+

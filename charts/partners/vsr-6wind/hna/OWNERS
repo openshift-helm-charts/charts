@@ -1,0 +1,10 @@
+chart:
+  name: hna
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: 6hchraiti
+vendor:
+  label: vsr-6wind
+  name: 6WIND

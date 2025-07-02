@@ -1,0 +1,15 @@
+chart:
+  name: akeyless-api-gateway
+  shortDescription: A Helm chart for Kubernetes that deploys akeyless-api-gateway
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: niv-ez
+- githubUsername: omriezra
+- githubUsername: OriBenHur-akeyless
+- githubUsername: michelsk
+- githubUsername: OriMankali
+- githubUsername: AngelRefael
+vendor:
+  label: akeyless
+  name: Akeyless

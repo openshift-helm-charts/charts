@@ -1,9 +1,0 @@
-chart:
-  name: test-2021-11-release-helm-chart-external
-  shortDescription: null
-publicPgpKey: null
-users:
-- githubUsername: sawalgiriraj
-vendor:
-  label: bpm-test-registry-namespace
-  name: BPM Test Company

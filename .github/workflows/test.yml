@@ -1,55 +1,52 @@
 name: Test Workflow
 
+# Test Workflow is executed when workflow changes are being made. For
+# development repos, this is testing every workflow modification For other
+# repos, this is effectively testing release PRs to development as workflow
+# changes are not made directly to those repos.
+
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
-  workflow_dispatch:
-    inputs:
-      dry-run:
-        description: "Run tests but do not create issues {true,false}"
-        required: true
-        default: "true"
-      vendor-type:
-        description: "Vendor type {all,partner,redhat,community}"
-        required: true
-        default: "all"
-      software-name:
-        description: "Software Name"
-        required: true
-      software-version:
-        description: "Software Version"
-        required: true
-      notify-id:
-        description: "(Optional) Issue notification {github id}"
-        required: false
-        default: ""
 
 jobs:
-  workflow-test:
-    name: Workflow Test
-    runs-on: ubuntu-20.04
+  check-contributor:
+    name: Check contributor
+    uses: ./.github/workflows/check-contributor.yml
+    with:
+      user: ${{ github.event.pull_request.user.login }}
+
+  determine-workflow-conditions:
+    name: Determine Workflow Conditions
+    needs: [check-contributor]
+    runs-on: ubuntu-22.04
     if: |
-      github.event.pull_request.draft == false
+      github.event.pull_request.draft == false &&
+      needs.check-contributor.outputs.is-repo-owner == 'true'
+    outputs:
+      run-tests: ${{ steps.check_request.outputs.run-tests }}
+      is-charts-release-branch: ${{ steps.check_if_release_pr.outputs.charts_release_branch }}
+      test-tags: ${{ steps.determine-test-tags.outputs.test-tags }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ secrets.BOT_TOKEN }}
           fetch-depth: 0
 
-      - name: Set up Python 3.x Part 1
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
+      - name: Set up Python
+        uses: ./.github/actions/setup-python
 
       - name: Set up Python 3.x Part 2
         run: |
           # set up python requirements and scripts
           python3 -m venv ve1
-          cd scripts && ../ve1/bin/pip3 install -r requirements.txt && cd ..
-          cd scripts && ../ve1/bin/python3 setup.py install && cd ..
+          cd scripts
+          ../ve1/bin/pip3 install -r requirements.txt
+          ../ve1/bin/pip3 install .
+          cd ..
 
       - name: Check Request
         id: check_request
@@ -57,14 +54,8 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           # check if workflow testing should run.
-          echo "Request type: '$GITHUB_EVENT_NAME'"
-          if [ "$GITHUB_EVENT_NAME" == "pull_request_target" ]; then
-              echo "[INFO] check if PR contains only workflow changes and user is authorized"
-              ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
-          else
-              echo "[INFO] manual invocation - check if user is authorized"
-              ve1/bin/check-pr-for-ci --verify-user=${{ github.actor }}
-          fi
+          echo "[INFO] check if PR contains only workflow changes and user is authorized"
+          ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
 
       - name: Check Request Result
         id: check_request_result
@@ -74,6 +65,11 @@ jobs:
           # workflow only change but user not authorized
           exit 1
 
+      # BUG: This task attempts to run the `full` behave tag if the PR under
+      # test is a release from dev to prod, but the matcher condition that would
+      # emit this appears broken. Investigate the setting of the
+      # charts_release_branch output, or just run smoke tests and remove the
+      # condition associated with this output.
       - name: (PR) check for release flow
         id: check_if_release_pr
         if: |
@@ -94,60 +90,63 @@ jobs:
                                 --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
                                 --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
 
-      - name: (PR) Test CI Workflow
-        if: |
-          github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BOT_NAME: ${{ secrets.BOT_NAME }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          PR_BODY: "Test triggered by ${{ github.event.pull_request.html_url }}."
+      - name: Determine test tags
+        id: determine-test-tags
+        if: steps.check_request.outputs.run-tests == 'true'
         run: |
-          echo "Full test in pr : {{steps.check_request.outputs.full_tests_in_pr }}"
-          if ${{steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }} ; then
-            echo "Release PR from dev to charts, oer PR with new full test, so running full tests"
-            ve1/bin/behave tests/functional/behave_features/ --tags=full --logging-level=WARNING --no-capture --no-color
-          else
-            echo "Not a release PR from dev to charts, so running only smoke tests"
-            ve1/bin/behave tests/functional/behave_features/ --tags=smoke --logging-level=WARNING --no-capture --no-color
+          echo "Full test in pr : ${{ steps.check_request.outputs.full_tests_in_pr }}"
+          echo "Is charts release branch : ${{ steps.check_request.outputs.full_tests_in_pr }}"
+          if ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }} ; then
+            echo "Release PR from dev to charts, or PR with new full test, so running full tests"
+            echo "test-tags=full" | tee -a $GITHUB_OUTPUT
+            exit 0
           fi
 
-      - name: (Manual) Test CI Workflow
-        if: |
-          github.event_name == 'workflow_dispatch' && steps.check_request.outputs.run-tests == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRY_RUN: ${{ github.event.inputs.dry-run }}
-          VENDOR_TYPE: ${{ github.event.inputs.vendor-type }}
-          NOTIFY_ID: ${{ github.event.inputs.notify-id }}
-          SOFTWARE_NAME: ${{ github.event.inputs.software-name }}
-          SOFTWARE_VERSION: ${{ github.event.inputs.software-version }}
-          BOT_NAME: ${{ secrets.BOT_NAME }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          PR_BODY: "Triggerd by ${{ github.event.sender.html_url }} from ${{ github.event.repository.html_url }} on `${{ github.event.ref }}`."
-        run: |
-          echo "[INFO] Dry run '${{ env.DRY_RUN }}'"
-          echo "[INFO] Vendor type '${{ env.VENDOR_TYPE }}'"
-          echo "[INFO] Notify ID '${{ env.NOTIFY_ID }}'"
-          echo "[INFO] Software Name '${{ env.SOFTWARE_NAME }}'"
-          echo "[INFO] Software Version '${{ env.SOFTWARE_VERSION }}'"
-          ve1/bin/behave tests/functional/behave_features/ --tags=version-change --logging-level=WARNING --no-capture --no-color
+          echo "Not a release PR from dev to charts, so running only smoke tests"
+          echo "test-tags=smoke" | tee -a $GITHUB_OUTPUT
+  
+  run-tests:
+    # No further pull request author checking done here because
+    # check-contributor gates the needed jobs.
+    name: Run Tests
+    needs:
+    - determine-workflow-conditions
+    if: |
+      needs.determine-workflow-conditions.outputs.run-tests == 'true'
+    uses: ./.github/workflows/behave.yml
+    with:
+      # Default tags to 'full' if test-tags is unset for any reason by the time
+      # we get here.
+      tags: ${{ needs.determine-workflow-conditions.outputs.test-tags || 'full' }}
+      behave-logging-level: WARNING
+      pr-body: "Test triggered by release PR ${{ github.event.pull_request.html_url }}."
+      # checkout parameters passed to ensure we're testing the release content
+      checkout-fetch-depth: 0
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+      checkout-ref: ${{ github.event.pull_request.head.sha }}
+    secrets:
+      bot-name: ${{ secrets.BOT_NAME }}
+      bot-token: ${{ secrets.BOT_TOKEN }}
 
-      - name: Approve PR
-        id: approve_pr
-        if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
-        uses: hmarr/auto-approve-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+  approve-and-merge:
+    name: Approve and merge
+    needs:
+    - determine-workflow-conditions
+    - run-tests
+    runs-on: ubuntu-22.04
+    if: needs.determine-workflow-conditions.outputs.is-charts-release-branch == 'true'
+    steps:
+    - name: Approve PR
+      id: approve_pr
+      uses: hmarr/auto-approve-action@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Merge PR
-        id: merge_pr
-        if: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' }}
-        uses: pascalgn/automerge-action@v0.13.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_METHOD: squash
-          MERGE_LABELS: ""
-
+    - name: Merge PR
+      id: merge_pr
+      uses: pascalgn/automerge-action@v0.16.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MERGE_METHOD: squash
+        MERGE_LABELS: ""
 

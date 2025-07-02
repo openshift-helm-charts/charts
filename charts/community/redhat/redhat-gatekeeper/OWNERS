@@ -1,0 +1,13 @@
+chart:
+  name: redhat-gatekeeper
+  shortDescription: OPA Gatekeeper
+publicPgpKey: null
+users:
+- githubUsername: thomasmckay
+- githubUsername: gparvin
+- githubUsername: mprahl
+- githubUsername: dhaiducek
+- githubUsername: JustinKuli
+vendor:
+  label: redhat
+  name: Red Hat

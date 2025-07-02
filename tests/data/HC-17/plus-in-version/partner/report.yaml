@@ -1,0 +1,120 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.4
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:4054779787745617517
+        chart-uri: https://github.com/openshift-helm-charts/development/blob/main/tests/data/cryostat-0.4.0%2B1.tgz?raw=true
+        digests:
+            chart: sha256:6b5babbd4329410e21cf6ae9011bf517c38352592aceea06c227988656e0bdb0
+            package: e210e4887fd7ed5cdfece4844f73f827ef69afa09d9cda8963232022f194efa2
+        lastCertifiedTimestamp: "2024-05-22T15:18:04.379024-04:00"
+        testedOpenShiftVersion: "4.14"
+        supportedOpenShiftVersions: '>=4.6'
+        webCatalogOnly: false
+    chart:
+        name: cryostat
+        home: https://cryostat.io
+        sources:
+            - https://github.com/cryostatio/cryostat
+            - https://github.com/cryostatio/cryostat-core
+            - https://github.com/cryostatio/cryostat-web
+            - https://github.com/cryostatio/jfr-datasource
+            - https://github.com/cryostatio/cryostat-grafana-dashboard
+        version: 0.4.0+1
+        description: Securely manage JFR recordings for your containerized Java workloads
+        keywords:
+            - flightrecorder
+            - java
+            - jdk
+            - jfr
+            - jmc
+            - missioncontrol
+            - monitoring
+            - profiling
+            - diagnostic
+        maintainers:
+            - name: The Cryostat Community
+              email: ""
+              url: https://groups.google.com/g/cryostat-development
+        icon: https://raw.githubusercontent.com/cryostatio/cryostat-helm/main/docs/images/cryostat-icon.svg
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.4.0.redhat
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/digest: sha256:e5f987974557cb190c02579e7dfd0c56c8715dc5e45ddcfd2af944f57c38c150
+            charts.openshift.io/lastCertifiedTimestamp: "2024-02-21T18:36:30.02064+00:00"
+            charts.openshift.io/name: Red Hat build of Cryostat
+            charts.openshift.io/provider: RedHat
+            charts.openshift.io/providerType: redhat
+            charts.openshift.io/supportURL: https://github.com/cryostatio/cryostat-helm
+            charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+            charts.openshift.io/testedOpenShiftVersion: "4.14"
+        kubeversion: '>= 1.19.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+

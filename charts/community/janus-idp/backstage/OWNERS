@@ -5,6 +5,7 @@ publicPgpKey: null
 users:
   - githubUsername: sabre1041
   - githubUsername: tumido
+  - githubUsername: kadel
 vendor:
   label: janus-idp
   name: Janus IDP
