@@ -1,0 +1,30 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+annotations:
+  charts.openshift.io/name: i2i-5G-Core
+apiVersion: v2
+appVersion: 1.12.0
+description: A Helm chart for Kubernetes
+icon: https://i2i-systems.com/wp-content/uploads/2020/02/i2i_logo.png
+kubeVersion: '>=1.19.0-0'
+name: i2i5gcorehelm-v109
+type: application
+version: 1.0.9
+
+...
+files:
+  i2i5gcorehelm-v109-1.0.9.tgz: sha256:9498970f1c1079c9822252fcdd91d3c6681ae406b46e7884f4b5a492f9a05518
+-----BEGIN PGP SIGNATURE-----
+
+wsDcBAEBCgAQBQJoZVIHCRAG5EWxyNbVUwAA+YAMACBCY9o1suFkz9fyn1xH9fk5
+6LK/D4Ug8b6SLT4jdRw4GTXG/3WW2r7qifUD936Ir93JH0D8jnZw4JVWLnRKEpq6
+CUezftqizJ5yZSLs3MmK4VSM9HsYO1eNOHjd4SfbAKDmG7gKb7VoTRXJJ3+wNUY3
+DR4hzT6zaB/VeO+gyAhvQ0KpX56NxhYWL0PDzgVc07xbYOPTQQW2Lr/G2IfJnA9v
+ZuliO5YugpkBa74mijKeojkDlQmA/CL9Ms2rWDyEmuxrWkgPoJuqxF3tuujt8ntp
+qj9sU9lkmHDtr1d/XbWSn6KA8SbI1aTaO8KAXBV+mT2f6UQfuQNEB0S/mLSJX3hn
+5+9V/AJB7OA+WpzE9OIQqiR9Sp7kLhKr5KOe7aiW8wIreBpjnYQ79Emv//jCltaa
+EntSk/+FbWBVoEgB1uu9vhMFAC5H7fUNFyX4esBn/owbBbW47Kzf/dz8bLU6plgR
+CXSK0CjHHBczpr2/YyQuZfxHauSEbFUPnXt/KjeI0Q==
+=sRG3
+-----END PGP SIGNATURE-----
