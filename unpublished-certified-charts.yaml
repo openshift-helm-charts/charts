@@ -4928,6 +4928,25 @@ entries:
     urls:
     - /home/partner/Music/newcharts/rafm
     version: 0.5.3
+  remote-active-worker-ubi:
+  - annotations:
+      charts.openshift.io/digest: sha256:879996f406dcb141d839e55ab48c572bc7372b56891ee0073370295d9fe28765
+      charts.openshift.io/lastCertifiedTimestamp: '2025-07-03T15:20:30.469612+00:00'
+      charts.openshift.io/name: Remote Active Testing Worker
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-07-03T15:24:33.848690+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 1.0.1
+    description: Active Worker Helm Chart for remote active worker deployments
+    digest: fc65efa1a469b0778aea0ac65d2c8b1b9150306f4538d7a5d7d139ee5ce28b37
+    kubeVersion: '>=1.0.0-0'
+    name: remote-active-worker-ubi
+    type: application
+    urls:
+    - N/A
+    version: 1.0.1
   smf:
   - annotations:
       charts.openshift.io/digest: sha256:08fd5c4cd8c86180336734a698c65fd85bf0f28ae76c669f6c028fc67998f0ab
@@ -5447,4 +5466,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-07-03T14:26:43.759871+00:00'
+generated: '2025-07-03T15:24:33.789894+00:00'
