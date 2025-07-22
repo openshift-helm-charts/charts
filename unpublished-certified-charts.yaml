@@ -2345,6 +2345,29 @@ entries:
     urls:
     - N/A
     version: 0.9.0
+  - annotations:
+      charts.openshift.io/digest: sha256:96881b30a9ad2ce203938d8f86703b8bf5b1ed8c471ce19c507353138f06b51b
+      charts.openshift.io/lastCertifiedTimestamp: '2025-07-22T00:26:18.799648+00:00'
+      charts.openshift.io/name: mvtco
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-07-22T00:47:58.927435+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: v1.0.0
+    dependencies:
+    - condition: loki-stack.enabled
+      name: loki-stack
+      repository: https://grafana.github.io/helm-charts
+      version: 2.10.2
+    description: Install MemVerge Transparent Checkpoint Operator
+    digest: 54af2b069e0bf0b359712c3199f28f5e038eb4f4a1ee7daaa8553e4e8e35ce03
+    kubeVersion: '>= 1.28.0-0'
+    name: mvtco
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   nfvri:
   - annotations:
       charts.openshift.io/digest: sha256:001abb541d0be2cc58a5ab6bf75bf0b05023ef37f40f9129ff677db7cef603e3
@@ -6002,4 +6025,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-07-20T19:32:37.802220+00:00'
+generated: '2025-07-22T00:47:58.865102+00:00'
