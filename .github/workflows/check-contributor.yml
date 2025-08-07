@@ -43,30 +43,30 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Set up Python
+        id: setup-python
         uses: ./.github/actions/setup-python
-      
-      - name: Install CI Scripts
-        run: |
-          # set up python scripts
-          echo "set up python script in $PWD"
-          python3 -m venv ve1
-          cd scripts
-          ../ve1/bin/pip3 install -r requirements.txt
-          ../ve1/bin/pip3 install .
-          cd ..
-      
+
+      - name: Install CI scripts
+        uses: ./.github/actions/install-ci-scripts
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
+
       - name: Check contributor
         # The return code from this script is what's important in this workflow.
         id: check-contributor
         continue-on-error: true
+        env:
+          CONTRIBUTOR: ${{ inputs.user }}
         run: |
-          ./ve1/bin/user-is-repo-owner ${{ inputs.user }}
+          ./ve1/bin/user-is-repo-owner "${CONTRIBUTOR}"
       
       - name: Add result to output
         id: populate-output
         # Outcome is the result of the workflow before continue-on-error is applied.
+        env:
+          CONTRIBUTOR_IS_OWNER: ${{ steps.check-contributor.outcome == 'success' }} 
         run: |
-          echo "is-repo-owner=${{ steps.check-contributor.outcome == 'success' }}" >> $GITHUB_OUTPUT
+          echo "is-repo-owner=${CONTRIBUTOR_IS_OWNER}" >> $GITHUB_OUTPUT
       
       - name: Fail if requested and the user is not a repo owner
         if: inputs.fail-workflow-if-not && steps.populate-output.outputs.is-repo-owner != 'true'

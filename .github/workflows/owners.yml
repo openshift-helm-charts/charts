@@ -17,16 +17,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python
+        id: setup-python
         uses: ./.github/actions/setup-python
 
-      - name: Set up Python 3.x Part 2
-        run: |
-          # set up python
-          python3 -m venv ve1
-          cd scripts
-          ../ve1/bin/pip3 install -r requirements.txt
-          ../ve1/bin/pip3 install .
-          cd ..
+      - name: Install CI scripts
+        uses: ./.github/actions/install-ci-scripts
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
 
       - uses: jitterbit/get-changed-files@v1
         id: filesChangedOrModified
@@ -35,17 +32,23 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Printing changes made
+        env:
+          FILES_ADDED: ${{ steps.filesChangedOrModified.outputs.added }}
+          FILES_MODIFIED: ${{ steps.filesChangedOrModified.outputs.modified }}
         run: |
           echo "Added:"
-          echo "${{ steps.filesChangedOrModified.outputs.added }}"
+          echo "${FILES_ADDED}"
           echo "Modified:"
-          echo "${{ steps.filesChangedOrModified.outputs.modified }}"
+          echo "${FILES_MODIFIED}"
 
       - name: Quit if owners files pushed are not
         id: check_pr_content
+        env:
+          FIRST_ADDED_FILE: ${{ steps.filesChangedOrModified.outputs.added[0] }}
+          FIRST_MODIFIED_FILE: ${{ steps.filesChangedOrModified.outputs.modified[0] }}
         run: |
           SUB="/OWNERS"
-          if [ "${{ steps.filesChangedOrModified.outputs.added[0] }}" == *"$SUB"* ] || [ "${{ steps.filesChangedOrModified.outputs.modified[0] }}" == *"$SUB"* ] ; then
+          if [ "${FIRST_ADDED_FILE}" == *"$SUB"* ] || [ "${FIRST_MODIFIED_FILE}" == *"$SUB"* ] ; then
               echo "OWNERS files have been modified or added"
               echo "collect_metrics=true" >> $GITHUB_OUTPUT
           else
@@ -57,13 +60,18 @@ jobs:
         if: ${{ steps.check_pr_content.outputs.collect_metrics == 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # TODO: consolidate these two keys based on environment.
+          SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
+          SEGMENT_WRITE_TEST_KEY: ${{ secrets.SEGMENT_TEST_WRITE_KEY }}
+          ADDED: ${{ steps.filesChangedOrModified.outputs.added }}
+          MODIFIED: ${{ steps.filesChangedOrModified.outputs.modified }}
         run: |
           if [ $GITHUB_REPOSITORY == "openshift-helm-charts/charts" ]; then
-              WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
+              WRITE_KEY="${SEGMENT_WRITE_KEY}"
               ID_PREFIX="helm-metric-pr"
               echo "Use segment production write key"
           else
-              WRITE_KEY=${{ secrets.SEGMENT_TEST_WRITE_KEY }}
+              WRITE_KEY="${SEGMENT_WRITE_TEST_KEY}"
               ID_PREFIX="helm-test-metric-pr"
               echo "Use segment test write key"
           fi
@@ -73,8 +81,8 @@ jobs:
               ve1/bin/pushowners --write-key="${WRITE_KEY}" \
                                 --metric-type="push_request" \
                                 --repository="${GITHUB_REPOSITORY}" \
-                                --added="${{ steps.filesChangedOrModified.outputs.added }}" \
-                                --modified="${{ steps.filesChangedOrModified.outputs.modified }}" \
+                                --added="${ADDED}" \
+                                --modified="${MODIFIED}" \
                                 --prefix="${ID_PREFIX}"
           else
               echo "Do not collect metrics, required segment write key is not set"
