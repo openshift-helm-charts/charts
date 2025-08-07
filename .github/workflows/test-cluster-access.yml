@@ -17,8 +17,10 @@ jobs:
         oc: latest
     - name: Read API_SERVER endpoint
       id: login-params
+      env:
+        API_SERVER_ENC: ${{ secrets.API_SERVER }}
       run: |
-        API_SERVER=$( echo -n ${{ secrets.API_SERVER }} | base64 -d)
+        API_SERVER=$( echo -n "${API_SERVER_ENC}" | base64 -d)
         echo "API_SERVER=${API_SERVER}" >> $GITHUB_OUTPUT
     - uses: redhat-actions/oc-login@v1
       id: oc_login

@@ -19,15 +19,12 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
     - name: Set up Python
+      id: setup-python
       uses: ./.github/actions/setup-python
-    - name: Set up Python 3.x Part 2
-      run: |
-        # set up python
-        python3 -m venv ve1
-        cd scripts
-        ../ve1/bin/pip3 install -r requirements.txt
-        ../ve1/bin/pip3 install .
-        cd ..
+    - name: Install CI scripts
+      uses: ./.github/actions/install-ci-scripts
+      with:
+        python-version: ${{ steps.setup-python.outputs.python-version }}
     - name: generate chart locks
       id: generate
       uses: ./.github/actions/generate-chart-locks
@@ -41,10 +38,10 @@ jobs:
         slack-text: |
           Failing to generate chart locks! '${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}'
     - name: create issue if notification failure
-      id: allback-notify
+      id: fallback-notify
       if: failure() && steps.notify.outcome == 'failure'
       run: |
-        gh issue create --title "Chart lock generation sanity check is failing" --body "${{ env.COMMENT_BODY }}"
+        gh issue create --title "Chart lock generation sanity check is failing" --body "${COMMENT_BODY}"
       env:
         GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
         COMMENT_BODY: |

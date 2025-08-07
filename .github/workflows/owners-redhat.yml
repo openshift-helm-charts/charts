@@ -28,7 +28,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const successLabel = '${{ env.SUCCESS_LABEL }}';
+            const successLabel = process.env.SUCCESS_LABEL;
             try {
               await github.issues.removeLabel({
                 issue_number: context.issue.number,
@@ -64,7 +64,7 @@ jobs:
         run: |
           ./scripts/venv.tools/bin/extract-metadata-from-pr \
             --emit-to-github-output \
-            ${{ env.API_URL }}
+            "${API_URL}"
   ensure-prefix-in-path:
     name: Ensure chart name prefix
     runs-on: ubuntu-22.04
@@ -72,7 +72,9 @@ jobs:
     steps:
       - name: Confirm Prefix
         id: confirm-prefix
-        run: echo "${{ needs.gather-metadata.outputs.chartname }}" | grep "^redhat-"
+        env:
+          CHART_NAME: ${{ needs.gather-metadata.outputs.chartname }} 
+        run: echo "${CHART_NAME}" | grep "^redhat-"
   ensure-owners-file-contents:
     name: Ensure OWNERS file contents is valid
     runs-on: ubuntu-22.04
@@ -121,12 +123,13 @@ jobs:
           PREFIX_CHECK_RESULT: ${{ needs.ensure-prefix-in-path.result != '' && needs.ensure-prefix-in-path.result || 'unknown' }}
           CONTENT_CHECK_RESULT: ${{ needs.ensure-owners-file-contents.result != '' && needs.ensure-owners-file-contents.result || 'unknown' }}
           BUILD_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          GITHUB_EVENT_NUMBER: ${{ github.event.number }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prefixCheckResult = '${{ env.PREFIX_CHECK_RESULT }}';   
-            const contentCheckResult = '${{ env.CONTENT_CHECK_RESULT }}';
-            const buildURL='${{ env.BUILD_URL }}';
+            const prefixCheckResult = process.env.PREFIX_CHECK_RESULT;   
+            const contentCheckResult = process.env.CONTENT_CHECK_RESULT;
+            const buildURL = process.env.BUILD_URL;
 
             var comment = '### :x: Red Hat OWNERS File Content and Path Check';
 
@@ -140,7 +143,7 @@ jobs:
 
             comment = comment.concat('\n\n', `Check your [workflow run](${buildURL}) for more information.`);
 
-            var issue_number = ${{ github.event.number }};
+            var issue_number = process.env.GITHUB_EVENT_NUMBER;
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -161,8 +164,8 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const issue_number = ${{ env.PR }};
-          const successLabel = '${{ env.SUCCESS_LABEL }}';
+          const issue_number = process.env.PR;
+          const successLabel = process.env.SUCCESS_LABEL;
 
           github.rest.issues.addLabels({
             issue_number: Number(issue_number),
