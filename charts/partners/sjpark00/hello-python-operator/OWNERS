@@ -1,0 +1,9 @@
+chart:
+  name: hello-python-operator
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: sjpark00
+  name: DreamSecurity Co., Ltd.
