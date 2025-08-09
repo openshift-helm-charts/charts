@@ -7,36 +7,27 @@ import git
 
 from tempfile import TemporaryDirectory
 
-import common.utils.github as github
-
-
 class RepoManagementError(Exception):
     pass
 
 
 class WorkflowRepoManager:
-    # Keep a log of things created so we can clean them up.
-    __local_branches_created: [str] = []
-    __local_worktrees_created: [TemporaryDirectory] = []
-    # (remote, branch), e.g. ('openshift-helm-charts/charts, 'my-pr-branch')
-    __remote_branches_created: [(str, str)] = []
-
-    # The token to use for GitHub API operations.
-    __authtoken: str = ""
-
-    # The branch at repo initialization. On Cleanup, we return to this branch
-    # before we remove locally generated branches.
-    original_branch: str = None
-
-    # Working directory at instantiation.
-    old_cwd: str = os.getcwd()
-
-    # The repository at working directory.
-    repo: git.Repo = None
-
     def __init__(self):
         logging.debug(f"{self} --> __init__ called!")
 
+        # Keep a log of things created so we can clean them up.
+        self.__local_branches_created: list[str] = []
+        self.__local_worktrees_created: list[TemporaryDirectory] = []
+        # (remote, branch), e.g. ('openshift-helm-charts/charts, 'my-pr-branch')
+        self.__remote_branches_created: list[tuple(str, str)] = []
+
+        # The token to use for GitHub API operations.
+        self.__authtoken: str = None
+
+        # Working directory at instantiation.
+        self.old_cwd: str = os.getcwd()
+
+        # The repository at working directory.
         try:
             self.repo = git.Repo()
         except git.InvalidGitRepositoryError as e:
@@ -44,7 +35,12 @@ class WorkflowRepoManager:
                 "Unable to initialize git repository. Is the current directory a git repo?"
             ) from e
 
-        self.original_branch = self.repo.active_branch.name
+        # The branch at repo initialization. On Cleanup, we return to this branch
+        # before we remove locally generated branches.
+        try:
+            self.original_branch = self.repo.active_branch.name
+        except TypeError:
+            self.original_branch = self.repo.git.rev_parse("--short", "HEAD")
 
     def set_auth_token(self, token: str):
         """Sets the github API token."""
@@ -91,6 +87,7 @@ class WorkflowRepoManager:
             self.repo.git.checkout("-b", branch_name)
         except (git.GitCommandError, ValueError) as e:
             raise RepoManagementError("Unable to create branch") from e
+        logging.debug(f'Adding {branch_name} to local_branches_created')
         self.__local_branches_created.append(branch_name)
 
     def add_worktree(self) -> TemporaryDirectory:

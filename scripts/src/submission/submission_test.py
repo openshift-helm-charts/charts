@@ -137,7 +137,7 @@ scenarios_submission_init = [
             chart=expected_chart,
             source=submission.Source(
                 found=True,
-                path=f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/src/Chart.yaml",
+                path=f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/src",
             ),
         ),
     ),
@@ -237,6 +237,12 @@ scenarios_submission_init = [
         ],
         excepted_exception=pytest.raises(submission.ChartError),
     ),
+    # Invalid PR doesn't contain any files
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/103",
+        modified_files=[],
+        excepted_exception=pytest.raises(submission.SubmissionError),
+    ),
 ]
 
 
@@ -253,6 +259,7 @@ def test_submission_init(test_scenario):
 
     with test_scenario.excepted_exception:
         s = submission.Submission(api_url=test_scenario.api_url)
+        s.parse_modified_files()
         assert s == test_scenario.expected_submission
 
 
@@ -304,7 +311,7 @@ scenarios_certification_submission = [
         expected_is_valid_certification=False,
         expected_reason="[ERROR] Send OWNERS file by itself in a separate PR.",
     ),
-    # Invalid certification Submission contains OWNERS and report file, but ignore_owners is set to True
+    # Valid certification Submission contains OWNERS and report file, but ignore_owners is set to True
     CertificationScenario(
         input_submission=submission.Submission(
             api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/1",

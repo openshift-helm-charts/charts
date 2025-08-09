@@ -64,10 +64,13 @@ runs:
     working-directory: temp-gen-chart-lock-repo
     id: generate-chart-locks
     shell: bash
+    env:
+      GENERATOR_CMD_PATH: ${{ inputs.generator-cmd-path }}
+      OUT_FILE: ${{ inputs.to-file }}
     run: |
       set -eo pipefail
-      ${{ inputs.generator-cmd-path }} | jq | tee ${{ inputs.to-file }}
-      echo "lockfile-path=$(realpath ${{ inputs.to-file }})" | tee -a $GITHUB_OUTPUT
+       "${GENERATOR_CMD_PATH}" | jq | tee "${OUT_FILE}"
+      echo "lockfile-path=$(realpath ${OUT_FILE})" | tee -a $GITHUB_OUTPUT
   - name: Cleanup
     id: cleanup
     if: always()

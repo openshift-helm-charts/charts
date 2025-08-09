@@ -23,7 +23,7 @@ def getFileContent(changed_file):
     try:
         owner_data = owners_file.get_owner_data_from_file(changed_file)
     except owners_file.OwnersFileError as e:
-        print("Exception loading OWNERS file: {e}")
+        print(f"Exception loading OWNERS file: {e}")
         return "", "", "", "", ""
 
     users_included = owners_file.get_users_included(owner_data)

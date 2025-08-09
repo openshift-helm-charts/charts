@@ -56,7 +56,7 @@ on:
           for verifying the user is a trusted user.
     secrets:
       # bot-name is not technically secret, but must be listed as a secret
-      # because you can't pass the ${{ secrets }} context as an input in the
+      # because you can't pass GitHub's "secrets" context as an input in the
       # calling workflow, and our repos have this configured as a secret.
       bot-name:
         required: true
@@ -116,24 +116,22 @@ jobs:
           fetch-depth: ${{ inputs.checkout-fetch-depth }}
 
       - name: Set up Python
+        id: setup-python
         uses: ./.github/actions/setup-python
 
-      - name: Set up CI scripts
-        run: |
-          # set up python scripts
-          echo "set up python script in $PWD"
-          python3 -m venv ve1
-          cd scripts
-          ../ve1/bin/pip3 install -r requirements.txt
-          ../ve1/bin/pip3 install .
-          cd ..
+      - name: Install CI scripts
+        uses: ./.github/actions/install-ci-scripts
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
 
         # Pull request numbers are included in generated chart names in E2E, so it's included
         # as an environment variable which E2E consumes.
       - name: Populate PR_NUMBER environment variable
         if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
+        env:
+          GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          echo "PR_NUMBER=${{ github.event.pull_request.number }}" | tee $GITHUB_ENV
+          echo "PR_NUMBER=${GITHUB_PR_NUMBER}" | tee $GITHUB_ENV
       
       - name: Run Tests
         env:
@@ -141,10 +139,13 @@ jobs:
           BOT_NAME: ${{ secrets.bot-name }}
           BOT_TOKEN: ${{ secrets.bot-token }}
           PR_BODY: ${{ inputs.pr-body }}
+          FEATURE_FILE: ${{ matrix.feature-file }}
+          INCLUDED_TAGS: ${{ inputs.tags }}
+          BEHAVE_LOG_LEVEL: ${{ inputs.behave-logging-level }}
         run: |
           ve1/bin/behave tests/functional/behave_features/ \
-            --include ${{ matrix.feature-file }} \
-            --tags=${{ inputs.tags }} \
-            --logging-level=${{ inputs.behave-logging-level }} \
+            --include "${FEATURE_FILE}" \
+            --tags="${INCLUDED_TAGS}"  \
+            --logging-level="${BEHAVE_LOG_LEVEL}" \
             --no-capture \
             --no-color

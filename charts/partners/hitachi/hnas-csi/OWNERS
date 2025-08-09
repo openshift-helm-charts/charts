@@ -1,0 +1,9 @@
+chart:
+  name: hnas-csi
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: hitachi
+  name: Hitachi Data Systems Corporation

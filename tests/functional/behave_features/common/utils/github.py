@@ -36,7 +36,7 @@ def get_run_id(secrets, workflow_name: str, pr_number: str = None):
         )
 
 
-@retry(stop_max_delay=60_000 * 40, wait_fixed=2000)
+@retry(stop_max_delay=60_000 * 40, wait_fixed=10000)
 def get_run_result(secrets, run_id):
     r = github_api(
         "get", f"repos/{secrets.test_repo}/actions/runs/{run_id}", secrets.bot_token

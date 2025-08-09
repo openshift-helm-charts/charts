@@ -37,25 +37,24 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
+        id: setup-python
         uses: ./.github/actions/setup-python
 
-      - name: Set up Python 3.x Part 2
-        run: |
-          # set up python requirements and scripts
-          python3 -m venv ve1
-          cd scripts
-          ../ve1/bin/pip3 install -r requirements.txt
-          ../ve1/bin/pip3 install .
-          cd ..
+      - name: Install CI scripts
+        uses: ./.github/actions/install-ci-scripts
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
 
       - name: Check Request
         id: check_request
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          USER: ${{ github.event.pull_request.user.login }}
+          PR_API_URL: ${{ github.event.pull_request._links.self.href }}
         run: |
           # check if workflow testing should run.
           echo "[INFO] check if PR contains only workflow changes and user is authorized"
-          ve1/bin/check-pr-for-ci --verify-user=${{ github.event.pull_request.user.login }} --api-url=${{ github.event.pull_request._links.self.href }}
+          ve1/bin/check-pr-for-ci --verify-user="${USER}" --api-url="${PR_API_URL}"
 
       - name: Check Request Result
         id: check_request_result
@@ -76,27 +75,32 @@ jobs:
           github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
         env:
           BOT_NAME: ${{ secrets.BOT_NAME }}
+          PR_API_URL: ${{ github.event.pull_request._links.self.href }}
+          SENDER: ${{ github.event.sender.login }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_BASE_REPO: ${{ github.event.pull_request.base.repo.full_name }}
+          PR_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
         run: |
-          # check if PR was created as part of release processing
-          # mitigate unmatched quote error in bash
-          pr_body=$(cat <<EOF | xargs -0 printf '%q'
-          ${{ github.event.pull_request.body }}
-          EOF
-          )
-          ./ve1/bin/release-checker --api-url=${{ github.event.pull_request._links.self.href }} \
-                                --sender='${{ github.event.sender.login }}' \
-                                --pr_branch='${{ github.event.pull_request.head.ref }}' \
-                                --pr_body="${pr_body}" \
-                                --pr_base_repo='${{ github.event.pull_request.base.repo.full_name }}' \
-                                --pr_head_repo='${{ github.event.pull_request.head.repo.full_name }}'
+          ./ve1/bin/release-checker
+            --api-url="${PR_API_URL}" \
+            --sender="${SENDER}" \
+            --pr_branch="${PR_BRANCH}" \
+            --pr_body="${PR_BODY}" \
+            --pr_base_repo="${PR_BASE_REPO}" \
+            --pr_head_repo="${PR_HEAD_REPO}"
 
       - name: Determine test tags
         id: determine-test-tags
         if: steps.check_request.outputs.run-tests == 'true'
+        env:
+          FULL_TESTS_IN_PR: ${{ steps.check_request.outputs.full_tests_in_pr }}
+          IS_CHARTS_RELEASE_BRANCH: ${{ steps.check_request.outputs.full_tests_in_pr }}
+          CHART_RELEASE_AND_FULL_TESTS: ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }}
         run: |
-          echo "Full test in pr : ${{ steps.check_request.outputs.full_tests_in_pr }}"
-          echo "Is charts release branch : ${{ steps.check_request.outputs.full_tests_in_pr }}"
-          if ${{ steps.check_if_release_pr.outputs.charts_release_branch == 'true' || steps.check_request.outputs.full_tests_in_pr == 'true' }} ; then
+          echo "Full test in pr : ${FULL_TESTS_IN_PR}"
+          echo "Is charts release branch : ${IS_CHARTS_RELEASE_BRANCH}"
+          if [ "${CHART_RELEASE_AND_FULL_TESTS}" = "true" ] ; then
             echo "Release PR from dev to charts, or PR with new full test, so running full tests"
             echo "test-tags=full" | tee -a $GITHUB_OUTPUT
             exit 0

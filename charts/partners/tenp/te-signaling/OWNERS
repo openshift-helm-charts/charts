@@ -1,0 +1,10 @@
+chart:
+  name: te-signaling
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: zhanglji
+vendor:
+  label: tenp
+  name: Tieto Corporation
