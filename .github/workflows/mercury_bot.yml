@@ -25,38 +25,35 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Set up Python
+        id: setup-python
         uses: ./.github/actions/setup-python
 
-      - name: Set up Python 3.x Part 2
-        run: |
-          # set up python
-          python3 -m venv ve1
-          cd scripts
-          ../ve1/bin/pip3 install -r requirements.txt
-          ../ve1/bin/pip3 install .
-          cd ..
+      - name: Install CI scripts
+        uses: ./.github/actions/install-ci-scripts
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
 
       - name: get files changed
         id: get_files_changed
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          PR_API_URL: ${{ github.event.pull_request._links.self.href }}
         run: |
           # get files in PR
-          ./ve1/bin/pr-artifact --api-url=${{ github.event.pull_request._links.self.href }} \
+          ./ve1/bin/pr-artifact --api-url="${PR_API_URL}" \
                                 --get-files
 
       - name: check if only an OWNERS file is pushed
         id: check_for_owners
         env:
-          pr_files_py: "${{ steps.get_files_changed.outputs.pr_files }}"
+          PR_FILES: ${{ steps.get_files_changed.outputs.pr_files }}
         run: |
           # check if PR contains just one partner OWNERS file
-          pr_files=($(echo "$pr_files_py" | tr -d '[],'))
-          echo "Files in PR: ${pr_files[@]}"
-          eval first_file=${pr_files[0]}
-          if [ ${#pr_files[@]} == 1 ]; then
-            eval first_file=${pr_files[0]}
-            if [[ $first_file == "charts/partners/"*/*"/OWNERS" ]] ; then
+          first_file=$(yq '.0' <<< "${PR_FILES}")
+          total_file_count=$(yq 'length' <<< ${PR_FILES})
+
+          if [ "${total_file_count}" == 1 ]; then
+            if [[ "${first_file}" == "charts/partners/"*/*"/OWNERS" ]] ; then
                 echo "An OWNERS file has been modified or added"
                 echo "merge_pr=true" | tee -a $GITHUB_OUTPUT
             else
@@ -99,7 +96,7 @@ jobs:
         run: |
           ./ve1/bin/extract-metadata-from-pr \
             --emit-to-github-output \
-            ${{ env.API_URL }}
+            "${API_URL}"
 
       # Only used to assert content of the OWNERS file.
       - name: Checkout Pull Request
@@ -117,21 +114,26 @@ jobs:
       - name: Ensure OWNERS content and path content align
         working-directory: "pr-branch"
         id: fact-check
+        env:
+          PR_FILES: ${{ steps.get_files_changed.outputs.pr_files }}
+          CHART_NAME: ${{ steps.gather-metadata.outputs.chart-name }}
+          ORGANIZATION: ${{ steps.gather-metadata.outputs.organization }}
         run: |
-          file=$(echo ${{ steps.get_files_changed.outputs.pr_files }} | yq .0)
+          file=$(yq .0 <<< ${PR_FILES})
           owner_contents_chart_name=$(yq '.chart.name' ${file})
           owner_contents_vendor_label=$(yq '.vendor.label' ${file})
-          echo "Chart Name Comparison: ${owner_contents_chart_name} = ${{ steps.gather-metadata.outputs.chart-name }}"
-          echo "Vendor Label Comparison: ${owner_contents_vendor_label} = ${{ steps.gather-metadata.outputs.organization }}"
-          test "${owner_contents_chart_name}" = "${{ steps.gather-metadata.outputs.chart-name }}"
-          test "${owner_contents_vendor_label}" = "${{ steps.gather-metadata.outputs.organization }}"
+          echo "Chart Name Comparison: ${owner_contents_chart_name} = ${CHART_NAME}"
+          echo "Vendor Label Comparison: ${owner_contents_vendor_label} = ${ORGANIZATION}"
+          test "${owner_contents_chart_name}" = "${CHART_NAME}"
+          test "${owner_contents_vendor_label}" = "${ORGANIZATION}"
 
       - name: Comment on PR if facts are mismatched
         id: comment-if-fact-check-failure
         if: failure() && steps.fact-check.outcome == 'failure'
         run: |
-          gh pr comment ${{ github.event.number }} --body "${{ env.COMMENT_BODY }}"
+          gh pr comment "${GITHUB_EVENT_NUMBER}" --body "${COMMENT_BODY}"
         env:
+          GITHUB_EVENT_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY: |
             ### Submission Facts Mismatch
@@ -153,19 +155,26 @@ jobs:
       # this file as users make changes to their project settings.
       - name: Determine if should merge and is safe to merge
         id: safe-to-merge
+        env:
+          NET_NEW_OWNERS_FILE: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file }}
+          CHART_IS_LOCKED: ${{ steps.determine-lock-status.outputs.chart-is-locked }}
+          MERGE_PR: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && steps.determine-lock-status.outputs.chart-is-locked == 'false') }}
         run: |
-          echo "OWNERS file is net new: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file }}"
-          echo "Chart name is already locked: ${{ steps.determine-lock-status.outputs.chart-is-locked }}"
-          echo "merge_pr=${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && steps.determine-lock-status.outputs.chart-is-locked == 'false') }}" | tee -a $GITHUB_OUTPUT
+          echo "OWNERS file is net new: ${NET_NEW_OWNERS_FILE}"
+          echo "Chart name is already locked: ${CHART_IS_LOCKED}"
+          echo "merge_pr=${MERGE_PR}" | tee -a $GITHUB_OUTPUT
 
       - name: Comment on PR
         if: ${{ steps.check_for_owners.outputs.merge_pr == 'false' }}
         uses: actions/github-script@v7
+        env:
+          GITHUB_EVENT_NUMBER: ${{ github.event.number }}
+          OWNER_CHECK_OUTPUT_MSG: ${{ steps.check_for_owners.outputs.msg }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-              var issue_number = ${{ github.event.number }};
-              var comment = "${{ steps.check_for_owners.outputs.msg }}";
+              var issue_number = process.env.GITHUB_EVENT_NUMBER;
+              var comment = process.env.OWNER_CHECK_OUTPUT_MSG;
               github.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
