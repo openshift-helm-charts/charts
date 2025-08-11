@@ -3293,6 +3293,63 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/lacework-lacework-agent-5.4.1/lacework-lacework-agent-5.4.1.tgz
     version: 5.4.1
+  librechat:
+  - annotations:
+      charts.openshift.io/digest: sha256:41bfc8e827813ec6f6fd5bc96bf1a1c5f7ae144474588ae12cba6761f2b4221e
+      charts.openshift.io/lastCertifiedTimestamp: '2025-08-09T05:34:01.898798+00:00'
+      charts.openshift.io/name: LibreChat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-08-11T21:29:13.121762+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: v0.8.0
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.5.38
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.3.0
+    - condition: ollama.enabled
+      name: ollama
+      repository: file://./ollama
+      version: 1.26.0
+    - condition: meilisearch.enabled
+      name: meilisearch
+      repository: file://./meilisearch
+      version: 0.7.0
+    - condition: librechat-rag-api.enabled
+      name: librechat-rag-api
+      repository: file://./librechat-rag-api
+      version: 0.5.1
+    description: A Helm chart for deploying LibreChat, an open-source, AI-powered
+      chat application.
+    digest: 316b84e772459b27dd19fcd5519d02d7e01fdca4322d6c1addbcd100c813dcdb
+    home: https://www.librechat.ai
+    icon: https://www.librechat.ai/librechat_alt.svg
+    keywords:
+    - librechat
+    - chat
+    - ai
+    - llm
+    - chatbot
+    - open-source
+    kubeVersion: '>=1.20.0'
+    maintainers:
+    - email: cestay@redhat.com
+      name: Carlos Estay
+    - email: mapizarr@redhat.com
+      name: Maximiliano Pizarro
+    name: librechat
+    sources:
+    - https://github.com/maximilianoPizarro/librechat
+    type: application
+    urls:
+    - https://maximilianoPizarro.github.io/librechat/librechat-1.8.10.tgz
+    version: 1.8.10
   model-server-sample:
   - annotations:
       charts.openshift.io/digest: sha256:e9aada8de77b6588a67292ecbfd488d141c77383e9f7bf5f0840969805d10dd2
@@ -12534,4 +12591,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-08-04T15:15:14.581704+00:00'
+generated: '2025-08-11T21:29:13.011113+00:00'
