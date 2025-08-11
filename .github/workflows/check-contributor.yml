@@ -37,7 +37,7 @@ jobs:
     outputs:
       is-repo-owner: ${{ steps.populate-output.outputs.is-repo-owner }}
     name: Contributor is repo owner
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository base
         uses: actions/checkout@v4
