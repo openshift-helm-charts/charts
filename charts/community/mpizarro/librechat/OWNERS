@@ -1,0 +1,9 @@
+chart:
+  name: librechat
+  shortDescription: A LibreChat Community for OpenShift
+publicPgpKey: null
+users:
+- githubUsername: maximilianoPizarro
+vendor:
+  label: mpizarro
+  name: Maximiliano Pizarro
