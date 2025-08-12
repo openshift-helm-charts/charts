@@ -8179,6 +8179,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-mariadb-persistent-0.0.2/mariadb-persistent-0.0.2.tgz
     version: 0.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:2192423f6462db8b2b468d00733b0aac37729efd228fb761ce5d0f63f19bc884
+      charts.openshift.io/lastCertifiedTimestamp: '2025-08-12T13:23:13.544178+00:00'
+      charts.openshift.io/name: Red Hat MariaDB database service, with persistent
+        storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-08-12T13:24:21.423994+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.3
+    description: 'This content is experimental, do not use it in production. MariaDB
+      database service, with persistent storage. For more information about using
+      this template, including OpenShift considerations, see https://github.com/sclorg/mariadb-container/blob/master/10.11/root/usr/share/container-scripts/mysql/README.md.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: 2a6e7a8cbb4b54cc2eb86d45afddb999479cf7c706385b43bc1da03c1e83b44c
+    kubeVersion: '>=1.20.0'
+    name: redhat-mariadb-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mariadb
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-mariadb-persistent-0.0.3/redhat-mariadb-persistent-0.0.3.tgz
+    version: 0.0.3
   redhat-mongo-sed:
   - annotations:
       charts.openshift.io/digest: sha256:0c58aaebf6f6fed25017c33d1a073febbb448d3cb561e3dfc6611a3b2a016cfd
@@ -12591,4 +12617,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-08-11T21:29:13.011113+00:00'
+generated: '2025-08-12T13:24:21.316984+00:00'
