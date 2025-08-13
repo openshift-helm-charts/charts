@@ -15,7 +15,7 @@ env:
 jobs:
   setup:
     name: Setup CI
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       run_build: ${{ steps.check_build_required.outputs.run-build }}
       verifier-action-image: ${{ steps.set-env.outputs.verifier-action-image }}
@@ -118,7 +118,7 @@ jobs:
 
   validate-submission:
     name: Extract and validate PR content
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [setup]
 
     outputs:
@@ -212,7 +212,7 @@ jobs:
 
   chart-verifier:
     name: Run chart-verifier
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [setup, validate-submission]
 
     outputs:
@@ -298,7 +298,7 @@ jobs:
         if: ${{ steps.verify_requires.outputs.cluster_needed == 'true' }}
         run: |
           wget --quiet https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
-          tar -zxvf openshift-client-linux.tar.gz oc -C /usr/local/bin/
+          tar -zxvf openshift-client-linux.tar.gz --directory /usr/local/bin/ oc
           rm -f openshift-client-linux.tar.gz
           oc version --client
 
@@ -429,7 +429,7 @@ jobs:
 
   manage-gh-pr:
     name: Comment and merge PR
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [setup, validate-submission, chart-verifier]
 
     outputs:
@@ -576,7 +576,7 @@ jobs:
 
   release:
     name: Release Chart
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [setup, validate-submission, chart-verifier, manage-gh-pr]
 
     steps:
