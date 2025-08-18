@@ -1,7 +1,7 @@
 chart:
-  name: test
+  name: testtstst
   shortDescription: unknown
-providerDelivery: true
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
