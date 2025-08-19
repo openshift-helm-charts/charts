@@ -1,0 +1,9 @@
+chart:
+  name: n8n
+  shortDescription: A Helm chart for fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.
+publicPgpKey: null
+users:
+- githubUsername: maximilianoPizarro
+vendor:
+  label: mpizarro
+  name: Maximiliano Pizarro
