@@ -1,11 +1,10 @@
 chart:
   name: alquimia-runtime-helm
-  shortDescription: unknown
+  shortDescription: A Helm chart to deploy Alquimia AI Runtime components (Serving & Eventing) on OpenShift using Knative.
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: jlcruzfiveit
 - githubUsername: joseluiscruz-alquimiaai
 vendor:
   label: alquimiaai
-  name: Alquimia S.A.
+  name: Alquimia AI US Corp
