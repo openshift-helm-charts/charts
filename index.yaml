@@ -3380,6 +3380,97 @@ entries:
     urls:
     - https://github.com/redhat-ai-dev/ai-lab-helm-charts/releases/download/v0.1.6/model-server-sample-0.1.6.tgz
     version: 0.1.6
+  n8n:
+  - annotations:
+      artifacthub.io/changes: "- kind: changed\n  description: Update n8nio/n8n image
+        version to 1.107.3\n  links:\n    - name: Upstream Project\n      url: https://github.com/n8n-io/n8n\n-
+        kind: changed\n  description: Update dependency redis from 22.0.1 to 22.0.4\n
+        \ links:\n    - name: ArtifactHub\n      url: https://artifacthub.io/packages/helm/bitnami/redis\n-
+        kind: changed\n  description: Update dependency postgresql from 16.7.24 to
+        16.7.26\n  links:\n    - name: ArtifactHub\n      url: https://artifacthub.io/packages/helm/bitnami/postgresql"
+      artifacthub.io/containsSecurityUpdates: 'false'
+      artifacthub.io/images: "- name: n8n\n  image: n8nio/n8n:1.107.3\n  platforms:\n
+        \   - linux/amd64\n    - linux/arm64\n"
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: "- name: Chart Source\n  url: https://github.com/community-charts/helm-charts\n-
+        name: Chart Usage Page\n  url: https://community-charts.github.io/docs/charts/n8n/usage\n-
+        name: Upstream Project\n  url: https://github.com/n8n-io/n8n\n- name: Official
+        Documentation\n  url: https://docs.n8n.io/\n"
+      artifacthub.io/maintainers: "- name: burakince\n  email: burak.ince@linux.org.tr\n"
+      artifacthub.io/operator: 'false'
+      artifacthub.io/prerelease: 'false'
+      artifacthub.io/screenshots: "- title: Editor UI Walkthrough\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-one/editor-ui-walkthrough.gif\n-
+        title: Node Menu Drilldown\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-one/l1-c1-node-menu-drilldown.gif\n-
+        title: Adding a Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-one/l1-c1-add-node-click.gif\n-
+        title: Node Buttons\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-one/node-buttons.gif\n-
+        title: Nathans Workflow\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-four/l1-c4-nathans-workflow.png\n-
+        title: Set Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-five/l1-c5-4-set-node.png\n-
+        title: Workflow with Set Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-five/l1-c5-4-workflow-with-set-node.png\n-
+        title: Code Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-five/l1-c5-5-5-code-node.png\n-
+        title: Discord Output\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-one/chapter-five/l1-c5-5-6-discord-output.png\n-
+        title: Exercise Function\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-one/exercise_function.png\n-
+        title: Exercise Function Not Nested\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-one/exercise_function_notnested.png\n-
+        title: Exercise Function Reference\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-one/exercise_function_reference.png\n-
+        title: HTTP Request Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-two/exercise_html_httprequestnode.png\n-
+        title: HTTP Extraction Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-two/exercise_html_htmlextractnode.png\n-
+        title: Binary Data HTTP Request Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-two/exercise_binarydata_httprequest_file.png\n-
+        title: Binary to JSON Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-two/exercise_binarydata_movedata_btoj.png\n-
+        title: JSON to XML Node\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-two/exercise_html_xmlnode_table.png\n-
+        title: Workflow\n  url: https://raw.githubusercontent.com/n8n-io/n8n-docs/refs/heads/main/docs/_images/courses/level-two/chapter-five/workflow2.png\n"
+      artifacthub.io/signKey: 'fingerprint: 939B1A0ED8AAA8E722ACCDB3B6A012EE8A76426A
+
+        url: https://keybase.io/communitycharts/pgp_keys.asc
+
+        '
+      charts.openshift.io/digest: sha256:ea8ee551656c3875cdd64bdfb73111ebba087fad9f557b947a78ebce86845f41
+      charts.openshift.io/lastCertifiedTimestamp: '2025-08-19T14:34:16.906804+00:00'
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-08-20T14:44:26.285273+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.10'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.107.3
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 22.0.4
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.7.26
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.min.io/
+      version: 5.4.0
+    description: A Helm chart for fair-code workflow automation platform with native
+      AI capabilities. Combine visual building with custom code, self-host or cloud,
+      400+ integrations.
+    digest: 060d4a7533a77072fe715cc3ce2743e56b0101f2c8fc303fd8100c57565fa7e2
+    home: https://n8n.io
+    icon: https://avatars1.githubusercontent.com/u/45487711?s=200&v=4
+    keywords:
+    - n8n
+    - Workflow Automation
+    - Workflow
+    - Automation
+    - iPaaS
+    - integration-framework
+    - low-code-plattform
+    - low-code
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: burak.ince@linux.org.tr
+      name: burakince
+      url: https://www.burakince.com
+    name: n8n
+    sources:
+    - https://github.com/community-charts/helm-charts
+    - https://github.com/n8n-io/n8n
+    type: application
+    urls:
+    - https://github.com/community-charts/helm-charts/releases/download/n8n-1.14.2/n8n-1.14.2.tgz
+    version: 1.14.2
   nearbyone-controller:
   - annotations:
       charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
@@ -12723,4 +12814,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-08-19T12:54:01.247014+00:00'
+generated: '2025-08-20T14:44:26.173894+00:00'
