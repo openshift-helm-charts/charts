@@ -1,0 +1,164 @@
+suite: test NOTES.txt
+templates:
+  - NOTES.txt
+
+tests:
+  - it: should render correct notes for enabled ingress
+    set:
+      core.ingress.enabled: true
+      core:
+        ingress:
+          className: nginx
+          hosts:
+            - host: example.com
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - example.com
+              secretName: example-tls
+    asserts:
+      - equalRaw:
+          value: |
+
+
+            1. Visit the application at:
+              ```
+              https://example.com/
+              ```
+
+  - it: should render correct notes for enabled route without TLS
+    set:
+      core.route.enabled: true
+      core.route.tls.enabled: false
+    asserts:
+      - equalRaw:
+          value: |
+
+            1. Configure the application to serve external traffic:
+              ```
+              No actions required with this configuration.
+              ```
+
+            2. Visit the application at:
+              ```
+              echo http://$(oc get route -n NAMESPACE RELEASE-NAME-cryostat -o jsonpath="{.status.ingress[0].host}")
+              ```
+
+  - it: should render correct notes for enabled route with TLS
+    set:
+      core.route.enabled: true
+      core.route.tls.enabled: true
+    asserts:
+      - equalRaw:
+          value: |
+
+            1. Configure the application to serve external traffic:
+              ```
+              No actions required with this configuration.
+              ```
+
+            2. Visit the application at:
+              ```
+              echo https://$(oc get route -n NAMESPACE RELEASE-NAME-cryostat -o jsonpath="{.status.ingress[0].host}")
+              ```
+
+  - it: should render correct notes for NodePort service without ingress or route
+    set:
+      core.service.type: "NodePort"
+      core.ingress.enabled: false
+      core.route.enabled: false
+    asserts:
+      - equalRaw:
+          value: |
+
+            1. Configure the application to serve external traffic:
+              ```
+              export NODE_IP=$(kubectl get nodes -n NAMESPACE -o jsonpath="{.items[0].status.addresses[0].address}")
+              export NODE_PORT=$(kubectl get -n NAMESPACE -o jsonpath="{.spec.ports[0].nodePort}" services RELEASE-NAME-cryostat)
+              kubectl -n NAMESPACE set env deploy --containers=cryostat RELEASE-NAME-cryostat-v4 QUARKUS_HTTP_HOST=$NODE_IP
+              ```
+
+            2. Visit the application at:
+              ```
+              echo http://$NODE_IP:$NODE_PORT
+              ```
+
+  - it: should render correct notes for LoadBalancer service without ingress or route
+    set:
+      core.service.type: "LoadBalancer"
+      core.ingress.enabled: false
+      core.route.enabled: false
+    asserts:
+      - equalRaw:
+          value: |
+
+            1. Configure the application to serve external traffic:
+              ```
+                 NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+                       You can watch the status by running 'kubectl get -n NAMESPACE -w svc/RELEASE-NAME-cryostat'
+              export SERVICE_IP=$(kubectl get svc -n NAMESPACE RELEASE-NAME-cryostat --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+              kubectl -n NAMESPACE set env deploy --containers=cryostat RELEASE-NAME-cryostat-v4 QUARKUS_HTTP_HOST=$SERVICE_IP
+              ```
+
+            2. Visit the application at:
+              ```
+              echo http://$SERVICE_IP:8181
+              ```
+
+  - it: should render correct notes for ClusterIP service without ingress or route and TLS enabled
+    set:
+      oauth2Proxy:
+        tls:
+          selfSigned:
+            enabled: true
+    asserts:
+      - equalRaw:
+          value: |
+
+            1. Configure the application to serve external traffic:
+              ```
+              No actions required with this configuration.
+              ```
+
+            2. Forward local port to the application's service:
+              ```
+              kubectl -n NAMESPACE wait --for=condition=available --timeout=60s deploy/RELEASE-NAME-cryostat-v4
+
+              export SVC_NAME=$(kubectl get services -n NAMESPACE -l "app.kubernetes.io/name=cryostat,app.kubernetes.io/instance=RELEASE-NAME,app.kubernetes.io/component=cryostat" --sort-by=.metadata.creationTimestamp -o jsonpath="{.items[-1:].metadata.name}")
+              kubectl -n NAMESPACE port-forward svc/$SVC_NAME 8443:https
+              ```
+
+            3. Visit the application at:
+              ```
+              https://localhost:8443
+              ```
+
+  - it: should render correct notes for ClusterIP service without ingress or route and TLS disabled
+    set:
+      oauth2Proxy:
+        tls:
+          selfSigned:
+            enabled: false
+    asserts:
+      - equalRaw:
+          value: |
+
+            1. Configure the application to serve external traffic:
+              ```
+              No actions required with this configuration.
+              ```
+
+            2. Forward local port to the application's service:
+              ```
+              kubectl -n NAMESPACE wait --for=condition=available --timeout=60s deploy/RELEASE-NAME-cryostat-v4
+
+              export SVC_NAME=$(kubectl get services -n NAMESPACE -l "app.kubernetes.io/name=cryostat,app.kubernetes.io/instance=RELEASE-NAME,app.kubernetes.io/component=cryostat" --sort-by=.metadata.creationTimestamp -o jsonpath="{.items[-1:].metadata.name}")
+              kubectl -n NAMESPACE port-forward svc/$SVC_NAME 8080:http
+              ```
+
+            3. Visit the application at:
+              ```
+              http://localhost:8080
+              ```

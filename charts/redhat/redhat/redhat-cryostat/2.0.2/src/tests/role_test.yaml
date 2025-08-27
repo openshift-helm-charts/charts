@@ -1,0 +1,143 @@
+suite: test role.yaml
+templates:
+  - role.yaml
+
+tests:
+  - it: should create Roles in target namespace
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.namespaces:
+        - "default"
+        - "test-ns"
+    asserts:
+      - hasDocuments:
+          count: 2
+      - equal:
+          path: kind
+          value: Role
+      - equal:
+          path: metadata.namespace
+          value: "default"
+        documentIndex: 0
+      - equal:
+          path: metadata.namespace
+          value: "test-ns"
+        documentIndex: 1
+      - matchRegex:
+          path: metadata.name
+          pattern: "RELEASE-NAME-cryostat"
+        documentIndex: 0
+      - matchRegex:
+          path: metadata.name
+          pattern: "RELEASE-NAME-cryostat"
+        documentIndex: 1
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/part-of: cryostat
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/version: "4.0.2-redhat"
+            helm.sh/chart: cryostat-2.0.2
+        documentIndex: 0
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/part-of: cryostat
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/version: "4.0.2-redhat"
+            helm.sh/chart: cryostat-2.0.2
+        documentIndex: 1
+
+  - it: should have correct permissions for endpoints, pods, and other resources
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.namespaces:
+        - "default"
+    asserts:
+      - equal:
+          path: rules[0].apiGroups
+          value: [""]
+      - equal:
+          path: rules[0].resources
+          value: ["endpoints"]
+      - equal:
+          path: rules[0].verbs
+          value: ["get", "list", "watch"]
+      - equal:
+          path: rules[1].apiGroups
+          value: [""]
+      - equal:
+          path: rules[1].resources
+          value: ["pods", "replicationcontrollers"]
+      - equal:
+          path: rules[1].verbs
+          value: ["get"]
+      - equal:
+          path: rules[2].apiGroups
+          value: ["apps"]
+      - equal:
+          path: rules[2].resources
+          value: ["replicasets", "deployments", "daemonsets", "statefulsets"]
+      - equal:
+          path: rules[2].verbs
+          value: ["get"]
+      - equal:
+          path: rules[3].apiGroups
+          value: ["apps.openshift.io"]
+      - equal:
+          path: rules[3].resources
+          value: ["deploymentconfigs"]
+      - equal:
+          path: rules[3].verbs
+          value: ["get"]
+      - equal:
+          path: rules[4].apiGroups
+          value: ["route.openshift.io"]
+      - equal:
+          path: rules[4].verbs
+          value: ["get", "list"]
+      - equal:
+          path: rules[4].resources
+          value: ["routes"]
+
+  - it: should not create any Role if RBAC is disabled
+    set:
+      rbac.create: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should not create any Roles when Kubernetes discovery is disabled
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should not specify a namespace if installNamespaceDisabled is true
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.installNamespaceDisabled: true
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should specify the default namespace if installNamespaceDisabled is false
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.installNamespaceDisabled: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: metadata.namespace
+          value: "NAMESPACE"

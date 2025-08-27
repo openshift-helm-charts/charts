@@ -1,0 +1,456 @@
+## @section Cryostat Container
+## @extra core Configuration for the core Cryostat application
+core:
+  image:
+    ## @param core.image.repository Repository for the main Cryostat container image
+    repository: "registry.redhat.io/cryostat/cryostat-rhel9"
+    ## @param core.image.pullPolicy Image pull policy for the main Cryostat container image
+    pullPolicy: IfNotPresent
+    ## @param core.image.tag Tag for the main Cryostat container image
+    tag: "4.0.2"
+  ## @param core.podAnnotations [object] Annotations to be applied to the Cryostat Pods
+  podAnnotations: {}
+  service:
+    ## @param core.service.type Type of Service to create for the Cryostat application
+    type: ClusterIP
+    ## @param core.service.httpPort Port number to expose on the Service for Cryostat's HTTP server
+    httpPort: 8181
+  debug:
+    log:
+      ## @param core.debug.log.level Log level for troubleshooting and debugging
+      level: INFO
+  ## @param core.sslProxied Enables SSL Proxied Environment Variables, useful when you are offloading SSL/TLS at External Loadbalancer instead of Ingress
+  sslProxied: false
+  ingress:
+    ## @param core.ingress.enabled Whether to create an Ingress object for the Cryostat service
+    enabled: false
+    ## @param core.ingress.className Ingress class name for the Cryostat application Ingress
+    className: ""
+    ## @param core.ingress.annotations [object] Annotations to apply to the Cryostat application Ingress
+    annotations: {}
+    ## @param core.ingress.hosts [array] Hosts to create rules for in the Cryostat application Ingress. See: [IngressSpec](https://kubernetes.io/docs/reference/kubernetes-api/service-resources/ingress-v1/#IngressSpec)
+    hosts:
+      - host: cryostat.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    ## @param core.ingress.tls [array] TLS configuration for the Cryostat application Ingress. See: [IngressSpec](https://kubernetes.io/docs/reference/kubernetes-api/service-resources/ingress-v1/#IngressSpec)
+    tls: []
+  route:
+    ## @param core.route.enabled Whether to create a Route object for the Cryostat service. Available only on OpenShift
+    enabled: true
+    tls:
+      ## @param core.route.tls.enabled Whether to secure the Cryostat application Route with TLS. See: [TLSConfig](https://docs.openshift.com/container-platform/4.10/rest_api/network_apis/route-route-openshift-io-v1.html#spec-tls)
+      enabled: true
+      ## @param core.route.tls.termination Type of TLS termination to use for the Cryostat application Route. One of: `edge`, `passthrough`, `reencrypt`
+      termination: edge
+      ## @param core.route.tls.insecureEdgeTerminationPolicy Specify how to handle insecure traffic for the Cryostat application Route. One of: `Allow`, `Disable`, `Redirect`
+      insecureEdgeTerminationPolicy: Redirect
+      ## @param core.route.tls.key Custom private key to use when securing the Cryostat application Route
+      key: ""
+      ## @param core.route.tls.certificate Custom certificate to use when securing the Cryostat application Route
+      certificate: ""
+      ## @param core.route.tls.caCertificate Custom CA certificate to use, if needed to complete the certificate chain, when securing the Cryostat application Route
+      caCertificate: ""
+      ## @param core.route.tls.destinationCACertificate Provides the contents of the CA certificate of the final destination when using reencrypt termination for the Cryostat application Route
+      destinationCACertificate: ""
+  resources:
+    requests:
+      ## @param core.resources.requests.cpu CPU resource request for the Cryostat container. See: [ResourceRequirements](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+      cpu: 500m
+      ## @param core.resources.requests.memory Memory resource request for the Cryostat container.
+      memory: 384Mi
+  ## @param core.securityContext [object] Security Context for the Cryostat container. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext:
+    ## @skip core.securityContext.allowPrivilegeEscalation
+    allowPrivilegeEscalation: false
+    ## @skip core.securityContext.capabilities
+    capabilities:
+      drop:
+        - ALL
+  ## @param core.databaseSecretName Name of the secret containing database keys. This secret must contain a CONNECTION_KEY secret which is the database connection password, and an ENCRYPTION_KEY secret which is the key used to encrypt sensitive data stored within the database, such as the target credentials keyring. It must not be updated across chart upgrades. It is recommended that the secret should be marked as immutable to avoid accidental changes to secret's data. More details: https://kubernetes.io/docs/concepts/configuration/secret/#secret-immutable
+  databaseSecretName: ""
+  ## @extra core.discovery Configuration options to the Cryostat application's target discovery mechanisms
+  discovery:
+    kubernetes:
+      ## @param core.discovery.kubernetes.enabled Enables Kubernetes API discovery mechanism
+      enabled: true
+      ## @param core.discovery.kubernetes.installNamespaceDisabled When false and `namespaces` is empty, the Cryostat application will default to discovery targets in the install namespace (i.e. `{{ .Release.Namespace }}`)
+      installNamespaceDisabled: false
+      ## @param core.discovery.kubernetes.namespaces [array] List of namespaces whose workloads the Cryostat application should be permitted to access and profile
+      namespaces: []
+      ## @param core.discovery.kubernetes.builtInPortNamesDisabled When false and `portNames` is empty, the Cryostat application will use the default port name `jfr-jmx` to look for JMX connectable targets.
+      builtInPortNamesDisabled: false
+      ## @param core.discovery.kubernetes.portNames [array] List of port names that the Cryostat application should look for in order to consider a target as JMX connectable
+      portNames: []
+      ## @param core.discovery.kubernetes.builtInPortNumbersDisabled When false and `portNumbers` is empty, the Cryostat application will use the default port number `9091` to look for JMX connectable targets.
+      builtInPortNumbersDisabled: false
+      ## @param core.discovery.kubernetes.portNumbers [array] List of port numbers that the Cryostat application should look for in order to consider a target as JMX connectable
+      portNumbers: []
+  config:
+    eventTemplates:
+      ## @param core.config.eventTemplates.configMapNames [array] List of ConfigMap names. Each ConfigMap is expected to contain one or more files, which are .jfc (XML) JFR Event Templates, to be mounted to the Cryostat container.
+      configMapNames: []
+    tlsTruststore:
+      ## @param core.config.tlsTruststore.secretNames [array] List of Secret names. Each Secret is expected to contain one or more files, which are TLS certificates which target applications may use for their JMX servers, to be mounted to the Cryostat container for its TLS truststore.
+      secretNames: []
+  ## @param core.nodeSelector [object] Node Selector for the Cryostat Pod. See: [NodeSelector](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  nodeSelector: {}
+  ## @param core.tolerations [array] Tolerations for the Cryostat Pod. See: [Tolerations](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  tolerations: []
+  ## @param core.affinity [object] Affinity for the Cryostat Pod. See: [Affinity](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  affinity: {}
+
+## @section Report Generator Deployment
+## @extra reports Configuration for the Reports Generator deployment
+reports:
+  image:
+    ## @param reports.image.repository Repository for the Report Generator container image
+    repository: "registry.redhat.io/cryostat/cryostat-reports-rhel9"
+    ## @param reports.image.pullPolicy Image pull policy for the Report Generator container image
+    pullPolicy: IfNotPresent
+    ## @param reports.image.tag Tag for the Report Generator image
+    tag: "4.0.2"
+  ## @param reports.podAnnotations [object] Annotations to be applied to the Report Generator Pods
+  podAnnotations: {}
+  service:
+    ## @param reports.service.type Type of Service to create for the Report Generator Deployment
+    type: ClusterIP
+    ## @param reports.service.httpPort Port number to expose on the Service for the Report Generator Deployment
+    httpPort: 10001
+  ## @param reports.reportsSecretName Name of the secret containing the report generator access keys. This secret must contain a REPORTS_PASS secret which is the secret credential for the report generators. It must not be updated across chart upgrades, or else the connection between Cryostat and report generators will not be able to initialize. It is recommended that the secret should be marked as immutable to avoid accidental changes to secret's data. More details: https://kubernetes.io/docs/concepts/configuration/secret/#secret-immutable
+  reportsSecretName: ""
+  debug:
+    log:
+      ## @param reports.debug.log.level Log level for troubleshooting and debugging
+      level: INFO
+  ## @param reports.replicas Number of Report Generator replicas to deploy. If zero, the Deployment and Service will not be created and the main Cryostat container will handle all report generations on its own.
+  replicas: 0
+  resources:
+    requests:
+      ## @param reports.resources.requests.cpu CPU resource request for each Pod in the Report Generator Deployment.
+      cpu: 500m
+      ## @param reports.resources.requests.memory Memory resource request for each Pod in the Report Generator Deployment.
+      memory: 512Mi
+  ## @param reports.securityContext [object] Security Context for the Report Generator containers. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext:
+    ## @skip reports.securityContext.allowPrivilegeEscalation
+    allowPrivilegeEscalation: false
+    ## @skip reports.securityContext.capabilities
+    capabilities:
+      drop:
+        - ALL
+  ## @param reports.nodeSelector [object] Node Selector for the Report Generator Pods. See: [NodeSelector](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  nodeSelector: {}
+  ## @param reports.tolerations [array] Tolerations for the Report Generator Pods. See: [Tolerations](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  tolerations: []
+  ## @param reports.affinity [object] Affinity for the Report Generator Pods. See: [Affinity](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  affinity: {}
+
+## @section Database Container
+## @extra db Configuration for Cryostat's database
+db:
+  image:
+    ## @param db.image.repository Repository for the database container image
+    repository: "registry.redhat.io/cryostat/cryostat-db-rhel9"
+    ## @param db.image.pullPolicy Image pull policy for the database container image
+    pullPolicy: IfNotPresent
+    ## @param db.image.tag Tag for the database container image
+    tag: "4.0.2"
+  ## @param db.podAnnotations [object] Annotations to be applied to the Database Pods
+  podAnnotations: {}
+  service:
+    ## @param db.service.type Type of Service to create for the database
+    type: ClusterIP
+    ## @param db.service.port Port number to expose on the Service
+    port: 5432
+  resources:
+    requests:
+      ## @param db.resources.requests.cpu CPU resource request for the database container. See: [ResourceRequirements](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+      cpu: 25m
+      ## @param db.resources.requests.memory Memory resource request for the database container.
+      memory: 64Mi
+  pvc:
+    ## @param db.pvc.enabled Specify whether to use persistentVolumeClaim (true) or EmptyDir storage (false). This is recommended to be enabled, but the storage size and selector should be chosen carefully first.
+    enabled: false
+    ## @param db.pvc.annotations [object] Annotations to add to the persistentVolumeClaim
+    annotations: {}
+    ## @param db.pvc.storage Storage size to request for the persistentVolumeClaim
+    storage: 500Mi
+    ## @param db.pvc.accessModes Access mode for the persistentVolumeClaim. See: [Access Modes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims)
+    accessModes:
+      - ReadWriteOnce
+    ## @param db.pvc.selector [object] Selector for the persistentVolumeClaim. See: [Selector](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims)
+    selector: {}
+    ## @param db.pvc.storageClassName [string, nullable] The name of the StorageClass for the persistentVolumeClaim. See: [Class](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims)
+    # storageClassName: ""
+  ## @param db.securityContext [object] Security Context for the database container. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext:
+    ## @skip db.securityContext.allowPrivilegeEscalation
+    allowPrivilegeEscalation: false
+    ## @skip db.securityContext.capabilities
+    capabilities:
+      drop:
+        - ALL
+  ## @param db.nodeSelector [object] Node Selector for the Database Pod. See: [NodeSelector](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  nodeSelector: {}
+  ## @param db.tolerations [array] Tolerations for the Database Pod. See: [Tolerations](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  tolerations: []
+  ## @param db.affinity [object] Affinity for the Database Pod. See: [Affinity](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  affinity: {}
+
+## @section Storage Container
+## @extra storage Configuration for Cryostat's object storage provider
+storage:
+  ## @param storage.storageSecretName Name of the secret containing the object storage secret access key. This secret must contain a STORAGE_ACCESS_KEY secret which is the object storage secret access key. It must not be updated across chart upgrades, or else the connection between Cryostat components and object storage will not be able to initialize. It is recommended that the secret should be marked as immutable to avoid accidental changes to secret's data. More details: https://kubernetes.io/docs/concepts/configuration/secret/#secret-immutable
+  storageSecretName: ""
+  image:
+    ## @param storage.image.repository Repository for the storage container image
+    repository: "registry.redhat.io/cryostat/cryostat-storage-rhel9"
+    ## @param storage.image.pullPolicy Image pull policy for the storage container image
+    pullPolicy: IfNotPresent
+    ## @param storage.image.tag Tag for the storage container image
+    tag: "4.0.2"
+  encryption:
+    ## @param storage.encryption.enabled Enable at-rest encryption of stored objects. The storage container will generate a secret key for each stored object and use this key to encrypt and decrypt objects transparently. The key is written to the object metadata, so in the default storage container configuration this only adds a small layer of additional security.
+    enabled: true
+  ## @param storage.podAnnotations [object] Annotations to be applied to the Storage Pods
+  podAnnotations: {}
+  service:
+    ## @param storage.service.type Type of Service to create for the object storage
+    type: ClusterIP
+    ## @param storage.service.port Port number to expose on the Service
+    port: 8333
+  resources:
+    requests:
+      ## @param storage.resources.requests.cpu CPU resource request for the object storage container. See: [ResourceRequirements](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+      cpu: 50m
+      ## @param storage.resources.requests.memory Memory resource request for the object storage container.
+      memory: 256Mi
+  pvc:
+    ## @param storage.pvc.enabled Specify whether to use persistentVolumeClaim (true) or EmptyDir storage (false). This is recommended to be enabled, but the storage size and selector should be chosen carefully first.
+    enabled: false
+    ## @param storage.pvc.annotations [object] Annotations to add to the persistentVolumeClaim
+    annotations: {}
+    ## @param storage.pvc.storage Storage size to request for the persistentVolumeClaim
+    storage: 500Mi
+    ## @param storage.pvc.accessModes Access mode for the persistentVolumeClaim. See: [Access Modes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims)
+    accessModes:
+      - ReadWriteOnce
+    ## @param storage.pvc.selector [object] Selector for the persistentVolumeClaim. See: [Selector](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims)
+    selector: {}
+    ## @param storage.pvc.storageClassName [string, nullable] The name of the StorageClass for the persistentVolumeClaim. See: [Class](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims)
+    # storageClassName: ""
+  ## @param storage.securityContext [object] Security Context for the storage container. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext:
+    ## @skip storage.securityContext.allowPrivilegeEscalation
+    allowPrivilegeEscalation: false
+    ## @skip storage.securityContext.capabilities
+    capabilities:
+      drop:
+        - ALL
+  ## @param storage.nodeSelector [object] Node Selector for the Storage Pod. See: [NodeSelector](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  nodeSelector: {}
+  ## @param storage.tolerations [array] Tolerations for the Storage Pod. See: [Tolerations](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  tolerations: []
+  ## @param storage.affinity [object] Affinity for the Storage Pod. See: [Affinity](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  affinity: {}
+
+## @section Grafana Container
+## @extra grafana Configuration for the customized Grafana instance for Cryostat
+grafana:
+  image:
+    ## @param grafana.image.repository Repository for the Grafana container image
+    repository: "registry.redhat.io/cryostat/cryostat-grafana-dashboard-rhel9"
+    ## @param grafana.image.pullPolicy Image pull policy for the Grafana container image
+    pullPolicy: IfNotPresent
+    ## @param grafana.image.tag Tag for the Grafana container image
+    tag: "4.0.2"
+  service:
+    ## @param grafana.service.type Type of Service to create for Grafana
+    type: ClusterIP
+    ## @param grafana.service.port Port number to expose on the Service for Grafana's HTTP server
+    port: 3000
+  resources:
+    requests:
+      ## @param grafana.resources.requests.cpu CPU resource request for the Grafana container. See: [ResourceRequirements](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+      cpu: 25m
+      ## @param grafana.resources.requests.memory Memory resource request for the Grafana container.
+      memory: 80Mi
+  ## @param grafana.securityContext [object] Security Context for the Grafana container. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext:
+    ## @skip grafana.securityContext.allowPrivilegeEscalation
+    allowPrivilegeEscalation: false
+    ## @skip grafana.securityContext.capabilities
+    capabilities:
+      drop:
+        - ALL
+  ## @param grafana.nodeSelector [object] Node Selector for the Grafana Pod. See: [NodeSelector](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  nodeSelector: {}
+  ## @param grafana.tolerations [array] Tolerations for the Grafana Pod. See: [Tolerations](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  tolerations: []
+
+## @section JFR Data Source Container
+## @extra datasource Configuration for the JFR Data Source component, which translates recording events into a format consumable by Grafana
+datasource:
+  image:
+    ## @param datasource.image.repository Repository for the JFR Data Source container image
+    repository: "registry.redhat.io/cryostat/jfr-datasource-rhel9"
+    ## @param datasource.image.pullPolicy Image pull policy for the JFR Data Source container image
+    pullPolicy: IfNotPresent
+    ## @param datasource.image.tag Tag for the JFR Data Source container image
+    tag: "4.0.2"
+  resources:
+    requests:
+      ## @param datasource.resources.requests.cpu CPU resource request for the JFR Data Source container. See: [ResourceRequirements](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+      cpu: 200m
+      ## @param datasource.resources.requests.memory Memory resource request for the JFR Data Source container.
+      memory: 200Mi
+  ## @param datasource.securityContext [object] Security Context for the JFR Data Source container. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext:
+    ## @skip datasource.securityContext.allowPrivilegeEscalation
+    allowPrivilegeEscalation: false
+    ## @skip datasource.securityContext.capabilities
+    capabilities:
+      drop:
+        - ALL
+  ## @param datasource.nodeSelector [object] Node Selector for the JFR Datasource Pod. See: [NodeSelector](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  nodeSelector: {}
+  ## @param datasource.tolerations [array] Tolerations for the JFR Datasource Pod. See: [Tolerations](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+  tolerations: []
+
+## @section Authentication
+
+authentication:
+  ## @param authentication.cookieSecretName Name of the secret containing the authenticating proxy cookie encryption key. This secret must contain a COOKIE_SECRET secret which is the cookie encryption key. It must not be updated across chart upgrades, or else existing user login sessions will be invalidated. It is recommended that the secret should be marked as immutable to avoid accidental changes to secret's data. More details: https://kubernetes.io/docs/concepts/configuration/secret/#secret-immutable
+  cookieSecretName: ""
+  openshift:
+    ## @param authentication.openshift.enabled Whether the OAuth Proxy deployed for securing Cryostat's Pods should be one that integrates with OpenShift-specific features, or a generic one.
+    enabled: true
+    clusterRole:
+      ## @param authentication.openshift.clusterRole.name The name of the ClusterRole to bind for the OpenShift OAuth Proxy
+      name: system:auth-delegator
+  basicAuth:
+    ## @param authentication.basicAuth.enabled Whether Cryostat should use basic authentication for users. When false, Cryostat will not perform any form of authentication
+    enabled: false
+    ## @param authentication.basicAuth.secretName Name of the Secret that contains the credentials within Cryostat's namespace **(Required if basicAuth is enabled)**
+    secretName: ""
+    ## @param authentication.basicAuth.filename Key within Secret containing the `htpasswd` file. The file should contain one user definition entry per line, with the syntax "user:passHash", where "user" is the username and "passHash" is the `bcrypt` hash of the desired password. Such an entry can be generated with ex. `htpasswd -nbB username password` **(Required if basicAuth is enabled)**
+    filename: ""
+
+## @section OAuth2 Proxy
+
+oauth2Proxy:
+  image:
+    ## @param oauth2Proxy.image.repository Repository for the OAuth2 Proxy container image
+    repository: ""
+    ## @param oauth2Proxy.image.pullPolicy Image pull policy for the OAuth2 Proxy container image
+    pullPolicy: Never
+    ## @param oauth2Proxy.image.tag Tag for the OAuth2 Proxy container image
+    tag: ""
+  tls:
+    selfSigned:
+      ## @param oauth2Proxy.tls.selfSigned.enabled Whether a self-signed TLS certificate for oauth2-proxy HTTPS is generated and used.
+      enabled: false
+  resources:
+    requests:
+      ## @param oauth2Proxy.resources.requests.cpu CPU resource request for the OAuth2 Proxy container.
+      cpu: 25m
+      ## @param oauth2Proxy.resources.requests.memory Memory resource request for the OAuth2 Proxy container.
+      memory: 64Mi
+  ## @param oauth2Proxy.securityContext [object] Security Context for the OAuth2 Proxy container. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1).
+  securityContext:
+    ## @skip oauth2Proxy.securityContext.allowPrivilegeEscalation
+    allowPrivilegeEscalation: false
+    ## @skip oauth2Proxy.securityContext.capabilities
+    capabilities:
+      drop:
+        - ALL
+
+## @section OpenShift OAuth Proxy
+
+openshiftOauthProxy:
+  image:
+    ## @param openshiftOauthProxy.image.repository Repository for the OpenShift OAuth Proxy container image
+    repository: "registry.redhat.io/cryostat/cryostat-ose-oauth-proxy-rhel9"
+    ## @param openshiftOauthProxy.image.pullPolicy Image pull policy for the OpenShift OAuth Proxy container image
+    pullPolicy: IfNotPresent
+    ## @param openshiftOauthProxy.image.tag Tag for the OpenShift OAuth Proxy container image
+    tag: "4.0.2"
+  resources:
+    requests:
+      ## @param openshiftOauthProxy.resources.requests.cpu CPU resource request for the OpenShift OAuth Proxy container.
+      cpu: 25m
+      ## @param openshiftOauthProxy.resources.requests.memory Memory resource request for the OpenShift OAuth Proxy container.
+      memory: 64Mi
+  accessReview:
+    ## @param openshiftOauthProxy.accessReview.enabled Whether the SubjectAccessReview/TokenAccessReview role checks for users and clients are enabled. If this is disabled then the proxy will only check that the user has valid credentials or holds a valid token.
+    enabled: true
+    ## @param openshiftOauthProxy.accessReview.group The OpenShift resource group that the SubjectAccessReview/TokenAccessReview will be performed for. See https://github.com/openshift/oauth-proxy/?tab=readme-ov-file#delegate-authentication-and-authorization-to-openshift-for-infrastructure
+    group: ""
+    ## @param openshiftOauthProxy.accessReview.resource The OpenShift resource that the SubjectAccessReview/TokenAccessReview will be performed for.
+    resource: "pods"
+    ## @param openshiftOauthProxy.accessReview.subresource The OpenShift resource that the SubjectAccessReview/TokenAccessReview will be performed for.
+    subresource: "exec"
+    ## @param openshiftOauthProxy.accessReview.name The OpenShift resource name that the SubjectAccessReview/TokenAccessReview will be performed for.
+    name: ""
+    ## @param openshiftOauthProxy.accessReview.namespace The OpenShift namespace that the SubjectAccessReview/TokenAccessReview will be performed for.
+    namespace: "{{ .Release.Namespace }}"
+    ## @param openshiftOauthProxy.accessReview.verb The OpenShift resource name that the SubjectAccessReview/TokenAccessReview will be performed for.
+    verb: "create"
+    ## @param openshiftOauthProxy.accessReview.version The OpenShift resource version that the SubjectAccessReview/TokenAccessReview will be performed for.
+    version: ""
+  ## @param openshiftOauthProxy.securityContext [object] Security Context for the OpenShift OAuth Proxy container. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext:
+    ## @skip openshiftOauthProxy.securityContext.allowPrivilegeEscalation
+    allowPrivilegeEscalation: false
+    ## @skip openshiftOauthProxy.securityContext.capabilities
+    capabilities:
+      drop:
+        - ALL
+
+## @section Other Parameters
+
+## @param imagePullSecrets [array] Image pull secrets to be used for the Cryostat deployment
+imagePullSecrets: []
+## @param nameOverride Overrides the name of this Chart
+nameOverride: ""
+## @param fullnameOverride Overrides the fully qualified application name of `[release name]-[chart name]`
+fullnameOverride: ""
+
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  create: true
+
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a service account should be created
+  create: true
+  ## @param serviceAccount.annotations [object] Annotations to add to the service account
+  annotations: {}
+  ## @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+## @param podAnnotations [object] Annotations to be applied to the various Pods
+podAnnotations: {}
+
+## @param podSecurityContext [object] Security Context for the Cryostat Pod. Defaults to meet "restricted" [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted). See: [PodSecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context)
+podSecurityContext:
+  ## @skip podSecurityContext.runAsNonRoot
+  runAsNonRoot: true
+  ## @skip podSecurityContext.seccompProfile
+  seccompProfile:
+    type: RuntimeDefault
+
+networkPolicy:
+  ingress:
+    ## @param networkPolicy.ingress.enabled whether a NetworkPolicy for restricting Cryostat component Pods' traffic is installed. This prevents other Pods from sending unwanted traffic to Cryostat's Pods. Traffic should flow via the Service (or Route, or other Ingress) only, not by directly targeting Pods.
+    enabled: true
+
+## @param nodeSelector [object] default Node Selector for the various Pods. Any Pod which does not have an individual nodeSelector setting will default to this. See: [NodeSelector](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+nodeSelector: {}
+
+## @param tolerations [array] default Tolerations for the various Pods. See: [Tolerations](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+tolerations: []
+
+## @param affinity [object] default Affinity for the various Pods. See: [Affinity](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+affinity: {}
