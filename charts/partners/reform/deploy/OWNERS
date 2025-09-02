@@ -1,0 +1,10 @@
+chart:
+  name: reform-deploy
+  shortDescription: Helm Chart for Reform Deploy
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: NA
+vendor:
+  label: reform
+  name: Reform
