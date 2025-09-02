@@ -2,11 +2,11 @@ chart:
   name: reform-deploy
   shortDescription: Provides a faster and smarter way to simplify application delivery
     and infrastructure provisioning.
-providerDelivery: true
+providerDelivery: false
 publicPgpKey: unknown
 users:
 - githubUsername: leoatreslv
 - githubUsername: kreslv
 vendor:
   label: reform
-  name: Resolve Technology Limited
+  name: Reform
