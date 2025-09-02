@@ -1,0 +1,9 @@
+chart:
+  name: reform-deploy
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: reform
+  name: Resolve Technology Limited
