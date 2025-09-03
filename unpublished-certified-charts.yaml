@@ -6437,6 +6437,32 @@ entries:
     urls:
     - /home/partner/Music/newcharts/rafm
     version: 0.5.3
+  reform-deploy:
+  - annotations:
+      charts.openshift.io/digest: sha256:b1e4918890315c377a007fb9dab9ab08c6aa9ee1e853cc56096f959a23000932
+      charts.openshift.io/lastCertifiedTimestamp: '2025-09-03T15:32:38.981411+08:00'
+      charts.openshift.io/name: reformdeploy
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-09-03T09:34:36.910262+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.6'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 0.7.0
+    dependencies:
+    - condition: hermitcrab.enabled
+      name: hermitcrab
+      repository: file://../hermitcrab
+      tags:
+      - hermitcrab
+      version: 0.1.4
+    description: A Helm chart for Kubernetes
+    digest: cc10f10d76720542ab6f563f7dad105ace4b10a47fad5e5e37fa74145010b4df
+    kubeVersion: '>=1.19.0-0'
+    name: reform-deploy
+    type: application
+    urls:
+    - N/A
+    version: 0.9.1
   remote-active-worker-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:879996f406dcb141d839e55ab48c572bc7372b56891ee0073370295d9fe28765
@@ -7263,4 +7289,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-08-27T19:15:58.288476+00:00'
+generated: '2025-09-03T09:34:36.839228+00:00'
