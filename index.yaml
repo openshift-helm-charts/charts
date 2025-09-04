@@ -3350,6 +3350,46 @@ entries:
     urls:
     - https://maximilianoPizarro.github.io/librechat/librechat-1.8.10.tgz
     version: 1.8.10
+  mattermost-team-edition:
+  - annotations:
+      charts.openshift.io/digest: sha256:b0c6d08764cfc1c28e3a3cfdd0c1cda8221f9d824bb27d4a3f681444c1d87825
+      charts.openshift.io/lastCertifiedTimestamp: '2025-09-03T14:15:27.569077+00:00'
+      charts.openshift.io/name: mattermost
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-09-04T08:28:26.485578+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 10.11.2
+    dependencies:
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.helm.sh/stable
+      version: 1.6.4
+    description: Mattermost Team Edition is an open-source, self-hosted messaging
+      platform for teams. It offers a free, community-driven solution for secure,
+      private collaboration. Features include group and direct messaging, file sharing,
+      and powerful search, giving your team a modern communication hub.
+    digest: bb47d7eb189dfce6211a66913a62655c3f3b3d6e146a0e2a9ff1836a35856057
+    home: https://mattermost.com
+    icon: http://www.mattermost.org/wp-content/uploads/2016/04/icon.png
+    keywords:
+    - mattermost
+    - communication
+    - team collaboration
+    kubeVersion: '>=1.20.0'
+    maintainers:
+    - email: maximiliano.pizarro.5@gmail.com
+      name: Maximiliano Pizarro
+      url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+    name: mattermost-team-edition
+    sources:
+    - https://github.com/mattermost/mattermost-server
+    - https://github.com/mattermost/mattermost-helm
+    type: application
+    urls:
+    - https://maximilianopizarro.github.io/mattermost-helm/mattermost-team-edition-6.6.83.tgz
+    version: 6.6.83
   model-server-sample:
   - annotations:
       charts.openshift.io/digest: sha256:e9aada8de77b6588a67292ecbfd488d141c77383e9f7bf5f0840969805d10dd2
@@ -12865,4 +12905,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-08-27T18:19:58.259794+00:00'
+generated: '2025-09-04T08:28:26.374772+00:00'
