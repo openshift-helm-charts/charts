@@ -5143,56 +5143,6 @@ entries:
     - N/A
     version: 3.50.9
   - annotations:
-      charts.openshift.io/digest: sha256:169d2eeb29e0765e29678b688d66ac1c298e0bf5a1b33bf4960446930224098f
-      charts.openshift.io/lastCertifiedTimestamp: '2025-07-22T16:52:10.379593+00:00'
-      charts.openshift.io/name: Remote Engine
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2025-07-22T16:56:38.915666+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
-      charts.openshift.io/testedOpenShiftVersion: '4.14'
-    apiVersion: v2
-    appVersion: 3.50.10
-    dependencies:
-    - condition: global.noname.enabled
-      name: noname
-      repository: file://charts/noname
-      version: 0.1.0
-    - condition: global.engine.enabled
-      name: engine
-      repository: file://charts/engine
-      version: 0.1.0
-    - condition: global.active.enabled
-      name: active
-      repository: file://charts/active
-      version: 0.1.0
-    - condition: global.platform.enabled
-      name: platform
-      repository: file://charts/platform
-      version: 0.1.0
-    - condition: global.router.enabled
-      name: router
-      repository: file://charts/router
-      version: 0.1.0
-    - condition: noagentapi.enabled
-      name: noagentapi
-      repository: file://charts/noagentapi
-      version: 0.1.0
-    - condition: global.noname.enabled,global.rabbitmq.enabled
-      name: rabbitmq
-      repository: file://charts/rabbitmq
-      version: 15.3.3
-    - condition: global.nns_eso.enabled
-      name: nns-eso
-      repository: file://charts/nns-eso
-      version: 0.1.0
-    description: Noname Helm on k8s
-    digest: a25cb0a9503afbb8f44e1b675c96a60f6d9d88f26b8e58ba9a8b105cb95b82cc
-    kubeVersion: '>=1.0.0-0'
-    name: nonamesec-ubi
-    urls:
-    - N/A
-    version: 3.50.10
-  - annotations:
       charts.openshift.io/digest: sha256:3aaf5029d252b01794368936959611664c814ddd1ccb4b2a1ab691dea1e9d8ce
       charts.openshift.io/lastCertifiedTimestamp: '2025-07-24T08:34:36.276154+00:00'
       charts.openshift.io/name: Remote Engine
@@ -6092,6 +6042,56 @@ entries:
     urls:
     - N/A
     version: 3.52.5
+  - annotations:
+      charts.openshift.io/digest: sha256:169d2eeb29e0765e29678b688d66ac1c298e0bf5a1b33bf4960446930224098f
+      charts.openshift.io/lastCertifiedTimestamp: '2025-09-04T12:53:28.488786+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-09-04T12:56:41.827929+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.50.10
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: noagentapi.enabled
+      name: noagentapi
+      repository: file://charts/noagentapi
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 15.3.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: a25cb0a9503afbb8f44e1b675c96a60f6d9d88f26b8e58ba9a8b105cb95b82cc
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.50.10
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -7289,4 +7289,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-09-03T09:34:36.839228+00:00'
+generated: '2025-09-04T12:56:41.753423+00:00'
