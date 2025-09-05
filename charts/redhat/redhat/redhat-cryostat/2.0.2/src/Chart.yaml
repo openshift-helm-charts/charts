@@ -1,5 +1,5 @@
 apiVersion: v2
-name: cryostat
+name: redhat-cryostat
 description: Securely manage JFR recordings for your containerized Java workloads
 
 type: application
