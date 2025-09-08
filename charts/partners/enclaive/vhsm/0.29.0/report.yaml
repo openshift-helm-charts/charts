@@ -1,0 +1,103 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.13
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:14456852576257879128
+        chart-uri: vhsm-0.29.0.tgz
+        digests:
+            chart: sha256:5f1bc27fd08754f1e97a5ba5326501ef5dae1ef42a2a64974717c0128605d7ea
+            package: 23c66904fc799f7cfa34afb83e6d1eab5d392ee2e491fd622ebb76f8cec9c601
+        lastCertifiedTimestamp: "2025-09-08T10:41:26.191558+00:00"
+        testedOpenShiftVersion: "4.19"
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: false
+    chart:
+        name: vhsm
+        home: https://www.enclaive.io
+        sources:
+            - https://github.com/enclaive/vhsm
+            - https://github.com/enclaive/vhsm-helm
+        version: 0.29.0
+        description: Official Enclaive vHSM Chart
+        keywords:
+            - vhsm
+            - security
+            - encryption
+            - secrets
+            - management
+            - automation
+            - infrastructure
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.4.4-1
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Enclaive vHSM
+        kubeversion: '>= 1.20.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : quay.io/enclaive/vhsm:v1.4.4-1'
