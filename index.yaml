@@ -3511,6 +3511,54 @@ entries:
     urls:
     - https://github.com/community-charts/helm-charts/releases/download/n8n-1.14.2/n8n-1.14.2.tgz
     version: 1.14.2
+  - annotations:
+      artifacthub.io/changes: "- kind: changed\n  description: \"Update n8n app version
+        to 1.109.1\"\n"
+      artifacthub.io/prerelease: 'false'
+      charts.openshift.io/digest: sha256:93f10d30cfb4397e8a373e7fdd90e7d5134d54d33a438df702ae5e93c782c33f
+      charts.openshift.io/lastCertifiedTimestamp: '2025-09-09T22:42:29.85684+00:00'
+      charts.openshift.io/name: n8n
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-09-10T14:10:06.686851+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.109.1
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 2.4.7
+    description: Helm Chart for deploying n8n on Kubernetes, a fair-code workflow
+      automation platform with native AI capabilities for technical teams. Easily
+      automate tasks across different services.
+    digest: 6710b9116a58ee8e803cbbe9c7f724194e9292db144c822ac4207392897e8b56
+    home: https://github.com/maximilianoPizarro/n8n-helm-chart
+    icon: https://avatars1.githubusercontent.com/u/45487711?s=200&v=4
+    keywords:
+    - Workflow Automation
+    - Workflow
+    - iPaaS
+    - integration-framework
+    - low-code-plattform
+    - low-code
+    kubeVersion: '>=1.20.0'
+    maintainers:
+    - email: maximiliano.pizarro.5@gmail.com
+      name: maximilianoPizarro
+      url: https://github.com/maximilianoPizarro
+    - email: _@8gears.com
+      name: n8n
+      url: https://github.com/n8n-io
+    name: n8n
+    sources:
+    - https://github.com/maximilianoPizarro/n8n-helm-chart
+    - https://github.com/n8n-io/n8n
+    - https://n8n.io/
+    type: application
+    urls:
+    - https://maximilianopizarro.github.io/n8n-helm-chart/n8n-1.15.5.tgz
+    version: 1.15.5
   nearbyone-controller:
   - annotations:
       charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
@@ -12981,4 +13029,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-09-10T08:59:14.422879+00:00'
+generated: '2025-09-10T14:10:06.574392+00:00'
