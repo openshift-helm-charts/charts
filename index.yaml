@@ -11735,6 +11735,37 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/hashicorp-vault-0.30.1/vault-0.30.1.tgz
     version: 0.30.1
+  vhsm:
+  - annotations:
+      charts.openshift.io/digest: sha256:5f1bc27fd08754f1e97a5ba5326501ef5dae1ef42a2a64974717c0128605d7ea
+      charts.openshift.io/lastCertifiedTimestamp: '2025-09-08T10:41:26.191558+00:00'
+      charts.openshift.io/name: Enclaive vHSM
+      charts.openshift.io/provider: enclaive GmbH
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-09-10T08:59:14.536259+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: 1.4.4-1
+    description: Official Enclaive vHSM Chart
+    digest: 0c6c6e6c1d0105e300cc1e02a4330920ac1d8aadb826ad31e37ab65ce36efe45
+    home: https://www.enclaive.io
+    keywords:
+    - vhsm
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.20.0-0'
+    name: vhsm
+    sources:
+    - https://github.com/enclaive/vhsm
+    - https://github.com/enclaive/vhsm-helm
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/enclaive-vhsm-0.29.0/vhsm-0.29.0.tgz
+    version: 0.29.0
   wavefront:
   - annotations:
       charts.openshift.io/digest: sha256:663b50a03cf0adac0485f8731a1e0c8cb729b216f75ce9e43d1f09ffbe2faa1a
@@ -12950,4 +12981,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-09-05T14:20:27.260831+00:00'
+generated: '2025-09-10T08:59:14.422879+00:00'
