@@ -1,0 +1,12 @@
+chart:
+  name: vhsm
+  shortDescription: The official enclaive Helm chart for installing and configuring
+    vHSM on OpenShift
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: sebastiangajek
+- githubUsername: klassiker
+vendor:
+  label: enclaive
+  name: enclaive GmbH
