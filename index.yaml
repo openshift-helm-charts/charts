@@ -3350,6 +3350,71 @@ entries:
     urls:
     - https://maximilianoPizarro.github.io/librechat/librechat-1.8.10.tgz
     version: 1.8.10
+  - annotations:
+      charts.openshift.io/digest: sha256:82446da00e3877e2d87ad07f1e9bd95ae6ee683a4e9d3d70ff5c414f40077feb
+      charts.openshift.io/documentation-url: https://www.librechat.ai/docs
+      charts.openshift.io/lastCertifiedTimestamp: '2025-09-18T18:32:50.993224+00:00'
+      charts.openshift.io/name: LibreChat
+      charts.openshift.io/privacy-policy-url: https://www.librechat.ai/privacy
+      charts.openshift.io/provider-display-name: maximilianoPizarro
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-09-19T20:54:11.849399+00:00'
+      charts.openshift.io/support-url: https://github.com/maximilianoPizarro/librechat/issues
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/terms-of-service-url: https://www.librechat.ai/terms
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: v0.8.0-rc4
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.5.38
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.5.45
+    - condition: ollama.enabled
+      name: ollama
+      repository: file://./ollama
+      version: 1.26.0
+    - condition: meilisearch.enabled
+      name: meilisearch
+      repository: file://./meilisearch
+      version: 0.7.0
+    - condition: librechat-rag-api.enabled
+      name: librechat-rag-api
+      repository: file://./librechat-rag-api
+      version: 0.5.1
+    description: 'A Helm chart for deploying LibreChat, an open-source, AI-powered
+      chat application. Enhanced ChatGPT Clone: Features Agents, MCP, DeepSeek, Anthropic,
+      AWS, OpenAI, Responses API, Azure, Groq, o1, GPT-5, Mistral, OpenRouter, Vertex
+      AI, Gemini, Artifacts, AI model switching, message search, Code Interpreter,
+      langchain, DALL-E-3, OpenAPI Actions, Functions, Secure Multi-User Auth, Presets,
+      open-source for self-hosting. Active.'
+    digest: 2b6663528f916e35a344dd3990a759cb5c78225c9f2d316412f58b0ed45c3b85
+    home: https://www.librechat.ai
+    icon: https://www.librechat.ai/librechat_alt.svg
+    keywords:
+    - librechat
+    - chat
+    - ai
+    - llm
+    - chatbot
+    - open-source
+    kubeVersion: '>=1.20.0'
+    maintainers:
+    - email: cestay@redhat.com
+      name: Carlos Estay
+    - email: mapizarr@redhat.com
+      name: Maximiliano Pizarro
+    name: librechat
+    sources:
+    - https://github.com/maximilianoPizarro/librechat
+    type: application
+    urls:
+    - https://maximilianopizarro.github.io/librechat/librechat-1.8.14.tgz
+    version: 1.8.14
   mattermost-team-edition:
   - annotations:
       charts.openshift.io/digest: sha256:b0c6d08764cfc1c28e3a3cfdd0c1cda8221f9d824bb27d4a3f681444c1d87825
@@ -13135,4 +13200,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-09-16T21:31:34.044459+00:00'
+generated: '2025-09-19T20:54:11.733420+00:00'
