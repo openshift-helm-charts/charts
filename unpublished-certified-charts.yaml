@@ -6263,6 +6263,56 @@ entries:
     urls:
     - N/A
     version: 3.46.19
+  - annotations:
+      charts.openshift.io/digest: sha256:86bc985aabafc0f512403fe6fe1be84628a53067bc58d88b0919a7705cc3a392
+      charts.openshift.io/lastCertifiedTimestamp: '2025-09-25T07:22:10.823857+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-09-25T07:25:58.588685+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.46.19-lts
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: noagentapi.enabled
+      name: noagentapi
+      repository: file://charts/noagentapi
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 15.3.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: 5cb7838329897f4d4858363601dc9e6a2db65dc73f5537e4a1b9f1c21b6851f1
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.46.19-lts
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -7478,4 +7528,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-09-24T18:00:19.309468+00:00'
+generated: '2025-09-25T07:25:58.509663+00:00'
