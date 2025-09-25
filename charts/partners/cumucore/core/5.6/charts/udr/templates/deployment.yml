@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udr
+  labels:
+    app: udr
+spec:
+  selector:
+    matchLabels:
+      app: udr
+  template:
+    metadata:
+      labels:
+        app: udr
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.udrIP }}"]
+            }
+          ] 
+    spec:
+      hostname: udr-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: udr
+          image: {{ .Values.global.image.udrImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }}
+          ports:
+            - containerPort: 20050
+              protocol: TCP
+          securityContext:
+            runAsUser: 1000   # non-root user
+            runAsGroup: 1000
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: udr-configuration
+              mountPath: app/udr-config.yml
+              subPath: udr-config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: udr-configuration
+          configMap:
+            name: udr-config
+            items:
+              - key: udr-config.yml
+                path: udr-config.yml

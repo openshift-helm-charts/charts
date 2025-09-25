@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smf
+spec:
+  selector:
+    matchLabels:
+      app: smf
+  replicas: {{ .Values.global.k8s.replicas }}
+  template:
+    metadata:
+      labels:
+        app: smf 
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.smfIP }}"]
+            }
+          ]
+    spec:
+      hostname: smf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: smf
+          image: {{ .Values.global.image.smfImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }} 
+          ports:
+            - containerPort: 8805
+              protocol: UDP
+            - containerPort: 4001
+              protocol: TCP 
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: smf-configuration
+              mountPath: app/smf_config.json
+              subPath: smf_config.json
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: smf-configuration
+          configMap:
+            name: smf-config
+            items:
+              - key: smf_config.json
+                path: smf_config.json

@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nrf-config
+data:
+  nrf-config.yml: |
+    info:
+      description: "Network Repository Function (NRF)"
+      version: "5.6.0"
+    config:
+      dbCredentials:
+        dbUrl: "mongodb://mongodb:27017"
+        dbName: "nrfdb"
+        username: "Y3VtdWNvcmVucmY="  
+        password: "Y3VtdWNvcmVucmY="  
+        useTls: false
+        caFilePath: "mongodbca.pem"
+        crtFilePath: "mongodb.pem"
+      nnrf:                                            
+        host: "{{ .Values.global.networking.nrfIP }}"
+        port: "9090"
+        nfInstanceName: "NRF-1"
+        tls:
+          certFile: "public.crt"
+          keyFile: "private.key"
+        enableFqdn: false    
+        fqdn: ""          
+        plmnIdList:           
+          - mcc: "{{ .Values.global.gnb.mcc }}"
+            mnc: "{{ .Values.global.gnb.mnc }}"
+      afAlarm:
+        host: "{{ .Values.global.networking.alarmIP }}"
+        port: "9005"
+      remotePlmnConfig:
+        nrfList:
+          - plmnId: 
+              mcc: "999"
+              mnc: "98"
+            host: "127.0.0.5"
+            port: "9091"
+    
+   
+
+

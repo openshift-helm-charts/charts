@@ -1,0 +1,47 @@
+apiVersion: v2
+name: core
+description: Cumucore 5GC Deployment using Helm
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
+icon: https://cumucore.com/wp-content/uploads/2021/07/cumucore.png
+dependencies:
+  - name: api-nad
+    condition: api-nad.enabled
+  - name: nrf
+    condition: nrf.enabled
+  - name: sagui
+    condition: sagui.enabled, nrf.ready
+  - name: amf
+    condition: amf.enabled, nrf.ready
+  - name: smf
+    condition: smf.enabled, nrf.ready
+  - name: upf
+    condition: upf.enabled, nrf.ready
+  - name: pcf
+    condition: pcf.enabled, nrf.ready
+  - name: cnc
+    condition: cnc.enabled, nrf.ready
+  - name: udm
+    condition: udm.enabled, nrf.ready
+  - name: udr
+    condition: udr.enabled, nrf.ready
+  - name: ausf
+    condition: ausf.enabled, nrf.ready
+  - name: nssf
+    condition: nssf.enabled, nrf.ready
+  - name: nsacf
+    condition: nsacf.enabled, nrf.ready
+  - name: nef
+    condition: nef.enabled, nrf.ready
+  - name: sepp
+    condition: sepp.enabled, nrf.ready
+  - name: nwdaf
+    condition: nwdaf.enabled, nrf.ready
+  - name: alarm
+    condition: alarm.enabled, nrf.ready
+  - name: license
+    condition: license.enabled, nrf.ready
+maintainers:
+  - name: Dancun Omondi Ogenda
+    email: dancun.ogenda@cumucore.com

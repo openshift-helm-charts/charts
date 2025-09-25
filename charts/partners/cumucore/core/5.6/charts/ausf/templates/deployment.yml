@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ausf
+spec:
+  selector:
+    matchLabels:
+      app: ausf
+  template:
+    metadata:
+      labels:
+        app: ausf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.ausfIP }}"]
+            }
+          ]
+    spec:
+      hostname: ausf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: ausf
+          image: {{ .Values.global.image.ausfImage }} 
+          command: ["./ausf", "-c", "ausf-config.yml"]
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }}
+          ports:
+            - containerPort: 20005
+              protocol: TCP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: ausf-configuration
+              mountPath: app/ausf-config.yml
+              subPath: ausf-config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: ausf-configuration
+          configMap:
+            name: ausf-config
+            items:
+              - key: ausf-config.yml
+                path: ausf-config.yml

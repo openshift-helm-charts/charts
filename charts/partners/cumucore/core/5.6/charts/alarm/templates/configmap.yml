@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alarm-config
+data:
+  alarm-config.yml: | 
+    info:
+      description: "Cumucore Monitoring Application Function (CMAF)"
+      version: "1.2.0"
+    configuration:
+      dbCredentials:
+        mondbUrl: "mongodb://mongodb:27017"
+        mondbName: "alarmdb"
+      servConfig:
+        fqdn: ""                                 
+        bindingIpv4: {{ .Values.global.networking.alarmIP | quote }}
+        port: "9005"
+        tls:
+          certFile: "public.crt"
+          keyFile: "private.key"
+        servType: "primary"
+            

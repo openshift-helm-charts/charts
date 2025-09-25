@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smf-config
+data:
+  smf_config.json: |-
+    {
+       "name": "SMF-1",
+       "n4_addr_ipv4": "{{ .Values.global.networking.smfIP }}",
+       "n4_addr_fqdn":"",
+       "mcc": {{ .Values.global.gnb.mcc }},
+       "mnc_len":2,
+       "mnc": {{ .Values.global.gnb.mnc }},
+       "tracking_area_list": [{{ join "," .Values.global.gnb.tac }}],
+       "nf_instance_id": "3fa85f64-5717-4562-b3fc-2c963f66afbb",
+       "nsmf_interf_addr_ipv4":"{{ .Values.global.networking.smfIP }}",
+       "nsmf_interf_addr_fqdn": "",
+       "nsmf_interf_port":4001,
+       "nrf_addr_ipv4":"{{ .Values.global.networking.nrfIP }}",
+       "nrf_addr_fqdn":"",
+       "nrf_port":9090,
+       "key_file_name":"private.key",
+       "certficate_file_name":"public.crt",
+       "back_off_timer" : 120,
+       "p_cscf_ipv4":"127.0.0.1",
+       "snssai_smf_info": [{"s_nssai":{"sst":1,"sd":1},"dnn_info_list": [{"dnn":"internet","group_id":"BbbcfFCd-853-27-6f2C8A","ue_ip_addr":"10.200.0.0","ue_ip_subnet_mask":24, "dns":"8.8.8.8", "secondary_dns":"8.8.4.4"}]}],
+       "NID":"",
+       "ethernet_info":[{"dnn":"ether", "network_instance":"net_instance1", "s_nssai":{"sst": 1}}],
+       "ipv4_link_mtu": 1436,
+       "ethernet_frame_payload_mtu":1436,
+    }

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: license
+  labels:
+    app: license
+spec:
+  selector:
+    matchLabels:
+      app: license
+  template:
+    metadata:
+      labels:
+        app: license 
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.licenseIP }}"]
+            }
+          ] 
+    spec:
+      hostname: license-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+       - name: regcred
+      containers:
+        - name: license
+          image: {{ .Values.global.image.licenseImage }}
+          imagePullPolicy: "{{ .Values.global.k8s.pullPolicy }}"
+          ports:
+            - containerPort: 2030
+              protocol: TCP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: license-configuration
+              mountPath: app/license_config.yml
+              subPath: license_config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: "{{ .Values.global.LOCALTIME }}"
+        - name: license-configuration
+          configMap:
+            name: license-config
+            items:
+              - key: license_config.yml
+                path: license_config.yml

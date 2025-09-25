@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: udr-service
+spec:
+  selector:
+    app: udr
+  ports:
+    - protocol: TCP
+      port: 20050
+      targetPort: 20050
+  type: ClusterIP

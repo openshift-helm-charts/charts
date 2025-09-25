@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udm
+  labels:
+    app: udm
+spec:
+  selector:
+    matchLabels:
+      app: udm
+  replicas: {{ .Values.global.k8s.replicas }}
+  template:
+    metadata:
+      labels:
+        app: udm
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.udmIP }}"]
+            }
+          ]
+    spec:
+      hostname: udm-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: udm
+          image: {{ .Values.global.image.udmImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }}
+          ports:
+            - containerPort: 20000
+              protocol: TCP 
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: udm-configuration
+              mountPath: app/udm-config.yml
+              subPath: udm-config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: udm-configuration
+          configMap:
+            name: udm-config
+            items:
+              - key: udm-config.yml
+                path: udm-config.yml

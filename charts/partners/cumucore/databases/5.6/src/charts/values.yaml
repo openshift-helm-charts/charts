@@ -1,0 +1,34 @@
+accessMode: ReadWriteOnce
+pullPolicy: IfNotPresent
+dnsPolicy: ClusterFirst
+restartPolicy: Always
+replicaCount: 1
+
+mongo:
+  svc:
+    hostname: mongodb
+    name: mongodb
+    type: NodePort
+    protocol: TCP
+    port: 27017
+    clusterIP: None
+  pvc:
+    name: mongo-pvc
+    storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 5Gi
+  configmap:
+    name: slice-init-config
+
+database_secrets:
+  mongodb_secrets:
+    name: mongo-secrets
+    type: Opaque
+    data:
+      MONGO_INITDB_ROOT_PASSWORD: Y3VtdWNvcmVucmY=
+      MONGO_INITDB_ROOT_USERNAME: root
+
+k8s:
+  nodeSelector:
+    node: "k8s-core-master" # Node selector for scheduling (override for each environment)

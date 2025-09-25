@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pcf-config
+data:
+  pcf-config.yml: |
+    info:
+      description: Policy Control Function (PCF)
+      version: "5.6.0"
+    config:
+      dbCred:  
+        dbUrl: "mongodb://mongodb:27017" 
+        dbName: "pcfdb"
+        username: "Y3VtdWNvcmVucmY="
+        password: "Y3VtdWNvcmVucmY="
+        caFilePath: "mongodbca.pem"
+        crtFilePath: "mongodb.pem"
+        useTls: false 
+      npcf:
+        host: "{{ .Values.global.networking.pcfIP }}"
+        port: "20022"
+        nfInstanceName: "PCF-1"
+        nfGroupId: "1"
+        tls:
+          certFile: "public.crt"
+          keyFile: "private.key"
+        enableFqdn: false
+        fqdn: ""
+        isRedundant: true
+        n7MsgLog: false
+        plmnIdList:       
+          - mcc: "{{ .Values.global.gnb.mcc }}"
+            mnc: "{{ .Values.global.gnb.mnc }}"  
+      nrfInfo:
+        nrfFqdn: ""
+        host: "{{ .Values.global.networking.nrfIP }}"
+        port: "9090"
+
+
+  

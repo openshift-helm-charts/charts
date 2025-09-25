@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mongo.svc.name }}
+  labels:
+    app: {{ .Values.mongo.svc.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.mongo.svc.name }}
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mongo.svc.name }}
+    spec:
+      hostname: {{ .Values.mongo.svc.hostname }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.k8s.nodeSelector.node }}
+      terminationGracePeriodSeconds: 120
+      containers:
+        - name: {{ .Values.mongo.svc.name }}
+          image: mongo:latest
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          stdin: true
+          tty: true
+          env:
+            - name: GCLIBC_TUNABLES
+              value: "glibc.pthread.rseq=0"
+          envFrom:
+            - secretRef:
+                name: mongo-secrets
+          ports:
+            - containerPort: {{ .Values.mongo.svc.port }}
+              name: {{ .Values.mongo.svc.name }}
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: mongo-data
+              mountPath: /data/db
+            - name: mongo-user-configurations
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/Europe/Helsinki
+        - name: mongo-data
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+        - name: mongo-user-configurations
+          configMap:
+            name: slice-init-config
+            items:
+              - key: init-slice-settings.js
+                path: init-slice-settings.js
+            defaultMode: 0644
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      restartPolicy: {{ .Values.restartPolicy }}

@@ -1,9 +1,9 @@
 chart:
-  name: puls8
+  name: cumucore
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
-  label: datacore-software
-  name: Ed Ignatoff
+  label: 5gc-core
+  name: Cumucore Oy

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nssf
+  labels:
+    app: nssf
+spec:
+  selector:
+    matchLabels:
+      app: nssf
+  template:
+    metadata:
+      labels:
+        app: nssf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.nssfIP }}"]
+            }
+          ]
+    spec:
+      hostname: nssf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: nssf
+          image: {{ .Values.global.image.nssfImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }} 
+          ports:
+            - containerPort: 20020
+              protocol: TCP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: nssf-configuration
+              mountPath: app/nssf-config.yml
+              subPath: nssf-config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: nssf-configuration
+          configMap:
+            name: nssf-config
+            items:
+              - key: nssf-config.yml
+                path: nssf-config.yml

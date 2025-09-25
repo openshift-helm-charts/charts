@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nrf
+spec:
+  selector:
+    matchLabels:
+      app: nrf
+  template:
+    metadata:
+      labels:
+        app: nrf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.nrfIP }}"]
+            }
+          ]
+    spec:
+      hostname: nrf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: nrf
+          image: {{ .Values.global.image.nrfImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }} 
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW", "SYS_TIME"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: nrf-configuration
+              mountPath: app/nrf-config.yml
+              subPath: nrf-config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: nrf-configuration
+          configMap:
+            name: nrf-config
+            items:
+              - key: nrf-config.yml
+                path: nrf-config.yml 

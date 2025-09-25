@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nwdaf
+  labels:
+    app: nwdaf
+spec:
+  selector:
+    matchLabels:
+      app: nwdaf
+  template:
+    metadata:
+      labels:
+        app: nwdaf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.nwdafIP }}"]
+            }
+          ] 
+    spec:
+      hostname: nwdaf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: nwdaf
+        image: {{ .Values.global.image.nwdafImage }} 
+        imagePullPolicy: {{ .Values.global.k8s.pullPolicy }} 
+        ports:
+        - containerPort: 8088
+          protocol: TCP
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["NET_ADMIN", "NET_RAW"]
+        volumeMounts:
+          - name: localtime
+            mountPath: /etc/localtime
+          - name: nwdaf-configuration
+            mountPath: app/nwdaf_settings.json 
+            subPath: nwdaf_settings.json
+      volumes:
+        - name: localtime
+          hostPath: 
+            path: {{ .Values.global.LOCALTIME }}
+        - name: nwdaf-configuration
+          configMap:
+            name: nwdaf-config
+            items:
+              - key: nwdaf_settings.json
+                path: nwdaf_settings.json
+ 

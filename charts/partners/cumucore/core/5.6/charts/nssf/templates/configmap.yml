@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nssf-config
+data:
+  nssf-config.yml: |-
+    info:
+      description: "Network Slice Selection Function (NSSF)"
+      version: "5.6.0"
+    config:
+      dbCred:
+        dbUrl: "mongodb://mongodb:27017"
+        dbName: "nssfdb"
+        username: "Y3VtdWNvcmVucmY="
+        password: "Y3VtdWNvcmVucmY="
+        caFilePath: "mongodbca.pem"
+        crtFilePath: "mongodb.pem"
+        useTls: false   
+      nnssf:
+        host: "{{ .Values.global.networking.nssfIP }}"
+        port: "20020"
+        nfInstanceName: "NSSF-1"
+        tls:
+          crtFile: "public.crt"
+          keyFile: "private.key"
+        enableFqdn: false
+        fqdn: ""
+        isRedundant: true
+        plmnIdList:
+          - mcc: "{{ .Values.global.gnb.mcc }}"
+            mnc: "{{ .Values.global.gnb.mnc }}"
+      logSliceRegInfo: false
+      nrfInfo:
+        nrfFqdn: ""
+        host: "{{ .Values.global.networking.nrfIP }}"
+        port: "9090"

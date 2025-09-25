@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: nwdaf-config
+data:
+    nwdaf_settings.json: |
+        {
+            "host": "{{ .Values.global.networking.nwdafIP }}:8088",
+            "mHost": "mongodb://mongodb:27017",
+            "MDbName": "Slice_settings",
+            "MUser": "Y3VtdWNvcmVucmY=",
+            "MPwd": "Y3VtdWNvcmVucmY=",
+            "nrf_url": {
+                "nrfip": "{{ .Values.global.networking.nrfIP }}",
+                "port": "9090",
+                "fqdn": ""
+            },
+            "cert": "./public.crt",
+            "key": "./private.key",
+            "uiCertkey": "./localhost-cert.pem",
+            "uiprivkey": "./localhost-privkey.pem",
+            "nfInstanceName": "NWDAF-1",
+            "priority": 16538,
+            "plmnList": {
+                "mcc": "{{ .Values.global.gnb.mcc }}",
+                "mnc": "{{ .Values.global.gnb.mnc }}"
+            },
+            "fqdn": "{{ .Values.global.networking.nwdafIP }}"
+        }

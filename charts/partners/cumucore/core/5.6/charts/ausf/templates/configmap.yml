@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ausf-config
+data:
+  ausf-config.yml: |
+    info:
+      description: Authentication Server Function (AUSF)
+      version: "5.6.0"
+    config:
+      dbCred:
+        dbUrl: "mongodb://mongodb:27017"
+        dbName: "ausfdb"
+        username: "Y3VtdWNvcmVucmY="
+        password: "Y3VtdWNvcmVucmY="
+        caFilePath: "mongodbca.pem"
+        crtFilePath: "mongodb.pem"
+        useTls: false 
+      nausf:
+        host: "{{ .Values.global.networking.ausfIP }}"
+        port: "20005"
+        nfInstanceName: "AUSF-1"   
+        nfGroupId: "1"
+        tls:
+          crtFile: "public.crt"
+          keyFile: "private.key"
+        enableFqdn: false
+        fqdn: ""
+        isRedundant: true
+        logAuthInfo: true
+        plmnIdList:
+          - mcc: "{{ .Values.global.gnb.mcc }}"
+            mnc: "{{ .Values.global.gnb.mnc }}"
+        expectedPlmnIdList:
+          - mcc: "{{ .Values.global.gnb.mcc }}"
+            mnc: "{{ .Values.global.gnb.mnc }}"
+      nrfInfo:
+        nrfFqdn: ""
+        host: "{{ .Values.global.networking.nrfIP }}"
+        port: "9090"

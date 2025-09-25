@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sepp-config
+data:
+  sepp-config.yml: |+
+    info:
+      description: Security Edge Protection Proxy (SEPP) configuration
+      version: "5.6"
+    config:
+      n32f:
+        host: "{{ .Values.global.networking.seppIP }}"
+        port: "20015"
+        nfInstanceName: "SEPP-1"
+        tls:
+          crtFile: "public.crt"
+          keyFile: "private.key"
+        enableFqdn: false
+        fqdn: ""
+        isRedundant: false
+        plmnIdList: 
+          - mcc: "{{ .Values.global.gnb.mcc }}"
+            mnc: "{{ .Values.global.gnb.mnc }}"
+      n32c:
+        trustCerts:  
+          certs: ["public.crt"]
+        secCapabilityList: ["TLS"]
+      nrfInfo:
+        fqdn: ""
+        host: "{{ .Values.global.networking.nrfIP }}"
+        port: "9090"
+      remoteN32f:
+        seppList:  
+          - host: "127.0.0.5"
+            port: "20010"
+            plmnList: 
+              - mcc: "999"
+                mnc: "88"

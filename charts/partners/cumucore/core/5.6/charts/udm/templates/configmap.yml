@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: udm-config
+data:
+  udm-config.yml: |
+    info:
+      description: "Unified Data Management (UDM)"
+      version: "5.6.0"
+    config:
+      dbCred:
+        dbUrl: "mongodb://mongodb:27017"
+        dbName: "udmdb"
+        username: "Y3VtdWNvcmVucmY="
+        password: "Y3VtdWNvcmVucmY="
+        caFilePath: "mongodbca.pem"
+        crtFilePath: "mongodb.pem"
+        useTls: false 
+      nudm:
+        host: "{{ .Values.global.networking.udmIP }}"
+        port: "20000"
+        nfGroupId: "1"
+        nfInstanceName: "UDM-1"
+        tls:
+          crtFile: "public.crt"
+          keyFile: "private.key"
+        enableFqdn: false
+        fqdn: ""
+        isRedundant: true
+        logAuthInfo: true
+        PlmnIdList:
+          - mcc: "{{ .Values.global.gnb.mcc }}"
+            mnc: "{{ .Values.global.gnb.mnc }}"
+      nrfInfo:
+        nrfFqdn: ""
+        host: "{{ .Values.global.networking.nrfIP }}"
+        port: "9090"

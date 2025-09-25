@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pcf-service
+spec:
+  selector:
+    app: pcf
+  ports:
+    - protocol: TCP
+      port: 20040
+      targetPort: 20040
+  type: ClusterIP

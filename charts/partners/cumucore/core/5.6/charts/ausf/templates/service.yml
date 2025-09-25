@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ausf-service
+spec:
+  selector:
+    app: ausf
+  ports:
+    - protocol: TCP
+      port: 20005
+      targetPort: 20005 
+  type: ClusterIP

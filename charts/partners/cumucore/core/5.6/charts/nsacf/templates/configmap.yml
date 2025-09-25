@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nsacf-config
+data:
+  nsacf_config.yml: |
+    nsacf:
+      nssacf_address_ipv4: "{{ .Values.global.networking.nsacfIP }}"
+      nssacf_address_fqdn: ""
+      port: "20030"
+      nfInstanceName: "NSACF-1"
+      tls_public_file_name: "public.crt"
+      tls_private_file_name: "private.key"
+      mcc: "{{ .Values.global.gnb.mcc }}"
+      mnc: "{{ .Values.global.gnb.mnc }}"
+      priority: 16538
+      
+    nrf:
+      address: "{{ .Values.global.networking.nrfIP }}"
+      port: "9090"
+      fqdn: ""

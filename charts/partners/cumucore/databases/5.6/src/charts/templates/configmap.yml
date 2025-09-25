@@ -1,0 +1,126 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.mongo.configmap.name }}
+data:
+  init-slice-settings.js: |
+    db = db.getSiblingDB("Slice_settings");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "Slice_settings",
+        },
+      ],
+    });
+
+    db = db.getSiblingDB("nrfdb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "nrfdb",
+        },
+      ],
+    });
+    db.grantRolesToUser("Y3VtdWNvcmVucmY=", [{ role: "dbAdmin", db: "nrfdb" }]);
+    
+    db = db.getSiblingDB("nefdb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "nefdb",
+        },
+      ],
+    });
+
+    db = db.getSiblingDB("nssfdb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "nssfdb",
+        },
+      ],
+    });
+
+    db = db.getSiblingDB("udrdb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "udrdb",
+        },
+      ],
+    });
+
+    db = db.getSiblingDB("udmdb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "udmdb",
+        },
+      ],
+    });
+
+    db = db.getSiblingDB("ausfdb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "ausfdb",
+        },
+      ],
+    });
+
+    db = db.getSiblingDB("pcfdb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "pcfdb",
+        },
+      ],
+    });
+
+    db = db.getSiblingDB("licensedb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "licensedb",
+        },
+      ],
+    }); 
+
+    db = db.getSiblingDB("alarmdb");
+    db.createUser({
+      user: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      pwd: "{{ .Values.database_secrets.mongodb_secrets.data.MONGO_INITDB_ROOT_PASSWORD }}",
+      roles: [
+        {
+          role: "readWrite",
+          db: "alarmdb",
+        },
+      ],
+    });

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: amf-service
+spec:
+  selector:
+    app: amf
+  ports:
+  - name: tcp-port
+    protocol: TCP
+    port: 4000
+    targetPort: 4000
+  - name: sctp-port
+    protocol: SCTP
+    port: 38412
+    targetPort: 38412
+  type: ClusterIP

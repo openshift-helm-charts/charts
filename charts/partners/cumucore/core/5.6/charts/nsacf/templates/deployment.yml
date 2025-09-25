@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsacf
+  labels:
+    app: nsacf
+spec:
+  selector:
+    matchLabels:
+      app: nsacf
+  replicas: {{ .Values.global.k8s.replicas }}
+  template:
+    metadata:
+      labels:
+        app: nsacf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.nsacfIP }}"]
+            }
+          ]
+    spec:
+      hostname: nsacf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: nsacf
+          image: {{ .Values.global.image.nsacfImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }} 
+          ports:
+            - containerPort: 20030
+              protocol: TCP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: nsacf-configuration
+              mountPath: app/nsacf_config.yml
+              subPath: nsacf_config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: nsacf-configuration
+          configMap:
+            name: nsacf-config
+            items:
+              - key: nsacf_config.yml
+                path: nsacf_config.yml

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: license-config
+data:
+  license_config.yml: |
+    settings:
+      info:
+        description: Network application function API for Licence management
+        version: "1.0.0"
+      mongodb:
+        host: "mongodb:27017"
+        name: "licensedb"
+        user: "Y3VtdWNvcmVucmY="
+        pwd: "Y3VtdWNvcmVucmY="
+      afInfo:
+        afHostAddress: "{{ .Values.global.networking.licenseIP }}:2030"
+        corecert: ./public.crt
+        corekey: ./private.key
+        clientcert: ./af-api-cert.pem
+        clientkey: ./af-api-privkey.pem
+        fqdn: ""
+        scheme: "https"

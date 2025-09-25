@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cnc
+  labels:
+    app: cnc
+spec:
+  selector:
+    matchLabels:
+      app: cnc
+  replicas: {{ .Values.global.k8s.replicas }}
+  template:
+    metadata:
+      labels:
+        app: cnc
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.cncIP }}"]
+            }
+          ]
+    spec:
+      hostname: cnc-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: cnc
+          image: {{ .Values.global.image.cncImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }}
+          command: ["./CNC", "-c", "cnc_settings.json"]
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NEW_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: cnc-configuration
+              mountPath: app/cnc_settings.json
+              subPath: cnc_settings.json
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: cnc-configuration
+          configMap:
+            name: cnc-config
+            items:
+              - key: cnc_settings.json
+                path: cnc_settings.json

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pcf
+  labels:
+    app: pcf
+spec:
+  selector:
+    matchLabels:
+      app: pcf
+  template:
+    metadata:
+      labels:
+        app: pcf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.pcfIP }}"]
+            }
+          ] 
+    spec:
+      hostname: pcf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: pcf
+          image: {{ .Values.global.image.pcfImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }} 
+          ports:
+            - containerPort: 20040
+              protocol: TCP 
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: pcf-configuration
+              mountPath: app/pcf-config.yml
+              subPath: pcf-config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: pcf-configuration
+          configMap:
+            name: pcf-config
+            items:
+              - key: pcf-config.yml
+                path: pcf-config.yml

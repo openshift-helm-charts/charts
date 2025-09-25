@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upf
+  labels:
+    app: upf
+spec:
+  selector:
+    matchLabels:
+      app: upf
+  replicas: {{ .Values.global.k8s.replicas }}
+  template:
+    metadata:
+      labels:
+        app: upf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [ 
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.upfIP }}"]
+            }
+          ]
+    spec:
+      hostname: upf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: upf
+          image: {{ .Values.global.image.upfImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }}
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                [
+                  "NET_ADMIN",
+                  "NET_RAW",
+                  "SYS_TIME",
+                  "SYS_PTRACE",
+                  "BPF",
+                  "PERFMON",
+                  "SYS_ADMIN",
+                  "SYS_RESOURCE",
+                ] 
+          ports:
+            - containerPort: 8805
+              protocol: UDP
+            - containerPort: 8081
+              protocol: TCP
+            - containerPort: 2152
+              protocol: UDP
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "ip route add 10.200.0.0/24 via 10.128.1.251"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: upf-configuration
+              mountPath: /app/config.yml
+              subPath: config.yml
+            - name: bpffs
+              mountPath: /sys/fs/bpf
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: upf-configuration
+          configMap:
+            name: upf-config
+            items:
+              - key: config.yml
+                path: config.yml
+            defaultMode: 0644
+        - name: bpffs
+          hostPath:
+            path: /sys/fs/bpf
+            type: Directory
+          

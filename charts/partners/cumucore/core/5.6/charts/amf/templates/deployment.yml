@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amf
+spec:
+  selector:
+    matchLabels:
+      app: amf
+  replicas: {{ .Values.global.k8s.replicas }}
+  template:
+    metadata:
+      labels:
+        app: amf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.amfIP }}"]
+            }
+          ]
+    spec:
+      hostname: amf-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      {{- if .Values.global.initContainers.enabled }}
+      initContainers:
+        - name: init-amf
+          image: bitnami/kubectl:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              mkdir -p /app
+              # Wait for the license pod to be running
+              until LICENSE_POD=$(kubectl get pod -l app=license -n 5g -o jsonpath="{.items[0].metadata.name}") && \
+                    [ -n "$LICENSE_POD" ] && \
+                    [ "$(kubectl get pod $LICENSE_POD -n 5g -o jsonpath="{.status.phase}")" = "Running" ]; do
+                echo "Waiting for License Pod to be running..."
+                sleep 2
+              done
+              echo "Found License Pod: $LICENSE_POD"
+
+              # Loop to check if the file amf-token.txt exists in the license pod
+              until kubectl exec -n 5g $LICENSE_POD -- test -f /app/amf-token.txt; do
+                echo "Waiting for amf-token.txt to appear in License Pod..."
+                sleep 2  # wait for 2 seconds before checking again
+              done
+
+              echo "Found amf-token.txt in License Pod"
+
+              kubectl cp 5g/$LICENSE_POD:amf-token.txt /app/amf-token.txt
+              echo "Copied amf-token.txt from License Pod"
+              chmod 644 /app/amf-token.txt # Ensure read permissions for the file
+              ls -l /app
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: shared-data
+              mountPath: /app
+      {{- end }}
+      containers:
+        - name: amf
+          image: {{ .Values.global.image.amfImage }}
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }}
+          ports:
+            - containerPort: 4000
+              protocol: TCP
+            - containerPort: 38412
+              protocol: SCTP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: amf-configuration
+              mountPath: app/amf_config.json
+              subPath: amf_config.json
+            {{- if .Values.global.initContainers.enabled }}
+            - name: shared-data
+              mountPath: /app/amf-token.txt
+              subPath: amf-token.txt
+            {{- end}}
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: amf-configuration
+          configMap:
+            name: amf-config
+            items:
+              - key: amf_config.json
+                path: amf_config.json
+        {{- if .Values.global.initContainers.enabled }}
+        - name: shared-data
+          emptyDir: {}
+        {{- end}}

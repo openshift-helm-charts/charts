@@ -1,0 +1,10 @@
+apiVersion: v2
+name: databases
+description: A Helm chart for Cumucore database installation
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
+icon: https://cumucore.com/wp-content/uploads/2021/07/cumucore.png
+maintainers:
+  - name: Dancun Omondi Ogenda
+    email: dancun.ogenda@cumucore.com

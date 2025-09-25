@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: upf-config
+data:
+  config.yml: |
+    logLevel: info
+    bpf:
+      hook: tc
+      ifaces:
+        ran: eth1
+    services:
+      n4:
+        interface: eth1
+      nrf:
+        enable: true
+        url: https://{{ .Values.global.networking.nrfIP }}:9090
+      api:
+        enable: false
+        bind: ":8081"
+

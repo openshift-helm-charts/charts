@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alarm
+spec:
+  selector:
+    matchLabels:
+      app: alarm
+  template:
+    metadata:
+      labels:
+        app: alarm
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.alarmIP }}"]
+            }
+          ] 
+    spec:
+      hostname: alarm-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname 
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+       - name: regcred 
+      containers:
+        - name: alarm
+          image: {{ .Values.global.image.alarmImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy | quote }}
+          ports:
+            - containerPort: 9005
+              protocol: TCP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW", "SYS_TIME"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: alarm-configuration
+              mountPath: app/alarm-config.yml
+              subPath: alarm-config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: "{{ .Values.global.LOCALTIME }}"
+        - name: alarm-configuration
+          configMap:
+            name: alarm-config
+            items:
+              - key: alarm-config.yml
+                path: alarm-config.yml
+

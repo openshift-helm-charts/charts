@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cnc-config
+data:
+  cnc_settings.json: |
+    {
+        "host": ":3000",
+        "cert1": "./Authentication_s/public.crt",
+        "key1": "./Authentication_s/private.key",
+        "cert2": "./Authentication_s/cnc-api-cert.pem",
+        "key2": "./Authentication_s/cnc-api-privkey.pem",
+        "nrf_url": {
+            "ip": "{{ .Values.global.networking.nrfIP }}",
+            "port": "9090",
+            "fqdn": ""
+        },
+        "mHost": "mongodb://mongodb:27017",
+        "mDbName": "Slice_settings",
+        "mUser": "Y3VtdWNvcmVucmY=",
+        "mPwd": "Y3VtdWNvcmVucmY=",
+        "statCollection": {
+            "permission": true,
+            "interval": 10
+        },
+        "nfInstanceName": "CUSTOM_CNC-1",
+        "priority": 16538,
+        "plmnList": {
+            "mcc": "{{ .Values.global.gnb.mcc }}",
+            "mnc": "{{ .Values.global.gnb.mnc }}"
+        },
+        "cncInfo": {
+            "ipv4Address": "{{ .Values.global.networking.cncIP }}",
+            "port": "3000",
+            "fqdn": ""
+        }
+    }
+

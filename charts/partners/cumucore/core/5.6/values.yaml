@@ -1,0 +1,75 @@
+global:
+  # Set the timezone for all containers. Override with --set global.LOCALTIME=... if needed
+  LOCALTIME: /usr/share/zoneinfo/Europe/Helsinki # e.g. /usr/share/zoneinfo/UTC
+  gnb:
+    # Mobile Country Code (MCC) and Mobile Network Code (MNC)
+    mcc: "999" # e.g. "999"
+    mnc: "81" # e.g. "81"
+    sst: 1 # Slice/Service Type
+    sd: 1 # Slice Differentiator
+    tac: # Tracking Area Codes (list)
+      - 1
+    plmnID:
+      first: "999-81" # e.g. "999-81"
+  k8s:
+    # Image pull policy for all pods
+    pullPolicy: Always # e.g. Always, IfNotPresent
+    replicas: 1 # Default number of replicas
+    nodeSelector:
+      node: "k8s-core-master" # Node selector for scheduling (override for each environment)
+    resources:
+      requests:
+        memory: 256Mi # Default memory request
+        cpu: 100m # Default CPU request
+      limits:
+        memory: 256Mi # Default memory limit
+        cpu: 100m # Default CPU limit
+  networking:
+    # Name of the main network interface (override for each environment)
+    masterInterface: eno7np2 # e.g. eth0
+    addresses: 10.128.1.0/24 # Pod subnet (override as needed)
+    startRange: 10.128.1.190 # Start of dynamic IP range
+    stopRange: 10.128.1.210 # End of dynamic IP range
+    # Service IPs (override for each deployment/environment)
+    amfIP: 10.128.1.200
+    smfIP: 10.128.1.201
+    upfIP: 10.128.1.202
+    alarmIP: 10.128.1.191
+    ausfIP: 10.128.1.192
+    cncIP: 10.128.1.193
+    nefIP: 10.128.1.194
+    seppIP: 10.128.1.195
+    nrfIP: 10.128.1.196
+    nsacfIP: 10.128.1.197
+    nssfIP: 10.128.1.198
+    nwdafIP: 10.128.1.199
+    pcfIP: 10.128.1.203
+    udmIP: 10.128.1.204
+    udrIP: 10.128.1.205
+    licenseIP: 10.128.1.206
+    saguiIP: 10.128.1.207
+  image:
+    amfImage: registry.east.lan/shared-group-runner/amf:5.6-latest
+    smfImage: registry.east.lan/shared-group-runner/smf:5.6-latest
+    upfImage: registry.east.lan/shared-group-runner/upf:latest
+    alarmImage: registry.east.lan/shared-group-runner/fgcalarm:1.2.0-latest
+    ausfImage: registry.east.lan/shared-group-runner/nfausf:5.6-latest
+    cncImage: registry.east.lan/shared-group-runner/cnc-api:5.6-latest
+    nefImage: registry.east.lan/shared-group-runner/nfnef:5.6-latest
+    seppImage: registry.east.lan/shared-group-runner/nfsepp:5.6-latest
+    nrfImage: registry.east.lan/shared-group-runner/nfnrfapi:5.6-latest
+    nsacfImage: registry.east.lan/shared-group-runner/nsacf:5.6-latest
+    nssfImage: registry.east.lan/shared-group-runner/nfnssf:5.6-latest
+    nwdafImage: registry.east.lan/shared-group-runner/nwdaf:5.6-latest
+    pcfImage: registry.east.lan/shared-group-runner/pcf-cumu:5.6-latest
+    udmImage: registry.east.lan/shared-group-runner/nfudm:5.6-latest
+    udrImage: registry.east.lan/shared-group-runner/nfudr:5.6-latest
+    licenseImage: registry.east.lan/shared-group-runner/licenceaf:5.6-latest
+    saguiImage: registry.east.lan/shared-group-runner/sa_gui_console:5.6-latest
+  initContainers:
+    enabled: false
+# To override any value, use --set or a custom values file when installing/upgrading the chart.
+# For example:
+#   helm install my5gc ./core -f my-values.yaml
+#   helm upgrade my5gc ./core --set global.networking.masterInterface=eth0
+#

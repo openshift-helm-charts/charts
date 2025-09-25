@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sepp-service
+spec:
+  selector:
+    app: sepp
+  ports:
+    - protocol: TCP
+      port: 20015
+      targetPort: 20015
+  type: ClusterIP

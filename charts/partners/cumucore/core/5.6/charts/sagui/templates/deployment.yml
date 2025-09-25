@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sagui
+  labels:
+    app: sagui
+spec:
+  selector:
+    matchLabels:
+      app: sagui
+  template:
+    metadata:
+      labels:
+        app: sagui
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [
+            {
+              "name": "cplane",
+              "interface": "eth1",
+              "ips": ["{{ .Values.global.networking.saguiIP }}"]
+            }
+          ] 
+    spec:
+      hostname: sagui-service
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.global.k8s.nodeSelector.node }}
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: sagui
+          image: {{ .Values.global.image.saguiImage }} 
+          imagePullPolicy: {{ .Values.global.k8s.pullPolicy }}
+          command: ["/app/sa-gui"]
+          env:
+            - name: GIN_MODE
+              value: release
+          ports:
+            - containerPort: 4000
+              protocol: TCP
+            - containerPort: 8000
+              protocol: TCP
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: sagui-configuration
+              mountPath: app/config/config.json
+              subPath: config.json
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.global.LOCALTIME }}
+        - name: sagui-configuration
+          configMap:
+            name: sagui-config
+            items:
+              - key: config.json
+                path: config.json

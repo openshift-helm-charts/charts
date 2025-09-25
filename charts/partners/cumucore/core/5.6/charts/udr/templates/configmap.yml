@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: udr-config
+data:
+  udr-config.yml: |+
+    info:
+      description: Unified Data Repository (UDR)
+      version: "5.6.0"
+    config:
+      dbCred:
+        dbUrl: "mongodb://mongodb:27017"
+        dbName: "udrdb"
+        username: "Y3VtdWNvcmVucmY="
+        password: "Y3VtdWNvcmVucmY="
+        caFilePath: "mongodbca.pem"
+        crtFilePath: "mongodb.pem"
+        useTls: false  
+      nudr:
+        host: "{{ .Values.global.networking.udrIP }}"
+        port: "20050"
+        nfInstanceName: "UDR-1"
+        nfGroupId: "1"
+        tls:
+          crtFile: "public.crt"
+          keyFile: "private.key"
+        enableFqdn: false
+        fqdn: ""
+        isRedundant: true
+        plmnIdList:
+          - mcc: "{{ .Values.global.gnb.mcc }}"
+            mnc: "{{ .Values.global.gnb.mnc }}"
+      nrfInfo:
+        nrfFqdn: ""
+        host: "{{ .Values.global.networking.nrfIP }}"
+        port: "9090"

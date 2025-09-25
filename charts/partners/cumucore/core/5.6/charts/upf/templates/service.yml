@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: upf-service
+spec:
+  selector:
+    app: upf
+  ports:
+  - name: tcp-port
+    protocol: TCP
+    port: 8081
+    targetPort: 8081
+  - name: udp-port
+    protocol: UDP
+    port: 8805
+    targetPort: 8805
+  - name: gtpu-port
+    protocol: UDP
+    port: 2152
+    targetPort: 2152
+  type: ClusterIP

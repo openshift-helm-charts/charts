@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nsacf-service
+spec:
+  selector:
+    app: nsacf
+  ports:
+    - protocol: TCP
+      port: 20030
+      targetPort: 20030
+  type: ClusterIP
+   

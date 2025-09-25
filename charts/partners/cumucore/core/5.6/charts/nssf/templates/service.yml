@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nssf-service
+spec:
+  selector:
+    app: nssf
+  ports:
+    - protocol: TCP
+      port: 20020
+      targetPort: 20020
+  type: ClusterIP
