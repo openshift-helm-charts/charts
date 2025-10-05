@@ -6536,56 +6536,6 @@ entries:
     urls:
     - N/A
     version: 3.54.4
-  - annotations:
-      charts.openshift.io/digest: sha256:aceac87fc2d77f5c59eb5d3496e35dcdf3cd56362712cd072d01057e4e0b1df8
-      charts.openshift.io/lastCertifiedTimestamp: '2025-10-05T16:37:44.691029+00:00'
-      charts.openshift.io/name: Remote Engine
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2025-10-05T16:40:58.326068+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
-      charts.openshift.io/testedOpenShiftVersion: '4.14'
-    apiVersion: v2
-    appVersion: 3.54.5
-    dependencies:
-    - condition: global.noname.enabled
-      name: noname
-      repository: file://charts/noname
-      version: 0.1.0
-    - condition: global.engine.enabled
-      name: engine
-      repository: file://charts/engine
-      version: 0.1.0
-    - condition: global.active.enabled
-      name: active
-      repository: file://charts/active
-      version: 0.1.0
-    - condition: global.platform.enabled
-      name: platform
-      repository: file://charts/platform
-      version: 0.1.0
-    - condition: global.router.enabled
-      name: router
-      repository: file://charts/router
-      version: 0.1.0
-    - condition: noagentapi.enabled
-      name: noagentapi
-      repository: file://charts/noagentapi
-      version: 0.1.0
-    - condition: global.noname.enabled,global.rabbitmq.enabled
-      name: rabbitmq
-      repository: file://charts/rabbitmq
-      version: 16.0.11
-    - condition: global.nns_eso.enabled
-      name: nns-eso
-      repository: file://charts/nns-eso
-      version: 0.1.0
-    description: Noname Helm on k8s
-    digest: e420dac0a1255324381ce8b18e32fca3a06f7c3ebc8204e9ef2c8f20dd795d75
-    kubeVersion: '>=1.0.0-0'
-    name: nonamesec-ubi
-    urls:
-    - N/A
-    version: 3.54.5
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -7354,6 +7304,24 @@ entries:
     urls:
     - N/A
     version: 3.54.4
+  - annotations:
+      charts.openshift.io/digest: sha256:d29f858a39f5f6b4fb626dceb3dac3cd0407be6962b5d793cb5c70463f65a701
+      charts.openshift.io/lastCertifiedTimestamp: '2025-10-05T16:38:17.466184+00:00'
+      charts.openshift.io/name: Remote Active Testing Worker
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-10-05T16:41:10.346029+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 2.42.3-ubi
+    description: Active Worker Helm Chart for remote active worker deployments
+    digest: 9b85b34a830af2e0f70987c5f9e6f10a66329ee80ddaee7aa3b72b82d7a49b8e
+    kubeVersion: '>=1.0.0-0'
+    name: remote-active-worker-ubi
+    type: application
+    urls:
+    - N/A
+    version: 3.54.5
   smf:
   - annotations:
       charts.openshift.io/digest: sha256:08fd5c4cd8c86180336734a698c65fd85bf0f28ae76c669f6c028fc67998f0ab
@@ -7873,4 +7841,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-10-05T16:40:58.243446+00:00'
+generated: '2025-10-05T16:41:10.262536+00:00'
