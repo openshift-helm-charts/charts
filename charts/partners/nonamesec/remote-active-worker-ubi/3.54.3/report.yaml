@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:15261386164060977719
+        reportDigest: uint64:13845704216768748260
         chart-uri: N/A
         digests:
             chart: sha256:e588eda80072e1a8688aeaccb3a2b3b3c849e04e4d34301d5f6e769446dda31f
-            package: 76b853df0d7f44fe4dfef125630048fd39c8d011c87096d0c0bde742fbc0fa08
-        lastCertifiedTimestamp: "2025-09-29T21:21:17.04525+00:00"
+            package: 371577d2658f9089600a586d8bfaf60fbdc59c0a406d03cc3a5fbab07c29cac9
+        lastCertifiedTimestamp: "2025-09-29T23:26:17.252117+00:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.1'
         webCatalogOnly: true
@@ -36,34 +36,10 @@ metadata:
         type: application
     chart-overrides: ""
 results:
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
     - check: v1.0/has-notes
       type: Optional
       outcome: PASS
       reason: Chart does contain NOTES.txt
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
@@ -72,6 +48,18 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
     - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
@@ -88,6 +76,18 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
     - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
