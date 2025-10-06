@@ -1,0 +1,75 @@
+suite: test route.yaml
+templates:
+  - route.yaml
+
+tests:
+  - it: should create a Route when routing is enabled
+    set:
+      core.route.enabled: true
+      core:
+        route:
+          annotations:
+            hello: world
+          tls:
+            enabled: true
+            termination: edge
+            insecureEdgeTerminationPolicy: Redirect
+            key: "RSA PRIVATE KEY"
+            destinationCACertificate: "DESTINATION CA"
+            caCertificate: "CA CERT"
+            certificate: "CERT"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: kind
+          value: Route
+      - equal:
+          path: metadata.name
+          value: "RELEASE-NAME-cryostat"
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/part-of: cryostat
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/version: "4.0.3-redhat"
+            helm.sh/chart: cryostat-2.0.3
+      - equal:
+          path: metadata.annotations.hello
+          value: "world"
+      - equal:
+          path: spec.to.kind
+          value: "Service"
+      - equal:
+          path: spec.to.name
+          value: "RELEASE-NAME-cryostat"
+      - equal:
+          path: spec.port.targetPort
+          value: 4180
+      - equal:
+          path: spec.tls.termination
+          value: "edge"
+      - equal:
+          path: spec.tls.insecureEdgeTerminationPolicy
+          value: "Redirect"
+      - matchRegex:
+          path: spec.tls.key
+          pattern: ".*RSA PRIVATE KEY.*"
+      - matchRegex:
+          path: spec.tls.destinationCACertificate
+          pattern: ".*DESTINATION CA.*"
+      - matchRegex:
+          path: spec.tls.caCertificate
+          pattern: ".*CA CERT.*"
+      - matchRegex:
+          path: spec.tls.certificate
+          pattern: ".*CERT.*"
+
+  - it: should not create a Route when routing is disabled
+    set:
+      core.route.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
