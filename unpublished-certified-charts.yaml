@@ -2275,6 +2275,25 @@ entries:
     urls:
     - N/A
     version: 3.0.2000-b11
+  mmai:
+  - annotations:
+      charts.openshift.io/digest: sha256:f167f8c990d85170a6f63bafedaf3088af40d0015810d869636328a9f1c4859b
+      charts.openshift.io/lastCertifiedTimestamp: '2025-10-06T23:07:38.831763+00:00'
+      charts.openshift.io/name: mmai
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-10-06T23:14:47.434876+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.16'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: v1.0.0
+    description: Memory Machine AI (MMAI) Management Plane
+    digest: c3ea09fcf8a83dbde191a4b91ed2485af503186fb77973e5cd53b85855bc99a7
+    kubeVersion: '>= 1.29.0-0'
+    name: mmai
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   mtas:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -7841,4 +7860,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-10-05T16:41:10.262536+00:00'
+generated: '2025-10-06T23:14:47.353794+00:00'
