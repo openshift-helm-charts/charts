@@ -1,0 +1,9 @@
+chart:
+  name: mmai
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: memverge
+  name: MemVerge
