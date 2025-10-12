@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cryostat.fullname" . }}-test-core-connection"
+  labels:
+    {{- include "cryostat.labels" . | nindent 4 }}
+    app.kubernetes.io/component: test-core-connection
+    charts.cryostat.io/role: helm-test
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: curl
+      image: registry.access.redhat.com/ubi8/ubi:latest
+      command:
+        - '/bin/bash'
+        - '-exc'
+        - >
+          dnf install --disableplugin=subscription-manager -yq jq;
+          curl -sSf --retry 10 --retry-connrefused http://{{ include "cryostat.fullname" . }}:{{ .Values.core.service.httpPort }}/health | tee /tmp/out.json;
+          cat /tmp/out.json;
+          {{- if hasSuffix "-dev" .Chart.AppVersion }}
+          jq -e '{{ printf "(.cryostatVersion | test(\"^v%s-snapshot$\"))" (.Chart.AppVersion | trimSuffix "-dev" | squote) }}' /tmp/out.json;
+          {{- else }}
+          jq -e '{{ printf "(.cryostatVersion | test(\"^v%s\"))" (.Chart.AppVersion | replace "-" "." | squote) }}' /tmp/out.json;
+          {{- end }}
+          jq -e '.datasourceAvailable' /tmp/out.json
+  restartPolicy: Never

@@ -1,0 +1,124 @@
+suite: test rolebinding.yaml
+templates:
+  - rolebinding.yaml
+
+tests:
+  - it: should create a RoleBinding in the default namespace
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.namespaces:
+        - "default"
+        - "test-ns"
+    asserts:
+      - hasDocuments:
+          count: 2
+      - equal:
+          path: kind
+          value: RoleBinding
+        documentIndex: 0
+      - equal:
+          path: kind
+          value: RoleBinding
+        documentIndex: 1
+      - equal:
+          path: metadata.namespace
+          value: "default"
+        documentIndex: 0
+      - equal:
+          path: metadata.namespace
+          value: "test-ns"
+        documentIndex: 1
+      - matchRegex:
+          path: metadata.name
+          pattern: "RELEASE-NAME-cryostat"
+        documentIndex: 0
+      - matchRegex:
+          path: metadata.name
+          pattern: "RELEASE-NAME-cryostat"
+        documentIndex: 1
+      - equal:
+          path: roleRef.apiGroup
+          value: "rbac.authorization.k8s.io"
+        documentIndex: 0
+      - equal:
+          path: roleRef.apiGroup
+          value: "rbac.authorization.k8s.io"
+        documentIndex: 1
+      - equal:
+          path: roleRef.kind
+          value: "Role"
+        documentIndex: 0
+      - equal:
+          path: roleRef.kind
+          value: "Role"
+        documentIndex: 1
+      - matchRegex:
+          path: roleRef.name
+          pattern: "RELEASE-NAME-cryostat"
+        documentIndex: 0
+      - matchRegex:
+          path: roleRef.name
+          pattern: "RELEASE-NAME-cryostat"
+        documentIndex: 1
+      - equal:
+          path: subjects[0].kind
+          value: "ServiceAccount"
+        documentIndex: 0
+      - equal:
+          path: subjects[0].kind
+          value: "ServiceAccount"
+        documentIndex: 1
+      - matchRegex:
+          path: subjects[0].name
+          pattern: "RELEASE-NAME-cryostat"
+        documentIndex: 0
+      - matchRegex:
+          path: subjects[0].name
+          pattern: "RELEASE-NAME-cryostat"
+        documentIndex: 1
+      - equal:
+          path: subjects[0].namespace
+          value: "NAMESPACE"
+        documentIndex: 0
+      - equal:
+          path: subjects[0].namespace
+          value: "NAMESPACE"
+        documentIndex: 1
+
+  - it: should not create any RoleBinding if RBAC is disabled
+    set:
+      rbac.create: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should not create any RoleBinding when Kubernetes discovery is disabled
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: false
+    asserts:
+    - hasDocuments:
+        count: 0
+
+  - it: should not create any RoleBinding if installNamespaceDisabled is true
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.installNamespaceDisabled: true
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should create a RoleBinding in the default namespace if installNamespaceDisabled is false
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.namespaces: []
+      core.discovery.kubernetes.installNamespaceDisabled: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: metadata.namespace
+          value: "NAMESPACE"

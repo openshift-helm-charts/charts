@@ -1,0 +1,11 @@
+chart:
+  name: mmai
+  shortDescription: Helm Chart of MMAI GPU Cluster Manager
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: memverge-build
+- githubUsername: xiongzubiao
+vendor:
+  label: memverge
+  name: MemVerge
