@@ -6606,15 +6606,15 @@ entries:
     - N/A
     version: 3.55.0
   - annotations:
-      charts.openshift.io/digest: sha256:66525e71aeaf2ff133fd4147a4963dfb2e6fd1126a33c5377daa2a64fb09ac71
-      charts.openshift.io/lastCertifiedTimestamp: '2025-10-12T19:38:16.353512+00:00'
+      charts.openshift.io/digest: sha256:e2d0e6c501afdadd24da0b8b218fbbbb066e2c2c7ba726418e13169e7ce2120a
+      charts.openshift.io/lastCertifiedTimestamp: '2025-10-12T19:40:45.848763+00:00'
       charts.openshift.io/name: Remote Engine
       charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2025-10-12T19:42:22.786550+00:00'
+      charts.openshift.io/submissionTimestamp: '2025-10-12T19:43:58.834391+00:00'
       charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
       charts.openshift.io/testedOpenShiftVersion: '4.14'
     apiVersion: v2
-    appVersion: 3.54.6
+    appVersion: 3.55.1
     dependencies:
     - condition: global.noname.enabled
       name: noname
@@ -6649,12 +6649,12 @@ entries:
       repository: file://charts/nns-eso
       version: 0.1.0
     description: Noname Helm on k8s
-    digest: f7fe9a6f114b773fb341b94da5df687ef07ad2d508a71c8fbedfc1008244cfc3
+    digest: 6bd54a09cdb4481771fd6c158d73f4ea1ddc91951177a4a6f2cd75657b14490d
     kubeVersion: '>=1.0.0-0'
     name: nonamesec-ubi
     urls:
     - N/A
-    version: 3.54.6
+    version: 3.55.1
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -7996,4 +7996,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-10-12T19:42:22.702726+00:00'
+generated: '2025-10-12T19:43:58.755972+00:00'
