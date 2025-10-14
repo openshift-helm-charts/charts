@@ -3,7 +3,7 @@ chart:
   shortDescription: 'CAST AI Repository for helm charts to operate the CAST AI Kubernetes
     automation platform. '
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: zilvinasu
 vendor:
