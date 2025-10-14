@@ -1,0 +1,10 @@
+chart:
+  name: test-provider-delivery
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: elhadjici
+vendor:
+  label: jnunez
+  name: Red Hat
