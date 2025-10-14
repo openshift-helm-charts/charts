@@ -1,0 +1,10 @@
+chart:
+  name: helm24
+  shortDescription: test
+providerDelivery: false
+publicPgpKey: dGVzdA==
+users:
+- githubUsername: test
+vendor:
+  label: redhat-test
+  name: Red Hat, Inc.
