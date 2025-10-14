@@ -1,0 +1,10 @@
+chart:
+  name: test-helm-chart
+  shortDescription: Helm Chart certification Test
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: marcorandria+github@gmail.com
+vendor:
+  label: certpm-test-partner
+  name: Test Company
