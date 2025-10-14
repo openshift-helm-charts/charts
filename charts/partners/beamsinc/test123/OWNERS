@@ -1,0 +1,9 @@
+chart:
+  name: test123
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: beamsinc
+  name: Beams Inc.
