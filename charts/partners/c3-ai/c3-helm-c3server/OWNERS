@@ -1,0 +1,9 @@
+chart:
+  name: c3-helm-c3server
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: c3-ai
+  name: C3.AI
