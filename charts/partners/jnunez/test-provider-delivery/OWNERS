@@ -3,8 +3,7 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users:
-- githubUsername: elhadjici
+users: []
 vendor:
   label: jnunez
   name: Red Hat
