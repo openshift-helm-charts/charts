@@ -1,0 +1,9 @@
+chart:
+  name: xcipio-helm-ccpag1
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: ss8inc
+  name: SS8 Networks, Inc.
