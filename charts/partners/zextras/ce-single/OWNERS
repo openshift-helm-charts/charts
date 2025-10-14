@@ -1,0 +1,10 @@
+chart:
+  name: ce-single
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: M0Rf30
+vendor:
+  label: zextras
+  name: Zextras Srl
