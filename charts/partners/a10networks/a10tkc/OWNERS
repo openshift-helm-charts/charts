@@ -2,7 +2,7 @@ chart:
   name: a10tkc
   shortDescription: Helm Chart for Installing A10 Thunder Kubernetes Connector
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: csingh-a10
 vendor:
