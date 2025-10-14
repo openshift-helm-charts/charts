@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: amitpd
 vendor:
   label: voereir
   name: VoerEir AB
