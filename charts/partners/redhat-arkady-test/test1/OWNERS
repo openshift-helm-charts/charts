@@ -1,7 +1,8 @@
 chart:
   name: test1
   shortDescription: Short description of a Helm chart project.
-publicPgpKey: null
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: wying3
 - githubUsername: sebrandon1
