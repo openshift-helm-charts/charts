@@ -1,0 +1,9 @@
+chart:
+  name: marc
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: jnunez
+  name: Red Hat
