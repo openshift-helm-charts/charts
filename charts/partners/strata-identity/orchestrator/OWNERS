@@ -1,0 +1,10 @@
+chart:
+  name: orchestrator
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: gramidt
+vendor:
+  label: strata-identity
+  name: Strata Identity, Inc.
