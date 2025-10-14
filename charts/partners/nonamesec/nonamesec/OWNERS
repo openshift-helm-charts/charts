@@ -1,0 +1,10 @@
+chart:
+  name: nonamesec
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: devopsnns
+vendor:
+  label: nonamesec
+  name: Noname Security
