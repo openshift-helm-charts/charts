@@ -1,0 +1,9 @@
+chart:
+  name: openmaru-apm-sys-agent
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: openmaru-apm
+  name: Openmaru, Inc.
