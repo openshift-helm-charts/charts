@@ -1,0 +1,10 @@
+chart:
+  name: test-helmchart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: jinhli
+vendor:
+  label: jinhli-2021-update
+  name: jinhli-uat1 inc
