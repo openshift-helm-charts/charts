@@ -1,0 +1,10 @@
+chart:
+  name: caddy-015
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: mobaipws
+vendor:
+  label: mobileum
+  name: Mobileum India Pvt. Ltd
