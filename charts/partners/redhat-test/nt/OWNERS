@@ -1,0 +1,10 @@
+chart:
+  name: nt
+  shortDescription: vcvf
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: rnargotr
+vendor:
+  label: redhat-test
+  name: Red Hat, Inc.
