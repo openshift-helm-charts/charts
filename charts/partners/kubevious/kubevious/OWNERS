@@ -1,0 +1,10 @@
+chart:
+  name: kubevious
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: kubevious
+vendor:
+  label: kubevious
+  name: Kubevious
