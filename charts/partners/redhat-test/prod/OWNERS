@@ -1,0 +1,10 @@
+chart:
+  name: prod
+  shortDescription: Short repository description
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: kkatare
+vendor:
+  label: redhat-test
+  name: Red Hat, Inc.
