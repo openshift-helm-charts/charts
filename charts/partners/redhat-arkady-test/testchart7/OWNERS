@@ -1,0 +1,10 @@
+chart:
+  name: testchart7
+  shortDescription: This is a short description testchart7
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: ansvu
+vendor:
+  label: redhat-arkady-test
+  name: Red Hat, Inc.
