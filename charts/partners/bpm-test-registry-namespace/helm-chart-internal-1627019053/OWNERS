@@ -1,6 +1,7 @@
 chart:
   name: helm-chart-internal-1627019053
   shortDescription: Test Helm Chart Short DESC
+providerDelivery: false
 publicPgpKey: MTIzNDU2Nzg5MA==
 users:
 - githubUsername: sawalgiriraj
