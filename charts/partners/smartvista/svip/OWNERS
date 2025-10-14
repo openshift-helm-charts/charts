@@ -1,0 +1,9 @@
+chart:
+  name: svip
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: smartvista
+  name: LLC BPC Banking Technologies
