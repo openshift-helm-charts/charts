@@ -1,0 +1,9 @@
+chart:
+  name: fluentdo-agent
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: fluentdo
+  name: FluentDo
