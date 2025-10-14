@@ -1,0 +1,9 @@
+chart:
+  name: smartmom-suite
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: b13-test
+  name: Red Hat GmbH
