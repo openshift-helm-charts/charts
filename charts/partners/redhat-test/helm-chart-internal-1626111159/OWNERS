@@ -1,0 +1,10 @@
+chart:
+  name: helm-chart-internal-1626111159
+  shortDescription: Test Helm Chart Short DESC
+providerDelivery: false
+publicPgpKey: MTIzNDU2Nzg5MA==
+users:
+- githubUsername: sawalgiriraj
+vendor:
+  label: redhat-test
+  name: Red Hat, Inc.
