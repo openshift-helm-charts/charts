@@ -1,6 +1,7 @@
 chart:
   name: helm-testing
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
