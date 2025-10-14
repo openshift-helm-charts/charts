@@ -1,6 +1,7 @@
 chart:
   name: oneshotchart
-  shortDescription: This is a test for one shot automation together with container+chart-verifier+helmchart-pr
+  shortDescription: This is a test for one shot automation together with container,
+    chart-verifier and helmchart-pr
 providerDelivery: true
 publicPgpKey: unknown
 users:
