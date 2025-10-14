@@ -1,9 +1,10 @@
 chart:
   name: ibm-oms-pro-prod
-  shortDescription: null
-publicPgpKey: null
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: ntinvo
 vendor:
   label: ibm
-  name: IBM
+  name: IBM Corporation
