@@ -1,0 +1,10 @@
+chart:
+  name: openshift-bks400-values
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: openshift
+vendor:
+  label: broadpeak
+  name: Broadpeak
