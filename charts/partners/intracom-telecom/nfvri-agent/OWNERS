@@ -1,0 +1,11 @@
+chart:
+  name: nfvri-agent
+  shortDescription: NFV-RI (TM) Agent Helm Chart Repository
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: angelouev
+- githubUsername: victor-timofei
+vendor:
+  label: intracom-telecom
+  name: Intracom S A Telecom Solutions
