@@ -1,0 +1,10 @@
+chart:
+  name: testte
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: jinhli
+vendor:
+  label: jinhli-test
+  name: RED HAT, INC.
