@@ -1,7 +1,8 @@
 chart:
   name: fpga-operator
   shortDescription: Simplifying FPGA management in Kubernetes
-publicPgpKey: null
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: eliaskoromilas
 vendor:
