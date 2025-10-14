@@ -1,9 +1,10 @@
 chart:
   name: helm
   shortDescription: unknown
-providerDelivery: true
+providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: khatare
 vendor:
   label: redhat-test
   name: Red Hat, Inc.
