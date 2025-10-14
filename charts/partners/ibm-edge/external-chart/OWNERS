@@ -1,9 +1,0 @@
-chart:
-  name: external-chart
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: ibm-edge
-  name: Edge Redhat Partner Enablement

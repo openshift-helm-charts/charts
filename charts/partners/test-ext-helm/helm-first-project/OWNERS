@@ -1,9 +1,0 @@
-chart:
-  name: helm-first-project
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: test-ext-helm
-  name: test-user-prod-02

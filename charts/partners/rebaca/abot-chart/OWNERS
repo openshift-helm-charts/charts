@@ -1,9 +1,0 @@
-chart:
-  name: abot-chart
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: rebaca
-  name: Rebaca Technologies

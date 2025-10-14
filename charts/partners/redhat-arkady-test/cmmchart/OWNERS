@@ -1,9 +1,0 @@
-chart:
-  name: cmmchart
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: redhat-arkady-test
-  name: Red Hat, Inc.

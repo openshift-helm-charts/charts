@@ -1,9 +1,0 @@
-chart:
-  name: orion
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: fiware
-  name: FIWARE FOUNDATION E V

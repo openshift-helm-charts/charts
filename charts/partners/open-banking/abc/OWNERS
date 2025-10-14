@@ -1,9 +1,0 @@
-chart:
-  name: abc
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: open-banking
-  name: SAVYINT GROUP JOINT STOCK COMPANY

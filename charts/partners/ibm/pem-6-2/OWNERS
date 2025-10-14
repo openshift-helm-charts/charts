@@ -1,9 +1,0 @@
-chart:
-  name: pem-6-2
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: ibm
-  name: IBM Corporation

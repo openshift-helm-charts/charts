@@ -1,9 +1,0 @@
-chart:
-  name: orchestrator
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: strata-identity
-  name: Strata Identity, Inc.
