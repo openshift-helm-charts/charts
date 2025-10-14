@@ -2,7 +2,7 @@ chart:
   name: sagent
   shortDescription: Granulate sAgent agent
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: shaharshitrit
 vendor:
