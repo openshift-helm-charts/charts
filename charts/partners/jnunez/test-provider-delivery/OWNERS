@@ -1,9 +1,0 @@
-chart:
-  name: test-provider-delivery
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: jnunez
-  name: Red Hat

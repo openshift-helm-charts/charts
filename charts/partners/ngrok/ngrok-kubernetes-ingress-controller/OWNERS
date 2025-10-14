@@ -1,9 +1,0 @@
-chart:
-  name: ngrok-kubernetes-ingress-controller
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: ngrok
-  name: ngrok, Inc.

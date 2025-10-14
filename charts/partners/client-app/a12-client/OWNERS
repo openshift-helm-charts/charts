@@ -1,9 +1,0 @@
-chart:
-  name: a12-client
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: client-app
-  name: mgm technology partners GmbH

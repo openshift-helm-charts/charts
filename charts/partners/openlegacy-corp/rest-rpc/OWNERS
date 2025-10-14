@@ -1,9 +1,0 @@
-chart:
-  name: rest-rpc
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: openlegacy-corp
-  name: OpenLegacy Technologies Ltd

@@ -1,9 +1,0 @@
-chart:
-  name: kedify-agent
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: kedify
-  name: Kedify Inc.
