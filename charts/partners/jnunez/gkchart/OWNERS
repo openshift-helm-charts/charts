@@ -1,0 +1,11 @@
+chart:
+  name: gkchart
+  shortDescription: testhelm
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: ghkibria
+- githubUsername: mmorency2021
+vendor:
+  label: jnunez
+  name: Red Hat
