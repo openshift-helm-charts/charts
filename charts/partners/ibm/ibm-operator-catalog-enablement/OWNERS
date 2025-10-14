@@ -1,10 +1,11 @@
 chart:
   name: ibm-operator-catalog-enablement
-  shortDescription: null
-publicPgpKey: null
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: morstad
 - githubUsername: rondamus
 vendor:
   label: ibm
-  name: IBM
+  name: IBM Corporation
