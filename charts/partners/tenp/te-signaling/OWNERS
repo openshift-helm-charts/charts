@@ -1,7 +1,7 @@
 chart:
   name: te-signaling
-  shortDescription: unknown
-providerDelivery: true
+  shortDescription: Signaling Stack CNF
+providerDelivery: false
 publicPgpKey: unknown
 users:
 - githubUsername: zhanglji
