@@ -1,0 +1,10 @@
+chart:
+  name: csi-nebulon
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: arun@nebulon.com
+vendor:
+  label: nebulon
+  name: Nebulon Inc.
