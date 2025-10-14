@@ -1,0 +1,9 @@
+chart:
+  name: ARCHIVED_smsf-momt
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: telenity
+  name: Telenity Iletisim Sistemleri Sa
