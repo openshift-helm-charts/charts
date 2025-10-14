@@ -1,0 +1,10 @@
+chart:
+  name: hcl-helm-oc
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: pulkitkumar0
+vendor:
+  label: hcl
+  name: HCL America Inc
