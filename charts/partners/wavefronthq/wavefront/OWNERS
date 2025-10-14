@@ -2,7 +2,8 @@ chart:
   name: wavefront
   shortDescription: Deploys the Wavefront Collector for Kubernetes and Wavefront Proxy
     to your Kubernetes cluster
-publicPgpKey: null
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: akodali18
 - githubUsername: johncornish
