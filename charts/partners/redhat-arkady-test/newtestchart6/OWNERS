@@ -1,6 +1,6 @@
 chart:
   name: newtestchart6
-  shortDescription: unknown
+  shortDescription: This is a short description newtestchart6!
 providerDelivery: true
 publicPgpKey: unknown
 users:
