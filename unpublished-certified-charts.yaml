@@ -7975,6 +7975,96 @@ entries:
     urls:
     - N/A
     version: 4.10.16-0
+  ve-touchstone-master:
+  - annotations:
+      category: Touchstone
+      charts.openshift.io/digest: sha256:f73c1f31935e17351fee30313cb95849a2d8a844e4ed759523a454cf6530a1e1
+      charts.openshift.io/lastCertifiedTimestamp: '2025-10-15T06:11:26.75522+00:00'
+      charts.openshift.io/name: Touchstone
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-10-15T06:24:08.473860+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: v5.1.0
+    dependencies:
+    - alias: mysql
+      condition: mysql.enabled
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.0
+    - alias: mongodb
+      condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.5.15
+    - alias: redis
+      condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.3.3
+    - alias: ingress_nginx
+      condition: ingress_nginx.enabled
+      name: nginx-ingress-controller
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.0.7
+    - alias: ve_touchstone_db_helper
+      name: ve-touchstone-db-helper
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_database_upgrade
+      name: ve-touchstone-database-migration
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_api
+      name: ve-touchstone-api
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_engine_observer
+      name: ve-touchstone-engine-observer
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_web
+      name: ve-touchstone-web
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_management_database_upgrade
+      name: ve-touchstone-management-database-migration
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_management_backend
+      name: ve-touchstone-management-backend
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_management_frontend
+      name: ve-touchstone-management-frontend
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_notification_dispatcher
+      condition: ve_notification_dispatcher.enabled
+      name: ve-notification-dispatcher
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_ui
+      name: ve-touchstone-ui
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    - alias: ve_touchstone_ai
+      name: ve-touchstone-ai
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.1.0
+    description: A Helm chart for Deploying Touchstone Portal as well as Touchstone
+      Management Portal End-to-End
+    digest: 99834cd9a72c709d664db7c5ab599b716628942987b74fd872e908505797d37b
+    kubeVersion: '>=1.28.0-0'
+    maintainers:
+    - name: VoerEir AB
+      url: https://github.com/VoerEirAB
+    name: ve-touchstone-master
+    type: application
+    urls:
+    - N/A
+    version: 5.1.0
   vsr:
   - annotations:
       charts.openshift.io/digest: sha256:0505e0601e67ad3a33905d233c72d0302160a6b77a2835fa43e083d0418ed9e9
@@ -8114,4 +8204,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-10-13T09:26:48.809519+00:00'
+generated: '2025-10-15T06:24:08.391286+00:00'
