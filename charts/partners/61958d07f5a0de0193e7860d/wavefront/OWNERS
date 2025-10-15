@@ -1,0 +1,16 @@
+chart:
+  name: wavefront
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: mceldeen
+- githubUsername: mmichael
+- githubUsername: helen-shao
+- githubUsername: josephgee
+- githubUsername: johncornish
+- githubUsername: priyamara
+- githubUsername: akodali18
+vendor:
+  label: 61958d07f5a0de0193e7860d
+  name: Vmware, Inc.
