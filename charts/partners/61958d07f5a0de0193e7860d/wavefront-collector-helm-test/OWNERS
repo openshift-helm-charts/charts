@@ -1,0 +1,10 @@
+chart:
+  name: wavefront-collector-helm-test
+  shortDescription: Wavefront Collector for Kubernetes
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: mamichael@vmware.com
+vendor:
+  label: 61958d07f5a0de0193e7860d
+  name: Vmware, Inc.
