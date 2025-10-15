@@ -1,0 +1,11 @@
+chart:
+  name: cloudguard
+  shortDescription: Check Point CNAPP CloudGuard Helm Chart
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: chkp-alexgl
+- githubUsername: chkp-rigor
+vendor:
+  label: 61cb8b3c80cc9b10e948181e
+  name: Check Point Software Technologies, Inc.
