@@ -1,0 +1,98 @@
+{{- $fullName := include "cryostat.fullname" . -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cryostat.deploymentName" . }}-db
+  labels:
+    {{- include "cryostat.labels" . | nindent 4 }}
+    app.kubernetes.io/component: db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "cryostat.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: db
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.db.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cryostat.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: db
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ printf "%s-%s" .Chart.Name "db" }}
+          securityContext:
+            {{- toYaml (.Values.db).securityContext | nindent 12 }}
+          image: "{{ (.Values.db).image.repository }}:{{ (.Values.db).image.tag }}"
+          imagePullPolicy: {{ (.Values.db).image.pullPolicy }}
+          env:
+          - name: POSTGRESQL_USER
+            value: cryostat
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (printf "%s-db" .Release.Name) .Values.core.databaseSecretName }}
+                key: CONNECTION_KEY
+                optional: false
+          - name: POSTGRESQL_DATABASE
+            value: cryostat
+          - name: PG_ENCRYPT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (printf "%s-db" .Release.Name) .Values.core.databaseSecretName }}
+                key: ENCRYPTION_KEY
+                optional: false
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: {{ .Chart.Name }}-db
+            subPath: postgres
+          readinessProbe:
+            exec:
+              command:
+              - pg_isready
+              - -U
+              - cryostat
+              - -d
+              - cryostat
+          resources:
+            {{- toYaml (.Values.db).resources | nindent 12 }}
+      {{- with (default .Values.nodeSelector .Values.db.nodeSelector) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.affinity .Values.db.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.tolerations .Values.db.tolerations) }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if ((.Values.db.pvc).enabled) }}
+      - name: {{ .Chart.Name }}-db
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-db
+      {{- end }}
+      {{- if not ((.Values.db.pvc).enabled) }}
+      - name: {{ .Chart.Name }}-db
+        emptyDir: {}
+      {{- end }}

@@ -1,0 +1,393 @@
+suite: test storage_deployment.yaml
+templates:
+  - storage_deployment.yaml
+
+tests:
+  - it: should verify general deployment settings
+    asserts:
+      - equal:
+          path: kind
+          value: Deployment
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cryostat-v4-storage
+      - equal:
+          path: spec.replicas
+          value: 1
+      - equal:
+          path: spec.strategy.type
+          value: Recreate
+      - equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/component: storage
+            app.kubernetes.io/part-of: cryostat
+      - equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/component: storage
+            app.kubernetes.io/part-of: cryostat
+      - notExists:
+          path: spec.template.spec.serviceAccountName
+      - equal:
+          path: spec.template.spec.securityContext.runAsNonRoot
+          value: true
+      - equal:
+          path: spec.template.spec.securityContext.seccompProfile.type
+          value: RuntimeDefault
+      - equal:
+          path: metadata.labels
+          value:
+            helm.sh/chart: cryostat-2.0.3
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/version: "4.0.3-redhat"
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/component: storage
+            app.kubernetes.io/part-of: cryostat
+
+  - it: should validate cryostat-storage settings
+    asserts:
+      - exists:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')]
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].securityContext.allowPrivilegeEscalation
+          value: false
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].securityContext.capabilities.drop
+          value:
+            - ALL
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].image
+          value: "registry.redhat.io/cryostat/cryostat-storage-rhel9"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].imagePullPolicy
+          value: "IfNotPresent"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].env[?(@.name=='CRYOSTAT_BUCKETS')].value
+          value: "archivedrecordings,archivedreports,eventtemplates,probes"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].env[?(@.name=='CRYOSTAT_ACCESS_KEY')].value
+          value: "cryostat"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].env[?(@.name=='CRYOSTAT_SECRET_KEY')].valueFrom.secretKeyRef
+          value:
+              name: "RELEASE-NAME-storage-secret"
+              key: "STORAGE_ACCESS_KEY"
+              optional: false
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].env[?(@.name=='DATA_DIR')].value
+          value: "/data"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].env[?(@.name=='IP_BIND')].value
+          value: 0.0.0.0
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].env[?(@.name=='REST_ENCRYPTION_ENABLE')].value
+          value: "1"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].ports[0].containerPort
+          value: 8333
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].ports[0].protocol
+          value: "TCP"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].volumeMounts[0].mountPath
+          value: "/data"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].volumeMounts[0].name
+          value: "cryostat-storage"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].volumeMounts[0].subPath
+          value: "seaweed"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].livenessProbe.httpGet.path
+          value: "/status"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].livenessProbe.httpGet.port
+          value: 8333
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].livenessProbe.periodSeconds
+          value: 10
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].livenessProbe.failureThreshold
+          value: 2
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].startupProbe.httpGet.path
+          value: "/status"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].startupProbe.httpGet.port
+          value: 8333
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].startupProbe.periodSeconds
+          value: 10
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].startupProbe.failureThreshold
+          value: 9
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].resources
+          value:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+
+  - it: should allow disabling at-rest encryption
+    set:
+      storage:
+        encryption:
+          enabled: false
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].env[?(@.name=='REST_ENCRYPTION_ENABLE')].value
+          value: "0"
+
+  - it: should set resource overrides
+    set:
+      storage:
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+          requests:
+            cpu: 4000m
+            memory: 2Gi
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].resources
+          value:
+            limits:
+              cpu: 2000m
+              memory: 1Gi
+            requests:
+              cpu: 4000m
+              memory: 2Gi
+
+  - it: should set PersistentVolumeClaim (pvc) reference
+    set:
+      storage:
+        pvc:
+          enabled: true
+    asserts:
+      - exists:
+          path: spec.template.spec.volumes[?(@.name=='cryostat-storage')]
+      - equal:
+          path: spec.template.spec.volumes[?(@.name=='cryostat-storage')]
+          value:
+            name: cryostat-storage
+            persistentVolumeClaim:
+              claimName: RELEASE-NAME-storage
+
+  - it: should validate volumes and volume mounts
+    asserts:
+      - exists:
+          path: spec.template.spec.volumes[?(@.name=='cryostat-storage')]
+      - equal:
+          path: spec.template.spec.volumes[?(@.name=='cryostat-storage')]
+          value:
+            name: cryostat-storage
+            emptyDir: {}
+      - exists:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].volumeMounts[?(@.mountPath=='/data')]
+
+  - it: should set image pull secrets if specified
+    set:
+      imagePullSecrets:
+        - name: myregistrykey
+    asserts:
+      - equal:
+          path: spec.template.spec.imagePullSecrets[0].name
+          value: "myregistrykey"
+
+  - it: should apply Kubernetes specific settings when configured
+    set:
+      nodeSelector:
+        disktype: ssd
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+      tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "value"
+        effect: "NoSchedule"
+    asserts:
+      - exists:
+          path: spec.template.spec.nodeSelector
+      - exists:
+          path: spec.template.spec.affinity
+      - exists:
+          path: spec.template.spec.tolerations
+
+  - it: should accept specific nodeSelector setting
+    set:
+      storage.nodeSelector:
+        diskType: ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            diskType: ssd
+
+  - it: should prefer specific nodeSelector over general
+    set:
+      nodeSelector:
+        disktype: hdd
+      storage.nodeSelector:
+        diskType: ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            diskType: ssd
+
+  - it: should accept specific tolerations setting
+    set:
+      storage.tolerations:
+        - key: "key1"
+          operator: "Equal"
+          value: "value1"
+          effect: "NoSchedule"
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: "key1"
+              operator: "Equal"
+              value: "value1"
+              effect: "NoSchedule"
+
+  - it: should prefer specific tolerations over general
+    set:
+      tolerations:
+        - key: "key1"
+          operator: "Equal"
+          value: "value1"
+          effect: "NoSchedule"
+      storage.tolerations:
+        - key: "key2"
+          operator: "Equal"
+          value: "value2"
+          effect: "NoSchedule"
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: "key2"
+              operator: "Equal"
+              value: "value2"
+              effect: "NoSchedule"
+
+  - it: should accept specific affinity setting
+    set:
+      storage.affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.affinity
+          value:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: disktype
+                    operator: In
+                    values:
+                    - ssd
+
+  - it: should prefer specific affinity over general
+    set:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+      storage.affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.affinity
+          value:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: disktype
+                    operator: In
+                    values:
+                    - ssd
+
+  - it: should verify image pull policies for development snapshots
+    set:
+      core.image.tag: "4.0.3-snapshot"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].imagePullPolicy
+          value: "Always"
+
+  - it: should verify image pull policies for release versions
+    set:
+      storage.image.pullPolicy: "IfNotPresent"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-storage')].imagePullPolicy
+          value: "IfNotPresent"
+
+  - it: should set default podAnnotations
+    set:
+      podAnnotations:
+        foo: bar
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            foo: bar
+
+  - it: should set pod-specific podAnnotations
+    set:
+      storage.podAnnotations:
+        foo: bar
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            foo: bar
+
+  - it: should set merge pod-specific and default podAnnotations
+    set:
+      storage.podAnnotations:
+        foo: bar
+      podAnnotations:
+        alice: bob
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            alice: bob
+            foo: bar

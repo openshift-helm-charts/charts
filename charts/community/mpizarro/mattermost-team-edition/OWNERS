@@ -1,0 +1,9 @@
+chart:
+  name: mattermost-team-edition
+  shortDescription: Mattermost Team Edition is an open-source, self-hosted messaging platform for teams. It offers a free, community-driven solution for secure, private collaboration. Features include group and direct messaging, file sharing, and powerful search, giving your team a modern communication hub.
+publicPgpKey: null
+users:
+- githubUsername: maximilianoPizarro
+vendor:
+  label: mpizarro
+  name: Maximiliano Pizarro

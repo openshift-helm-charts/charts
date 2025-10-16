@@ -1,9 +1,10 @@
 chart:
   name: ibm-spectrum-protect-plus-prod
-  shortDescription: null
-publicPgpKey: null
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: emcollin
 vendor:
   label: ibm
-  name: IBM
+  name: IBM Corporation

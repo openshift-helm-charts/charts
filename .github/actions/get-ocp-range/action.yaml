@@ -23,11 +23,13 @@ runs:
     - name: Run get-ocp-range
       id: run-get-ocp-range
       shell: bash
+      env:
+        KUBEVERSION_RANGE: ${{ inputs.kube-version-range }}
       run: |
-        echo "::debug::Received kubeVersionRange to translate '${{ inputs.kube-version-range }}'"
-        OCP_VERSION_RANGE=$(get-ocp-range '${{ inputs.kube-version-range }}')
-        echo "ocp-version-range=$OCP_VERSION_RANGE" >> $GITHUB_OUTPUT
-        echo "::debug::Successfully translated kubeVersionRange to OCPVersionRange $OCP_VERSION_RANGE"
+        echo "::debug::Received kubeVersionRange to translate \"${KUBEVERSION_RANGE}\""
+        OCP_VERSION_RANGE=$(get-ocp-range "${KUBEVERSION_RANGE}")
+        echo "ocp-version-range=${OCP_VERSION_RANGE}" >> $GITHUB_OUTPUT
+        echo "::debug::Successfully translated kubeVersionRange to OCPVersionRange ${OCP_VERSION_RANGE}"
 
     - name: Display error message if get-ocp-range failed
       if: ${{ failure() && steps.run-get-ocp-range.outcome == 'failure' }}

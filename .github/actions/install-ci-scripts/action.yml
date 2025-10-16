@@ -1,0 +1,33 @@
+name: Install our CI scripts
+description: |
+  Handles installation and caching/restore of the CI scripts in a virtualenv.
+inputs:
+  working-directory:
+    description: Basedir in which to save / restore cache and install venv.
+    default: './'
+    required: false
+  python-version:
+    description: Installed Python version
+    required: true
+runs:
+  using: composite
+  steps:
+  # This attempts to restore the virtualenv from a GitHub cache with the corresponding cache key.
+  # On cache-miss, this automatically adds a post step that creates a cache from this path and using this cache key.
+  - name: Cache virtualenv
+    id: cache
+    uses: actions/cache@v4
+    with:
+      key: venv-${{ runner.os }}-${{ inputs.python-version }}-${{ hashFiles('scripts/requirements.txt') }}
+      path: ${{ inputs.working-directory }}/ve1
+
+  - name: Setup venv on cache-miss
+    if: steps.cache.outputs.cache-hit != 'true'
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+    run: |
+      # set up python
+      python3 -m venv ve1
+      cd scripts
+      ../ve1/bin/pip3 install -r requirements.txt
+      ../ve1/bin/pip3 install .

@@ -4,20 +4,15 @@ approvers:
 - komish
 - jsm84
 - jomkz
-- baijum
-- mmulholla
-- jasperchui
-- dperaza4dustbit
+- mgoerens
+- OchiengEd
 - openshift-helm-charts-bot
-- tisutisu
-- Kartikey-star
+- acornett21
 
 reviewers:
 - komish
 - jsm84
 - jomkz
-- baijum
-- mmulholla
-- jasperchui
-- dperaza4dustbit
-- Kartikey-star
+- mgoerens
+- OchiengEd
+- acornett21

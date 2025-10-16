@@ -1,8 +1,9 @@
 chart:
   name: ibm-connect-direct
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:
   label: ibm
-  name: IBM
+  name: IBM Corporation

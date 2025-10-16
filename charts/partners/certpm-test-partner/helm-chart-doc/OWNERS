@@ -1,6 +1,7 @@
 chart:
   name: helm-chart-doc
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:

@@ -1,0 +1,737 @@
+suite: test cryostat_deployment.yaml
+templates:
+  - cryostat_deployment.yaml
+
+tests:
+  - it: should verify general deployment settings
+    asserts:
+      - equal:
+          path: kind
+          value: Deployment
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cryostat-v4
+      - equal:
+          path: spec.replicas
+          value: 1
+      - equal:
+          path: spec.strategy.type
+          value: Recreate
+      - equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/component: cryostat
+            app.kubernetes.io/part-of: cryostat
+      - equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/component: cryostat
+            app.kubernetes.io/part-of: cryostat
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: RELEASE-NAME-cryostat
+      - equal:
+          path: spec.template.spec.securityContext.runAsNonRoot
+          value: true
+      - equal:
+          path: spec.template.spec.securityContext.seccompProfile.type
+          value: RuntimeDefault
+      - equal:
+          path: metadata.labels
+          value:
+            helm.sh/chart: cryostat-2.0.2
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/version: "4.0.2-redhat"
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/component: cryostat
+            app.kubernetes.io/part-of: cryostat
+
+  - it: should validate all container settings including environment variables and security contexts
+    asserts:
+      - exists:
+          path: spec.template.spec.containers[?(@.name=='cryostat')]
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].image
+          value: "registry.redhat.io/cryostat/cryostat-rhel9:4.0.2"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].image
+          value: "registry.redhat.io/cryostat/cryostat-ose-oauth-proxy-rhel9:4.0.2"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_HTTP_PORT')].value
+          value: "8181"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_LOG_LEVEL')].value
+          value: "INFO"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_HTTP_HOST')].value
+          value: "localhost"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_HTTP_PROXY_PROXY_ADDRESS_FORWARDING')].value
+          value: "true"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_HTTP_PROXY_ALLOW_X_FORWARDED')].value
+          value: "true"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_HOST')].value
+          value: "true"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_PREFIX')].value
+          value: "true"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION')].value
+          value: "none"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_HIBERNATE_ORM_SQL_LOAD_SCRIPT')].value
+          value: "no-file"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_DATASOURCE_USERNAME')].value
+          value: "cryostat"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_DATASOURCE_PASSWORD')].valueFrom.secretKeyRef
+          value:
+            key: "CONNECTION_KEY"
+            name: "RELEASE-NAME-db"
+            optional: false
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_DATASOURCE_JDBC_URL')].value
+          value: "jdbc:postgresql://RELEASE-NAME-cryostat-db:5432/cryostat"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='STORAGE_BUCKETS_ARCHIVES_NAME')].value
+          value: "archivedrecordings"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_S3_ENDPOINT_OVERRIDE')].value
+          value: "http://RELEASE-NAME-cryostat-storage:8333"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_S3_PATH_STYLE_ACCESS')].value
+          value: "true"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_S3_AWS_REGION')].value
+          value: "us-east-1"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_S3_AWS_CREDENTIALS_TYPE')].value
+          value: "static"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_S3_AWS_CREDENTIALS_STATIC_PROVIDER_ACCESS_KEY_ID')].value
+          value: "cryostat"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='AWS_ACCESS_KEY_ID')].value
+          value: $(QUARKUS_S3_AWS_CREDENTIALS_STATIC_PROVIDER_ACCESS_KEY_ID)
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_S3_AWS_CREDENTIALS_STATIC_PROVIDER_SECRET_ACCESS_KEY')].valueFrom.secretKeyRef
+          value:
+              key: "STORAGE_ACCESS_KEY"
+              name: "RELEASE-NAME-storage-secret"
+              optional: false
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='AWS_SECRET_ACCESS_KEY')].value
+          value: $(QUARKUS_S3_AWS_CREDENTIALS_STATIC_PROVIDER_SECRET_ACCESS_KEY)
+      - notExists:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_REST_CLIENT_REPORTS_URL')].value
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='GRAFANA_DATASOURCE_URL')].value
+          value: "http://localhost:8800"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='GRAFANA_DASHBOARD_URL')].value
+          value: "http://localhost:3000"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='GRAFANA_DASHBOARD_EXT_URL')].value
+          value: "/grafana/"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='CRYOSTAT_DISCOVERY_KUBERNETES_ENABLED')].value
+          value: "true"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='CRYOSTAT_DISCOVERY_KUBERNETES_NAMESPACES')].value
+          value: "NAMESPACE"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='CRYOSTAT_DISCOVERY_KUBERNETES_PORT_NAMES')].value
+          value: "jfr-jmx"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='CRYOSTAT_DISCOVERY_KUBERNETES_PORT_NUMBERS')].value
+          value: "9091"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].ports[0].containerPort
+          value: 8181
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].ports[0].protocol
+          value: "TCP"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].livenessProbe.exec.command
+          value:
+            - curl
+            - --fail
+            - http://localhost:8181/health/liveness
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].startupProbe.exec.command
+          value:
+            - curl
+            - --fail
+            - http://localhost:8181/health/liveness
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].startupProbe.failureThreshold
+          value: 18
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].resources
+          value:
+            requests:
+              cpu: 500m
+              memory: 384Mi
+      - notExists:
+          path: spec.template.spec.contains[?(@.name=='cryostat')].volumeMounts
+
+  - it: should set log level
+    set:
+      core:
+        debug:
+          log:
+            level: TRACE
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_LOG_LEVEL')].value
+          value: TRACE
+
+  - it: should set environment variable if sidecar report generator is enabled
+    set:
+      reports:
+        replicas: 1
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_REST_CLIENT_REPORTS_URL')].value
+          value: http://cryostat:$(REPORTS_PASS_SECRET_KEY)@RELEASE-NAME-cryostat-reports.NAMESPACE.svc:10001
+
+  - it: should set environment variable if sidecar report generator is enabled in OpenShift with HTTPS
+    set:
+      reports:
+        replicas: 1
+      authentication:
+        openshift:
+          enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].env[?(@.name=='QUARKUS_REST_CLIENT_REPORTS_URL')].value
+          value: https://cryostat:$(REPORTS_PASS_SECRET_KEY)@RELEASE-NAME-cryostat-reports.NAMESPACE.svc:10001
+
+  - it: should set oauth2proxy resource overrides
+    set:
+      oauth2Proxy:
+        resources:
+          limits:
+            cpu: 4000m
+            memory: 1Gi
+          requests:
+            cpu: 4000m
+            memory: 2Gi
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].resources
+          value:
+            limits:
+              cpu: 4000m
+              memory: 1Gi
+            requests:
+              cpu: 4000m
+              memory: 2Gi
+
+  - it: should set openshiftOauthProxy resource overrides
+    set:
+      authentication:
+        openshift:
+          enabled: true
+      openshiftOauthProxy:
+        resources:
+          limits:
+            cpu: 4000m
+            memory: 1Gi
+          requests:
+            cpu: 4000m
+            memory: 2Gi
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].resources
+          value:
+            limits:
+              cpu: 4000m
+              memory: 1Gi
+            requests:
+              cpu: 4000m
+              memory: 2Gi
+
+  - it: should set cryostat resource overrides
+    set:
+      core:
+        resources:
+          limits:
+            cpu: 4000m
+            memory: 1Gi
+          requests:
+            cpu: 4000m
+            memory: 2Gi
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].resources
+          value:
+            limits:
+              cpu: 4000m
+              memory: 1Gi
+            requests:
+              cpu: 4000m
+              memory: 2Gi
+
+  - it: should set grafana resource overrides
+    set:
+      grafana:
+        resources:
+          limits:
+            cpu: 4000m
+            memory: 1Gi
+          requests:
+            cpu: 4000m
+            memory: 2Gi
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].resources
+          value:
+            limits:
+              cpu: 4000m
+              memory: 1Gi
+            requests:
+              cpu: 4000m
+              memory: 2Gi
+
+  - it: should set jfr-datasource resource overrides
+    set:
+      datasource:
+        resources:
+          limits:
+            cpu: 4000m
+            memory: 1Gi
+          requests:
+            cpu: 4000m
+            memory: 2Gi
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].resources
+          value:
+            limits:
+              cpu: 4000m
+              memory: 1Gi
+            requests:
+              cpu: 4000m
+              memory: 2Gi
+
+  - it: should validate cryostat-grafana settings
+    asserts:
+      - exists:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')]
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].securityContext.allowPrivilegeEscalation
+          value: false
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].securityContext.capabilities.drop
+          value:
+            - ALL
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].image
+          value: "registry.redhat.io/cryostat/cryostat-grafana-dashboard-rhel9"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].imagePullPolicy
+          value: "IfNotPresent"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].env[?(@.name=='GF_AUTH_ANONYMOUS_ENABLED')].value
+          value: "true"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].env[?(@.name=='GF_SERVER_DOMAIN')].value
+          value: "localhost"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].env[?(@.name=='GF_SERVER_ROOT_URL')].value
+          value: "http://localhost:4180/grafana/"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].env[?(@.name=='GF_SERVER_SERVE_FROM_SUB_PATH')].value
+          value: "true"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].env[?(@.name=='JFR_DATASOURCE_URL')].value
+          value: "http://localhost:8800"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].ports[0].containerPort
+          value: 3000
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].ports[0].protocol
+          value: "TCP"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].livenessProbe.httpGet.path
+          value: "/api/health"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].livenessProbe.httpGet.port
+          value: 3000
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].resources
+          value:
+            requests:
+              cpu: 25m
+              memory: 80Mi
+
+  - it: should validate cryostat-jfr-datasource settings
+    asserts:
+      - exists:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')]
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].securityContext.allowPrivilegeEscalation
+          value: false
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].securityContext.capabilities.drop
+          value:
+            - ALL
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].image
+          value: "registry.redhat.io/cryostat/jfr-datasource-rhel9"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].imagePullPolicy
+          value: "IfNotPresent"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].env[?(@.name=='LISTEN_HOST')].value
+          value: "localhost"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].env[?(@.name=='QUARKUS_HTTP_PORT')].value
+          value: "8800"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].ports[0].containerPort
+          value: 8800
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].ports[0].protocol
+          value: "TCP"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].livenessProbe.exec.command
+          value:
+              - curl
+              - --fail
+              - http://localhost:8800
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].resources
+          value:
+            requests:
+              cpu: 200m
+              memory: 200Mi
+
+  - it: should validate volumes and volume mounts
+    asserts:
+      - lengthEqual:
+          count: 1
+          path: spec.template.spec.volumes
+      - exists:
+          path: spec.template.spec.volumes[?(@.name=='alpha-config')]
+      - exists:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].volumeMounts[?(@.mountPath=='/etc/oauth2_proxy/alpha_config')]
+
+  - it: should validate volumes and volume mounts with oauth2-proxy self-signed TLS enabled
+    set:
+      oauth2Proxy.tls.selfSigned.enabled: true
+    asserts:
+      - lengthEqual:
+          count: 2
+          path: spec.template.spec.volumes
+      - exists:
+          path: spec.template.spec.volumes[?(@.name=='alpha-config')]
+      - exists:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].volumeMounts[?(@.mountPath=='/etc/oauth2_proxy/alpha_config')]
+      - exists:
+          path: spec.template.spec.volumes[?(@.name=='RELEASE-NAME-oauth2proxy-tls')]
+      - exists:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].volumeMounts[?(@.mountPath=='/etc/tls/private')]
+
+  - it: should set image pull secrets if specified
+    set:
+      imagePullSecrets:
+        - name: myregistrykey
+    asserts:
+      - equal:
+          path: spec.template.spec.imagePullSecrets[0].name
+          value: "myregistrykey"
+
+  - it: should configure the OpenShift OAuth Proxy when authentication.openshift is enabled
+    set:
+      authentication.openshift.enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].image
+          value: "registry.redhat.io/cryostat/cryostat-ose-oauth-proxy-rhel9:4.0.2"
+
+  - it: should configure the OAuth2 Proxy when OpenShift OAuth is disabled and OAuth2 is enabled
+    set:
+      authentication.openshift.enabled: false
+      authentication.oauth2.enabled: true
+    asserts:
+    - exists:
+        path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')]
+    - equal:
+        path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].image
+        value: ""
+
+  - it: should apply Kubernetes specific settings when configured
+    set:
+      nodeSelector:
+        disktype: ssd
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+      tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "value"
+        effect: "NoSchedule"
+    asserts:
+      - exists:
+          path: spec.template.spec.nodeSelector
+      - exists:
+          path: spec.template.spec.affinity
+      - exists:
+          path: spec.template.spec.tolerations
+
+  - it: should accept specific nodeSelector setting
+    set:
+      core.nodeSelector:
+        diskType: ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            diskType: ssd
+
+  - it: should prefer specific nodeSelector over general
+    set:
+      nodeSelector:
+        disktype: hdd
+      core.nodeSelector:
+        diskType: ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            diskType: ssd
+
+  - it: should accept specific tolerations setting
+    set:
+      core.tolerations:
+        - key: "key1"
+          operator: "Equal"
+          value: "value1"
+          effect: "NoSchedule"
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: "key1"
+              operator: "Equal"
+              value: "value1"
+              effect: "NoSchedule"
+
+  - it: should prefer specific tolerations over general
+    set:
+      tolerations:
+        - key: "key1"
+          operator: "Equal"
+          value: "value1"
+          effect: "NoSchedule"
+      core.tolerations:
+        - key: "key2"
+          operator: "Equal"
+          value: "value2"
+          effect: "NoSchedule"
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: "key2"
+              operator: "Equal"
+              value: "value2"
+              effect: "NoSchedule"
+
+  - it: should accept specific affinity setting
+    set:
+      core.affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.affinity
+          value:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: disktype
+                    operator: In
+                    values:
+                    - ssd
+
+  - it: should prefer specific affinity over general
+    set:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+      core.affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.affinity
+          value:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: disktype
+                    operator: In
+                    values:
+                    - ssd
+
+  - it: should verify image pull policies for development snapshots
+    set:
+      core.image.tag: "4.0.2"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].imagePullPolicy
+          value: IfNotPresent
+
+  - it: should verify image pull policies for release versions
+    set:
+      core.image.tag: "4.1.0"
+      core.image.pullPolicy: "IfNotPresent"
+      oauth2Proxy.image.pullPolicy: "IfNotPresent"
+      grafana.image.pullPolicy: "IfNotPresent"
+      db.image.pullPolicy: "IfNotPresent"
+      datasource.image.pullPolicy: "IfNotPresent"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].imagePullPolicy
+          value: "IfNotPresent"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-authproxy')].imagePullPolicy
+          value: "IfNotPresent"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-grafana')].imagePullPolicy
+          value: "IfNotPresent"
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat-jfr-datasource')].imagePullPolicy
+          value: "IfNotPresent"
+
+  - it: should add volume mounts for declarative event templates
+    set:
+      core.config.eventTemplates.configMapNames: ['a', 'b']
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].volumeMounts
+          value:
+            - name: a
+              mountPath: /opt/cryostat.d/templates.d/a
+              readOnly: true
+            - name: b
+              mountPath: /opt/cryostat.d/templates.d/b
+              readOnly: true
+      - equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: alpha-config
+              configMap:
+                name: RELEASE-NAME-alpha-config
+            - name: a
+              configMap:
+                name: a
+            - name: b
+              configMap:
+                name: b
+
+  - it: should add volume mounts for declarative TLS truststore
+    set:
+      core.config.tlsTruststore.secretNames: ['a', 'b']
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[?(@.name=='cryostat')].volumeMounts
+          value:
+            - name: a
+              mountPath: /truststore/a
+              readOnly: true
+            - name: b
+              mountPath: /truststore/b
+              readOnly: true
+      - equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: alpha-config
+              configMap:
+                name: RELEASE-NAME-alpha-config
+            - name: a
+              secret:
+                secretName: a
+            - name: b
+              secret:
+                secretName: b
+
+  - it: should set default podAnnotations
+    set:
+      podAnnotations:
+        foo: bar
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            foo: bar
+
+  - it: should set pod-specific podAnnotations
+    set:
+      core.podAnnotations:
+        foo: bar
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            foo: bar
+
+  - it: should set merge pod-specific and default podAnnotations
+    set:
+      core.podAnnotations:
+        foo: bar
+      podAnnotations:
+        alice: bob
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            alice: bob
+            foo: bar

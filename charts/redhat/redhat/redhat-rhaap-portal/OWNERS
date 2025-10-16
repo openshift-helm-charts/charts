@@ -1,0 +1,13 @@
+chart:
+  name: redhat-rhaap-portal
+  shortDescription: "A Helm chart for deploying a self-service automation portal"
+publicPgpKey: null
+users:
+  - githubUsername: aap-portal-bot
+  - githubUsername: abhikdps
+  - githubUsername: alisonlhart
+  - githubUsername: audgirka
+  - githubUsername: ganeshrn
+vendor:
+  label: redhat
+  name: Red Hat

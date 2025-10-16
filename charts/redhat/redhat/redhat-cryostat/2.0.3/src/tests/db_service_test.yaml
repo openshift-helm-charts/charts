@@ -1,0 +1,61 @@
+suite: test db_service.yaml
+templates:
+  - db_service.yaml
+
+tests:
+  - it: should create a Service with the correct default settings
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: kind
+          value: Service
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cryostat-db
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - equal:
+          path: spec.ports[0].port
+          value: 5432
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/version: "4.0.3-redhat"
+            helm.sh/chart: cryostat-2.0.3
+            app.kubernetes.io/component: db
+            app.kubernetes.io/part-of: cryostat
+
+  - it: should create a Service with the correct settings overrides
+    set:
+      db.service.type: NodeIP
+      db.service.port: 8080
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: kind
+          value: Service
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cryostat-db
+      - equal:
+          path: spec.type
+          value: NodeIP
+      - equal:
+          path: spec.ports[0].port
+          value: 8080
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/version: "4.0.3-redhat"
+            helm.sh/chart: cryostat-2.0.3
+            app.kubernetes.io/component: db
+            app.kubernetes.io/part-of: cryostat

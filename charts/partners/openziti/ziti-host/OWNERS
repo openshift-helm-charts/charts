@@ -2,7 +2,7 @@ chart:
   name: ziti-host
   shortDescription: Expose cluster services with Ziti
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: qrkourier
 - githubUsername: dovholuknf

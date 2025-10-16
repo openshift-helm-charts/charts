@@ -36,22 +36,27 @@ runs:
   - name: Check lockfile for chart lock
     id: check-for-chart-lock
     shell: bash
+    env:
+      GENERATED_LOCKFILE_PATH: ${{ steps.generate-locks.outputs.lockfile-path }}
+      TARGET_CHART_NAME: ${{ inputs.chart-name }}
     run: |
       set -e
       echo "Ensuring expected key exists in lock JSON."
-      jq --exit-status .packages < ${{ steps.generate-locks.outputs.lockfile-path }}
+      jq --exit-status .packages < "${GENERATED_LOCKFILE_PATH}"
 
-      echo "Checking if chart '${{ inputs.chart-name }}' is locked."
-      LOCK_PATH=$(jq -r '.packages."${{ inputs.chart-name }}"' < ${{ steps.generate-locks.outputs.lockfile-path }})
+      echo "Checking if chart \"${TARGET_CHART_NAME}\" is locked."
+      LOCK_TARGET=$(jq -r '.packages.[$chartname]' --arg chartname "${TARGET_CHART_NAME}" < "${GENERATED_LOCKFILE_PATH}")
 
-      echo "locked-to-path=${LOCK_PATH}" | tee -a $GITHUB_OUTPUT
+      echo "locked-to-path=${LOCK_TARGET}" | tee -a $GITHUB_OUTPUT
 
   # Defaults to a locked state as a safeguard.
   - name: Set lock state output
     shell: bash
     id: set-lock-state
+    env:
+      IS_LOCKED: ${{ steps.check-for-chart-lock.outputs.locked-to-path != 'null' }}
     run: |
-      echo "chart-is-locked=${{ steps.check-for-chart-lock.outputs.locked-to-path != 'null' }}" | tee -a $GITHUB_OUTPUT
+      echo "chart-is-locked=${IS_LOCKED}" | tee -a $GITHUB_OUTPUT
 
   - name: Fail if requested and the chart is locked
     shell: bash

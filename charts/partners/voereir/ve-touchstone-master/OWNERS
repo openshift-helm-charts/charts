@@ -1,0 +1,10 @@
+chart:
+  name: ve-touchstone-master
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: amitpd
+vendor:
+  label: voereir
+  name: VoerEir AB

@@ -1,7 +1,8 @@
 chart:
   name: demo-helm
   shortDescription: test
-publicPgpKey: null
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: rhm-samples
 - githubUsername: demo123

@@ -1,0 +1,46 @@
+apiVersion: v2
+name: redhat-cryostat
+description: Securely manage JFR recordings for your containerized Java workloads
+
+type: application
+
+version: "2.0.2"
+
+kubeVersion: ">= 1.25.0-0"
+
+appVersion: "4.0.2-redhat"
+
+home: "https://cryostat.io"
+
+icon: "https://raw.githubusercontent.com/cryostatio/cryostat-helm/main/docs/images/cryostat-icon.svg"
+
+annotations:
+  charts.openshift.io/archs: x86_64, aarch64
+  charts.openshift.io/name: Red Hat build of Cryostat
+  charts.openshift.io/provider: Red Hat
+  charts.openshift.io/supportURL: https://github.com/cryostatio/cryostat-helm
+
+keywords:
+- flightrecorder
+- java
+- jdk
+- jfr
+- jmc
+- missioncontrol
+- monitoring
+- profiling
+- diagnostic
+
+sources:
+- https://github.com/cryostatio/cryostat
+- https://github.com/cryostatio/cryostat-core
+- https://github.com/cryostatio/cryostat-web
+- https://github.com/cryostatio/jfr-datasource
+- https://github.com/cryostatio/cryostat-grafana-dashboard
+- https://github.com/cryostatio/cryostat-db
+- https://github.com/cryostatio/cryostat-storage
+- https://github.com/cryostatio/openshift-oauth-proxy
+
+maintainers:
+- name: The Cryostat Community
+  url: https://groups.google.com/g/cryostat-development

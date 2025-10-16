@@ -180,21 +180,35 @@ class Chart:
 
 @dataclass
 class Report:
+    """Contains metadata about the report.yaml"""
+
+    # Whether the PR contains a report.yaml
     found: bool = False
+    # Whether the report.yaml is signed (signaled by the presence or absence of report.yaml.asc)
     signed: bool = False
+    # The path to the report.yaml, e.g. charts/parnters/hashicorp/vault/0.29.1/report.yaml
     path: str = None
 
 
 @dataclass
 class Source:
+    """Contains metadata about the chart's source"""
+
+    # Whether the PR contains the Helm chart's source
     found: bool = False
-    path: str = None  # Path to the Chart.yaml
+    # The path to the base directory containing the source, e.g. charts/parnters/hashicorp/vault/0.29.1/src
+    path: str = None
 
 
 @dataclass
 class Tarball:
+    """Contains metadata about the tarball"""
+
+    # Whether the PR contains a tarball
     found: bool = False
+    # The path to the tarball, e.g. charts/parnters/hashicorp/vault/0.29.1/vault-0.29.1.tgz
     path: str = None
+    # The name of the provenance file, if provided
     provenance: str = None
 
 
@@ -293,6 +307,10 @@ class Submission:
         * The tarball file is named incorrectly
 
         """
+        if not self.modified_files:
+            msg = "PR doesn't contain any files"
+            raise SubmissionError(msg)
+
         for file_path in self.modified_files:
             file_category, match = get_file_type(file_path)
             if file_category == "report":
@@ -334,7 +352,7 @@ class Submission:
         """
         if os.path.basename(file_path) == "Chart.yaml":
             self.source.found = True
-            self.source.path = file_path
+            self.source.path = os.path.dirname(file_path)
 
     def set_tarball(self, file_path: str, tarball_match: re.Match[str]):
         """Action to take when a file related to the tarball is found.

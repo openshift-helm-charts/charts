@@ -2,7 +2,7 @@ chart:
   name: exateapigator
   shortDescription: eXate APIgator deployment
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: zeeshanAt
 vendor:

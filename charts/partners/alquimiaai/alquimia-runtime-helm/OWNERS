@@ -4,8 +4,7 @@ chart:
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: jlcruzfiveit
 - githubUsername: joseluiscruz-alquimiaai
 vendor:
   label: alquimiaai
-  name: Alquimia S.A.
+  name: Alquimia AI US Corp.

@@ -1,0 +1,195 @@
+suite: test cryostat_service.yaml
+templates:
+  - cryostat_service.yaml
+
+tests:
+  - it: should create a Service with the correct settings
+    set:
+      core.service.type: ClusterIP
+      core.service.httpPort: 8080
+      authentication.openshift.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: kind
+          value: Service
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cryostat
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - lengthEqual:
+          path: spec.ports
+          count: 1
+      - equal:
+          path: spec.ports[0].port
+          value: 8080
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 4180
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+      - equal:
+          path: spec.ports[0].name
+          value: http
+      - equal:
+          path: spec.ports[0].appProtocol
+          value: http
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/version: "4.0.2-redhat"
+            helm.sh/chart: cryostat-2.0.2
+            app.kubernetes.io/component: cryostat
+            app.kubernetes.io/part-of: cryostat
+
+  - it: should create a Service with the correct settings when OpenShift authentication is enabled
+    set:
+      authentication.openshift.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: kind
+          value: Service
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cryostat
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - lengthEqual:
+          path: spec.ports
+          count: 2
+      - equal:
+          path: spec.ports[0].port
+          value: 8181
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 4180
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+      - equal:
+          path: spec.ports[0].name
+          value: http
+      - equal:
+          path: spec.ports[1].port
+          value: 443
+      - equal:
+          path: spec.ports[1].targetPort
+          value: 8443
+      - equal:
+          path: spec.ports[1].protocol
+          value: TCP
+      - equal:
+          path: spec.ports[1].name
+          value: https
+      - equal:
+          path: spec.ports[1].appProtocol
+          value: https
+      - equal:
+          path: spec.selector
+          value:
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/component: cryostat
+            app.kubernetes.io/part-of: cryostat
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/version: "4.0.2-redhat"
+            helm.sh/chart: cryostat-2.0.2
+            app.kubernetes.io/component: cryostat
+            app.kubernetes.io/part-of: cryostat
+      - equal:
+          path: metadata.annotations
+          value:
+            service.alpha.openshift.io/serving-cert-secret-name: RELEASE-NAME-proxy-tls
+
+  - it: should include OpenShift specific annotations when OpenShift auth is enabled
+    set:
+      authentication.openshift.enabled: true
+    asserts:
+      - exists:
+          path: metadata.annotations
+      - equal:
+          path: metadata.annotations
+          value:
+            service.alpha.openshift.io/serving-cert-secret-name: RELEASE-NAME-proxy-tls
+
+  - it: should not include OpenShift specific annotations when OpenShift auth is disabled
+    set:
+      authentication.openshift.enabled: false
+    asserts:
+      - notExists:
+          path: metadata.annotations.`service.alpha.openshift.io/serving-cert-secret-name`
+
+  - it: should create a Service with the correct settings when oauth2-proxy self-signed TLS is enabled
+    set:
+      oauth2Proxy.tls.selfSigned.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: kind
+          value: Service
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cryostat
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - lengthEqual:
+          path: spec.ports
+          count: 2
+      - equal:
+          path: spec.ports[0].port
+          value: 8181
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 4180
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+      - equal:
+          path: spec.ports[0].name
+          value: http
+      - equal:
+          path: spec.ports[1].port
+          value: 443
+      - equal:
+          path: spec.ports[1].targetPort
+          value: 8443
+      - equal:
+          path: spec.ports[1].protocol
+          value: TCP
+      - equal:
+          path: spec.ports[1].name
+          value: https
+      - equal:
+          path: spec.selector
+          value:
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/part-of: cryostat
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/component: cryostat
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/part-of: cryostat
+            app.kubernetes.io/version: "4.0.2-redhat"
+            helm.sh/chart: cryostat-2.0.2
+            app.kubernetes.io/component: cryostat

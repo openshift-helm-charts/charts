@@ -1,0 +1,9 @@
+chart:
+  name: librechat
+  shortDescription: A Helm chart for deploying LibreChat, an open-source, AI-powered chat application.
+publicPgpKey: null
+users:
+- githubUsername: maximilianoPizarro
+vendor:
+  label: mpizarro
+  name: Maximiliano Pizarro

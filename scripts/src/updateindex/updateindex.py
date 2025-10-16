@@ -1,5 +1,4 @@
-"""This files downloads and updates the Helm repository index data
-"""
+"""This files downloads and updates the Helm repository index data"""
 
 import argparse
 import base64
