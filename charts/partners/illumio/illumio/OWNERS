@@ -1,7 +1,7 @@
 chart:
   name: illumio
   shortDescription: unknown
-providerDelivery: false
+providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: jan-lucansky

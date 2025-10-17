@@ -1,7 +1,7 @@
 chart:
   name: ausf
   shortDescription: Mavenir 5GCore AUSF CNF Helm charts
-providerDelivery: false
+providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: k-anirwan

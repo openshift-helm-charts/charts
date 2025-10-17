@@ -1,7 +1,7 @@
 chart:
   name: udr
   shortDescription: Mavenir 5GCore UDR CNF Helm charts
-providerDelivery: false
+providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: k-anirwan

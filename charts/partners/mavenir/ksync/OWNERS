@@ -1,7 +1,7 @@
 chart:
   name: ksync
   shortDescription: Mavenir 5GCore KSYNC CNF Helm charts
-providerDelivery: false
+providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: k-anirwan
