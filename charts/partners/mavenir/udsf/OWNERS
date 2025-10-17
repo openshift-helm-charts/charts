@@ -1,7 +1,7 @@
 chart:
   name: udsf
   shortDescription: Mavenir 5GCore UDSF CNF Helm charts
-providerDelivery: false
+providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: k-anirwan
