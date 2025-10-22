@@ -1,9 +1,0 @@
-chart:
-  name: '18031440'
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: bpm-test-registry-namespace
-  name: BPM Test Company

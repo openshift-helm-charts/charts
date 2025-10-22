@@ -1,9 +1,0 @@
-chart:
-  name: csm-operator
-  shortDescription: unknown
-providerDelivery: true
-publicPgpKey: unknown
-users: []
-vendor:
-  label: cloudera
-  name: Cloudera

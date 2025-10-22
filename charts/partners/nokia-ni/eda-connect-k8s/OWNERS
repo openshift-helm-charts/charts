@@ -1,9 +1,0 @@
-chart:
-  name: eda-connect-k8s
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: nokia-ni
-  name: Nokia

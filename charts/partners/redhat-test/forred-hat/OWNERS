@@ -1,9 +1,0 @@
-chart:
-  name: forred-hat
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: redhat-test
-  name: Red Hat, Inc.
