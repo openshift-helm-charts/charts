@@ -1,9 +1,0 @@
-chart:
-  name: amelia-chart
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: 61c4cabb4841f1221d7676be
-  name: Kyndryl Poland Sp. z o.o.
