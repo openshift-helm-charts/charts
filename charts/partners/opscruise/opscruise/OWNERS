@@ -2,7 +2,7 @@ chart:
   name: opscruise
   shortDescription: Helm chart for deploying OpsCruise
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: sudheeshopscruise
 - githubUsername: cesar-quintana-opscruise

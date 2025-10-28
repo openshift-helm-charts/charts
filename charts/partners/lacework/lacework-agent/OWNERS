@@ -1,7 +1,8 @@
 chart:
   name: lacework-agent
   shortDescription: Lacework Agent Helm Charts
-publicPgpKey: null
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: cirego
 - githubUsername: nschmeller

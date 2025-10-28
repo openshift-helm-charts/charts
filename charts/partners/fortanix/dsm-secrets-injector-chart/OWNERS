@@ -1,7 +1,8 @@
 chart:
   name: dsm-secrets-injector-chart
   shortDescription: Helm Charts for Fortanix DSM Secrets Injector
-publicPgpKey: null
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: frankus0512
 - githubUsername: manasag

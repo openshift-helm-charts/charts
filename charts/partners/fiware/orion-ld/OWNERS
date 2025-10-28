@@ -2,7 +2,8 @@ chart:
   name: orion-ld
   shortDescription: Context Broker and CEF building block for context data management
     which supports both the NGSI-LD and the NGSI-v2 APIs.
-publicPgpKey: null
+providerDelivery: false
+publicPgpKey: unknown
 users:
 - githubUsername: wistefan
 vendor:

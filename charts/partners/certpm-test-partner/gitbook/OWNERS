@@ -1,6 +1,7 @@
 chart:
   name: gitbook
   shortDescription: unknown
+providerDelivery: false
 publicPgpKey: unknown
 users: []
 vendor:

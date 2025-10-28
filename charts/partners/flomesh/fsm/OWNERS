@@ -1,8 +1,8 @@
 chart:
   name: fsm
-  shortDescription: null
+  shortDescription: unknown
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: reaver-flomesh
 vendor:

@@ -1,8 +1,8 @@
 chart:
   name: cdr-core-ehrbase-enterprise
-  shortDescription: null
+  shortDescription: unknown
 providerDelivery: false
-publicPgpKey: null
+publicPgpKey: unknown
 users:
 - githubUsername: bjoernpauli
 vendor:

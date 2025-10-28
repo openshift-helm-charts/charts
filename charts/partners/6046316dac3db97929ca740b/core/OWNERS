@@ -1,0 +1,9 @@
+chart:
+  name: core
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: 6046316dac3db97929ca740b
+  name: CUMUCORE

@@ -1,9 +1,0 @@
-chart:
-  name: venafi-tlspk
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: venafi
-  name: Venafi

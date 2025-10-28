@@ -1,9 +1,0 @@
-chart:
-  name: touchstone-101
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: voereir
-  name: VoerEir AB
