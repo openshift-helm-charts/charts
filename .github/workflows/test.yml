@@ -13,6 +13,8 @@ jobs:
   check-contributor:
     name: Check contributor
     uses: ./.github/workflows/check-contributor.yml
+    permissions:
+      contents: read
     with:
       user: ${{ github.event.pull_request.user.login }}
 
@@ -20,6 +22,8 @@ jobs:
     name: Determine Workflow Conditions
     needs: [check-contributor]
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     if: |
       github.event.pull_request.draft == false &&
       needs.check-contributor.outputs.is-repo-owner == 'true'
@@ -118,6 +122,8 @@ jobs:
     if: |
       needs.determine-workflow-conditions.outputs.run-tests == 'true'
     uses: ./.github/workflows/behave.yml
+    permissions:
+      contents: read
     with:
       # Default tags to 'full' if test-tags is unset for any reason by the time
       # we get here.
@@ -138,6 +144,9 @@ jobs:
     - determine-workflow-conditions
     - run-tests
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
     if: needs.determine-workflow-conditions.outputs.is-charts-release-branch == 'true'
     steps:
     - name: Approve PR

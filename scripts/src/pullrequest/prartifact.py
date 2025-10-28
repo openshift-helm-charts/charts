@@ -1,30 +1,11 @@
-import argparse
 import os
 import sys
-
 import requests
-
-sys.path.append("../")
-from reporegex import matchers
-from tools import gitutils
 
 pr_files = []
 pr_labels = []
 xRateLimit = "X-RateLimit-Limit"
 xRateRemain = "X-RateLimit-Remaining"
-
-
-# TODO(baijum): Move this code under chartsubmission.chart module
-def get_modified_charts(api_url):
-    files = get_modified_files(api_url)
-    pattern, _, _ = matchers.get_file_match_compiled_patterns()
-    for file in files:
-        match = pattern.match(file)
-        if match:
-            category, organization, chart, version = match.groups()
-            return category, organization, chart, version
-
-    return "", "", "", ""
 
 
 def get_modified_files(api_url):
@@ -91,44 +72,3 @@ def get_labels(api_url):
                 pr_labels.append(label["name"])
 
     return pr_labels
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-d",
-        "--directory",
-        dest="directory",
-        type=str,
-        required=False,
-        help="artifact directory for archival",
-    )
-    parser.add_argument(
-        "-n",
-        "--pr-number",
-        dest="number",
-        type=str,
-        required=False,
-        help="current pull request number",
-    )
-    parser.add_argument(
-        "-u",
-        "--api-url",
-        dest="api_url",
-        type=str,
-        required=True,
-        help="API URL for the pull request",
-    )
-    parser.add_argument(
-        "-f", "--get-files", dest="get_files", default=False, action="store_true"
-    )
-
-    args = parser.parse_args()
-    if args.get_files:
-        pr_files = get_modified_files(args.api_url)
-        print(f"[INFO] files in pr: {pr_files}")
-        gitutils.add_output("pr_files", pr_files)
-
-
-if __name__ == "__main__":
-    main()

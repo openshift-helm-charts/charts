@@ -549,10 +549,11 @@ def send_metric(write_key, id, event, properties):
     analytics.track(id, event, properties)
 
 
-def check_rate_limit(g, force):
+def check_rate_limit(g: Github, force: bool):
+    """Emits a log line containing rate limit information if forced or if running low on remaining requests."""
     rate_limit = g.get_rate_limit()
-    if force or rate_limit.core.remaining < 10:
-        print(f"[INFO] rate limit info: {rate_limit.core}")
+    if force or rate_limit.resources.core.remaining < 10:
+        print(f"[INFO] rate limit info: {rate_limit.resources.core}")
 
 
 def getChartUpdate(type, partner, chart, cwd):
