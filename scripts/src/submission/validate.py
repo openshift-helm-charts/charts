@@ -14,13 +14,13 @@ def write_submission_to_file(s: submission.Submission, artifact_path: str):
     """Save a JSON representation of the Submission object to file."""
     data = serializer.SubmissionEncoder().encode(s)
 
-    with open(artifact_path, "w") as f:
+    with open(artifact_path, "w", encoding="utf-8") as f:
         f.write(data)
 
 
 def read_submission_from_file(articact_path: str) -> submission.Submission:
     """Read and load the JSON representation of the Submission object from file."""
-    with open(articact_path, "r") as f:
+    with open(articact_path, "r", encoding="utf-8") as f:
         s = json.load(f, cls=serializer.SubmissionDecoder)
 
     return s
@@ -42,9 +42,9 @@ def craft_pr_content_error_msg(
 
     """
     try:
-        s.parse_modified_files()
+        s.parse_modified_files(repo_path="pr-branch")
     except submission.SubmissionError as e:
-        raise ParseFilesError(str(e))
+        raise ParseFilesError(str(e)) from e
 
     # Checks that this PR is a valid "Chart certification" PR
     is_valid, msg = s.is_valid_certification_submission(ignore_owners=True)

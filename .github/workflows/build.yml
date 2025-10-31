@@ -1,6 +1,9 @@
 name: CI
 
 on:
+  # NOTE: There are implementation details in this workflow that require the
+  # triggering event be pull_request_target. See RESOLVED_GITHUB_REF before
+  # changing the events that can trigger this workflow.
   pull_request_target:
     types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
 
@@ -11,11 +14,24 @@ env:
   # fetch them from the GitHub API a second time.
   SUBMISSION_PATH: "${{ github.workspace }}/submission.json"
   SUBMISSION_ARTIFACT_NAME: submission
+  # RESOLVED_GITHUB_REF works around an GitHub Actions bug where the GitHub
+  # Runner does not properly populate the GITHUB_REF value. For this workflow,
+  # we reconstruct a ref but only in cases where GITHUB_REF is missing.
+  #
+  # See https://github.com/openshift-helm-charts/development/issues/432 for more
+  # information.
+  RESOLVED_GITHUB_REF: ${{ github.ref || format('refs/heads/{0}', (github.event.pull_request.base.ref || ''))  }}
+
+concurrency:
+  group: cert-ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   setup:
     name: Setup CI
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     outputs:
       run_build: ${{ steps.check_build_required.outputs.run-build }}
       verifier-action-image: ${{ steps.set-env.outputs.verifier-action-image }}
@@ -26,14 +42,6 @@ jobs:
       (github.event.action != 'labeled' || github.event.label.name == 'force-publish') &&
       github.actor != 'redhat-mercury-bot'
     steps:
-      # TODO: Removing interpolated github.ref and replacing with variable
-      # as this task is here for debugging purposes that are ongoing.
-      - run: |
-          echo "[DEBUG] GITHUB_REF value is ${GITHUB_REF}"
-          echo "[DEBUG] github.ref value is ${CONTEXT_REF}"
-        env:
-          CONTEXT_REF: ${{ github.ref }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -119,6 +127,9 @@ jobs:
   validate-submission:
     name: Extract and validate PR content
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
     needs: [setup]
 
     outputs:
@@ -131,14 +142,6 @@ jobs:
       vendor_type: ${{ steps.validate-submission.outputs.vendor_type }}
 
     steps:
-      # TODO: Removing interpolated github.ref and replacing with variable
-      # as this task is here for debugging purposes that are ongoing.
-      - run: |
-          echo "[DEBUG] GITHUB_REF value is ${GITHUB_REF}"
-          echo "[DEBUG] github.ref value is ${CONTEXT_GITHUB_REF}"
-        env:
-          CONTEXT_GITHUB_REF: ${{ github.ref }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -146,7 +149,7 @@ jobs:
         if: ${{ needs.setup.outputs.run_build == 'true' }}
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
 
@@ -213,6 +216,9 @@ jobs:
   chart-verifier:
     name: Run chart-verifier
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
     needs: [setup, validate-submission]
 
     outputs:
@@ -227,14 +233,6 @@ jobs:
       ocp-version-range: ${{ steps.get-ocp-range.outputs.ocp-version-range }}
 
     steps:
-      # TODO: Removing interpolated github.ref and replacing with variable
-      # as this task is here for debugging purposes that are ongoing.
-      - run: |
-          echo "[DEBUG] GITHUB_REF value is ${GITHUB_REF}"
-          echo "[DEBUG] github.ref value is ${CONTEXT_REF}"
-        env:
-          CONTEXT_REF: ${{ github.ref }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -242,7 +240,7 @@ jobs:
         if: ${{ needs.setup.outputs.run_build == 'true' }}
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
 
@@ -430,6 +428,9 @@ jobs:
   manage-gh-pr:
     name: Comment and merge PR
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
     needs: [setup, validate-submission, chart-verifier]
 
     outputs:
@@ -440,14 +441,6 @@ jobs:
     if: ${{ always() && needs.setup.result == 'success' }}
 
     steps:
-      # TODO: Removing interpolated github.ref and replacing with variable
-      # as this task is here for debugging purposes that are ongoing.
-      - run: |
-          echo "[DEBUG] GITHUB_REF value is ${GITHUB_REF}"
-          echo "[DEBUG] github.ref value is ${CONTEXT_GITHUB_REF}"
-        env:
-          CONTEXT_GITHUB_REF: ${{ github.ref }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -455,7 +448,7 @@ jobs:
         if: ${{ needs.setup.outputs.run_build == 'true' }}
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
 
@@ -529,6 +522,15 @@ jobs:
               body: comment
             });
 
+      - name: Send message to helm_dev slack channel
+        id: notify_to_dev
+        if: github.repository == 'openshift-helm-charts/charts' && steps.pr_comment.outputs.ping_helm_dev == 'true'
+        uses: archive/github-actions-slack@v2.8.0
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: C02979BDUPL
+          slack-text: PR needs maintainer review ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}
+
       # The steps running chart-verifier may be skipped in some valid case, for instance if the user
       # provided a valid report.yaml
       - name: Add 'authorized-request' label to PR
@@ -577,15 +579,12 @@ jobs:
   release:
     name: Release Chart
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
     needs: [setup, validate-submission, chart-verifier, manage-gh-pr]
 
     steps:
-      - run: |
-          echo "[DEBUG] GITHUB_REF value is ${GITHUB_REF}"
-          echo "[DEBUG] github.ref value is ${CONTEXT_GITHUB_REF}"
-        env:
-          CONTEXT_GITHUB_REF: ${{ github.ref }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -593,7 +592,7 @@ jobs:
         if: ${{ needs.setup.outputs.run_build == 'true' }}
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
 
@@ -664,7 +663,6 @@ jobs:
           CHART_ENTRY_NAME: ${{ needs.validate-submission.outputs.chart_entry_name }}
           WEB_CATALOG_ONLY: ${{ needs.validate-submission.outputs.web_catalog_only }}
           RELEASE_TAG: ${{ needs.validate-submission.outputs.release_tag }}
-          CONTEXT_GITHUB_REF: ${{ github.ref }} # for debugging
           GITHUB_REPOSITORY: ${{ github.repository }}
           PREPARED_CHART_ENTRY: ${{ steps.prepare-chart-release.outputs.chart_entry }}
           PREPARED_CHART_URL: ${{ steps.prepare-chart-release.outputs.chart_url }}
@@ -672,10 +670,7 @@ jobs:
           GITHUB_EVENT_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "[DEBUG] GITHUB_REF value is ${GITHUB_REF}"
-          echo "[DEBUG] github.ref value is ${CONTEXT_GITHUB_REF}"
-
-          INDEX_BRANCH=$(if [ "${GITHUB_REF}" = "refs/heads/main" ]; then echo "gh-pages"; else echo "${GITHUB_REF##*/}-gh-pages"; fi)
+          INDEX_BRANCH=$(if [ "${RESOLVED_GITHUB_REF}" = "refs/heads/main" ]; then echo "gh-pages"; else echo "${RESOLVED_GITHUB_REF##*/}-gh-pages"; fi)
 
           echo "[INFO] Creating Git worktree for index branch"
           INDEX_DIR=$(mktemp -d)

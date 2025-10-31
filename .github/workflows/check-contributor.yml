@@ -38,6 +38,8 @@ jobs:
       is-repo-owner: ${{ steps.populate-output.outputs.is-repo-owner }}
     name: Contributor is repo owner
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository base
         uses: actions/checkout@v4

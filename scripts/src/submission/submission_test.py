@@ -8,13 +8,17 @@ Each test is run against a list of "Scenarios":
 """
 
 import contextlib
-import pytest
+from dataclasses import dataclass, field
 import os
-import responses
+from pathlib import Path
+import re
+import tarfile
 import tempfile
 
-from dataclasses import dataclass, field
+import pytest
+import responses
 
+from reporegex import matchers
 from submission import submission
 
 # Define assets that are being reused accross tests
@@ -69,13 +73,69 @@ def make_new_tarball_only_submission():
     return s
 
 
+def get_tarball_from_modified_files(modified_files: list[str]) -> str:
+    """Browse the modified files and return information on the first tarball found (.tgz)
+
+    Args:
+        modified_files (list[str]): List of files modified by the PR
+
+    Returns:
+        (str, str): basedir and filename of the tarball
+
+    """
+    _, _, tarballpattern = matchers.get_file_match_compiled_patterns()
+
+    for file in modified_files:
+        if tarballpattern.match(file):
+            return os.path.split(file)
+    return "", ""
+
+
+def create_tarball(tarball_basedir: str, tarball_name: str, tarball_content: list[str]):
+    """Create a tarball.
+
+    Args:
+        tarball_basedir (str): Directory in which to place the tarball. Will be created.
+        tarball_name (str): Name of the tarball including .tgz extension.
+        tarball_content (list[str]): List files to be included in the tarball. Files are empty as we don't perform any
+            check based on the content of the files, only on theire presence or absence in the tarball.
+
+    """
+    with tempfile.TemporaryDirectory() as content_temp_dir:
+        # Create tarball content in a temporary directory.
+        for file in tarball_content:
+            # Ensure base directory exists
+            os.makedirs(
+                os.path.join(content_temp_dir, os.path.dirname(file)), exist_ok=True
+            )
+            # Create an empty file - we don't check actual content of any files
+            Path(os.path.join(content_temp_dir, file)).touch()
+
+        # Create tarball base directory
+        os.makedirs(tarball_basedir)
+
+        # Create tarball
+        with tarfile.open(
+            os.path.join(tarball_basedir, tarball_name), mode="w:gz"
+        ) as tarball:
+            # os.listdir lists both files and directory
+            for file in os.listdir(content_temp_dir):
+                # Add the files and directories present in the root folder into the archive. Directory content is
+                # automatically added recursively.
+                # Use arcname option to rename the file/directory within the archive and make them relative paths.
+                tarball.add(
+                    os.path.join(content_temp_dir, file), arcname=os.path.basename(file)
+                )
+
+
 @dataclass
 class SubmissionInitScenario:
     api_url: str
     modified_files: list[str]
+    tarball_content: list[str] = field(default_factory=list)
     expected_submission: submission.Submission = None
     excepted_exception: contextlib.ContextDecorator = field(
-        default_factory=lambda: contextlib.nullcontext()
+        default_factory=contextlib.nullcontext
     )
 
 
@@ -142,20 +202,24 @@ scenarios_submission_init = [
         ),
     ),
     # PR contains an unsigned tarball
+    # Tarball contains a Chart.yaml placed under the directory named after the chart
     SubmissionInitScenario(
         api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/4",
         modified_files=[
             f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/{expected_name}-{expected_version}.tgz"
         ],
+        tarball_content=[os.path.join(expected_name, "Chart.yaml")],
         expected_submission=make_new_tarball_only_submission(),
     ),
     # PR contains a signed tarball
+    # Tarball contains a Chart.yaml placed under the directory named after the chart
     SubmissionInitScenario(
         api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/5",
         modified_files=[
             f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/{expected_name}-{expected_version}.tgz",
             f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/{expected_name}-{expected_version}.tgz.prov",
         ],
+        tarball_content=[os.path.join(expected_name, "Chart.yaml")],
         expected_submission=submission.Submission(
             api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/5",
             modified_files=[
@@ -170,6 +234,85 @@ scenarios_submission_init = [
             ),
         ),
     ),
+    # PR contains an unsigned tarball
+    # Tarball contains a Chart.yaml and additional files, placed under the directory named after the chart
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/4",
+        modified_files=[
+            f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/{expected_name}-{expected_version}.tgz"
+        ],
+        tarball_content=[
+            os.path.join(expected_name, "Chart.yaml"),
+            os.path.join(expected_name, "bar"),
+            os.path.join(expected_name, "foo", "baz"),
+        ],
+        expected_submission=make_new_tarball_only_submission(),
+    ),
+    # PR contains an unsigned tarball
+    # Tarball contains a Chart.yaml, placed under the directory that is not named after the chart
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/4",
+        modified_files=[
+            f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/{expected_name}-{expected_version}.tgz"
+        ],
+        tarball_content=[os.path.join("not-awesome", "Chart.yaml")],
+        excepted_exception=pytest.raises(
+            submission.SubmissionError,
+            match=re.escape(
+                f"[ERROR] Incorrect tarball content: expected a {expected_name} directory"
+            ),
+        ),
+    ),
+    # PR contains an unsigned tarball
+    # Tarball contains additional files placed at the root directory
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/4",
+        modified_files=[
+            f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/{expected_name}-{expected_version}.tgz"
+        ],
+        tarball_content=[
+            os.path.join(expected_name, "Chart.yaml"),
+            os.path.join("bar"),
+        ],
+        excepted_exception=pytest.raises(
+            submission.SubmissionError,
+            match=re.escape(
+                f"[ERROR] Incorrect tarball content: found a file outside the {expected_name} directory"
+            ),
+        ),
+    ),
+    # PR contains an unsigned tarball
+    # Tarball does not contain a Chart.yaml under the directory named after the chart
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/4",
+        modified_files=[
+            f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/{expected_name}-{expected_version}.tgz"
+        ],
+        tarball_content=[
+            os.path.join(expected_name, "bar"),
+        ],
+        excepted_exception=pytest.raises(
+            submission.SubmissionError,
+            match=re.escape(
+                f"[ERROR] Incorrect tarball content: expected a {expected_name}/Chart.yaml file"
+            ),
+        ),
+    ),
+    # PR contains an unsigned tarball
+    # Tarball is empty
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/4",
+        modified_files=[
+            f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/{expected_name}-{expected_version}.tgz"
+        ],
+        tarball_content=[],
+        excepted_exception=pytest.raises(
+            submission.SubmissionError,
+            match=re.escape(
+                f"[ERROR] Incorrect tarball content: expected a {expected_name} directory"
+            ),
+        ),
+    ),
     # PR contains an OWNERS file
     SubmissionInitScenario(
         api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/6",
@@ -178,6 +321,12 @@ scenarios_submission_init = [
         ],
         expected_submission=submission.Submission(
             api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/6",
+            chart=submission.Chart(
+                category=expected_chart.category,
+                organization=expected_chart.organization,
+                name=expected_chart.name,
+                # OWNERS submissions do not contain version information.
+            ),
             modified_files=[
                 f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS"
             ],
@@ -257,10 +406,24 @@ def test_submission_init(test_scenario):
         json=[{"filename": file} for file in test_scenario.modified_files],
     )
 
-    with test_scenario.excepted_exception:
-        s = submission.Submission(api_url=test_scenario.api_url)
-        s.parse_modified_files()
-        assert s == test_scenario.expected_submission
+    # Mock step checking out the PR locally - create tempdir with PR content
+    with tempfile.TemporaryDirectory() as prbanch_temp_dir:
+        # This step is only necessary if the PR contains a tarball, otherwise we don't perform any check of the content
+        # of the PR files.
+        tarball_path, tarball_name = get_tarball_from_modified_files(
+            test_scenario.modified_files
+        )
+        if tarball_path:
+            create_tarball(
+                os.path.join(prbanch_temp_dir, tarball_path),
+                tarball_name,
+                test_scenario.tarball_content,
+            )
+
+        with test_scenario.excepted_exception:
+            s = submission.Submission(api_url=test_scenario.api_url)
+            s.parse_modified_files(repo_path=prbanch_temp_dir)
+            assert s == test_scenario.expected_submission
 
 
 @responses.activate
@@ -420,7 +583,7 @@ class WebCatalogOnlyScenario:
     report_web_catalog_only: str = None  # Set to None to skip key creation in report
     expected_output: bool = None
     excepted_exception: contextlib.ContextDecorator = field(
-        default_factory=lambda: contextlib.nullcontext()
+        default_factory=contextlib.nullcontext
     )
 
 
@@ -543,34 +706,36 @@ def test_parse_web_catalog_only(test_scenario):
 
         # Populate OWNERS file
         if test_scenario.create_owners:
-            owners_file = open(os.path.join(owners_base_path, "OWNERS"), "w")
-            owners_file.write(
-                "publicPgpKey: unknown"
-            )  # Make sure OWNERS is not an empty file
-            if test_scenario.owners_web_catalog_only:
+            with open(
+                os.path.join(owners_base_path, "OWNERS"), "w", encoding="utf-8"
+            ) as owners_file:
                 owners_file.write(
-                    f"\nproviderDelivery: {test_scenario.owners_web_catalog_only}"
-                )
-            owners_file.close()
+                    "publicPgpKey: unknown"
+                )  # Make sure OWNERS is not an empty file
+                if test_scenario.owners_web_catalog_only:
+                    owners_file.write(
+                        f"\nproviderDelivery: {test_scenario.owners_web_catalog_only}"
+                    )
 
         # Populate report.yaml file
         if test_scenario.create_report:
-            report_file = open(os.path.join(chart_base_path, "report.yaml"), "w")
-            report_file.writelines(
-                [
-                    "apiversion: v1",
-                    "\nkind: verify-report",
-                ]
-            )
-            if test_scenario.report_web_catalog_only:
+            with open(
+                os.path.join(chart_base_path, "report.yaml"), "w", encoding="utf-8"
+            ) as report_file:
                 report_file.writelines(
                     [
-                        "\nmetadata:",
-                        "\n    tool:",
-                        f"\n        webCatalogOnly: {test_scenario.report_web_catalog_only}",
+                        "apiversion: v1",
+                        "\nkind: verify-report",
                     ]
                 )
-            report_file.close()
+                if test_scenario.report_web_catalog_only:
+                    report_file.writelines(
+                        [
+                            "\nmetadata:",
+                            "\n    tool:",
+                            f"\n        webCatalogOnly: {test_scenario.report_web_catalog_only}",
+                        ]
+                    )
 
         with test_scenario.excepted_exception:
             test_scenario.input_submission.parse_web_catalog_only(repo_path=temp_dir)
@@ -655,23 +820,24 @@ def test_is_valid_web_catalog_only(test_scenario):
 
         # Populate report.yaml file
         if test_scenario.create_report:
-            report_file = open(os.path.join(chart_base_path, "report.yaml"), "w")
-            report_file.writelines(
-                [
-                    "apiversion: v1",
-                    "\nkind: verify-report",
-                ]
-            )
-            if test_scenario.report_has_digest:
+            with open(
+                os.path.join(chart_base_path, "report.yaml"), "w", encoding="utf-8"
+            ) as report_file:
                 report_file.writelines(
                     [
-                        "\nmetadata:",
-                        "\n    tool:",
-                        "\n        digests:",
-                        "\n            package: 7755e7cf43e55bbf2edafd9788b773b844fb15626c5ff8ff7a30a6d9034f3a33",
+                        "apiversion: v1",
+                        "\nkind: verify-report",
                     ]
                 )
-            report_file.close()
+                if test_scenario.report_has_digest:
+                    report_file.writelines(
+                        [
+                            "\nmetadata:",
+                            "\n    tool:",
+                            "\n        digests:",
+                            "\n            package: 7755e7cf43e55bbf2edafd9788b773b844fb15626c5ff8ff7a30a6d9034f3a33",
+                        ]
+                    )
 
         is_valid_web_catalog_only, reason = (
             test_scenario.input_submission.is_valid_web_catalog_only(repo_path=temp_dir)
@@ -683,12 +849,15 @@ def test_is_valid_web_catalog_only(test_scenario):
         assert test_scenario.expected_reason in reason
 
 
-def create_new_index(charts: list[submission.Chart] = []):
+def create_new_index(charts: list[submission.Chart] = None):
     """Create the JSON representation of a Helm chart index containing the provided list of charts
 
     The resulting index only contains the required information for the check_index to work.
 
     """
+    if charts is None:
+        charts = []
+
     index = {"apiVersion": "v1", "entries": {}}
 
     for chart in charts:
@@ -715,9 +884,9 @@ class CheckIndexScenario:
             version=expected_version,
         )
     )
-    index: dict = field(default_factory=lambda: create_new_index())
+    index: dict = field(default_factory=create_new_index)
     excepted_exception: contextlib.ContextDecorator = field(
-        default_factory=lambda: contextlib.nullcontext()
+        default_factory=contextlib.nullcontext
     )
 
 
@@ -768,9 +937,9 @@ class CheckReleaseTagScenario:
             version=expected_version,
         )
     )
-    exising_tags: list[str] = field(default_factory=lambda: list())
+    exising_tags: list[str] = field(default_factory=list)
     excepted_exception: contextlib.ContextDecorator = field(
-        default_factory=lambda: contextlib.nullcontext()
+        default_factory=contextlib.nullcontext
     )
 
 
@@ -802,7 +971,6 @@ def test_check_release_tag(test_scenario):
     if chart_release_tag not in test_scenario.exising_tags:
         responses.head(
             f"https://api.github.com/repos/my-fake-org/my-fake-repo/git/ref/tags/{chart_release_tag}",
-            # json=[{"filename": file} for file in test_scenario.modified_files],
             status=404,
         )
 
@@ -810,7 +978,6 @@ def test_check_release_tag(test_scenario):
         # Mock GitHub API
         responses.head(
             f"https://api.github.com/repos/my-fake-org/my-fake-repo/git/ref/tags/{tag}",
-            # json=[{"filename": file} for file in test_scenario.modified_files],
         )
 
     with test_scenario.excepted_exception:

@@ -19,6 +19,9 @@ jobs:
   owners-file-check:
     name: OWNERS file PR checker
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
     if: github.event.pull_request.draft == false && github.actor == 'redhat-mercury-bot'
     steps:
       - name: Checkout
@@ -33,39 +36,14 @@ jobs:
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
-      - name: get files changed
-        id: get_files_changed
+      - name: check if only an OWNERS file is pushed
+        id: check_for_owners
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_API_URL: ${{ github.event.pull_request._links.self.href }}
         run: |
-          # get files in PR
-          ./ve1/bin/pr-artifact --api-url="${PR_API_URL}" \
-                                --get-files
-
-      - name: check if only an OWNERS file is pushed
-        id: check_for_owners
-        env:
-          PR_FILES: ${{ steps.get_files_changed.outputs.pr_files }}
-        run: |
-          # check if PR contains just one partner OWNERS file
-          first_file=$(yq '.0' <<< "${PR_FILES}")
-          total_file_count=$(yq 'length' <<< ${PR_FILES})
-
-          if [ "${total_file_count}" == 1 ]; then
-            if [[ "${first_file}" == "charts/partners/"*/*"/OWNERS" ]] ; then
-                echo "An OWNERS file has been modified or added"
-                echo "merge_pr=true" | tee -a $GITHUB_OUTPUT
-            else
-              echo "The file in the PR is not a partner OWNERS file"
-              echo "merge_pr=false" | tee -a $GITHUB_OUTPUT
-              echo "msg=ERROR: PR does not include a partner OWNERS file." >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "The PR contains multiple files."
-            echo "msg=ERROR: PR contains multiple files." >> $GITHUB_OUTPUT
-            echo "merge_pr=false" | tee -a $GITHUB_OUTPUT
-          fi
+          ./ve1/bin/check-for-owners --api-url="${PR_API_URL}" \
+            --allowed-category partners
 
       # We know that only one file was modified at this point, and it seems
       # mergeable. Determine if that file was created or modified here.
@@ -88,16 +66,6 @@ jobs:
             console.log(`setting output: net-new-owners-file=${ownersFile.status == 'added'}`);
             core.setOutput('net-new-owners-file', ownersFile.status == 'added');
 
-      - name: Add category/organization/chart-name from modified file to GITHUB_OUTPUT
-        id: gather-metadata
-        env:
-          API_URL: ${{ github.event.pull_request._links.self.href }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        run: |
-          ./ve1/bin/extract-metadata-from-pr \
-            --emit-to-github-output \
-            "${API_URL}"
-
       # Only used to assert content of the OWNERS file.
       - name: Checkout Pull Request
         uses: actions/checkout@v4
@@ -115,9 +83,9 @@ jobs:
         working-directory: "pr-branch"
         id: fact-check
         env:
-          PR_FILES: ${{ steps.get_files_changed.outputs.pr_files }}
-          CHART_NAME: ${{ steps.gather-metadata.outputs.chart-name }}
-          ORGANIZATION: ${{ steps.gather-metadata.outputs.organization }}
+          PR_FILES: ${{ steps.check_for_owners.outputs.pr_files }}
+          CHART_NAME: ${{ steps.check_for_owners.outputs.chart-name }}
+          ORGANIZATION: ${{ steps.check_for_owners.outputs.organization }}
         run: |
           file=$(yq .0 <<< ${PR_FILES})
           owner_contents_chart_name=$(yq '.chart.name' ${file})
@@ -147,7 +115,7 @@ jobs:
         id: determine-lock-status
         uses: ./.github/actions/check-chart-locks
         with:
-          chart-name: ${{ steps.gather-metadata.outputs.chart-name }}
+          chart-name: ${{ steps.check_for_owners.outputs.chart-name }}
           fail-workflow-if-locked: 'false'
 
       # Do not merge net-new OWNERS files for locked chart names. Allow a

@@ -10,6 +10,8 @@ jobs:
   test-cluster-access:
     name: Test Cluster Access
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     steps:
     - name: Install oc
       uses: redhat-actions/openshift-tools-installer@v1

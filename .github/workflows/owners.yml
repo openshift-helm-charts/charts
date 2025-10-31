@@ -8,6 +8,8 @@ jobs:
   owners-metrics:
     name: Send Owner Metrics
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     if: github.actor == 'redhat-mercury-bot'
     env:
       SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}

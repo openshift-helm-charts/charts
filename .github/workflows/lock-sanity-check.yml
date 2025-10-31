@@ -15,6 +15,9 @@ on:
 jobs:
   ensure-health:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write
     steps:
     - name: checkout
       uses: actions/checkout@v4

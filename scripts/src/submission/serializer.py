@@ -12,23 +12,23 @@ from submission import submission
 
 
 class SubmissionEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, submission.Submission):
-            obj_dict = copy.deepcopy(obj.__dict__)
+    def default(self, o):
+        if isinstance(o, submission.Submission):
+            obj_dict = copy.deepcopy(o.__dict__)
             obj_dict["chart"] = obj_dict["chart"].__dict__
             obj_dict["report"] = obj_dict["report"].__dict__
             obj_dict["source"] = obj_dict["source"].__dict__
             obj_dict["tarball"] = obj_dict["tarball"].__dict__
             return obj_dict
 
-        return json.JSONEncoder.default(self, obj)
+        return json.JSONEncoder.default(self, o)
 
 
 class SubmissionDecoder(json.JSONDecoder):
     def __init__(self, *args, **kwargs):
-        json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
+        json.JSONDecoder.__init__(self, object_hook=self.custom_hook, *args, **kwargs)
 
-    def object_hook(self, dct):
+    def custom_hook(self, dct):
         if "chart" in dct:
             chart_obj = submission.Chart(**dct["chart"])
             report_obj = submission.Report(**dct["report"])
