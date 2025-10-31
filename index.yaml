@@ -1067,6 +1067,37 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/perfectscale-exporter-1.0.47/exporter-1.0.47.tgz
     version: 1.0.47
+  fineract:
+  - annotations:
+      charts.openshift.io/digest: sha256:86a894e836b048e45a303081eea9c87b8e645d0d86e5c59fd8e68598da5b6473
+      charts.openshift.io/lastCertifiedTimestamp: '2025-10-30T23:13:56.749706+00:00'
+      charts.openshift.io/name: Fineract
+      charts.openshift.io/provider-display-name: maximilianoPizarro
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-10-31T17:30:07.142929+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.18'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: v1.12.1
+    description: Apache Fineract is an open source microfinance platform that provides
+      a robust and scalable solution for financial institutions, enabling the management
+      of loans, savings, customers and financial reporting
+    digest: 2ece35efd93caa6d11936873140035ab570e16a6ea5ffdb1f7384ee6ff0e9132
+    home: https://github.com/apache/fineract
+    icon: https://fineract.apache.org/images/apache-fineract-logo.png
+    keywords:
+    - microfinance
+    kubeVersion: '>=1.31.0'
+    maintainers:
+    - email: maximiliano.pizarro.5@gmail.com
+      name: Maximiliano Pizarro
+    name: fineract
+    sources:
+    - https://github.com/maximilianoPizarro/fineract
+    type: application
+    urls:
+    - https://maximilianopizarro.github.io/fineract/fineract-0.1.1.tgz
+    version: 0.1.1
   flomesh-console:
   - annotations:
       charts.openshift.io/digest: sha256:285ad867162027142c056417a3c303867d3f8592c59822577af08f4cdd9b56ec
@@ -13476,4 +13507,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-10-16T17:24:34.859866+00:00'
+generated: '2025-10-31T17:30:07.028902+00:00'
