@@ -1,0 +1,9 @@
+chart:
+  name: fineract
+  shortDescription: Apache Fineract is an open source microfinance platform that provides a robust and scalable solution for financial institutions, enabling the management of loans, savings, customers and financial reporting.
+publicPgpKey: null
+users:
+- githubUsername: maximilianoPizarro
+vendor:
+  label: mpizarro
+  name: Maximiliano Pizarro
