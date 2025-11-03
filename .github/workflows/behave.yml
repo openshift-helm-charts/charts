@@ -70,6 +70,8 @@ on:
 jobs:
   get-features:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       features: ${{ steps.find-features.outputs.features }}
     steps:
@@ -90,7 +92,8 @@ jobs:
         run: |
           set -e
           cd tests/functional/behave_features
-          features=$(find . -name '*.feature' | sed -e 's%\./%%g' | jq -R -s -c 'split("\n") | del(.[] | select(length == 0))')
+          # Format the names of the features into a json array and prioritize the HC-16 feature by placing it at the beginning of the array.
+          features=$(find . -name '*.feature' | sed -e 's%\./%%g' | jq -R -s -c 'split("\n") | del(.[] | select(length == 0)) | sort_by(startswith("HC-16")) | reverse')
           [ "${features}" == "" ] && { echo "The feature file variable was empty"; exit 1 ;}
           echo "Found feature files: ${features}"
           echo "Running sanity checks."
@@ -100,6 +103,8 @@ jobs:
           echo "features=${features}" | tee -a $GITHUB_OUTPUT
   run-tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [get-features]
     strategy:
       fail-fast: false

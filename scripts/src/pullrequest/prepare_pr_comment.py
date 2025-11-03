@@ -248,6 +248,7 @@ def main():
                 outcome = "Pending Manual Review"
                 detail_message = append_to(detail_message, prepare_community_comment())
                 gitutils.add_output("pr_passed", "true")
+                gitutils.add_output("ping_helm_dev", "true")
             else:
                 detail_message = append_to(detail_message, prepare_failure_comment())
                 gitutils.add_output("pr_passed", "false")
