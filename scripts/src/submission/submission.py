@@ -1,5 +1,8 @@
+from dataclasses import dataclass, field
 import os
 import re
+import tarfile
+
 import requests
 import semver
 import yaml
@@ -9,7 +12,6 @@ try:
 except ImportError:
     from yaml import Loader
 
-from dataclasses import dataclass, field
 
 from owners import owners_file
 from tools import gitutils
@@ -18,40 +20,45 @@ from report import verifier_report
 
 xRateLimit = "X-RateLimit-Limit"
 xRateRemain = "X-RateLimit-Remaining"
+REQUEST_TIMEOUT = 10
 
 
 class SubmissionError(Exception):
-    """Root Exception for handling any error with the submission"""
-
-    pass
+    """Root exception for handling any error with the submission"""
 
 
 class DuplicateChartError(SubmissionError):
-    """This Exception is to be raised when the user attempts to submit a PR with more than one chart"""
-
-    pass
+    """This exception is raised when the user attempts to submit a PR with more than one chart"""
 
 
 class VersionError(SubmissionError):
-    """This Exception is to be raised when the version of the chart is not semver compatible"""
-
-    pass
+    """This exception is raised when the version of the chart is not semver compatible"""
 
 
 class WebCatalogOnlyError(SubmissionError):
-    pass
+    """This exception is raised when there is an error when determining the WebCatalogOnly attribute
+    or if it is inconsistently set
+
+    """
 
 
 class HelmIndexError(SubmissionError):
-    pass
+    """This exception is raised when the chart is already present in the index, or if there was an error
+    downloading or reading the helm index
+
+    """
 
 
 class ReleaseTagError(SubmissionError):
-    pass
+    """This exception is raised when the chart's release already exists"""
 
 
-class ChartError(Exception):
-    pass
+class ChartError(SubmissionError):
+    """This exception is raised when the redhat prefix is incorrectly set"""
+
+
+class TarballContentError(SubmissionError):
+    """This exception is raised when checking the provided tarball content"""
 
 
 @dataclass
@@ -172,7 +179,7 @@ class Chart:
             "Authorization": f'Bearer {os.environ.get("BOT_TOKEN")}',
         }
         print(f"[INFO] checking tag: {tag_api}")
-        r = requests.head(tag_api, headers=headers)
+        r = requests.head(tag_api, headers=headers, timeout=REQUEST_TIMEOUT)
         if r.status_code == 200:
             msg = f"[ERROR] Helm chart release already exists in the GitHub Release/Tag: {tag_name}"
             raise ReleaseTagError(msg)
@@ -227,10 +234,10 @@ class Submission:
 
     api_url: str
     modified_files: list[str] = None
-    chart: Chart = field(default_factory=lambda: Chart())
-    report: Report = field(default_factory=lambda: Report())
-    source: Source = field(default_factory=lambda: Source())
-    tarball: Tarball = field(default_factory=lambda: Tarball())
+    chart: Chart = field(default_factory=Chart)
+    report: Report = field(default_factory=Report)
+    source: Source = field(default_factory=Source)
+    tarball: Tarball = field(default_factory=Tarball)
     modified_owners: list[str] = field(default_factory=list)
     modified_unknown: list[str] = field(default_factory=list)
     is_web_catalog_only: bool = None
@@ -238,7 +245,7 @@ class Submission:
     def __post_init__(self):
         """Complete the initialization of the Submission object.
 
-        Only retrieve PR information from the GitHub API if requiered, by checking for the presence
+        Only retrieve PR information from the GitHub API if required, by checking for the presence
         of a value for the modified_files attributes. This check allows to make the distinction
         between the two aforementioned cases of initialization of a Submission object:
         * If modified_files is not set, we're in the case of initializing a brand new Submission
@@ -269,7 +276,7 @@ class Submission:
                     "get", files_api_query, os.environ.get("BOT_TOKEN")
                 )
             except SystemExit as e:
-                raise SubmissionError(e)
+                raise SubmissionError(e) from e
 
             files = r.json()
             page_size = len(files)
@@ -288,7 +295,7 @@ class Submission:
                     if "filename" in file:
                         self.modified_files.append(file["filename"])
 
-    def parse_modified_files(self):
+    def parse_modified_files(self, repo_path: str = ""):
         """Classify the list of modified files.
 
         Modified files are categorized into 5 groups, mapping to 5 class attributes:
@@ -301,10 +308,15 @@ class Submission:
         - A list of added / modified OWNERS files is recorded in the `modified_owners` attribute.
         - The rest of the files are classified in the `modified_unknown` attribute.
 
+        Args:
+            repo_path (str): Local directory where the repo is checked out
+
         Raises a SubmissionError if:
+        * The PR doesn't contain any files
         * The Submission concerns more than one chart
         * The version of the chart is not SemVer compatible
         * The tarball file is named incorrectly
+        * The tarball content is incorrect
 
         """
         if not self.modified_files:
@@ -322,8 +334,10 @@ class Submission:
             elif file_category == "tarball":
                 category, organization, name, version, _ = match.groups()
                 self.chart.register_chart_info(category, organization, name, version)
-                self.set_tarball(file_path, match)
+                self.set_tarball(file_path, match, repo_path)
             elif file_category == "owners":
+                category, organization, name = match.groups()
+                self.chart.register_chart_info(category, organization, name)
                 self.modified_owners.append(file_path)
             elif file_category == "unknown":
                 self.modified_unknown.append(file_path)
@@ -354,10 +368,21 @@ class Submission:
             self.source.found = True
             self.source.path = os.path.dirname(file_path)
 
-    def set_tarball(self, file_path: str, tarball_match: re.Match[str]):
+    def set_tarball(
+        self, file_path: str, tarball_match: re.Match[str], repo_path: str = ""
+    ):
         """Action to take when a file related to the tarball is found.
 
         This can either be the .tgz tarball itself, or the .prov provenance key.
+
+        Args:
+            file_path (str): File that has been potentially detected as the tarball or the provenance file.
+            tarball_match (re.Match[str]): Matching regex, used to get the chart name and version and the tarball name.
+            repo_path (str): Local directory where the repo is checked out
+
+        Raises:
+            SubmissionError: If the tarball is incorrectly named
+            TarballContentError: If an error is found when checking the tarball content
 
         """
         _, file_extension = os.path.splitext(file_path)
@@ -371,6 +396,10 @@ class Submission:
             if tar_name != expected_tar_name:
                 msg = f"[ERROR] the tgz file is named incorrectly. Expected: {expected_tar_name}. Got: {tar_name}"
                 raise SubmissionError(msg)
+
+            # Raise a TarballContentError if content check fails
+            check_tarball_content(os.path.join(repo_path, file_path), chart_name)
+
         elif file_extension == ".prov":
             self.tarball.provenance = file_path
         else:
@@ -616,7 +645,7 @@ def download_index_data(
 
     """
     index_url = f"https://raw.githubusercontent.com/{repository}/{branch}/index.yaml"
-    r = requests.get(index_url)
+    r = requests.get(index_url, timeout=REQUEST_TIMEOUT)
 
     data = {"apiVersion": "v1", "entries": {}}
     if r.status_code != 200:
@@ -629,3 +658,48 @@ def download_index_data(
             raise HelmIndexError(f"Error parsing index file at {index_url}") from e
 
     return data
+
+
+def check_tarball_content(tarball_path: str, chart_name: str):
+    """Check the tarball content for errors.
+
+    Checks that the tarball contains a unique directory named after the chart. This directory must contain a Chart.yaml
+    file. The directory may contain additional files or folders. No other files or folder should be placed at the root
+    of the archive.
+
+    Args:
+        tarball_path (str): Location of the tarball to check on the local filesystem.
+        chart_name (str): Name of the corresponding chart.
+
+    Raise:
+        TarballContentError: If an error is found when checking the tarball content
+
+    """
+    found_chart_directory = False
+    found_chart_yaml = False
+    found_file_out_of_dir = False
+    expected_chart_file_path = os.path.join(chart_name, "Chart.yaml")
+    with tarfile.open(tarball_path, "r:gz") as tar:
+        tarinfo = tar.next()
+        while tarinfo:
+            if (
+                tarinfo.isdir() and tarinfo.name == chart_name
+            ) or tarinfo.name.startswith(chart_name + "/"):
+                found_chart_directory = True
+                if tarinfo.isfile() and tarinfo.name == expected_chart_file_path:
+                    found_chart_yaml = True
+            else:
+                found_file_out_of_dir = True
+            tarinfo = tar.next()
+
+    if not found_chart_directory:
+        msg = f"[ERROR] Incorrect tarball content: expected a {chart_name} directory"
+        raise TarballContentError(msg)
+
+    if found_file_out_of_dir:
+        msg = f"[ERROR] Incorrect tarball content: found a file outside the {chart_name} directory"
+        raise TarballContentError(msg)
+
+    if not found_chart_yaml:
+        msg = f"[ERROR] Incorrect tarball content: expected a {expected_chart_file_path} file"
+        raise TarballContentError(msg)
