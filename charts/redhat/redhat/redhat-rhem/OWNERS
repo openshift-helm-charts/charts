@@ -1,0 +1,9 @@
+chart:
+  name: redhat-rhen
+  shortDescription: "A Helm chart for Red Hat Edge Manager"
+publicPgpKey: null
+users:
+  - githubUsername: rawagner
+vendor:
+  label: redhat
+  name: Red Hat
