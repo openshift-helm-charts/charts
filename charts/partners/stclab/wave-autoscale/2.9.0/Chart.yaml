@@ -1,6 +1,6 @@
 apiVersion: v2
-name: wave-autoscale-helm
-description: A Helm chart for Wave Autoscale ML
+name: wave-autoscale
+description: Wave Autoscale replaces HPA and VPA with AI-driven workload scaling, container rightsizing, and traffic shaping—cutting cloud costs, improving reliability, and simplifying Kubernetes operations.
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -15,10 +15,17 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.0.0
+version: 2.9.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "0.0.0"
+appVersion: "2.9.0"
+
+# Minimum Kubernetes version required
+kubeVersion: '>=1.26.0-0'
+
+# Required annotations for Red Hat certification
+annotations:
+  charts.openshift.io/name: wave-autoscale
