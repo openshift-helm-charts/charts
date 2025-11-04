@@ -1,0 +1,659 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Wave Autoscale Helm Chart Configuration",
+  "description": "Configuration values for Wave Autoscale deployment",
+  "required": [
+    "serviceSpec",
+    "spec",
+    "default_namespace"
+  ],
+  "properties": {
+    "serviceSpec": {
+      "type": "object",
+      "description": "Kubernetes service configuration",
+      "required": ["type", "core", "webConsole", "intelligence"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Kubernetes service type",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
+          "default": "ClusterIP"
+        },
+        "core": {
+          "type": "object",
+          "description": "Core API service ports",
+          "required": ["port", "targetPort"],
+          "properties": {
+            "port": {
+              "type": "integer",
+              "description": "Service port for core API",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3024
+            },
+            "targetPort": {
+              "type": "integer",
+              "description": "Target port for core API",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3024
+            },
+            "nodePort": {
+              "type": "integer",
+              "description": "Node port (required if service type is NodePort)",
+              "minimum": 30000,
+              "maximum": 32767
+            }
+          }
+        },
+        "webConsole": {
+          "type": "object",
+          "description": "Web console service ports",
+          "required": ["port", "targetPort"],
+          "properties": {
+            "port": {
+              "type": "integer",
+              "description": "Service port for web console",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3025
+            },
+            "targetPort": {
+              "type": "integer",
+              "description": "Target port for web console",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3025
+            }
+          }
+        },
+        "intelligence": {
+          "type": "object",
+          "description": "Intelligence module service ports",
+          "required": ["port", "targetPort"],
+          "properties": {
+            "port": {
+              "type": "integer",
+              "description": "Service port for intelligence module",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3026
+            },
+            "targetPort": {
+              "type": "integer",
+              "description": "Target port for intelligence module",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 3026
+            }
+          }
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "description": "Service account configuration for Wave Autoscale core",
+      "properties": {
+        "annotations": {
+          "type": "object",
+          "description": "Annotations to add to the service account"
+        }
+      }
+    },
+    "serviceAccountAgent": {
+      "type": "object",
+      "description": "Service account configuration for Wave Autoscale agent",
+      "properties": {
+        "annotations": {
+          "type": "object",
+          "description": "Annotations to add to the agent service account"
+        }
+      }
+    },
+    "ghcr": {
+      "type": "object",
+      "description": "GitHub Container Registry credentials",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable GitHub Container Registry secret",
+          "default": false
+        },
+        "dockerconfigjson": {
+          "type": "string",
+          "description": "Base64 encoded Docker config JSON for image pull secret"
+        }
+      }
+    },
+    "clusterRole": {
+      "type": "object",
+      "description": "Cluster role configuration",
+      "properties": {
+        "readOnly": {
+          "type": "boolean",
+          "description": "Use read-only cluster role permissions",
+          "default": false
+        },
+        "istioAdmin": {
+          "type": "boolean",
+          "description": "Enable Istio admin permissions",
+          "default": false
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "description": "Workload specifications",
+      "required": ["core", "webConsole", "intelligence", "agent"],
+      "properties": {
+        "affinity": {
+          "type": "object",
+          "description": "Pod affinity rules"
+        },
+        "core": {
+          "type": "object",
+          "description": "Wave Autoscale core component configuration",
+          "required": ["image", "resources", "ports"],
+          "properties": {
+            "image": {
+              "type": "object",
+              "description": "Container image configuration",
+              "required": ["repository", "tag", "pullPolicy"],
+              "properties": {
+                "repository": {
+                  "type": "string",
+                  "description": "Container image repository for core component"
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "Container image tag"
+                },
+                "pullPolicy": {
+                  "type": "string",
+                  "description": "Image pull policy",
+                  "enum": ["Always", "IfNotPresent", "Never"],
+                  "default": "Always"
+                }
+              }
+            },
+            "resources": {
+              "type": "object",
+              "description": "Resource requests and limits",
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "type": "string",
+                      "description": "CPU request (e.g., 1500m, 1.5)",
+                      "pattern": "^[0-9]+(m|\\.[0-9]+)?$"
+                    },
+                    "memory": {
+                      "type": "string",
+                      "description": "Memory request (e.g., 1Gi, 1024Mi)",
+                      "pattern": "^[0-9]+(Gi|Mi|G|M)$"
+                    }
+                  }
+                },
+                "limits": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "type": "string",
+                      "description": "CPU limit",
+                      "pattern": "^[0-9]+(m|\\.[0-9]+)?$"
+                    },
+                    "memory": {
+                      "type": "string",
+                      "description": "Memory limit",
+                      "pattern": "^[0-9]+(Gi|Mi|G|M)$"
+                    }
+                  }
+                }
+              }
+            },
+            "livenessProbe": {
+              "type": "object",
+              "description": "Liveness probe configuration",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable liveness probe",
+                  "default": true
+                },
+                "httpGet": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "description": "HTTP path for liveness check"
+                    },
+                    "port": {
+                      "type": "integer",
+                      "description": "Port for liveness check",
+                      "minimum": 1,
+                      "maximum": 65535
+                    },
+                    "scheme": {
+                      "type": "string",
+                      "description": "HTTP or HTTPS",
+                      "enum": ["HTTP", "HTTPS"]
+                    }
+                  }
+                },
+                "initialDelaySeconds": {
+                  "type": "integer",
+                  "description": "Initial delay before liveness probe",
+                  "minimum": 0
+                },
+                "periodSeconds": {
+                  "type": "integer",
+                  "description": "Period between liveness checks",
+                  "minimum": 1
+                },
+                "timeoutSeconds": {
+                  "type": "integer",
+                  "description": "Timeout for liveness check",
+                  "minimum": 1
+                },
+                "failureThreshold": {
+                  "type": "integer",
+                  "description": "Number of failures before restart",
+                  "minimum": 1
+                },
+                "successThreshold": {
+                  "type": "integer",
+                  "description": "Number of successes to mark as healthy",
+                  "minimum": 1
+                }
+              }
+            },
+            "env": {
+              "type": "array",
+              "description": "Environment variables",
+              "items": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Environment variable name"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Environment variable value"
+                  },
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Environment variable from source"
+                  }
+                }
+              }
+            },
+            "ports": {
+              "type": "object",
+              "description": "Container ports",
+              "properties": {
+                "containerPort": {
+                  "type": "integer",
+                  "description": "Container port",
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "hostPort": {
+                  "type": "integer",
+                  "description": "Host port",
+                  "minimum": 1,
+                  "maximum": 65535
+                }
+              }
+            },
+            "volumeClaimTemplates": {
+              "type": "object",
+              "description": "Volume claim templates",
+              "properties": {
+                "accessModes": {
+                  "type": "array",
+                  "description": "Volume access modes",
+                  "items": {
+                    "type": "string",
+                    "enum": ["ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "webConsole": {
+          "type": "object",
+          "description": "Web console component configuration",
+          "required": ["image", "resources", "ports"],
+          "properties": {
+            "image": {
+              "type": "object",
+              "required": ["repository", "tag", "pullPolicy"],
+              "properties": {
+                "repository": {
+                  "type": "string",
+                  "description": "Container image repository for web console"
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "Container image tag"
+                },
+                "pullPolicy": {
+                  "type": "string",
+                  "enum": ["Always", "IfNotPresent", "Never"]
+                }
+              }
+            },
+            "resources": {
+              "type": "object",
+              "description": "Resource requests and limits",
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "type": "string",
+                      "pattern": "^[0-9]+(m|\\.[0-9]+)?$"
+                    },
+                    "memory": {
+                      "type": "string",
+                      "pattern": "^[0-9]+(Gi|Mi|G|M)$"
+                    }
+                  }
+                }
+              }
+            },
+            "livenessProbe": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "env": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "ports": {
+              "type": "object",
+              "properties": {
+                "containerPort": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "hostPort": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
+                }
+              }
+            }
+          }
+        },
+        "intelligence": {
+          "type": "object",
+          "description": "Intelligence module configuration",
+          "required": ["image", "resources", "ports"],
+          "properties": {
+            "image": {
+              "type": "object",
+              "required": ["repository", "tag", "pullPolicy"],
+              "properties": {
+                "repository": {
+                  "type": "string",
+                  "description": "Container image repository for intelligence module"
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "Container image tag"
+                },
+                "pullPolicy": {
+                  "type": "string",
+                  "enum": ["Always", "IfNotPresent", "Never"]
+                }
+              }
+            },
+            "resources": {
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "type": "string",
+                      "pattern": "^[0-9]+(m|\\.[0-9]+)?$"
+                    },
+                    "memory": {
+                      "type": "string",
+                      "pattern": "^[0-9]+(Gi|Mi|G|M)$"
+                    }
+                  }
+                }
+              }
+            },
+            "livenessProbe": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "env": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "ports": {
+              "type": "object",
+              "properties": {
+                "containerPort": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "hostPort": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
+                }
+              }
+            }
+          }
+        },
+        "agent": {
+          "type": "object",
+          "description": "Agent DaemonSet configuration",
+          "required": ["enabled", "image"],
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable Wave Autoscale agent DaemonSet",
+              "default": true
+            },
+            "image": {
+              "type": "object",
+              "required": ["repository", "tag", "pullPolicy"],
+              "properties": {
+                "repository": {
+                  "type": "string",
+                  "description": "Container image repository for agent"
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "Container image tag"
+                },
+                "pullPolicy": {
+                  "type": "string",
+                  "enum": ["Always", "IfNotPresent", "Never"]
+                }
+              }
+            },
+            "resources": {
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "type": "string",
+                      "pattern": "^[0-9]+(m|\\.[0-9]+)?$"
+                    },
+                    "memory": {
+                      "type": "string",
+                      "pattern": "^[0-9]+(Gi|Mi|G|M)$"
+                    }
+                  }
+                }
+              }
+            },
+            "priorityClassName": {
+              "type": "string",
+              "description": "Priority class for agent pods"
+            },
+            "livenessProbe": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "env": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "volumeMounts": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "cadvisor": {
+          "type": "object",
+          "description": "cAdvisor configuration",
+          "properties": {
+            "image": {
+              "type": "object",
+              "properties": {
+                "repository": {
+                  "type": "string",
+                  "description": "cAdvisor image repository"
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "cAdvisor image tag"
+                }
+              }
+            },
+            "resources": {
+              "type": "object"
+            },
+            "env": {
+              "type": "object"
+            },
+            "volumeMounts": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "waAgentVolumes": {
+          "type": "array",
+          "description": "Volumes for Wave Autoscale agent",
+          "items": {
+            "type": "object"
+          }
+        },
+        "pvcStorage": {
+          "type": "string",
+          "description": "Persistent volume storage size (e.g., 30Gi)",
+          "pattern": "^[0-9]+(Gi|Mi|Ti|G|M|T)$",
+          "default": "30Gi"
+        },
+        "storageClassName": {
+          "type": "string",
+          "description": "Storage class name for persistent volume (empty for default)"
+        },
+        "existingPvcName": {
+          "type": "string",
+          "description": "Use an existing PVC instead of creating a new one"
+        }
+      }
+    },
+    "default_namespace": {
+      "type": "string",
+      "description": "Default namespace when chart is installed in 'default' namespace",
+      "default": "wave-autoscale"
+    },
+    "license": {
+      "type": "object",
+      "description": "Wave Autoscale license configuration",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "License mode"
+        },
+        "plan": {
+          "type": "string",
+          "description": "License plan"
+        },
+        "key": {
+          "type": "string",
+          "description": "License key (required for Wave Autoscale to function)"
+        }
+      }
+    },
+    "openshift": {
+      "type": "object",
+      "description": "OpenShift-specific configuration",
+      "properties": {
+        "waveAutoscale": {
+          "type": "object",
+          "properties": {
+            "scc": {
+              "type": "object",
+              "properties": {
+                "create": {
+                  "type": "boolean",
+                  "description": "Create Security Context Constraint for Wave Autoscale",
+                  "default": false
+                }
+              }
+            }
+          }
+        },
+        "waveAutoscaleAgent": {
+          "type": "object",
+          "properties": {
+            "scc": {
+              "type": "object",
+              "properties": {
+                "create": {
+                  "type": "boolean",
+                  "description": "Create Security Context Constraint for Wave Autoscale Agent",
+                  "default": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
