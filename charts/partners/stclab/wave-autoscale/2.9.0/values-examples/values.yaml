@@ -1,0 +1,62 @@
+# GitHub Container Registry
+ghcr:
+  enabled: true # Enable GHCR secret creation for private image access
+  dockerconfigjson: '{GHCR_TOKEN}' # base64 encoded dockerconfigjson - replace with your GHCR token
+
+# # Cluster role configuration
+# clusterRole:
+#   readOnly: false # Set to true to limit cluster permissions to read-only access
+#   istioAdmin: false # Enable istio cluster role permissions when set to true - required for Istio service mesh integration
+
+# Workload specification
+spec:
+  core:
+    # # Container image configuration - uncomment and set when using private registry
+    # image:
+    #   repository: $repository
+    #   tag: $tag
+    env:
+      - name: WA_LICENSE
+        value: '{WA_LICENSE}' # Replace with your actual license key
+      - name: WA_LOG_LEVEL
+        value: "info" # 'info', 'debug', 'trace'
+      - name: WA_API_SERVER_HOST
+        value: "0.0.0.0"
+      - name: WA_KUBELET_METRICS_ENABLED
+        value: "true"
+  # webConsole:
+  #   # Container image configuration - uncomment and set when using private registry
+  #   image:
+  #     repository: $repository
+  #     tag: $tag
+  # intelligence:
+  #   # Container image configuration - uncomment and set when using private registry
+  #   image:
+  #     repository: $repository
+  #     tag: $tag
+  # agent:
+  #   # Container image configuration - uncomment and set when using private registry
+  #   image:
+  #     repository: $repository
+  #     tag: $tag
+  # cadvisor:
+  #   # Container image configuration - uncomment and set when using private registry
+  #   image:
+  #     repository: gcr.io/cadvisor/cadvisor
+  #     tag: v0.45.0
+
+  # Storage configuration for StatefulSet persistent volumes
+  storageClassName: # Storage class name for PVC creation - required for StatefulSet persistent volumes (e.g., gp3, fast-ssd, local-path). If empty, default storage class will be used
+  existingPvcName: "" # If you want to use an existing PVC, specify its name here
+
+# OpenShift specific configurations
+# openshift:
+#   # Wave Autoscale core component SCC settings
+#   waveAutoscale:
+#     scc:
+#       create: true # Create custom SecurityContextConstraints for Wave Autoscale core - required for proper pod security in OpenShift
+  
+#   # Wave Autoscale agent component SCC settings
+#   waveAutoscaleAgent:
+#     scc:
+#       create: true # Create custom SecurityContextConstraints for Wave Autoscale agent - required for host-level monitoring capabilities

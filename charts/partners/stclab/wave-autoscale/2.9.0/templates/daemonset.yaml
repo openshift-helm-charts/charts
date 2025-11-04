@@ -1,0 +1,97 @@
+{{- if .Values.spec.agent.enabled | default true }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: wave-autoscale-agent
+  namespace: {{ if eq .Release.Namespace "default" }}{{ .Values.default_namespace }}{{ else }}{{ .Release.Namespace }}{{ end }}
+  labels:
+    app.kubernetes.io/name: wave-autoscale-agent
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: agent
+    app.kubernetes.io/part-of: wave-autoscale-agent
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wave-autoscale-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wave-autoscale-agent
+    spec:
+      serviceAccountName: wave-autoscale-agent-sa
+      {{- if .Values.spec.agent.priorityClassName }}
+      priorityClassName: {{ .Values.spec.agent.priorityClassName | quote }}
+      {{- end }}
+      hostPID: true  # Enable host PID namespace access
+      {{- if .Values.ghcr.enabled }}
+      imagePullSecrets:
+        - name: wave-autoscale-ghcr-secret
+      {{ end }}
+      containers:
+        - name: wave-autoscale-agent
+          image: "{{ .Values.spec.agent.image.repository }}:{{ .Values.spec.agent.image.tag }}"
+          imagePullPolicy: {{ .Values.spec.agent.image.pullPolicy }}
+          command: [ "./wave-autoscale-agent" ]
+          resources:
+            {{- toYaml .Values.spec.agent.resources | nindent 12 }}
+          {{- if .Values.spec.agent.livenessProbe.enabled | default true }}
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  for piddir in /proc/[0-9]*; do
+                    if test -f "$piddir/comm"; then
+                      read comm < "$piddir/comm" 2>/dev/null || continue
+                      case "$comm" in
+                        wave-autoscale*)
+                          exit 0
+                          ;;
+                      esac
+                    fi
+                  done
+                  exit 1
+            initialDelaySeconds: {{ .Values.spec.agent.livenessProbe.initialDelaySeconds | default 30 }}
+            periodSeconds: {{ .Values.spec.agent.livenessProbe.periodSeconds | default 300 }}
+            timeoutSeconds: {{ .Values.spec.agent.livenessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.spec.agent.livenessProbe.failureThreshold | default 3 }}
+            successThreshold: {{ .Values.spec.agent.livenessProbe.successThreshold | default 1 }}
+          {{- end }}
+          securityContext:
+            privileged: true
+          {{- with .Values.spec.agent.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- toYaml .Values.spec.agent.volumeMounts | nindent 12 }}
+        - name: cadvisor
+          image: "{{ .Values.spec.cadvisor.image.repository }}:{{ .Values.spec.cadvisor.image.tag }}"
+          imagePullPolicy: {{ .Values.spec.cadvisor.image.pullPolicy }}
+          args:
+            - --enable_metrics=cpu,diskIO,memory,network,oom_event,pressure
+            - --docker_only
+          resources:
+            {{- toYaml .Values.spec.cadvisor.resources | nindent 12 }}
+          securityContext:
+            privileged: true
+          {{- with .Values.spec.cadvisor.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- toYaml .Values.spec.cadvisor.volumeMounts | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+      # wa-agent 에서는 `automountServiceAccountToken: true`가 필요하지만, cadvisor 에서는 사용할 수 없음.
+      # 따라서 `automountServiceAccountToken: false`설정 후, wa-agent 에 따로 serviceAccountToken을 mount 해준다.
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      volumes:
+        {{- toYaml .Values.spec.waAgentVolumes | nindent 8 }}
+  updateStrategy:
+    type: RollingUpdate
+{{ end }}

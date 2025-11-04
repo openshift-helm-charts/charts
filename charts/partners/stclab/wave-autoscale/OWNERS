@@ -1,0 +1,10 @@
+chart:
+  name: wave-autoscale
+  shortDescription: Wave Autoscale replaces HPA and VPA with AI-driven workload scaling, container rightsizing, and traffic shaping—cutting cloud costs, improving reliability, and simplifying Kubernetes operations.
+  publicPgpKey: null
+  providerDelivery: False
+users:
+- githubUsername: wave-autoscale
+vendor:
+  label: stclab
+  name: STCLab Inc.

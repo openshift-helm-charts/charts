@@ -1,0 +1,51 @@
+{{- if .Values.openshift.waveAutoscale.scc.create }}
+kind: SecurityContextConstraints
+apiVersion: security.openshift.io/v1
+metadata:
+  name: wave-autoscale-core
+users:
+  - system:serviceaccount:{{ if eq .Release.Namespace "default" }}{{ .Values.default_namespace }}{{ else }}{{ .Release.Namespace }}{{ end }}:wave-autoscale-sa
+allowHostPorts: true
+runAsUser:
+  type: RunAsAny
+fsGroup:
+  type: RunAsAny
+seLinuxContext:
+  type: RunAsAny
+---
+{{- end }}
+{{- if .Values.openshift.waveAutoscaleAgent.scc.create }}
+kind: SecurityContextConstraints
+apiVersion: security.openshift.io/v1
+metadata:
+  name: wave-autoscale-agent
+users:
+  - system:serviceaccount:{{ if eq .Release.Namespace "default" }}{{ .Values.default_namespace }}{{ else }}{{ .Release.Namespace }}{{ end }}:wave-autoscale-agent-sa
+allowHostPorts: true
+allowHostPID: true
+allowHostNetwork: true
+allowPrivilegedContainer: true
+allowHostDirVolumePlugin: true
+volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - hostPath
+  - secret
+  - projected
+seLinuxContext:
+  type: MustRunAs
+  seLinuxOptions:
+    type: "spc_t"
+seccompProfiles:
+  - '*'
+allowedCapabilities:
+  - SYS_ADMIN
+  - DAC_OVERRIDE
+  - NET_ADMIN
+runAsUser:
+  type: RunAsAny
+fsGroup:
+  type: RunAsAny
+---
+{{- end }}

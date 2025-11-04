@@ -1,0 +1,157 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: wave-autoscale
+  namespace: {{ if eq .Release.Namespace "default" }}{{ .Values.default_namespace }}{{ else }}{{ .Release.Namespace }}{{ end }}
+  labels:
+    app.kubernetes.io/name: wave-autoscale
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: core
+    app.kubernetes.io/part-of: wave-autoscale
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain # PVCs are retained even if the StatefulSet is deleted
+    whenScaled: Retain # PVCs are not deleted when scaling down
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wave-autoscale
+  serviceName: wave-autoscale-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wave-autoscale
+        app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/component: core
+        app.kubernetes.io/part-of: wave-autoscale
+    spec:
+      serviceAccountName: wave-autoscale-sa
+      {{- if .Values.ghcr.enabled | default false }}
+      imagePullSecrets:
+        - name: wave-autoscale-ghcr-secret
+      {{ end }}
+      {{- with .Values.spec.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.spec.existingPvcName }}
+      volumes:
+        - name: wave-autoscale-pvc
+          persistentVolumeClaim:
+            claimName: {{ .Values.spec.existingPvcName }}
+      {{- end }}
+      containers:
+        - name: wave-autoscale-core
+          image: "{{ .Values.spec.core.image.repository }}:{{ .Values.spec.core.image.tag }}"
+          imagePullPolicy: {{ .Values.spec.core.image.pullPolicy }}
+          command: [ "./wave-autoscale" ]
+          {{- with .Values.spec.core.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.spec.core.livenessProbe.enabled | default true }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.spec.core.livenessProbe.httpGet.path | default "/" }}
+              port: {{ .Values.spec.core.livenessProbe.httpGet.port | default .Values.spec.core.ports.containerPort }}
+              scheme: {{ .Values.spec.core.livenessProbe.httpGet.scheme | default "HTTP" }}
+            initialDelaySeconds: {{ .Values.spec.core.livenessProbe.initialDelaySeconds | default 60 }}
+            periodSeconds: {{ .Values.spec.core.livenessProbe.periodSeconds | default 300 }}
+            timeoutSeconds: {{ .Values.spec.core.livenessProbe.timeoutSeconds | default 10 }}
+            failureThreshold: {{ .Values.spec.core.livenessProbe.failureThreshold | default 3 }}
+            successThreshold: {{ .Values.spec.core.livenessProbe.successThreshold | default 1 }}
+          {{- end }}
+          {{- with .Values.spec.core.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: wave-autoscale-pvc
+              mountPath: /app/core/data
+            - name: wave-autoscale-pvc
+              mountPath: /app/wave-intelligence/data
+            - name: wave-autoscale-pvc
+              mountPath: /app/autopilot/data
+          ports:
+            - name: core
+              containerPort: {{ .Values.spec.core.ports.containerPort }}
+              hostPort: {{ .Values.spec.core.ports.hostPort }}
+        - name: wave-autoscale-web-console
+          image: {{ .Values.spec.webConsole.image.repository }}:{{ .Values.spec.webConsole.image.tag }}
+          imagePullPolicy: {{ .Values.spec.webConsole.image.pullPolicy }}
+          command: [ "node" ]
+          args: [ "server.js" ]
+          {{- with .Values.spec.webConsole.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.spec.webConsole.livenessProbe.enabled | default true }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.spec.webConsole.livenessProbe.httpGet.path | default "/" }}
+              port: {{ .Values.spec.webConsole.livenessProbe.httpGet.port | default .Values.spec.webConsole.ports.containerPort }}
+              scheme: {{ .Values.spec.webConsole.livenessProbe.httpGet.scheme | default "HTTP" }}
+            initialDelaySeconds: {{ .Values.spec.webConsole.livenessProbe.initialDelaySeconds | default 60 }}
+            periodSeconds: {{ .Values.spec.webConsole.livenessProbe.periodSeconds | default 300 }}
+            timeoutSeconds: {{ .Values.spec.webConsole.livenessProbe.timeoutSeconds | default 10 }}
+            failureThreshold: {{ .Values.spec.webConsole.livenessProbe.failureThreshold | default 3 }}
+            successThreshold: {{ .Values.spec.webConsole.livenessProbe.successThreshold | default 1 }}
+          {{- end }}
+          {{- with .Values.spec.webConsole.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: web-console
+              containerPort: {{ .Values.spec.webConsole.ports.containerPort }}
+              hostPort: {{ .Values.spec.webConsole.ports.hostPort }}
+        - name: wave-autoscale-intelligence
+          image: "{{ .Values.spec.intelligence.image.repository }}:{{ .Values.spec.intelligence.image.tag }}"
+          imagePullPolicy: {{ .Values.spec.intelligence.image.pullPolicy }}
+          {{- with .Values.spec.intelligence.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.spec.intelligence.livenessProbe.enabled | default true }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.spec.intelligence.livenessProbe.httpGet.path | default "/" }}
+              port: {{ .Values.spec.intelligence.livenessProbe.httpGet.port | default .Values.spec.intelligence.ports.containerPort }}
+              scheme: {{ .Values.spec.intelligence.livenessProbe.httpGet.scheme | default "HTTP" }}
+            initialDelaySeconds: {{ .Values.spec.intelligence.livenessProbe.initialDelaySeconds | default 60 }}
+            periodSeconds: {{ .Values.spec.intelligence.livenessProbe.periodSeconds | default 300 }}
+            timeoutSeconds: {{ .Values.spec.intelligence.livenessProbe.timeoutSeconds | default 10 }}
+            failureThreshold: {{ .Values.spec.intelligence.livenessProbe.failureThreshold | default 3 }}
+            successThreshold: {{ .Values.spec.intelligence.livenessProbe.successThreshold | default 1 }}
+          {{- end }}
+          {{- with .Values.spec.intelligence.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: wave-autoscale-pvc
+              mountPath: /app/wave-intelligence/data
+            - name: wave-autoscale-pvc
+              mountPath: /app/autopilot/data
+            - name: wave-autoscale-pvc
+              mountPath: /app/core/data
+          ports:
+            - name: intelligence
+              containerPort: {{ .Values.spec.intelligence.ports.containerPort }}
+              hostPort: {{ .Values.spec.intelligence.ports.hostPort }}
+  updateStrategy:
+    type: RollingUpdate
+  {{- if not .Values.spec.existingPvcName }}
+  volumeClaimTemplates:
+    - metadata:
+        name: wave-autoscale-pvc
+      spec:
+        {{- with .Values.spec.core.volumeClaimTemplates.accessModes }}
+        accessModes:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.spec.pvcStorage }}
+        storageClassName: {{ .Values.spec.storageClassName }}
+  {{- end }}

@@ -1,0 +1,270 @@
+# service spec
+serviceSpec:
+  type: ClusterIP
+  core:
+    port: 3024
+    targetPort: 3024
+    # nodePort: 3024
+  webConsole:
+    port: 3025
+    targetPort: 3025
+  intelligence:
+    port: 3026
+    targetPort: 3026
+
+# service account spec
+serviceAccount:
+  annotations: { }
+
+# service account agent spec
+serviceAccountAgent:
+  annotations: { }
+
+# Github Container Registry Secret
+ghcr:
+  enabled: false
+  dockerconfigjson: "" # base64 encoded dockerconfigjson
+
+# cluster role spec
+clusterRole:
+  readOnly: false
+  istioAdmin: false
+
+# workload spec
+spec:
+  affinity: { }
+  core:
+    image:
+      repository: $repository
+      tag: $tag
+      pullPolicy: Always
+    resources:
+      requests:
+        cpu: 1500m
+        memory: 1Gi
+    livenessProbe:
+      enabled: true # If you want to disable liveness probe, set this to false, default is true
+      httpGet:
+        path: "/"
+        port: 3024
+        scheme: "HTTP"
+      initialDelaySeconds: 60
+      periodSeconds: 300
+      timeoutSeconds: 10
+      failureThreshold: 3
+      successThreshold: 1
+    env:
+      - name: WA_LICENSE
+        value: ""
+      - name: WA_LOG_LEVEL
+        value: "debug"
+      - name: WA_API_SERVER_HOST
+        value: "0.0.0.0"
+      - name: WA_PLATFORM_K8S
+        value: "true"
+      - name: WA_DEBUG_ENCRYPTION_PUBLIC_KEY
+        value: ""
+      - name: WA_WAVE_SHAPER_MODULE_URL
+        value: "public.ecr.aws/wave-autoscale/wave-shaper:0.1.3"
+    ports:
+      containerPort: 3024
+      hostPort: 3024
+    volumeClaimTemplates:
+      accessModes:
+        - "ReadWriteOnce"
+  webConsole:
+    image:
+      repository: $repository
+      tag: $tag
+      pullPolicy: Always
+    resources:
+      requests:
+        cpu: 300m
+        memory: 300Mi
+    livenessProbe:
+      enabled: true # If you want to disable liveness probe, set this to false, default is true
+      httpGet:
+        path: "/"
+        port: 3025
+        scheme: "HTTP"
+      initialDelaySeconds: 60
+      periodSeconds: 300
+      timeoutSeconds: 10
+      failureThreshold: 3
+      successThreshold: 1
+    env:
+      - name: WA_CONSOLE_KUBERNETES
+        value: "true"
+      - name: PORT
+        value: "3025"
+      - name: HOSTNAME
+        value: "0.0.0.0"
+    ports:
+      containerPort: 3025
+      hostPort: 3025
+  intelligence:
+    image:
+      repository: $repository
+      tag: $tag
+      pullPolicy: Always
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+    livenessProbe:
+      enabled: true # If you want to disable liveness probe, set this to false, default is true
+      httpGet:
+        path: "/"
+        port: 3026
+        scheme: "HTTP"
+      initialDelaySeconds: 60
+      periodSeconds: 300
+      timeoutSeconds: 10
+      failureThreshold: 3
+      successThreshold: 1
+    env:
+      - name: PYTHONPATH
+        value: /app/wave-intelligence/src
+      - name: WA_METRICS_DIRECTORY
+        value: "/app/core/data/metrics"
+      - name: WA_AUTOPILOT_MODELS_DIRECTORY
+        value: "/app/autopilot/data/ml-models"
+      - name: WA_AUTOPILOT_STORES_DIRECTORY
+        value: "/app/autopilot/data/stores"
+      - name: WA_GUNICORN_WORKERS
+        value: "2"
+    ports:
+      containerPort: 3026
+      hostPort: 3026
+  agent:
+    enabled: true
+    image:
+      repository: $repository
+      tag: $tag
+      pullPolicy: Always
+    resources:
+      requests:
+        cpu: 100m
+        memory: 50Mi
+    priorityClassName: "system-node-critical"
+    livenessProbe:
+      enabled: true # If you want to disable liveness probe, set this to false, default is true
+      initialDelaySeconds: 30
+      periodSeconds: 300
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+    env:
+      - name: WAA_LOG_LEVEL
+        value: "debug"
+      - name: WAA_WA_URI
+        value: "http://wave-autoscale-svc.wave-autoscale.svc.cluster.local:3024"
+      - name: WAA_CADVISOR_URI
+        value: "http://0.0.0.0:8080/metrics"
+      - name: WAA_NODE_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.hostIP
+      - name: WAA_NODE_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+    volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access
+        readOnly: true
+      - mountPath: /host/proc
+        name: proc
+        readOnly: true
+  cadvisor:
+    image:
+      repository: gcr.io/cadvisor/cadvisor
+      tag: v0.52.1
+    resources:
+    #   requests:
+    #     cpu: 100m
+    #     memory: 50Mi
+    env: { }
+    volumeMounts:
+      - mountPath: /sys/fs/cgroup
+        name: cgroup
+        readOnly: true
+      - name: rootfs
+        mountPath: /rootfs
+        readOnly: true
+      - name: var-run
+        mountPath: /var/run
+        readOnly: true
+      - name: sys
+        mountPath: /sys
+        readOnly: true
+      - name: docker
+        mountPath: /var/lib/docker
+        readOnly: true
+      - name: disk
+        mountPath: /dev/disk
+        readOnly: true
+  waAgentVolumes:
+    - hostPath:
+        path: /proc
+        type: ""
+      name: proc
+    - hostPath:
+        path: /sys/fs/cgroup
+        type: ""
+      name: cgroup
+    - name: rootfs
+      hostPath:
+        path: /
+    - name: var-run
+      hostPath:
+        path: /var/run
+    - name: sys
+      hostPath:
+        path: /sys
+    - name: docker
+      hostPath:
+        path: /var/lib/docker
+    - name: disk
+      hostPath:
+        path: /dev/disk
+    # wa-agent 에서 serviceAccountToken을 mount 하기 위해 사용
+    - name: kube-api-access
+      projected:
+        defaultMode: 420
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              items:
+                - key: ca.crt
+                  path: ca.crt
+              name: kube-root-ca.crt
+          - downwardAPI:
+              items:
+                - fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+                  path: namespace
+  pvcStorage: 30Gi
+  storageClassName: #gp2
+  existingPvcName: "" # If you want to use an existing PVC, specify its name here
+
+# default namespace
+default_namespace: wave-autoscale
+
+# license
+license:
+  mode: ""
+  plan: ""
+  key: ""
+
+openshift:
+  waveAutoscale:
+    scc:
+      create: false
+  waveAutoscaleAgent:
+    scc:
+      create: false
