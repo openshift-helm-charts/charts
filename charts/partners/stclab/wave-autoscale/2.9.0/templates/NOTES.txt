@@ -1,0 +1,157 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named: {{ .Release.Name }}
+Deployed in namespace: {{ .Release.Namespace }}
+
+================================================================================
+
+Wave Autoscale has been successfully deployed!
+
+Wave Autoscale is an AI-driven Kubernetes resource management solution that
+optimizes workload scaling, container rightsizing, and traffic shaping to
+reduce cloud costs while improving application reliability.
+
+================================================================================
+
+NEXT STEPS:
+
+1. Check the deployment status:
+
+   kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/name=wave-autoscale
+
+2. Wait for all pods to be ready (this may take a few minutes):
+
+   kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=wave-autoscale -n {{ .Release.Namespace }} --timeout=300s
+
+{{- if .Values.spec.agent.enabled }}
+3. Verify Wave Autoscale agents are running on all nodes:
+
+   kubectl get daemonset -n {{ .Release.Namespace }} wave-autoscale-agent
+{{- end }}
+
+4. Access the Wave Autoscale Web Console:
+
+   {{- if eq .Values.serviceSpec.type "LoadBalancer" }}
+
+   # Get the LoadBalancer IP or hostname:
+   kubectl get svc wave-autoscale-svc -n {{ .Release.Namespace }}
+
+   # Access the web console at:
+   # http://<EXTERNAL-IP>:{{ .Values.serviceSpec.webConsole.port }}
+
+   {{- else if eq .Values.serviceSpec.type "NodePort" }}
+
+   # Get the NodePort:
+   kubectl get svc wave-autoscale-svc -n {{ .Release.Namespace }}
+
+   # Access the web console at:
+   # http://<NODE-IP>:<NODE-PORT>
+
+   {{- else }}
+
+   # Port-forward to access the web console locally:
+   kubectl port-forward -n {{ .Release.Namespace }} svc/wave-autoscale-svc {{ .Values.serviceSpec.webConsole.port }}:{{ .Values.serviceSpec.webConsole.port }}
+
+   # Then visit: http://localhost:{{ .Values.serviceSpec.webConsole.port }}
+
+   {{- end }}
+
+5. Access the Wave Autoscale Core API:
+
+   kubectl port-forward -n {{ .Release.Namespace }} svc/wave-autoscale-svc {{ .Values.serviceSpec.core.port }}:{{ .Values.serviceSpec.core.port }}
+
+   # API available at: http://localhost:{{ .Values.serviceSpec.core.port }}
+
+================================================================================
+
+IMPORTANT CONFIGURATION:
+
+{{- if or (eq .Values.spec.core.image.repository "$repository") (eq .Values.spec.core.image.tag "$tag") }}
+
+⚠️  WARNING: Default placeholder values detected for container images!
+
+   You must set the correct image repository and tags:
+
+   --set spec.core.image.repository=<your-registry>/wave-autoscale-core
+   --set spec.core.image.tag=<version>
+   --set spec.webConsole.image.repository=<your-registry>/wave-autoscale-console
+   --set spec.webConsole.image.tag=<version>
+   --set spec.intelligence.image.repository=<your-registry>/wave-autoscale-intelligence
+   --set spec.intelligence.image.tag=<version>
+   --set spec.agent.image.repository=<your-registry>/wave-autoscale-agent
+   --set spec.agent.image.tag=<version>
+
+{{- end }}
+
+{{- if not .Values.license.key }}
+
+⚠️  LICENSE KEY REQUIRED:
+
+   Wave Autoscale requires a valid license key to function.
+
+   To set your license key:
+
+   helm upgrade {{ .Release.Name }} {{ .Chart.Name }} \
+     --namespace {{ .Release.Namespace }} \
+     --reuse-values \
+     --set license.key=<your-license-key>
+
+   Contact STCLab Inc. for licensing: https://waveautoscale.com
+
+{{- end }}
+
+================================================================================
+
+MONITORING AND LOGS:
+
+View logs from Wave Autoscale components:
+
+# Core component logs:
+kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/component=core -c wave-autoscale-core --tail=100 -f
+
+# Web console logs:
+kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/component=core -c wave-autoscale-web-console --tail=100 -f
+
+# Intelligence module logs:
+kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/component=core -c wave-autoscale-intelligence --tail=100 -f
+
+{{- if .Values.spec.agent.enabled }}
+# Agent logs (from a specific node):
+kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/name=wave-autoscale-agent --tail=100 -f
+{{- end }}
+
+================================================================================
+
+GETTING STARTED:
+
+Once Wave Autoscale is running and licensed, you can:
+
+1. Access the Web Console to view cluster insights
+2. Configure workload optimization policies
+3. Monitor cost savings and performance improvements
+4. Set up alerts and notifications
+
+For detailed documentation and tutorials, visit:
+📚 https://waveautoscale.com/docs
+
+================================================================================
+
+SUPPORT:
+
+For issues, questions, or feature requests:
+🌐 Website: https://waveautoscale.com
+📧 Email: team@waveautoscale.com
+📖 Documentation: https://waveautoscale.com/docs
+
+To check the chart version:
+helm list -n {{ .Release.Namespace }}
+
+To upgrade Wave Autoscale:
+helm upgrade {{ .Release.Name }} {{ .Chart.Name }} -n {{ .Release.Namespace }}
+
+To uninstall:
+helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+================================================================================
+
+Happy optimizing! 🚀
