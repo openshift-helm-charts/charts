@@ -560,7 +560,7 @@
               }
             },
             "resources": {
-              "type": "object"
+              "type": ["object", "null"]
             },
             "env": {
               "type": "object"
@@ -587,7 +587,7 @@
           "default": "30Gi"
         },
         "storageClassName": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Storage class name for persistent volume (empty for default)"
         },
         "existingPvcName": {
