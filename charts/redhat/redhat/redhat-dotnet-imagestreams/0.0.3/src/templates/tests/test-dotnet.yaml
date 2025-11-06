@@ -16,7 +16,14 @@ spec:
       command:
         - '/bin/bash'
         - '-ec'
-        - 'dotnet --list-runtimes | grep -F {{ $latestversion }}. && [[ -z $(dotnet --list-sdks) ]]'
+        - 'dotnet --list-runtimes | grep -F {{ $latestversion }}. && ! dotnet --list-runtimes | grep -q Microsoft.AspNetCore.App && [[ -z $(dotnet --list-sdks) ]]'
+    - name: 'aspnet-latest'
+      image: dotnet-aspnet:latest
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --list-runtimes | grep Microsoft.AspNetCore.App | grep -F {{ $latestversion }}. && [[ -z $(dotnet --list-sdks) ]]'
     - name: sdk-latest
       image: dotnet:latest
       imagePullPolicy: IfNotPresent
@@ -32,6 +39,13 @@ spec:
         - '/bin/bash'
         - '-ec'
         - 'dotnet --list-runtimes | grep -F {{ $version }}. && [[ -z $(dotnet --list-sdks) ]]'
+    - name: 'aspnet-{{ $version | replace "." "" }}'
+      image: dotnet-aspnet:{{ $version }}
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --list-runtimes | grep Microsoft.AspNetCore.App | grep -F {{ $version }}. && [[ -z $(dotnet --list-sdks) ]]'
     - name: 'sdk-{{ $version | replace "." "" }}'
       image: dotnet:{{ $version }}
       imagePullPolicy: IfNotPresent
@@ -46,6 +60,13 @@ spec:
         - '/bin/bash'
         - '-ec'
         - 'dotnet --list-runtimes | grep -F {{ $version }}. && [[ -z $(dotnet --list-sdks) ]]'
+    - name: 'aspnet-{{ $version | replace "." "" }}-{{ include "platformTag" $info.platform }}'
+      image: dotnet-aspnet:{{ $version }}-{{ include "platformTag" $info.platform }}
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-ec'
+        - 'dotnet --list-runtimes | grep Microsoft.AspNetCore.App | grep -F {{ $version }}. && [[ -z $(dotnet --list-sdks) ]]'
     - name: 'sdk-{{ $version | replace "." "" }}-{{ include "platformTag" $info.platform }}'
       image: dotnet:{{ $version }}-{{ include "platformTag" $info.platform }}
       imagePullPolicy: IfNotPresent
