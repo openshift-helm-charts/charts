@@ -1,9 +1,0 @@
-chart:
-  name: helm-3
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: vendor-independence-1
-  name: Red Hat, Inc.
