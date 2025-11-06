@@ -79,6 +79,7 @@ jobs:
           github.event_name == 'pull_request_target' && steps.check_request.outputs.run-tests == 'true'
         env:
           BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_API_URL: ${{ github.event.pull_request._links.self.href }}
           SENDER: ${{ github.event.sender.login }}
           PR_BRANCH: ${{ github.event.pull_request.head.ref }}
@@ -145,7 +146,7 @@ jobs:
     - run-tests
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
     if: needs.determine-workflow-conditions.outputs.is-charts-release-branch == 'true'
     steps:
@@ -162,4 +163,5 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MERGE_METHOD: squash
         MERGE_LABELS: ""
+        MERGE_ERROR_FAIL: "true"
 
