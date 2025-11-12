@@ -1,0 +1,358 @@
+{{- $fullName := include "cryostat.fullname" . -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cryostat.deploymentName" . }}
+  labels:
+    {{- include "cryostat.labels" . | nindent 4 }}
+    app.kubernetes.io/component: cryostat
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "cryostat.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: cryostat
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.core.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cryostat.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: cryostat
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cryostat.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        {{- if (.Values.authentication.openshift).enabled }}
+        {{- include "cryostat.openshiftOauthProxy" . | nindent 8 }}
+        {{- else }}
+        {{- include "cryostat.oauth2Proxy" . | nindent 8 }}
+        {{- end }}
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.core.securityContext | nindent 12 }}
+          image: "{{ .Values.core.image.repository }}:{{ .Values.core.image.tag }}"
+          imagePullPolicy: {{ .Values.core.image.pullPolicy }}
+          env:
+          - name: QUARKUS_HTTP_HOST
+            value: localhost
+          - name: QUARKUS_LOG_LEVEL
+            value: {{ .Values.core.debug.log.level }}
+          - name: QUARKUS_HTTP_PORT
+            value: "8181"
+          - name: QUARKUS_HTTP_PROXY_PROXY_ADDRESS_FORWARDING
+            value: 'true'
+          - name: QUARKUS_HTTP_PROXY_ALLOW_X_FORWARDED
+            value: 'true'
+          - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_HOST
+            value: 'true'
+          - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_PREFIX
+            value: 'true'
+          - name: QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION
+            value: none
+          - name: QUARKUS_HIBERNATE_ORM_SQL_LOAD_SCRIPT
+            value: no-file
+          {{- if gt (int (.Values.reports).replicas) 0 }}
+          - name: REPORTS_PASS_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (printf "%s-reports-secret" .Release.Name) .Values.reports.reportsSecretName }}
+                key: REPORTS_PASS
+                optional: false
+          # TODO TLS trust
+          - name: QUARKUS_TLS_TRUST_ALL
+            value: "true"
+          - name: QUARKUS_REST_CLIENT_EXTENSIONS_API_VERIFY_HOST
+            value: "false"
+          - name: QUARKUS_REST_CLIENT_REPORTS_URL
+            value: {{ printf "%s://cryostat:$(REPORTS_PASS_SECRET_KEY)@%s-reports.%s.svc:%d" (include "cryostat.core.service.scheme" .) $fullName $.Release.Namespace (int .Values.reports.service.httpPort) }}
+          {{- end }}
+          {{- $hasSecret := (include "cryostat.databaseSecretHasUsernameKey" . ) }}
+          {{- if ($hasSecret | eq "true") }}
+          - name: QUARKUS_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (printf "%s-db" .Release.Name) .Values.core.databaseSecretName }}
+                key: USERNAME
+                optional: false
+          {{- else }}
+          - name: QUARKUS_DATASOURCE_USERNAME
+            value: "cryostat"
+          {{- end }}
+          - name: QUARKUS_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (printf "%s-db" .Release.Name) .Values.core.databaseSecretName }}
+                key: CONNECTION_KEY
+                optional: false
+          - name: QUARKUS_DATASOURCE_JDBC_URL
+            value: {{ default (printf "jdbc:postgresql://%s-db:5432/cryostat" $fullName) (.Values.db.provider).url }} 
+          - name: STORAGE_BUCKETS_ARCHIVES_NAME
+            value: {{ .Values.storage.buckets.names.archivedRecordings }}
+          - name: STORAGE_BUCKETS_EVENT_TEMPLATES_NAME
+            value: {{ .Values.storage.buckets.names.eventTemplates }}
+          - name: STORAGE_BUCKETS_PROBE_TEMPLATES_NAME
+            value: {{ .Values.storage.buckets.names.jmcAgentProbeTemplates }}
+          - name: STORAGE_BUCKETS_THREAD_DUMPS_NAME
+            value: {{ .Values.storage.buckets.names.threadDumps }}
+          - name: STORAGE_BUCKETS_HEAP_DUMPS_NAME
+            value: {{ .Values.storage.buckets.names.heapDumps }}
+          - name: STORAGE_BUCKETS_METADATA_NAME
+            value: {{ .Values.storage.buckets.names.metadata }}
+          - name: CRYOSTAT_SERVICES_REPORTS_STORAGE_CACHE_NAME
+            value: {{ .Values.storage.buckets.names.archivedReports }}
+          - name: STORAGE_METADATA_STORAGE_MODE
+            value: {{ .Values.storage.provider.metadata.storageMode }}
+          {{- if (.Values.storage.provider.tls).trustAll }}
+          - name: QUARKUS_S3_SYNC_CLIENT_TLS_TRUST_MANAGERS_PROVIDER_TYPE
+            value: trust-all
+          {{- end }}
+          - name: QUARKUS_S3_ENDPOINT_OVERRIDE
+            value: {{ default (printf "http://%s-storage:8333" $fullName) .Values.storage.provider.url }}
+          - name: QUARKUS_S3_PATH_STYLE_ACCESS
+            value: "{{ .Values.storage.provider.usePathStyleAccess }}"
+          - name: STORAGE_PRESIGNED_TRANSFERS_ENABLED
+            value: "{{ .Values.storage.provider.usePresignedRecordingTransfers }}"
+          - name: STORAGE_PRESIGNED_DOWNLOADS_ENABLED
+            value: "{{ .Values.storage.provider.usePresignedDownloads }}"
+          - name: QUARKUS_S3_AWS_REGION
+            # if an external provider URL is supplied then a region must also be supplied.
+            # Otherwise we are deploying a managed storage instance and can set a default value
+            value: {{ ternary .Values.storage.provider.region "us-east-1" (not (empty .Values.storage.provider.url)) }}
+          - name: QUARKUS_S3_CHECKSUM_VALIDATION
+            # if an external provider URL is supplied then use the configuration checksum validation value.
+            # Otherwise we are deploying a managed storage instance and should override this to false, since it is known to cause issues.
+            # See https://github.com/cryostatio/cryostat/issues/948
+            value: {{ ternary (quote .Values.storage.provider.useChecksumValidation) (quote "false") (not (empty .Values.storage.provider.url)) }}
+          - name: QUARKUS_S3_AWS_CREDENTIALS_TYPE
+            value: {{ .Values.storage.provider.authentication.credentialsType }}
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (printf "%s-storage-secret" .Release.Name) .Values.storage.storageSecretName }}
+                key: STORAGE_ACCESS_KEY_ID
+                optional: false
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (printf "%s-storage-secret" .Release.Name) .Values.storage.storageSecretName }}
+                key: STORAGE_ACCESS_KEY
+                optional: false
+          - name: GRAFANA_DATASOURCE_URL
+            value: http://localhost:8800
+          - name: GRAFANA_DASHBOARD_URL
+            value: http://localhost:3000
+          - name: GRAFANA_DASHBOARD_EXT_URL
+            value: /grafana/
+          {{- with .Values.core.discovery.kubernetes }}
+          {{- if .enabled }}
+          - name: CRYOSTAT_DISCOVERY_KUBERNETES_ENABLED
+            value: "true"
+          - name: CRYOSTAT_DISCOVERY_KUBERNETES_PORT_NAMES
+            value: {{ include "cryostat.commaSepList" (list .portNames "jfr-jmx" .builtInPortNamesDisabled) }}
+          - name: CRYOSTAT_DISCOVERY_KUBERNETES_PORT_NUMBERS
+            value: {{ include "cryostat.commaSepList" (list .portNumbers 9091 .builtInPortNumbersDisabled) }}
+          {{- if .allowAllNamespaces }}
+          - name: CRYOSTAT_DISCOVERY_KUBERNETES_NAMESPACES
+            value: '*'
+          {{- else }}
+          - name: CRYOSTAT_DISCOVERY_KUBERNETES_NAMESPACES
+            value: {{ include "cryostat.commaSepList" (list .namespaces $.Release.Namespace .installNamespaceDisabled) }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- with (.Values.core.config.extra).envVars }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- with (.Values.core.config.extra).envSources }}
+          envFrom:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          ports:
+            - containerPort: 8181
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - --fail
+                - http://localhost:8181/health/liveness
+          startupProbe:
+            exec:
+              command:
+                - curl
+                - --fail
+                - http://localhost:8181/health/liveness
+            failureThreshold: 18
+          resources:
+            {{- toYaml .Values.core.resources | nindent 12 }}
+          volumeMounts:
+          {{- range .Values.core.config.eventTemplates.configMapNames }}
+            - name: {{ . }}
+              mountPath: /opt/cryostat.d/templates.d/{{ . }}
+              readOnly: true
+          {{- end }}
+          {{- range  .Values.core.config.rules.configMapNames}}
+            - name: {{ . }}
+              mountPath: /opt/cryostat.d/rules.d/{{ . }}
+              readOnly: true
+          {{- end }}
+          {{- range .Values.core.config.probeTemplates.configMapNames}}
+            - name: {{ . }}
+              mountPath: /opt/cryostat.d/probes.d/{{ . }}
+              readOnly: true
+          {{- end }}
+          {{- range .Values.core.config.tlsTruststore.secretNames }}
+            - name: {{ . }}
+              mountPath: /truststore/{{ . }}
+              readOnly: true
+          {{- end }}
+          {{- range .Values.core.config.credentials.secretNames }}
+            - name: {{ . }}
+              mountPath: /opt/cryostat.d/credentials.d/{{ . }}
+              readOnly: true
+          {{- end}}
+        - name: {{ printf "%s-%s" .Chart.Name "grafana" }}
+          securityContext:
+            {{- toYaml .Values.grafana.securityContext | nindent 12 }}
+          image: "{{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}"
+          imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+          env:
+          - name: GF_AUTH_ANONYMOUS_ENABLED
+            value: "true"
+          - name: GF_SERVER_DOMAIN
+            value: localhost
+          - name: GF_SERVER_ROOT_URL
+            value: http://localhost:4180/grafana/
+          - name: GF_SERVER_SERVE_FROM_SUB_PATH
+            value: "true"
+          - name: JFR_DATASOURCE_URL
+            value: http://localhost:8800
+          {{- with (.Values.grafana.config).extra.envVars }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- with (.Values.grafana.config).extra.envSources }}
+          envFrom:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+          resources:
+            {{- toYaml .Values.grafana.resources | nindent 12 }}
+        - name: {{ printf "%s-%s" .Chart.Name "jfr-datasource" }}
+          securityContext:
+            {{- toYaml .Values.datasource.securityContext | nindent 12 }}
+          image: "{{ .Values.datasource.image.repository }}:{{ .Values.datasource.image.tag }}"
+          imagePullPolicy: {{ .Values.datasource.image.pullPolicy }}
+          env:
+          - name: LISTEN_HOST
+            value: localhost
+          - name: QUARKUS_HTTP_PORT
+            value: "8800"
+          {{- with (.Values.datasource.config).extra.envVars }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- with (.Values.datasource.config).extra.envSources }}
+          envFrom:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          ports:
+          - containerPort: 8800
+            protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+              - curl
+              - --fail
+              - http://localhost:8800
+          resources:
+            {{- toYaml .Values.datasource.resources | nindent 12 }}
+      {{- with (default .Values.nodeSelector .Values.core.nodeSelector) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.affinity .Values.core.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.tolerations .Values.core.tolerations) }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if not (.Values.authentication.openshift).enabled }}
+      - name: alpha-config
+        configMap:
+          name: {{ .Release.Name }}-alpha-config
+      {{- end }}
+      {{- if .Values.authentication.basicAuth.enabled }}
+      - name: {{ .Release.Name }}-htpasswd
+        secret:
+          defaultMode: 0440
+          secretName: {{ .Values.authentication.basicAuth.secretName }}
+      {{- end }}
+      {{- if (.Values.authentication.openshift).enabled }}
+      - name: {{ .Release.Name }}-proxy-tls
+        secret:
+          secretName: {{ .Release.Name }}-proxy-tls
+      {{- else if .Values.oauth2Proxy.tls.selfSigned.enabled }}
+      - name: {{ .Release.Name }}-oauth2proxy-tls
+        secret:
+          secretName: {{ .Release.Name }}-oauth2proxy-tls
+      {{- end }}
+      {{- range .Values.core.config.eventTemplates.configMapNames}}
+      - name: {{ . }}
+        configMap:
+          name: {{ . }}
+      {{- end }}
+      {{- range .Values.core.config.tlsTruststore.secretNames }}
+      - name: {{ . }}
+        secret:
+          secretName: {{ . }}
+      {{- end }}
+      {{- range .Values.core.config.credentials.secretNames }}
+      - name: {{ . }}
+        secret:
+          secretName: {{ . }}
+          optional: false
+      {{- end }}
+      {{- if .Values.core.config.probeTemplates.configMapNames}}
+      - name: declarative-probe-templates
+        projected:
+          defaultMode: {{ .Values.core.config.declarative.fsMode }}
+          sources:
+            {{- range .Values.core.config.probeTemplates.configMapNames}}
+            - configMap:
+                name: {{ . }}
+                optional: false
+            {{- end }}
+      {{- end }}
+      {{- if .Values.core.config.rules.configMapNames}}
+      - name: declarative-rules
+        projected:
+          defaultMode: {{ .Values.core.config.declarative.fsMode }}
+          sources:
+            {{- range .Values.core.config.rules.configMapNames}}
+            - configMap:
+                name: {{ . }}
+                optional: false
+            {{- end }}
+      {{- end }}

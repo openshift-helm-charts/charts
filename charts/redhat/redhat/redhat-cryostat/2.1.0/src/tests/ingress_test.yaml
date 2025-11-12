@@ -1,0 +1,60 @@
+suite: test ingress.yaml
+templates:
+  - ingress.yaml
+
+tests:
+  - it: should create an Ingress with default settings
+    set:
+      core.ingress.enabled: true
+      core.service.httpPort: 8080
+      core:
+        ingress:
+          className: nginx
+          annotations:
+            nginx.ingress.kubernetes.io/rewrite-target: /
+          hosts:
+            - host: example.com
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - example.com
+              secretName: example-tls
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: kind
+          value: Ingress
+      - matchRegex:
+          path: metadata.name
+          pattern: "RELEASE-NAME-cryostat"
+      - equal:
+          path: metadata.annotations['nginx.ingress.kubernetes.io/rewrite-target']
+          value:  "/"
+      - equal:
+          path: spec.rules[0].host
+          value: "example.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "RELEASE-NAME-cryostat"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 8080
+      - equal:
+          path: spec.ingressClassName
+          value: "nginx"
+      - equal:
+          path: spec.tls[0].secretName
+          value: "example-tls"
+
+  - it: should not create an Ingress when ingress is disabled
+    set:
+      core.ingress.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

@@ -1,0 +1,67 @@
+suite: test discovery_clusterrolebinding.yaml
+templates:
+  - discovery_clusterrolebinding.yaml
+
+tests:
+  - it: should do nothing if Kubernetes All Namespaces discovery is not enabled
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.allowAllNamespaces: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should do nothing if Kubernetes discovery is not enabled
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: false
+      core.discovery.kubernetes.allowAllNamespaces: true
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should do nothing if RBAC creation is not enabled
+    set:
+      rbac.create: false
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.allowAllNamespaces: true
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should create ClusterRoleBinding
+    set:
+      rbac.create: true
+      core.discovery.kubernetes.enabled: true
+      core.discovery.kubernetes.allowAllNamespaces: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: kind
+          value: ClusterRoleBinding
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cryostat-discovery
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/part-of: cryostat
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cryostat
+            app.kubernetes.io/version: "4.1.0-redhat"
+            helm.sh/chart: cryostat-2.1.0
+      - equal:
+          path: roleRef
+          value:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: RELEASE-NAME-cryostat-discovery
+      - equal:
+          path: subjects
+          value:
+            - kind: ServiceAccount
+              name: RELEASE-NAME-cryostat
+              namespace: NAMESPACE
