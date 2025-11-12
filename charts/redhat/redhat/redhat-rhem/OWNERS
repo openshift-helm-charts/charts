@@ -1,0 +1,13 @@
+chart:
+  name: redhat-rhem
+  shortDescription: Red Hat Edge Manager
+publicPgpKey: null
+users:
+- githubUsername: amir-yogev-gh
+- githubUsername: avishayt
+- githubUsername: fzdarsky
+- githubUsername: hexfusion
+- githubUsername: rawagner
+vendor:
+  label: redhat
+  name: Red Hat
