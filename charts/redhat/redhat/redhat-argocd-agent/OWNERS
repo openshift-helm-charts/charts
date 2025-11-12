@@ -3,12 +3,13 @@ chart:
   shortDescription: A Helm chart for deploying Red Hat OpenShift Argocd agent, agent component.
 publicPgpKey: null
 users:
-  - githubUsername: kam-bot
   - githubUsername: anandrkskd
   - githubUsername: svghadi 
   - githubUsername: varshab1210
   - githubUsername: jgwest
   - githubUsername: keithchong
+  - githubUsername: jannfis
+  - githubUsername: anandf
 vendor:
   label: redhat
   name: Red Hat
