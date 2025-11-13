@@ -1,0 +1,13 @@
+chart:
+  name: flightctl
+  shortDescription: Flight Control is a service for declarative management of fleets of edge devices and their workloads
+publicPgpKey: null
+users:
+- githubUsername: amir-yogev-gh
+- githubUsername: avishayt
+- githubUsername: fzdarsky
+- githubUsername: hexfusion
+- githubUsername: rawagner
+vendor:
+  label: flightctl
+  name: flightctl
