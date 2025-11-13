@@ -4845,6 +4845,36 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/rafaysystems-rafay-operator-redhat-0.2.3/rafay-operator-redhat-0.2.3.tgz
     version: 0.2.3
+  redhat-argocd-agent:
+  - annotations:
+      charts.openshift.io/digest: sha256:200aee721ac4aae71c191231d5caf054e1b7780228f5d9dd1a45cb3ca0fb277b
+      charts.openshift.io/lastCertifiedTimestamp: '2025-11-13T11:32:23.874793+00:00'
+      charts.openshift.io/name: RedHat Argo CD Agent - Agent Component
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-11-13T11:33:29.099468+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.4.1
+    description: RedHat Argo CD Agent for connecting managed clusters to a Principal
+    digest: 7654705bf2de94bae694dcf45fa9c3b7f51574b9e8ea31ce10b04273734ad888
+    home: https://github.com/argoproj-labs/argocd-agent
+    keywords:
+    - argocd
+    - gitops
+    - agent
+    kubeVersion: '>=1.24.0-0'
+    maintainers:
+    - name: Argo Project Maintainers
+      url: https://github.com/argoproj-labs/argocd-agent
+    name: redhat-argocd-agent
+    sources:
+    - https://github.com/argoproj-labs/argocd-agent
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-argocd-agent-0.1.0/redhat-argocd-agent-0.1.0.tgz
+    version: 0.1.0
   redhat-cakephp-application-template:
   - annotations:
       charts.openshift.io/digest: sha256:9216b5e25c0f15c61081455a89c54292a6246ca02a083cc3cc9d4ca0bb9b2b8d
@@ -13723,4 +13753,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-11-12T14:36:47.776639+00:00'
+generated: '2025-11-13T11:33:28.974853+00:00'
