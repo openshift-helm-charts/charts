@@ -864,7 +864,7 @@
                         "storage": {
                             "type": "string",
                             "description": "Storage size to request for the persistentVolumeClaim",
-                            "default": "500Mi"
+                            "default": "32Gi"
                         },
                         "accessModes": {
                             "type": "array",
