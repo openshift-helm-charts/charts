@@ -20,7 +20,7 @@ jobs:
     name: OWNERS file PR checker
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
     if: github.event.pull_request.draft == false && github.actor == 'redhat-mercury-bot'
     steps:
@@ -175,3 +175,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_METHOD: squash
           MERGE_LABELS: ""
+          MERGE_ERROR_FAIL: "true"

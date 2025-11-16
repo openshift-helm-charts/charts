@@ -1,0 +1,9 @@
+chart:
+  name: cortex-agent
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: paloalto
+  name: Palo Alto Networks Inc.

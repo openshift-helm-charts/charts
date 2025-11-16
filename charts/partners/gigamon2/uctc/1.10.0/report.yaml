@@ -1,0 +1,91 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.3
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:13095817448489770420
+        chart-uri: uctc-1.10.0.tgz
+        digests:
+            chart: sha256:df76df27b6a69766459117dcaebdfc5497a4a63625e58b429de836aecbf7b061
+            package: 7430ba281761ebc05247f3470ebc14a5a7d4eb710c07ed923c04429a6692d444
+        lastCertifiedTimestamp: "2025-11-03T16:24:31.849209+05:30"
+        testedOpenShiftVersion: "4.14"
+        supportedOpenShiftVersions: '>=4.14'
+        webCatalogOnly: false
+    chart:
+        name: uctc
+        home: ""
+        sources: []
+        version: 1.10.0
+        description: A Helm chart for Gigamon UCT-C
+        keywords: []
+        maintainers: []
+        icon: data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NjguNTQgOTcuMjEiPjxkZWZzPjxzdHlsZT4uY2xzLTF7ZmlsbDojZjI2NzIyO308L3N0eWxlPjwvZGVmcz48dGl0bGU+UHJpbnQtR2lnYW1vbi1PcmFuZ2UtTG9nbzwvdGl0bGU+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNODUsODcuMTJINjZWNzNoNDAuMzJ2MzguMzJhMTIzLjgxLDEyMy44MSwwLDAsMS0zNi43NSw1LjE1Yy0zMi4xMywwLTQ4LjI5LTEyLjkxLTQ4LjI5LTM4LjQzLDAtMjUuMTksMTYuMzktMzkuMzcsNDYuMDktMzkuMzcsMjUsMCwzNy44OSw4LjMsMzksMjUuMDlIODMuMTdjLS4zMi02LjkyLTYuNC0xMS4yNC0xNi40OS0xMS4yNC0xNC45LDAtMjMuMTksOC43My0yMy4xOSwyNC4zNywwLDE2LjU5LDguNTEsMjUsMjUuMzksMjVBNjMuNTksNjMuNTksMCwwLDAsODUsOTkuNjFaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjEuMjMgLTM4LjYyKSIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTExNy4zOSwzOS41NmgyMS43M1Y1NC4zN0gxMTcuMzlabS44NCwyMi44OWgyMC4xNnY1Mi43SDExOC4yM1oiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMS4yMyAtMzguNjIpIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTk4LjY1LDYyLjQ1aDE5LjcyYTk0LjgxLDk0LjgxLDAsMCwwLS43MywxMlYxMDEuM2MwLDEwLjE3LS40MSwxNy41My00LjgzLDIzLjQxLTUuODgsNy42NS0xNi4zOCwxMS4xMi0zMi4yMiwxMS4xMi0xOS43NCwwLTI5LjcyLTYuMDktMjkuOTItMTguNTdoMTkuOTRjLjIxLDQuNzMsMy43OCw3LjEzLDEwLjYsNy4xMywxMS4xNCwwLDE2LjI3LTUsMTYuMjctMTUuNzR2LTQuNDFjLTUuMjUsNi0xMi44MSw4LjkxLTIyLjQ1LDguOTEtMTYuNTksMC0yNy4xOS0xMC44LTI3LjE5LTI1LjYxLDAtMTYuMjcsMTAuNDktMjYuMzQsMjguMTItMjYuMzRxMTIuNDUsMCwyMiw5LjEyQTQxLjc3LDQxLjc3LDAsMCwxLDE5OC42NSw2Mi40NVpNMTgyLjksMTAxLjVjOS42NSwwLDE0LjgtNS4xNCwxNC44LTE0LjU5LDAtOS01LjM1LTE0LjI4LTE0LjU5LTE0LjI4cy0xNC42LDUuNDYtMTQuNiwxNUMxNjguNTEsOTUuOTQsMTc0LjA3LDEwMS41LDE4Mi45LDEwMS41WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIxLjIzIC0zOC42MikiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yNDYuMDgsMTE2LjQyYy0xMy41MywwLTIwLjg3LTYtMjAuODctMTZhMTYuNTIsMTYuNTIsMCwwLDEsOC4xOC0xNC44MWM1LjI0LTMuMjUsMTQuMTctMy42NywyNy0zLjY3aDkuNzdjMC0uNTMuMTEtMSwuMTEtMS40NiwwLTUuNzctMy40Ny04LjgzLTkuODgtOC44My03LDAtMTAuNiwxLjY4LTExLjM0LDYuNEgyMjguNTZjMS4zNi0xMS43NCwxMS43NS0xNi44OSwzMi4xMi0xNi44OSwxOS42NCwwLDI5LDYuMTgsMjksMjAuMTR2MjYuODlhMTguNzEsMTguNzEsMCwwLDAsMS4wNSw2LjkySDI3MS45MWExNi42MywxNi42MywwLDAsMS0xLjI2LTYuODF2LTFDMjY2LjQ2LDExMy4wNiwyNTguMDUsMTE2LjQyLDI0Ni4wOCwxMTYuNDJabTIyLjQ3LTI0Ljc4Yy0xNS4zMywwLTIyLjM2LDEuNTYtMjIuMzYsNy40NSwwLDMuODksMy4zNiw1Ljg4LDEwLjA5LDUuODgsOC45MSwwLDEzLjg1LTQuMywxMy44NS0xMi4xOFY5MS42NFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMS4yMyAtMzguNjIpIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjk5LjMxLDc0Ljg0YTk3LjkzLDk3LjkzLDAsMCwwLS42My0xMi4zOWgxOS44NHEuNjMsNC4yNy45NCw4LjVBMjguMzcsMjguMzcsMCwwLDEsMzQxLjMsNjEuMmM5Ljc2LDAsMTYuMTYsMy43NiwxOC45LDEwLjkxLDUtNy4yNCwxMi4zOC0xMC45MSwyMS41MS0xMC45MSwxNC44LDAsMjMuMSw3Ljc1LDIzLjEsMjIuMzZ2MzEuNTlIMzg0Ljc2VjgzYzAtNi40MS0zLjc4LTEwLTEwLjE5LTEwLTguNywwLTEyLjcsNS0xMi43LDE1LjMydjI2Ljc4SDM0MlY4M2MwLTYuMy0zLjc4LTEwLTEwLTEwLTguOTMsMC0xMi45MSw1LTEyLjkxLDE1LjMydjI2Ljc4SDI5OS4zMVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMS4yMyAtMzguNjIpIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNDEyLjY4LDg4LjdjMC0xNy42MywxMi4yOC0yNy42MiwzNS43LTI3LjYyczM1LjgsMTAsMzUuOCwyNy44M2MwLDE4LjE2LTEyLjI5LDI3LjUxLTM2LjY1LDI3LjUxQzQyNC42NSwxMTYuNDIsNDEyLjY4LDEwNi40NCw0MTIuNjgsODguN1ptNTAuMzgtLjQyYzAtMTAuMjktNS42Ni0xNi41OS0xNC41OC0xNi41OS05LjI0LDAtMTQuNTksNS44OC0xNC41OSwxNi40OXM1LjE1LDE2LjQ3LDE0LjY5LDE2LjQ3QzQ1Ny41LDEwNC42NSw0NjMuMDYsOTguNDUsNDYzLjA2LDg4LjI4WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIxLjIzIC0zOC42MikiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik00OTAuNzksNzQuODRhOTQuMzQsOTQuMzQsMCwwLDAtLjY1LTEyLjM5aDIwLjI4YTcwLjg2LDcwLjg2LDAsMCwxLC41Miw4LjRjNS44Ny02LjE5LDEyLjgxLTkuNjUsMjIuNjctOS42NSwxNC4yOCwwLDIyLjg4LDgsMjIuODgsMjEuNzN2MzIuMjJINTM2LjI0VjgzLjg3YzAtNy4xNC0zLjg4LTEwLjgyLTExLjEzLTEwLjgyLTkuNjcsMC0xNC4xNyw1LTE0LjE3LDE1LjMydjI2Ljc4SDQ5MC43OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMS4yMyAtMzguNjIpIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNTc1LjA3LDM4LjYyYTE1LDE1LDAsMCwxLDcuMjMsMS45QTEzLjQ3LDEzLjQ3LDAsMCwxLDU4Ny44LDQ2YTE0Ljc5LDE0Ljc5LDAsMCwxLDAsMTQuNywxMy42NSwxMy42NSwwLDAsMS01LjQ0LDUuNDUsMTQuNzMsMTQuNzMsMCwwLDEtMTQuNjUsMCwxMy42OCwxMy42OCwwLDAsMS01LjQ1LTUuNDUsMTQuNzMsMTQuNzMsMCwwLDEsMC0xNC43LDEzLjU1LDEzLjU1LDAsMCwxLDUuNTEtNS40NEExNSwxNSwwLDAsMSw1NzUuMDcsMzguNjJabTAsMi40NGExMi41MSwxMi41MSwwLDAsMC02LDEuNTksMTEuNDIsMTEuNDIsMCwwLDAtNC42LDQuNTQsMTIuMjMsMTIuMjMsMCwwLDAsMCwxMi4yNUExMS42LDExLjYsMCwwLDAsNTY5LDY0YTEyLjI1LDEyLjI1LDAsMCwwLDEyLjIxLDAsMTEuNTEsMTEuNTEsMCwwLDAsNC41NS00LjU1LDEyLjI5LDEyLjI5LDAsMCwwLDAtMTIuMjUsMTEuMywxMS4zLDAsMCwwLTQuNi00LjU0QTEyLjUyLDEyLjUyLDAsMCwwLDU3NS4wNyw0MS4wNlptLTYuNDYsMjAuNDJWNDUuNjRoNS40NGExMy4zOSwxMy4zOSwwLDAsMSw0LC40NCwzLjkyLDMuOTIsMCwwLDEsMiwxLjUzLDQuMDksNC4wOSwwLDAsMSwuNzQsMi4zMiw0LjIyLDQuMjIsMCwwLDEtMS4yNCwzLDQuOTIsNC45MiwwLDAsMS0zLjI5LDEuNDQsNC4yMSw0LjIxLDAsMCwxLDEuMzUuODRBMTcuNjIsMTcuNjIsMCwwLDEsNTgwLDU4LjM4bDEuOTMsMy4xaC0zLjEyTDU3Ny4zOSw1OWExMi42NCwxMi42NCwwLDAsMC0yLjY4LTMuNjksMy4yMywzLjIzLDAsMCwwLTIuMDUtLjU1aC0xLjV2Ni43M1ptMi41NS04LjkxaDMuMTFhNSw1LDAsMCwwLDMtLjY3LDIuMjcsMi4yNywwLDAsMCwuNDItMywyLjMsMi4zLDAsMCwwLTEuMDktLjgzLDguMDcsOC4wNywwLDAsMC0yLjU2LS4yN2gtMi45MVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMS4yMyAtMzguNjIpIi8+PC9zdmc+
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 6.12.00
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: gigamon-uctc
+        kubeversion: '>= 1.27.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: No images to certify
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+
