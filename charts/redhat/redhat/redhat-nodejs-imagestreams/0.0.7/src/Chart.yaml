@@ -1,0 +1,14 @@
+description: |-
+  This content is experimental, do not use it in production. Build and run NodeJS applications on UBI.
+  For more information about using this builder image, including OpenShift considerations,
+  see https://github.com/sclorg/s2i-nodejs-container/blob/master/24/README.md.
+annotations:
+  charts.openshift.io/name: Red Hat NodeJS applications on UBI (experimental)
+apiVersion: v2
+appVersion: 0.0.7
+kubeVersion: '>=1.20.0'
+name: redhat-nodejs-imagestreams
+tags: builder,nodejs
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.7
