@@ -1,0 +1,9 @@
+chart:
+  name: redhat-valkey-imagestreams
+  description: This is the Red Hat Valkey imagestreams chart
+publicPgpKey: null
+users:
+  - githubUsername: phracek
+vendor:
+  label: redhat
+  name: Red Hat
