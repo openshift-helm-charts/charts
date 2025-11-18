@@ -1,0 +1,49 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    description: Defines how to build the application
+    template.alpha.openshift.io/wait-for-ready: "true"
+  labels:
+    app: nodejs-example
+    template: nodejs-example
+  name: {{ .Values.name }}
+spec:
+  {{ if .Values.registry.enabled }}
+  output:
+    to:
+      kind: DockerImage
+      name: "{{ .Values.registry.name }}/{{ .Values.registry.namespace }}/{{ .Values.name }}:latest"
+    pushSecret:
+      name: {{ .Values.registry.push_secret }}
+  {{ else }}
+  output:
+    to:
+      kind: ImageStreamTag
+      name: {{ .Values.name }}:latest
+  {{ end }}
+  source:
+    contextDir: {{ .Values.context_dir }}
+    git:
+      ref: "{{ .Values.source_repository_ref }}"
+      uri: "{{ .Values.source_repository_url }}"
+    type: Git
+  strategy:
+    sourceStrategy:
+      env:
+      - name: NPM_MIRROR
+        value: {{ .Values.npm_mirror }}
+      from:
+        kind: ImageStreamTag
+        name: nodejs:{{ .Values.nodejs_version }}
+        namespace: {{ .Values.namespace }}
+    type: Source
+  triggers:
+  - type: ImageChange
+  - type: ConfigChange
+  - github:
+      secret: {{ .Values.github_webhook_secret }}
+    type: GitHub
+  - generic:
+      secret: {{ .Values.generic_webhook_secret }}
+    type: Generic
