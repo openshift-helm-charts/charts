@@ -12,8 +12,8 @@
         },
         "nodejs_version": {
             "type": "string",
-            "description": "Version of NodeJS image to be used (18-ubi8, 20-ubi8, or latest).",
-            "enum": [ "latest", "18-ubi8", "20-ubi8",  "18-ubi9", "20-ubi9" ]
+            "description": "Version of NodeJS image to be used (20-ubi8, 22-ubi9, or latest).",
+            "enum": [ "latest", "20-ubi8", "20-ubi9", "22-ubi9", "22-ubi10", "24-ubi10", "24-ubi9" ]
         },
         "memory_limit": {
             "type": "string",
@@ -49,6 +49,26 @@
         "npm_mirror": {
             "type": "string",
             "description": "The custom NPM mirror URL."
+        },
+        "registry": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of registry that will be used for pushing built image."
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "The namespace of registry that will be used for pushing built image."
+                },
+                "push_secret": {
+                    "type": "string",
+                    "description": "The push secret to push image to registry."
+                }
+            }
         }
     }
 }

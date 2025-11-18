@@ -9,15 +9,24 @@ metadata:
     template: nodejs-example
   name: {{ .Values.name }}
 spec:
+  {{ if .Values.registry.enabled }}
+  output:
+    to:
+      kind: DockerImage
+      name: "{{ .Values.registry.name }}/{{ .Values.registry.namespace }}/{{ .Values.name }}:latest"
+    pushSecret:
+      name: {{ .Values.registry.push_secret }}
+  {{ else }}
   output:
     to:
       kind: ImageStreamTag
       name: {{ .Values.name }}:latest
+  {{ end }}
   source:
     contextDir: {{ .Values.context_dir }}
     git:
-      ref: {{ .Values.source_repository_ref }}
-      uri: {{ .Values.source_repository_url }}
+      ref: "{{ .Values.source_repository_ref }}"
+      uri: "{{ .Values.source_repository_url }}"
     type: Git
   strategy:
     sourceStrategy:
