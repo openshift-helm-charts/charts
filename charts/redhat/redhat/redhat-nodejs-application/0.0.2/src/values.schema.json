@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9-_]+$"
+        },
+        "namespace": {
+            "type": "string",
+            "title": "The URL of the repository with your application source code."
+        },
+        "nodejs_version": {
+            "type": "string",
+            "description": "Version of NodeJS image to be used (20-ubi8, 22-ubi9, or latest).",
+            "enum": [ "latest", "20-ubi8", "20-ubi9", "22-ubi9", "22-ubi10", "24-ubi10", "24-ubi9" ]
+        },
+        "memory_limit": {
+            "type": "string",
+            "title": "Maximum amount of memory the container can use.",
+            "form": true,
+            "render": "slider",
+            "sliderMin": 512,
+            "sliderMax": 65536,
+            "sliderUnit": "Mi"
+        },
+        "source_repository_url": {
+            "type": "string"
+        },
+        "source_repository_ref": {
+            "type": "string"
+        },
+        "context_dir": {
+            "type": "string",
+            "description": "Set this to the relative path to your project if it is not in the root of your repository."
+        },
+        "application_domain": {
+            "type": "string",
+            "description": "The exposed hostname that will route to the httpd service, if left blank a value will be defaulted."
+        },
+        "github_webhook_secret": {
+            "type": "string",
+            "description": "Github trigger secret.  A difficult to guess string encoded as part of the webhook URL.  Not encrypted."
+        },
+        "generic_webhook_secret": {
+            "type": "string",
+            "description": "A secret string used to configure the Generic webhook."
+        },
+        "npm_mirror": {
+            "type": "string",
+            "description": "The custom NPM mirror URL."
+        },
+        "registry": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of registry that will be used for pushing built image."
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "The namespace of registry that will be used for pushing built image."
+                },
+                "push_secret": {
+                    "type": "string",
+                    "description": "The push secret to push image to registry."
+                }
+            }
+        }
+    }
+}
