@@ -11307,6 +11307,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-valkey-imagestreams-0.0.1/redhat-valkey-imagestreams-0.0.1.tgz
     version: 0.0.1
+  redhat-valkey-persistent:
+  - annotations:
+      charts.openshift.io/digest: sha256:85571d8693a1740e2da61868086e1f3ac0fcbbbbf79fb385019f21a91d11afaf
+      charts.openshift.io/lastCertifiedTimestamp: '2025-11-26T11:00:15.164293+00:00'
+      charts.openshift.io/name: Red Hat Valkey in-memory data structure store, with
+        persistent storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-11-26T11:01:39.241610+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: 'This content is experimental, do not use it in production. Valkey
+      in-memory data structure store, with persistent storage. For more information
+      about using this template, including OpenShift considerations, see https://github.com/sclorg/valkey-container/blob/master/8.  NOTE:
+      You must have persistent volumes available in your cluster to use this template.'
+    digest: 7849ab0e25ddc47a897e7838a1844fddd9e91eb8618ddfa46612e1d2d9b0fcd7
+    kubeVersion: '>=1.20.0'
+    name: redhat-valkey-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,valkey
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-valkey-persistent-0.0.1/redhat-valkey-persistent-0.0.1.tgz
+    version: 0.0.1
   redhat-vertx:
   - annotations:
       charts.openshift.io/digest: sha256:3331fdb13510b38a2e420a370716e542a31dc764c02976659e653213b2e764ee
@@ -13917,4 +13943,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-11-26T10:51:09.381036+00:00'
+generated: '2025-11-26T11:01:39.116999+00:00'
