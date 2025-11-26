@@ -11283,6 +11283,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-trusted-profile-analyzer-1.2.0/redhat-trusted-profile-analyzer-1.2.0.tgz
     version: 1.2.0
+  redhat-valkey-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:b6b66018bb2bf5aeb570869155cdb6f44163656923c27cd0de7e923299b18479
+      charts.openshift.io/lastCertifiedTimestamp: '2025-11-26T10:49:47.076164+00:00'
+      charts.openshift.io/name: Provides a Valkey database on RHEL imagestreams (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-11-26T10:51:09.504260+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: 0.0.1
+    description: This content is experimental, do not use it in production. Provides
+      a Valkey database on RHEL imagestreams. For more information about Valkey container
+      see https://github.com/sclorg/valkey-container/.
+    digest: e36f4f21232e638d8d51d8040594c8cbdbbb415e5af0d630bc588387c44aa8bd
+    kubeVersion: '>=1.20.0'
+    name: redhat-valkey-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,valkey
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-valkey-imagestreams-0.0.1/redhat-valkey-imagestreams-0.0.1.tgz
+    version: 0.0.1
   redhat-vertx:
   - annotations:
       charts.openshift.io/digest: sha256:3331fdb13510b38a2e420a370716e542a31dc764c02976659e653213b2e764ee
@@ -13893,4 +13917,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-11-25T11:51:29.473493+00:00'
+generated: '2025-11-26T10:51:09.381036+00:00'
