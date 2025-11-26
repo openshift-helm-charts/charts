@@ -1,0 +1,9 @@
+database_service_name: valkey
+memory_limit: 512Mi
+namespace: valkey-persistent-testing
+valkey_password: testp # TODO: must define a default value for .valkey_password'
+valkey_version: 8-el10
+pvc:
+  volume_capacity: 1Gi
+  app_code: "something"
+  netapp_nfs: false
