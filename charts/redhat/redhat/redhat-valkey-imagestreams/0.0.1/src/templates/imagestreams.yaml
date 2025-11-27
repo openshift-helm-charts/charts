@@ -1,0 +1,60 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/display-name: Valkey
+  name: valkey
+spec:
+  tags:
+    - annotations:
+        description: >-
+          Provides a Valkey database on RHEL. For more information about using
+          this database image, including OpenShift considerations, see
+          https://github.com/sclorg/valkey-container/tree/master/6/README.md.
+
+
+          WARNING: By selecting this tag, your application will automatically
+          update to use the latest version of Valkey available on OpenShift,
+          including major version updates.
+        iconClass: icon-valkey
+        openshift.io/display-name: Valkey (Latest)
+        openshift.io/provider-display-name: 'Red Hat, Inc.'
+        tags: valkey
+      from:
+        kind: ImageStreamTag
+        name: 8-el10
+      referencePolicy:
+        type: Local
+      name: latest
+    - annotations:
+        description: >-
+          Provides a Valkey 8 database on RHEL 10. For more information about
+          using this database image, including OpenShift considerations, see
+          https://github.com/sclorg/valkey-container/tree/master/8/README.md.
+        iconClass: icon-valkey
+        openshift.io/display-name: Valkey 8 (RHEL 10)
+        openshift.io/provider-display-name: 'Red Hat, Inc.'
+        tags: valkey
+        version: '8'
+      from:
+        kind: DockerImage
+        name: 'registry.redhat.io/rhel10/valkey-8:latest'
+      referencePolicy:
+        type: Local
+      name: 8-el10
+    - annotations:
+        description: >-
+          Provides a Valkey 8 database on RHEL 9. For more information about
+          using this database image, including OpenShift considerations, see
+          https://github.com/sclorg/valkey-container/tree/master/8/README.md.
+        iconClass: icon-valkey
+        openshift.io/display-name: Valkey 8 (RHEL 9)
+        openshift.io/provider-display-name: 'Red Hat, Inc.'
+        tags: valkey
+        version: '8'
+      from:
+        kind: DockerImage
+        name: 'registry.redhat.io/rhel9/valkey-8:latest'
+      referencePolicy:
+        type: Local
+      name: 8-el9

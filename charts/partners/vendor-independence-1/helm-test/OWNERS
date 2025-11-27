@@ -1,0 +1,9 @@
+chart:
+  name: helm-test
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: vendor-independence-1
+  name: Red Hat, Inc.

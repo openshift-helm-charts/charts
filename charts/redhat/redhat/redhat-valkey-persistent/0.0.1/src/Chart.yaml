@@ -1,0 +1,15 @@
+description: |-
+  This content is experimental, do not use it in production. Valkey in-memory data structure store, with persistent storage.
+  For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/valkey-container/blob/master/8.
+
+  NOTE: You must have persistent volumes available in your cluster to use this template.
+name: redhat-valkey-persistent
+tags: database,valkey
+version: 0.0.1
+annotations:
+  charts.openshift.io/name: Red Hat Valkey in-memory data structure store, with persistent storage (experimental)
+apiVersion: v2
+appVersion: 0.0.1
+kubeVersion: '>=1.20.0'
+sources:
+  - https://github.com/sclorg/helm-charts
