@@ -1,0 +1,11 @@
+chart:
+  name: redhat-eap81
+  shortDescription: Build and Deploy EAP 8.1 applications on OpenShift
+publicPgpKey: null
+users:
+  - githubUsername: bstansberry
+  - githubUsername: jmesnil
+  - githubUsername: jfdenise
+vendor:
+  label: redhat
+  name: Red Hat
