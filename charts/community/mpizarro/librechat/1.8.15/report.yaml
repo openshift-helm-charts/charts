@@ -1,0 +1,135 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.13
+        profile:
+            VendorType: community
+            version: v1.1
+        reportDigest: uint64:14345681230610780080
+        chart-uri: https://maximilianopizarro.github.io/librechat/librechat-1.8.15.tgz
+        digests:
+            chart: sha256:bed464852069daac3647ee0f833b32280c76ee17a126a6d522cbf7b6de25153f
+            package: 4521129da6e2cf840e334600417f06f36f13852a3dd1550a86f8833e3edf1a07
+        lastCertifiedTimestamp: "2025-11-27T22:53:51.212851+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: false
+    chart:
+        name: librechat
+        home: https://www.librechat.ai
+        sources:
+            - https://github.com/maximilianoPizarro/librechat
+        version: 1.8.15
+        description: 'A Helm chart for deploying LibreChat, an open-source, AI-powered chat application. Enhanced ChatGPT Clone: Features Agents, MCP, DeepSeek, Anthropic, AWS, OpenAI, Responses API, Azure, Groq, o1, GPT-5, Mistral, OpenRouter, Vertex AI, Gemini, Artifacts, AI model switching, message search, Code Interpreter, langchain, DALL-E-3, OpenAPI Actions, Functions, Secure Multi-User Auth, Presets, open-source for self-hosting. Active.'
+        keywords:
+            - librechat
+            - chat
+            - ai
+            - llm
+            - chatbot
+            - open-source
+        maintainers:
+            - name: Carlos Estay
+              email: cestay@redhat.com
+              url: ""
+            - name: Maximiliano Pizarro
+              email: mapizarr@redhat.com
+              url: ""
+        icon: https://www.librechat.ai/librechat_alt.svg
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: v0.8.0-rc4
+        deprecated: false
+        annotations:
+            charts.openshift.io/documentation-url: https://www.librechat.ai/docs
+            charts.openshift.io/name: LibreChat
+            charts.openshift.io/privacy-policy-url: https://www.librechat.ai/privacy
+            charts.openshift.io/provider-display-name: maximilianoPizarro
+            charts.openshift.io/support-url: https://github.com/maximilianoPizarro/librechat/issues
+            charts.openshift.io/terms-of-service-url: https://www.librechat.ai/terms
+        kubeversion: '>=1.20.0'
+        dependencies:
+            - name: postgresql
+              version: 15.5.38
+              repository: https://charts.bitnami.com/bitnami
+              condition: postgresql.enabled
+            - name: mongodb
+              version: 16.5.45
+              repository: https://charts.bitnami.com/bitnami
+              condition: mongodb.enabled
+            - name: ollama
+              version: 1.26.0
+              repository: file://./ollama
+              condition: ollama.enabled
+            - name: meilisearch
+              version: 0.7.0
+              repository: file://./meilisearch
+              condition: meilisearch.enabled
+            - name: librechat-rag-api
+              version: 0.5.1
+              repository: file://./librechat-rag-api
+              condition: librechat-rag-api.enabled
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Optional
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/images-are-certified
+      type: Optional
+      outcome: FAIL
+      reason: |-
+        Failed to certify images : ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest : No images found for Registry/Repository: ghcr.io/danny-avila/librechat-rag-api-dev-lite
+        Failed to certify images : docker.io/mongo:8.0.13 : No images found for Registry/Repository: docker.io/mongo
+        Image is not Red Hat certified : ollama/ollama:0.11.2 : repository not found: ollama/ollama
+        Image is not Red Hat certified : ollama/ollama:0.11.2
+        Failed to certify images : ghcr.io/danny-avila/librechat:v0.8.0-rc4 : No images found for Registry/Repository: ghcr.io/danny-avila/librechat
+        Image is not Red Hat certified : getmeili/meilisearch:v1.7.3 : repository not found: getmeili/meilisearch
+        Image is not Red Hat certified : getmeili/meilisearch:v1.7.3
+        Failed to certify images : ghcr.io/bat-bs/bitnami-pgvector:pg16 : No images found for Registry/Repository: ghcr.io/bat-bs/bitnami-pgvector
+        Image is not Red Hat certified : busybox : repository not found: busybox
+        Image is not Red Hat certified : busybox
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: FAIL
+      reason: 'chart Install failure: context deadline exceeded'
+
