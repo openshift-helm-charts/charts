@@ -1,0 +1,96 @@
+{{- if ((.Values.networkPolicy.ingress).enabled) }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-cryostat-internal-ingress
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "cryostat.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: cryostat
+  ingress:
+    - from:
+      - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 4180
+        - protocol: TCP
+          port: 8443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-reports-internal-ingress
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "cryostat.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: reports
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            {{- include "cryostat.selectorLabels" $ | nindent 12 }}
+            app.kubernetes.io/component: cryostat
+        namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: {{ .Release.Namespace }}
+      ports:
+        - protocol: TCP
+          port: 4180
+        - protocol: TCP
+          port: 8443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-db-internal-ingress
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "cryostat.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: db
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            {{- include "cryostat.selectorLabels" $ | nindent 12 }}
+            app.kubernetes.io/component: cryostat
+        namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: {{ .Release.Namespace }}
+      ports:
+        - protocol: TCP
+          port: 5432
+{{- if (empty (.Values.storage.provider).url) }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-storage-internal-ingress
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "cryostat.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: storage
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            {{- include "cryostat.selectorLabels" $ | nindent 12 }}
+            app.kubernetes.io/component: cryostat
+        namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: {{ .Release.Namespace }}
+      - podSelector:
+          matchLabels:
+            {{- include "cryostat.selectorLabels" $ | nindent 12 }}
+            app.kubernetes.io/component: reports
+        namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: {{ .Release.Namespace }}
+      ports:
+        - protocol: TCP
+          port: 8333
+{{- end }}
+{{- end }}
