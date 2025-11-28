@@ -1,0 +1,11 @@
+chart:
+  name: redhat-eap-xp6
+  shortDescription: Build and Deploy EAP XP 6 applications on OpenShift
+publicPgpKey: null
+users:
+  - githubUsername: bstansberry
+  - githubUsername: jmesnil
+  - githubUsername: jfdenise
+vendor:
+  label: redhat
+  name: Red Hat
