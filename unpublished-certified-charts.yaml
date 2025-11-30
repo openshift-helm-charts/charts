@@ -8729,6 +8729,24 @@ entries:
     urls:
     - N/A
     version: 3.52.18
+  - annotations:
+      charts.openshift.io/digest: sha256:0264a866814be27f3d24dbaa149613614fa801915454e9f51c7f8d2698556812
+      charts.openshift.io/lastCertifiedTimestamp: '2025-11-30T13:15:58.483915+00:00'
+      charts.openshift.io/name: Remote Active Testing Worker
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-11-30T13:19:08.363008+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 2.43.4-ubi
+    description: Active Worker Helm Chart for remote active worker deployments
+    digest: ba37ca03b0674277ff96c6c366056ce8e20040715448bbf628e1b98e7798dab1
+    kubeVersion: '>=1.0.0-0'
+    name: remote-active-worker-ubi
+    type: application
+    urls:
+    - N/A
+    version: 3.55.6
   smf:
   - annotations:
       charts.openshift.io/digest: sha256:08fd5c4cd8c86180336734a698c65fd85bf0f28ae76c669f6c028fc67998f0ab
@@ -9338,4 +9356,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-11-28T08:40:18.393128+00:00'
+generated: '2025-11-30T13:19:08.268812+00:00'
