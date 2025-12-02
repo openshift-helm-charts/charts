@@ -1,0 +1,140 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.12.2
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:16113516145444189057
+        chart-uri: N/A
+        digests:
+            chart: sha256:31aebb6dad929c0b68d2cfe7c4fb17804e15716512f4765be361d157df88c76e
+            package: 6cc242d4b53f9776e7bf2136003d73cb0b79011ca6787e0777413b2f309a5f83
+        lastCertifiedTimestamp: "2025-12-02T18:10:02.527101+00:00"
+        testedOpenShiftVersion: 4.16.20
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: true
+    chart:
+        name: 5g-upf-global
+        home: ""
+        sources: []
+        version: 25.2.516-20250806.9917186
+        description: A Helm chart for 5G Core cUPF(25/08/06)
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 25.B.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: 5g-upf-global-25b
+            charts.openshift.io/provider: Samsung Electronics
+            charts.openshift.io/releaseDate: 25/08/06
+            charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+        kubeversion: '>= 1.21.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-utilbox:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-fqm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-cdbm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-vcdm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-twamp:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-updm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-drmm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-lbcm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-ppsm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-nfmc:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-pm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-nlm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-crm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-lem:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ima:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ncdh:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-crtm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-eves:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-fm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-dm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-cap:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-sshd:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-ui:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-dpme:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-bgpm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-lbim:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-ucsm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-imcm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-clm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-nsm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-prm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-endm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-pmexp:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-nidm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-bfdm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-uppi:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ncth:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-vpbt:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-lbsshd:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-imim:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-clbc:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-fluentd:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ldbm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-lbm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-upf-trcm:SVR25B_20250806_9917186
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-clbs:SVR25B_20250806_9917186
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
