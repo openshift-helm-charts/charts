@@ -1,0 +1,127 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.12.2
+        profile:
+            VendorType: partner
+            version: v1.2
+        reportDigest: uint64:15155573079698884418
+        chart-uri: N/A
+        digests:
+            chart: sha256:2b9d359615bf4b32985dbd779485d623a03d14f15a8854f2abfb144978e40ffc
+            package: 517a5b7bde9d8e86fe6eecbd0d327f8729ffc392b23814ff469e3e29a81f4224
+        lastCertifiedTimestamp: "2025-12-02T16:57:02.733799+00:00"
+        testedOpenShiftVersion: 4.16.20
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: true
+    chart:
+        name: 5g-nrf-global
+        home: ""
+        sources: []
+        version: 25.2.570-20250814.9942493
+        description: A Helm chart for 5G Core cNRF(25/08/14)
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 25.B.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: 5g-nrf-global
+            charts.openshift.io/provider: Samsung Electronics
+            charts.openshift.io/releaseDate: 25/08/14
+            charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+        kubeversion: '>= 1.21.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-grdh:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ima:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nrf-atsm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-dm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-clbs:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-fluentd:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ndns:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-cap:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nrf-nmcm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-utilbox:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nrf-pm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nrf-vcdm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-fqm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ldbm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nrf-ui:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-lem:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nrf-dnsf:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nrf-ndcm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nrf-nscm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ncdh:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-sshd:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-bfdm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-ncth:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-bgpm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-imcm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-fm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-clm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-crm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-nsm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-imim:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-lbm:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-pmexp:SVR25B_20250814_9942493
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/global-nf-twamp:SVR25B_20250814_9942493
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
