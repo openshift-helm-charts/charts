@@ -3072,6 +3072,24 @@ entries:
     urls:
     - N/A
     version: 3.3.50-rhel
+  - annotations:
+      charts.openshift.io/digest: sha256:864b1ab5a58ce9c407cb4d6bf7fb73d0f6c40b8877e2e1feab49f490a04f477d
+      charts.openshift.io/lastCertifiedTimestamp: '2025-12-07T11:04:42.405682+00:00'
+      charts.openshift.io/name: noname-security-sensor
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-12-07T11:07:50.970924+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.9'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: 3.3.51-rhel
+    description: A Helm chart for Kubernetes
+    digest: cc48c6b01f1c04178943c753af13c3b54e99ed9a72b071b12db41ebb6ce83c53
+    kubeVersion: '>=1.22.0-0'
+    name: noname-security-sensor-ubi
+    type: application
+    urls:
+    - N/A
+    version: 3.3.51-rhel
   nonamesec-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:9d5737cecbf3192547e56f7ad9d3960b3827eb318d96932c55dd1815b5cd6988
@@ -9838,4 +9856,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-12-04T20:33:42.906383+00:00'
+generated: '2025-12-07T11:07:50.873963+00:00'
