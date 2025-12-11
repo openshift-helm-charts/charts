@@ -1,0 +1,94 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.14
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:3290859301402831359
+        chart-uri: N/A
+        digests:
+            chart: sha256:6a6b0727d38ce5c87c02b6fd5957f3538c2c53fb7f7a120bea908f85e1794cf4
+            package: bdb9067168cc2729672d694431d005e26d98aba7d681503829d46bc199d2e794
+        lastCertifiedTimestamp: "2025-12-11T12:07:25.058464+00:00"
+        testedOpenShiftVersion: "4.14"
+        supportedOpenShiftVersions: '>=4.1'
+        webCatalogOnly: true
+    chart:
+        name: remote-active-worker-ubi
+        home: ""
+        sources: []
+        version: 3.57.6
+        description: Active Worker Helm Chart for remote active worker deployments
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.45.1-ubi
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Remote Active Testing Worker
+        kubeversion: '>=1.0.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/active-worker:2.45.1-ubi'
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
