@@ -1,0 +1,9 @@
+chart:
+  name: alquimia-studio
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: alquimiaai
+  name: Alquimia AI US Corp.
