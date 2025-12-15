@@ -1,0 +1,43 @@
+Thank you for installing {{ include "argocd-agent-agent.name" . }}!
+
+Your agent has been deployed to the {{ include  "argocd-agent-agent.namespace" . }} namespace.
+
+Release: {{ .Release.Name }}
+Namespace: {{ include  "argocd-agent-agent.namespace" . }}
+
+Deployment
+----------
+- Name: {{ include "argocd-agent-agent.agentDeploymentName" . }}
+- Replicas: {{ .Values.replicaCount }}
+- Image: {{ .Values.image.repository }}:{{ .Values.image.tag }} (pullPolicy: {{ .Values.image.pullPolicy }})
+
+Services
+--------
+- Metrics Service:  {{ include "argocd-agent-agent.metricsServiceName" . }}
+  - Port/TargetPort: {{ .Values.service.metrics.port }} / {{ .Values.service.metrics.targetPort }}
+- Healthz Service:  {{ include "argocd-agent-agent.healthzServiceName" . }}
+  - Port/TargetPort: {{ .Values.service.healthz.port }} / {{ .Values.service.healthz.targetPort }}
+
+Quick checks
+------------
+1) Check Deployment rollout
+   kubectl -n {{ include  "argocd-agent-agent.namespace" . }} rollout status deploy/{{ include "argocd-agent-agent.agentDeploymentName" . }}
+
+2) List Services
+   kubectl -n {{ include  "argocd-agent-agent.namespace" . }} get svc {{ include "argocd-agent-agent.metricsServiceName" . }} {{ include "argocd-agent-agent.healthzServiceName" . }}
+
+3) Port-forward to Metrics and Healthz
+   # Metrics
+   kubectl -n {{ include  "argocd-agent-agent.namespace" . }} port-forward deploy/{{ include "argocd-agent-agent.agentDeploymentName" . }} 127.0.0.1:{{ .Values.service.metrics.port }}:{{ .Values.service.metrics.targetPort }}
+   # Healthz
+   kubectl -n {{ include  "argocd-agent-agent.namespace" . }} port-forward deploy/{{ include "argocd-agent-agent.agentDeploymentName" . }} 127.0.0.1:{{ .Values.service.healthz.port }}:{{ .Values.service.healthz.targetPort }}
+
+4) Probe endpoints
+   curl -sf http://127.0.0.1:{{ .Values.service.healthz.port }}/healthz || true
+   curl -sf http://127.0.0.1:{{ .Values.service.metrics.port }}/metrics | head -n 20 || true
+
+Configuration overview
+----------------------
+- Agent mode: {{ .Values.agentMode }}
+- Remote server: {{ .Values.server }}:{{ .Values.serverPort }}
+- Redis address: {{ .Values.redisAddress }}
