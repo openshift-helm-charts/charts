@@ -8,6 +8,9 @@ version: 0.5.3
 appVersion: 0.5.3
 home: https://github.com/argoproj-labs/argocd-agent
 
+icon: "https://raw.githubusercontent.com/redhat-developer/gitops-operator/refs/heads/master/docs/Red_Hat-OpenShift_GitOps-Standard-RGB.svg"
+
+
 sources:
   - https://github.com/argoproj-labs/argocd-agent
 keywords:
