@@ -167,6 +167,40 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/alquimiaai-alquimia-runtime-helm-0.2.1/alquimia-runtime-helm-0.2.1.tgz
     version: 0.2.1
+  alquimia-studio:
+  - annotations:
+      charts.openshift.io/digest: sha256:6a5e05e482ca223cc78e3bde28cdc2f831f98a7dc5043f3458a81527b7622ce1
+      charts.openshift.io/lastCertifiedTimestamp: '2025-12-16T03:15:39.095156+00:00'
+      charts.openshift.io/links: Documentation,https://github.com/Alquimia-ai/studio
+      charts.openshift.io/name: Alquimia Studio
+      charts.openshift.io/provider: Alquimia AI US Corp.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-12-16T03:37:02.111045+00:00'
+      charts.openshift.io/supportURL: https://github.com/Alquimia-ai/studio/issues
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.13'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: "Alquimia Studio \u2013 front/app service for Alquimia Platform."
+    digest: ba7c74c28dfeab0c04b163d3949300388911e5556ed5505f725382297d9e8e63
+    home: https://github.com/Alquimia-ai
+    icon: https://raw.githubusercontent.com/Alquimia-ai/brand/main/icons/alquimia.png
+    keywords:
+    - alquimia
+    - studio
+    - nextjs
+    - web
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: team@alquimia.ai
+      name: Alquimia AI
+    name: alquimia-studio
+    sources:
+    - https://github.com/Alquimia-ai/studio
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/alquimiaai-alquimia-studio-0.1.0/alquimia-studio-0.1.0.tgz
+    version: 0.1.0
   axual-governance-core:
   - annotations:
       charts.openshift.io/digest: sha256:9923321ae2076dd1b1d4827ff3a3d62816add6ea92dd909616cf2c57830bc60d
@@ -14200,4 +14234,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-12-09T17:19:13.834970+00:00'
+generated: '2025-12-16T03:37:01.981449+00:00'
