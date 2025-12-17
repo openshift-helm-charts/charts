@@ -1,0 +1,10 @@
+chart:
+  name: alquimia-studio
+  shortDescription: Enterprise-Ready AI Agent Creation Platform
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: joseluiscruz-alquimiaai
+vendor:
+  label: alquimiaai
+  name: Alquimia AI US Corp.
