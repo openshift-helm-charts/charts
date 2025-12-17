@@ -1,0 +1,25 @@
+apiVersion: v2
+name: redhat-argocd-agent
+description: RedHat Argo CD Agent for connecting managed clusters to a Principal
+type: application
+# chart version 
+version: 0.5.3
+# applicaation version, ArgoCD Agent version
+appVersion: 0.5.3
+home: https://github.com/argoproj-labs/argocd-agent
+
+icon: "https://raw.githubusercontent.com/redhat-developer/gitops-operator/refs/heads/master/docs/Red_Hat-OpenShift_GitOps-Standard-RGB.svg"
+
+
+sources:
+  - https://github.com/argoproj-labs/argocd-agent
+keywords:
+  - argocd
+  - gitops
+  - agent
+maintainers:
+  - name: Argo Project Maintainers
+    url: https://github.com/argoproj-labs/argocd-agent
+kubeVersion: ">=1.24.0-0"
+annotations:
+  charts.openshift.io/name: "RedHat Argo CD Agent - Agent Component"
