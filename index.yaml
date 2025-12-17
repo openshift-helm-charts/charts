@@ -201,6 +201,39 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/alquimiaai-alquimia-studio-0.1.0/alquimia-studio-0.1.0.tgz
     version: 0.1.0
+  - annotations:
+      charts.openshift.io/digest: sha256:b39161d9de173f651bac36df960fc804e7a6f4628e7ebb36ba182118849803dc
+      charts.openshift.io/lastCertifiedTimestamp: '2025-12-17T12:43:25.173057+00:00'
+      charts.openshift.io/links: Documentation,https://github.com/Alquimia-ai/studio
+      charts.openshift.io/name: Alquimia Studio
+      charts.openshift.io/provider: Alquimia AI US Corp.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-12-17T12:47:23.545206+00:00'
+      charts.openshift.io/supportURL: https://github.com/Alquimia-ai/studio/issues
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.13'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: "Alquimia Studio \u2013 front/app service for Alquimia Platform."
+    digest: be97ad5ca11b0b509f482160a8e168b3cf25329162e3f0463d1725c78b42d786
+    home: https://github.com/Alquimia-ai
+    icon: https://www.alquimia.ai/favicon.ico
+    keywords:
+    - alquimia
+    - studio
+    - nextjs
+    - web
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: team@alquimia.ai
+      name: Alquimia AI
+    name: alquimia-studio
+    sources:
+    - https://github.com/Alquimia-ai/studio
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/alquimiaai-alquimia-studio-0.2.0/alquimia-studio-0.2.0.tgz
+    version: 0.2.0
   axual-governance-core:
   - annotations:
       charts.openshift.io/digest: sha256:9923321ae2076dd1b1d4827ff3a3d62816add6ea92dd909616cf2c57830bc60d
@@ -14234,4 +14267,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-12-16T03:37:01.981449+00:00'
+generated: '2025-12-17T12:47:23.420686+00:00'
