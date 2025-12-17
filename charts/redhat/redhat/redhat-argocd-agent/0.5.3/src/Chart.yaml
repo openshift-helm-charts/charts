@@ -1,5 +1,5 @@
 apiVersion: v2
-name: argocd-agent-agent
+name: redhat-argocd-agent
 description: RedHat Argo CD Agent for connecting managed clusters to a Principal
 type: application
 # chart version 
