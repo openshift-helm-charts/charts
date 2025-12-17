@@ -4984,6 +4984,36 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-argocd-agent-0.1.0/redhat-argocd-agent-0.1.0.tgz
     version: 0.1.0
+  - annotations:
+      charts.openshift.io/digest: sha256:995eff4d7f1fad22a8c1062ef595345965fe28a48a8e0d621be8dfa834885fb0
+      charts.openshift.io/lastCertifiedTimestamp: '2025-12-17T14:44:38.35715+00:00'
+      charts.openshift.io/name: RedHat Argo CD Agent - Agent Component
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2025-12-17T14:45:51.540493+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.5.3
+    description: RedHat Argo CD Agent for connecting managed clusters to a Principal
+    digest: 6e158d1d08f33478868d753a73a397c4f93323f28abcedeacf224632afd57fab
+    home: https://github.com/argoproj-labs/argocd-agent
+    icon: https://raw.githubusercontent.com/redhat-developer/gitops-operator/refs/heads/master/docs/Red_Hat-OpenShift_GitOps-Standard-RGB.svg
+    keywords:
+    - argocd
+    - gitops
+    - agent
+    kubeVersion: '>=1.24.0-0'
+    maintainers:
+    - name: Argo Project Maintainers
+      url: https://github.com/argoproj-labs/argocd-agent
+    name: redhat-argocd-agent
+    sources:
+    - https://github.com/argoproj-labs/argocd-agent
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-argocd-agent-0.5.3/redhat-argocd-agent-0.5.3.tgz
+    version: 0.5.3
   redhat-cakephp-application-template:
   - annotations:
       charts.openshift.io/digest: sha256:9216b5e25c0f15c61081455a89c54292a6246ca02a083cc3cc9d4ca0bb9b2b8d
@@ -14267,4 +14297,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2025-12-17T12:47:23.420686+00:00'
+generated: '2025-12-17T14:45:51.415923+00:00'
