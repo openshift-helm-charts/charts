@@ -1,9 +1,15 @@
 chart:
   name: wave-autoscale-helm
-  shortDescription: unknown
+  shortDescription: AI-powered Kubernetes cost optimization and resource management
+    using machine learning.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Thomas-stc-dev
+- githubUsername: Ari-suhyeon
+- githubUsername: wave-autoscale
+- githubUsername: pueding
+- githubUsername: ian-stclab
 vendor:
   label: stclab-inc
   name: STCLAB
