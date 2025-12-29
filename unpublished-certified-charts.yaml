@@ -9555,24 +9555,6 @@ entries:
     - N/A
     version: 3.56.6
   - annotations:
-      charts.openshift.io/digest: sha256:1e336007867c7e1be63d2e88617e288286ead3fb82e12ad9b39f05f98a7ff8b8
-      charts.openshift.io/lastCertifiedTimestamp: '2025-12-17T17:43:31.081918+00:00'
-      charts.openshift.io/name: Remote Active Testing Worker
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2025-12-17T17:47:07.392836+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
-      charts.openshift.io/testedOpenShiftVersion: '4.14'
-    apiVersion: v2
-    appVersion: 2.45.1-ubi
-    description: Active Worker Helm Chart for remote active worker deployments
-    digest: e05c98f916b7855587fd4de794780ab8994a37659959569b6a0bd607c4622615
-    kubeVersion: '>=1.0.0-0'
-    name: remote-active-worker-ubi
-    type: application
-    urls:
-    - N/A
-    version: 3.57.9
-  - annotations:
       charts.openshift.io/digest: sha256:6a1d789a1c673bc5f7fa282ae2b5442f666155f24c98b38f5448866ae74c8371
       charts.openshift.io/lastCertifiedTimestamp: '2025-12-17T22:57:37.288869+00:00'
       charts.openshift.io/name: Remote Active Testing Worker
@@ -9626,6 +9608,24 @@ entries:
     urls:
     - N/A
     version: 3.57.10
+  - annotations:
+      charts.openshift.io/digest: sha256:1e336007867c7e1be63d2e88617e288286ead3fb82e12ad9b39f05f98a7ff8b8
+      charts.openshift.io/lastCertifiedTimestamp: '2025-12-29T00:09:53.757615+00:00'
+      charts.openshift.io/name: Remote Active Testing Worker
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2025-12-29T00:12:50.595701+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 2.45.1-ubi
+    description: Active Worker Helm Chart for remote active worker deployments
+    digest: d174e5d195b9641e96921367e11eef87a9a39bf7d0813f0e701cffe6482ae72b
+    kubeVersion: '>=1.0.0-0'
+    name: remote-active-worker-ubi
+    type: application
+    urls:
+    - N/A
+    version: 3.57.9
   smf:
   - annotations:
       charts.openshift.io/digest: sha256:08fd5c4cd8c86180336734a698c65fd85bf0f28ae76c669f6c028fc67998f0ab
@@ -10369,4 +10369,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2025-12-25T14:34:37.303933+00:00'
+generated: '2025-12-29T00:12:50.489638+00:00'
