@@ -1,5 +1,5 @@
 chart:
-  name: kubedb
+  name: kubedb-certified
   shortDescription: KubeDB runs production-grade Databases on Kubernetes
 providerDelivery: false
 publicPgpKey: unknown
