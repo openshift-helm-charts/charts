@@ -1,0 +1,11 @@
+chart:
+  name: kubedb-certified
+  shortDescription: KubeDB runs production-grade Databases on Kubernetes
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: tamalsaha
+- githubUsername: Superm4n
+vendor:
+  label: appscode
+  name: Tamal Saha
