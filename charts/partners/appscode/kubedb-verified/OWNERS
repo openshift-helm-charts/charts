@@ -1,9 +1,11 @@
 chart:
   name: kubedb-verified
-  shortDescription: unknown
+  shortDescription: KubeDB runs production-grade Databases on Kubernetes
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: tamalsaha
+- githubUsername: Superm4n97
 vendor:
   label: appscode
   name: Tamal Saha
