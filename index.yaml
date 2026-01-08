@@ -3339,6 +3339,94 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/kovair-kovairdevops-helm-0.1.0/kovair-kovairdevops-helm-0.1.0.tgz
     version: 0.1.0
+  kubedb-verified:
+  - annotations:
+      charts.openshift.io/digest: sha256:64838cb1a7602ae9f12466c91c165f8a8736e1b3550627d44ee8acd4c64e08ca
+      charts.openshift.io/lastCertifiedTimestamp: '2026-01-08T14:55:13.474224+06:00'
+      charts.openshift.io/name: kubedb
+      charts.openshift.io/provider: Tamal Saha
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-01-08T09:00:17.975959+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: 2025.12.31-rc.1
+    dependencies:
+    - condition: petset.enabled
+      name: petset
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.1.15
+    - condition: operator-shard-manager.enabled
+      name: operator-shard-manager
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.1.15
+    - condition: sidekick.enabled
+      name: sidekick
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.1.15
+    - condition: supervisor.enabled
+      name: supervisor
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.1.15
+    - condition: kubedb-crd-manager.enabled
+      name: kubedb-crd-manager
+      repository: file://../kubedb-crd-manager
+      version: v0.15.0-rc.1
+    - condition: kubedb-provisioner.enabled
+      name: kubedb-provisioner
+      repository: file://../kubedb-provisioner
+      version: v0.60.0-rc.1
+    - condition: kubedb-ops-manager.enabled
+      name: kubedb-ops-manager
+      repository: file://../kubedb-ops-manager
+      version: v0.47.0-rc.1
+    - condition: kubedb-autoscaler.enabled
+      name: kubedb-autoscaler
+      repository: file://../kubedb-autoscaler
+      version: v0.45.0-rc.1
+    - condition: kubedb-schema-manager.enabled
+      name: kubedb-schema-manager
+      repository: file://../kubedb-schema-manager
+      version: v0.36.0-rc.1
+    - condition: kubedb-webhook-server.enabled
+      name: kubedb-webhook-server
+      repository: file://../kubedb-webhook-server
+      version: v0.36.0-rc.1
+    - condition: kubedb-metrics.enabled
+      name: kubedb-metrics
+      repository: file://../kubedb-metrics
+      version: v2025.12.31-rc.1
+    - condition: kubedb-catalog.enabled
+      name: kubedb-catalog
+      repository: file://../kubedb-catalog
+      version: v2025.12.31-rc.1
+    - condition: kubedb-kubestash-catalog.enabled
+      name: kubedb-kubestash-catalog
+      repository: file://../kubedb-kubestash-catalog
+      version: v2025.12.31-rc.1
+    - condition: kubedb-crd-manager.installGitOpsCRDs
+      name: kubedb-gitops
+      repository: file://../kubedb-gitops
+      version: v0.8.0-rc.1
+    - condition: ace-user-roles.enabled
+      name: ace-user-roles
+      repository: oci://ghcr.io/appscode-charts
+      version: v2025.3.14
+    description: KubeDB by AppsCode - Production ready databases on Kubernetes
+    digest: 9e27ab9f0c43286259bc5aa280d65d89ceb683493a03e09053b998863986a1dd
+    home: https://kubedb.com
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    kubeVersion: '>=1.28.0'
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: kubedb-verified
+    sources:
+    - https://github.com/kubedb
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/appscode-kubedb-verified-2025.12.31-rc.1/kubedb-verified-2025.12.31-rc.1.tgz
+    version: 2025.12.31-rc.1
   kyverno:
   - annotations:
       charts.openshift.io/digest: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
@@ -14372,4 +14460,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-01-07T19:33:51.582065+00:00'
+generated: '2026-01-08T09:00:17.839754+00:00'
