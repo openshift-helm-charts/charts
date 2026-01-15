@@ -1,0 +1,452 @@
+{{- if and .Values.victoriametrics.enabled (.Capabilities.APIVersions.Has "operator.victoriametrics.com/v1beta1") }}
+{{- $vmUserSecret := default "vmuser-secret" .Values.victoriametrics.vmuser.existingSecret }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmagent-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+  name: vmagent-agg
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  replicaCount: 3
+  image:
+    repository: victoriametrics/vmagent
+    tag: v1.126.0
+  resources:
+    limits:
+      cpu: 1500m
+      memory: 1500Mi
+    requests:
+      cpu: 500m
+      memory: 500Mi
+  statefulMode: true
+  statefulStorage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: {{ .Values.victoriametrics.storageClassName }}
+        resources:
+          requests:
+            storage: 2Gi
+  serviceSpec:
+    metadata:
+      name: vmagent-emu-aggregate
+      labels:
+        app.kubernetes.io/instance: vmagent-tokenvisor
+    spec:
+      clusterIP: None
+      publishNotReadyAddresses: true
+      ports:
+        - name: http
+          port: 8429
+          targetPort: 8429
+  remoteWrite:
+    - url: "http://vminsertinternal-victoria-cluster.{{ include "tokenvisor.namespace" . }}.svc:8480/insert/0/prometheus/api/v1/write"
+      streamAggrConfig:
+        enableWindows: true
+        rules:
+          - match: "flower.task.runtime.seconds_bucket"
+            interval: 1m
+            without: [service.instance.id, worker]
+            outputs: [total]
+            keep_metric_names: true
+
+          - match: '{__name__=~"flower.task.runtime.seconds_(count|sum)"}'
+            interval: 1m
+            without: [service.instance.id, worker]
+            outputs: [total]
+            keep_metric_names: true
+
+          - match: '{__name__=~"http.+_bucket"}'
+            interval: 1m
+            without: [service.instance.id, http.server_name, http.host]
+            outputs: [total]
+            keep_metric_names: true
+
+          - match: '{__name__=~"http.+_(count|sum)"}'
+            interval: 1m
+            without: [service.instance.id, http.server_name, http.host]
+            outputs: [total]
+            keep_metric_names: true
+
+          - match: '{service.name=~"emu|starling", __name__=~"(llm|embed|rerank).+_bucket"}'
+            interval: 1m
+            without: [service.instance.id, service.name]
+            outputs: [total]
+            keep_metric_names: true
+            output_relabel_configs:
+              - target_label: "service.name"
+                replacement: "emu"
+
+          - match: '{service.name=~"emu|starling", __name__=~"(llm|embed|rerank).+_(count|sum)"}'
+            interval: 1m
+            without: [service.instance.id, service.name]
+            outputs: [total]
+            keep_metric_names: true
+            output_relabel_configs:
+              - target_label: "service.name"
+                replacement: "emu"
+
+          - match: "db.client.connections.usage"
+            interval: 1m
+            without: [service.instance.id]
+            outputs: [total]
+            keep_metric_names: true
+
+          - match: "http.server.active_requests"
+            interval: 1m
+            without: [service.instance.id, http.server_name, http.host]
+            outputs: [total]
+            keep_metric_names: true
+
+          - match:
+              - "request_count"
+              - "llm_request_count"
+              - "embed_request_count"
+              - "rerank_request_count"
+            interval: 30s
+            without: [service.instance.id]
+            outputs: [total]
+            keep_metric_names: true
+
+          - match:
+              - "llm_itl_milliseconds"
+              - "llm_tpot_milliseconds"
+              - "llm_ttft_milliseconds"
+              - "embed_completion_time_milliseconds"
+              - "rerank_completion_time_milliseconds"
+            interval: 30s
+            without: [service.instance.id]
+            outputs: [max]
+            keep_metric_names: true
+
+          - match: "deployment_num_replica"
+            interval: 10s
+            without: [service.instance.id, service.name]
+            outputs: [min]
+            keep_metric_names: true
+            output_relabel_configs:
+              - target_label: "service.name"
+                replacement: "emu"
+
+          - match: "model_request_total"
+            interval: 30s
+            without: [service.instance.id]
+            outputs: [total]
+            keep_metric_names: true
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmagent-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+  name: vmagent
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  replicaCount: 2
+  image:
+    repository: victoriametrics/vmagent
+    tag: v1.126.0
+  serviceScrapeNamespaceSelector:
+    matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: In
+        values:
+          - {{ include "tokenvisor.namespace" . }}
+  podScrapeNamespaceSelector:
+    matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: In
+        values:
+          - {{ include "tokenvisor.namespace" . }}
+  nodeScrapeSelector:
+    matchLabels:
+      app.kubernetes.io/instance: system-monitor
+  resources:
+    limits:
+      cpu: 1500m
+      memory: 1500Mi
+    requests:
+      cpu: 500m
+      memory: 500Mi
+  remoteWrite:
+    - url: "http://vminsertinternal-victoria-cluster.{{ include "tokenvisor.namespace" . }}.svc:8480/insert/0/prometheus/api/v1/write"
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  labels:
+    app.kubernetes.io/instance: vm-podscrape-spec
+    app.kubernetes.io/part-of: vm-operator
+  name: dragonfly-scrape
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  podMetricsEndpoints:
+    - port: admin
+  selector:
+    matchLabels:
+      app: dragonfly
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  labels:
+    app.kubernetes.io/instance: vm-podscrape-spec
+    app.kubernetes.io/part-of: vm-operator
+  name: amd-exporter-amdgpu-metrics-exporter
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  podMetricsEndpoints:
+    - port: ""
+      honorLabels: true
+      relabelConfigs:
+        - targetLabel: job
+          replacement: amd-gpu-metrics-exporter
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metrics-exporter
+  namespaceSelector:
+    any: true
+  jobLabel: app
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  labels:
+    app.kubernetes.io/instance: vm-podscrape-spec
+    app.kubernetes.io/part-of: vm-operator
+  name: nvidia-dcgm-exporter
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      app: nvidia-dcgm-exporter
+  namespaceSelector:
+    any: true
+  jobLabel: app
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMNodeScrape
+metadata:
+  name: system-monitor
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    app.kubernetes.io/part-of: vm-operator
+    app.kubernetes.io/instance: system-monitor
+spec:
+  scheme: https
+  tlsConfig:
+    caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    insecureSkipVerify: true
+    serverName: localhost
+  bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+  relabelConfigs:
+    - action: labelmap
+      regex: __meta_kubernetes_node_label_(.+)
+    - targetLabel: __address__
+      replacement: kubernetes.default.svc:443
+    - sourceLabels: [__meta_kubernetes_node_name]
+      regex: (.+)
+      targetLabel: __metrics_path__
+      replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+    - targetLabel: job
+      replacement: system-monitor
+  metricRelabelConfigs:
+    - action: labelkeep
+      regex: __name__|namespace|job|instance|container
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: skypilot-vllm-scrape
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    app.kubernetes.io/part-of: vm-operator
+    app.kubernetes.io/instance: vm-pod-scrape
+spec:
+  selector:
+    matchLabels:
+      deployment: skypilot
+      deployment-type: vllm
+  namespaceSelector:
+    matchNames:
+      - skypilot
+  podMetricsEndpoints:
+    - targetPort: 8000
+      relabelConfigs:
+        - source_labels: [__meta_kubernetes_pod_name]
+          action: replace
+          target_label: pod_name
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: clickhouse-keeper-metrics
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    app.kubernetes.io/part-of: vm-operator
+    app.kubernetes.io/instance: vm-pod-scrape
+spec:
+  selector:
+    matchLabels:
+      app: clickhouse-keeper
+  namespaceSelector:
+    matchNames:
+      - {{ include "tokenvisor.namespace" . }}
+  podMetricsEndpoints:
+    - port: chk-metrics
+      relabelConfigs:
+        - sourceLabels: [__meta_kubernetes_namespace]
+          targetLabel: namespace
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          targetLabel: pod_name
+        - sourceLabels: [__meta_kubernetes_pod_container_name]
+          targetLabel: container_name
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMCluster
+metadata:
+  labels:
+    app.kubernetes.io/instance: victoria-metrics-cluster-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+  name: victoria-cluster
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  clusterVersion: v1.126.0-cluster
+  retentionPeriod: "100y"
+  replicationFactor: 2
+  requestsLoadBalancer:
+    enabled: true
+    spec:
+      replicaCount: 2
+  vmstorage:
+    replicaCount: 2
+    storageDataPath: "/vm-data"
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ .Values.victoriametrics.storageClassName }}
+          resources:
+            requests:
+              storage: "10Gi"
+    resources:
+      limits:
+        cpu: "3"
+        memory: "3Gi"
+      requests:
+        cpu: 500m
+        memory: 500Mi
+  vmselect:
+    replicaCount: 2
+    cacheMountPath: "/select-cache"
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ .Values.victoriametrics.storageClassName }}
+          resources:
+            requests:
+              storage: "1Gi"
+    resources:
+      limits:
+        cpu: "1"
+        memory: "1Gi"
+      requests:
+        cpu: "0.5"
+        memory: "500Mi"
+  vminsert:
+    replicaCount: 2
+    resources:
+      limits:
+        cpu: "1"
+        memory: "1Gi"
+      requests:
+        cpu: "0.5"
+        memory: "500Mi"
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAuth
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmauth-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+  name: vmauth
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  replicaCount: 2
+  image:
+    repository: victoriametrics/vmauth
+    tag: v1.126.0
+  userSelector:
+    matchLabels:
+      app.kubernetes.io/instance: vmuser-tokenvisor
+  resources:
+    limits:
+      cpu: 1500m
+      memory: 1500Mi
+    requests:
+      cpu: 500m
+      memory: 500Mi
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMUser
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmuser-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+  name: vmuser
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  name: vmuser
+  username: vmuser
+  passwordRef:
+    name: {{ $vmUserSecret }}
+    key: password
+  targetRefs:
+    - crd:
+        kind: VMCluster/vmselect
+        name: victoria-cluster
+        namespace: {{ include "tokenvisor.namespace" . }}
+      target_path_suffix: "/select/0"
+      paths:
+        - "/vm/vmui"
+        - "/vm/vmui/.*"
+        - "/vm/prometheus/api/v1/query"
+        - "/vm/prometheus/api/v1/query_range"
+        - "/vm/prometheus/api/v1/series"
+        - "/vm/prometheus/api/v1/status/.*"
+        - "/vm/prometheus/api/v1/label/"
+        - "/vm/prometheus/api/v1/label/[^/]+/values"
+        - "/vm/prometheus/api/v1/status/tsdb"
+        - "/vm/prometheus/api/v1/export"
+        - "/vm/prometheus/api/v1/export/csv"
+      drop_src_path_prefix_parts: 1
+    - crd:
+        kind: VMCluster/vmselect
+        name: victoria-cluster
+        namespace: {{ include "tokenvisor.namespace" . }}
+      target_path_suffix: "/select/0/prometheus"
+      paths:
+        - "/vm/api/v1/query"
+        - "/vm/api/v1/query_range"
+        - "/vm/api/v1/series"
+        - "/vm/api/v1/status/.*"
+        - "/vm/api/v1/label/"
+        - "/vm/api/v1/label/[^/]+/values"
+        - "/vm/api/v1/status/tsdb"
+        - "/vm/api/v1/export"
+        - "/vm/api/v1/export/csv"
+      drop_src_path_prefix_parts: 1
+    - static:
+        urls:
+          - http://vls-victoria-logs-single-server-0.vls-victoria-logs-single-server.{{ include "tokenvisor.namespace" . }}.svc.cluster.local:9428/
+          - http://vls-victoria-logs-single-server-1.vls-victoria-logs-single-server.{{ include "tokenvisor.namespace" . }}.svc.cluster.local:9428/
+      drop_src_path_prefix_parts: 1
+      paths:
+        - "/vl/select"
+        - "/vl/select/.*"
+        - "/vl/logsql"
+        - "/vl/logsql/.*"
+{{- end }}

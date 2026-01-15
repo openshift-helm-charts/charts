@@ -1,0 +1,18 @@
+{{- if and .Values.features.core .Values.studio.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.studio.service.name }}
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: studio
+spec:
+  selector:
+    app: studio
+  ports:
+    - name: http
+      port: {{ .Values.studio.service.port | int }}
+      targetPort: {{ .Values.studio.service.port | int }}
+  type: ClusterIP
+{{- end }}

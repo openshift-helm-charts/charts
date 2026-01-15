@@ -1,0 +1,13 @@
+apiVersion: v2
+name: tokenvisor
+description: TokenVisor Helm chart (operators required as pre-requisites)
+type: application
+version: 0.1.0
+appVersion: "0.0.0"
+kubeVersion: ">=1.21.0-0"
+annotations:
+  charts.openshift.io/name: "TokenVisor"
+dependencies:
+  - name: victoria-logs-single
+    repository: https://victoriametrics.github.io/helm-charts/
+    version: 0.11.19

@@ -1,0 +1,17 @@
+{{- if and .Values.features.core .Values.emu.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: emu-config
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+    app.kubernetes.io/part-of: emu-backend
+  
+
+data:
+{{- range $key, $value := .Values.emu.config }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}

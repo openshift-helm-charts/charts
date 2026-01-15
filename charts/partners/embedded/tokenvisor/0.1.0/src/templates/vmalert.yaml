@@ -1,0 +1,79 @@
+{{- if and .Values.vmalert.enabled .Values.victoriametrics.enabled (.Capabilities.APIVersions.Has "operator.victoriametrics.com/v1beta1") }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlert
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmalert-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+  name: vmalert
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  replicaCount: 1
+  datasource:
+    url: "http://vmselectinternal-victoria-cluster.{{ include "tokenvisor.namespace" . }}.svc:8481/select/0/prometheus"
+  remoteWrite:
+    url: "http://vminsertinternal-victoria-cluster.{{ include "tokenvisor.namespace" . }}.svc:8480/insert/0/prometheus"
+  remoteRead:
+    url: "http://vmselectinternal-victoria-cluster.{{ include "tokenvisor.namespace" . }}.svc:8481/select/0/prometheus"
+  notifier:
+    url: "http://vmalertmanager-tokenvisor-alertmanager.{{ include "tokenvisor.namespace" . }}.svc:9093"
+  evaluationInterval: "30s"
+  ruleSelector:
+    matchLabels:
+      vmalert/rule-type: metrics
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlert
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmalert-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+  name: vmalert-log
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  replicaCount: 1
+  datasource:
+    url: "http://vls-victoria-logs-single-server.{{ include "tokenvisor.namespace" . }}.svc:9428"
+  notifier:
+    url: "http://vmalertmanager-tokenvisor-alertmanager.{{ include "tokenvisor.namespace" . }}.svc:9093"
+  evaluationInterval: "30s"
+  ruleSelector:
+    matchLabels:
+      vmalert/rule-type: logs
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanager
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmalertmanager-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+  name: tokenvisor-alertmanager
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  replicaCount: 1
+  disableNamespaceMatcher: true
+  configNamespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: {{ include "tokenvisor.namespace" . }}
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+{{- end }}

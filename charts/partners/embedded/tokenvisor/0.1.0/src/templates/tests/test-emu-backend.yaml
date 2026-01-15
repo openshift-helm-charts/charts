@@ -1,0 +1,39 @@
+{{- if and .Values.features.core .Values.emu.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-emu-backend-test"
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: test-emu-backend
+      image: {{ .Values.emu.initWaiter.image | default "ghcr.io/embeddedllm/tokenvisor-curl-ubi:8.12.1" }}
+      command:
+        - sh
+        - -c
+        - |
+          echo "Testing EMU Backend connectivity..."
+          SERVICE_NAME="{{ .Values.emu.service.name }}"
+          SERVICE_PORT="{{ .Values.emu.service.port }}"
+          NAMESPACE="{{ include "tokenvisor.namespace" . }}"
+
+          # Wait for service to be ready
+          for i in $(seq 1 30); do
+            if curl -sS --connect-timeout 5 "http://${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local:${SERVICE_PORT}/api/v1/health" > /dev/null 2>&1; then
+              echo "✓ EMU Backend health check passed"
+              curl -sS --connect-timeout 5 "http://${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local:${SERVICE_PORT}/api/v1/health" || true
+              exit 0
+            fi
+            echo "Attempt ${i}/30: Service not ready yet, waiting..."
+            sleep 2
+          done
+
+          echo "✗ EMU Backend failed to respond after 30 attempts"
+          exit 1
+{{- end }}

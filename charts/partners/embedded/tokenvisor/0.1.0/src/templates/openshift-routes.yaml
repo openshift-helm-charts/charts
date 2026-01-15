@@ -1,0 +1,115 @@
+{{- if and .Values.features.core .Values.network.openshiftRoutes.enabled }}
+{{- $namespace := include "tokenvisor.namespace" . }}
+{{- $hostPrefix := .Values.network.openshiftRoutes.hostPrefix | default "studio-frontend" }}
+
+---
+# Studio Frontend Route
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.studio.service.name }}
+  namespace: {{ $namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+spec:
+  host: {{ .Values.studio.service.name }}-{{ $hostPrefix }}.{{ $namespace }}.{{ .Values.network.openshiftRoutes.clusterDomain }}
+  to:
+    kind: Service
+    name: {{ .Values.studio.service.name }}
+    weight: 100
+  port:
+    targetPort: {{ .Values.studio.service.port | int }}
+  wildcardPolicy: None
+  tls:
+    {{- toYaml .Values.network.openshiftRoutes.tls | nindent 4 }}
+
+---
+# EMU API Route
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.emu.service.name }}
+  namespace: {{ $namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+spec:
+  host: {{ .Values.emu.service.name }}-{{ $hostPrefix }}.{{ $namespace }}.{{ .Values.network.openshiftRoutes.clusterDomain }}
+  to:
+    kind:    Service
+    name: {{ .Values.emu.service.name }}
+    weight: 100
+  port:
+    targetPort: {{ .Values.emu.service.port | int }}
+  wildcardPolicy: None
+  tls:
+    {{- toYaml .Values.network.openshiftRoutes.tls | nindent 4 }}
+
+---
+# Victoria Metrics Route
+{{- if .Values.network.openshiftRoutes.victoriaMetrics.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.network.openshiftRoutes.victoriaMetrics.serviceName }}
+  namespace: {{ $namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+spec:
+  host: {{ .Values.network.openshiftRoutes.victoriaMetrics.serviceName }}-{{ $hostPrefix }}.{{ $namespace }}.{{ .Values.network.openshiftRoutes.clusterDomain }}
+  to:
+    kind: Service
+    name: {{ .Values.network.openshiftRoutes.victoriaMetrics.serviceName }}
+    weight: 100
+  port:
+    targetPort: {{ .Values.network.openshiftRoutes.victoriaMetrics.port | int }}
+  wildcardPolicy: None
+  tls:
+    {{- toYaml .Values.network.openshiftRoutes.tls | nindent 4 }}
+{{- end }}
+
+---
+# Victoria Logs Route
+{{- if .Values.network.openshiftRoutes.victoriaLogs.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.network.openshiftRoutes.victoriaLogs.serviceName }}-vl
+  namespace: {{ $namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+spec:
+  host: {{ .Values.network.openshiftRoutes.victoriaLogs.serviceName }}-vl-{{ $hostPrefix }}.{{ $namespace }}.{{ .Values.network.openshiftRoutes.clusterDomain }}
+  to:
+    kind: Service
+    name: {{ .Values.network.openshiftRoutes.victoriaLogs.serviceName }}
+    weight: 100
+  port:
+    targetPort: {{ .Values.network.openshiftRoutes.victoriaLogs.port | int }}
+  wildcardPolicy: None
+  tls:
+    {{- toYaml .Values.network.openshiftRoutes.tls | nindent 4 }}
+{{- end }}
+
+---
+# ArgoCD Route
+{{- if .Values.network.openshiftRoutes.argocd.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.network.openshiftRoutes.argocd.serviceName }}
+  namespace: {{ .Values.network.openshiftRoutes.argocd.namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+spec:
+  host: {{ .Values.network.openshiftRoutes.argocd.serviceName }}-{{ $hostPrefix }}.{{ .Values.network.openshiftRoutes.argocd.namespace }}.{{ .Values.network.openshiftRoutes.clusterDomain }}
+  to:
+    kind: Service
+    name: {{ .Values.network.openshiftRoutes.argocd.serviceName }}
+    weight: 100
+  port:
+    targetPort: {{ .Values.network.openshiftRoutes.argocd.port | int }}
+  wildcardPolicy: None
+  tls:
+    {{- toYaml .Values.network.openshiftRoutes.tls | nindent 4 }}
+{{- end }}
+{{- end }}
