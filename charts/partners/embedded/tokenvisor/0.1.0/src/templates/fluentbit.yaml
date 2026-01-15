@@ -1,0 +1,181 @@
+{{- if and .Values.fluentbit.enabled (.Capabilities.APIVersions.Has "fluentbit.fluent.io/v1alpha2") }}
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterInput
+metadata:
+  name: cnpg-tail
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/mode: "k8s"
+    fluentbit.fluent.io/part-of: "tokenvisor"
+spec:
+  tail:
+    tag: kube.postgresql.*
+    path: /var/log/containers/tokenvisor-postgresql*_postgres*.log
+    parser: cri
+    refreshIntervalSeconds: 10
+    memBufLimit: 5MB
+    skipLongLines: true
+    db: /fluent-bit/tail/pos.db
+    dbSync: Normal
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterFilter
+metadata:
+  name: kubernetes-filter
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/mode: "k8s"
+    fluentbit.fluent.io/part-of: "tokenvisor"
+spec:
+  match: kube.*
+  filters:
+    - kubernetes:
+        kubeURL: https://kubernetes.default.svc:443
+        kubeCAFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        kubeTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+        labels: false
+        annotations: false
+        mergeLog: true
+        keepLog: false
+        mergeLogKey: log
+    - nest:
+        operation: lift
+        nestedUnder: kubernetes
+        addPrefix: kubernetes_
+    - modify:
+        rules:
+          - remove: stream
+          - remove: kubernetes_pod_id
+          - remove: kubernetes_host
+          - remove: kubernetes_container_hash
+    - nest:
+        operation: nest
+        wildcard:
+          - kubernetes_*
+        nestUnder: kubernetes
+        removePrefix: kubernetes_
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterFilter
+metadata:
+  name: postgresql-kubernetes-filter
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/mode: "k8s"
+    fluentbit.fluent.io/part-of: "tokenvisor"
+spec:
+  match: kube.postgresql.*
+  filters:
+    - parser:
+        keyName: message
+        parser: json
+    - grep:
+        regex: logger pgaudit
+    - nest:
+        operation: lift
+        nestedUnder: record
+    - nest:
+        operation: lift
+        nestedUnder: audit
+    - grep:
+        exclude: command SELECT
+    - modify:
+        rules:
+          - rename:
+              logger: service.name
+          - remove: transaction_id
+          - remove: log_time
+          - remove: process_id
+          - remove: msg
+          - remove: session_id
+          - remove: session_line_num
+          - remove: session_start_time
+          - remove: virtual_transaction_id
+          - remove: query_id
+          - remove: statement_id
+          - remove: substatement_id
+          - remove: statement_start_time
+          - remove: command_tag
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterOutput
+metadata:
+  name: vls-output-0
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/mode: "k8s"
+    fluentbit.fluent.io/part-of: "tokenvisor"
+spec:
+  matchRegex: (?:kube|service)\.(.*)
+  http:
+    host: vls-victoria-logs-single-server-0.vls-victoria-logs-single-server.{{ include "tokenvisor.namespace" . }}.svc
+    port: 9428
+    uri: /insert/jsonline?_stream_fields=service.name&_msg_field=statement&_time_field=ts
+    format: json_lines
+    jsonDateFormat: iso8601
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterOutput
+metadata:
+  name: vls-output-1
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/mode: "k8s"
+    fluentbit.fluent.io/part-of: "tokenvisor"
+spec:
+  matchRegex: (?:kube|service)\.(.*)
+  http:
+    host: vls-victoria-logs-single-server-1.vls-victoria-logs-single-server.{{ include "tokenvisor.namespace" . }}.svc
+    port: 9428
+    uri: /insert/jsonline?_stream_fields=service.name&_msg_field=statement&_time_field=ts
+    format: json_lines
+    jsonDateFormat: iso8601
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: FluentBit
+metadata:
+  name: tokenvisor-fluent-bit
+  labels:
+    app.kubernetes.io/instance: fluent-bit-tokenvisor
+    app.kubernetes.io/part-of: fluent-operator
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  image: ghcr.io/fluent/fluent-operator/fluent-bit:v4.1
+  positionDB:
+    hostPath:
+      path: /var/lib/fluent-bit/
+  resources:
+    requests:
+      cpu: 10m
+      memory: 25Mi
+    limits:
+      cpu: 500m
+      memory: 200Mi
+  fluentBitConfigName: tokenvisor-fluent-bit-config
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterFluentBitConfig
+metadata:
+  name: tokenvisor-fluent-bit-config
+  labels:
+    app.kubernetes.io/instance: fluent-bit-config-tokenvisor
+    app.kubernetes.io/part-of: fluent-operator
+spec:
+  service:
+    parsersFile: /fluent-bit/etc/parsers.conf
+  inputSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+      fluentbit.fluent.io/mode: "k8s"
+      fluentbit.fluent.io/part-of: "tokenvisor"
+  filterSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+      fluentbit.fluent.io/mode: "k8s"
+      fluentbit.fluent.io/part-of: "tokenvisor"
+  outputSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+      fluentbit.fluent.io/mode: "k8s"
+      fluentbit.fluent.io/part-of: "tokenvisor"
+{{- end }}

@@ -1,0 +1,24 @@
+TokenVisor Helm chart
+
+Prerequisites:
+- Kubernetes cluster with at least {{ .Values.global.minNodesRequired }} nodes.
+- Required operators already installed (VM Operator, ClickHouse Operator, CNPG, Dragonfly Operator, Grafana Operator, Fluent Operator).
+- Gateway API CRDs installed and a gateway controller (e.g., Cilium) configured.
+- Required storage classes available (e.g., openebs-three-replica, local-path, or your chosen classes).
+
+Namespace: {{ include "tokenvisor.namespace" . }}
+
+Core services:
+- EMU API: Service {{ .Values.emu.service.name }} (port {{ .Values.emu.service.port }})
+- Studio: Service {{ .Values.studio.service.name }} (port {{ .Values.studio.service.port }})
+
+Default-enabled dependencies: ClickHouse, CNPG, Dragonfly, VictoriaMetrics, VictoriaLogs, Skypilot.
+Optional components: Grafana, VMAlert.
+
+Provide required secrets before install (or set create + values):
+- ClickHouse user/cluster secrets
+- CNPG user secret
+- VictoriaMetrics vmuser secret
+EMU/OTEL notes:
+- OTEL ClickHouse password is read from {{ .Values.emu.secretRefs.clickhouseSecretName }}:{{ .Values.emu.secretRefs.clickhousePasswordKey }}
+- EMU VictoriaMetrics password is read from {{ .Values.emu.secretRefs.vmuserSecretName }}:{{ .Values.emu.secretRefs.vmuserPasswordKey }}

@@ -1,0 +1,19 @@
+{{- if and .Values.features.core .Values.storage.modelPvc.create (or .Values.emu.enabled .Values.starling.enabled) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.storage.modelPvc.name }}
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+spec:
+  accessModes:
+{{- toYaml .Values.storage.modelPvc.accessModes | nindent 4 }}
+{{- if .Values.storage.modelPvc.storageClassName }}
+  storageClassName: {{ .Values.storage.modelPvc.storageClassName }}
+{{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.modelPvc.size }}
+{{- end }}

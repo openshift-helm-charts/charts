@@ -1,0 +1,83 @@
+{{- if and .Values.cnpg.enabled (.Capabilities.APIVersions.Has "postgresql.cnpg.io/v1") }}
+{{- $secretName := default "pg-emu-user-secret" .Values.cnpg.secrets.existingSecret }}
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  name: postgresql
+spec:
+  images:
+    - major: 17
+      image: ghcr.io/embeddedllm/tokenvisor/postgres-17-ubi:17.7-ubi-fixed
+      # image: ghcr.io/cloudnative-pg/postgresql:17.6-202510060807-standard-trixie
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: tokenvisor-postgresql-cluster
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    app.kubernetes.io/instance: cnpg-tokenvisor
+    app.kubernetes.io/part-of: cnpg-cluster
+spec:
+  instances: {{ .Values.cnpg.instances }}
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
+    name: postgresql
+    major: 17
+  {{- with .Values.cnpg.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  managed:
+    roles:
+      - name: tokenvisor_auditor
+        ensure: present
+        comment: pgaudit role for tokenvisor
+        login: false
+  postgresql:
+    parameters:
+      dynamic_library_path: "/usr/lib/postgresql/17/lib"
+      pgaudit.log: "ddl, role"
+      pgaudit.log_catalog: "off"
+      pgaudit.log_parameter: "on"
+      pgaudit.log_client: "on"
+      pgaudit.role: "tokenvisor_auditor"
+      max_connections: "100"
+      deadlock_timeout: "5s"
+  bootstrap:
+    initdb:
+      database: emu
+      owner: emupg
+      secret:
+        name: {{ $secretName }}
+  monitoring:
+    enablePodMonitor: true
+  storage:
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.cnpg.storageSize }}
+      storageClassName: {{ .Values.cnpg.storageClassName }}
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: tokenvisor-pgbouncer
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  cluster:
+    name: tokenvisor-postgresql-cluster
+  instances: 1
+  type: rw
+  pgbouncer:
+    poolMode: transaction
+    parameters:
+      max_client_conn: "1000"
+      default_pool_size: "80"
+  monitoring:
+    enablePodMonitor: true
+{{- end }}
