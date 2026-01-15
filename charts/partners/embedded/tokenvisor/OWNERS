@@ -1,0 +1,9 @@
+chart:
+  name: tokenvisor
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: embedded
+  name: Embedded LLM Pte. Ltd.
