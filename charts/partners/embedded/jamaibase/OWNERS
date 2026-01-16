@@ -1,9 +1,11 @@
 chart:
   name: jamaibase
-  shortDescription: unknown
+  shortDescription: JamAI Base | Orchestrate your AI and Agentic workflow in a intuitive
+    and observable way.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: big-yellow-duck
 vendor:
   label: embedded
   name: Embedded LLM Pte. Ltd.
