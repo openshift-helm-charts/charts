@@ -12296,6 +12296,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-smsf-registration-1.0.4/smsf-registration-1.0.4.tgz
     version: 1.0.4
+  tokenvisor:
+  - annotations:
+      charts.openshift.io/digest: sha256:d9ad29d2d60038365c3dcbff262ab3d692159957f892b3996fa8825a8dcde25f
+      charts.openshift.io/lastCertifiedTimestamp: '2026-01-16T09:36:28.220226+08:00'
+      charts.openshift.io/name: TokenVisor
+      charts.openshift.io/provider: Embedded LLM Pte. Ltd.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-01-16T02:02:43.898839+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 0.0.0
+    dependencies:
+    - name: victoria-logs-single
+      repository: https://victoriametrics.github.io/helm-charts/
+      version: 0.11.19
+    description: TokenVisor Helm chart (operators required as pre-requisites)
+    digest: 12a128416b380d90a92ebe9128da2142354c3e54b5cc1aeceffef5eee5799ff9
+    kubeVersion: '>=1.21.0-0'
+    name: tokenvisor
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/embedded-tokenvisor-0.1.0/tokenvisor-0.1.0.tgz
+    version: 0.1.0
   uctc:
   - annotations:
       charts.openshift.io/digest: sha256:1bedd401dd5dfaa87aebcc86eea71c577c72197d39a04f80869e471062a76215
@@ -14656,4 +14680,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-01-15T07:23:50.171861+00:00'
+generated: '2026-01-16T02:02:43.773621+00:00'
