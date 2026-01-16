@@ -1,0 +1,858 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 11,
+  "panels": [
+    {
+      "datasource": {
+        "type": "victoriametrics-metrics-datasource",
+        "uid": "${datasource}"
+      },
+      "description": "Total LLM token usage over the last hour.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1000000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 3, "w": 8, "x": 0, "y": 0 },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "expr": "sum(increase_pure(llm_token_usage{org_id=~\"$org_id\", model=~\"$model\"}[1h]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Total LLM Token Usage",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Total Embedding token usage over the last hour.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1000000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 3, "w": 8, "x": 8, "y": 0 },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "sum(increase_pure(embedding_token_usage{org_id=~\"$org_id\", model=~\"$model\"}[1h]))",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Total Embedding Token Usage",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Total Rerank searches over the last hour.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1000000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 3, "w": 8, "x": 16, "y": 0 },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "sum(increase_pure(reranker_search_usage{org_id=~\"$org_id\", model=~\"$model\"}[1h]))",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Total Rerank Searches",
+      "type": "stat"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Distribution of HTTP server request durations over time.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "scaleDistribution": { "type": "linear" }
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 3 },
+      "id": 7,
+      "options": {
+        "calculate": false,
+        "cellGap": 1,
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "RdYlGn",
+          "steps": 64
+        },
+        "exemplars": { "color": "rgba(255,0,255,0.7)" },
+        "filterValues": { "le": 1e-9 },
+        "legend": { "show": true },
+        "rowsFrame": { "layout": "auto" },
+        "tooltip": { "mode": "single", "showColorScale": false, "yHistogram": false },
+        "yAxis": { "axisPlacement": "left", "reverse": false, "unit": "ms" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "prometheus_buckets(sum(rate(http.server.duration_bucket{service.name=~\"$service\", http.target=~\"$route\"}[5m])) by(vmrange))",
+          "format": "heatmap",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "HTTP Server Duration",
+      "type": "heatmap"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Requests per second (RPS) and error rates. Error series use right axis (percent).",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "axisPlacement": "left" }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "4xx %" },
+            "properties": [
+              { "id": "unit", "value": "percentunit" },
+              { "id": "custom.axisPlacement", "value": "right" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "5xx %" },
+            "properties": [
+              { "id": "unit", "value": "percentunit" },
+              { "id": "custom.axisPlacement", "value": "right" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "RPS" },
+            "properties": [{ "id": "unit", "value": "reqps" }]
+          }
+        ]
+      },
+      "gridPos": { "h": 5, "w": 12, "x": 12, "y": 3 },
+      "id": 11,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "sum(rate(http.server.duration_count{service.name=~\"$service\", http.target=~\"$route\"}[1m]))",
+          "legendFormat": "RPS",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "sum(rate(http.server.duration_count{service.name=~\"$service\", http.target=~\"$route\", http.status_code=~\"4..\"}[1m]))\n/\nsum(rate(http.server.duration_count{service.name=~\"$service\", http.target=~\"$route\"}[1m]))",
+          "legendFormat": "4xx %",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "sum(rate(http.server.duration_count{service.name=~\"$service\", http.target=~\"$route\", http.status_code=~\"5..\"}[1m]))\n/\nsum(rate(http.server.duration_count{service.name=~\"$service\", http.target=~\"$route\"}[1m]))",
+          "legendFormat": "5xx %",
+          "refId": "C"
+        }
+      ],
+      "title": "RPS & Error %",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Observed concurrency vs. predicted concurrency (Little's Law). Predicted = rate(duration_sum).",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green" }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 12, "x": 12, "y": 8 },
+      "id": 12,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "expr": "sum(http.server.active_requests{service.name=~\"$service\"})",
+          "legendFormat": "active",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "expr": "sum(rate(http.server.duration_sum{service.name=~\"$service\"}[1m]))",
+          "legendFormat": "predicted",
+          "refId": "B"
+        }
+      ],
+      "title": "Active vs Predicted Concurrency",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Token usage of LLMs over time, broken down by type, model, and org_id.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 500000 },
+              { "color": "red", "value": 1000000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 13 },
+      "id": 1,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "sum(increase_pure(llm_token_usage{org_id=~\"$org_id\", model=~\"$model\"}[1h])) by (type, model, org_id)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "{{type}} - {{model}} (Org: {{org_id}})",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "LLM Token Usage",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Usage of reranker system over time, broken down by model, and org_id.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 10000 },
+              { "color": "red", "value": 50000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 21 },
+      "id": 5,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "sum(increase_pure(reranker_search_usage{org_id=~\"$org_id\", model=~\"$model\"}[5m])) by (model, org_id)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "{{model}} (Org: {{org_id}})",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Rerank Usage",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Token usage for embeddings over time, broken down by model.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 10000 },
+              { "color": "red", "value": 50000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 21 },
+      "id": 4,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "sum(increase_pure(embedding_token_usage{org_id=~\"$org_id\", model=~\"$model\"}[5m])) by (model)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "{{model}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Embedding Usage",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Number of HTTP requests over time (stacked by path).",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "normal" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green" }, { "color": "yellow", "value": 500 }, { "color": "red", "value": 1000 }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 29 },
+      "id": 2,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "sum(increase_pure(request_count{org_id=~\"$org_id\"})) by (org_id, path)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "Path: {{path}} (Org: {{org_id}})",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "HTTP Requests",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Cost of LLM usage over time, broken down by model, category, and type.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green" }, { "color": "yellow", "value": 100 }, { "color": "red", "value": 500 }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 29 },
+      "id": 3,
+      "interval": "24h",
+      "options": {
+        "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "sum by(model, category, type) (increase_pure(spent{org_id=~\"$org_id\", model=~\"$model\"}[5m]))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "interval": "",
+          "legendFormat": "{{type}} - {{category}} (Model: {{model}})",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "LLM Usage Input Costs",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Service latency percentiles by route.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green" }] },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 37 },
+      "id": 13,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.50,\n  prometheus_buckets(\n    sum by (vmrange, http.method, http.target) (\n      rate(http.server.duration_bucket{service.name=~\"$service\", http.target=~\"$route\"}[5m])\n    )\n  )\n)",
+          "legendFormat": "p50 {{http.method}} {{http.target}}",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95,\n  prometheus_buckets(\n    sum by (vmrange, http.method, http.target) (\n      rate(http.server.duration_bucket{service.name=~\"$service\", http.target=~\"$route\"}[5m])\n    )\n  )\n)",
+          "legendFormat": "p95 {{http.method}} {{http.target}}",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.99,\n  prometheus_buckets(\n    sum by (vmrange, http.method, http.target) (\n      rate(http.server.duration_bucket{service.name=~\"$service\", http.target=~\"$route\"}[5m])\n    )\n  )\n)",
+          "legendFormat": "p99 {{http.method}} {{http.target}}",
+          "refId": "C"
+        }
+      ],
+      "title": "Server Latency (p50/p95/p99) by Route",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Client-side (outbound) latency p95 by target.",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "ms" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 37 },
+      "id": 14,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "expr": "histogram_quantile(0.95,\n  prometheus_buckets(\n    sum by (vmrange, http.method, http.target) (\n      rate(http.client.duration_bucket{service.name=~\"$service\"}[5m])\n    )\n  )\n)",
+          "legendFormat": "{{http.method}} {{http.target}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Client Latency p95 (by target)",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Server egress throughput (bytes/sec).",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "Bps" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 45 },
+      "id": 15,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "expr": "sum(rate(http.server.response.size_sum{service.name=~\"$service\", http.target=~\"$route\"}[1m]))",
+          "legendFormat": "throughput",
+          "refId": "A"
+        }
+      ],
+      "title": "Response Throughput",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Average response size by route (bytes).",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "bytes" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 45 },
+      "id": 16,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "expr": "sum by (http.target) (rate(http.server.response.size_sum{service.name=~\"$service\"}[5m]))\n/\nsum by (http.target) (rate(http.server.response.size_count{service.name=~\"$service\"}[5m]))",
+          "legendFormat": "{{http.target}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Response Size (by route)",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+      "description": "Top 10 slowest endpoints by p95 (current window).",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "ms" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 53 },
+      "id": 17,
+      "options": {
+        "displayMode": "gradient",
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "min": 0,
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showUnfilled": true
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+          "editorMode": "code",
+          "expr": "topk(10, histogram_quantile(0.95,\n  prometheus_buckets(\n    sum by (vmrange, http.method, http.target) (\n      rate(http.server.duration_bucket{service.name=~\"$service\"}[5m])\n    )\n  )\n))",
+          "legendFormat": "{{http.method}} {{http.target}}",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Top 10 Slow Endpoints (p95)",
+      "type": "bargauge"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 40,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": { "text": "tokenvisor-vm-prometheus", "value": "d2d2051d-297c-4b13-994d-1429b263b881" },
+        "includeAll": false,
+        "label": "Data Source",
+        "name": "datasource",
+        "options": [],
+        "query": "victoriametrics-metrics-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "allValue": ".*",
+        "current": { "text": ["All"], "value": ["$__all"] },
+        "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+        "includeAll": true,
+        "label": "Organization ID",
+        "multi": true,
+        "name": "org_id",
+        "options": [],
+        "query": "label_values(llm_token_usage, org_id)",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": { "text": ["All"], "value": ["$__all"] },
+        "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+        "includeAll": true,
+        "label": "Model",
+        "multi": true,
+        "name": "model",
+        "options": [],
+        "query": "label_values(llm_token_usage{org_id=~\"$org_id\"}, model)",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": { "text": ["All"], "value": ["$__all"] },
+        "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+        "includeAll": true,
+        "label": "Service",
+        "multi": true,
+        "name": "service",
+        "options": [],
+        "query": "label_values(http.server.duration_count, service.name)",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": { "text": ["All"], "value": ["$__all"] },
+        "datasource": { "type": "victoriametrics-metrics-datasource", "uid": "${datasource}" },
+        "includeAll": true,
+        "label": "Route (http.target)",
+        "multi": true,
+        "name": "route",
+        "options": [],
+        "query": "label_values(http.server.duration_count{service.name=~\"$service\"}, http.target)",
+        "refresh": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-24h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "TokenVisor-usage",
+  "uid": "eea17o583rjswc",
+  "version": 7,
+  "weekStart": ""
+}

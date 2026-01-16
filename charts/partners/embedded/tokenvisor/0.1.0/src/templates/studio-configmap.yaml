@@ -1,0 +1,65 @@
+{{- if and .Values.features.core .Values.studio.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: studio-config
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: studio
+
+data:
+{{- range $key, $value := .Values.studio.config }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: studio-auth-yaml-config
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: studio
+
+data:
+  studio-config.yml: |
+{{- .Values.studio.authConfigYaml | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: studio-themes
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: studio
+
+data:
+  theme.css: |
+{{- .Values.studio.themeCss | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: studio-logos
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: studio
+
+{{- if .Values.studio.logosBinaryData }}
+binaryData:
+{{- range $key, $value := .Values.studio.logosBinaryData }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+data:
+{{- if .Values.studio.logos }}
+{{- range $key, $value := .Values.studio.logos }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- else }}
+  .keep: ""
+{{- end }}
+{{- end }}

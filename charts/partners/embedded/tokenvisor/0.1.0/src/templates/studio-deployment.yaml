@@ -1,0 +1,118 @@
+{{- if and .Values.features.core .Values.studio.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: studio-deployment
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: studio
+spec:
+  replicas: {{ .Values.studio.replicas }}
+  selector:
+    matchLabels:
+      app: studio
+  template:
+    metadata:
+      labels:
+        app: studio
+    spec:
+      serviceAccountName: {{ .Values.studio.serviceAccountName }}
+{{- include "tokenvisor.imagePullSecrets" . | nindent 6 }}
+      initContainers:
+{{ if .Values.studio.initWaiter.enabled }}
+        - name: wait-emu
+          image: {{ .Values.studio.initWaiter.image }}
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              URL="{{ .Values.studio.initWaiter.emuHealthUrl }}"
+              INTERVAL="{{ .Values.studio.initWaiter.intervalSeconds }}"
+              ATTEMPTS={{ div (int .Values.studio.initWaiter.timeoutSeconds) (int .Values.studio.initWaiter.intervalSeconds) }}
+              echo "Waiting for EMU at ${URL}..."
+              i=0
+              while [ $i -lt $ATTEMPTS ]; do
+                code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}")
+                if [ "${code}" = "200" ]; then
+                  echo "EMU is ready."
+                  exit 0
+                fi
+                i=$((i+1))
+                sleep "${INTERVAL}"
+              done
+              echo "Timed out waiting for EMU."
+              exit 1
+{{ end }}
+        - name: prepare-assets
+          image: {{ .Values.studio.image }}
+          imagePullPolicy: {{ .Values.studio.imagePullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              cp -r /app/build/client/. /assets/
+              if [ -n "$(ls -A /logos)" ]; then
+                cp /logos/* /assets/
+              fi
+              ls -l /assets/
+          volumeMounts:
+            - name: logos-volume
+              mountPath: /logos
+              readOnly: true
+            - name: final-assets
+              mountPath: /assets
+      containers:
+        - name: studio
+          image: {{ .Values.studio.image }}
+          imagePullPolicy: {{ .Values.studio.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.studio.service.port | int }}
+          envFrom:
+            - configMapRef:
+                name: studio-config
+{{- if or .Values.studio.secret.existingSecret .Values.studio.secret.create }}
+            - secretRef:
+                name: {{ default "studio-secret" .Values.studio.secret.existingSecret }}
+{{- end }}
+{{- if or .Values.emu.secret.existingSecret .Values.emu.secret.create }}
+            - secretRef:
+                name: {{ default "emu-secret" .Values.emu.secret.existingSecret }}
+{{- end }}
+          volumeMounts:
+            - name: final-assets
+              mountPath: /app/build/client
+            - name: auth-yaml-config
+              mountPath: /app/studio-config.yml
+              subPath: studio-config.yml
+            - name: themes-volume
+              mountPath: /app/static/theme.css
+              subPath: theme.css
+          command: ["node", "server"]
+          livenessProbe:
+            httpGet:
+              path: /favicon.svg
+              port: {{ .Values.studio.service.port | int }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /favicon.svg
+              port: {{ .Values.studio.service.port | int }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+      volumes:
+        - name: logos-volume
+          configMap:
+            name: studio-logos
+        - name: themes-volume
+          configMap:
+            name: studio-themes
+        - name: final-assets
+          emptyDir: {}
+        - name: auth-yaml-config
+          configMap:
+            name: studio-auth-yaml-config
+{{- end }}

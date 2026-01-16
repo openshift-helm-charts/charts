@@ -1,0 +1,132 @@
+{{- if and .Values.grafana.enabled (.Capabilities.APIVersions.Has "grafana.integreatly.org/v1beta1") }}
+{{- $ns := include "tokenvisor.namespace" . }}
+{{- $adminSecret := (lookup "v1" "Secret" $ns .Values.grafana.adminSecret.name) }}
+{{- $clickhouseSecret := (lookup "v1" "Secret" $ns .Values.grafana.clickhouseSecret.name) }}
+{{- $adminPass := .Values.grafana.adminPassword }}
+{{- $clickhouseReadonlyPass := .Values.grafana.clickhouseReadonlyPassword }}
+{{- if $adminSecret }}
+{{- $adminPass = (get $adminSecret.data .Values.grafana.adminSecret.key | b64dec) }}
+{{- end }}
+{{- if $clickhouseSecret }}
+{{- $clickhouseReadonlyPass = (get $clickhouseSecret.data .Values.grafana.clickhouseSecret.key | b64dec) }}
+{{- end }}
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: tokenvisor-grafana
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    dashboards: tokenvisor-grafana
+spec:
+  config:
+    log:
+      mode: "console"
+    auth:
+      disable_login_form: "false"
+    security:
+      admin_user: {{ .Values.grafana.adminUser | quote }}
+      admin_password: {{ $adminPass | quote }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: vm-datasource
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: tokenvisor-grafana
+  datasource:
+    access: proxy
+    type: victoriametrics-metrics-datasource
+    name: tokenvisor-vm
+    url: http://vmselectinternal-victoria-cluster.{{ include "tokenvisor.namespace" . }}.svc.cluster.local:8481/select/0/prometheus
+  plugins:
+    - name: victoriametrics-metrics-datasource
+      version: 0.13.3
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: vm-prom-datasource
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: tokenvisor-grafana
+  datasource:
+    access: proxy
+    name: tokenvisor-vm-prometheus
+    type: prometheus
+    url: http://vmselectinternal-victoria-cluster.{{ include "tokenvisor.namespace" . }}.svc.cluster.local:8481/select/0/prometheus
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: clickhouse-datasource
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: tokenvisor-grafana
+  datasource:
+    type: grafana-clickhouse-datasource
+    access: proxy
+    name: clickhouse-datasource
+    jsonData:
+      defaultDatabase: tokenvisor_emu
+      name: clickhouse-datasource
+      port: 9000
+      host: clickhouse-tokenvisor.{{ include "tokenvisor.namespace" . }}.svc.cluster.local
+      username: emu_readonly
+      traces:
+        defaultDatabase: tokenvisor_emu
+        defaultTable: emu_traces
+        otelEnabled: true
+    secureJsonData:
+      password: {{ $clickhouseReadonlyPass | quote }}
+  plugins:
+    - name: grafana-clickhouse-datasource
+      version: 4.8.2
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: altinity-clickhouse-datasource
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: tokenvisor-grafana
+  datasource:
+    name: k8s-tokenvisor-tokenvisor
+    type: vertamedia-clickhouse-datasource
+    access: proxy
+    url: http://clickhouse-tokenvisor.{{ include "tokenvisor.namespace" . }}.svc.cluster.local:8123
+    basicAuth: true
+    isDefault: false
+    editable: true
+    basicAuthUser: emu_readonly
+    jsonData:
+      defaultDatabase: tokenvisor_emu
+    secureJsonData:
+      basicAuthPassword: {{ $clickhouseReadonlyPass | quote }}
+  plugins:
+    - name: vertamedia-clickhouse-datasource
+      version: 3.3.1
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: vm-dashboard
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  resyncPeriod: 30s
+  plugins:
+    - name: victoriametrics-metrics-datasource
+      version: 0.13.3
+  instanceSelector:
+    matchLabels:
+      dashboards: tokenvisor-grafana
+  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/vm/victoriametrics-cluster.json"
+{{- end }}

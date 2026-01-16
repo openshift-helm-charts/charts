@@ -1,0 +1,30 @@
+{{- if and .Values.features.core .Values.emu.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: emu-pdb
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+spec:
+  minAvailable: {{ .Values.emu.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      app: emu
+{{- end }}
+{{- if and .Values.features.core .Values.starling.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: starling-pdb
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: starling
+spec:
+  minAvailable: {{ .Values.starling.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      app: starling
+{{- end }}

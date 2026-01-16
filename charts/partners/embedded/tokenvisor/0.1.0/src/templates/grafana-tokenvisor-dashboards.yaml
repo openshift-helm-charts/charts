@@ -1,0 +1,40 @@
+{{- if and .Values.grafana.enabled (.Capabilities.APIVersions.Has "grafana.integreatly.org/v1beta1") }}
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: tokenvisor-emu-dashboard
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  resyncPeriod: 30s
+  instanceSelector:
+    matchLabels:
+      dashboards: tokenvisor-grafana
+  json: |
+{{ .Files.Get "files/dashboards/tokenvisor-emu.json" | nindent 4 }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: tokenvisor-model-status-dashboard
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  resyncPeriod: 30s
+  instanceSelector:
+    matchLabels:
+      dashboards: tokenvisor-grafana
+  json: |
+{{ .Files.Get "files/dashboards/tokenvisor-model-status.json" | nindent 4 }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: tokenvisor-traces-dashboard
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      dashboards: tokenvisor-grafana
+  json: |
+{{ .Files.Get "files/dashboards/tokenvisor-traces.json" | nindent 4 }}
+{{- end }}

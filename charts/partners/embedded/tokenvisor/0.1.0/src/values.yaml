@@ -1,0 +1,520 @@
+global:
+  namespace: tokenvisor
+  minNodesRequired: 3
+  imagePullSecrets:
+    - name: github-registry-secret
+
+validation:
+  failOnMissingModelPVC: true
+
+features:
+  core: true
+  storage: false
+
+clickhouse:
+  enabled: true
+  storageClassName: openebs-hostpath
+  storageSize: 10Gi
+  keeperReplicas: 1
+  clusterReplicas: 1
+  imagePullSecrets:
+    - name: github-registry-secret
+  images:
+    keeper: ghcr.io/embeddedllm/jamaibase/clickhouse-keeper-openshift:24.12.6.70
+    server: ghcr.io/embeddedllm/jamaibase/clickhouse-server-openshift:25.12.2.54
+    client: ghcr.io/embeddedllm/jamaibase/clickhouse-client-openshift:25.12.2.54
+    imagePullPolicy: IfNotPresent
+  secrets:
+    existingSecret: clickhouse-secret
+    create: false
+    data:
+      cluster_secret: clickhouse-cluster-secret
+      db_user_password: emupassword
+      db_readonly_user_password: emureadonlypassword
+  initJob:
+    enabled: true
+    useHelmHook: true
+    user: emuuser
+    host: clickhouse-tokenvisor-test.tokenvisor.svc.cluster.local
+    clusterName: tokenvisor-test
+    expectedClusterNumber: "1"
+    readonlyUser: emu_readonly
+  configuration:
+    zookeeper:
+      session_timeout_ms: 30000
+      operation_timeout_ms: 10000
+    keeper:
+      logger:
+        level: trace
+        console: true
+      prometheus:
+        port: 7000
+      settings:
+        four_letter_word_white_list: "*"
+        coordination_settings:
+          raft_logs_level: information
+    server:
+      logger:
+        level: trace
+        console: true
+        size: 100M
+        count: 10
+      prometheus:
+        endpoint: /metrics
+        port: 9363
+        metrics: true
+        events: true
+        asynchronous_metrics: true
+      listen_host: 0.0.0.0
+    users:
+      clickhouse_operator:
+        networks:
+          ip: 10.0.0.0/8
+      emuuser:
+        networks:
+          ip: "::/0"
+        profile: default
+        quota: default
+        access_management: 1
+    profiles:
+      default:
+        allow_experimental_time_series_table: 1
+        allow_experimental_json_type: 1
+    logTtl:
+      ttl_days: 45
+  resources:
+    keeper:
+      requests:
+        memory: 256M
+        cpu: 350m
+      limits:
+        memory: 4Gi
+        cpu: 2
+
+cnpg:
+  enabled: true
+  instances: 1
+  storageClassName: openebs-hostpath
+  storageSize: 10Gi
+  imagePullSecrets:
+    - name: github-registry-secret
+  secrets:
+    existingSecret: pg-emu-user-secret
+    create: false
+
+dragonfly:
+  enabled: true
+  replicas: 2
+
+victoriametrics:
+  enabled: true
+  storageClassName: openebs-hostpath
+  storageSize: 10Gi
+  vmuser:
+    existingSecret: vmuser-secret
+    create: false
+    password: ""
+
+victoria-logs-single:
+  fullnameOverride: vls-victoria-logs-single
+  server:
+    image:
+      repository: ghcr.io/embeddedllm/tokenvisor/victoria-logs-ubi
+      tag: v1.41.1
+    replicaCount: 2
+    retentionPeriod: "100y"
+    retentionDiskSpaceUsage: "9GiB"
+    persistentVolume:
+      enabled: true
+      storageClassName: openebs-hostpath
+      size: 10Gi
+    resources:
+      limits:
+        cpu: 3000m
+        memory: 3000Mi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    vmServiceScrape:
+      enabled: true
+      extraLabels:
+        scrape-by: vmagent
+
+skypilot:
+  enabled: false
+  namespace: skypilot
+  image: ghcr.io/embeddedllm/skypilot-nightly:1.0.0.dev20250518
+  imagePullSecrets:
+    - name: github-registry-secret
+  serviceAccountName: skypilot-api-sa
+  pvc:
+    name: skyplatform-state
+    size: 10Gi
+  service:
+    name: skypilot-api-service
+    port: 80
+    targetPort: 46580
+  config: |
+    serve:
+      controller:
+        resources:
+          cpus: 2+
+    kubernetes:
+      ports: podip
+  env:
+    SKYPILOT_DEV: "1"
+
+grafana:
+  enabled: false
+  adminUser: tokenvisor-admin
+  adminPassword: ""
+  clickhouseReadonlyPassword: ""
+  adminSecret:
+    name: grafana-secret
+    key: admin_password
+  clickhouseSecret:
+    name: clickhouse-secret
+    key: db_readonly_user_password
+
+vmalert:
+  enabled: false
+  tokenvisorWebhookUrl: ""
+  tokenvisorLogWebhookUrl: ""
+  enableLogRules: true
+
+fluentbit:
+  enabled: false
+
+network:
+  openshiftRoutes:
+    enabled: true
+    clusterDomain: "apps.ellm-3.local.com"
+    hostPrefix: "tokenvisor"
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Allow
+    # ArgoCD route configuration (disabled by default to match main chart)
+    argocd:
+      enabled: false
+      namespace: argocd
+      serviceName: argocd-server
+      port: 80
+    # Victoria Metrics route configuration
+    victoriaMetrics:
+      enabled: true
+      serviceName: vmauth-vmauth
+      port: 8427
+    # Victoria Logs route configuration
+    victoriaLogs:
+      enabled: true
+      serviceName: vmauth-vmauth
+      port: 8427
+
+storage:
+  modelPvc:
+    create: true
+    # NOTE: emu backend currently expects this PVC name (do not change unless code is updated)
+    name: nfs-model-storage-pvc
+    storageClassName: openebs-hostpath
+    accessModes:
+      - ReadWriteOnce
+    size: 20Gi
+
+emu:
+  enabled: true
+  image:  ghcr.io/embeddedllm/tokenvisor/tokenvisor-emu-openshift:20251229
+  imagePullPolicy: IfNotPresent
+  replicas: 1
+  serviceAccountName: emu
+  service:
+    name: emu-api-server
+    port: 5969
+  rbac:
+    create: true
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "2Gi"
+    limits:
+      cpu: "4000m"
+      memory: "4Gi"
+  config:
+    EMU_PORT: "5969"
+    EMU_WORKERS: "8"
+    EMU_OPENTELEMETRY_HOST: "localhost"
+    EMU_OPENTELEMETRY_PORT: "4317"
+    EMU_REDIS_HOST: "dragonfly.tokenvisor.svc.cluster.local"
+    EMU_REDIS_PORT: "6379"
+    EMU_CLICKHOUSE_HOST: "clickhouse-tokenvisor-test.tokenvisor.svc.cluster.local"
+    EMU_CLICKHOUSE_PORT: "8123"
+    EMU_CLICKHOUSE_USER: "emuuser"
+    EMU_BENCHMARK_URL: "emu-api-server.tokenvisor.svc.cluster.local:5969"
+    EMU_VICTORIA_METRICS_HOST: "vmauth-vmauth.tokenvisor.svc.cluster.local"
+    EMU_VICTORIA_METRICS_PORT: "8427"
+    EMU_VICTORIA_METRICS_USER: "vmuser"
+    EMU_VICTORIA_LOGS_HOST: "vls-victoria-logs-single-server.tokenvisor.svc.cluster.local"
+    EMU_VICTORIA_LOGS_PORT: "9428"
+    EMU_SKYPILOT_SERVER_API_BASE: "http://skypilot-api-service.skypilot.svc.cluster.local"
+    EMU_DISABLE_BILLING: "true"
+    SERVICE_NAME: "emu"
+    OTEL_INSTRUMENTATION_HTTP_CAPTURE_HEADERS_SERVER_REQUEST: "X-.*"
+    OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION: base2_exponential_bucket_histogram
+    OTEL_PYTHON_FASTAPI_EXCLUDED_URLS: "api/health"
+    HF_HOME: "/hf_repo"
+  secret:
+    create: false
+    existingSecret: emu-secret
+    data: {}
+  secretRefs:
+    clickhouseSecretName: clickhouse-secret
+    clickhousePasswordKey: db_user_password
+    vmuserSecretName: vmuser-secret
+    vmuserPasswordKey: password
+  initWaiter:
+    enabled: true
+    intervalSeconds: 5
+    timeoutSeconds: 600
+    postgres:
+      image: ghcr.io/embeddedllm/tokenvisor/postgres-17-ubi:17.7
+      host: tokenvisor-pgbouncer.tokenvisor.svc.cluster.local
+      port: 5432
+    clickhouse:
+      image: ghcr.io/embeddedllm/tokenvisor-curl-ubi:8.12.1
+      host: clickhouse-tokenvisor-test.tokenvisor.svc.cluster.local
+      port: 8123
+      user: emuuser
+      database: tokenvisor_emu
+      requiredTables:
+        - llm_usage
+        - embed_usage
+        - rerank_usage
+        - deployment_usage
+        - emu_traces
+        - emu_traces_trace_id_ts
+        - emu_traces_trace_id_ts_mv
+    victoriametrics:
+      host: vmauth-vmauth.tokenvisor.svc.cluster.local
+      port: 8427
+  otelCollector:
+    image: ghcr.io/embeddedllm/jamaibase/otelcol-openshift:20250107
+    resources:
+      requests:
+        cpu: "300m"
+        memory: "128Mi"
+      limits:
+        cpu: "1000m"
+        memory: "256Mi"
+    config: |
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: "0.0.0.0:4317"
+            http:
+              endpoint: "0.0.0.0:4318"
+
+      exporters:
+        otlphttp/victoriametrics1:
+          endpoint: "http://vmagent-vmagent-agg-0.vmagent-emu-aggregate.tokenvisor.svc:8429/opentelemetry"
+          compression: gzip
+          encoding: proto
+
+        otlphttp/victoriametrics2:
+          endpoint: "http://vmagent-vmagent-agg-1.vmagent-emu-aggregate.tokenvisor.svc:8429/opentelemetry"
+          compression: gzip
+          encoding: proto
+
+        otlphttp/victoriametrics3:
+          endpoint: "http://vmagent-vmagent-agg-2.vmagent-emu-aggregate.tokenvisor.svc:8429/opentelemetry"
+          compression: gzip
+          encoding: proto
+
+        debug:
+          verbosity: detailed
+
+        clickhouse:
+          endpoint: http://clickhouse-tokenvisor.tokenvisor.svc.cluster.local:8123?dial_timeout=10s&compress=lz4&async_insert=1
+          ttl: 24h
+          database: tokenvisor_emu
+          traces_table_name: emu_traces
+          username: emuuser
+          password: ${env:CH_PASSWORD}
+          create_schema: false
+          timeout: 5s
+          sending_queue:
+            queue_size: 1000
+          retry_on_failure:
+            enabled: true
+            initial_interval: 5s
+            max_interval: 30s
+            max_elapsed_time: 300s
+
+        otlphttp/vl1:
+          logs_endpoint: http://vls-victoria-logs-single-server-0.vls-victoria-logs-single-server.tokenvisor.svc.cluster.local:9428/insert/opentelemetry/v1/logs
+
+        otlphttp/vl2:
+          logs_endpoint: http://vls-victoria-logs-single-server-1.vls-victoria-logs-single-server.tokenvisor.svc.cluster.local:9428/insert/opentelemetry/v1/logs
+
+      processors:
+        batch:
+          timeout: 5s
+
+        filter/ottl:
+          traces:
+            span:
+              - 'IsMatch(attributes["db.statement"], "^PRAGMA")'
+
+      extensions:
+        health_check:
+          endpoint: "0.0.0.0:13133"
+
+      service:
+        extensions: [health_check]
+        pipelines:
+          traces:
+            receivers: [otlp]
+            processors: [filter/ottl, batch]
+            exporters: [clickhouse]
+          metrics:
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [otlphttp/victoriametrics1, otlphttp/victoriametrics2, otlphttp/victoriametrics3]
+          logs:
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [otlphttp/vl1, otlphttp/vl2]
+  modelStorage:
+    # NOTE: emu backend currently expects this PVC name (do not change unless code is updated)
+    existingClaim: nfs-model-storage-pvc
+  pdb:
+    minAvailable: 1
+
+starling:
+  enabled: true
+  image:  ghcr.io/embeddedllm/tokenvisor/tokenvisor-emu-openshift:20251229
+  imagePullPolicy: Always
+  replicas: 1
+  serviceAccountName: emu
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+  pdb:
+    minAvailable: 1
+
+studio:
+  enabled: true
+  image: ghcr.io/embeddedllm/tokenvisor/tokenvisor-studio-openshift:20260113
+  imagePullPolicy: Always
+  replicas: 1
+  serviceAccountName: studio
+  service:
+    name: studio-frontend-server
+    port: 4969
+  resources: {}
+  config:
+    HOST: "studio-frontend-server-tokenvisor.tokenvisor.apps.ellm-3.local.com"
+    ORIGIN: "http://studio-frontend-server-tokenvisor.tokenvisor.apps.ellm-3.local.com"
+    EMU_URL: "http://emu-api-server.tokenvisor.svc.cluster.local:5969"
+    STUDIO_PORT: "4969"
+    NODE_ENV: "production"
+    BODY_SIZE_LIMIT: "Infinity"
+    CHECK_ORIGIN: "false"
+    USE_SECURE_COOKIES: "false"
+    ABSOLUTE_AUTH_TIMEOUT: "86400"
+    IDLE_AUTH_TIMEOUT: "900"
+  secret:
+    create: false
+    existingSecret: studio-secret
+    data: {}
+  authConfigYaml: |
+    features:
+      user-pass-login:
+        login: true
+        signups: true
+      redirect-to-idp: false
+      organization:
+        no-orgs-message: "You don't belong to any organizations yet. Please contact support."
+  themeCss: |
+    :root {
+      --background: 216 24% 96%;
+      --foreground: 222.2 84% 4.9%;
+
+      --muted: 220 14% 96%;
+      --muted-foreground: 220 9% 56%;
+
+      --popover: 0 0% 100%;
+      --popover-foreground: 222.2 84% 4.9%;
+
+      --card: 0 0% 100%;
+      --card-foreground: 222.2 84% 4.9%;
+
+      --border: 214.3 31.8% 88%;
+      --input: 214.3 31.8% 91.4%;
+
+      --primary: 192 67% 32%;
+      --primary-foreground: 210 40% 98%;
+
+      /* Secondary color scale */
+      --secondary-50: 210 40% 98%;
+      --secondary-100: 210 40% 96%;
+      --secondary-200: 213 26% 88%;
+      --secondary-300: 215 18% 80%;
+      --secondary-400: 215 17% 72%;
+      --secondary-500: 215 16% 65%;
+      --secondary-600: 215 16% 57%;
+      --secondary-700: 215 16% 45%;
+      --secondary-800: 215 16% 30%;
+      --secondary-900: 216 18% 18%;
+
+      /* Semantic aliases */
+      --secondary: var(--secondary-200);
+      --secondary-foreground: var(--secondary-800);
+
+      --tertiary: 184 52% 63%;
+      --tertiary-foreground: 192 67% 32%;
+
+      --highlight: 280 53% 48%;
+      --highlight-foreground: 0 0% 100%;
+
+      --accent: 77 100% 93%;
+      --accent-strong: 87 82% 64%;
+      --accent-foreground: 222.2 47.4% 11.2%;
+
+      --destructive: 0 72.2% 50.6%;
+      --destructive-foreground: 210 40% 98%;
+
+      --success: 138 76% 97%;
+      --success-foreground: 142 72% 29%;
+
+      --error: 0 84% 60%;
+      --error-foreground: 210 40% 98%;
+
+      --warning: 38 85% 60%;
+      --warning-foreground: 0 0% 100%;
+
+      --ring: 222.2 84% 4.9%;
+
+      --radius: 0.75rem;
+
+      --navbar-system-from: 210 12% 34%;
+      --navbar-system-to: 208 31% 70%;
+
+      --navbar-organization-from: 193 100% 33%;
+      --navbar-organization-to: 189 100% 13%;
+
+      --navbar-project-from: 253 32% 61%;
+      --navbar-project-to: 247 21% 28%;
+    }
+  # Plain-text logo files (stringData)
+  logos: {}
+  # Base64-encoded logo files (binaryData)
+  logosBinaryData: {}
+  pdb:
+    minAvailable: 1
+  initWaiter:
+    enabled: true
+    image: ghcr.io/embeddedllm/tokenvisor-curl-ubi:8.12.1
+    intervalSeconds: 5
+    timeoutSeconds: 600
+    emuHealthUrl: "http://emu-api-server.tokenvisor.svc.cluster.local:5969/api/health"

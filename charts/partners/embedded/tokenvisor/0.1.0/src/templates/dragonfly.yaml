@@ -1,0 +1,21 @@
+{{- if and .Values.dragonfly.enabled (.Capabilities.APIVersions.Has "dragonflydb.io/v1alpha1") }}
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: dragonfly
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    app.kubernetes.io/name: dragonfly
+    app.kubernetes.io/instance: dragonfly
+    app.kubernetes.io/part-of: dragonfly-operator
+    app.kubernetes.io/created-by: dragonfly-operator
+spec:
+  replicas: {{ .Values.dragonfly.replicas }}
+  resources:
+    requests:
+      cpu: 500m
+      memory: 500Mi
+    limits:
+      cpu: 2000m
+      memory: 4000Mi
+{{- end }}

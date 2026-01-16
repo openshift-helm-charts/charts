@@ -1,0 +1,173 @@
+{{- if and .Values.features.core .Values.emu.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emu-deployment
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+spec:
+  replicas: {{ .Values.emu.replicas }}
+  selector:
+    matchLabels:
+      app: emu
+  template:
+    metadata:
+      labels:
+        app: emu
+        app.kubernetes.io/instance: tokenvisor-emu-otel
+        app.kubernetes.io/part-of: emu-backend
+    spec:
+      serviceAccountName: {{ .Values.emu.serviceAccountName }}
+{{- include "tokenvisor.imagePullSecrets" . | nindent 6 }}
+{{ if .Values.emu.initWaiter.enabled }}
+      initContainers:
+        - name: wait-postgres
+          image: {{ .Values.emu.initWaiter.postgres.image }}
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              HOST="{{ .Values.emu.initWaiter.postgres.host }}"
+              PORT="{{ .Values.emu.initWaiter.postgres.port }}"
+              INTERVAL="{{ .Values.emu.initWaiter.intervalSeconds }}"
+              ATTEMPTS={{ div (int .Values.emu.initWaiter.timeoutSeconds) (int .Values.emu.initWaiter.intervalSeconds) }}
+              echo "Waiting for Postgres at ${HOST}:${PORT}..."
+              i=0
+              while [ $i -lt $ATTEMPTS ]; do
+                if pg_isready -h "${HOST}" -p "${PORT}" >/dev/null 2>&1; then
+                  echo "Postgres is ready."
+                  exit 0
+                fi
+                i=$((i+1))
+                sleep "${INTERVAL}"
+              done
+              echo "Timed out waiting for Postgres."
+              exit 1
+        - name: wait-clickhouse-vm
+          image: {{ .Values.emu.initWaiter.clickhouse.image }}
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              CH_HOST="{{ .Values.emu.initWaiter.clickhouse.host }}"
+              CH_PORT="{{ .Values.emu.initWaiter.clickhouse.port }}"
+              CH_USER="{{ .Values.emu.initWaiter.clickhouse.user }}"
+              CH_DB="{{ .Values.emu.initWaiter.clickhouse.database }}"
+              CH_REQUIRED_TABLES="{{ join " " .Values.emu.initWaiter.clickhouse.requiredTables }}"
+              VM_HOST="{{ .Values.emu.initWaiter.victoriametrics.host }}"
+              VM_PORT="{{ .Values.emu.initWaiter.victoriametrics.port }}"
+              INTERVAL="{{ .Values.emu.initWaiter.intervalSeconds }}"
+              ATTEMPTS={{ div (int .Values.emu.initWaiter.timeoutSeconds) (int .Values.emu.initWaiter.intervalSeconds) }}
+              echo "Waiting for ClickHouse schema + VictoriaMetrics..."
+              i=0
+              while [ $i -lt $ATTEMPTS ]; do
+                vm_code=$(curl -s -o /dev/null -w "%{http_code}" "http://${VM_HOST}:${VM_PORT}/")
+                if [ "${vm_code}" != "000" ]; then
+                  all_ok=1
+                  for table in ${CH_REQUIRED_TABLES}; do
+                    exists=$(curl -sG "http://${CH_HOST}:${CH_PORT}/" \
+                      --data-urlencode "user=${CH_USER}" \
+                      --data-urlencode "password=${CH_PASSWORD}" \
+                      --data-urlencode "query=SELECT count() FROM system.tables WHERE database='${CH_DB}' AND name='${table}'")
+                    exists=$(echo "${exists}" | tr -d '\r\n')
+                    if [ "${exists}" != "1" ]; then
+                      all_ok=0
+                      break
+                    fi
+                  done
+                  if [ "${all_ok}" -eq 1 ]; then
+                    echo "ClickHouse schema and VictoriaMetrics are ready."
+                    exit 0
+                  fi
+                fi
+                i=$((i+1))
+                sleep "${INTERVAL}"
+              done
+              echo "Timed out waiting for ClickHouse schema or VictoriaMetrics."
+              exit 1
+          env:
+            - name: CH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.emu.secretRefs.clickhouseSecretName }}
+                  key: {{ .Values.emu.secretRefs.clickhousePasswordKey }}
+{{ end }}
+      containers:
+        - name: emu
+          image: {{ .Values.emu.image }}
+          imagePullPolicy: {{ .Values.emu.imagePullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: emu-config
+{{- if or .Values.emu.secret.existingSecret .Values.emu.secret.create }}
+            - secretRef:
+                name: {{ default "emu-secret" .Values.emu.secret.existingSecret }}
+{{- end }}
+          env:
+            - name: EMU_VICTORIA_METRICS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.emu.secretRefs.vmuserSecretName }}
+                  key: {{ .Values.emu.secretRefs.vmuserPasswordKey }}
+            - name: EMU_CLICKHOUSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.emu.secretRefs.clickhouseSecretName }}
+                  key: {{ .Values.emu.secretRefs.clickhousePasswordKey }}
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              uv run --no-sync python -m emu.entrypoints.api
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.emu.service.port | int }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.emu.service.port | int }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+{{- toYaml .Values.emu.resources | nindent 12 }}
+          volumeMounts:
+            - name: model-storage
+              mountPath: /hf_repo
+        - name: otel-collector
+          image: {{ .Values.emu.otelCollector.image }}
+          args: ["--config=/etc/otelcol/config.yaml"]
+          ports:
+            - name: metrics
+              containerPort: 8889
+          env:
+            - name: CH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.emu.secretRefs.clickhouseSecretName }}
+                  key: {{ .Values.emu.secretRefs.clickhousePasswordKey }}
+          volumeMounts:
+            - name: otel-config
+              mountPath: /etc/otelcol/config.yaml
+              subPath: config.yaml
+          resources:
+{{- toYaml .Values.emu.otelCollector.resources | nindent 12 }}
+      volumes:
+        - name: otel-config
+          configMap:
+            name: otel-collector-config
+        - name: model-storage
+          persistentVolumeClaim:
+            claimName: {{ default .Values.storage.modelPvc.name .Values.emu.modelStorage.existingClaim }}
+{{- end }}
