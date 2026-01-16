@@ -13440,6 +13440,39 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/hashicorp-vault-0.31.0/vault-0.31.0.tgz
     version: 0.31.0
+  - annotations:
+      charts.openshift.io/digest: sha256:ddc6b52c67d0b4134d3f1782ca4030d2f437fb6fe6077b28f56453a8470369d0
+      charts.openshift.io/lastCertifiedTimestamp: '2026-01-16T08:05:55.457186+00:00'
+      charts.openshift.io/name: HashiCorp Vault
+      charts.openshift.io/provider: HashiCorp
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-01-16T08:07:34.615260+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: 1.21.2
+    description: Official HashiCorp Vault Chart
+    digest: c14fcf6b25e2185047894a3b06db380d12ceb4c9e918fea4db77724f39026bf4
+    home: https://www.vaultproject.io
+    icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+    keywords:
+    - vault
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.20.0-0'
+    name: vault
+    sources:
+    - https://github.com/hashicorp/vault
+    - https://github.com/hashicorp/vault-helm
+    - https://github.com/hashicorp/vault-k8s
+    - https://github.com/hashicorp/vault-csi-provider
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/hashicorp-vault-0.32.0/vault-0.32.0.tgz
+    version: 0.32.0
   vhsm:
   - annotations:
       charts.openshift.io/digest: sha256:5f1bc27fd08754f1e97a5ba5326501ef5dae1ef42a2a64974717c0128605d7ea
@@ -14718,4 +14751,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-01-16T05:01:05.739352+00:00'
+generated: '2026-01-16T08:07:34.488000+00:00'
