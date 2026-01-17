@@ -1,0 +1,121 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.13
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:16794473140779297209
+        chart-uri: ./kubestash-certified-2026.1.8-rc.0.tgz
+        digests:
+            chart: sha256:cbd144e5e513d498ba4cea7b3bdb147baeddeaa492d971ec7c4f6b9979816f73
+            package: 64c81c1eb14da93c330c31ee6b858c03976e3642e9ea5e9662245e94c897abeb
+        lastCertifiedTimestamp: "2026-01-17T16:04:55.201023+06:00"
+        testedOpenShiftVersion: "4.18"
+        supportedOpenShiftVersions: '>=4.15'
+        webCatalogOnly: false
+    chart:
+        name: kubestash-certified
+        home: https://kubestash.com
+        sources:
+            - https://github.com/kubestash
+        version: 2026.1.8-rc.0
+        description: KubeStash by AppsCode - Backup your Kubernetes native applications
+        keywords: []
+        maintainers:
+            - name: appscode
+              email: support@appscode.com
+              url: ""
+        icon: https://cdn.appscode.com/images/products/kubestash/stash-icon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: v2026.1.8-rc.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: kubestash-certified
+        kubeversion: '>=1.28.0'
+        dependencies:
+            - name: kubestash-operator
+              version: v0.23.0-rc.0
+              repository: file://../kubestash-operator
+              condition: kubestash-operator.enabled
+            - name: kubestash-catalog
+              version: v2026.1.8-rc.0
+              repository: file://../kubestash-catalog
+              condition: kubestash-catalog.enabled
+            - name: kubestash-metrics
+              version: v2026.1.8-rc.0
+              repository: file://../kubestash-metrics
+              condition: kubestash-metrics.enabled
+            - name: ace-user-roles
+              version: v2025.3.14
+              repository: oci://ghcr.io/appscode-charts
+              condition: ace-user-roles.enabled
+            - name: taskqueue
+              version: v2026.1.15
+              repository: oci://ghcr.io/appscode-charts
+              condition: global.taskQueue.enabled
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : ghcr.io/kubestash/kubestash:v0.23.0-rc.0-ubi
+        Image is Red Hat certified : ghcr.io/appscode/kubectl-nonroot:1.34-ubi
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+
