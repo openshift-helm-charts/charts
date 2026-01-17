@@ -1,9 +1,12 @@
 chart:
   name: kubestash-certified
-  shortDescription: unknown
+  shortDescription: KubeStash by AppsCode is a cloud native data backup and recovery
+    solution
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: tamalsaha
+- githubUsername: Superm4n97
 vendor:
   label: appscode
   name: Tamal Saha
