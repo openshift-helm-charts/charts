@@ -1,0 +1,11 @@
+chart:
+  name: kubedump-chart
+  shortDescription: Kube Dump helm chart
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: tamalsaha
+- githubUsername: Superm4n97
+vendor:
+  label: appscode
+  name: Tamal Saha
