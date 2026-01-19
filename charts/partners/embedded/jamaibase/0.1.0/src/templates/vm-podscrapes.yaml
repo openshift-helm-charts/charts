@@ -1,0 +1,33 @@
+{{- if .Values.victoriaMetrics.enabled }}
+{{- if .Values.victoriaMetrics.podScrapes.enabled }}
+{{- range .Values.victoriaMetrics.podScrapes.scrapes }}
+{{- if .enabled | default true }}
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: {{ .name }}
+  labels:
+    app.kubernetes.io/part-of: vm-operator
+    app.kubernetes.io/instance: {{ .instanceLabel | default "vm-pod-scrape" }}
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+spec:
+  {{- if .selector }}
+  selector:
+    {{- toYaml .selector | nindent 4 }}
+  {{- end }}
+  {{- if .namespaceSelector }}
+  namespaceSelector:
+    {{- toYaml .namespaceSelector | nindent 4 }}
+  {{- end }}
+  {{- if .podMetricsEndpoints }}
+  podMetricsEndpoints:
+    {{- toYaml .podMetricsEndpoints | nindent 4 }}
+  {{- end }}
+  {{- if .jobLabel }}
+  jobLabel: {{ .jobLabel }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

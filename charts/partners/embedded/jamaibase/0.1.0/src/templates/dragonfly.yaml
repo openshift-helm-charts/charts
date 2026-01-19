@@ -1,0 +1,31 @@
+{{/*
+ =============================================================================
+ Dragonfly Replica Template
+ Creates Dragonfly Redis-compatible cache instances
+ ============================================================================*/}}
+
+{{- if .Values.dragonfly.enabled }}
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: {{ .Values.dragonfly.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- range $key, $value := .Values.dragonfly.labels }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: dragonfly
+  annotations:
+    {{- with .Values.dragonfly.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+    "helm.sh/hook-weight": "1"
+spec:
+  replicas: {{ .Values.dragonfly.replicas }}
+  {{- with .Values.dragonfly.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

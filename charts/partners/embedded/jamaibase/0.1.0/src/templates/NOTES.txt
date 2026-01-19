@@ -1,0 +1,163 @@
+{{/*
+ =============================================================================
+ Post-Installation Notes for Jamaibase
+ =============================================================================
+ This template provides helpful information after installing the chart.
+=============================================================================*/}}
+
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+{{- if .Values.postgresql.enabled }}
+{{- with .Values.postgresql }}
+
+=============================================================================
+PostgreSQL Database Information
+=============================================================================
+
+The PostgreSQL cluster has been deployed with the following details:
+
+Cluster Configuration:
+  Name:       {{ .cluster.name | default "jamaibase-postgresql-cluster" }}
+  Instances:  {{ .cluster.instances | default 1 }}
+  Version:    PostgreSQL {{ .cluster.postgresqlMajorVersion | default 17 }}
+  Database:   {{ .cluster.bootstrap.initdb.database }}
+
+Connection Information:
+  Primary Service:   {{ .cluster.name | default "jamaibase-postgresql-cluster" }}-rw
+  {{- if and .pooler .pooler.name }}
+  PgBouncer Service: {{ .pooler.name }} ({{ .pooler.type | default "rw" }})
+  {{- end }}
+  Port:              5432
+  Namespace:         {{ $.Release.Namespace }}
+
+{{- if and .pooler .pooler.enabled }}
+Connection String (via PgBouncer):
+  postgresql://{{ .cluster.bootstrap.initdb.owner }}:PASSWORD@{{ .pooler.name | default "jamaibase-pgbouncer" }}.{{ $.Release.Namespace }}.svc.cluster.local:5432/{{ .cluster.bootstrap.initdb.database }}
+{{- else }}
+Connection String (direct):
+  postgresql://{{ .cluster.bootstrap.initdb.owner }}:PASSWORD@{{ .cluster.name | default "jamaibase-postgresql-cluster" }}-rw.{{ $.Release.Namespace }}.svc.cluster.local:5432/{{ .cluster.bootstrap.initdb.database }}
+{{- end }}
+
+To get the database password:
+  kubectl get secret {{ .cluster.bootstrap.initdb.secret.name }} -n {{ $.Release.Namespace }} -o jsonpath='{.data.password}' | base64 -d
+
+To connect to the database:
+  # Port forward to PostgreSQL
+  kubectl port-forward -n {{ $.Release.Namespace }} svc/{{ .cluster.name | default "jamaibase-postgresql-cluster" }}-rw 5432:5432
+
+  # Connect using psql
+  psql -h localhost -U {{ .cluster.bootstrap.initdb.owner }} -d {{ .cluster.bootstrap.initdb.database }}
+
+To check the cluster status:
+  kubectl get cluster -n {{ $.Release.Namespace }}
+  kubectl describe cluster {{ .cluster.name | default "jamaibase-postgresql-cluster" }} -n {{ $.Release.Namespace }}
+
+To view PostgreSQL logs:
+  kubectl logs -n {{ $.Release.Namespace }} -l postgresql={{ .cluster.name | default "jamaibase-postgresql-cluster" }} --tail=100 -f
+
+To scale the cluster:
+  kubectl patch cluster {{ .cluster.name | default "jamaibase-postgresql-cluster" }} -n {{ $.Release.Namespace }} --type merge -p '{"spec":{"instances":3}}'
+
+{{- if and .backup .backup.enabled }}
+Backups:
+  Backup Schedule: {{ .backup.schedule | default "0 2 * * *" }}
+  Retention: {{ .backup.retention }} backups
+  To list backups: kubectl get scheduledbackup -n {{ $.Release.Namespace }}
+{{- end }}
+
+=============================================================================
+{{- end }}
+{{- end }}
+
+{{- if .Values.jamaibase.owl.enabled }}
+=============================================================================
+OWL Backend Information
+=============================================================================
+
+OWL Backend Service:
+  Service:   jamaibase-owl
+  Port:      6969
+  Namespace: {{ .Release.Namespace }}
+
+To check OWL status:
+  kubectl get pods -n {{ .Release.Namespace }} -l app=owl
+
+To view OWL logs:
+  kubectl logs -n {{ .Release.Namespace }} -l app=owl --tail=100 -f
+
+To access OWL API:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/jamaibase-owl 6969:6969
+  curl http://localhost:6969/api/health
+
+{{- end }}
+
+{{- if .Values.jamaibase.jambu.enabled }}
+=============================================================================
+Jambu Frontend Information
+=============================================================================
+
+Jambu Frontend Service:
+  Service:   jamaibase-jambu
+  Port:      4000
+  Namespace: {{ .Release.Namespace }}
+
+{{- if .Values.openshift.enabled }}
+To access the application:
+  # Get the route URL
+  oc get route -n {{ .Release.Namespace }}
+
+  # Or create a route
+  oc expose svc/jamaibase-jambu -n {{ .Release.Namespace }}
+{{- else }}
+To access the application:
+  # Port forward to the service
+  kubectl port-forward -n {{ .Release.Namespace }} svc/jamaibase-jambu 4000:4000
+
+  # Or create an ingress/route as needed
+{{- end }}
+
+{{- end }}
+
+=============================================================================
+General Information
+=============================================================================
+
+To list all resources:
+  kubectl get all -n {{ .Release.Namespace }}
+
+To check the status of the release:
+  helm status {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+To upgrade the release:
+  helm upgrade {{ .Release.Name }} . -n {{ .Release.Namespace }}
+
+To rollback the release:
+  helm rollback {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+To uninstall the release:
+  helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+For more information, visit:
+{{ .Chart.Home | default "https://github.com/embeddedllm/JAM.ai.dev" }}
+
+=============================================================================
+Troubleshooting
+=============================================================================
+
+Pods not starting?
+  kubectl describe pod -n {{ .Release.Namespace }} <pod-name>
+  kubectl logs -n {{ .Release.Namespace }} <pod-name>
+
+Connection issues?
+  kubectl get svc -n {{ .Release.Namespace }}
+  kubectl get endpoints -n {{ .Release.Namespace }}
+
+Storage issues?
+  kubectl get pvc -n {{ .Release.Namespace }}
+  kubectl describe pvc -n {{ .Release.Namespace }} <pvc-name>
+
+For detailed troubleshooting, see the README.md file.
+
+=============================================================================

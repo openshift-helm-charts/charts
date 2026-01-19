@@ -1,0 +1,144 @@
+{{- if .Values.docling.enabled }}
+{{- with .Values.docling }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: docling
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docling
+  template:
+    metadata:
+      labels:
+        app: docling
+        {{- include "jamaibase.labels" $ | nindent 8 }}
+    spec:
+      {{- if .securityContext.enabled }}
+      securityContext:
+        runAsNonRoot: {{ .securityContext.settings.runAsNonRoot }}
+        runAsUser: {{ .securityContext.settings.runAsUser }}
+        runAsGroup: {{ .securityContext.settings.runAsGroup }}
+        fsGroup: {{ .securityContext.settings.fsGroup }}
+      {{- end }}
+      {{- with $.Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .gpu.enabled }}
+      nodeSelector:
+        {{ .gpu.nodeSelectorLabel }}: "true"
+      {{- end }}
+      {{- with .gpu.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: docling
+          image: {{ .image.repository }}:{{ .image.tag }}
+          imagePullPolicy: {{ .image.pullPolicy }}
+          {{- if .gpu.enabled }}
+          resources:
+            requests:
+              memory: {{ .resources.requests.memory }}
+              cpu: {{ .resources.requests.cpu }}
+              {{ .gpu.resourceName }}: "{{ .gpu.count }}"
+            limits:
+              memory: {{ .resources.limits.memory }}
+              cpu: {{ .resources.limits.cpu }}
+              {{ .gpu.resourceName }}: "{{ .gpu.count }}"
+          {{- else }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .port }}
+          env:
+            - name: MAX_FILE_SIZE
+              value: {{ .config.maxFileSize | quote }}
+            - name: LOG_LEVEL
+              value: {{ .config.logLevel | quote }}
+            - name: ALLOWED_FILE_TYPES
+              value: {{ .config.allowedFileTypes | quote }}
+            {{- if .gpu.enabled }}
+            - name: CUDA_VISIBLE_DEVICES
+              value: {{ .config.cudaVisibleDevices | quote }}
+            {{- end }}
+          {{- with .probes.liveness }}
+          livenessProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds | default 10 }}
+            periodSeconds: {{ .periodSeconds | default 10 }}
+            timeoutSeconds: {{ .timeoutSeconds | default 2 }}
+          {{- end }}
+          {{- with .probes.readiness }}
+          readinessProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds | default 10 }}
+            periodSeconds: {{ .periodSeconds | default 10 }}
+            timeoutSeconds: {{ .timeoutSeconds | default 2 }}
+          {{- end }}
+          {{- if .probes.startup.enabled }}
+          {{- with .probes.startup }}
+          startupProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            failureThreshold: {{ .failureThreshold | default 20 }}
+            periodSeconds: {{ .periodSeconds | default 10 }}
+            timeoutSeconds: {{ .timeoutSeconds | default 2 }}
+          {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: easyocr-cache
+              mountPath: /opt/app-root/src/.EasyOCR
+      restartPolicy: Always
+      volumes:
+        - name: easyocr-cache
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: docling
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+  name: {{ .serviceName }}
+spec:
+  selector:
+    app: docling
+  ports:
+    - name: http
+      port: {{ .port }}
+      targetPort: {{ .port }}
+  type: ClusterIP
+
+{{- if .podDisruptionBudget.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: {{ .podDisruptionBudget.name | default "docling-pdb" }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+spec:
+  minAvailable: {{ .podDisruptionBudget.minAvailable | default 1 }}
+  selector:
+    matchLabels:
+      app: docling
+{{- end }}
+{{- end }}
+{{- end }}

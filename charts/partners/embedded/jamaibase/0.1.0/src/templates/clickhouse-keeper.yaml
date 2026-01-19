@@ -1,0 +1,106 @@
+{{/*
+ =============================================================================
+ ClickHouse Keeper Installation Template
+ Creates the ClickHouse Keeper for ZooKeeper coordination
+ ============================================================================*/}}
+
+{{- if and .Values.clickhouse.enabled .Values.clickhouse.keeper.enabled }}
+apiVersion: "clickhouse-keeper.altinity.com/v1"
+kind: "ClickHouseKeeperInstallation"
+metadata:
+  name: {{ .Values.clickhouse.keeper.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: clickhouse-keeper
+  annotations:
+    # Helm hook to ensure this is created before the init job
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  configuration:
+    clusters:
+      - name: {{ .Values.clickhouse.cluster.name }}
+        layout:
+          replicasCount: {{ .Values.clickhouse.keeper.replicas }}
+    settings:
+      {{- toYaml .Values.clickhouse.keeper.settings | nindent 6 }}
+  defaults:
+    templates:
+      podTemplate: clickhouse
+      dataVolumeClaimTemplate: clickhouse
+
+  templates:
+    podTemplates:
+      - name: clickhouse
+        metadata:
+          labels:
+            app: clickhouse-keeper
+            {{- include "jamaibase.labels" $ | nindent 12 }}
+          annotations:
+            config.linkerd.io/proxy-preserve-ip: "true"
+            "prometheus.io/port": "7000"
+            "prometheus.io/scrape": "true"
+            {{- if .Values.clickhouse.monitoring.enabled }}
+            {{- with .Values.monitoring.serviceMonitor.additionalLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}
+        spec:
+          {{- with .Values.global.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          initContainers:
+            - name: fix-permissions
+              image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  # Fix permissions for directories that will be used by clickhouse-keeper
+                  # The main container runs as a non-root user with fsGroup set
+                  for dir in /var/lib/clickhouse /var/log/clickhouse-keeper /etc/clickhouse-keeper; do
+                    if [ -d "$dir" ]; then
+                      # Ensure directory and files are readable by group and others
+                      chmod -R g+rX,o+rX "$dir" 2>/dev/null || true
+                      # Ensure directories have group write permissions
+                      find "$dir" -type d -exec chmod g+w {} \; 2>/dev/null || true
+                    fi
+                  done
+                  echo "Permissions fixed successfully"
+              volumeMounts:
+                - name: clickhouse
+                  mountPath: /var/lib/clickhouse
+                - name: clickhouse-logs
+                  mountPath: /var/log/clickhouse-keeper
+          containers:
+            - name: clickhouse-keeper
+              imagePullPolicy: {{ .Values.clickhouse.keeper.image.pullPolicy }}
+              image: "{{ .Values.clickhouse.keeper.image.repository }}:{{ .Values.clickhouse.keeper.image.tag }}"
+              ports:
+                - name: chk-metrics
+                  containerPort: 7000
+              {{- with .Values.clickhouse.keeper.resources }}
+              resources:
+                {{- toYaml . | nindent 14 }}
+              {{- end }}
+              volumeMounts:
+                - name: clickhouse-logs
+                  mountPath: /var/log/clickhouse-keeper
+          volumes:
+            - name: clickhouse-logs
+              emptyDir: {}
+
+    volumeClaimTemplates:
+      - name: clickhouse
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: {{ .Values.clickhouse.keeper.storage.storageClassName | default .Values.global.storageClass }}
+          resources:
+            requests:
+              storage: {{ .Values.clickhouse.keeper.storage.size }}
+{{- end }}

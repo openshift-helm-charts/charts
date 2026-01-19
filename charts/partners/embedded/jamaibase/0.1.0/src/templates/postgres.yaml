@@ -1,0 +1,260 @@
+{{/*
+=============================================================================
+PostgreSQL Database Templates for CloudNativePG
+=============================================================================
+This template creates CloudNativePG Cluster, Pooler (PgBouncer), and related
+resources for deploying PostgreSQL with connection pooling on OpenShift.
+
+Prerequisites:
+- CloudNativePG Operator must be installed cluster-wide
+- ImageCatalog must be created in the operator namespace (cnpg-operator-system)
+  See README.md for ImageCatalog installation instructions
+
+Architecture:
+  Prerequisites (Cluster-Wide):
+  - CloudNativePG Operator
+  - ImageCatalog: postgresql (in openshift-operators namespace)
+
+  Helm Chart Resources (Release Namespace):
+  - Cluster: jamaibase-postgresql-cluster
+  - Pooler: jamaibase-pgbouncer
+  - Secret: pg-owl-user-secret
+============================================================================*/}}
+
+{{- if .Values.postgresql.enabled }}
+{{- with .Values.postgresql }}
+
+{{/*
+=============================================================================
+PostgreSQL User Secret
+Creates a secret for PostgreSQL database user credentials
+============================================================================*/}}
+{{- if and .cluster.enabled .credentials }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "jamaibase.fullname" $ }}-{{ .cluster.bootstrap.initdb.secret.name | default "pg-user-secret" }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: postgresql-credentials
+    app.kubernetes.io/instance: {{ .cluster.name | default "jamaibase-postgresql-cluster" }}
+    app.kubernetes.io/part-of: jamaibase
+    app.kubernetes.io/managed-by: helm
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+    helm.sh/resource-policy: keep
+type: kubernetes.io/basic-auth
+stringData:
+  username: {{ .credentials.username | required "PostgreSQL username is required!" }}
+  password: {{ .credentials.password | required "PostgreSQL password is required!" }}
+---
+{{- end }}
+
+{{/*
+=============================================================================
+ImageCatalog
+Creates an ImageCatalog in the same namespace as the cluster
+This allows the CNPG operator to find the catalog without namespace issues
+============================================================================*/}}
+{{- if and .cluster.enabled .imageCatalog.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  name: {{ include "jamaibase.fullname" $ }}-postgres-catalog
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: postgresql-imagecatalog
+    app.kubernetes.io/part-of: cnpg-cluster
+    app.kubernetes.io/managed-by: helm
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  images:
+    - major: {{ .cluster.postgresqlMajorVersion | default 17 }}
+      image: {{ .imageCatalog.image | default "ghcr.io/embeddedllm/cnpg-postgresql:17.5" }}
+---
+{{- end }}
+
+{{/*
+=============================================================================
+PostgreSQL Cluster
+Deploys a PostgreSQL cluster using CloudNativePG
+============================================================================*/}}
+{{- if .cluster.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "jamaibase.fullname" $ }}-postgresql
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: {{ include "jamaibase.fullname" $ }}-postgresql
+    app.kubernetes.io/part-of: cnpg-cluster
+    app.kubernetes.io/managed-by: helm
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  # Number of PostgreSQL instances (replicas)
+  instances: {{ .cluster.instances | default 1 }}
+
+  # Reference to the ImageCatalog
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
+    name: {{ include "jamaibase.fullname" $ }}-postgres-catalog
+    {{- if .imageCatalog.namespace }}
+    namespace: {{ .imageCatalog.namespace }}
+    {{- end }}
+    major: {{ .cluster.postgresqlMajorVersion | default 17 }}
+
+  # Image pull secrets for private registry authentication
+  {{- with .cluster.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- else }}
+  {{- with $.Values.global.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+
+  # PostgreSQL server configuration parameters
+  postgresql:
+    {{- with .cluster.parameters }}
+    parameters:
+      {{- if .max_connections }}
+      max_connections: {{ .max_connections | quote }}
+      {{- end }}
+      {{- if .max_locks_per_transaction }}
+      max_locks_per_transaction: {{ .max_locks_per_transaction | quote }}
+      {{- end }}
+      {{- if .pgroonga }}
+      {{- if .pgroonga.enable_wal_resource_manager }}
+      pgroonga.enable_wal_resource_manager: {{ .pgroonga.enable_wal_resource_manager | quote }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- with .cluster.sharedPreloadLibraries }}
+    shared_preload_libraries:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+
+  # Bootstrap configuration for database initialization
+  bootstrap:
+    initdb:
+      database: {{ .cluster.bootstrap.initdb.database | required "PostgreSQL database name is required!" }}
+      owner: {{ .cluster.bootstrap.initdb.owner | required "PostgreSQL owner username is required!" }}
+      {{- with .cluster.bootstrap.initdb.secret }}
+      secret:
+        name: {{ include "jamaibase.fullname" $ }}-{{ .name }}
+      {{- end }}
+      {{- with .cluster.bootstrap.initdb.postInitApplicationSQL }}
+      postInitApplicationSQL:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+  # Monitoring configuration (PodMonitor for Prometheus/VictoriaMetrics)
+  {{- with .cluster.monitoring }}
+  monitoring:
+    {{- if .enablePodMonitor }}
+    enablePodMonitor: true
+    {{- end }}
+  {{- end }}
+
+  # Storage configuration
+  storage:
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .cluster.storage.size | default "10Gi" }}
+      {{- if .cluster.storage.storageClassName }}
+      storageClassName: {{ .cluster.storage.storageClassName }}
+      {{- else if $.Values.global.storageClass }}
+      storageClassName: {{ $.Values.global.storageClass }}
+      {{- else }}
+      storageClassName: openebs-hostpath
+      {{- end }}
+
+  # Optional: Resource limits and requests
+  {{- with .cluster.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+---
+{{- end }}
+
+{{/*
+=============================================================================
+PgBouncer Pooler
+Provides connection pooling for PostgreSQL to improve performance
+============================================================================*/}}
+{{- if and .cluster.enabled .pooler .pooler.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: {{ include "jamaibase.fullname" $ }}-pgbouncer
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: pgbouncer
+    app.kubernetes.io/instance: {{ include "jamaibase.fullname" $ }}-pgbouncer
+    app.kubernetes.io/part-of: cnpg-cluster
+    app.kubernetes.io/managed-by: helm
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  # Reference to the PostgreSQL cluster
+  cluster:
+    name: {{ include "jamaibase.fullname" $ }}-postgresql
+
+  # Number of PgBouncer instances
+  instances: {{ .pooler.instances | default 1 }}
+
+  # Pooler type: rw (read-write) or ro (read-only)
+  type: {{ .pooler.type | default "rw" }}
+
+  # PgBouncer configuration
+  pgbouncer:
+    poolMode: {{ .pooler.pgbouncer.poolMode | default "transaction" }}
+    {{- with .pooler.pgbouncer.parameters }}
+    parameters:
+      {{- if .max_client_conn }}
+      max_client_conn: {{ .max_client_conn | quote }}
+      {{- end }}
+      {{- if .default_pool_size }}
+      default_pool_size: {{ .default_pool_size | quote }}
+      {{- end }}
+      {{- if .server_idle_timeout }}
+      server_idle_timeout: {{ .server_idle_timeout | quote }}
+      {{- end }}
+      {{- if .query_wait_timeout }}
+      query_wait_timeout: {{ .query_wait_timeout | quote }}
+      {{- end }}
+      {{- if .server_reset_query }}
+      server_reset_query: {{ .server_reset_query | quote }}
+      {{- end }}
+    {{- end }}
+
+  # Monitoring configuration (PodMonitor for Prometheus/VictoriaMetrics)
+  {{- with .pooler.monitoring }}
+  monitoring:
+    {{- if .enablePodMonitor }}
+    enablePodMonitor: true
+    {{- end }}
+  {{- end }}
+
+  # Optional: Resource limits and requests
+  {{- with .pooler.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+---
+{{- end }}
+
+{{- end }}
+{{- end }}

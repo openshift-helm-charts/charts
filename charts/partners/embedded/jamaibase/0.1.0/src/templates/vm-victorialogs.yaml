@@ -1,0 +1,34 @@
+{{- if .Values.victoriaMetrics.enabled }}
+{{- if .Values.victoriaMetrics.victoriaLogs.enabled }}
+apiVersion: operator.victoriametrics.com/v1
+kind: VLSingle
+metadata:
+  labels:
+    app.kubernetes.io/instance: vls-jamaibase
+    app.kubernetes.io/part-of: vm-operator
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  name: {{ .Values.victoriaMetrics.victoriaLogs.name }}
+spec:
+  replicaCount: {{ .Values.victoriaMetrics.victoriaLogs.replicaCount }}
+  {{- with .Values.global.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  retentionPeriod: {{ .Values.victoriaMetrics.victoriaLogs.retentionPeriod | quote }}
+  {{- if .Values.victoriaMetrics.victoriaLogs.retentionDiskSpaceUsage }}
+  retentionDiskSpaceUsage: {{ .Values.victoriaMetrics.victoriaLogs.retentionDiskSpaceUsage | quote }}
+  {{- end }}
+  {{- if .Values.victoriaMetrics.victoriaLogs.persistentVolume }}
+  persistentVolume:
+    enabled: {{ .Values.victoriaMetrics.victoriaLogs.persistentVolume.enabled }}
+    storageClassName: {{ .Values.victoriaMetrics.victoriaLogs.persistentVolume.storageClassName | default .Values.global.storageClass }}
+    size: {{ .Values.victoriaMetrics.victoriaLogs.persistentVolume.size }}
+  {{- end }}
+  resources:
+    {{- toYaml .Values.victoriaMetrics.victoriaLogs.resources | nindent 4 }}
+  {{- if .Values.victoriaMetrics.victoriaLogs.vmServiceScrape }}
+  vmServiceScrape:
+    {{- toYaml .Values.victoriaMetrics.victoriaLogs.vmServiceScrape | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}

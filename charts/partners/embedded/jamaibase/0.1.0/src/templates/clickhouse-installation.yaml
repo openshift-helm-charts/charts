@@ -1,0 +1,112 @@
+{{/*
+ =============================================================================
+ ClickHouse Installation Template
+ Creates the main ClickHouse cluster
+ ============================================================================*/}}
+
+{{- if .Values.clickhouse.enabled }}
+apiVersion: "clickhouse.altinity.com/v1"
+kind: "ClickHouseInstallation"
+metadata:
+  name: {{ .Values.clickhouse.cluster.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: clickhouse
+  annotations:
+    # Helm hook to ensure this is created before the init job
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  configuration:
+    users:
+      {{- range $user, $config := .Values.clickhouse.users }}
+      {{ $user }}:
+        {{- toYaml $config | nindent 8 }}
+      {{- end }}
+    profiles:
+      {{- toYaml .Values.clickhouse.profiles | nindent 6 }}
+    settings:
+      {{- toYaml .Values.clickhouse.cluster.settings | nindent 6 }}
+    files:
+      conf.d/log_ttl_setup.xml: |
+        <clickhouse>
+          {{- range $log, $ttl := .Values.clickhouse.logTTL }}
+          <{{ $log }}>
+            <ttl>{{ $ttl }}</ttl>
+          </{{ $log }}>
+          {{- end }}
+        </clickhouse>
+    {{- if .Values.clickhouse.keeper.enabled }}
+    zookeeper:
+      nodes:
+        {{- range $i := until (.Values.clickhouse.keeper.replicas | int) }}
+        - host: chk-{{ $.Values.clickhouse.keeper.name }}-{{ $.Values.clickhouse.cluster.name }}-{{ $i }}-0.{{ $.Release.Namespace }}.svc.cluster.local
+          port: 2181
+        {{- end }}
+      session_timeout_ms: {{ .Values.clickhouse.cluster.zookeeper.session_timeout_ms | default "30000" }}
+      operation_timeout_ms: {{ .Values.clickhouse.cluster.zookeeper.operation_timeout_ms | default "10000" }}
+    {{- end }}
+    clusters:
+      - name: {{ .Values.clickhouse.cluster.name }}
+        layout:
+          replicasCount: {{ .Values.clickhouse.cluster.replicas }}
+        {{- if .Values.clickhouse.secret.name }}
+        secret:
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.clickhouse.secret.name }}
+              key: cluster_secret
+        {{- end }}
+        templates:
+          podTemplate: clickhouse-with-volume
+
+  templates:
+    podTemplates:
+      - name: clickhouse-with-volume
+        metadata:
+          labels:
+            app: clickhouse-cluster
+            {{- include "jamaibase.labels" $ | nindent 12 }}
+          annotations:
+            {{- if .Values.clickhouse.monitoring.enabled }}
+            "prometheus.io/port": "9363"
+            "prometheus.io/scrape": "true"
+            {{- with .Values.monitoring.serviceMonitor.additionalLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}
+        spec:
+          {{- with .Values.global.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          containers:
+            - name: clickhouse
+              image: "{{ .Values.clickhouse.cluster.image.repository }}:{{ .Values.clickhouse.cluster.image.tag }}"
+              imagePullPolicy: {{ .Values.clickhouse.cluster.image.pullPolicy }}
+              env:
+                - name: CLICKHOUSE_ALWAYS_RUN_INITDB_SCRIPTS
+                  value: "1"
+                - name: CLICKHOUSE_DB
+                  value: {{ .Values.clickhouse.databaseName | quote }}
+              volumeMounts:
+                - mountPath: /var/lib/clickhouse
+                  name: clickhouse-cluster-pvc
+              {{- with .Values.clickhouse.cluster.resources }}
+              resources:
+                {{- toYaml . | nindent 14 }}
+              {{- end }}
+
+    volumeClaimTemplates:
+      - name: clickhouse-cluster-pvc
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: {{ .Values.clickhouse.cluster.storage.storageClassName | default .Values.global.storageClass }}
+          resources:
+            requests:
+              storage: {{ .Values.clickhouse.cluster.storage.size }}
+{{- end }}

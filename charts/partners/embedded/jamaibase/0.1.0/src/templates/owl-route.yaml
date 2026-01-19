@@ -1,0 +1,55 @@
+{{/*
+ =============================================================================
+ OWL Route Template
+ Creates OpenShift Route for external access to owl API server
+ ============================================================================*/}}
+
+{{- if .Values.jamaibase.owl.enabled }}
+{{- with .Values.jamaibase.owl }}
+
+---
+# OpenShift Route: owl-api-server
+{{- if and .route.enabled $.Values.openshift.enabled $.Values.openshift.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .route.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-api
+  annotations:
+    {{- with .route.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  host: {{ .route.host | quote }}
+  to:
+    kind: Service
+    name: {{ .service.name }}
+  port:
+    targetPort: http
+  {{- if .route.tls.enabled }}
+  tls:
+    termination: {{ .route.tls.termination }}
+    {{- if .route.tls.insecureEdgeTerminationPolicy }}
+    insecureEdgeTerminationPolicy: {{ .route.tls.insecureEdgeTerminationPolicy }}
+    {{- end }}
+    {{- if .route.tls.certificate }}
+    certificate: {{ .route.tls.certificate | quote }}
+    {{- end }}
+    {{- if .route.tls.key }}
+    key: {{ .route.tls.key | quote }}
+    {{- end }}
+    {{- if .route.tls.caCertificate }}
+    caCertificate: {{ .route.tls.caCertificate | quote }}
+    {{- end }}
+    {{- if .route.tls.destinationCACertificate }}
+    destinationCACertificate: {{ .route.tls.destinationCACertificate | quote }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- end }}
+{{- end }}
