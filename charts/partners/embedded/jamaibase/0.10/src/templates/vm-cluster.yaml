@@ -1,0 +1,52 @@
+{{- if .Values.victoriaMetrics.enabled }}
+{{- if .Values.victoriaMetrics.cluster.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMCluster
+metadata:
+  labels:
+    app.kubernetes.io/instance: victoria-metrics-cluster-jamaibase
+    app.kubernetes.io/part-of: vm-operator
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  name: {{ .Values.victoriaMetrics.cluster.name }}
+spec:
+  clusterVersion: {{ .Values.victoriaMetrics.cluster.version }}
+  retentionPeriod: {{ .Values.victoriaMetrics.cluster.retentionPeriod | quote }}
+  replicationFactor: {{ .Values.victoriaMetrics.cluster.replicationFactor }}
+  {{- with .Values.global.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  requestsLoadBalancer:
+    enabled: {{ .Values.victoriaMetrics.cluster.requestsLoadBalancer.enabled }}
+    spec:
+      replicaCount: {{ .Values.victoriaMetrics.cluster.requestsLoadBalancer.replicaCount }}
+  vmstorage:
+    replicaCount: {{ .Values.victoriaMetrics.cluster.storage.replicaCount }}
+    storageDataPath: {{ .Values.victoriaMetrics.cluster.storage.storageDataPath | quote }}
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ .Values.victoriaMetrics.cluster.storage.storageClassName | default .Values.global.storageClass }}
+          resources:
+            requests:
+              storage: {{ .Values.victoriaMetrics.cluster.storage.size }}
+    resources:
+      {{- toYaml .Values.victoriaMetrics.cluster.storage.resources | nindent 6 }}
+  vmselect:
+    replicaCount: {{ .Values.victoriaMetrics.cluster.select.replicaCount }}
+    cacheMountPath: {{ .Values.victoriaMetrics.cluster.select.cacheMountPath | quote }}
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ .Values.victoriaMetrics.cluster.select.storageClassName | default .Values.global.storageClass }}
+          resources:
+            requests:
+              storage: {{ .Values.victoriaMetrics.cluster.select.cacheSize }}
+    resources:
+      {{- toYaml .Values.victoriaMetrics.cluster.select.resources | nindent 6 }}
+  vminsert:
+    replicaCount: {{ .Values.victoriaMetrics.cluster.insert.replicaCount }}
+    resources:
+      {{- toYaml .Values.victoriaMetrics.cluster.insert.resources | nindent 6 }}
+{{- end }}
+{{- end }}

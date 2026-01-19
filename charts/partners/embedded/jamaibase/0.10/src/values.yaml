@@ -1,0 +1,1873 @@
+# =============================================================================
+# Jamaibase Helm Chart - Main Configuration
+# =============================================================================
+# This is the main configuration file for the Jamaibase platform.
+# Use this file for global settings and import additional value files.
+#
+# Usage Examples:
+# Basic installation:
+#   helm install jamaibase . -f values.yaml
+#
+# With custom configurations:
+#   helm install jamaibase . -f values.yaml -f values-storage.yaml -f values-monitoring.yaml
+#
+# Cluster managers should provide their own storage classes and PVs.
+# =============================================================================
+
+# Global Jamaibase Configuration
+# These settings affect all components unless overridden in specific value files
+global:
+  # Namespace is automatically set to the release namespace during deployment
+  # Do not override - all resources are deployed to the same namespace
+
+  # Image Pull Secrets
+  # IMPORTANT: Pre-create the secret in your namespace before deploying
+  #
+  # Step 1: Create namespace
+  #   kubectl create namespace jamaibase
+  #
+  # Step 2: Create image pull secret in that namespace
+  #   kubectl create secret docker-registry jamaibase-registry-secret \
+  #     --docker-server=ghcr.io \
+  #     --docker-username=<USERNAME> \
+  #     --docker-password=<TOKEN> \
+  #     --namespace=jamaibase
+  #
+  # Step 3: Deploy Helm chart referencing the secret
+  #   helm install jamaibase . \
+  #     --namespace jamaibase \
+  #     --set global.imagePullSecrets[0].name=jamaibase-registry-secret
+  imagePullSecrets:
+    - name: github-registry-secret
+  # Example:
+  # imagePullSecrets:
+  #   - name: jamaibase-registry-secret
+
+  storageClass: "" # IMPORTANT: Cluster managers should provide their own storage class name
+  labels: {} # Global labels applied to all resources
+  annotations: {} # Global annotations applied to all resources
+
+# Image Configuration (for generic templates)
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+
+# Service Account Configuration
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automount: false
+
+# Service Configuration (default service settings)
+service:
+  type: ClusterIP
+  port: 80
+  annotations: {}
+
+# Resource Management
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+# Autoscaling Configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Networking Configuration
+networking:
+  service:
+    type: ClusterIP
+  httpRoute:
+    enabled: true
+    hostnames:
+      - "jamaibase.local"
+    parentRefs:
+      - name: gateway
+        sectionName: http
+
+# HTTPRoute Configuration (alternative to networking.httpRoute)
+httpRoute:
+  enabled: true
+  hostnames:
+    - "jamaibase.local"
+  parentRefs:
+    - name: gateway
+      sectionName: http
+
+# Ingress Configuration (alternative to HTTPRoute)
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Resource Quotas (optional)
+resourceQuotas:
+  enabled: false
+  requests:
+    cpu: "4"
+    memory: "8Gi"
+  limits:
+    cpu: "8"
+    memory: "16Gi"
+
+# Pod Disruption Budgets
+podDisruptionBudgets:
+  enabled: true
+  minAvailable: 1
+
+# Backup Configuration
+backup:
+  enabled: false
+  schedule: "0 2 * * *" # Daily at 2 AM
+  retention: 7
+  s3:
+    endpoint: ""
+    bucket: ""
+    accessKey: ""
+    secretKey: ""
+
+# =============================================================================
+# Component Enablement
+# =============================================================================
+# Enable/disable major components here, then configure in specific value files
+
+# Core Jamaibase Components
+jamaibase:
+  owl:
+    enabled: true
+
+    # Secret Configuration
+    secret:
+      enabled: true
+      name: owl-secret
+      # LLM Provider API Keys
+      anthropicApiKey: ""
+      azureApiKey: ""
+      azureAiApiKey: ""
+      bedrockApiKey: ""
+      cerebrasApiKey: ""
+      cohereApiKey: ""
+      deepseekApiKey: ""
+      ellmApiKey: ""
+      geminiApiKey: ""
+      groqApiKey: ""
+      hyperbolicApiKey: ""
+      jinaAiApiKey: ""
+      openaiApiKey: "" 
+      openrouterApiKey: ""
+      sagemakerApiKey: ""
+      sambanovaApiKey: ""
+      serviceKey: ""
+      togetherAiApiKey: ""
+      vertexAiApiKey: ""
+      voyageApiKey: ""
+      # Stripe Configuration
+      stripeApiKey: ""
+      stripePublishableKeyLive: ""
+      stripePublishableKeyTest: ""
+      stripeWebhookSecretLive: ""
+      stripeWebhookSecretTest: ""
+
+    # ConfigMap Configuration
+    config:
+      enabled: true
+      name: owl-config
+      otelConfigName: otel-collector-config
+
+      # API Configuration
+      dbPath: "postgresql+psycopg://owlpguser:changeme@jamaibase-pgbouncer.jamaibase.svc.cluster.local:5432/jamaibase_owl"
+      logDir: "logs"
+      host: "0.0.0.0"
+      port: "6969"
+      workers: "8"
+      maxConcurrency: "300"
+      dbInit: "True"
+      dbReset: "False"
+      dbInitMaxUsers: "1"
+      cacheReset: "False"
+      encryptionKey: "..."
+      serviceKey: ""
+
+      # Service Endpoints
+      redisHost: "dragonfly.jamaibase.svc.cluster.local"
+      redisPort: "6379"
+      fileProxyUrl: "owl-api-route-jamaibase.apps.ellm-3.local.com"
+      fileDir: "s3://file"
+      s3Endpoint: "http://seaweedfs-s3.seaweedfs.svc.cluster.local:8333"
+      s3AccessKeyId: "seaweedfsJamaibase"
+      s3SecretAccessKey: "seaweedfsJamaibaseS3"
+      codeExecutorEndpoint: "http://v8-kopi-server-service.jamaibase.svc.cluster.local:8000"
+      doclingUrl: "http://docling-server.jamaibase.svc.cluster.local:5001"
+      doclingTimeoutSec: "20"
+
+      # File Upload Limits
+      embedFileUploadMaxBytes: "209715200" # 200MiB
+      imageFileUploadMaxBytes: "20971520" # 20MiB
+      audioFileUploadMaxBytes: "125829120" # 120MiB
+
+      # Timeouts
+      computeStoragePeriodSec: "300"
+      documentLoaderCacheTtlSec: "900"
+      llmTimeoutSec: "3600"
+      embedTimeoutSec: "3600"
+
+      # Generative Table Configs
+      concurrentRowsBatchSize: "3"
+      concurrentColsBatchSize: "5"
+      maxWriteBatchSize: "100"
+      maxFileCacheSize: "20"
+
+      # PDF Loader
+      fastPdfParsing: "True"
+
+      # Starling configs
+      s3BackupBucketName: ""
+      flushClickhouseBufferSec: "60"
+
+      # OpenTelemetry Configuration
+      otelHost: "localhost"
+      otelPort: "4317"
+      clickhouseHost: "clickhouse-jamaibase.jamaibase.svc.cluster.local"
+      clickhousePort: "8123"
+      victoriaMetricsHost: "vmauth-vmauth.jamaibase.svc.cluster.local"
+      victoriaMetricsPort: "8427"
+      victoriaMetricsUser: "vmuser"
+      victoriaMetricsPassword: "jamaibase-vm-operator"
+      victoriaLogsHost: "vls-victoria-logs-single-server.jamaibase.svc.cluster.local"
+      victoriaLogsPort: "9428"
+      serviceName: "owl"
+      otelInstrumentationHttpCaptureHeadersServerRequest: "X-.*"
+      otelExporterOtlpMetricsDefaultHistogramAggregation: "base2_exponential_bucket_histogram"
+      otelPythonFastapiExcludedUrls: "api/health"
+
+      # OpenTelemetry Collector Exporters
+      otel:
+        victoriaMetricsEndpoint1: "http://vmagent-vmagent-agg-0.vmagent-owl-aggregate.jamaibase.svc:8429/opentelemetry"
+        victoriaMetricsEndpoint2: "http://vmagent-vmagent-agg-1.vmagent-owl-aggregate.jamaibase.svc:8429/opentelemetry"
+        clickhouseEndpoint: "http://clickhouse-jamaibase.jamaibase.svc.cluster.local:8123?dial_timeout=10s&compress=lz4&async_insert=1"
+        clickhouseTtl: "24h"
+        clickhouseDatabase: "jamaibase_owl"
+        clickhouseTracesTable: "owl_traces"
+        clickhouseUsername: "owluser"
+        clickhousePassword: "owlpassword"
+        victoriaLogsEndpoint1: "http://vls-victoria-logs-single-server-0.vls-victoria-logs-single-server.jamaibase.svc.cluster.local:9428/insert/opentelemetry/v1/logs"
+        victoriaLogsEndpoint2: "http://vls-victoria-logs-single-server-1.vls-victoria-logs-single-server.jamaibase.svc.cluster.local:9428/insert/opentelemetry/v1/logs"
+
+    # ServiceAccount
+    serviceAccount:
+      create: true
+      name: owl
+      annotations: {}
+      automountToken: false
+
+    # Service
+    service:
+      name: owl-api-server
+      type: ClusterIP
+      port: 6969
+
+    # Deployment: owl-deployment (API Server)
+    deployment:
+      enabled: true
+      name: owl-deployment
+      replicas: 1
+      image:
+        repository: ghcr.io/embeddedllm/jamaibase/owl-openshift
+        tag: "20251212"
+        pullPolicy: Always
+      env:
+        PATH: "/home/appuser/.cargo/bin:/home/appuser/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      probes:
+        liveness:
+          path: /api/health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+        readiness:
+          path: /api/health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+      resources:
+        requests:
+          cpu: "1000m"
+          memory: "2Gi"
+        limits:
+          cpu: "2000m"
+          memory: "4Gi"
+      otelCollector:
+        image:
+          repository: ghcr.io/embeddedllm/jamaibase/otelcol-openshift
+          tag: "20250107"
+        resources:
+          requests:
+            cpu: "300m"
+            memory: "128Mi"
+          limits:
+            cpu: "1000m"
+            memory: "256Mi"
+
+    # Deployment: starling (Celery Worker)
+    starling:
+      enabled: true
+      deployment:
+        name: starling
+        replicas: 1
+        image:
+          repository: ghcr.io/embeddedllm/jamaibase/owl-openshift
+          tag: "20251212"
+          pullPolicy: Always
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          fsGroup: 1001
+        resources:
+          requests:
+            cpu: "1000m"
+            memory: "1Gi"
+          limits:
+            cpu: "2000m"
+            memory: "2Gi"
+        otelCollector:
+          image:
+            repository: ghcr.io/embeddedllm/jamaibase/otelcol-openshift
+            tag: "20250107"
+          resources:
+            requests:
+              cpu: "300m"
+              memory: "128Mi"
+            limits:
+              cpu: "1000m"
+              memory: "256Mi"
+      autoscale:
+        min: 2
+        max: 4
+        maxMemoryPerChild: "65536"
+      podDisruptionBudget:
+        enabled: true
+        name: starling-pdb
+        minAvailable: 1
+      serviceMonitor:
+        enabled: true
+        name: starling-servicemonitor
+
+    # PodDisruptionBudgets
+    podDisruptionBudget:
+      enabled: true
+      name: owl-pdb
+      minAvailable: 1
+
+    # ServiceMonitor
+    serviceMonitor:
+      enabled: true
+      name: owl-servicemonitor
+
+    # OpenShift Route
+    route:
+      enabled: true
+      name: owl-api-server-route
+      host: ""
+      annotations: {}
+      tls:
+        enabled: false
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+        certificate: ""
+        key: ""
+        caCertificate: ""
+        destinationCACertificate: ""
+  jambu:
+    enabled: true
+    # ServiceAccount
+    serviceAccount:
+      create: true
+      name: jambu
+      annotations: {}
+      automountToken: false
+    # Image Pull Secrets (use global imagePullSecrets if not specified here)
+    imagePullSecrets:
+      - name: github-registry-secret
+    # ConfigMap Configuration
+    config:
+      enabled: true
+      name: jambu-config
+      # Frontend Configuration
+      authSecret: "iMGEX6/QNe3JFAOCDSjk2c4mKeYV0uibzuYWvmAxQPc="
+      host: "jambu-frontend-route-jamaibase.apps.ellm-3.local.com"
+      origin: "http://jambu-frontend-route-jamaibase.apps.ellm-3.local.com"
+      owlUrl: "http://owl-api-server-route-jamaibase.apps.ellm-3.local.com"
+      owlServiceKey: ""
+      publicJamaiUrl: "http://jambu-frontend-route-jamaibase.apps.ellm-3.local.com"
+      publicIsSpa: "false"
+      nodeEnv: "production"
+      bodySizeLimit: "Infinity"
+      resendApiKey: ""
+      checkOrigin: "false"
+      useSecureCookies: "false"
+      absoluteAuthTimeout: "86400"
+      idleAuthTimeout: "900"
+    # Service
+    service:
+      name: jambu-frontend-server
+      type: ClusterIP
+      port: 4000
+      annotations: {}
+    # Deployment: jambu-deployment (Frontend Server)
+    deployment:
+      enabled: true
+      name: jambu-deployment
+      replicas: 1
+      image:
+        repository: ghcr.io/embeddedllm/jamaibase/jambu-openshift
+        tag: "20251203"
+        pullPolicy: Always
+      command: ["node", "server"]
+      args: []
+      env: {}
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "512Mi"
+        limits:
+          cpu: "1"
+          memory: "1Gi"
+      probes:
+        liveness:
+          path: /
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        readiness:
+          path: /
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+    # PodDisruptionBudget
+    podDisruptionBudget:
+      enabled: true
+      name: jambu-pdb
+      minAvailable: 1
+    # OpenShift Route
+    route:
+      enabled: true
+      name: jambu-frontend-route
+      host: "jambu-frontend-route-jamaibase.apps.ellm-3.local.com"
+      annotations: {}
+      tls:
+        enabled: false
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+        certificate: ""
+        key: ""
+        caCertificate: ""
+        destinationCACertificate: ""
+
+# Infrastructure Components
+# NOTE: Operators must be installed cluster-wide BEFORE deploying this chart.
+# See README.md for operator installation instructions.
+postgresql:
+  enabled: true
+
+  # =============================================================================
+  # Image Catalog Configuration
+  # =============================================================================
+  # The ImageCatalog allows using custom PostgreSQL images with additional
+  # extensions and optimizations. The catalog will be created in the same
+  # namespace as the cluster (release namespace).
+  #
+  # IMPORTANT: Custom images require pull secrets - contact Jamaibase team
+  # for credentials before using custom images.
+  imageCatalog:
+    enabled: true
+    name: jamaibase-postgres
+    image: ghcr.io/embeddedllm/jamaibase/postgres-17-openshift:20251230
+
+  # =============================================================================
+  # PostgreSQL Cluster Configuration
+  # =============================================================================
+  cluster:
+    enabled: true
+    name: jamaibase-postgresql-cluster
+    instances: 1
+    postgresqlMajorVersion: 17
+
+    # Image Pull Secrets for PostgreSQL images
+    # Inherits from global.imagePullSecrets if not specified
+    imagePullSecrets:
+      - name: github-registry-secret
+
+    # PostgreSQL configuration parameters
+    parameters:
+      max_connections: "100" # Maximum allowed connections
+      max_locks_per_transaction: "512" # Locks per transaction
+      shared_buffers: "256MB" # Shared memory buffers
+      effective_cache_size: "1GB" # System cache estimate
+      maintenance_work_mem: "64MB" # Maintenance operations memory
+      checkpoint_completion_target: "0.9" # Checkpoint target
+      wal_buffers: "16MB" # WAL buffer size
+      default_statistics_target: "100" # Statistics target
+      random_page_cost: "1.1" # SSD optimization
+      effective_io_concurrency: "200" # IO concurrency
+      work_mem: "4MB" # Working memory per operation
+      min_wal_size: "1GB" # Minimum WAL size
+      max_wal_size: "4GB" # Maximum WAL size
+      pgroonga.enable_wal_resource_manager: "on" # Enable pgroonga WAL
+
+    # Shared preload libraries (extensions that need to be loaded at start)
+    sharedPreloadLibraries:
+      - pgroonga_wal_resource_manager # Pgroonga WAL management
+      - pg_stat_statements # Query statistics
+
+    # Bootstrap configuration for database initialization
+    bootstrap:
+      initdb:
+        # Database name to create
+        database: jamaibase_owl
+
+        # Database owner username
+        owner: owlpguser
+
+        # Secret containing database credentials
+        # If not specified, a secret will be created using credentials below
+        secret:
+          name: pg-owl-user-secret
+
+        # SQL to run after database initialization
+        postInitApplicationSQL:
+          - "ALTER ROLE owlpguser SET deadlock_timeout = '5s';"
+          - "CREATE EXTENSION IF NOT EXISTS vectorscale CASCADE;"
+          - "CREATE EXTENSION IF NOT EXISTS pgroonga;"
+          - "CREATE EXTENSION IF NOT EXISTS vector;"
+          - "CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"
+          - "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+
+    # Storage configuration
+    storage:
+      size: 10Gi
+      # storageClassName is inherited from global.storageClass or specify here:
+      # storageClassName: "your-storage-class"
+      labels:
+        app: postgresql
+
+    # Resource allocation for PostgreSQL instances
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
+
+    # Monitoring configuration
+    monitoring:
+      enablePodMonitor: true
+      podMonitorLabels:
+        scrape-by: vmagent
+
+    # Additional labels for the cluster
+    labels:
+      environment: production
+
+    # Additional annotations for the cluster
+    annotations: {}
+
+  # Credentials for auto-generated secret
+  # Only used if secret.name is not specified in bootstrap.initdb
+  credentials:
+    username: owlpguser
+    password: changeme # TODO: Override with strong password!
+
+  # =============================================================================
+  # PgBouncer Pooler Configuration
+  # =============================================================================
+  # PgBouncer provides connection pooling for PostgreSQL, reducing connection
+  # overhead and improving performance for applications with many connections.
+  pooler:
+    enabled: true
+
+    # Pooler name
+    name: jamaibase-pgbouncer
+
+    # Number of PgBouncer instances
+    instances: 1
+
+    # Pooler type: rw (read-write) or ro (read-only)
+    type: rw
+
+    # PgBouncer configuration
+    pgbouncer:
+      # Pooling mode: session, transaction, or statement
+      poolMode: transaction
+
+      # PgBouncer parameters
+      parameters:
+        max_client_conn: "1000" # Maximum client connections
+        default_pool_size: "80" # Pool size per user/database
+        min_pool_size: "0" # Minimum pool size
+        reserve_pool_size: "0" # Reserve pool for sudden spikes
+        reserve_pool_timeout: "5" # Reserve pool timeout (seconds)
+        max_db_connections: "100" # Max connections per database
+        max_user_connections: "100" # Max connections per user
+        server_idle_timeout: "600" # Server idle timeout (seconds)
+        server_lifetime: "3600" # Server connection lifetime (seconds)
+        server_connect_timeout: "15" # Server connect timeout (seconds)
+        server_login_retry: "15" # Server login retry (seconds)
+        query_timeout: "0" # Query timeout (0 = disabled)
+        query_wait_timeout: "120" # Query wait timeout (seconds)
+        client_idle_timeout: "0" # Client idle timeout (seconds)
+        idle_transaction_timeout: "0" # Idle transaction timeout (seconds)
+        pkt_buf: "4096" # Buffer size for packets
+        max_packet_size: "2147483647" # Maximum packet size
+        listen_port: "5432" # Listening port
+        server_reset_query: "DISCARD ALL" # Query to run on release
+        server_reset_query_always: "0" # Run reset query always (0 = no)
+        track_extra_parameters: "" # Extra parameters to track
+
+    # Resource allocation for PgBouncer instances
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+
+    # Monitoring configuration
+    monitoring:
+      enablePodMonitor: true
+      podMonitorLabels:
+        scrape-by: vmagent
+
+  # =============================================================================
+  # Backup Configuration
+  # =============================================================================
+  # Configure automated backups for the PostgreSQL cluster.
+  # Backups can be stored in S3-compatible storage or other supported backends.
+  backup:
+    enabled: false
+
+    # Backup name
+    name: jamaibase-postgresql-backup
+
+    # Schedule in cron format (default: daily at 2 AM)
+    # Format: minute hour day month weekday
+    schedule: "0 2 * * *"
+
+    # Retention policy
+    retention: 7 # Keep last 7 backups
+
+    # Storage configuration
+    storage:
+      type: s3
+
+      # S3 configuration (when type: s3)
+      s3:
+        endpoint: https://s3.example.com
+        region: us-east-1
+        bucket: jamaibase-backups
+        path: /postgresql
+
+        # S3 credentials secret reference
+        accessKey:
+          secretName: s3-backup-credentials
+          key: accessKey
+        secretKey:
+          secretName: s3-backup-credentials
+          key: secretKey
+clickhouse:
+  enabled: true
+  # ClickHouse operator must be installed cluster-wide
+  # Install via Helm - see README.md
+
+  # Secret Configuration
+  secret:
+    name: clickhouse-secret-jamaibase
+  clusterSecret: jamaibasecluster
+  dbUserPassword: owlpassword
+  dbReadonlyUserPassword: owlreadonlypassword
+  databaseName: jamaibase_owl
+
+  # Log TTL Configuration
+  logTTL:
+    text_log: "event_date + INTERVAL 45 day"
+    processors_profile_log: "event_date + INTERVAL 45 day"
+    metric_log: "event_date + INTERVAL 45 day"
+    asynchronous_metric_log: "event_date + INTERVAL 45 day"
+    trace_log: "event_date + INTERVAL 45 day"
+    part_log: "event_date + INTERVAL 45 day"
+
+  # Users Configuration
+  # IMPORTANT: owluser is created by ClickHouse Installation for database initialization
+  # The ClickHouse operator auto-generates host_regexp, so we need to explicitly allow the pod network IP range
+  users:
+    clickhouse_operator/networks/ip: "10.0.0.0/8"
+    owluser/networks/ip: "::/0"
+    owluser/profile: default
+    owluser/quota: default
+    owluser/access_management: 1
+    owluser/password:
+      valueFrom:
+        secretKeyRef:
+          name: clickhouse-secret-jamaibase
+          key: db_user_password
+
+  # ClickHouse Profiles
+  profiles:
+    default/allow_experimental_time_series_table: 1
+    default/allow_experimental_json_type: 1
+
+  monitoring:
+    enabled: true
+
+  # ClickHouse Keeper Configuration (ZooKeeper replacement)
+  keeper:
+    enabled: true
+    name: keeper-installation
+    replicas: 1
+    image:
+      repository: ghcr.io/embeddedllm/jamaibase/clickhouse-keeper-openshift
+      tag: "24.12.6.70"
+      pullPolicy: IfNotPresent
+    settings:
+      logger/level: "trace"
+      logger/console: "true"
+      listen_host: "0.0.0.0"
+      keeper_server/four_letter_word_white_list: "*"
+      keeper_server/coordination_settings/raft_logs_level: "information"
+      prometheus/endpoint: /metrics
+      prometheus/port: 7000
+      prometheus/metrics: true
+      prometheus/events: true
+      prometheus/asynchronous_metrics: true
+    resources:
+      requests:
+        memory: "256M"
+        cpu: "350m"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    storage:
+      size: 10Gi
+      storageClassName: openebs-hostpath
+
+  # ClickHouse Cluster Configuration
+  cluster:
+    name: jamaibase
+    replicas: 1
+    image:
+      repository: ghcr.io/embeddedllm/jamaibase/clickhouse-server-openshift
+      tag: "20260107"
+      pullPolicy: Always
+    settings:
+      prometheus/endpoint: /metrics
+      prometheus/port: 9363
+      prometheus/metrics: true
+      prometheus/events: true
+      prometheus/asynchronous_metrics: true
+      logger/level: "trace"
+      logger/console: "true"
+      logger/size: "100M"
+      logger/count: 10
+      listen_host: "0.0.0.0"
+    zookeeper:
+      session_timeout_ms: 30000
+      operation_timeout_ms: 10000
+    resources:
+      requests:
+        memory: "512M"
+        cpu: "350m"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    storage:
+      size: 10Gi
+      storageClassName: openebs-hostpath
+
+  # Database Initialization Job Configuration
+  initJob:
+    enabled: true
+    name: clickhouse-init-db
+    configMapName: init-clickhouse-db
+    envConfigMapName: clickhouse-env-config
+
+    # ClickHouse client image
+    image:
+      repository: ghcr.io/embeddedllm/jamaibase/clickhouse-client-openshift
+      tag: "25.12.2.54"
+      pullPolicy: IfNotPresent
+
+    # Connection settings
+    # Use owluser which is created by ClickHouse Installation
+    user: owluser
+    host: clickhouse-jamaibase.jamaibase.svc.cluster.local
+    clusterName: jamaibase
+    expectedClusterNumber: "1"
+    readonlyUser: owl_readonly
+
+    # Secret keys
+    passwordKey: db_user_password
+    readonlyPasswordKey: db_readonly_user_password
+
+    # Job settings
+    backoffLimit: 4
+    restartPolicy: OnFailure
+
+    # Resource limits
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+
+    # Security context
+    securityContext: {}
+
+    # Scheduling constraints
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+
+    # Init script - embedded for Helm chart convenience
+    script: |
+      #!/bin/bash
+      set -e # Exit immediately if a command exits with a non-zero status.
+
+      # Environment variables
+      CH_USER=${CH_USER:-default}
+      CH_PASSWORD=${CH_PASSWORD:-}
+      CH_HOST=${CH_HOST:-clickhouse-jamaibase.jamaibase.svc.cluster.local}
+      EXPECTED_CLUSTER_COUNT=${EXPECTED_CLUSTER_NUMBER:-1}
+      CLUSTER_NAME=${CLUSTER_NAME:-jamaibase}
+      READONLY_USER=${READONLY_USER:-owl_readonly}
+      READONLY_PASSWORD=${READONLY_PASSWORD:-}
+      DB_NAME="jamaibase_owl"
+
+      # Connection arguments - don't use password for default user
+      if [ "$CH_USER" == "default" ]; then
+        CH_CLIENT_AUTH="--user ${CH_USER}"
+      else
+        CH_CLIENT_AUTH="--user ${CH_USER} --password ${CH_PASSWORD}"
+      fi
+
+      # Function to create a table or view with retry logic
+      create_with_retry() {
+        local resource_type=$1 # "table" or "view"
+        local resource_name=$2
+        local create_query=$3
+        local max_retries=5
+        local retry_delay=10
+        local retries=0
+
+        while [ $retries -lt $max_retries ]; do
+          echo "Attempting to create $resource_type $resource_name (attempt $((retries+1))/$max_retries)"
+
+          # Execute the creation command
+          if clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+            --query="$create_query"; then
+
+            # For single node setup, skip replica verification
+            if [ "$EXPECTED_CLUSTER_COUNT" -eq "1" ]; then
+              echo "Successfully created $resource_type $resource_name"
+              return 0
+            fi
+
+            # Verify creation on all replicas for multi-node clusters
+            if verify_resource_creation "$resource_type" "$resource_name"; then
+              echo "Successfully created $resource_type $resource_name on all replicas"
+              return 0
+            fi
+          fi
+
+          retries=$((retries + 1))
+          if [ $retries -lt $max_retries ]; then
+            echo "Retrying in $retry_delay seconds..."
+            sleep $retry_delay
+          fi
+        done
+
+        echo "ERROR: Failed to create $resource_type $resource_name after $max_retries attempts"
+        return 1
+      }
+
+      # Function to verify table/view is created on all cluster nodes.
+      verify_resource_creation() {
+        local resource_type=$1
+        local resource_name=$2
+        local system_table="system.tables"
+        if [ "$resource_type" == "view" ]; then
+          system_table="system.tables" # Materialized views are also in system.tables
+        fi
+
+        local hosts
+        hosts=$(clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+          --query="SELECT host_name FROM system.clusters WHERE cluster = '${CLUSTER_NAME}'" --format=TabSeparated)
+
+        local missing_hosts=""
+        for host in $hosts; do
+          local exists
+          exists=$(clickhouse-client ${CH_CLIENT_AUTH} --host "$host" \
+            --query="SELECT count() FROM ${system_table} WHERE database = '${DB_NAME}' AND name = '${resource_name}'")
+
+          if [ "$exists" -ne "1" ]; then
+            missing_hosts+=" $host"
+          fi
+        done
+
+        if [ -z "$missing_hosts" ]; then
+          return 0
+        else
+          echo "$resource_type $resource_name missing on:$missing_hosts"
+          return 1
+        fi
+      }
+
+      # Wait for the cluster to be ready
+      echo "Waiting for ClickHouse cluster '${CLUSTER_NAME}' to be ready..."
+      RETRIES_READINESS=0
+      MAX_RETRIES_READINESS=30
+      RETRY_DELAY_READINESS=10
+
+      until clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="SELECT 1" >/dev/null 2>&1; do
+        RETRIES_READINESS=$((RETRIES_READINESS+1))
+        if [ $RETRIES_READINESS -ge $MAX_RETRIES_READINESS ]; then
+          echo "Failed to connect to ClickHouse host ${CH_HOST}. Exiting..."
+          exit 1
+        fi
+        echo "Cannot connect to ${CH_HOST}. Retrying in $RETRY_DELAY_READINESS seconds..."
+        sleep $RETRY_DELAY_READINESS
+      done
+
+      # For single node, skip cluster count check
+      if [ "$EXPECTED_CLUSTER_COUNT" -ne "1" ]; then
+        while true; do
+          CLUSTER_COUNT=$(clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+            --query="SELECT count() FROM system.clusters WHERE cluster = '${CLUSTER_NAME}'" 2>/dev/null || echo "0")
+
+          if [ "$CLUSTER_COUNT" -eq "$EXPECTED_CLUSTER_COUNT" ]; then
+            echo "ClickHouse cluster is ready with $CLUSTER_COUNT nodes."
+            break
+          fi
+
+          RETRIES_READINESS=$((RETRIES_READINESS+1))
+          if [ $RETRIES_READINESS -ge $MAX_RETRIES_READINESS ]; then
+            echo "Timed out waiting for ClickHouse cluster. Expected $EXPECTED_CLUSTER_COUNT nodes, found $CLUSTER_COUNT. Exiting..."
+            exit 1
+          fi
+
+          echo "Waiting for all $EXPECTED_CLUSTER_COUNT nodes to be ready (found $CLUSTER_COUNT)... Retrying in $RETRY_DELAY_READINESS seconds."
+          sleep $RETRY_DELAY_READINESS
+        done
+      else
+        echo "Single node cluster detected, skipping cluster count check."
+      fi
+
+      # owluser is already created by ClickHouse Installation configuration
+      # Skip user creation as users_xml is read-only
+      echo "Using existing admin user '${CH_USER}'..."
+
+      # Create Database
+      echo "Creating database ${DB_NAME}..."
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="CREATE DATABASE IF NOT EXISTS ${DB_NAME}"
+
+      # Skip read-only user creation as users_xml is read-only
+      # The readonly user should be defined in ClickHouse Installation configuration
+      echo "Skipping read-only user creation (users_xml is read-only)..."
+
+      # Create Tables and Views
+      echo "Creating tables and views in database ${DB_NAME}..."
+
+      create_with_retry "table" "llm_usage" "CREATE TABLE IF NOT EXISTS ${DB_NAME}.llm_usage
+      (
+          \`id\` UUID,
+          \`org_id\` String,
+          \`proj_id\` String,
+          \`user_id\` String,
+          \`timestamp\` DateTime64(6, 'UTC'),
+          \`model\` String,
+          \`input_token\` UInt32,
+          \`output_token\` UInt32,
+          \`cost\` Decimal128(12),
+          \`input_cost\` Decimal128(12),
+          \`output_cost\` Decimal128(12)
+      )
+      ENGINE=MergeTree
+      PARTITION BY toYYYYMM(timestamp)
+      ORDER BY (org_id, timestamp, model)"
+
+      create_with_retry "table" "embed_usage" "CREATE TABLE IF NOT EXISTS ${DB_NAME}.embed_usage
+      (
+          \`id\` UUID,
+          \`org_id\` String,
+          \`proj_id\` String,
+          \`user_id\` String,
+          \`timestamp\` DateTime64(6, 'UTC'),
+          \`model\` String,
+          \`num_token\` UInt32,
+          \`cost\` Decimal128(12)
+      )
+      ENGINE=MergeTree
+      PARTITION BY toYYYYMM(timestamp)
+      ORDER BY (org_id, timestamp, model)"
+
+      create_with_retry "table" "rerank_usage" "CREATE TABLE IF NOT EXISTS ${DB_NAME}.rerank_usage
+      (
+          \`id\` UUID,
+          \`org_id\` String,
+          \`proj_id\` String,
+          \`user_id\` String,
+          \`timestamp\` DateTime64(6, 'UTC'),
+          \`model\` String,
+          \`num_search\` UInt32,
+          \`cost\` Decimal128(12)
+      )
+      ENGINE=MergeTree
+      PARTITION BY toYYYYMM(timestamp)
+      ORDER BY (org_id, timestamp, model)"
+
+      create_with_retry "table" "egress_usage" "CREATE TABLE IF NOT EXISTS ${DB_NAME}.egress_usage
+      (
+          \`id\` UUID,
+          \`org_id\` String,
+          \`proj_id\` String,
+          \`user_id\` String,
+          \`timestamp\` DateTime64(6, 'UTC'),
+          \`amount_gib\` Decimal128(12),
+          \`cost\` Decimal128(12)
+      )
+      ENGINE=MergeTree
+      PARTITION BY toYYYYMM(timestamp)
+      ORDER BY (org_id, timestamp)"
+
+      create_with_retry "table" "file_storage_usage" "CREATE TABLE IF NOT EXISTS ${DB_NAME}.file_storage_usage
+      (
+          \`id\` UUID,
+          \`org_id\` String,
+          \`proj_id\` String,
+          \`user_id\` String,
+          \`timestamp\` DateTime64(6, 'UTC'),
+          \`amount_gib\` Decimal128(12),
+          \`cost\` Decimal128(12),
+          \`snapshot_gib\` Decimal128(12)
+      )
+      ENGINE=MergeTree
+      PARTITION BY toYYYYMM(timestamp)
+      ORDER BY (org_id, timestamp)"
+
+      create_with_retry "table" "db_storage_usage" "CREATE TABLE IF NOT EXISTS ${DB_NAME}.db_storage_usage
+      (
+          \`id\` UUID,
+          \`org_id\` String,
+          \`proj_id\` String,
+          \`user_id\` String,
+          \`timestamp\` DateTime64(6, 'UTC'),
+          \`amount_gib\` Decimal128(12),
+          \`cost\` Decimal128(12),
+          \`snapshot_gib\` Decimal128(12)
+      )
+      ENGINE=MergeTree
+      PARTITION BY toYYYYMM(timestamp)
+      ORDER BY (org_id, timestamp)"
+
+      create_with_retry "table" "owl_traces" "CREATE TABLE IF NOT EXISTS ${DB_NAME}.owl_traces
+      (
+          \`Timestamp\` DateTime64(9) CODEC(Delta(8), ZSTD(1)),
+          \`TraceId\` String CODEC(ZSTD(1)),
+          \`SpanId\` String CODEC(ZSTD(1)),
+          \`ParentSpanId\` String CODEC(ZSTD(1)),
+          \`TraceState\` String CODEC(ZSTD(1)),
+          \`SpanName\` LowCardinality(String) CODEC(ZSTD(1)),
+          \`SpanKind\` LowCardinality(String) CODEC(ZSTD(1)),
+          \`ServiceName\` LowCardinality(String) CODEC(ZSTD(1)),
+          \`ResourceAttributes\` Map(LowCardinality(String), String) CODEC(ZSTD(1)),
+          \`ScopeName\` String CODEC(ZSTD(1)),
+          \`ScopeVersion\` String CODEC(ZSTD(1)),
+          \`SpanAttributes\` Map(LowCardinality(String), String) CODEC(ZSTD(1)),
+          \`Duration\` Int64 CODEC(ZSTD(1)),
+          \`StatusCode\` LowCardinality(String) CODEC(ZSTD(1)),
+          \`StatusMessage\` String CODEC(ZSTD(1)),
+          \`Events.Timestamp\` Array(DateTime64(9)) CODEC(ZSTD(1)),
+          \`Events.Name\` Array(LowCardinality(String)) CODEC(ZSTD(1)),
+          \`Events.Attributes\` Array(Map(LowCardinality(String), String)) CODEC(ZSTD(1)),
+          \`Links.TraceId\` Array(String) CODEC(ZSTD(1)),
+          \`Links.SpanId\` Array(String) CODEC(ZSTD(1)),
+          \`Links.TraceState\` Array(String) CODEC(ZSTD(1)),
+          \`Links.Attributes\` Array(Map(LowCardinality(String), String)) CODEC(ZSTD(1)),
+          INDEX idx_trace_id TraceId TYPE bloom_filter(0.001) GRANULARITY 1,
+          INDEX idx_res_attr_key mapKeys(ResourceAttributes) TYPE bloom_filter(0.01) GRANULARITY 1,
+          INDEX idx_res_attr_value mapValues(ResourceAttributes) TYPE bloom_filter(0.01) GRANULARITY 1,
+          INDEX idx_span_attr_key mapKeys(SpanAttributes) TYPE bloom_filter(0.01) GRANULARITY 1,
+          INDEX idx_span_attr_value mapValues(SpanAttributes) TYPE bloom_filter(0.01) GRANULARITY 1,
+          INDEX idx_duration Duration TYPE minmax GRANULARITY 1
+      )
+      ENGINE = MergeTree
+      PARTITION BY toDate(Timestamp)
+      ORDER BY (ServiceName, SpanName, toUnixTimestamp(Timestamp), TraceId)
+      TTL toDateTime(Timestamp) + toIntervalDay(3)
+      SETTINGS index_granularity = 8192, ttl_only_drop_parts = 1"
+
+      create_with_retry "table" "owl_traces_trace_id_ts" "CREATE TABLE IF NOT EXISTS ${DB_NAME}.owl_traces_trace_id_ts
+      (
+        \`TraceId\` String CODEC(ZSTD(1)),
+        \`Start\` DateTime64(9) CODEC(Delta(8), ZSTD(1)),
+        \`End\` DateTime64(9) CODEC(Delta(8), ZSTD(1)),
+        INDEX idx_trace_id TraceId TYPE bloom_filter(0.01) GRANULARITY 1
+      )
+      ENGINE = MergeTree
+      ORDER BY (TraceId, toUnixTimestamp(Start))
+      TTL toDateTime(Start) + toIntervalDay(3)"
+
+      create_with_retry "view" "owl_traces_trace_id_ts_mv" "CREATE MATERIALIZED VIEW IF NOT EXISTS ${DB_NAME}.owl_traces_trace_id_ts_mv TO ${DB_NAME}.owl_traces_trace_id_ts
+      (
+        \`TraceId\` String,
+        \`Start\` DateTime64(9),
+        \`End\` DateTime64(9)
+      ) AS
+      SELECT
+        TraceId,
+        min(Timestamp) AS Start,
+        max(Timestamp) AS End
+      FROM ${DB_NAME}.owl_traces
+      WHERE TraceId != ''
+      GROUP BY TraceId"
+
+      echo "Database initialization complete."
+
+      # --- Migration --- #
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="ALTER TABLE ${DB_NAME}.egress_usage RENAME COLUMN IF EXISTS amount_gb TO amount_gib"
+
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="ALTER TABLE ${DB_NAME}.llm_usage MODIFY COLUMN cost Decimal128(12)"
+
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="ALTER TABLE ${DB_NAME}.llm_usage MODIFY COLUMN input_cost Decimal128(12)"
+
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="ALTER TABLE ${DB_NAME}.llm_usage MODIFY COLUMN output_cost Decimal128(12)"
+
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="ALTER TABLE ${DB_NAME}.embed_usage MODIFY COLUMN cost Decimal128(12)"
+
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="ALTER TABLE ${DB_NAME}.rerank_usage MODIFY COLUMN cost Decimal128(12)"
+
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="ALTER TABLE ${DB_NAME}.egress_usage MODIFY COLUMN cost Decimal128(12)"
+
+      clickhouse-client ${CH_CLIENT_AUTH} --host "${CH_HOST}" \
+        --query="ALTER TABLE ${DB_NAME}.egress_usage MODIFY COLUMN amount_gib Decimal128(12)"
+
+dragonfly:
+  enabled: true
+  # Dragonfly operator must be installed cluster-wide and SCC must be applied
+  # Install via Helm and apply SCC - see README.md
+
+  # Dragonfly Resource Configuration
+  name: dragonfly
+
+  # Replicas - number of Dragonfly instances
+  replicas: 2
+
+  # Resources for Dragonfly pods
+  resources:
+    requests:
+      cpu: 500m
+      memory: 500Mi
+    limits:
+      cpu: 2000m
+      memory: 4000Mi
+
+  # Labels for the Dragonfly resource
+  labels:
+    app.kubernetes.io/name: dragonfly
+    app.kubernetes.io/instance: dragonfly
+    app.kubernetes.io/part-of: dragonfly-operator
+    app.kubernetes.io/created-by: dragonfly-operator
+
+  # Annotations (optional)
+  annotations: {}
+# seaweedfs:
+#   enabled: true
+#   # SeaweedFS operator must be installed cluster-wide
+#   # Install via Helm - see README.md
+#   s3Route:
+#     name: seaweedfs-s3-route
+#     serviceName: seaweedfs-s3
+#     port: 8333
+#     host: ""
+#     annotations: {}
+#     tls:
+#       enabled: false
+#       termination: edge
+#       insecureEdgeTerminationPolicy: Redirect
+#   bucketJob:
+#     name: seaweedfs-bucket-creator
+#     enabled: true
+#     bucketName: "jamaibase"
+#     masterService: seaweedfs-master
+#     masterPort: 9333
+#     s3Service: seaweedfs-s3
+#     s3Port: 8333
+#     image:
+#       repository: chrislusf/seaweedfs
+#       tag: latest
+#       pullPolicy: IfNotPresent
+
+# =============================================================================
+# S3-Compatible Storage Configuration
+# =============================================================================
+# Supports AWS S3, MinIO, or any S3-compatible storage
+# IMPORTANT: Bring Your Own S3 - This chart does NOT deploy S3 storage
+# Pre-requisites:
+#   1. Create S3 bucket in your cloud provider or self-hosted solution
+#   2. Create Kubernetes secret with S3 credentials:
+#      kubectl create secret generic s3-credentials \
+#        --from-literal=accessKeyId=<YOUR_ACCESS_KEY> \
+#        --from-literal=secretAccessKey=<YOUR_SECRET_KEY> \
+#        --namespace jamaibase
+s3:
+  enabled: true
+  # S3 endpoint URL (e.g., "https://s3.amazonaws.com" or custom endpoint)
+  endpoint: ""
+  # AWS region (required for AWS S3, optional for other providers)
+  region: ""
+  # TLS configuration
+  tls:
+    enabled: false
+    # Set to false for self-signed certificates (use with --insecure flag)
+    verify: true
+  # Credentials secret reference (must be pre-created)
+  credentials:
+    secretName: "s3-credentials"
+    accessKeyKey: "accessKeyId"
+    secretKeyKey: "secretAccessKey"
+
+# Additional Services
+v8kopi:
+  enabled: true
+
+  # Service Account
+  serviceAccount:
+    name: kopi
+
+  # RBAC Configuration
+  rbac:
+    roleName: kopi
+
+  # Server Configuration
+  server:
+    name: v8-kopi-server
+    serviceName: v8-kopi-server-service
+    port: 8000
+    replicas: 1
+    configMapName: v8-kopi-server-config
+
+    image:
+      repository: ghcr.io/embeddedllm/jamaibase/kopi/k8s-kopi-server-openshift
+      tag: "20251205"
+      pullPolicy: Always
+
+    config:
+      requestTimeout: "15"
+      queueTimeout: "60"
+      maxQueueSize: "50"
+      queueCleanupInterval: "5"
+
+    probes:
+      liveness:
+        path: /health
+      readiness:
+        path: /health
+
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "500m"
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+
+  # Worker Configuration
+  worker:
+    name: v8-kopi-workers
+    serviceName: v8-kopi-worker-service
+    port: 3000
+    replicas: 5
+    configMapName: v8-kopi-worker-config
+
+    image:
+      repository: ghcr.io/embeddedllm/jamaibase/kopi/kopiworker-openshift
+      tag: "20251203"
+      pullPolicy: Always
+
+    config:
+      nodeEnv: "production"
+
+    probes:
+      liveness:
+        path: /health
+      readiness:
+        path: /health
+
+    resources:
+      # seems at least need 1Gi+ memory to start properly
+      requests:
+        memory: "2Gi"
+        cpu: "500m"
+      limits:
+        memory: "4Gi"
+        cpu: "4000m"
+
+docling:
+  enabled: true
+  name: docling-deployment
+  serviceName: docling-server
+  port: 5001
+  configMapName: docling-config
+  image:
+    repository: ghcr.io/embeddedllm/jamaibase/docling-serve-cu128-openshift
+    tag: "20250108"
+    pullPolicy: IfNotPresent
+  probes:
+    liveness:
+      path: /health
+      port: 5001
+    readiness:
+      path: /health
+      port: 5001
+    startup:
+      enabled: true
+      path: /health
+      port: 5001
+      failureThreshold: 20
+      periodSeconds: 10
+      timeoutSeconds: 2
+  securityContext:
+    enabled: false
+    settings:
+      runAsNonRoot: true
+      # Let OpenShift assign arbitrary UID - best practice for security
+      # runAsUser: 1001  # REMOVED - allow OpenShift to assign UID
+      # runAsGroup: 1001  # REMOVED - allow OpenShift to assign GID
+      # fsGroup: 1001  # REMOVED - allow OpenShift to assign GID
+  config:
+    logLevel: "INFO"
+    maxFileSize: "52428800"
+    allowedFileTypes: "pdf,docx,doc,jpg,jpeg,png,tiff"
+    cudaVisibleDevices: "0"
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "1000m"
+    limits:
+      memory: "4Gi"
+      cpu: "4000m"
+  gpu:
+    enabled: true
+    count: 1
+    nodeSelectorLabel: nvidia.com/gpu.present
+    resourceName: nvidia.com/gpu
+    tolerations: []
+  podDisruptionBudget:
+    enabled: true
+    name: docling-pdb
+    minAvailable: 1
+
+# =============================================================================
+# Victoria Metrics Configuration
+# =============================================================================
+# Victoria Metrics provides metrics storage, monitoring, and logging
+# IMPORTANT: VM Operator must be installed cluster-wide BEFORE enabling this
+# Install via Helm - see README.md
+victoriaMetrics:
+  enabled: true
+
+  # =============================================================================
+  # Victoria Logs Single (VLS) Configuration
+  # =============================================================================
+  victoriaLogs:
+    enabled: true
+    name: victoria-logs-single-server
+    replicaCount: 2
+    retentionPeriod: "100y"
+    retentionDiskSpaceUsage: "9GiB"
+
+    persistentVolume:
+      enabled: true
+      storageClassName: "" # Uses global.storageClass if empty
+      size: 10Gi
+
+    resources:
+      limits:
+        cpu: 3000m
+        memory: 3000Mi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+
+    vmServiceScrape:
+      enabled: true
+      extraLabels:
+        scrape-by: vmagent
+
+  # =============================================================================
+  # VMCluster Configuration
+  # =============================================================================
+  cluster:
+    enabled: true
+    name: victoria-cluster
+    version: v1.126.0-cluster
+    retentionPeriod: "100y"
+    replicationFactor: 2
+
+    requestsLoadBalancer:
+      enabled: true
+      replicaCount: 2
+
+    # VMStorage configuration - stores metric data
+    storage:
+      replicaCount: 2
+      storageDataPath: "/vm-data"
+      storageClassName: "" # Uses global.storageClass if empty
+      size: "10Gi"
+      resources:
+        limits:
+          cpu: "3"
+          memory: "3Gi"
+        requests:
+          cpu: 500m
+          memory: 500Mi
+
+    # VMSelect configuration - queries metric data
+    select:
+      replicaCount: 2
+      cacheMountPath: "/select-cache"
+      storageClassName: "" # Uses global.storageClass if empty
+      cacheSize: "1Gi"
+      resources:
+        limits:
+          cpu: "1"
+          memory: "1Gi"
+        requests:
+          cpu: "0.5"
+          memory: "500Mi"
+
+    # VMInsert configuration - ingests metric data
+    insert:
+      replicaCount: 2
+      resources:
+        limits:
+          cpu: "1"
+          memory: "1Gi"
+        requests:
+          cpu: "0.5"
+          memory: "500Mi"
+
+  # =============================================================================
+  # VMAgent Configuration
+  # =============================================================================
+  vmagent:
+    enabled: true
+
+    # Aggregate agent - for advanced aggregation
+    agents:
+      aggregate:
+        name: vmagent-agg
+        replicaCount: 3
+        statefulMode: true
+        port: 8429
+        serviceName: vmagent-owl-aggregate
+
+        image:
+          repository: ghcr.io/embeddedllm/jamaibase/vmagent-openshift
+          tag: "20250107"
+
+        storage:
+          storageClassName: "" # Uses global.storageClass if empty
+          size: 2Gi
+
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 1500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+
+        remoteWrite:
+          - url: "http://vminsertinternal-victoria-cluster.jamaibase.svc:8480/insert/0/prometheus/api/v1/write"
+            streamAggrConfig:
+              enableWindows: true
+              rules:
+                - match: "flower.task.runtime.seconds_bucket"
+                  interval: 1m
+                  without: [service.instance.id, worker]
+                  outputs: [total]
+                  keep_metric_names: true
+
+                - match: '{__name__=~"flower.task.runtime.seconds_(count|sum)"}'
+                  interval: 1m
+                  without: [service.instance.id, worker]
+                  outputs: [total]
+                  keep_metric_names: true
+
+                - match: '{__name__=~"http.+_bucket"}'
+                  interval: 1m
+                  without: [service.instance.id, http.server_name, http.host]
+                  outputs: [total]
+                  keep_metric_names: true
+
+                - match: '{__name__=~"http.+_(count|sum)"}'
+                  interval: 1m
+                  without: [service.instance.id, http.server_name, http.host]
+                  outputs: [total]
+                  keep_metric_names: true
+
+                - match: "db.client.connections.usage"
+                  interval: 1m
+                  without: [service.instance.id]
+                  outputs: [total]
+                  keep_metric_names: true
+
+                - match: "http.server.active_requests"
+                  interval: 1m
+                  without: [service.instance.id, http.server_name, http.host]
+                  outputs: [total]
+                  keep_metric_names: true
+
+                - match:
+                    - "request_count"
+                  interval: 1m
+                  without: [service.instance.id]
+                  outputs: [total]
+                  keep_metric_names: true
+
+      # Main agent - for general scraping
+      main:
+        name: vmagent
+        replicaCount: 2
+
+        image:
+          repository: ghcr.io/embeddedllm/jamaibase/vmagent-openshift
+          tag: "20250107"
+
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 1500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+
+        remoteWrite:
+          - url: "http://vminsertinternal-victoria-cluster.jamaibase.svc:8480/insert/0/prometheus/api/v1/write"
+
+        serviceScrapeNamespaceSelector:
+          matchExpressions:
+            - key: kubernetes.io/metadata.name
+              operator: In
+              values:
+                - jamaibase
+                - dragonfly-operator-system
+                - clickhouse-operator-system
+                - cnpg-operator-system
+                - vm-operator-system
+
+        podScrapeNamespaceSelector:
+          matchExpressions:
+            - key: kubernetes.io/metadata.name
+              operator: In
+              values:
+                - jamaibase
+                - cnpg-operator-system
+
+        nodeScrapeSelector:
+          matchLabels:
+            app.kubernetes.io/instance: system-monitor
+
+  # =============================================================================
+  # Pod Scrapes Configuration
+  # =============================================================================
+  podScrapes:
+    enabled: true
+    scrapes:
+      - name: dragonfly-scrape
+        enabled: true
+        instanceLabel: vm-podscrape-spec
+        selector:
+          matchLabels:
+            app: dragonfly
+        podMetricsEndpoints:
+          - port: admin
+
+      - name: amd-exporter-amdgpu-metrics-exporter
+        instanceLabel: vm-podscrape-spec
+        selector:
+          matchLabels:
+            app: amd-exporter-amdgpu-metrics-exporter
+        namespaceSelector:
+          any: true
+        podMetricsEndpoints:
+          - port: ""
+        jobLabel: app
+
+      - name: nvidia-dcgm-exporter
+        instanceLabel: vm-podscrape-spec
+        selector:
+          matchLabels:
+            app: nvidia-dcgm-exporter
+        namespaceSelector:
+          any: true
+        podMetricsEndpoints:
+          - port: metrics
+        jobLabel: app
+
+      - name: clickhouse-keeper-metrics
+        instanceLabel: vm-pod-scrape
+        selector:
+          matchLabels:
+            app: clickhouse-keeper
+        namespaceSelector:
+          matchNames:
+            - jamaibase
+        podMetricsEndpoints:
+          - port: chk-metrics
+            relabelConfigs:
+              - sourceLabels: [__meta_kubernetes_namespace]
+                targetLabel: namespace
+              - sourceLabels: [__meta_kubernetes_pod_name]
+                targetLabel: pod_name
+              - sourceLabels: [__meta_kubernetes_pod_container_name]
+                targetLabel: container_name
+
+  # =============================================================================
+  # Node Scrape Configuration
+  # =============================================================================
+  nodeScrape:
+    enabled: true
+    name: system-monitor
+    scheme: https
+    tlsConfig:
+      caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      insecureSkipVerify: true
+    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabelConfigs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - targetLabel: __address__
+        replacement: kubernetes.default.svc:443
+      - sourceLabels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        targetLabel: __metrics_path__
+        replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+      - targetLabel: job
+        replacement: system-monitor
+
+  # =============================================================================
+  # VMAuth Configuration
+  # =============================================================================
+  vmauth:
+    enabled: true
+    name: vmauth
+    replicaCount: 2
+
+    image:
+      repository: ghcr.io/embeddedllm/jamaibase/vmauth-openshift
+      tag: v1.126.0
+
+    resources:
+      limits:
+        cpu: 1500m
+        memory: 1500Mi
+      requests:
+        cpu: 500m
+        memory: 500Mi
+
+  # =============================================================================
+  # VMUser Configuration
+  # =============================================================================
+  vmuser:
+    name: vmuser
+    username: vmuser
+    password: jamaibase-vm-operator # TODO: Override with strong password!
+    secretName: vmuser-secret
+    victoriaLogsUrls:
+      - http://vls-victoria-logs-single-server-0.vls-victoria-logs-single-server.jamaibase.svc.cluster.local:9428/
+      - http://vls-victoria-logs-single-server-1.vls-victoria-logs-single-server.jamaibase.svc.cluster.local:9428/
+
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+  alerts:
+    enabled: true
+  grafana:
+    dashboards:
+      enabled: true
+      jamaibase: true
+
+# OpenShift Specific
+openshift:
+  enabled: true
+  route:
+    enabled: true
+    host: ""
+    tls:
+      enabled: false
+      termination: edge
+
+  # V8-Kopi Routes
+  v8kopiRoutes:
+    server:
+      enabled: false
+      name: v8-kopi-server-route
+      serviceName: v8-kopi-server-service
+      servicePort: 8000
+      host: ""
+      tls:
+        enabled: false
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+        certificate: ""
+        key: ""
+        caCertificate: ""
+        destinationCACertificate: ""
+      annotations: {}
+    workers:
+      enabled: false
+      name: v8-kopi-workers-route
+      serviceName: v8-kopi-worker-service
+      servicePort: 3000
+      host: ""
+      tls:
+        enabled: false
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+        certificate: ""
+        key: ""
+        caCertificate: ""
+        destinationCACertificate: ""
+      annotations: {}
+
+# =============================================================================
+# STORAGE CONFIGURATION
+# =============================================================================
+# Configure storage classes for different workload types
+# Cluster managers should provide their own storage classes or use these defaults
+storage:
+  classes:
+    create: false # Set to true to create default storage classes
+
+    # General Purpose StorageClass
+    # Good for: development, testing, non-critical workloads
+    generalPurpose:
+      name: jamaibase-gp
+      provisioner: kubernetes.io/no-provisioner # Replace with your provisioner
+      volumeBindingMode: WaitForFirstConsumer
+      allowVolumeExpansion: true
+      reclaimPolicy: Delete
+      annotations: {}
+      parameters:
+        type: gp3 # Adjust based on your cloud provider
+        iops: "3000"
+        throughput: "125"
+# =============================================================================
+# Quick Installation Guide
+# =============================================================================
+#
+# 1. MINIMAL INSTALLATION:
+#    helm install jamaibase . -f values.yaml
+#
+# 2. WITH CUSTOM STORAGE:
+#    helm install jamaibase . -f values.yaml -f values-storage.yaml
+#
+# 3. WITH MONITORING:
+#    helm install jamaibase . -f values.yaml -f values-monitoring.yaml
+#
+# 4. PRODUCTION DEPLOYMENT:
+#    helm install jamaibase . \
+#      -f values.yaml \
+#      -f values-jamaibase.yaml \
+#      -f values-storage.yaml \
+#      -f values-v8kopi.yaml \
+#      -f values-docling.yaml \
+#      -f values-monitoring.yaml \
+#      -f values-networking.yaml \
+#      -f values-openshift.yaml
+#
+# 5. OPENSHIFT CLUSTER DEPLOYMENT:
+#    helm install jamaibase . \
+#      -f values.yaml \
+#      -f values-jamaibase.yaml \
+#      -f values-storage.yaml \
+#      -f values-openshift.yaml \
+#      --namespace jamaibase \
+#      --create-namespace
+#
+# =============================================================================
+
+# =============================================================================
+# IMPORTANT NOTES FOR CLUSTER MANAGERS
+# =============================================================================
+#
+# 1. STORAGE CLASSES:
+#    - Set global.storageClass to your cluster's storage class name
+#    - Ensure sufficient PVs are available for the components you enable
+#
+# 2. RESOURCE REQUIREMENTS:
+#    - OWL Backend: ~2-4GB RAM, 1-2 CPU cores
+#    - Jambu Frontend: ~512MB RAM, 0.5-1 CPU core
+#    - PostgreSQL: ~2-4GB RAM, 1-2 CPU cores
+#    - ClickHouse: ~2-4GB RAM, 1-2 CPU cores
+#    - Dragonfly Redis: ~256MB-1GB RAM, 0.2-1 CPU core
+#    - SeaweedFS: ~1-2GB RAM, 0.5-1 CPU core
+#    - V8-Kopi: ~8-20GB RAM (5 workers), 2-4 CPU cores
+#    - Docling (GPU): ~4-8GB RAM, 1-2 CPU cores + GPU
+#
+# 3. OPENSHIFT SPECIFIC:
+#    - Security Context Constraints will be created automatically
+#    - Routes will be created for external access
+#    - ServiceAccounts will have proper permissions
+#
+# 4. MONITORING:
+#    - VictoriaMetrics provides metrics storage
+#    - ServiceMonitors are created for all components
+#    - Grafana dashboards are available when enabled
+#
+# =============================================================================

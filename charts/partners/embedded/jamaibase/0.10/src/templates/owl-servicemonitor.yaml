@@ -1,0 +1,59 @@
+{{/*
+  =============================================================================
+  OWL ServiceMonitor Template
+  Creates ServiceMonitor resources for Prometheus/VictoriaMetrics integration
+  ============================================================================*/}}
+
+{{- if .Values.jamaibase.owl.enabled }}
+{{- with .Values.jamaibase.owl }}
+
+---
+# ServiceMonitor: owl-servicemonitor
+{{- if and .serviceMonitor.enabled $.Values.monitoring.enabled $.Values.monitoring.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .serviceMonitor.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-api
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: owl
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: {{ $.Values.monitoring.serviceMonitor.interval }}
+      scrapeTimeout: {{ $.Values.monitoring.serviceMonitor.scrapeTimeout }}
+{{- end }}
+
+---
+# ServiceMonitor: starling-servicemonitor
+{{- if and .starling.enabled .starling.serviceMonitor.enabled $.Values.monitoring.enabled $.Values.monitoring.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .starling.serviceMonitor.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-starling
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: starling
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: {{ $.Values.monitoring.serviceMonitor.interval }}
+      scrapeTimeout: {{ $.Values.monitoring.serviceMonitor.scrapeTimeout }}
+{{- end }}
+
+{{- end }}
+{{- end }}

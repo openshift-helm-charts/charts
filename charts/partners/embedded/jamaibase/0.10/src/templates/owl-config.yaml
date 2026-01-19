@@ -1,0 +1,184 @@
+{{/*
+ =============================================================================
+ OWL Config Template
+ Creates two ConfigMaps: owl-config and otel-collector-config
+ ============================================================================*/}}
+
+{{- if .Values.jamaibase.owl.enabled }}
+{{- with .Values.jamaibase.owl }}
+{{- if .config.enabled }}
+
+---
+# ConfigMap: owl-config
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .config.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-config
+    app.kubernetes.io/part-of: owl-backend
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+data:
+  # API Configuration
+  {{- $pgbouncerService := printf "%s-pgbouncer" (include "jamaibase.fullname" $) }}
+  {{- $pgHost := printf "%s.%s.svc.cluster.local" $pgbouncerService $.Release.Namespace }}
+  OWL_DB_PATH: {{ printf "postgresql+psycopg://owlpguser:changeme@%s:5432/jamaibase_owl" $pgHost | quote }}
+  OWL_LOG_DIR: {{ .config.logDir | quote }}
+  OWL_HOST: {{ .config.host | quote }}
+  OWL_PORT: {{ .config.port | quote }}
+  OWL_WORKERS: {{ .config.workers | quote }}
+  OWL_MAX_CONCURRENCY: {{ .config.maxConcurrency | quote }}
+  OWL_DB_INIT: {{ .config.dbInit | quote }}
+  OWL_DB_RESET: {{ .config.dbReset | quote }}
+  OWL_DB_INIT_MAX_USERS: {{ .config.dbInitMaxUsers | quote }}
+  OWL_CACHE_RESET: {{ .config.cacheReset | quote }}
+  OWL_ENCRYPTION_KEY: {{ .config.encryptionKey | quote }}
+  OWL_SERVICE_KEY: {{ .config.serviceKey | quote }}
+  
+  # Service Endpoints
+  OWL_REDIS_HOST: {{ .config.redisHost | quote }}
+  OWL_REDIS_PORT: {{ .config.redisPort | quote }}
+  OWL_FILE_PROXY_URL: {{ .config.fileProxyUrl | quote }}
+  OWL_FILE_DIR: {{ .config.fileDir | quote }}
+  OWL_S3_ENDPOINT: {{ .config.s3Endpoint | quote }}
+  OWL_S3_ACCESS_KEY_ID: {{ .config.s3AccessKeyId | quote }}
+  OWL_S3_SECRET_ACCESS_KEY: {{ .config.s3SecretAccessKey | quote }}
+  OWL_CODE_EXECUTOR_ENDPOINT: {{ .config.codeExecutorEndpoint | quote }}
+  OWL_DOCLING_URL: {{ .config.doclingUrl | quote }}
+  OWL_DOCLING_TIMEOUT_SEC: {{ .config.doclingTimeoutSec | quote }}
+  
+  # File Upload Limits
+  OWL_EMBED_FILE_UPLOAD_MAX_BYTES: {{ .config.embedFileUploadMaxBytes | quote }}
+  OWL_IMAGE_FILE_UPLOAD_MAX_BYTES: {{ .config.imageFileUploadMaxBytes | quote }}
+  OWL_AUDIO_FILE_UPLOAD_MAX_BYTES: {{ .config.audioFileUploadMaxBytes | quote }}
+  
+  # Timeouts
+  OWL_COMPUTE_STORAGE_PERIOD_SEC: {{ .config.computeStoragePeriodSec | quote }}
+  OWL_DOCUMENT_LOADER_CACHE_TTL_SEC: {{ .config.documentLoaderCacheTtlSec | quote }}
+  OWL_LLM_TIMEOUT_SEC: {{ .config.llmTimeoutSec | quote }}
+  OWL_EMBED_TIMEOUT_SEC: {{ .config.embedTimeoutSec | quote }}
+  
+  # Generative Table Configs
+  OWL_CONCURRENT_ROWS_BATCH_SIZE: {{ .config.concurrentRowsBatchSize | quote }}
+  OWL_CONCURRENT_COLS_BATCH_SIZE: {{ .config.concurrentColsBatchSize | quote }}
+  OWL_MAX_WRITE_BATCH_SIZE: {{ .config.maxWriteBatchSize | quote }}
+  OWL_MAX_FILE_CACHE_SIZE: {{ .config.maxFileCacheSize | quote }}
+  
+  # PDF Loader
+  OWL_FAST_PDF_PARSING: {{ .config.fastPdfParsing | quote }}
+  
+  # Starling configs
+  OWL_S3_BACKUP_BUCKET_NAME: {{ .config.s3BackupBucketName | quote }}
+  OWL_FLUSH_CLICKHOUSE_BUFFER_SEC: {{ .config.flushClickhouseBufferSec | quote }}
+  
+  # OpenTelemetry Configuration
+  OWL_OPENTELEMETRY_HOST: {{ .config.otelHost | quote }}
+  OWL_OPENTELEMETRY_PORT: {{ .config.otelPort | quote }}
+  OWL_CLICKHOUSE_HOST: {{ .config.clickhouseHost | quote }}
+  OWL_CLICKHOUSE_PORT: {{ .config.clickhousePort | quote }}
+  OWL_VICTORIA_METRICS_HOST: {{ .config.victoriaMetricsHost | quote }}
+  OWL_VICTORIA_METRICS_PORT: {{ .config.victoriaMetricsPort | quote }}
+  OWL_VICTORIA_METRICS_USER: {{ .config.victoriaMetricsUser | quote }}
+  OWL_VICTORIA_METRICS_PASSWORD: {{ .config.victoriaMetricsPassword | quote }}
+  OWL_VICTORIA_LOGS_HOST: {{ .config.victoriaLogsHost | quote }}
+  OWL_VICTORIA_LOGS_PORT: {{ .config.victoriaLogsPort | quote }}
+  SERVICE_NAME: {{ .config.serviceName | quote }}
+  OTEL_INSTRUMENTATION_HTTP_CAPTURE_HEADERS_SERVER_REQUEST: {{ .config.otelInstrumentationHttpCaptureHeadersServerRequest | quote }}
+  OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION: {{ .config.otelExporterOtlpMetricsDefaultHistogramAggregation | quote }}
+  OTEL_PYTHON_FASTAPI_EXCLUDED_URLS: {{ .config.otelPythonFastapiExcludedUrls | quote }}
+
+---
+# ConfigMap: otel-collector-config
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .config.otelConfigName }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: otel-config
+    app.kubernetes.io/part-of: owl-backend
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+data:
+  config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: "0.0.0.0:4317"
+          http:
+            endpoint: "0.0.0.0:4318"
+
+    exporters:
+      otlphttp/victoriametrics1:
+        endpoint: {{ .config.otel.victoriaMetricsEndpoint1 | quote }}
+        compression: gzip
+        encoding: proto
+
+      otlphttp/victoriametrics2:
+        endpoint: {{ .config.otel.victoriaMetricsEndpoint2 | quote }}
+        compression: gzip
+        encoding: proto
+
+      debug:
+        verbosity: detailed
+
+      clickhouse:
+        endpoint: {{ .config.otel.clickhouseEndpoint | quote }}
+        ttl: {{ .config.otel.clickhouseTtl | quote }}
+        database: {{ .config.otel.clickhouseDatabase | quote }}
+        traces_table_name: {{ .config.otel.clickhouseTracesTable | quote }}
+        username: {{ .config.otel.clickhouseUsername | quote }}
+        password: {{ .config.otel.clickhousePassword | quote }}
+        create_schema: false
+        timeout: 5s
+        sending_queue:
+          queue_size: 1000
+        retry_on_failure:
+          enabled: true
+          initial_interval: 5s
+          max_interval: 30s
+          max_elapsed_time: 300s
+
+      otlphttp/vl1:
+        logs_endpoint: {{ .config.otel.victoriaLogsEndpoint1 | quote }}
+
+      otlphttp/vl2:
+        logs_endpoint: {{ .config.otel.victoriaLogsEndpoint2 | quote }}
+
+    processors:
+      batch:
+        timeout: 5s
+
+      filter/ottl:
+        traces:
+          span:
+            - 'IsMatch(attributes["db.statement"], "^PRAGMA")'
+
+    extensions:
+      health_check:
+        endpoint: "0.0.0.0:13133"
+
+    service:
+      extensions: [health_check]
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [filter/ottl, batch]
+          exporters: [clickhouse]
+        metrics:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlphttp/victoriametrics1, otlphttp/victoriametrics2]
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlphttp/vl1, otlphttp/vl2]
+
+{{- end }}
+{{- end }}
+{{- end }}

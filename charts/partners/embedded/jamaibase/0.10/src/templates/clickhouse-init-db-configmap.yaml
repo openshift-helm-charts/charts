@@ -1,0 +1,25 @@
+{{/*
+ =============================================================================
+ ClickHouse Database Initialization ConfigMap Template
+ Creates the initialization script for ClickHouse database
+ ============================================================================*/}}
+
+{{- if and .Values.clickhouse.enabled .Values.clickhouse.initJob.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.clickhouse.initJob.configMapName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: clickhouse-init
+  annotations:
+    # Create before the init job runs
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "3"
+    "helm.sh/hook-delete-policy": before-hook-creation
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+data:
+  01_create_databases.sh: |
+    {{- .Values.clickhouse.initJob.script | nindent 4 }}
+{{- end }}

@@ -1,0 +1,39 @@
+{{- if or .Values.jamaibase.owl.enabled .Values.jamaibase.jambu.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "jamaibase.fullname" . }}-test-connection"
+  labels:
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  containers:
+    {{- if .Values.jamaibase.owl.enabled }}
+    - name: test-owl
+      # Using Red Hat Universal Base Image (Minimal)
+      image: registry.access.redhat.com/ubi8/ubi-minimal:latest
+      # Test OWL API health endpoint
+      command: ['curl']
+      args:
+        - "--retry"
+        - "5"
+        - "--retry-connrefused"
+        - "--silent"
+        - "{{ .Values.jamaibase.owl.service.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.jamaibase.owl.service.port }}/api/health"
+    {{- end }}
+    {{- if .Values.jamaibase.jambu.enabled }}
+    - name: test-jambu
+      image: registry.access.redhat.com/ubi8/ubi-minimal:latest
+      # Test Jambu frontend health endpoint
+      command: ['curl']
+      args:
+        - "--retry"
+        - "5"
+        - "--retry-connrefused"
+        - "--silent"
+        - "{{ .Values.jamaibase.jambu.service.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.jamaibase.jambu.service.port }}/"
+    {{- end }}
+  restartPolicy: Never
+{{- end }}
