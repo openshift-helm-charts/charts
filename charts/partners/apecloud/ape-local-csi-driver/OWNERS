@@ -1,9 +1,11 @@
 chart:
   name: ape-local-csi-driver
-  shortDescription: unknown
+  shortDescription: ApeLocal CSI is the good choice for running databases on local
+    disks by using Kubernetes
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: ldming
 vendor:
   label: apecloud
   name: KubeBlocks Inc
