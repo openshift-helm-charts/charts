@@ -3305,6 +3305,26 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.7.0/infinispan-0.7.0.tgz
     version: 0.7.0
+  jamaibase:
+  - annotations:
+      charts.openshift.io/digest: sha256:bf48eb1181fa2e34065e54fcb3bfe69d59d63eacfd172c52d0193cb27e3e0424
+      charts.openshift.io/lastCertifiedTimestamp: '2026-01-19T13:31:05.194853+08:00'
+      charts.openshift.io/name: Jamaibase
+      charts.openshift.io/provider: Embedded LLM Pte. Ltd.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-01-19T05:36:50.953593+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: Complete Jamaibase AI platform with all dependencies
+    digest: f3b96b383aa5e63fa03ad0dcb57428ebcc0ef89e3e7fee696a82c60e7f9f5149
+    kubeVersion: '>=1.21.0-0'
+    name: jamaibase
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/embedded-jamaibase-0.1.0/jamaibase-0.1.0.tgz
+    version: 0.1.0
   jhipster-online:
   - annotations:
       charts.openshift.io/digest: sha256:9805ab0e19fcd18f072ff796a563637b2b4bd0e7e9c65920d19480fa75111b4b
@@ -14875,4 +14895,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-01-17T10:16:54.769865+00:00'
+generated: '2026-01-19T05:36:50.822332+00:00'
