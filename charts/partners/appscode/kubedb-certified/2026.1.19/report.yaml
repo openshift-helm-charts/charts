@@ -1,0 +1,167 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.13
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:10881066287260062646
+        chart-uri: ./kubedb-certified-2026.1.19.tgz
+        digests:
+            chart: sha256:b92bb55be06aff1f5955c964f6bd4970fd16228963b7a877248f015e8d94f54c
+            package: 01b8bcd94c98f7cd319cf8dca5da51d16f3d0c762c1cca75125763aca0dcf79e
+        lastCertifiedTimestamp: "2026-01-20T19:33:52.734085+06:00"
+        testedOpenShiftVersion: "4.18"
+        supportedOpenShiftVersions: '>=4.15'
+        webCatalogOnly: false
+    chart:
+        name: kubedb-certified
+        home: https://kubedb.com
+        sources:
+            - https://github.com/kubedb
+        version: 2026.1.19
+        description: KubeDB by AppsCode - Production ready databases on Kubernetes
+        keywords: []
+        maintainers:
+            - name: appscode
+              email: support@appscode.com
+              url: ""
+        icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: v2026.1.19
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: kubedb-certified
+        kubeversion: '>=1.28.0'
+        dependencies:
+            - name: petset
+              version: v2026.1.15
+              repository: oci://ghcr.io/appscode-charts
+              condition: petset.enabled
+            - name: operator-shard-manager
+              version: v2026.1.15
+              repository: oci://ghcr.io/appscode-charts
+              condition: operator-shard-manager.enabled
+            - name: sidekick
+              version: v2026.1.15
+              repository: oci://ghcr.io/appscode-charts
+              condition: sidekick.enabled
+            - name: supervisor
+              version: v2026.1.15
+              repository: oci://ghcr.io/appscode-charts
+              condition: supervisor.enabled
+            - name: kubedb-crd-manager
+              version: v0.15.0
+              repository: file://../kubedb-crd-manager
+              condition: kubedb-crd-manager.enabled
+            - name: kubedb-provisioner
+              version: v0.60.0
+              repository: file://../kubedb-provisioner
+              condition: kubedb-provisioner.enabled
+            - name: kubedb-ops-manager
+              version: v0.47.0
+              repository: file://../kubedb-ops-manager
+              condition: kubedb-ops-manager.enabled
+            - name: kubedb-autoscaler
+              version: v0.45.0
+              repository: file://../kubedb-autoscaler
+              condition: kubedb-autoscaler.enabled
+            - name: kubedb-schema-manager
+              version: v0.36.0
+              repository: file://../kubedb-schema-manager
+              condition: kubedb-schema-manager.enabled
+            - name: kubedb-webhook-server
+              version: v0.36.0
+              repository: file://../kubedb-webhook-server
+              condition: kubedb-webhook-server.enabled
+            - name: kubedb-metrics
+              version: v2026.1.19
+              repository: file://../kubedb-metrics
+              condition: kubedb-metrics.enabled
+            - name: kubedb-catalog
+              version: v2026.1.19
+              repository: file://../kubedb-catalog
+              condition: kubedb-catalog.enabled
+            - name: kubedb-kubestash-catalog
+              version: v2026.1.19
+              repository: file://../kubedb-kubestash-catalog
+              condition: kubedb-kubestash-catalog.enabled
+            - name: kubedb-gitops
+              version: v0.8.0
+              repository: file://../kubedb-gitops
+              condition: kubedb-crd-manager.installGitOpsCRDs
+            - name: ace-user-roles
+              version: v2025.3.14
+              repository: oci://ghcr.io/appscode-charts
+              condition: ace-user-roles.enabled
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : ghcr.io/kubedb/kubedb-crd-manager:v0.15.0-ubi
+        Image is Red Hat certified : ghcr.io/appscode/petset:v0.0.16-ubi
+        Image is Red Hat certified : ghcr.io/appscode/sidekick:v0.0.13-ubi
+        Image is Red Hat certified : ghcr.io/kubedb/kubedb-ops-manager:v0.47.0-ubi
+        Image is Red Hat certified : ghcr.io/kubedb/kubedb-webhook-server:v0.36.0-ubi
+        Image is Red Hat certified : ghcr.io/appscode/kubectl-nonroot:1.34-ubi
+        Image is Red Hat certified : ghcr.io/kubedb/kubedb-autoscaler:v0.45.0-ubi
+        Image is Red Hat certified : ghcr.io/kubedb/kubedb-provisioner:v0.60.0-ubi
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+
