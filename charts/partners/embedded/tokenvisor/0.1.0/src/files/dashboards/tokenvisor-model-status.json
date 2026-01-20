@@ -1,0 +1,596 @@
+{
+  "title": "TokenVisor Model Status",
+  "schemaVersion": 1,
+  "version": 10,
+  "editable": true,
+  "style": "dark",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": ["10s", "30s", "1m", "5m", "15m", "30m", "1h"],
+    "time_options": ["1h", "6h", "12h", "24h", "2d", "7d", "30d"]
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data Source",
+        "query": "victoriametrics-metrics-datasource",
+        "refresh": 1,
+        "includeAll": false
+      },
+      {
+        "name": "rollup",
+        "type": "custom",
+        "label": "Window (increase range)",
+        "query": "1m,5m,10m,30m,1h,2h,6h,12h,24h",
+        "current": {
+          "text": "30m",
+          "value": "30m",
+          "selected": true
+        }
+      },
+      {
+        "name": "good",
+        "type": "textbox",
+        "label": "Good ≥",
+        "query": "0.95",
+        "current": {
+          "text": "0.95",
+          "value": "0.95"
+        }
+      },
+      {
+        "name": "warn",
+        "type": "textbox",
+        "label": "Warn ≥ (else Red)",
+        "query": "0.30",
+        "current": {
+          "text": "0.30",
+          "value": "0.30"
+        }
+      },
+      {
+        "name": "mtype",
+        "label": "Type",
+        "type": "query",
+        "datasource": {
+          "uid": "$datasource",
+          "type": "victoriametrics-metrics-datasource"
+        },
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "refresh": 2,
+        "query": "label_values(model_request_total, type)"
+      },
+      {
+        "name": "model",
+        "label": "Model",
+        "type": "query",
+        "datasource": {
+          "uid": "$datasource",
+          "type": "victoriametrics-metrics-datasource"
+        },
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "refresh": 2,
+        "query": "label_values(model_request_total, model)"
+      },
+      {
+        "name": "provider",
+        "label": "Provider",
+        "type": "query",
+        "datasource": {
+          "uid": "$datasource",
+          "type": "victoriametrics-metrics-datasource"
+        },
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "refresh": 2,
+        "query": "label_values(model_request_total, provider)"
+      },
+      {
+        "name": "routing_id",
+        "label": "Routing ID",
+        "type": "query",
+        "datasource": {
+          "uid": "$datasource",
+          "type": "victoriametrics-metrics-datasource"
+        },
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "refresh": 2,
+        "query": "label_values(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\"}, routing_id)"
+      },
+      {
+        "name": "topn",
+        "type": "custom",
+        "label": "Top N (rows)",
+        "query": "3,5,10,15,25",
+        "current": {
+          "text": "5",
+          "value": "5",
+          "selected": true
+        }
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0,211,255,1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard",
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "state-timeline",
+      "title": "Model status — availability (Good/Warn/Bad/No Request) — window: $rollup",
+      "datasource": {
+        "uid": "$datasource",
+        "type": "victoriametrics-metrics-datasource"
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "displayMode": "gradient",
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single"
+        },
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "min": 0,
+          "max": 3,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "gray",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0.5
+              },
+              {
+                "color": "orange",
+                "value": 1.5
+              },
+              {
+                "color": "green",
+                "value": 2.5
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "value": 0,
+                "result": {
+                  "text": "No Request"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "value": 1,
+                "result": {
+                  "text": "Bad"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "value": 2,
+                "result": {
+                  "text": "Warn"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "value": 3,
+                "result": {
+                  "text": "Good"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "range": true,
+          "editorMode": "code",
+          "interval": "$rollup",
+          "intervalFactor": 1,
+          "legendFormat": "{{model}}",
+          "expr": "(\n  (\n    3 * (\n      (\n        sum by (model) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n        / clamp_min(sum by (model) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1)\n      ) >= bool $good\n    )\n  + 2 * (\n      (\n        sum by (model) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n        / clamp_min(sum by (model) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1)\n      ) >= bool $warn\n    ) * (\n      (\n        sum by (model) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n        / clamp_min(sum by (model) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1)\n      ) < bool $good\n    )\n  + 1 * (\n      (sum by (model) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])) > bool 0)\n      * (\n        (\n          sum by (model) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n          / clamp_min(sum by (model) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1)\n        ) < bool $warn\n      )\n    )\n  )\n) or on (model) (0 * sum by (model) (max_over_time(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[24h])))"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "state-timeline",
+      "title": "Deployment status (model ⟂ provider) — availability states — window: $rollup",
+      "datasource": {
+        "uid": "$datasource",
+        "type": "victoriametrics-metrics-datasource"
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "options": {
+        "displayMode": "gradient",
+        "mergeValues": true,
+        "rowHeight": 0.85,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single"
+        },
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "min": 0,
+          "max": 3,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "gray",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0.5
+              },
+              {
+                "color": "orange",
+                "value": 1.5
+              },
+              {
+                "color": "green",
+                "value": 2.5
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "value": 0,
+                "result": {
+                  "text": "No Request"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "value": 1,
+                "result": {
+                  "text": "Bad"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "value": 2,
+                "result": {
+                  "text": "Warn"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "value": 3,
+                "result": {
+                  "text": "Good"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "range": true,
+          "editorMode": "code",
+          "interval": "$rollup",
+          "intervalFactor": 1,
+          "legendFormat": "{{model}} ⟂ {{provider}}",
+          "expr": "(\n  (\n    3 * (\n      (\n        sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n        / clamp_min(sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1)\n      ) >= bool $good\n    )\n  + 2 * (\n      (\n        sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n        / clamp_min(sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1)\n      ) >= bool $warn\n    ) * (\n      (\n        sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n        / clamp_min(sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1)\n      ) < bool $good\n    )\n  + 1 * (\n      (sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])) > bool 0)\n      * (\n        (\n          sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n          / clamp_min(sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1)\n        ) < bool $warn\n      )\n    )\n  )\n) or on (model, provider) (0 * sum by (model, provider) (max_over_time(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[24h])))"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Actual success % (by model ⟂ provider) — per $rollup",
+      "datasource": {
+        "uid": "$datasource",
+        "type": "victoriametrics-metrics-datasource"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 2,
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "spanNulls": true,
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "range": true,
+          "editorMode": "code",
+          "interval": "$rollup",
+          "intervalFactor": 1,
+          "legendFormat": "{{model}} ⟂ {{provider}}",
+          "expr": "(\n  sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", status=\"success\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))\n  /\n  clamp_min(\n    sum by (model, provider) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup])), 1\n  )\n)"
+        },
+        {
+          "refId": "B",
+          "range": true,
+          "editorMode": "code",
+          "interval": "$rollup",
+          "intervalFactor": 1,
+          "legendFormat": "Warn ≥ $warn",
+          "expr": "vector($warn)"
+        },
+        {
+          "refId": "C",
+          "range": true,
+          "editorMode": "code",
+          "interval": "$rollup",
+          "intervalFactor": 1,
+          "legendFormat": "Good ≥ $good",
+          "expr": "vector($good)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Requests by status (count per $rollup)",
+      "datasource": {
+        "uid": "$datasource",
+        "type": "victoriametrics-metrics-datasource"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 39
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        },
+        "stacking": {
+          "mode": "normal",
+          "group": "A"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "range": true,
+          "editorMode": "code",
+          "interval": "$rollup",
+          "intervalFactor": 1,
+          "expr": "sum by (status) (increase(model_request_total{type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Failures by reason over time (count per $rollup)",
+      "datasource": {
+        "uid": "$datasource",
+        "type": "victoriametrics-metrics-datasource"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 39
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        },
+        "stacking": {
+          "mode": "normal",
+          "group": "B"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "range": true,
+          "editorMode": "code",
+          "interval": "$rollup",
+          "intervalFactor": 1,
+          "expr": "sum by (reason) (increase(model_request_total{type=~\"$mtype\", status=\"fail\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$rollup]))"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "table",
+      "title": "Top $topn failing model routes (current range)",
+      "datasource": {
+        "uid": "$datasource",
+        "type": "victoriametrics-metrics-datasource"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 47
+      },
+      "options": {
+        "showHeader": true,
+        "footer": {
+          "show": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "renameByName": {
+              "model": "Model",
+              "provider": "Provider",
+              "routing_id": "Routing ID",
+              "type": "Type",
+              "reason": "Reason",
+              "Value": "Failures"
+            },
+            "indexByName": {
+              "Model": 0,
+              "Provider": 1,
+              "Routing ID": 2,
+              "Type": 3,
+              "Reason": 4,
+              "Failures": 5
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": [
+              {
+                "field": "Failures",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "range": false,
+          "editorMode": "code",
+          "format": "table",
+          "expr": "topk($topn, sum by (model, provider, routing_id, type, reason) (increase(model_request_total{status=\"fail\", type=~\"$mtype\", model=~\"$model\", provider=~\"$provider\", routing_id=~\"$routing_id\"}[$__range])))"
+        }
+      ]
+    }
+  ]
+}

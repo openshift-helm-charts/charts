@@ -1,0 +1,105 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:12804404123271071726
+        chart-uri: src
+        digests:
+            chart: sha256:bf48eb1181fa2e34065e54fcb3bfe69d59d63eacfd172c52d0193cb27e3e0424
+        lastCertifiedTimestamp: "2026-01-19T13:31:05.194853+08:00"
+        testedOpenShiftVersion: "4.20"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: false
+    chart:
+        name: jamaibase
+        home: ""
+        sources: []
+        version: 0.1.0
+        description: Complete Jamaibase AI platform with all dependencies
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.0.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Jamaibase
+        kubeversion: '>=1.21.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/kopi/kopiworker-openshift:20251203
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/otelcol-openshift:20250107
+        Image is Red Hat certified : registry.access.redhat.com/ubi8/ubi-minimal:latest
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/clickhouse-client-openshift:25.12.2.54
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/clickhouse-server-openshift:20260107
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:latest
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/clickhouse-keeper-openshift:24.12.6.70
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/docling-serve-cu128-openshift:20250108
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/jambu-openshift:20251203
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/kopi/k8s-kopi-server-openshift:20251205
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/owl-openshift:20251212
+        Image is Red Hat certified : ghcr.io/embeddedllm/jamaibase/postgres-17-openshift:20251230
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist

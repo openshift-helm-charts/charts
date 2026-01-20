@@ -1,0 +1,65 @@
+{{- if .Values.victoriaMetrics.enabled }}
+{{- if .Values.victoriaMetrics.vmauth.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMUser
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmuser-jamaibase
+    app.kubernetes.io/part-of: vm-operator
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  name: {{ .Values.victoriaMetrics.vmuser.name }}
+spec:
+  name: {{ .Values.victoriaMetrics.vmuser.name }}
+  username: {{ .Values.victoriaMetrics.vmuser.username }}
+  passwordRef:
+    name: {{ .Values.victoriaMetrics.vmuser.secretName }}
+    key: password
+  targetRefs:
+    # vmui + vmselect
+    - crd:
+        kind: VMCluster/vmselect
+        name: {{ .Values.victoriaMetrics.cluster.name }}
+        namespace: {{ .Release.Namespace }}
+      target_path_suffix: "/select/0"
+      drop_src_path_prefix_parts: 1
+      paths:
+        - "/vm/vmui"
+        - "/vm/vmui/.*"
+        - "/vm/prometheus/api/v1/query"
+        - "/vm/prometheus/api/v1/query_range"
+        - "/vm/prometheus/api/v1/series"
+        - "/vm/prometheus/api/v1/status/.*"
+        - "/vm/prometheus/api/v1/label/"
+        - "/vm/prometheus/api/v1/label/[^/]+/values"
+        - "/vm/prometheus/api/v1/status/tsdb"
+        - "/vm/prometheus/api/v1/export"
+        - "/vm/prometheus/api/v1/export/csv"
+    - crd: # needed for vmui query
+        kind: VMCluster/vmselect
+        name: {{ .Values.victoriaMetrics.cluster.name }}
+        namespace: {{ .Release.Namespace }}
+      target_path_suffix: "/select/0/prometheus"
+      paths:
+        - "/vm/api/v1/query"
+        - "/vm/api/v1/query_range"
+        - "/vm/api/v1/series"
+        - "/vm/api/v1/status/.*"
+        - "/vm/api/v1/label/"
+        - "/vm/api/v1/label/[^/]+/values"
+        - "/vm/api/v1/status/tsdb"
+        - "/vm/api/v1/export"
+        - "/vm/api/v1/export/csv"
+      drop_src_path_prefix_parts: 1
+    - static:
+        urls:
+          {{- range .Values.victoriaMetrics.vmuser.victoriaLogsUrls }}
+          - {{ . }}
+          {{- end }}
+      drop_src_path_prefix_parts: 1
+      paths:
+        - "/vl/select"
+        - "/vl/select/.*"
+        - "/vl/logsql"
+        - "/vl/logsql/.*"
+{{- end }}
+{{- end }}

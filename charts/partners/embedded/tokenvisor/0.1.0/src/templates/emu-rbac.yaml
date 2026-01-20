@@ -1,0 +1,60 @@
+{{- if and .Values.features.core .Values.emu.enabled .Values.emu.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: emu-sky-role
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: emu-sky-cluster-role
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    parent: skypilot
+    app: emu
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: emu-role-binding
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.emu.serviceAccountName }}
+    namespace: {{ include "tokenvisor.namespace" . }}
+roleRef:
+  kind: Role
+  name: emu-sky-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: emu-cluster-role-binding
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.emu.serviceAccountName }}
+    namespace: {{ include "tokenvisor.namespace" . }}
+roleRef:
+  kind: ClusterRole
+  name: emu-sky-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

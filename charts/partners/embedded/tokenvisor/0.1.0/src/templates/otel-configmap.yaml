@@ -1,0 +1,15 @@
+{{- if and .Values.features.core .Values.emu.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+    app.kubernetes.io/part-of: emu-backend
+
+data:
+  config.yaml: |
+{{- .Values.emu.otelCollector.config | nindent 4 }}
+{{- end }}

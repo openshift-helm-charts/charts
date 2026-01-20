@@ -1,0 +1,20 @@
+{{- if .Values.victoriaMetrics.enabled }}
+{{- if .Values.victoriaMetrics.nodeScrape.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMNodeScrape
+metadata:
+  name: {{ .Values.victoriaMetrics.nodeScrape.name }}
+  labels:
+    app.kubernetes.io/part-of: vm-operator
+    app.kubernetes.io/instance: system-monitor
+    {{- include "jamaibase.labels" . | nindent 4 }}
+spec:
+  scheme: {{ .Values.victoriaMetrics.nodeScrape.scheme }}
+  tlsConfig:
+    caFile: {{ .Values.victoriaMetrics.nodeScrape.tlsConfig.caFile }}
+    insecureSkipVerify: {{ .Values.victoriaMetrics.nodeScrape.tlsConfig.insecureSkipVerify }}
+  bearerTokenFile: {{ .Values.victoriaMetrics.nodeScrape.bearerTokenFile }}
+  relabelConfigs:
+    {{- toYaml .Values.victoriaMetrics.nodeScrape.relabelConfigs | nindent 4 }}
+{{- end }}
+{{- end }}

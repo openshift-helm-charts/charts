@@ -1,0 +1,88 @@
+{{- if .Values.victoriaMetrics.enabled }}
+{{- if .Values.victoriaMetrics.vmagent.enabled }}
+{{- if .Values.victoriaMetrics.vmagent.agents.aggregate }}
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmagent-jamaibase
+    app.kubernetes.io/part-of: vm-operator
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  name: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.name }}
+spec:
+  replicaCount: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.replicaCount }}
+  {{- with .Values.global.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  image:
+    repository: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.image.repository }}
+    tag: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.image.tag | quote }}
+  statefulMode: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.statefulMode }}
+  statefulStorage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.storage.storageClassName | default .Values.global.storageClass }}
+        resources:
+          requests:
+            storage: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.storage.size }}
+  serviceSpec:
+    metadata:
+      name: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.serviceName }}
+      labels:
+        app.kubernetes.io/instance: vmagent-jamaibase
+    spec:
+      clusterIP: None
+      publishNotReadyAddresses: true
+      ports:
+        - name: http
+          port: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.port }}
+          targetPort: {{ .Values.victoriaMetrics.vmagent.agents.aggregate.port }}
+  {{- if .Values.victoriaMetrics.vmagent.agents.aggregate.remoteWrite }}
+  remoteWrite:
+    {{- toYaml .Values.victoriaMetrics.vmagent.agents.aggregate.remoteWrite | nindent 4 }}
+  {{- end }}
+  resources:
+    {{- toYaml .Values.victoriaMetrics.vmagent.agents.aggregate.resources | nindent 4 }}
+{{- end }}
+{{- if .Values.victoriaMetrics.vmagent.agents.main }}
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmagent-jamaibase
+    app.kubernetes.io/part-of: vm-operator
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  name: {{ .Values.victoriaMetrics.vmagent.agents.main.name }}
+spec:
+  replicaCount: {{ .Values.victoriaMetrics.vmagent.agents.main.replicaCount }}
+  {{- with .Values.global.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  image:
+    repository: {{ .Values.victoriaMetrics.vmagent.agents.main.image.repository }}
+    tag: {{ .Values.victoriaMetrics.vmagent.agents.main.image.tag | quote }}
+  {{- if .Values.victoriaMetrics.vmagent.agents.main.remoteWrite }}
+  remoteWrite:
+    {{- toYaml .Values.victoriaMetrics.vmagent.agents.main.remoteWrite | nindent 4 }}
+  {{- end }}
+  {{- if .Values.victoriaMetrics.vmagent.agents.main.serviceScrapeNamespaceSelector }}
+  serviceScrapeNamespaceSelector:
+    {{- toYaml .Values.victoriaMetrics.vmagent.agents.main.serviceScrapeNamespaceSelector | nindent 4 }}
+  {{- end }}
+  {{- if .Values.victoriaMetrics.vmagent.agents.main.podScrapeNamespaceSelector }}
+  podScrapeNamespaceSelector:
+    {{- toYaml .Values.victoriaMetrics.vmagent.agents.main.podScrapeNamespaceSelector | nindent 4 }}
+  {{- end }}
+  {{- if .Values.victoriaMetrics.vmagent.agents.main.nodeScrapeSelector }}
+  nodeScrapeSelector:
+    {{- toYaml .Values.victoriaMetrics.vmagent.agents.main.nodeScrapeSelector | nindent 4 }}
+  {{- end }}
+  resources:
+    {{- toYaml .Values.victoriaMetrics.vmagent.agents.main.resources | nindent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}

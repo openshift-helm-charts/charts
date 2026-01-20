@@ -1,0 +1,144 @@
+{{/*
+ =============================================================================
+ ClickHouse Database Initialization Job Template
+ Creates a job to initialize the ClickHouse database with schema
+ ============================================================================*/}}
+
+{{- if and .Values.clickhouse.enabled .Values.clickhouse.initJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.clickhouse.initJob.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: clickhouse-init
+  annotations:
+    # This hook ensures the job runs after ClickHouse is fully deployed and ready but before OWL starts
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "4"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.clickhouse.initJob.name }}
+        {{- include "jamaibase.labels" $ | nindent 8 }}
+      annotations:
+        linkerd.io/inject: "disabled"
+    spec:
+      {{- with .Values.clickhouse.initJob.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.clickhouse.initJob.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        - name: wait-for-clickhouse
+          image: "{{ .Values.clickhouse.initJob.image.repository }}:{{ .Values.clickhouse.initJob.image.tag }}"
+          imagePullPolicy: {{ .Values.clickhouse.initJob.image.pullPolicy }}
+          command:
+            - "/bin/bash"
+            - "-c"
+            - |
+              set -e
+              CH_HOST=${CH_HOST:-clickhouse-jamaibase.{{ $.Release.Namespace }}.svc.cluster.local}
+              echo "Waiting for ClickHouse DNS at ${CH_HOST}..."
+
+              # Wait for DNS to resolve
+              for i in {1..60}; do
+                if nslookup ${CH_HOST} >/dev/null 2>&1 || getent hosts ${CH_HOST} >/dev/null 2>&1; then
+                  echo "DNS resolved for ${CH_HOST}"
+                  break
+                fi
+                if [ $i -eq 60 ]; then
+                  echo "ERROR: DNS did not resolve for ${CH_HOST} after 60 attempts"
+                  exit 1
+                fi
+                echo "Waiting for DNS... (attempt $i/60)"
+                sleep 5
+              done
+
+              # Wait for ClickHouse to be ready
+              echo "Waiting for ClickHouse to accept connections..."
+              for i in {1..60}; do
+                # Try without password first (for default user with no password)
+                if clickhouse-client --host ${CH_HOST} --user ${CH_USER:-default} --query "SELECT 1" >/dev/null 2>&1; then
+                  echo "ClickHouse is ready!"
+                  exit 0
+                fi
+                # If that fails, try with password (for users with password set)
+                if [ -n "${CH_PASSWORD}" ] && clickhouse-client --host ${CH_HOST} --user ${CH_USER:-default} --password "${CH_PASSWORD}" --query "SELECT 1" >/dev/null 2>&1; then
+                  echo "ClickHouse is ready!"
+                  exit 0
+                fi
+                if [ $i -eq 60 ]; then
+                  echo "ERROR: ClickHouse did not become ready after 60 attempts"
+                  exit 1
+                fi
+                echo "Waiting for ClickHouse... (attempt $i/60)"
+                sleep 5
+              done
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.clickhouse.initJob.envConfigMapName }}
+          env:
+            - name: CH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.clickhouse.secret.name }}
+                  key: {{ .Values.clickhouse.initJob.passwordKey }}
+      containers:
+        - name: {{ .Values.clickhouse.initJob.name }}
+          image: "{{ .Values.clickhouse.initJob.image.repository }}:{{ .Values.clickhouse.initJob.image.tag }}"
+          imagePullPolicy: {{ .Values.clickhouse.initJob.image.pullPolicy }}
+          command:
+            - "/bin/bash"
+            - "-c"
+            - |
+              cp /usr/src/app/01_create_databases.sh /tmp/01_create_databases.sh
+              chmod +x /tmp/01_create_databases.sh
+              /tmp/01_create_databases.sh
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.clickhouse.initJob.envConfigMapName }}
+          env:
+            - name: CH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.clickhouse.secret.name }}
+                  key: {{ .Values.clickhouse.initJob.passwordKey }}
+            - name: READONLY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.clickhouse.secret.name }}
+                  key: {{ .Values.clickhouse.initJob.readonlyPasswordKey }}
+          {{- with .Values.clickhouse.initJob.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /usr/src/app
+              name: {{ .Values.clickhouse.initJob.configMapName }}
+      volumes:
+        - name: {{ .Values.clickhouse.initJob.configMapName }}
+          configMap:
+            name: {{ .Values.clickhouse.initJob.configMapName }}
+      {{- with .Values.clickhouse.initJob.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.clickhouse.initJob.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.clickhouse.initJob.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: OnFailure
+  backoffLimit: {{ .Values.clickhouse.initJob.backoffLimit }}
+{{- end }}

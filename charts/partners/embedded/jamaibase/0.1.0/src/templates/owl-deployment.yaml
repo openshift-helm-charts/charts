@@ -1,0 +1,284 @@
+{{/*
+ =============================================================================
+ OWL Deployment Template
+ Creates OWL backend deployments, services, and associated resources
+ Includes ServiceAccount merged into deployment template
+ ============================================================================*/}}
+
+{{- if .Values.jamaibase.owl.enabled }}
+{{- with .Values.jamaibase.owl }}
+
+---
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "jamaibase.fullname" $ }}-{{ .serviceAccount.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-serviceaccount
+    app.kubernetes.io/part-of: owl-backend
+  {{- with .serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+automountServiceAccountToken: {{ .serviceAccount.automountToken }}
+
+---
+# Deployment: owl-deployment (API Server)
+{{- if .deployment.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .deployment.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-api
+    app.kubernetes.io/part-of: owl-backend
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+    # Helm hook annotation to ensure OWL starts last after all infrastructure
+    "helm.sh/hook-weight": "5"
+spec:
+  replicas: {{ .deployment.replicas }}
+  selector:
+    matchLabels:
+      app: owl
+  template:
+    metadata:
+      labels:
+        app: owl
+        app.kubernetes.io/component: owl-api
+        app.kubernetes.io/part-of: owl-backend
+      annotations:
+        {{- include "jamaibase.annotations" $ | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "jamaibase.fullname" $ }}-{{ .serviceAccount.name }}
+      {{- include "jamaibase.imagePullSecrets" $ | nindent 6 }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+        - name: owl
+          image: "{{ .deployment.image.repository }}:{{ .deployment.image.tag }}"
+          imagePullPolicy: {{ .deployment.image.pullPolicy }}
+          command: ["/home/appuser/.local/bin/uv", "run", "python", "-m", "owl.entrypoints.api"]
+          env:
+            - name: PATH
+              value: {{ .deployment.env.PATH | quote }}
+          envFrom:
+            - configMapRef:
+                name: {{ .config.name }}
+            - secretRef:
+                name: {{ .secret.name }}
+          ports:
+            - name: http
+              containerPort: {{ .config.port | int }}
+            - name: metrics
+              containerPort: 8889
+          livenessProbe:
+            httpGet:
+              path: {{ .deployment.probes.liveness.path }}
+              port: {{ .config.port | int }}
+            initialDelaySeconds: {{ .deployment.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .deployment.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .deployment.probes.liveness.timeoutSeconds }}
+            successThreshold: {{ .deployment.probes.liveness.successThreshold }}
+            failureThreshold: {{ .deployment.probes.liveness.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .deployment.probes.readiness.path }}
+              port: {{ .config.port | int }}
+            initialDelaySeconds: {{ .deployment.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .deployment.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .deployment.probes.readiness.timeoutSeconds }}
+            successThreshold: {{ .deployment.probes.readiness.successThreshold }}
+            failureThreshold: {{ .deployment.probes.readiness.failureThreshold }}
+          resources:
+            requests:
+              cpu: {{ .deployment.resources.requests.cpu }}
+              memory: {{ .deployment.resources.requests.memory }}
+            limits:
+              cpu: {{ .deployment.resources.limits.cpu }}
+              memory: {{ .deployment.resources.limits.memory }}
+        - name: otel-collector
+          image: "{{ .deployment.otelCollector.image.repository }}:{{ .deployment.otelCollector.image.tag }}"
+          args: ["--config=/etc/otelcol/config.yaml"]
+          ports:
+            - name: otel-metrics
+              containerPort: 8888
+          volumeMounts:
+            - name: otel-config
+              mountPath: /etc/otelcol/config.yaml
+              subPath: config.yaml
+          resources:
+            requests:
+              cpu: {{ .deployment.otelCollector.resources.requests.cpu }}
+              memory: {{ .deployment.otelCollector.resources.requests.memory }}
+            limits:
+              cpu: {{ .deployment.otelCollector.resources.limits.cpu }}
+              memory: {{ .deployment.otelCollector.resources.limits.memory }}
+      volumes:
+        - name: otel-config
+          configMap:
+            name: {{ .config.otelConfigName }}
+{{- end }}
+
+---
+# Deployment: starling (Celery Worker)
+{{- if .starling.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .starling.deployment.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-starling
+    app.kubernetes.io/part-of: owl-backend
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+    # Helm hook annotation to ensure OWL starts last after all infrastructure
+    "helm.sh/hook-weight": "5"
+spec:
+  replicas: {{ .starling.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: starling
+  template:
+    metadata:
+      labels:
+        app: starling
+        app.kubernetes.io/component: owl-starling
+        app.kubernetes.io/part-of: owl-backend
+      annotations:
+        {{- include "jamaibase.annotations" $ | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "jamaibase.fullname" $ }}-{{ .serviceAccount.name }}
+      {{- include "jamaibase.imagePullSecrets" $ | nindent 6 }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - owl
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: starling
+          image: "{{ .starling.deployment.image.repository }}:{{ .starling.deployment.image.tag }}"
+          imagePullPolicy: {{ .starling.deployment.image.pullPolicy }}
+          command: ["/home/appuser/.local/bin/uv", "run", "celery", "-A", "owl.entrypoints.starling", "worker", "--loglevel=info", "--max-memory-per-child", "{{ .starling.autoscale.maxMemoryPerChild }}", "--autoscale={{ .starling.autoscale.min }},{{ .starling.autoscale.max }}", "--beat"]
+          envFrom:
+            - configMapRef:
+                name: {{ .config.name }}
+            - secretRef:
+                name: {{ .secret.name }}
+          resources:
+            requests:
+              cpu: {{ .starling.deployment.resources.requests.cpu }}
+              memory: {{ .starling.deployment.resources.requests.memory }}
+            limits:
+              cpu: {{ .starling.deployment.resources.limits.cpu }}
+              memory: {{ .starling.deployment.resources.limits.memory }}
+        - name: otel-collector
+          image: "{{ .starling.deployment.otelCollector.image.repository }}:{{ .starling.deployment.otelCollector.image.tag }}"
+          args: ["--config=/etc/otelcol/config.yaml"]
+          ports:
+            - name: otel-metrics
+              containerPort: 8888
+          volumeMounts:
+            - name: otel-config
+              mountPath: /etc/otelcol/config.yaml
+              subPath: config.yaml
+          resources:
+            requests:
+              cpu: {{ .starling.deployment.otelCollector.resources.requests.cpu }}
+              memory: {{ .starling.deployment.otelCollector.resources.requests.memory }}
+            limits:
+              cpu: {{ .starling.deployment.otelCollector.resources.limits.cpu }}
+              memory: {{ .starling.deployment.otelCollector.resources.limits.memory }}
+      volumes:
+        - name: otel-config
+          configMap:
+            name: {{ .config.otelConfigName }}
+{{- end }}
+
+---
+# Service: owl-api-server
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .service.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-api
+    app.kubernetes.io/part-of: owl-backend
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  selector:
+    app: owl
+  ports:
+    - name: http
+      port: {{ .service.port }}
+      targetPort: {{ .config.port | int }}
+    - name: metrics
+      port: 8889
+      targetPort: 8889
+  type: {{ .service.type }}
+
+---
+# PodDisruptionBudget: owl-pdb
+{{- if .podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .podDisruptionBudget.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-api
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  minAvailable: {{ .podDisruptionBudget.minAvailable }}
+  selector:
+    matchLabels:
+      app: owl
+{{- end }}
+
+---
+# PodDisruptionBudget: starling-pdb
+{{- if and .starling.enabled .starling.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .starling.podDisruptionBudget.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: owl-starling
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  minAvailable: {{ .starling.podDisruptionBudget.minAvailable }}
+  selector:
+    matchLabels:
+      app: starling
+{{- end }}
+
+{{- end }}
+{{- end }}

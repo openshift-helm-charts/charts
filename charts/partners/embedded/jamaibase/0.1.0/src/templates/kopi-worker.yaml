@@ -1,0 +1,98 @@
+{{- if .Values.v8kopi.enabled }}
+---
+# ConfigMap for V8-Kopi Worker
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jamaibase.fullname" . }}-{{ .Values.v8kopi.worker.configMapName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.v8kopi.worker.name }}
+    {{- include "jamaibase.labels" . | nindent 4 }}
+data:
+  MAX_SIZE_BYTES: "20971520"
+  TIMEOUT_MS: "10000"
+  PORT: "{{ .Values.v8kopi.worker.port }}"
+  # concurrency and queue handles by kopi-server
+  MAX_CONCURRENT_EXECUTIONS: "1"
+  MAX_QUEUE_SIZE: "1"
+  NODE_ENV: "{{ .Values.v8kopi.worker.config.nodeEnv }}"
+---
+# Service for V8-Kopi Workers
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.v8kopi.worker.serviceName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.v8kopi.worker.name }}
+    {{- include "jamaibase.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ .Values.v8kopi.worker.name }}
+    status: ready
+  ports:
+    - port: {{ .Values.v8kopi.worker.port }}
+      targetPort: {{ .Values.v8kopi.worker.port }}
+      protocol: TCP
+      name: http
+---
+# Deployment for V8-Kopi Workers
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.v8kopi.worker.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.v8kopi.worker.name }}
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  annotations:
+    {{- include "jamaibase.annotations" . | nindent 4 }}
+    "helm.sh/hook-weight": "3"
+spec:
+  replicas: {{ .Values.v8kopi.worker.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.v8kopi.worker.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.v8kopi.worker.name }}
+        status: ready
+    spec:
+      serviceAccountName: {{ include "jamaibase.fullname" . }}-{{ .Values.v8kopi.serviceAccount.name }}
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: code-executor
+          image: "{{ .Values.v8kopi.worker.image.repository }}:{{ .Values.v8kopi.worker.image.tag }}"
+          imagePullPolicy: {{ .Values.v8kopi.worker.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.v8kopi.worker.port }}
+              name: http
+          envFrom:
+            - configMapRef:
+                name: {{ include "jamaibase.fullname" . }}-{{ .Values.v8kopi.worker.configMapName }}
+          resources:
+            {{- toYaml .Values.v8kopi.worker.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.v8kopi.worker.probes.liveness.path }}
+              port: {{ .Values.v8kopi.worker.port }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.v8kopi.worker.probes.readiness.path }}
+              port: {{ .Values.v8kopi.worker.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+{{- end }}

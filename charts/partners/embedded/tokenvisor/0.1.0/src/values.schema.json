@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TokenVisor Helm Chart Values",
+  "description": "Schema for TokenVisor Helm chart values",
+  "type": "object",
+  "properties": {
+    "global": {
+      "type": "object",
+      "description": "Global configuration",
+      "properties": {
+        "namespace": { "type": "string", "default": "tokenvisor" },
+        "minNodesRequired": { "type": "integer", "default": 3 },
+        "imagePullSecrets": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "failOnMissingModelPVC": { "type": "boolean" }
+      }
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "core": { "type": "boolean" },
+        "storage": { "type": "boolean" }
+      }
+    },
+    "emu": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "image": { "type": "string" },
+        "replicas": { "type": "integer", "minimum": 1 },
+        "secret": {
+          "type": "object",
+          "properties": {
+            "create": { "type": "boolean" },
+            "existingSecret": { "type": "string" }
+          }
+        }
+      }
+    },
+    "studio": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "image": { "type": "string" },
+        "replicas": { "type": "integer", "minimum": 1 },
+        "secret": {
+          "type": "object",
+          "properties": {
+            "create": { "type": "boolean" },
+            "existingSecret": { "type": "string" }
+          }
+        }
+      }
+    },
+    "clickhouse": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "storageClassName": { "type": "string" },
+        "storageSize": { "type": "string" },
+        "keeperReplicas": { "type": "integer", "minimum": 1 },
+        "clusterReplicas": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "cnpg": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "instances": { "type": "integer", "minimum": 1 },
+        "storageClassName": { "type": "string" },
+        "storageSize": { "type": "string" }
+      }
+    },
+    "dragonfly": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "replicas": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "victoriametrics": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "storageClassName": { "type": "string" }
+      }
+    },
+    "victorialogs": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" }
+      }
+    }
+  },
+  "required": ["global", "features"]
+}

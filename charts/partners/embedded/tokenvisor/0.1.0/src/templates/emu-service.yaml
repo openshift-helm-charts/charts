@@ -1,0 +1,19 @@
+{{- if and .Values.features.core .Values.emu.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.emu.service.name }}
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: emu
+    app.kubernetes.io/part-of: emu-backend
+spec:
+  selector:
+    app: emu
+  ports:
+    - name: http
+      port: {{ .Values.emu.service.port | int }}
+      targetPort: {{ .Values.emu.service.port | int }}
+  type: ClusterIP
+{{- end }}

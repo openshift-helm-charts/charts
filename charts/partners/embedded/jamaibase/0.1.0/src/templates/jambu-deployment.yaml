@@ -1,0 +1,185 @@
+{{/*
+=============================================================================
+Jambu Deployment Template
+Creates Jambu frontend deployment, service, and associated resources
+Includes ServiceAccount merged into deployment template
+=============================================================================*/}}
+
+{{- if .Values.jamaibase.jambu.enabled }}
+{{- with .Values.jamaibase.jambu }}
+
+---
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "jamaibase.fullname" $ }}-{{ .serviceAccount.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: jambu-serviceaccount
+    app.kubernetes.io/part-of: jambu-frontend
+  {{- with .serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+automountServiceAccountToken: {{ .serviceAccount.automountToken }}
+
+---
+# ConfigMap
+{{- if .config.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .config.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: jambu-config
+    app.kubernetes.io/part-of: jambu-frontend
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+data:
+  AUTH_SECRET: {{ .config.authSecret | quote }}
+  HOST: {{ .config.host | quote }}
+  ORIGIN: {{ .config.origin | quote }}
+  OWL_URL: {{ .config.owlUrl | quote }}
+  OWL_SERVICE_KEY: {{ .config.owlServiceKey | quote }}
+  PUBLIC_JAMAI_URL: {{ .config.publicJamaiUrl | quote }}
+  PUBLIC_IS_SPA: {{ .config.publicIsSpa | quote }}
+  NODE_ENV: {{ .config.nodeEnv | quote }}
+  BODY_SIZE_LIMIT: {{ .config.bodySizeLimit | quote }}
+  RESEND_API_KEY: {{ .config.resendApiKey | quote }}
+  CHECK_ORIGIN: {{ .config.checkOrigin | quote }}
+  USE_SECURE_COOKIES: {{ .config.useSecureCookies | quote }}
+  ABSOLUTE_AUTH_TIMEOUT: {{ .config.absoluteAuthTimeout | quote }}
+  IDLE_AUTH_TIMEOUT: {{ .config.idleAuthTimeout | quote }}
+{{- end }}
+
+---
+# Deployment
+{{- if .deployment.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .deployment.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: jambu-frontend
+    app.kubernetes.io/part-of: jambu-frontend
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+    # Helm hook annotation to ensure Jambu starts after OWL backend
+    "helm.sh/hook-weight": "6"
+spec:
+  replicas: {{ .deployment.replicas }}
+  selector:
+    matchLabels:
+      app: jambu
+  template:
+    metadata:
+      labels:
+        app: jambu
+        {{- include "jamaibase.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: jambu-frontend
+        app.kubernetes.io/part-of: jambu-frontend
+    spec:
+      serviceAccountName: {{ include "jamaibase.fullname" $ }}-{{ .serviceAccount.name }}
+      {{- with .imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: jambu
+          image: "{{ .deployment.image.repository }}:{{ .deployment.image.tag }}"
+          imagePullPolicy: {{ .deployment.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .service.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .config.name }}
+          command:
+            {{- toYaml .deployment.command | nindent 12 }}
+          {{- with .deployment.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .deployment.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .deployment.resources | nindent 12 }}
+          {{- with .deployment.probes }}
+          livenessProbe:
+            httpGet:
+              path: {{ .liveness.path }}
+              port: http
+            initialDelaySeconds: {{ .liveness.initialDelaySeconds }}
+            periodSeconds: {{ .liveness.periodSeconds }}
+            timeoutSeconds: {{ .liveness.timeoutSeconds }}
+            successThreshold: {{ .liveness.successThreshold }}
+            failureThreshold: {{ .liveness.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .readiness.path }}
+              port: http
+            initialDelaySeconds: {{ .readiness.initialDelaySeconds }}
+            periodSeconds: {{ .readiness.periodSeconds }}
+            timeoutSeconds: {{ .readiness.timeoutSeconds }}
+            successThreshold: {{ .readiness.successThreshold }}
+            failureThreshold: {{ .readiness.failureThreshold }}
+          {{- end }}
+{{- end }}
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .service.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: jambu-frontend
+    app.kubernetes.io/part-of: jambu-frontend
+  annotations:
+    {{- with .service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  type: {{ .service.type }}
+  selector:
+    app: jambu
+  ports:
+    - name: http
+      port: {{ .service.port }}
+      targetPort: http
+      protocol: TCP
+
+---
+# PodDisruptionBudget
+{{- if .podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .podDisruptionBudget.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "jamaibase.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: jambu-pdb
+    app.kubernetes.io/part-of: jambu-frontend
+  annotations:
+    {{- include "jamaibase.annotations" $ | nindent 4 }}
+spec:
+  minAvailable: {{ .podDisruptionBudget.minAvailable }}
+  selector:
+    matchLabels:
+      app: jambu
+{{- end }}
+
+{{- end }}
+{{- end }}

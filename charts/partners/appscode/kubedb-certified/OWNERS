@@ -6,6 +6,7 @@ publicPgpKey: unknown
 users:
 - githubUsername: tamalsaha
 - githubUsername: Superm4n97
+- githubUsername: arnobkumarsaha
 vendor:
-  label: kubeops
+  label: appscode
   name: Tamal Saha

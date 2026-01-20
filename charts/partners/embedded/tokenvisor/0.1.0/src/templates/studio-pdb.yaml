@@ -1,0 +1,15 @@
+{{- if and .Values.features.core .Values.studio.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: studio-pdb
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: studio
+spec:
+  minAvailable: {{ .Values.studio.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      app: studio
+{{- end }}

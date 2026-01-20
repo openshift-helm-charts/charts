@@ -1,0 +1,167 @@
+{{- if .Values.skypilot.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.skypilot.pvc.name }}
+  namespace: {{ .Values.skypilot.namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: skypilot
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.skypilot.pvc.size }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: skypilot-config
+  namespace: {{ .Values.skypilot.namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: skypilot
+
+data:
+  config.yaml: |
+{{- .Values.skypilot.config | nindent 4 }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.skypilot.serviceAccountName }}
+  namespace: {{ .Values.skypilot.namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: skypilot
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: skypilot-api-role
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: skypilot
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: skypilot-api-role-binding
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: skypilot
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.skypilot.serviceAccountName }}
+    namespace: {{ .Values.skypilot.namespace }}
+roleRef:
+  kind: ClusterRole
+  name: skypilot-api-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.skypilot.service.name }}
+  namespace: {{ .Values.skypilot.namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: skypilot
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.skypilot.service.port | int }}
+      targetPort: {{ .Values.skypilot.service.targetPort | int }}
+      protocol: TCP
+  selector:
+    app: skypilot-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skypilot-api-server
+  namespace: {{ .Values.skypilot.namespace }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: skypilot
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: skypilot-api
+  template:
+    metadata:
+      labels:
+        app: skypilot-api
+    spec:
+      automountServiceAccountToken: true
+      serviceAccountName: {{ .Values.skypilot.serviceAccountName }}
+{{- if .Values.skypilot.imagePullSecrets }}
+      imagePullSecrets:
+{{- range .Values.skypilot.imagePullSecrets }}
+        - name: {{ if kindIs "map" . }}{{ .name }}{{ else }}{{ . }}{{ end }}
+{{- end }}
+{{- end }}
+      containers:
+        - name: skypilot-api
+          image: {{ .Values.skypilot.image }}
+          imagePullPolicy: Always
+          env:
+{{- range $key, $value := .Values.skypilot.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+{{- end }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              echo "Pre-deploy hook"
+              mkdir -p /root/.sky
+              echo "Copying config.yaml from ConfigMap `skypilot-config` to /root/.sky/config.yaml"
+              cp /tmp/config.yaml /root/.sky/config.yaml
+              sky api start --deploy && tail -f /root/.sky/api_server/server.log
+          ports:
+            - containerPort: {{ .Values.skypilot.service.targetPort | int }}
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.skypilot.service.targetPort | int }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.skypilot.service.targetPort | int }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: state-volume
+              mountPath: /root/.sky
+              subPath: .sky
+            - name: state-volume
+              mountPath: /root/.ssh
+              subPath: .ssh
+            - name: skypilot-config
+              mountPath: /tmp/config.yaml
+              subPath: config.yaml
+      volumes:
+        - name: state-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.skypilot.pvc.name }}
+        - name: skypilot-config
+          configMap:
+            name: skypilot-config
+{{- end }}

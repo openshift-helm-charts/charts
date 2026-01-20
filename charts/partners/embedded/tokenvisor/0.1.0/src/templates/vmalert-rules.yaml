@@ -1,0 +1,159 @@
+{{- if and .Values.vmalert.enabled .Values.victoriametrics.enabled (.Capabilities.APIVersions.Has "operator.victoriametrics.com/v1beta1") }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmrule-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+    vmalert/rule-type: metrics
+  name: storage-alert
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  groups:
+    - name: storage.rules
+      interval: 30s
+      rules:
+        - record: chi_clickhouse_disk_free_percentage
+          expr: |
+            (
+              chi_clickhouse_metric_DiskFreeBytes{chi=~".*",hostname=~".*"} /
+              chi_clickhouse_metric_DiskTotalBytes{chi=~".*",hostname=~".*"}
+            ) * 100
+          labels:
+            unit: percent
+            component: clickhouse
+        - alert: ClickHouseDiskSpaceLow
+          expr: chi_clickhouse_disk_free_percentage < 10
+          for: 1h
+          labels:
+            severity: critical
+            component: clickhouse
+          annotations:
+            summary: "ClickHouse disk space low"
+            description: "ClickHouse disk space below threshold."
+        - alert: PostgreSQLDatabaseSizeTooLarge
+          expr: |
+            cnpg_pg_database_size_bytes / 1024 ^ 3 > 10
+          for: 1h
+          labels:
+            severity: warning
+            component: postgresql
+          annotations:
+            summary: "PostgreSQL database size exceeded 10 GiB"
+            description: "PostgreSQL database size exceeded threshold."
+        - record: vmcluster_disk_usage_percentage
+          expr: |
+            (
+              max(
+                sum(vm_data_size_bytes{job=~"(vminsert-victoria-cluster|vmselect-victoria-cluster|vmstorage-victoria-cluster)", instance=~".*"}) by(job, instance) /
+                (
+                  sum(vm_free_disk_space_bytes{job=~"(vminsert-victoria-cluster|vmselect-victoria-cluster|vmstorage-victoria-cluster)", instance=~".*"}-vm_free_disk_space_limit_bytes{job=~"(vminsert-victoria-cluster|vmselect-victoria-cluster|vmstorage-victoria-cluster)", instance=~".*"}) by(job, instance) +
+                  sum(vm_data_size_bytes{job=~"(vminsert-victoria-cluster|vmselect-victoria-cluster|vmstorage-victoria-cluster)", instance=~".*"}) by(job, instance)
+                )
+              ) * 100
+            )
+          labels:
+            unit: percent
+            component: vmcluster
+        - alert: VMClusterDiskSpaceHigh
+          expr: vmcluster_disk_usage_percentage > 80
+          for: 1h
+          labels:
+            severity: critical
+            component: vmcluster
+          annotations:
+            summary: "VictoriaMetrics cluster disk usage high"
+            description: "VMStorage disk usage above threshold."
+---
+{{- if .Values.vmalert.enableLogRules }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmrule-tokenvisor
+    app.kubernetes.io/part-of: vm-operator
+    vmalert/rule-type: logs
+  name: tokenvisor-log-alert
+  namespace: {{ include "tokenvisor.namespace" . }}
+spec:
+  groups:
+    - name: tokenvisor.rules
+      type: vlogs
+      interval: 30s
+      rules:
+        - alert: TokenVisorException
+          expr: severity:i(critical) AND (service.name:=emu OR service.name:=starling) | stats by (service.name, code.filepath, code.function, code.lineno, _msg, exception.message, exception.stacktrace) count() as total | filter total:> 0
+          labels:
+            severity: exception
+            component: tokenvisor-log
+          annotations:
+            summary: "TokenVisor exception detected"
+            description: "TokenVisor exception logs detected."
+        - alert: TokenVisorError
+          expr: severity:i(error) AND (service.name:=emu OR service.name:=starling) | stats by (service.name, code.filepath, code.function, code.lineno, _msg) count() as total | filter total:> 0
+          labels:
+            severity: critical
+            component: tokenvisor-log
+          annotations:
+            summary: "TokenVisor error detected"
+            description: "TokenVisor error logs detected."
+        - alert: TokenVisorWarning
+          expr: severity:i(warning) AND (service.name:=emu OR service.name:=starling) | stats by (service.name, code.filepath, code.function, code.lineno, _msg) count() as total | filter total:> 0
+          labels:
+            severity: warning
+            component: tokenvisor-log
+          annotations:
+            summary: "TokenVisor warning detected"
+            description: "TokenVisor warning logs detected."
+{{- end }}
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
+metadata:
+  name: vmalert-notifications
+  namespace: {{ include "tokenvisor.namespace" . }}
+  labels:
+    app.kubernetes.io/instance: vmalertmanager-config
+    app.kubernetes.io/part-of: vm-operator
+spec:
+  route:
+    group_by: ["alertname"]
+    group_wait: 10s
+    group_interval: 10s
+    repeat_interval: 3h
+    receiver: tokenvisor-discord
+    routes:
+      - matchers:
+          - component="vmcluster"
+        receiver: tokenvisor-discord
+      - matchers:
+          - component="postgresql"
+        receiver: tokenvisor-discord
+      - matchers:
+          - component="clickhouse"
+        receiver: tokenvisor-discord
+      - matchers:
+          - component="tokenvisor-log"
+        receiver: tokenvisor-log-discord
+  receivers:
+    - name: tokenvisor-discord
+      discord_configs:
+        - webhook_url: "{{ .Values.vmalert.tokenvisorWebhookUrl }}"
+          title: "TokenVisor Alert"
+          message: "TokenVisor alert triggered."
+          send_resolved: true
+    - name: tokenvisor-log-discord
+      discord_configs:
+        - webhook_url: "{{ .Values.vmalert.tokenvisorLogWebhookUrl }}"
+          title: "TokenVisor Log Alert"
+          message: "TokenVisor log alert triggered."
+          send_resolved: false
+  inhibit_rules:
+    - source_matchers:
+        - severity="critical"
+        - component!="tokenvisor-log"
+      target_matchers:
+        - severity="warning"
+        - component!="tokenvisor-log"
+      equal: ["alertname"]
+{{- end }}

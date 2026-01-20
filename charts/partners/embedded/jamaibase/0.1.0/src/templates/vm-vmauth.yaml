@@ -1,0 +1,26 @@
+{{- if .Values.victoriaMetrics.enabled }}
+{{- if .Values.victoriaMetrics.vmauth.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAuth
+metadata:
+  labels:
+    app.kubernetes.io/instance: vmauth-jamaibase
+    app.kubernetes.io/part-of: vm-operator
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  name: {{ .Values.victoriaMetrics.vmauth.name }}
+spec:
+  replicaCount: {{ .Values.victoriaMetrics.vmauth.replicaCount }}
+  {{- with .Values.global.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  image:
+    repository: {{ .Values.victoriaMetrics.vmauth.image.repository }}
+    tag: {{ .Values.victoriaMetrics.vmauth.image.tag | quote }}
+  userSelector:
+    matchLabels:
+      app.kubernetes.io/instance: vmuser-jamaibase
+  resources:
+    {{- toYaml .Values.victoriaMetrics.vmauth.resources | nindent 4 }}
+{{- end }}
+{{- end }}

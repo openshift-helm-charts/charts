@@ -1,0 +1,339 @@
+{{- if and .Values.clickhouse.enabled .Values.clickhouse.initJob.enabled }}
+{{- $secretName := default "clickhouse-secret" .Values.clickhouse.secrets.existingSecret }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-clickhouse-db
+  namespace: {{ include "tokenvisor.namespace" . }}
+  {{- if .Values.clickhouse.initJob.useHelmHook }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-6"
+    helm.sh/hook-delete-policy: before-hook-creation
+  {{- end }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: clickhouse
+
+data:
+  01_create_databases.sh: |
+    #!/bin/bash
+
+    # Environment variables
+    CH_USER=${CH_USER:-default}
+    CH_PASSWORD=${CH_PASSWORD:-}
+    CH_HOST=${CH_HOST:-clickhouse-tokenvisor-test.tokenvisor.svc.cluster.local}
+    EXPECTED_CLUSTER_COUNT=${EXPECTED_CLUSTER_NUMBER:-1}
+    CLUSTER_NAME=${CLUSTER_NAME:-tokenvisor-test}
+    READONLY_USER=${READONLY_USER:-defaultreadonly}
+    READONLY_PASSWORD=${READONLY_PASSWORD:-}
+
+    create_table_with_retry() {
+      local table_name=$1
+      local create_query=$2
+      local max_retries=5
+      local retry_delay=10
+      local retries=0
+
+      while [ $retries -lt $max_retries ]; do
+        echo "Attempting to create $table_name (attempt $((retries+1))/$max_retries)"
+
+        if clickhouse-client --user ${CH_USER} --password ${CH_PASSWORD} --host ${CH_HOST} \
+          --query="$create_query"; then
+
+          if verify_table_creation "$table_name"; then
+            echo "Successfully created $table_name on all replicas"
+            return 0
+          fi
+        fi
+
+        retries=$((retries + 1))
+        if [ $retries -lt $max_retries ]; then
+          echo "Retrying in $retry_delay seconds..."
+          sleep $retry_delay
+        fi
+      done
+
+      echo "ERROR: Failed to create $table_name after $max_retries attempts"
+      return 1
+    }
+
+    verify_table_creation() {
+      local table_name=$1
+      local hosts=$(clickhouse-client --user ${CH_USER} --password ${CH_PASSWORD} --host ${CH_HOST} \
+        --query="SELECT host_name FROM system.clusters WHERE cluster = '${CLUSTER_NAME}'")
+
+      local missing_hosts=""
+      for host in $hosts; do
+        local exists=$(clickhouse-client --user ${CH_USER} --password ${CH_PASSWORD} --host $host \
+          --query="SELECT count() FROM system.tables WHERE database = 'tokenvisor_emu' AND name = '${table_name}'")
+
+        if [ "$exists" -ne "1" ]; then
+          missing_hosts+=" $host"
+        fi
+      done
+
+      if [ -z "$missing_hosts" ]; then
+        return 0
+      else
+        echo "Table $table_name missing on:$missing_hosts"
+        return 1
+      fi
+    }
+
+    CLUSTER_COUNT=0
+    RETRIES_READINESS=0
+    MAX_RETRIES_READINESS=90
+    RETRY_DELAY_READINESS=10
+    while [ $CLUSTER_COUNT -ne $EXPECTED_CLUSTER_COUNT ]; do
+      if [ $RETRIES_READINESS -ge $MAX_RETRIES_READINESS ]; then
+        echo "Failed to start ClickHouse cluster. Exiting..."
+        exit 1
+      fi
+      if ! getent hosts "${CH_HOST}" >/dev/null 2>&1; then
+        echo "Waiting for ClickHouse DNS (${CH_HOST})..."
+        sleep $RETRY_DELAY_READINESS
+        RETRIES_READINESS=$((RETRIES_READINESS+1))
+        CLUSTER_COUNT=0
+        continue
+      fi
+      echo "Waiting for ClickHouse cluster to be ready..."
+      sleep $RETRY_DELAY_READINESS
+      RETRIES_READINESS=$((RETRIES_READINESS+1))
+      CLUSTER_COUNT=$(clickhouse-client --user ${CH_USER} --password ${CH_PASSWORD} --host ${CH_HOST} \
+      --query="SELECT count(host_name) FROM system.clusters WHERE cluster = '${CLUSTER_NAME}'" 2>/dev/null || echo 0)
+      case "${CLUSTER_COUNT}" in
+        ''|*[!0-9]*)
+          CLUSTER_COUNT=0
+          ;;
+      esac
+    done
+    echo "ClickHouse cluster is ready."
+
+    echo "Creating read-only user..."
+    clickhouse-client --user ${CH_USER} --password ${CH_PASSWORD} --host ${CH_HOST} \
+      --query="CREATE USER IF NOT EXISTS ${READONLY_USER} IDENTIFIED BY '${READONLY_PASSWORD}' ON CLUSTER '${CLUSTER_NAME}'"
+
+    echo "Granting read-only permissions..."
+    clickhouse-client --user ${CH_USER} --password ${CH_PASSWORD} --host ${CH_HOST} \
+      --query="GRANT SELECT ON *.* TO '${READONLY_USER}' ON CLUSTER '${CLUSTER_NAME}'"
+
+    clickhouse-client --user ${CH_USER} --password ${CH_PASSWORD} --host ${CH_HOST} \
+      --query="GRANT REMOTE ON *.* TO '${READONLY_USER}' ON CLUSTER '${CLUSTER_NAME}'"
+
+    echo "Creating databases and tables..."
+    create_table_with_retry "llm_usage" "CREATE TABLE IF NOT EXISTS tokenvisor_emu.llm_usage ON CLUSTER '${CLUSTER_NAME}'
+    (
+        \`id\` UUID,
+        \`org_id\` String,
+        \`proj_id\` String,
+        \`user_id\` String,
+        \`timestamp\` DateTime64(6, 'UTC'),
+        \`model\` String,
+        \`input_token\` UInt32,
+        \`output_token\` UInt32,
+        \`cost\` Decimal128(12),
+        \`input_cost\` Decimal128(12),
+        \`output_cost\` Decimal128(12)
+    )
+    ENGINE=ReplicatedMergeTree
+    PARTITION BY toYYYYMM(timestamp)
+    ORDER BY (org_id, timestamp, model)"
+
+    create_table_with_retry "embed_usage" "CREATE TABLE IF NOT EXISTS tokenvisor_emu.embed_usage ON CLUSTER '${CLUSTER_NAME}'
+    (
+        \`id\` UUID,
+        \`org_id\` String,
+        \`proj_id\` String,
+        \`user_id\` String,
+        \`timestamp\` DateTime64(6, 'UTC'),
+        \`model\` String,
+        \`num_token\` UInt32,
+        \`cost\` Decimal128(12)
+    )
+    ENGINE=ReplicatedMergeTree
+    PARTITION BY toYYYYMM(timestamp)
+    ORDER BY (org_id, timestamp, model)"
+
+    create_table_with_retry "rerank_usage" "CREATE TABLE IF NOT EXISTS tokenvisor_emu.rerank_usage ON CLUSTER '${CLUSTER_NAME}'
+    (
+        \`id\` UUID,
+        \`org_id\` String,
+        \`proj_id\` String,
+        \`user_id\` String,
+        \`timestamp\` DateTime64(6, 'UTC'),
+        \`model\` String,
+        \`num_search\` UInt32,
+        \`cost\` Decimal128(12)
+    )
+    ENGINE=ReplicatedMergeTree
+    PARTITION BY toYYYYMM(timestamp)
+    ORDER BY (org_id, timestamp, model)"
+
+    create_table_with_retry "deployment_usage" "CREATE TABLE IF NOT EXISTS tokenvisor_emu.deployment_usage ON CLUSTER '${CLUSTER_NAME}'
+    (
+        \`id\` UUID,
+        \`model_id\` String,
+        \`deployment_id\` String,
+        \`huggingface_id\` String,
+        \`accelerator\` String,
+        \`num_accelerator\` UInt32,
+        \`timestamp\` DateTime64(6, 'UTC'),
+        \`num_replica\` UInt32
+    )
+    ENGINE=MergeTree
+    PARTITION BY toYYYYMM(timestamp)
+    ORDER BY (huggingface_id, timestamp)"
+
+    create_table_with_retry "emu_traces" "CREATE TABLE IF NOT EXISTS tokenvisor_emu.emu_traces ON CLUSTER '${CLUSTER_NAME}'
+    (
+        \`Timestamp\` DateTime64(9) CODEC(Delta(8), ZSTD(1)),
+        \`TraceId\` String CODEC(ZSTD(1)),
+        \`SpanId\` String CODEC(ZSTD(1)),
+        \`ParentSpanId\` String CODEC(ZSTD(1)),
+        \`TraceState\` String CODEC(ZSTD(1)),
+        \`SpanName\` LowCardinality(String) CODEC(ZSTD(1)),
+        \`SpanKind\` LowCardinality(String) CODEC(ZSTD(1)),
+        \`ServiceName\` LowCardinality(String) CODEC(ZSTD(1)),
+        \`ResourceAttributes\` Map(LowCardinality(String), String) CODEC(ZSTD(1)),
+        \`ScopeName\` String CODEC(ZSTD(1)),
+        \`ScopeVersion\` String CODEC(ZSTD(1)),
+        \`SpanAttributes\` Map(LowCardinality(String), String) CODEC(ZSTD(1)),
+        \`Duration\` Int64 CODEC(ZSTD(1)),
+        \`StatusCode\` LowCardinality(String) CODEC(ZSTD(1)),
+        \`StatusMessage\` String CODEC(ZSTD(1)),
+        \`Events.Timestamp\` Array(DateTime64(9)) CODEC(ZSTD(1)),
+        \`Events.Name\` Array(LowCardinality(String)) CODEC(ZSTD(1)),
+        \`Events.Attributes\` Array(Map(LowCardinality(String), String)) CODEC(ZSTD(1)),
+        \`Links.TraceId\` Array(String) CODEC(ZSTD(1)),
+        \`Links.SpanId\` Array(String) CODEC(ZSTD(1)),
+        \`Links.TraceState\` Array(String) CODEC(ZSTD(1)),
+        \`Links.Attributes\` Array(Map(LowCardinality(String), String)) CODEC(ZSTD(1)),
+        INDEX idx_trace_id TraceId TYPE bloom_filter(0.001) GRANULARITY 1,
+        INDEX idx_res_attr_key mapKeys(ResourceAttributes) TYPE bloom_filter(0.01) GRANULARITY 1,
+        INDEX idx_res_attr_value mapValues(ResourceAttributes) TYPE bloom_filter(0.01) GRANULARITY 1,
+        INDEX idx_span_attr_key mapKeys(SpanAttributes) TYPE bloom_filter(0.01) GRANULARITY 1,
+        INDEX idx_span_attr_value mapValues(SpanAttributes) TYPE bloom_filter(0.01) GRANULARITY 1,
+        INDEX idx_duration Duration TYPE minmax GRANULARITY 1
+    )
+    ENGINE = ReplicatedMergeTree
+    PARTITION BY toDate(Timestamp)
+    ORDER BY (ServiceName, SpanName, toUnixTimestamp(Timestamp), TraceId)
+    TTL toDateTime(Timestamp) + toIntervalDay(3)
+    SETTINGS index_granularity = 8192, ttl_only_drop_parts = 1"
+
+    create_table_with_retry "emu_traces_trace_id_ts" "CREATE TABLE IF NOT EXISTS tokenvisor_emu.emu_traces_trace_id_ts ON CLUSTER '${CLUSTER_NAME}'
+    (
+      \`TraceId\` String CODEC(ZSTD(1)),
+      \`Start\` DateTime64(9) CODEC(Delta(8), ZSTD(1)),
+      \`End\` DateTime64(9) CODEC(Delta(8), ZSTD(1)),
+      INDEX idx_trace_id TraceId TYPE bloom_filter(0.01) GRANULARITY 1
+    )
+    ENGINE = ReplicatedMergeTree
+    ORDER BY (TraceId, toUnixTimestamp(Start))
+    TTL toDateTime(Start) + toIntervalDay(3)"
+
+    create_table_with_retry "emu_traces_trace_id_ts_mv" "CREATE MATERIALIZED VIEW IF NOT EXISTS tokenvisor_emu.emu_traces_trace_id_ts_mv ON CLUSTER '${CLUSTER_NAME}' TO tokenvisor_emu.emu_traces_trace_id_ts
+    (
+      \`TraceId\` String,
+      \`Start\` DateTime64(9),
+      \`End\` DateTime64(9)
+    ) AS
+    SELECT
+      TraceId,
+      min(Timestamp) AS Start,
+      max(Timestamp) AS End
+    FROM tokenvisor_emu.emu_traces
+    WHERE TraceId != ''
+    GROUP BY TraceId"
+
+    echo "Database initialization completed successfully!"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clickhouse-env-config
+  namespace: {{ include "tokenvisor.namespace" . }}
+  {{- if .Values.clickhouse.initJob.useHelmHook }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-6"
+    helm.sh/hook-delete-policy: before-hook-creation
+  {{- end }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: clickhouse
+
+data:
+  CH_USER: {{ .Values.clickhouse.initJob.user | quote }}
+  CH_HOST: {{ .Values.clickhouse.initJob.host | quote }}
+  CLUSTER_NAME: {{ .Values.clickhouse.initJob.clusterName | quote }}
+  EXPECTED_CLUSTER_NUMBER: {{ .Values.clickhouse.initJob.expectedClusterNumber | quote }}
+  READONLY_USER: {{ .Values.clickhouse.initJob.readonlyUser | quote }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: clickhouse-init-db
+  namespace: {{ include "tokenvisor.namespace" . }}
+  {{- if .Values.clickhouse.initJob.useHelmHook }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+    linkerd.io/inject: disabled
+  {{- else }}
+  annotations:
+    linkerd.io/inject: disabled
+  {{- end }}
+  labels:
+    {{- include "tokenvisor.labels" . | nindent 4 }}
+    app: clickhouse
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+        app: init-clickhouse-db
+      annotations:
+        linkerd.io/inject: disabled
+    spec:
+      {{- with .Values.clickhouse.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: clickhouse-init-db
+          image: {{ .Values.clickhouse.images.client }}
+          imagePullPolicy: {{ .Values.clickhouse.images.imagePullPolicy }}
+          command:
+            - "/bin/bash"
+            - "-c"
+            - |
+              cp /usr/src/app/01_create_databases.sh /tmp/01_create_databases.sh
+              chmod +x /tmp/01_create_databases.sh
+              /tmp/01_create_databases.sh
+          envFrom:
+            - configMapRef:
+                name: clickhouse-env-config
+          env:
+            - name: CH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: db_user_password
+            - name: READONLY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: db_readonly_user_password
+          volumeMounts:
+            - mountPath: /usr/src/app
+              name: clickhouse-init-db
+      volumes:
+        - name: clickhouse-init-db
+          configMap:
+            name: init-clickhouse-db
+      restartPolicy: Never
+{{- end }}

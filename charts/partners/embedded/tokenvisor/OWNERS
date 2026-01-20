@@ -1,0 +1,10 @@
+chart:
+  name: tokenvisor
+  shortDescription: TokenVisor | AI token accounting and metrics, all in one platform
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: big-yellow-duck
+vendor:
+  label: embedded
+  name: Embedded LLM Pte. Ltd.

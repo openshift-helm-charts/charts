@@ -1,0 +1,95 @@
+{{- if .Values.v8kopi.enabled }}
+---
+# ConfigMap for V8-Kopi Server
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jamaibase.fullname" . }}-{{ .Values.v8kopi.server.configMapName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.v8kopi.server.name }}
+    {{- include "jamaibase.labels" . | nindent 4 }}
+data:
+  NAMESPACE: "{{ .Release.Namespace }}"
+  APP_LABEL: "{{ .Values.v8kopi.worker.name }}"
+  POD_PORT: "{{ .Values.v8kopi.worker.port }}"
+  REQUEST_TIMEOUT: "{{ .Values.v8kopi.server.config.requestTimeout }}"
+  QUEUE_TIMEOUT: "{{ .Values.v8kopi.server.config.queueTimeout }}"
+  MAX_QUEUE_SIZE: "{{ .Values.v8kopi.server.config.maxQueueSize }}"
+  QUEUE_CLEANUP_INTERVAL: "{{ .Values.v8kopi.server.config.queueCleanupInterval }}"
+---
+# Service for V8-Kopi Server
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.v8kopi.server.serviceName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.v8kopi.server.name }}
+    {{- include "jamaibase.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ .Values.v8kopi.server.name }}
+  ports:
+    - port: {{ .Values.v8kopi.server.port }}
+      targetPort: {{ .Values.v8kopi.server.port }}
+      protocol: TCP
+      name: http
+---
+# Deployment for V8-Kopi Server
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.v8kopi.server.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.v8kopi.server.name }}
+    {{- include "jamaibase.labels" . | nindent 4 }}
+  annotations:
+    {{- include "jamaibase.annotations" . | nindent 4 }}
+    "helm.sh/hook-weight": "3"
+spec:
+  replicas: {{ .Values.v8kopi.server.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Values.v8kopi.server.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.v8kopi.server.name }}
+    spec:
+      serviceAccountName: {{ include "jamaibase.fullname" . }}-{{ .Values.v8kopi.serviceAccount.name }}
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: server
+          image: "{{ .Values.v8kopi.server.image.repository }}:{{ .Values.v8kopi.server.image.tag }}"
+          imagePullPolicy: {{ .Values.v8kopi.server.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.v8kopi.server.port }}
+              name: http
+          envFrom:
+            - configMapRef:
+                name: {{ include "jamaibase.fullname" . }}-{{ .Values.v8kopi.server.configMapName }}
+          resources:
+            {{- toYaml .Values.v8kopi.server.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.v8kopi.server.probes.liveness.path }}
+              port: {{ .Values.v8kopi.server.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.v8kopi.server.probes.readiness.path }}
+              port: {{ .Values.v8kopi.server.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+{{- end }}
