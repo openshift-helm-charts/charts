@@ -1,9 +1,10 @@
 chart:
   name: kb-cloud-installer
-  shortDescription: unknown
+  shortDescription: This Installer is used to install the KubeBlocks Enterprise Edition.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: ldming
 vendor:
   label: kubeblocks
   name: KubeBlocks Inc
