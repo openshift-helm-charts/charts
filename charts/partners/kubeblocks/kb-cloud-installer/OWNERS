@@ -1,0 +1,9 @@
+chart:
+  name: kb-cloud-installer
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: kubeblocks
+  name: KubeBlocks Inc
