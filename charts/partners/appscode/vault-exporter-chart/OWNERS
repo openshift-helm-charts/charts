@@ -1,0 +1,9 @@
+chart:
+  name: vault-exporter-chart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: appscode
+  name: Tamal Saha
