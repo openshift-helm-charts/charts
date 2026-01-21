@@ -1,9 +1,11 @@
 chart:
   name: kubevault-certified
-  shortDescription: unknown
+  shortDescription: KubeVault operator is a Kubernetes controller for HashiCorp Vault
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: tamalsaha
+- githubUsername: Superm4n97
 vendor:
   label: appscode
   name: Tamal Saha
