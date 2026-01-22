@@ -3653,6 +3653,54 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/appscode-kubestash-certified-2026.1.19/kubestash-certified-2026.1.19.tgz
     version: 2026.1.19
+  kubevault-certified:
+  - annotations:
+      charts.openshift.io/digest: sha256:91778efbb304f971a9dddfdab4d7ca18dc3dbfd11aec8a8115fe0333d874d354
+      charts.openshift.io/lastCertifiedTimestamp: '2026-01-22T12:29:16.762341+06:00'
+      charts.openshift.io/name: kubevault-certified
+      charts.openshift.io/provider: Tamal Saha
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-01-22T07:10:08.939258+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: v2026.1.8-rc.0
+    dependencies:
+    - condition: kubevault-crds.enabled
+      name: kubevault-crds
+      repository: file://../kubevault-crds
+      version: v2026.1.8-rc.0
+    - condition: kubevault-catalog.enabled
+      name: kubevault-catalog
+      repository: file://../kubevault-catalog
+      version: v2026.1.8-rc.0
+    - condition: kubevault-operator.enabled
+      name: kubevault-operator
+      repository: file://../kubevault-operator
+      version: v0.24.0-rc.0
+    - condition: kubevault-webhook-server.enabled
+      name: kubevault-webhook-server
+      repository: file://../kubevault-webhook-server
+      version: v0.24.0-rc.0
+    - condition: ace-user-roles.enabled
+      name: ace-user-roles
+      repository: oci://ghcr.io/appscode-charts
+      version: v2025.3.14
+    description: KubeVault by AppsCode - HashiCorp Vault operator for Kubernetes
+    digest: 019f73d2dec115b14e17bb906ae3de123638ff93c22278e8fc41ae92c0b17e92
+    home: https://kubevault.com
+    icon: https://cdn.appscode.com/images/products/kubevault/kubevault-icon.png
+    kubeVersion: '>=1.28.0'
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: kubevault-certified
+    sources:
+    - https://github.com/kubevault
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/appscode-kubevault-certified-2026.1.8-rc.0/kubevault-certified-2026.1.8-rc.0.tgz
+    version: 2026.1.8-rc.0
   kyverno:
   - annotations:
       charts.openshift.io/digest: sha256:e2146be6e64f8581d77e026ffda519e03e9ce5e91cae86609cd4e723961856c1
@@ -15030,4 +15078,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-01-21T11:17:26.538534+00:00'
+generated: '2026-01-22T07:10:08.800003+00:00'
