@@ -3360,6 +3360,47 @@ entries:
     urls:
     - https://maximilianopizarro.github.io/jhipster-online-helm-chart/charts/jhipster-online-0.1.0.tgz
     version: 0.1.0
+  kb-cloud-installer:
+  - annotations:
+      charts.openshift.io/digest: sha256:d38a1f3a8807c1c435eb3994b12bd624ee92c016051451ec8eaa6e5684fe4ee7
+      charts.openshift.io/lastCertifiedTimestamp: '2026-01-24T02:40:42.322484+00:00'
+      charts.openshift.io/name: kb-cloud-installer
+      charts.openshift.io/provider: KubeBlocks Inc
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-01-24T02:47:58.538866+00:00'
+      charts.openshift.io/supportURL: https://kubeblocks.com/contact
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: 2.1.35
+    description: A Helm chart for installing/uninstalling/upgrading the KubeBlocks
+      Enterprise, include the dependency components. KubeBlocks Enterprise is a ready-to-use
+      database management platform enabling users to run and manage multiple types
+      of databases on Kubernetes.
+    digest: c651b9d13dfe0862cfd2eadb29bca756e8210d6c4c529f2d8468fa44a383d4cf
+    home: https://kubeblocks.com
+    icon: https://kubeblocks.com/logo.png
+    keywords:
+    - kubernetes
+    - kubeblocks
+    - database
+    - streaming
+    - message queue
+    - dbaas
+    - mysql
+    - postgresql
+    - redis
+    - mongodb
+    kubeVersion: '>=1.20.0-0'
+    maintainers:
+    - email: support@kubeblocks.com
+      name: KubeBlocks Inc.
+      url: https://kubeblocks.com
+    name: kb-cloud-installer
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/kubeblocks-kb-cloud-installer-2.1.35/kb-cloud-installer-2.1.35.tgz
+    version: 2.1.35
   kovairdevops-helm:
   - annotations:
       charts.openshift.io/digest: sha256:a4c8cc79dbc78fd8d10779d3e7e80518cacde3e4730e00207829d51cfc77b0f4
@@ -15078,4 +15119,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-01-22T07:10:08.800003+00:00'
+generated: '2026-01-24T02:47:58.402918+00:00'
