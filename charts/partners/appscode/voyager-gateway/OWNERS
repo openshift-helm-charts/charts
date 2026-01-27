@@ -1,9 +1,12 @@
 chart:
   name: voyager-gateway
-  shortDescription: unknown
+  shortDescription: Voyager is a HAProxy backed secure L7 and L4 ingress controller
+    for Kubernetes developed by AppsCode.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: tamalsaha
+- githubUsername: Superm4n97
 vendor:
   label: appscode
   name: Tamal Saha
