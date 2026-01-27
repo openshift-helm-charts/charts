@@ -13872,6 +13872,46 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/enclaive-vhsm-0.29.0/vhsm-0.29.0.tgz
     version: 0.29.0
+  voyager-gateway:
+  - annotations:
+      charts.openshift.io/digest: sha256:2f0cd4b5163a46b5386db672ce11b70929aeed21cb170703223ae6d4a511244e
+      charts.openshift.io/lastCertifiedTimestamp: '2026-01-27T10:54:49.052023+06:00'
+      charts.openshift.io/name: voyager-gateway
+      charts.openshift.io/provider: Tamal Saha
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-01-27T05:01:17.687878+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: v1.6.2
+    dependencies:
+    - condition: gateway-converter.enabled
+      name: gateway-converter
+      repository: file://../gateway-converter
+      version: v2024.8.30
+    - condition: crd-manager.enabled
+      name: crd-manager
+      repository: file://../crd-manager
+      version: v2026.1.15
+    description: The Helm chart for Voyager Gateway
+    digest: 12370f01290c433daee19df64aec77d5da1a204b9a8404667915f18cba4834f5
+    home: https://gateway.voyagermesh.com/
+    keywords:
+    - gateway-api
+    - envoyproxy
+    - envoy-gateway
+    - eg
+    kubeVersion: '>=1.28.0'
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: voyager-gateway
+    sources:
+    - https://github.com/voyagermesh/gateway
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/appscode-voyager-gateway-2026.1.15/voyager-gateway-2026.1.15.tgz
+    version: 2026.1.15
   wave-autoscale-helm:
   - annotations:
       charts.openshift.io/digest: sha256:35f41c5f9c2ea1163ab8ccfea7a0ae42e92dd6ac2256d0cbc72ce4d32ffa4e2b
@@ -15119,4 +15159,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-01-24T02:47:58.402918+00:00'
+generated: '2026-01-27T05:01:17.557395+00:00'
