@@ -46,7 +46,10 @@ jobs:
             --allowed-category partners
 
       # We know that only one file was modified at this point, and it seems
-      # mergeable. Determine if that file was created or modified here.
+      # mergeable. Now we need to determine if that file is effectively new.
+      #
+      # Being "effectively new" just influences whether or not we should be 
+      # checking the lockfile before merging.
       #
       # This step only checks the first file for its modification type!
       - name: Determine if net-new OWNERS file
@@ -62,9 +65,15 @@ jobs:
               pull_number: context.issue.number,
             });
             const ownersFile = resp.data[0];
-            console.log(`Modified file "${ownersFile.filename} has a status of ${ownersFile.status}`);
-            console.log(`setting output: net-new-owners-file=${ownersFile.status == 'added'}`);
-            core.setOutput('net-new-owners-file', ownersFile.status == 'added');
+            console.log(`Modified file "${ownersFile.filename}" has a status of ${ownersFile.status}`);
+            const effectivelyNew = ownersFile.status == 'added' || ownersFile.status == 'renamed';
+            console.log(`setting output: net-new-owners-file=${effectivelyNew}`);
+            core.setOutput('net-new-owners-file', effectivelyNew);
+            core.setOutput('is-rename', ownersFile.status == 'renamed')
+            if (ownersFile.status === 'renamed') {
+              core.setOutput('previous-filename', ownersFile.previous_filename);
+            }
+
 
       # Only used to assert content of the OWNERS file.
       - name: Checkout Pull Request
@@ -117,6 +126,23 @@ jobs:
         with:
           chart-name: ${{ steps.check_for_owners.outputs.chart-name }}
           fail-workflow-if-locked: 'false'
+        
+      # Rename operations would produce a locking failure because main has an
+      # existing lock for the chart name. For renaming operations, evaluate if
+      # the original file in the rename matches the current lock.
+      - name: Assert renaming semantics
+        id: assert-rename-semantics
+        if: |
+          steps.populate-file-mod-type.outputs.is-rename == 'true'
+          && steps.determine-lock-status.outputs.chart-is-locked == 'true'
+        env:
+          PREVIOUS_FILENAME: ${{ steps.populate-file-mod-type.outputs.previous-filename && steps.populate-file-mod-type.outputs.previous-filename || 'unset' }}
+          CURRENT_LOCK: ${{ format('{0}/{1}', 'charts', steps.determine-lock-status.outputs.locked-to-path) }}
+          LOCKED_TO_PREVIOUS: ${{ startsWith((steps.populate-file-mod-type.outputs.previous-filename && steps.populate-file-mod-type.outputs.previous-filename || 'unset'), format('{0}/{1}', 'charts', steps.determine-lock-status.outputs.locked-to-path)) }}
+        run: |
+          echo "Current lock is set to ${CURRENT_LOCK}"
+          echo "The previous filename for this rename is: ${PREVIOUS_FILENAME}"
+          echo locked-to-previous-filename="${LOCKED_TO_PREVIOUS}" | tee -a $GITHUB_OUTPUT
 
       # Do not merge net-new OWNERS files for locked chart names. Allow a
       # modification to an existing file. The mercury-bot periodically updates
@@ -126,10 +152,14 @@ jobs:
         env:
           NET_NEW_OWNERS_FILE: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file }}
           CHART_IS_LOCKED: ${{ steps.determine-lock-status.outputs.chart-is-locked }}
-          MERGE_PR: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && steps.determine-lock-status.outputs.chart-is-locked == 'false') }}
+          CHART_LOCKED_TO_PREVIOUS: ${{ steps.determine-lock-status.outputs.chart-is-locked == 'true' && steps.assert-rename-semantics.outputs.locked-to-previous-filename == 'true' }}
+          IS_RENAME: ${{ steps.populate-file-mod-type.outputs.is-rename }}
+          MERGE_PR: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && (steps.determine-lock-status.outputs.chart-is-locked == 'false' || (steps.determine-lock-status.outputs.chart-is-locked == 'true' && steps.assert-rename-semantics.outputs.locked-to-previous-filename == 'true'))) }}
         run: |
           echo "OWNERS file is net new: ${NET_NEW_OWNERS_FILE}"
           echo "Chart name is already locked: ${CHART_IS_LOCKED}"
+          echo "This is a namespace rename: ${IS_RENAME}"
+          echo "Existing locks checked, the previous lockfile is being moved to a new path: ${CHART_LOCKED_TO_PREVIOUS}"
           echo "merge_pr=${MERGE_PR}" | tee -a $GITHUB_OUTPUT
 
       - name: Comment on PR
