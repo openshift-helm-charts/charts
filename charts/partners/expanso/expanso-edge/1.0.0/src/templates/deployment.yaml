@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "expanso-edge.fullname" . }}
+  labels:
+    {{- include "expanso-edge.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "expanso-edge.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "expanso-edge.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "expanso-edge.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: expanso-edge
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+          - expanso-edge
+          - serve
+          - --node-type
+          - {{ .Values.expansoEdge.nodeType }}
+          - --api-host
+          - {{ .Values.expansoEdge.apiHost }}
+        ports:
+        - name: api
+          containerPort: {{ .Values.expansoEdge.apiPort }}
+          protocol: TCP
+        env:
+        - name: EXPANSO_EDGE_BOOTSTRAP_URL
+          value: {{ .Values.expansoEdge.bootstrap.url | quote }}
+        {{- if .Values.expansoEdge.bootstrap.token }}
+        - name: EXPANSO_EDGE_BOOTSTRAP_TOKEN
+          value: {{ .Values.expansoEdge.bootstrap.token | quote }}
+        {{- else }}
+        - name: EXPANSO_EDGE_BOOTSTRAP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: expanso-edge-bootstrap
+              key: token
+              optional: true
+        {{- end }}
+        {{- with .Values.extraEnv }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/expanso
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /api/v1/agent/alive
+            port: api
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/v1/agent/alive
+            port: api
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "expanso-edge.fullname" . }}-config
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
