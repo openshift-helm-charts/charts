@@ -2,12 +2,12 @@
 
 image:
   repository: quay.io/expanso/expanso-edge
-  tag: "1.0.4-ubi9"
+  tag: "1.0.0-ubi9"
   pullPolicy: IfNotPresent
 
 # Expanso Edge configuration
 expansoEdge:
-  version: "1.0.4"
+  version: "1.0.0"
   nodeType: "compute"
   apiHost: "0.0.0.0"
   apiPort: 1234

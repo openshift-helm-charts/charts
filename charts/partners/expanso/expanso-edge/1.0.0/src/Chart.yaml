@@ -3,7 +3,7 @@ name: expanso-edge
 description: Expanso Edge Compute Node for edge computing workloads
 type: application
 version: 1.0.0
-appVersion: "1.0.4"
+appVersion: "1.0.0"
 kubeVersion: ">=1.24.0-0"
 home: https://expanso.io
 icon: https://expanso.io/images/logo.png
