@@ -1,0 +1,12 @@
+chart:
+  name: expanso-edge
+  shortDescription: Kubernetes-native upstream data pipelines and computing. Run AI
+    and analytics where data lives. 50-70% cost reduction.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: aronchick
+- githubUsername: wdbaruni
+vendor:
+  label: expanso
+  name: Expanso
