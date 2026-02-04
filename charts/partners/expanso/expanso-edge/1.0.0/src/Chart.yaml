@@ -1,0 +1,22 @@
+annotations:
+  charts.openshift.io/name: expanso-edge
+apiVersion: v2
+appVersion: 1.0.0
+description: Expanso Edge Compute Node for edge computing workloads
+home: https://expanso.io
+icon: https://expanso.io/images/logo.png
+keywords:
+- edge-computing
+- compute-node
+- expanso
+- openshift
+- kubernetes
+kubeVersion: '>=1.24.0-0'
+maintainers:
+- email: support@expanso.io
+  name: Expanso Team
+name: expanso-edge
+sources:
+- https://github.com/expanso/expanso-edge
+type: application
+version: 1.0.0
