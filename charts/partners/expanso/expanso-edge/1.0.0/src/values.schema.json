@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["image", "expansoEdge"],
+  "properties": {
+    "image": {
+      "type": "object",
+      "required": ["repository", "tag"],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "Container image repository"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Container image tag"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "enum": ["Always", "IfNotPresent", "Never"],
+          "description": "Image pull policy"
+        }
+      }
+    },
+    "expansoEdge": {
+      "type": "object",
+      "required": ["version", "nodeType"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Expanso Edge version"
+        },
+        "nodeType": {
+          "type": "string",
+          "enum": ["compute", "orchestrator"],
+          "description": "Node type (compute or orchestrator)"
+        },
+        "apiHost": {
+          "type": "string",
+          "description": "API host binding address"
+        },
+        "apiPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "API port number"
+        },
+        "bootstrap": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "Bootstrap URL"
+            },
+            "token": {
+              "type": "string",
+              "description": "Bootstrap token"
+            }
+          }
+        },
+        "orchestrators": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of orchestrator NATS URLs"
+        },
+        "logging": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "string",
+              "enum": ["debug", "info", "warn", "error"],
+              "description": "Log level"
+            },
+            "mode": {
+              "type": "string",
+              "description": "Logging mode"
+            }
+          }
+        }
+      }
+    },
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of replicas"
+    },
+    "resources": {
+      "type": "object",
+      "description": "Resource requests and limits"
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "description": "Create a service account"
+        },
+        "name": {
+          "type": "string",
+          "description": "Service account name"
+        }
+      }
+    }
+  }
+}
