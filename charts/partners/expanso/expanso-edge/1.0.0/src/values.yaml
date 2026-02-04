@@ -13,9 +13,11 @@ expansoEdge:
   apiPort: 1234
 
   # Bootstrap configuration
+  # WARNING: Default credentials are for testing/certification only
+  # MUST be overridden in production with valid credentials from cloud.expanso.io
   bootstrap:
     url: "https://start.cloud.expanso.io"
-    token: ""  # Set via --set or secrets
+    token: "CHANGE_ME_expanso_test_token_for_certification_only_12345"
 
   # Orchestrator connection
   orchestrators:

@@ -3,7 +3,7 @@
 [![Docker Repository on Quay](https://quay.io/repository/expanso/expanso-edge/status "Docker Repository on Quay")](https://quay.io/repository/expanso/expanso-edge)
 ![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.4.0](https://img.shields.io/badge/AppVersion-1.4.0-informational?style=flat-square)
+![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 Expanso Edge Compute Node for edge computing workloads on Kubernetes and OpenShift.
 
@@ -16,6 +16,21 @@ This Helm chart deploys the Expanso Edge compute node, enabling distributed comp
 - Kubernetes 1.19+ or OpenShift 4.10+
 - Helm 3.8+
 - PodSecurityPolicy or Pod Security Standards support (optional)
+
+## ⚠️ IMPORTANT: Production Credentials Required
+
+**The default bootstrap token in `values.yaml` is for testing/certification purposes only and WILL NOT work in production.**
+
+Before deploying to production, you **MUST**:
+1. Obtain valid credentials from [cloud.expanso.io](https://cloud.expanso.io)
+2. Override the default token using `--set` or a custom values file
+3. Never use the default `CHANGE_ME_*` token in production environments
+
+```bash
+# Example: Override with production credentials
+helm install expanso-edge ./expanso-edge \
+  --set expansoEdge.bootstrap.token=YOUR_VALID_TOKEN_FROM_CLOUD_EXPANSO_IO
+```
 
 ## Installation
 
@@ -52,10 +67,10 @@ The following table lists the configurable parameters of the Expanso Edge Comput
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `image.repository` | Container image repository | `quay.io/expanso/expanso-edge` |
-| `image.tag` | Container image tag | `1.4.0-ubi9` |
+| `image.tag` | Container image tag | `1.0.0-ubi9` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `replicaCount` | Number of replicas | `1` |
-| `expansoEdge.version` | Expanso Edge version | `1.4.0` |
+| `expansoEdge.version` | Expanso Edge version | `1.0.0` |
 | `expansoEdge.nodeType` | Node type (compute/orchestrator) | `compute` |
 | `expansoEdge.apiHost` | API host binding | `0.0.0.0` |
 | `expansoEdge.apiPort` | API port | `1234` |
