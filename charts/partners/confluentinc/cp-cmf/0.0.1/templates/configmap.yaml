@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cmf.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cmf.labels" . | nindent 4 }}
+data:
+  cmf-config.yaml: |
+{{- $cmfConf := .Values.cmf | default dict }}
+{{- if .Values.encryption }}
+    encryption:
+{{ toYaml .Values.encryption | indent 6 }}
+{{- end }}
+{{- if hasKey $cmfConf "logging" }}
+    logging:
+{{ toYaml .Values.cmf.logging | indent 6 }}
+{{- end }}
+{{- if hasKey $cmfConf "ssl" }}
+    server:
+      ssl:
+{{ toYaml .Values.cmf.ssl | indent 8 }}
+{{- end }}
+    cmf:
+{{- unset (unset (mustDeepCopy $cmfConf) "ssl") "logging"| toYaml | nindent 6 }}

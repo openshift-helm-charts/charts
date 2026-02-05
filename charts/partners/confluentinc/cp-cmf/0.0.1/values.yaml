@@ -1,0 +1,237 @@
+## Image pull secret
+imagePullSecretRef:
+
+## confluent-manager-for-apache-flink image
+image:
+  repository: confluentinc
+  name: cp-cmf
+  pullPolicy: IfNotPresent
+  tag: 2.2.0
+
+## CMF Pod Resources
+resources:
+  limits:
+    cpu: 2
+    memory: 1024Mi
+  requests:
+    cpu: 1
+    memory: 1024Mi
+
+## Load license either from K8s secret
+license:
+  ##
+  ## The license secret reference name is injected through
+  ## CONFLUENT_LICENSE environment variable.
+  ## The expected key: license.txt. license.txt contains raw license data.
+  ## Example:
+  ##   secretRef: confluent-license-for-cmf
+  secretRef: ""
+
+## Pod Security Context
+podSecurity:
+  enabled: true
+  securityContext:
+    # fsGroup and runAsUser are omitted to allow OpenShift to auto-assign from namespace range
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+## Container Security Context
+containerSecurity:
+  enabled: true
+  securityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    # runAsUser is omitted to allow OpenShift to auto-assign from namespace range
+    capabilities:
+      drop:
+        - ALL
+
+## Pod Tolerations
+## Tolerations allow the pod to be scheduled on nodes with matching taints.
+## See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for reference.
+## Example:
+## tolerations:
+## - key: "dedicated"
+##   operator: "Equal"
+##   value: "cmf"
+##   effect: "NoSchedule"
+tolerations: []
+
+## Pod Node Selector
+## Node selector allows you to constrain which nodes your pod can be scheduled on based on node labels.
+## See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector for reference.
+## Example:
+## nodeSelector:
+##   node-role: worker
+##   zone: us-west-2a
+nodeSelector: {}
+
+## Pod Annotations
+## Additional annotations to add to the pod template metadata.
+## These will be merged with the default annotations (like rollme).
+## Example:
+## podAnnotations:
+##   prometheus.io/scrape: "true"
+##   prometheus.io/port: "8080"
+podAnnotations: {}
+
+## Pod Affinity and Anti-affinity
+## Affinity allows you to constrain which nodes your pod can be scheduled on.
+## See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity for reference.
+## Example:
+## affinity:
+##   nodeAffinity:
+##     requiredDuringSchedulingIgnoredDuringExecution:
+##       nodeSelectorTerms:
+##       - matchExpressions:
+##         - key: node-role
+##           operator: In
+##           values:
+##           - worker
+##   podAntiAffinity:
+##     preferredDuringSchedulingIgnoredDuringExecution:
+##     - weight: 100
+##       podAffinityTerm:
+##         labelSelector:
+##           matchLabels:
+##             app.kubernetes.io/name: confluent-manager-for-apache-flink
+##         topologyKey: kubernetes.io/hostname
+affinity: {}
+
+### Config to control the encryption of sensitive data in the CMF database.
+# The encryption of Secrets is always enabled and cannot be disabled.
+# This configuration allows you to control the encryption key.
+# The encryption algorithm is AES with GCM mode. Please keep that in mind while providing the key.
+# The key must be a base64 encoded string. The key length must be 128 bits (16 bytes) or 256 bits (32 bytes).
+# Preferably, use 256 bits.
+# In addition to this, you need to make sure that you create the k8s secret in the namespace where the CMF is deployed.
+# And CMF's Service Account has access to the secret.
+# The secret name must be the same as the kubernetesSecretName name, and the key for the encryption key must be the same as the
+# kubernetesSecretProperty.
+# WARNING: encryption key once set cannot be changed for reasons described in the public documentation.
+# So PLEASE make sure that you set the correct key.
+encryption:
+  key:
+    kubernetesSecretName: ""
+    kubernetesSecretProperty: ""
+
+## Persistence for CMF
+## Note: Only used when cmf.database.type is set to "local" (SQLite)
+persistence:
+  # if set to false, the database will be on the pod ephemeral storage, e.g. gone when the pod stops
+  create: true
+  dataVolumeCapacity: 10Gi
+##  storageClassName: # Without the storage class, the default storage class is used.
+
+## Volumes to mount for the CMF pod.
+##
+## Example with a PVC.
+## mountedVolumes:
+##   volumes:
+##   - name: custom-volume
+##     persistentVolumeClaim:
+##       claimName: pvc-test
+##   volumeMounts:
+##   - name: custom-volume
+##     mountPath: /mnt/<path_of_your_choice>
+##
+mountedVolumes:
+  volumes:
+  volumeMounts:
+
+## Configure the CMF service for example Authn/Authz
+cmf:
+  # controls whether CMF logs stack traces in case of an error.
+  # Set to 'true' in development environments or when access to the logs is properly controlled
+  # Set to 'false' in production environments.
+  stackTraceLogging: false
+  # determines whether cmf sync's all apps from metadata on startup
+  k8s:
+    metadataSync: true
+  # determines max requests per sec to K8s API server during sync
+  # max-req-sec: 300
+  ## Database Configuration
+  ## CMF supports two database types (choose one):
+  ## 1. "local" - Uses SQLite database stored in persistent volume (default)
+  ##    - Good for: Development, testing, small deployments
+  ## 2. "jdbc" - Uses external JDBC database (PostgreSQL or SQL Server)
+  ##    - Good for: Production deployments, high availability
+  database:
+    # Type of database to use. Choose either "local" or "jdbc"
+    # WARNING: Do not change this after initial deployment without proper data migration
+    type: local
+    # JDBC database configuration (only used when type: jdbc)
+    jdbc:
+      # Database engine type. values: postgresql, sqlserver
+      engine: postgresql
+      # Database server hostname or IP address
+      url: ""
+      # Database server port 
+      port: 5432
+      # Database name (must be created beforehand)
+      database: cmf
+      # Database username
+      user: cmf
+      # Database options, string to append to the JDBC URL for extra parameters. 
+      # Eg. options: "encrypt=true;trustServerCertificate=true;" 
+      options: ""
+      
+      # Database password configuration
+      password:
+        # Name of Kubernetes secret containing the password
+        kubernetesSecretName: ""
+        # Key within the secret that contains the password
+        kubernetesSecretProperty: ""
+
+  # configures the CP Flink SQL feature
+  sql:
+    # if set to true, production level features are enabled and enforced. One of the primary features is the
+    # encryption of secrets in the CMF database.
+    production: false
+
+  # Kafka client configuration
+#  kafka:
+##     Comma-separated list of URLs that are allowed to be accessed by the OAuth bearer token.
+##     This is required for CP 8.0+ where Kafka clients need to explicitly allowlist token endpoints.
+##     Defaults to "" to allow no URLs.
+#     oauthbearerAllowedUrls: ""
+
+  # authentication:
+  #   type: mtls
+
+  # application-events:
+  #   # max events per application
+  #   max-events-per-application: 100
+
+  # application-instances:
+  #   # max instances per application
+  #   max-instances-per-application: 100
+
+## Enable Kubernetes RBAC
+# When set to true, it will create a proper role/rolebinding or cluster/clusterrolebinding based on namespaced field.
+# If a user doesn't have permission to create role/rolebinding then they can disable rbac field and
+# create required resources out of band to be used by the Operator. In this case, follow the
+# templates/clusterrole.yaml and templates/clusterrolebiding.yaml to create proper required resources.
+rbac: true
+## Creates a default service account for the CMF pod if service.account.create is set to true.
+# In order to use a custom service account, set the name field to the desired service account name and set create to false.
+# Also note that the new service account must have the necessary permissions to run the CMF pod, i.e cluster wide permissions.
+# The custom service account must have:
+# 
+# rules:
+#  - apiGroups: ["flink.apache.org"]
+#    resources: ["flinkdeployments", "flinkdeployments/status"] # Needed to manage FlinkDeployments CRs
+#    verbs: ["*"]
+#  - apiGroups: [""]
+#    resources: ["services"] # Read-only permissions needed for the flink UI
+#    verbs: ["get", "list", "watch"]
+serviceAccount:
+  create: true
+  name: ""
+# The jvmArgs parameter allows you to specify custom Java Virtual Machine (JVM) arguments that will be passed to the application container.
+# This can be useful for tuning memory settings, garbage collection, and other JVM-specific options.
+# Example :
+# jvmArgs: "-Xms512m -Xmx1024m -XX:+UseG1GC"
+
+jvmArgs:

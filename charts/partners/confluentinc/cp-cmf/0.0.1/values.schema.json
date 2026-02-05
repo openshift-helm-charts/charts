@@ -1,0 +1,248 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+        "affinity": {
+            "type": "object"
+        },
+        "cmf": {
+            "type": "object",
+            "properties": {
+                "database": {
+                    "type": "object",
+                    "properties": {
+                        "jdbc": {
+                            "type": "object",
+                            "properties": {
+                                "database": {
+                                    "type": "string"
+                                },
+                                "engine": {
+                                    "type": "string"
+                                },
+                                "options": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "object",
+                                    "properties": {
+                                        "kubernetesSecretName": {
+                                            "type": "string"
+                                        },
+                                        "kubernetesSecretProperty": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "port": {
+                                    "type": "integer"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "user": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "k8s": {
+                    "type": "object",
+                    "properties": {
+                        "metadataSync": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "sql": {
+                    "type": "object",
+                    "properties": {
+                        "production": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "stackTraceLogging": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "containerSecurity": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "securityContext": {
+                    "type": "object",
+                    "properties": {
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean"
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "encryption": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "object",
+                    "properties": {
+                        "kubernetesSecretName": {
+                            "type": "string"
+                        },
+                        "kubernetesSecretProperty": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "pullPolicy": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "imagePullSecretRef": {
+            "type": "null"
+        },
+        "jvmArgs": {
+            "type": "null"
+        },
+        "license": {
+            "type": "object",
+            "properties": {
+                "secretRef": {
+                    "type": "string"
+                }
+            }
+        },
+        "mountedVolumes": {
+            "type": "object",
+            "properties": {
+                "volumeMounts": {
+                    "type": "null"
+                },
+                "volumes": {
+                    "type": "null"
+                }
+            }
+        },
+        "nodeSelector": {
+            "type": "object"
+        },
+        "persistence": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean"
+                },
+                "dataVolumeCapacity": {
+                    "type": "string"
+                }
+            }
+        },
+        "podAnnotations": {
+            "type": "object"
+        },
+        "podSecurity": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "securityContext": {
+                    "type": "object",
+                    "properties": {
+                        "runAsNonRoot": {
+                            "type": "boolean"
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "rbac": {
+            "type": "boolean"
+        },
+        "resources": {
+            "type": "object",
+            "properties": {
+                "limits": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "type": "integer"
+                        },
+                        "memory": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "requests": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "type": "integer"
+                        },
+                        "memory": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "tolerations": {
+            "type": "array"
+        }
+    }
+}

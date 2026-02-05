@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cmf.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cmf.labels" . | nindent 4 }}
+spec:
+  # We do not want to expose the replicas as CMF is supposed to be a single instance
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "cmf.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        platform.confluent.io/origin: flink
+        {{- include "cmf.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ include "cmf.name" . }}
+      {{- else }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}
+      {{- if .Values.imagePullSecretRef}}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecretRef }}
+      {{- end }}
+      {{- if .Values.podSecurity.enabled }}
+      securityContext:
+{{ toYaml .Values.podSecurity.securityContext | indent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      containers:
+        - name: cmf
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.containerSecurity.enabled }}
+          securityContext:
+{{ toYaml .Values.containerSecurity.securityContext | indent 12 }}
+          {{- end }}
+          args:
+            - "/opt/config/cmf-config.yaml"
+            - "{{ .Values.jvmArgs }}"
+          ports:
+          - name: api-port
+            containerPort: 8080
+          volumeMounts:
+            - name: cmf-config
+              mountPath: "/opt/config"
+          {{- if .Values.persistence.create }}
+            - name: cmf-storage
+              mountPath: "/app/local"
+          {{- end }}
+          {{- if .Values.mountedVolumes.volumeMounts }}
+            {{- toYaml .Values.mountedVolumes.volumeMounts | nindent 12}}
+          {{- end }}
+          env:
+            {{- if .Values.license.secretRef }}
+            - name: CONFLUENT_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.license.secretRef }}
+                  key: license.txt
+            {{- end }}
+            {{- if and (eq .Values.cmf.database.type "jdbc") .Values.cmf.database.jdbc.password.kubernetesSecretName }}
+            - name: CMF_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cmf.database.jdbc.password.kubernetesSecretName }}
+                  key: {{ .Values.cmf.database.jdbc.password.kubernetesSecretProperty | default "password" }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 16 }}
+          livenessProbe:
+            tcpSocket:
+              port: api-port
+            failureThreshold: 5
+            periodSeconds: 20
+          # startup probe disables liveness probes, until pod has booted up
+          # and has a higher failure threshold / runs with higher frequency
+          startupProbe:
+            tcpSocket:
+              port: api-port
+            failureThreshold: 50
+            # if metadata sync is enabled we need to wait longer as we do a table scan and reinstate
+            # all apps from metadata
+            {{- if .Values.cmf.k8s.metadataSync }}
+            periodSeconds: 60
+            {{- else }}
+            periodSeconds: 5
+            {{- end }}
+
+      volumes:
+        - name: cmf-config
+          configMap:
+            name: {{ include "cmf.name" . }}
+        {{- if .Values.persistence.create }}
+        - name: cmf-storage
+          persistentVolumeClaim:
+            claimName: {{ include "cmf.name" . }}-pvc
+        {{- end }}
+        {{- if .Values.mountedVolumes.volumes }}
+          {{- toYaml .Values.mountedVolumes.volumes | nindent 8}}
+        {{- end }}

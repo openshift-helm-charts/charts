@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cmf-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  # Service selects the pods to attach to using the selectors. The selector is a key-value pair, which must match the labels on the pods.
+  selector:
+    {{- include "cmf.selectorLabels" . | nindent 4 }}
+  ports:
+    # Port for CMF service
+    - name: cmf-service-https
+      protocol: TCP
+      port: 80
+      targetPort: 8080

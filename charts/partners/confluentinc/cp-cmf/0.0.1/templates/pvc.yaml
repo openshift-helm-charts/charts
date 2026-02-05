@@ -1,0 +1,16 @@
+{{- if .Values.persistence.create -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "cmf.name" . }}-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+          storage: {{ .Values.persistence.dataVolumeCapacity }}
+    {{- if .Values.persistence.storageClassName }}
+    storageClassName: {{ .Values.persistence.storageClassName }}
+    {{- end }}
+{{- end }}
