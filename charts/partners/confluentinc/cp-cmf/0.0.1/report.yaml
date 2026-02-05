@@ -6,17 +6,17 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:6864191378336396609
-        chart-uri: ./confluent-manager-for-apache-flink-0.0.1.tgz
+        reportDigest: uint64:4272914355885050805
+        chart-uri: ./cp-cmf-0.0.1.tgz
         digests:
-            chart: sha256:6d8fb2914bf4654a4e7ca64b02621a3390dd4fe4801b96a503eea94fc0844188
-            package: 6ff4cddaeaf038d1f622396794bdb3eb9d6a6655d1f9ad5bf4d2739a15e5f98a
-        lastCertifiedTimestamp: "2026-02-05T16:25:46.672259+05:30"
+            chart: sha256:6a80dc49885154e1045c34ed295aff7516d10ef3056f3d0d564b8644cebf9301
+            package: 84e8d3fe896302507eda6ad02eee1e7db2bf6655f3da97d1ee1c1c2756a49898
+        lastCertifiedTimestamp: "2026-02-05T18:33:42.633596+05:30"
         testedOpenShiftVersion: "4.18"
         supportedOpenShiftVersions: '>=4.11'
         webCatalogOnly: false
     chart:
-        name: confluent-manager-for-apache-flink
+        name: cp-cmf
         home: https://www.confluent.io/
         sources: []
         version: 0.0.1
@@ -53,34 +53,6 @@ results:
       type: Optional
       outcome: PASS
       reason: Chart does contain NOTES.txt
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
@@ -91,10 +63,14 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
-    - check: v1.0/signature-is-valid
+    - check: v1.0/required-annotations-present
       type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
     - check: v1.1/has-kubeversion
       type: Mandatory
       outcome: PASS
@@ -103,4 +79,28 @@ results:
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
 
