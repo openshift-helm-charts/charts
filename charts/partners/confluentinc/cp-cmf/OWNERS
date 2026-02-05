@@ -1,9 +1,12 @@
 chart:
   name: cp-cmf
-  shortDescription: unknown
+  shortDescription: "Confluent Manager for Apache Flink\xAE"
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: shiremath
+- githubUsername: kumar-mallikarjuna
+- githubUsername: abhijeet2096-confluent
 vendor:
   label: confluentinc
   name: Confluent
