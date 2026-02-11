@@ -903,6 +903,27 @@ entries:
     urls:
     - N/A
     version: 25.11.0-p1
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:9aa20f6b711ef54be4d03698049a57329c62d31139823048887aa9b271cfc428
+      charts.openshift.io/lastCertifiedTimestamp: '2026-02-10T02:31:20.970136+00:00'
+      charts.openshift.io/name: Nokia CMM
+      charts.openshift.io/provider: Nokia
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-02-11T11:22:01.901746+00:00'
+      charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    description: A Helm chart for CMM in Kubernetes using operators
+    digest: bca9a9b93574098ef9be93b4b55c70728b37fa34287b8d30155f8c44a7f79b9e
+    icon: https://www.nokia.com/chart-icon.png
+    kubeVersion: '>= 1.21.0-0'
+    name: cmm-operator-k8s
+    type: application
+    urls:
+    - N/A
+    version: 26.3.0-p1
   corpay-progressoft:
   - annotations:
       charts.openshift.io/digest: sha256:39b7fdecbc249d5570a769e0814575f7d3d65a99445c0d43be5459ca05dbfc75
@@ -10809,4 +10830,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-02-11T09:52:49.937536+00:00'
+generated: '2026-02-11T11:22:01.796026+00:00'
