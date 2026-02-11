@@ -1,0 +1,99 @@
+Using config file: config.yaml
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.13.13
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:5880604193858173417
+        chart-uri: N/A
+        digests:
+            chart: sha256:9aa20f6b711ef54be4d03698049a57329c62d31139823048887aa9b271cfc428
+            package: bca9a9b93574098ef9be93b4b55c70728b37fa34287b8d30155f8c44a7f79b9e
+        lastCertifiedTimestamp: "2026-02-10T02:31:20.970136+00:00"
+        testedOpenShiftVersion: "4.20"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: true
+    chart:
+        name: cmm-operator-k8s
+        home: ""
+        sources: []
+        version: 26.3.0-p1
+        description: A Helm chart for CMM in Kubernetes using operators
+        keywords: []
+        maintainers: []
+        icon: https://www.nokia.com/chart-icon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: ""
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: Nokia CMM
+            charts.openshift.io/provider: Nokia
+            charts.openshift.io/supportURL: https://github.com/nokiacmm/helm-chart
+        kubeversion: '>= 1.21.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : quay.io/nepravee/cmm-operator:CMM26.3.0.0'
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+
