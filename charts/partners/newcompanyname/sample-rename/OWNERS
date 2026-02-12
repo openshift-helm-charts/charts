@@ -1,0 +1,10 @@
+chart:
+  name: sample-rename
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: Allda
+vendor:
+  label: newcompanyname
+  name: Red Hat
