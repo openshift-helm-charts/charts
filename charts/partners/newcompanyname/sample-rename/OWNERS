@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Allda
 vendor:
-  label: mycompanyname
+  label: newcompanyname
   name: Red Hat
