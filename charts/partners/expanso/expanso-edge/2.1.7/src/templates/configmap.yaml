@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "expanso-edge-compute.fullname" . }}-config
+  labels:
+    {{- include "expanso-edge-compute.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    api:
+      host: {{ .Values.expansoEdge.apiHost | quote }}
+      port: {{ .Values.expansoEdge.apiPort }}
+
+    webui:
+      enabled: false
+
+    compute:
+      enabled: true
+      labels:
+        {{- toYaml .Values.expansoEdge.labels | nindent 8 }}
+
+      orchestrators:
+        {{- toYaml .Values.expansoEdge.orchestrators | nindent 8 }}
+
+      allowlistedlocalpaths:
+        {{- toYaml .Values.expansoEdge.allowlistedLocalPaths | nindent 8 }}
+
+    orchestrator:
+      enabled: false
+
+    jobselection:
+      locality: {{ .Values.expansoEdge.jobSelection.locality | quote }}
+      rejectstatelessjobs: {{ .Values.expansoEdge.jobSelection.rejectStatelessJobs }}
+      acceptnetworkedjobs: {{ .Values.expansoEdge.jobSelection.acceptNetworkedJobs }}
+
+    logging:
+      level: {{ .Values.expansoEdge.logging.level | quote }}
+      mode: {{ .Values.expansoEdge.logging.mode | quote }}
