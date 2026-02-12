@@ -1,0 +1,91 @@
+# Default values for expanso-edge-compute
+
+image:
+  repository: quay.io/expanso/expanso-edge
+  tag: "2.1.5-ubi9"
+  pullPolicy: IfNotPresent
+
+# Expanso Edge configuration
+expansoEdge:
+  version: "2.1.5"
+  nodeType: "compute"
+  apiHost: "0.0.0.0"
+  apiPort: 1234
+
+  # Bootstrap configuration
+  bootstrap:
+    url: "https://start.cloud.expanso.io"
+    token: ""  # Set via --set or secrets
+
+  # Orchestrator connection
+  orchestrators:
+    - "nats://expanso-orchestrator:4222"
+
+  # Compute node labels
+  labels:
+    environment: "production"
+    cloud: "openshift"
+    marketplace: "redhat"
+
+  # Allowed local paths for workload execution
+  allowlistedLocalPaths:
+    - "/tmp"
+
+  # Job selection
+  jobSelection:
+    locality: "anywhere"
+    rejectStatelessJobs: false
+    acceptNetworkedJobs: true
+
+  # Logging
+  logging:
+    level: "info"
+    mode: "default"
+
+# Kubernetes resources
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+# Pod security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+# Service configuration (optional - for API exposure)
+service:
+  enabled: true
+  type: ClusterIP
+  port: 1234
+  targetPort: 1234
+
+# ServiceAccount
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Node selector, tolerations, affinity
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Additional environment variables
+extraEnv: []
+
+# Pod annotations
+podAnnotations: {}
+
+# Replica count (typically 1 per compute node)
+replicaCount: 1
