@@ -17,7 +17,7 @@ To check the API endpoint:
 
   kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "expanso-edge-compute.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.targetPort }}
 
-Then access: http://localhost:{{ .Values.service.port }}/api/v1/agent/alive
+Then access: http://localhost:{{ .Values.service.port }}/api/v1/health
 
 {{- if not .Values.expansoEdge.bootstrap.token }}
 

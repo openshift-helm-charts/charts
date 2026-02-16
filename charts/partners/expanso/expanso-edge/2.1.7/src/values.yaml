@@ -12,6 +12,10 @@ expansoEdge:
   apiHost: "0.0.0.0"
   apiPort: 1234
 
+  # Local mode: run without control plane connection (useful for CI/testing)
+  # When true, adds --local flag to the run command
+  localMode: false
+
   # Bootstrap configuration
   bootstrap:
     url: "https://start.cloud.expanso.io"
@@ -51,11 +55,10 @@ resources:
     cpu: 1000m
     memory: 2Gi
 
-# Security context
+# Security context (container-level; fsGroup belongs in podSecurityContext only)
 securityContext:
   runAsNonRoot: true
   runAsUser: 1000
-  fsGroup: 1000
 
 # Pod security context
 podSecurityContext:
@@ -94,7 +97,7 @@ replicaCount: 1
 livenessProbe:
   enabled: true
   httpGet:
-    path: /api/v1/agent/alive
+    path: /api/v1/health
     port: api
   initialDelaySeconds: 30
   periodSeconds: 10
@@ -105,7 +108,7 @@ livenessProbe:
 readinessProbe:
   enabled: true
   httpGet:
-    path: /api/v1/agent/alive
+    path: /api/v1/health
     port: api
   initialDelaySeconds: 10
   periodSeconds: 5

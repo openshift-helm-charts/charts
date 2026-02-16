@@ -10,5 +10,5 @@ spec:
   containers:
     - name: wget
       image: registry.access.redhat.com/ubi9/ubi-minimal:9.5
-      command: ['sh', '-c', 'curl -sf http://{{ include "expanso-edge-compute.fullname" . }}:{{ .Values.service.port }}/api/v1/agent/alive || true']
+      command: ['sh', '-c', 'curl -sf http://{{ include "expanso-edge-compute.fullname" . }}:{{ .Values.service.port }}/api/v1/health || true']
   restartPolicy: Never

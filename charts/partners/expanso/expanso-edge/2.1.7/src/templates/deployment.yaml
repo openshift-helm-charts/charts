@@ -28,11 +28,13 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command:
           - expanso-edge
-          - serve
-          - --node-type
-          - {{ .Values.expansoEdge.nodeType }}
-          - --api-host
-          - {{ .Values.expansoEdge.apiHost }}
+          - run
+          - --api-listen
+          - "{{ .Values.expansoEdge.apiHost }}:{{ .Values.expansoEdge.apiPort }}"
+          - --no-watch
+          {{- if .Values.expansoEdge.localMode }}
+          - --local
+          {{- end }}
         ports:
         - name: api
           containerPort: {{ .Values.expansoEdge.apiPort }}

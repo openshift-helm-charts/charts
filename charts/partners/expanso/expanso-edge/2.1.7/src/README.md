@@ -198,7 +198,7 @@ kubectl exec -it <pod-name> -- curl -v nats://orchestrator:4222
 Port-forward to access locally:
 ```bash
 kubectl port-forward svc/expanso-edge-compute 1234:1234
-curl http://localhost:1234/api/v1/agent/alive
+curl http://localhost:1234/api/v1/health
 ```
 
 ## OpenShift Specific Configuration

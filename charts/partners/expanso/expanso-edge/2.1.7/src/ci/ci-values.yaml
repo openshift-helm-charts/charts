@@ -1,6 +1,9 @@
 # CI values for chart-testing
-# Disables health probes so the chart installs successfully in CI
-# without a live Expanso bootstrap connection.
+# Enables local mode (no control plane connection) and disables health probes
+# so the chart installs successfully in CI without a live Expanso bootstrap connection.
+
+expansoEdge:
+  localMode: true
 
 livenessProbe:
   enabled: false
