@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "expanso-edge.fullname" . }}-test-connection"
+  name: "{{ include "expanso-edge-compute.fullname" . }}-test-connection"
   labels:
-    {{- include "expanso-edge.labels" . | nindent 4 }}
+    {{- include "expanso-edge-compute.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
   containers:
     - name: wget
-      image: registry.access.redhat.com/ubi9/ubi-minimal:latest
-      command: ['sh', '-c', 'curl -s http://{{ include "expanso-edge.fullname" . }}:{{ .Values.service.port }}/ || true']
+      image: registry.access.redhat.com/ubi9/ubi-minimal:9.5
+      command: ['sh', '-c', 'curl -sf http://{{ include "expanso-edge-compute.fullname" . }}:{{ .Values.service.port }}/api/v1/agent/alive || true']
   restartPolicy: Never
