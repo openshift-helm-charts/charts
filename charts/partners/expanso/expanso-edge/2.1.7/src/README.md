@@ -51,7 +51,7 @@ The following table lists the configurable parameters of the Expanso Edge Comput
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `image.repository` | Container image repository | `quay.io/expanso/expanso-edge` |
+| `image.repository` | Container image repository | `registry.connect.redhat.com/expanso/expanso-edge` |
 | `image.tag` | Container image tag | `2.1.7-ubi9` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `replicaCount` | Number of replicas | `1` |

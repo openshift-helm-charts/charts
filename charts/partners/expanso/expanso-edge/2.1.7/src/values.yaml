@@ -1,7 +1,7 @@
 # Default values for expanso-edge-compute
 
 image:
-  repository: quay.io/expanso/expanso-edge
+  repository: registry.connect.redhat.com/expanso/expanso-edge
   tag: "2.1.7-ubi9"
   pullPolicy: IfNotPresent
 
