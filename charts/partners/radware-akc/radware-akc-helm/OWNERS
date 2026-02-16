@@ -1,0 +1,10 @@
+chart:
+  name: radware-akc-helm
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: rdwr-mohamedt
+vendor:
+  label: radware-akc
+  name: Radware

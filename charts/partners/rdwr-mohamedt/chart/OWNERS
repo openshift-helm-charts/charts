@@ -1,0 +1,10 @@
+chart:
+  name: chart
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: rdwr-mohamedt
+vendor:
+  label: rdwr-mohamedt
+  name: Radware
