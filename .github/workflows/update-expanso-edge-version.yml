@@ -1,0 +1,141 @@
+name: Update Expanso Edge Version
+
+on:
+  schedule:
+    # Run daily at 9:00 AM UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v2
+        
+      - name: Get latest Expanso Edge version from Quay.io
+        id: get_latest_version
+        run: |
+          LATEST_TAG=$(curl -s 'https://quay.io/api/v1/repository/expanso/expanso-edge/tag/?limit=20&onlyActiveTags=true' | \
+            jq -r '.tags[] | select(.name != "latest") | .name' | \
+            sort -V | \
+            tail -1)
+          echo "Latest tag from Quay.io: $LATEST_TAG"
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          
+      - name: Get current version from values.yaml
+        id: get_current_version
+        run: |
+          CURRENT_TAG=$(grep -A1 "image:" charts/partners/expanso/expanso-edge/*/src/values.yaml | grep "tag:" | sed 's/.*tag: "\([^"]*\)".*/\1/')
+          echo "Current tag in values.yaml: $CURRENT_TAG"
+          echo "current_tag=$CURRENT_TAG" >> $GITHUB_OUTPUT
+          
+      - name: Compare versions and update if needed
+        id: compare_update
+        run: |
+          LATEST_TAG="${{ steps.get_latest_version.outputs.latest_tag }}"
+          CURRENT_TAG="${{ steps.get_current_version.outputs.current_tag }}"
+          
+          if [ "$LATEST_TAG" != "$CURRENT_TAG" ]; then
+            echo "Version update needed: $CURRENT_TAG -> $LATEST_TAG"
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "new_version=$LATEST_TAG" >> $GITHUB_OUTPUT
+            
+            # Extract version number (remove -ubi9 suffix)
+            NEW_VERSION_NUMBER=$(echo "$LATEST_TAG" | sed 's/-ubi9$//')
+            echo "new_version_number=$NEW_VERSION_NUMBER" >> $GITHUB_OUTPUT
+          else
+            echo "No update needed. Current version is already latest: $CURRENT_TAG"
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Update chart files
+        if: steps.compare_update.outputs.needs_update == 'true'
+        run: |
+          NEW_TAG="${{ steps.compare_update.outputs.new_version }}"
+          NEW_VERSION="${{ steps.compare_update.outputs.new_version_number }}"
+          CHART_DIR="charts/partners/expanso/expanso-edge"
+          
+          # Find the current version directory
+          CURRENT_DIR=$(find $CHART_DIR -maxdepth 1 -type d -name "*.*.*" | head -1)
+          
+          # Create new version directory if needed
+          NEW_DIR="$CHART_DIR/$NEW_VERSION"
+          if [ "$CURRENT_DIR" != "$NEW_DIR" ]; then
+            echo "Creating new version directory: $NEW_DIR"
+            cp -r "$CURRENT_DIR" "$NEW_DIR"
+            CHART_DIR="$NEW_DIR"
+          else
+            CHART_DIR="$CURRENT_DIR"
+          fi
+          
+          # Update values.yaml
+          echo "Updating values.yaml with tag: $NEW_TAG"
+          sed -i "s/tag: \".*\"/tag: \"$NEW_TAG\"/" "$CHART_DIR/src/values.yaml"
+          sed -i "s/version: \".*\"/version: \"$NEW_VERSION\"/" "$CHART_DIR/src/values.yaml"
+          
+          # Update Chart.yaml
+          echo "Updating Chart.yaml with version: $NEW_VERSION"
+          sed -i "s/^version: .*/version: $NEW_VERSION/" "$CHART_DIR/src/Chart.yaml"
+          sed -i "s/^appVersion: .*/appVersion: \"$NEW_VERSION\"/" "$CHART_DIR/src/Chart.yaml"
+          
+          # Update README.md version badges
+          echo "Updating README.md version badges"
+          sed -i "s/Version-[^-]*-informational/Version-$NEW_VERSION-informational/" "$CHART_DIR/src/README.md"
+          sed -i "s/AppVersion-[^-]*-informational/AppVersion-$NEW_VERSION-informational/" "$CHART_DIR/src/README.md"
+          
+          # Update README.md configuration table
+          sed -i "s/| \`image.tag\` | Container image tag | \`.*\` |/| \`image.tag\` | Container image tag | \`$NEW_TAG\` |/" "$CHART_DIR/src/README.md"
+          sed -i "s/| \`expansoEdge.version\` | Expanso Edge version | \`.*\` |/| \`expansoEdge.version\` | Expanso Edge version | \`$NEW_VERSION\` |/" "$CHART_DIR/src/README.md"
+          
+          echo "Updated files:"
+          git diff --name-only
+          
+      - name: Create Pull Request
+        if: steps.compare_update.outputs.needs_update == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore: Update Expanso Edge to version ${{ steps.compare_update.outputs.new_version }}
+            
+            - Update image tag from ${{ steps.get_current_version.outputs.current_tag }} to ${{ steps.compare_update.outputs.new_version }}
+            - Update Chart.yaml version and appVersion to ${{ steps.compare_update.outputs.new_version_number }}
+            - Update values.yaml image tag and version
+            - Update README.md version badges and configuration table
+            
+            Auto-generated by GitHub Actions workflow.
+          title: 'chore: Update Expanso Edge to version ${{ steps.compare_update.outputs.new_version }}'
+          body: |
+            ## 🤖 Automated Version Update
+            
+            This PR automatically updates the Expanso Edge Helm chart to use the latest version available on Quay.io.
+            
+            ### Changes
+            - **Previous version**: `${{ steps.get_current_version.outputs.current_tag }}`
+            - **New version**: `${{ steps.compare_update.outputs.new_version }}`
+            
+            ### Files Updated
+            - `charts/partners/expanso/expanso-edge/*/src/values.yaml` - Updated image tag and version
+            - `charts/partners/expanso/expanso-edge/*/src/Chart.yaml` - Updated chart version and appVersion  
+            - `charts/partners/expanso/expanso-edge/*/src/README.md` - Updated version badges and configuration table
+            
+            ### Verification
+            - [ ] Version update is correct
+            - [ ] All files are consistently updated
+            - [ ] Chart can be successfully installed with new version
+            
+            This PR was automatically created by the `update-expanso-edge-version` GitHub Actions workflow.
+          branch: auto-update-expanso-edge-${{ steps.compare_update.outputs.new_version_number }}
+          delete-branch: true
+          reviewers: aronchick
+          labels: |
+            automated
+            version-update
+            expanso-edge
