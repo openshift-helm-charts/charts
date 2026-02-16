@@ -1,9 +1,9 @@
 # Expanso Edge Compute - Helm Chart
 
 [![Docker Repository on Quay](https://quay.io/repository/expanso/expanso-edge/status "Docker Repository on Quay")](https://quay.io/repository/expanso/expanso-edge)
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square)
+![Version: 2.1.7](https://img.shields.io/badge/Version-2.1.7-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.4.0](https://img.shields.io/badge/AppVersion-1.4.0-informational?style=flat-square)
+![AppVersion: 2.1.7](https://img.shields.io/badge/AppVersion-2.1.7-informational?style=flat-square)
 
 Expanso Edge Compute Node for edge computing workloads on Kubernetes and OpenShift.
 
@@ -51,11 +51,11 @@ The following table lists the configurable parameters of the Expanso Edge Comput
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `image.repository` | Container image repository | `quay.io/expanso/expanso-edge-compute` |
-| `image.tag` | Container image tag | `1.4.0-ubi9` |
+| `image.repository` | Container image repository | `quay.io/expanso/expanso-edge` |
+| `image.tag` | Container image tag | `2.1.7-ubi9` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `replicaCount` | Number of replicas | `1` |
-| `expansoEdge.version` | Expanso Edge version | `1.4.0` |
+| `expansoEdge.version` | Expanso Edge version | `2.1.7` |
 | `expansoEdge.nodeType` | Node type (compute/orchestrator) | `compute` |
 | `expansoEdge.apiHost` | API host binding | `0.0.0.0` |
 | `expansoEdge.apiPort` | API port | `1234` |
