@@ -1,0 +1,25 @@
+# CI values for chart-testing
+# Fixes both image pull authentication and health probe issues
+
+# Use Quay.io image instead of Red Hat registry (no auth required for testing)
+image:
+  repository: quay.io/expanso/expanso-edge
+  tag: "2.1.7-ubi9"
+  pullPolicy: IfNotPresent
+
+# Disable health probes so the chart installs successfully in CI
+# without a live Expanso bootstrap connection
+livenessProbe:
+  enabled: false
+
+readinessProbe:
+  enabled: false
+
+# Optional: reduce resource requests for CI environments
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 256Mi
