@@ -29,6 +29,8 @@ spec:
         command:
           - expanso-edge
           - run
+          - --config
+          - /etc/expanso/config.yaml
           - --api-listen
           - "{{ .Values.expansoEdge.apiHost }}:{{ .Values.expansoEdge.apiPort }}"
           - --no-watch
