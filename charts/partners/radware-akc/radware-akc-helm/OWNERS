@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: rdwr-mohamedt
 vendor:
-  label: rdwr-mohamedt
+  label: radware-akc
   name: Radware
