@@ -89,3 +89,25 @@ podAnnotations: {}
 
 # Replica count (typically 1 per compute node)
 replicaCount: 1
+
+# Liveness probe configuration (can be disabled for CI/testing)
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /api/v1/agent/alive
+    port: api
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# Readiness probe configuration (can be disabled for CI/testing)
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /api/v1/agent/alive
+    port: api
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
