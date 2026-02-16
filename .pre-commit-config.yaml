@@ -1,0 +1,51 @@
+# pre-commit configuration for Expanso Edge OpenShift Helm chart
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+#
+# Philosophy: These hooks are LIGHTWEIGHT — lint + template render only.
+# No cluster spin-up, no image pulls. Commits stay fast.
+# For the full K8s preflight test, run: scripts/preflight.sh
+
+repos:
+  # ── Standard file hygiene ──────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '^charts/.*\.tgz$'
+      - id: end-of-file-fixer
+        exclude: '^charts/.*\.tgz$'
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+        exclude: '^charts/.*\.tgz$'
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # ── YAML linting ───────────────────────────────────────────────────────────
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [-c, .yamllint.yaml]
+        exclude: '^charts/(assets|.*\.tgz)'
+
+  # ── Helm chart validation (local hooks, no network needed) ─────────────────
+  - repo: local
+    hooks:
+      - id: helm-lint
+        name: Helm lint (expanso-edge)
+        language: script
+        entry: scripts/hooks/helm-lint.sh
+        pass_filenames: false
+        # Only trigger when chart source files change
+        files: '^charts/partners/expanso/expanso-edge/.*\.(yaml|json|tpl)$'
+        stages: [pre-commit]
+
+      - id: helm-template
+        name: Helm template render (expanso-edge)
+        language: script
+        entry: scripts/hooks/helm-template.sh
+        pass_filenames: false
+        files: '^charts/partners/expanso/expanso-edge/.*\.(yaml|json|tpl)$'
+        stages: [pre-commit]
