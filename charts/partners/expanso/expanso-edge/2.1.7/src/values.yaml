@@ -50,11 +50,11 @@ expansoEdge:
 # Kubernetes resources
 resources:
   limits:
-    cpu: 2000m
-    memory: 4Gi
+    cpu: 500m
+    memory: 512Mi
   requests:
-    cpu: 1000m
-    memory: 2Gi
+    cpu: 50m
+    memory: 64Mi
 
 # Security context (container-level; fsGroup belongs in podSecurityContext only)
 securityContext:
