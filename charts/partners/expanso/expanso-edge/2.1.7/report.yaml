@@ -99,7 +99,4 @@ results:
       reason: |-
         Image is Red Hat certified : registry.connect.redhat.com/expanso/expanso-edge:2.1.7-ubi9
         Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:9.5
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
+
