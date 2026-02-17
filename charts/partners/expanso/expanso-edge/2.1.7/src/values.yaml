@@ -12,8 +12,9 @@ expansoEdge:
   apiHost: "0.0.0.0"
   apiPort: 1234
 
-  # Local mode: run without control plane connection (useful for CI/testing)
-  # When true, adds --local flag to the run command
+  # Local mode: run without control plane connection
+  # Automatically enabled when no bootstrap token is provided
+  # Can also be explicitly set to true
   localMode: false
 
   # Bootstrap configuration

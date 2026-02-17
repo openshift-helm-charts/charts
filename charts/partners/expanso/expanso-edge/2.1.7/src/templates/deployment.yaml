@@ -34,7 +34,7 @@ spec:
           - --api-listen
           - "{{ .Values.expansoEdge.apiHost }}:{{ .Values.expansoEdge.apiPort }}"
           - --no-watch
-          {{- if .Values.expansoEdge.localMode }}
+          {{- if or .Values.expansoEdge.localMode (not .Values.expansoEdge.bootstrap.token) }}
           - --local
           {{- end }}
         ports:
