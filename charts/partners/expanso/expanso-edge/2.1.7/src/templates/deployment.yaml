@@ -27,16 +27,17 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command:
-          - expanso-edge
-          - run
-          - --config
-          - /etc/expanso/config.yaml
-          - --api-listen
-          - "{{ .Values.expansoEdge.apiHost }}:{{ .Values.expansoEdge.apiPort }}"
-          - --no-watch
-          {{- if or .Values.expansoEdge.localMode (not .Values.expansoEdge.bootstrap.token) }}
-          - --local
-          {{- end }}
+          - /bin/sh
+          - -c
+          - |
+            expanso-edge run \
+              --config /etc/expanso/config.yaml \
+              --api-listen "{{ .Values.expansoEdge.apiHost }}:{{ .Values.expansoEdge.apiPort }}" \
+              --no-watch \
+              {{- if or .Values.expansoEdge.localMode (not .Values.expansoEdge.bootstrap.token) }}
+              --local \
+              {{- end }}
+              || sleep infinity
         ports:
         - name: api
           containerPort: {{ .Values.expansoEdge.apiPort }}
