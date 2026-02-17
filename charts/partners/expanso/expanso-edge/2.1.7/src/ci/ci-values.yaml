@@ -1,5 +1,5 @@
 # CI values for chart-testing
-# Enables local mode (no control plane connection) and disables health probes
+# Enables local mode, disables health probes, and minimizes resources
 # so the chart installs successfully in CI without a live Expanso bootstrap connection.
 
 expansoEdge:
@@ -10,3 +10,11 @@ livenessProbe:
 
 readinessProbe:
   enabled: false
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi

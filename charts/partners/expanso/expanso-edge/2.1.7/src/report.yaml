@@ -72,8 +72,8 @@ results:
     reason: Chart does not contain CRDs
   - check: v1.0/chart-testing
     type: Mandatory
-    outcome: PASS
-    reason: Chart install and readiness checks passed (simulated)
+    outcome: SKIPPED
+    reason: Chart installation skipped due to local testing environment limitations
   - check: v1.1/has-kubeversion
     type: Mandatory
     outcome: PASS
