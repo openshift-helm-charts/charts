@@ -1090,6 +1090,38 @@ entries:
     urls:
     - https://charts.test.exate.co/chartrepo/exate-apigator/charts/exateapigator-0.3.0.tgz
     version: 0.3.0
+  expanso-edge:
+  - annotations:
+      charts.openshift.io/digest: sha256:7360e9f2b00f6c72e75b4745f1d1594d008208e8253a604bf7d5004b0e8ab96e
+      charts.openshift.io/lastCertifiedTimestamp: '2026-02-17T06:52:58.277541+00:00'
+      charts.openshift.io/name: expanso-edge
+      charts.openshift.io/provider: Expanso
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-02-17T06:55:13.862141+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 2.1.7
+    description: Expanso Edge Compute Node for edge computing workloads
+    digest: 6cef91c3bd3518c0786e432c970d3da05768612347ee6c5f73a55dfcfeaf7895
+    home: https://expanso.io
+    keywords:
+    - edge-computing
+    - compute-node
+    - expanso
+    - openshift
+    - kubernetes
+    kubeVersion: '>=1.24.0-0'
+    maintainers:
+    - email: support@expanso.io
+      name: Expanso Team
+    name: expanso-edge
+    sources:
+    - https://github.com/expanso/expanso-edge
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/expanso-expanso-edge-2.1.7/expanso-edge-2.1.7.tgz
+    version: 2.1.7
   exporter:
   - annotations:
       charts.openshift.io/digest: sha256:c6b3dcc6b99336093626f5b79314134031791cecb1ef1ccddc8935324fc2658c
@@ -15332,4 +15364,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-02-16T15:57:50.703945+00:00'
+generated: '2026-02-17T06:55:13.728929+00:00'
