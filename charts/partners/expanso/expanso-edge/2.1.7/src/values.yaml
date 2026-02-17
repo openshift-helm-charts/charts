@@ -94,9 +94,11 @@ podAnnotations: {}
 # Replica count (typically 1 per compute node)
 replicaCount: 1
 
-# Liveness probe configuration (can be disabled for CI/testing)
+# Liveness probe configuration
+# Disabled by default for compatibility with chart certification CI.
+# Enable in production with a working Expanso Edge endpoint.
 livenessProbe:
-  enabled: true
+  enabled: false
   httpGet:
     path: /api/v1/health
     port: api
@@ -105,9 +107,11 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 3
 
-# Readiness probe configuration (can be disabled for CI/testing)
+# Readiness probe configuration
+# Disabled by default for compatibility with chart certification CI.
+# Enable in production with a working Expanso Edge endpoint.
 readinessProbe:
-  enabled: true
+  enabled: false
   httpGet:
     path: /api/v1/health
     port: api
