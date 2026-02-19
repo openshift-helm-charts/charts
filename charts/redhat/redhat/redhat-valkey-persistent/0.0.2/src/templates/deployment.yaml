@@ -35,6 +35,22 @@ spec:
             secretKeyRef:
               key: database-password
               name: {{ .Values.database_service_name }}
+        {{- if .Values.tls.enabled }}
+        args:
+          - valkey-server
+          - --requirepass
+          - $(VALKEY_PASSWORD)
+          - --tls-port
+          - "6380"
+          - --tls-cert-file
+          - /tls/tls.crt
+          - --tls-key-file
+          - /tls/tls.key
+          - --tls-ca-cert-file
+          - /tls/tls.crt
+          - --tls-auth-clients
+          - "no"
+        {{- end }}
         image: "valkey:{{ .Values.valkey_version }}"
         imagePullPolicy: IfNotPresent
         livenessProbe:
@@ -46,13 +62,21 @@ spec:
         ports:
         - containerPort: 6379
           protocol: TCP
+        {{- if .Values.tls.enabled }}
+        - containerPort: 6380
+          protocol: TCP
+        {{- end }}
         readinessProbe:
           exec:
             command:
             - /bin/sh
             - -i
             - -c
+            {{- if .Values.tls.enabled }}
+            - test "$(valkey-cli -h 127.0.0.1 -a $VALKEY_PASSWORD --tls --cert /tls/tls.crt --key /tls/tls.key --cacert /tls/tls.crt -p 6380 ping)" == "PONG"
+            {{- else }}
             - test "$(valkey-cli -h 127.0.0.1 -a $VALKEY_PASSWORD ping)" == "PONG"
+            {{- end }}
           initialDelaySeconds: 5
           timeoutSeconds: 1
         resources:
@@ -65,10 +89,20 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/valkey/data
           name: {{ .Values.database_service_name }}-data
+        {{- if .Values.tls.enabled }}
+        - mountPath: /tls
+          name: tls-certs
+          readOnly: true
+        {{- end }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       volumes:
       - name: {{ .Values.database_service_name }}-data
         persistentVolumeClaim:
           claimName: {{ .Values.database_service_name }}
+      {{- if .Values.tls.enabled }}
+      - name: tls-certs
+        secret:
+          secretName: {{ .Values.tls.secretName }}
+      {{- end }}
 status: {}

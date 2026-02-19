@@ -19,5 +19,21 @@ spec:
       command:
         - /bin/bash
         - -ec
+        {{- if .Values.tls.enabled }}
+        - "timeout 15 valkey-cli -h {{ .Values.database_service_name }} -a $VALKEY_PASSWORD --tls --cacert /service-ca/service-ca.crt -p 6380 ping"
+        {{- else }}
         - "timeout 15 valkey-cli -h {{ .Values.database_service_name }} -a $VALKEY_PASSWORD ping"
+        {{- end }}
+      {{- if .Values.tls.enabled }}
+      volumeMounts:
+        - mountPath: /service-ca
+          name: service-ca
+          readOnly: true
+      {{- end }}
+  {{- if .Values.tls.enabled }}
+  volumes:
+    - name: service-ca
+      configMap:
+        name: {{ .Values.database_service_name }}-service-ca
+  {{- end }}
   restartPolicy: Never
