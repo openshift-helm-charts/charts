@@ -1,0 +1,22 @@
+{{- $fullName := include "cryostat.fullname" . -}}
+---
+{{- if (empty (.Values.db.provider).url) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-db
+  labels:
+    {{- include "cryostat.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: db
+  {{- with .Values.db.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.db.service.type }}
+  ports:
+    - port: {{ .Values.db.service.port }}
+  selector:
+    {{- include "cryostat.selectorLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: db
+{{- end }}

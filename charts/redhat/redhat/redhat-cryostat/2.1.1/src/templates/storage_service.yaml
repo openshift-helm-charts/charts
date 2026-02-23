@@ -1,0 +1,22 @@
+{{- $fullName := include "cryostat.fullname" . -}}
+---
+{{- if (empty (.Values.storage.provider).url) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-storage
+  labels:
+    {{- include "cryostat.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: storage
+  {{- with .Values.storage.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.storage.service.type }}
+  ports:
+    - port: {{ .Values.storage.service.port }}
+  selector:
+    {{- include "cryostat.selectorLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: storage
+{{- end }}
