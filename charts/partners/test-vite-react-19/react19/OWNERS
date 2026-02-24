@@ -1,0 +1,9 @@
+chart:
+  name: react19
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: test-vite-react-19
+  name: Red Hat, Inc.
