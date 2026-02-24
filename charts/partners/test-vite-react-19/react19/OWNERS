@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: aurne
 vendor:
   label: test-vite-react-19
   name: Red Hat, Inc.
