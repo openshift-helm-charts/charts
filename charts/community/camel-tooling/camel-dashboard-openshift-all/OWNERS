@@ -1,0 +1,10 @@
+chart:
+  name: camel-dashboard-openshift-all
+  shortDescription: Helm umbrella chart for Camel Dashboard on OpenShift
+publicPgpKey: null
+users:
+- githubUsername: gansheer
+- githubUsername: phantomjinx
+vendor:
+  label: camel-tooling
+  name: Camel Tooling

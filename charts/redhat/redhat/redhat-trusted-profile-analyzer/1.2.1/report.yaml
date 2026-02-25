@@ -1,0 +1,103 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.0
+        profile:
+            VendorType: redhat
+            version: v1.3
+        reportDigest: uint64:12074107594478457531
+        chart-uri: ./redhat-trusted-profile-analyzer-1.2.1.tgz
+        digests:
+            chart: sha256:9e1f528b8c095ec3688596782e30a055fae4db9b84f4f76e6a1421e659dad2a8
+            package: 85a7a93bda69734ff673a647f742e2c42211b4f054da0f3a0d0508c1ccf36e7d
+        lastCertifiedTimestamp: "2026-02-23T12:43:32.233431+00:00"
+        testedOpenShiftVersion: "4.20"
+        supportedOpenShiftVersions: '>=4.16'
+        webCatalogOnly: false
+    chart:
+        name: redhat-trusted-profile-analyzer
+        home: https://access.redhat.com/products/red-hat-trusted-profile-analyzer
+        sources: []
+        version: 1.2.1
+        description: An Helm chart for deploying Red Hat Trusted Profile Analyzer (RHTPA)
+        keywords: []
+        maintainers:
+            - name: Red Hat
+              email: rhtpa-support@redhat.com
+              url: https://www.redhat.com
+        icon: data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjM4IiBoZWlnaHQ9IjM4IiB2aWV3Qm94PSIwIDAgMzggMzgiPjxkZWZzPjxzdHlsZT4uZHtmaWxsOiNlMDA7fS5le2ZpbGw6I2ZmZjt9LmZ7ZmlsbDojZTBlMGUwO308L3N0eWxlPjwvZGVmcz48ZyBpZD0iYSI+PHJlY3QgY2xhc3M9ImUiIHg9IjEiIHk9IjEiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgcng9IjkiIHJ5PSI5Ii8+PHBhdGggY2xhc3M9ImYiIGQ9Im0yOCwyLjI1YzQuMjczNCwwLDcuNzUsMy40NzY2LDcuNzUsNy43NXYxOGMwLDQuMjczNC0zLjQ3NjYsNy43NS03Ljc1LDcuNzVIMTBjLTQuMjczNCwwLTcuNzUtMy40NzY2LTcuNzUtNy43NVYxMGMwLTQuMjczNCwzLjQ3NjYtNy43NSw3Ljc1LTcuNzVoMThtMC0xLjI1SDEwQzUuMDI5NCwxLDEsNS4wMjk0LDEsMTB2MThjMCw0Ljk3MDYsNC4wMjk0LDksOSw5aDE4YzQuOTcwNiwwLDktNC4wMjk0LDktOVYxMGMwLTQuOTcwNi00LjAyOTQtOS05LTloMFoiLz48L2c+PGcgaWQ9ImIiPjxwYXRoIGNsYXNzPSJkIiBkPSJtMjguNDQyNCwyNy41NTgxbC00LjgxODUtNC44MTg1Yy43MTM1LS42OTQ2LDEuMjc3Ni0xLjU1MjcsMS42MjMyLTIuNTMxNi4xMTUyLS4zMjUyLS4wNTU3LS42ODIxLS4zODA5LS43OTc0LS4zMjIzLS4xMTYyLS42ODI2LjA1NTItLjc5NjkuMzgxMy0uNzU3OCwyLjE0MzEtMi43OTQ5LDMuNTgzLTUuMDY5MywzLjU4My0yLjk2MzksMC01LjM3NS0yLjQxMTEtNS4zNzUtNS4zNzVzMi40MTExLTUuMzc1LDUuMzc1LTUuMzc1Yy4zNDQ3LDAsLjYyNS0uMjc5OC42MjUtLjYyNXMtLjI4MDMtLjYyNS0uNjI1LS42MjVjLTMuNjUzMywwLTYuNjI1LDIuOTcyMi02LjYyNSw2LjYyNXMyLjk3MTcsNi42MjUsNi42MjUsNi42MjVjMS4zMjUxLDAsMi41Nzc3LS40MDc0LDMuNjM2Mi0xLjEwNDVsNC45MjE0LDQuOTIxNGMuMTIyMS4xMjIxLjI4MjIuMTgzMS40NDI0LjE4MzFzLjMyMDMtLjA2MS40NDI0LS4xODMxYy4yNDMyLS4yNDQxLjI0MzItLjYzOTYsMC0uODgzOFoiLz48cGF0aCBkPSJtMjAuNDQyNCwyNy41NTgxbC0yLTJjLS4yNDQxLS4yNDQxLS42NDA2LS4yNDQxLS44ODQ4LDAtLjI0MzIuMjQ0MS0uMjQzMi42Mzk2LDAsLjg4MzhsLjkwNjIuOTA1OWMtNC45MTkxLS4yODA0LTguODM4OC00LjM1OTQtOC44Mzg4LTkuMzQ3OCwwLTUuMTY5NCw0LjIwNjEtOS4zNzUsOS4zNzUtOS4zNzUuMzQ0NywwLC42MjUtLjI3OTguNjI1LS42MjVzLS4yODAzLS42MjUtLjYyNS0uNjI1Yy01Ljg1ODQsMC0xMC42MjUsNC43NjY2LTEwLjYyNSwxMC42MjUsMCw1LjY5NDksNC41MDc3LDEwLjM0NDUsMTAuMTQwNiwxMC42MDA1bC0uOTU3OS45NTc2Yy0uMjQzMi4yNDQxLS4yNDMyLjYzOTYsMCwuODgzOC4xMjIxLjEyMjEuMjgyMi4xODMxLjQ0MjQuMTgzMXMuMzIwMy0uMDYxLjQ0MjQtLjE4MzFsMi0yYy4yNDMyLS4yNDQxLjI0MzItLjYzOTYsMC0uODgzOFoiLz48cGF0aCBkPSJtMjUuNSwxNy42MjVjLTIuMjc0NCwwLTQuMTI1LTEuODUwNi00LjEyNS00LjEyNXYtNC4wMjg4YzAtLjI5NDkuMjA2MS0uNTQ5OC40OTUxLS42MTEzbDMuNS0uNzQ0MWMuMDg1OS0uMDE4Ni4xNzM4LS4wMTg2LjI1OTgsMGwzLjUuNzQ0MWMuMjg5MS4wNjEuNDk1MS4zMTY0LjQ5NTEuNjExM3Y0LjAyODhjMCwyLjI3NDQtMS44NTA2LDQuMTI1LTQuMTI1LDQuMTI1Wm0tMi44NzUtNy42NDc5djMuNTIyOWMwLDEuNTg1NCwxLjI5LDIuODc1LDIuODc1LDIuODc1czIuODc1LTEuMjg5NiwyLjg3NS0yLjg3NXYtMy41MjI5bC0yLjg3NS0uNjEwOC0yLjg3NS42MTA4WiIvPjxwYXRoIGNsYXNzPSJkIiBkPSJtMjUsMTQuMzUyMWMtLjE2MDIsMC0uMzIwMy0uMDYxLS40NDI0LS4xODMxbC0xLTFjLS4yNDMyLS4yNDQxLS4yNDMyLS42Mzk2LDAtLjg4MzguMjQ0MS0uMjQ0MS42NDA2LS4yNDQxLjg4NDgsMGwuNTU3Ni41NTgxLDEuNTU3Ni0xLjU1ODFjLjI0NDEtLjI0NDEuNjQwNi0uMjQ0MS44ODQ4LDAsLjI0MzIuMjQ0MS4yNDMyLjYzOTYsMCwuODgzOGwtMiwyYy0uMTIyMS4xMjIxLS4yODIyLjE4MzEtLjQ0MjQuMTgzMVoiLz48L2c+PC9zdmc+
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.2.1
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: Red Hat Trusted Profile Analyzer
+            charts.openshift.io/provider: Red Hat
+            charts.openshift.io/supportURL: https://access.redhat.com/support
+        kubeversion: ^1.29.0
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:latest
+        Image certification skipped : registry.redhat.io/rhtpa/rhtpa-trustification-service-rhel9@sha256:ab74fd1172d27aedc77497269eccdaac21c4067fd0788c299c13a530f8788c5d
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+
