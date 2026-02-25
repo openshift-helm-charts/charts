@@ -1,0 +1,132 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:14143665437779399284
+        chart-uri: N/A
+        digests:
+            chart: sha256:62c838b50db949b1015e4232e1ec4f24257753ca4cfb9451f8fff842cbc0def4
+            package: 0a19ecabed5c061d056b16be9118fd61041ede8b9670ea5aebfbc0142d7df0dd
+        lastCertifiedTimestamp: "2026-02-25T22:53:24.489397+00:00"
+        testedOpenShiftVersion: "4.14"
+        supportedOpenShiftVersions: '>=4.1'
+        webCatalogOnly: true
+    chart:
+        name: nonamesec-ubi
+        home: ""
+        sources: []
+        version: 3.61.5
+        description: Noname Helm on k8s
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 3.61.5
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Remote Engine
+        kubeversion: '>=1.0.0-0'
+        dependencies:
+            - name: noname
+              version: 0.1.0
+              repository: file://charts/noname
+              condition: global.noname.enabled
+            - name: engine
+              version: 0.1.0
+              repository: file://charts/engine
+              condition: global.engine.enabled
+            - name: active
+              version: 0.1.0
+              repository: file://charts/active
+              condition: global.active.enabled
+            - name: platform
+              version: 0.1.0
+              repository: file://charts/platform
+              condition: global.platform.enabled
+            - name: router
+              version: 0.1.0
+              repository: file://charts/router
+              condition: global.router.enabled
+            - name: rabbitmq
+              version: 16.0.14
+              repository: file://charts/rabbitmq
+              condition: global.noname.enabled,global.rabbitmq.enabled
+            - name: nns-eso
+              version: 0.1.0
+              repository: file://charts/nns-eso
+              condition: global.nns_eso.enabled
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/rhel8/postgresql-15:1-1768365248
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/router:v3.61.5-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nginx:v3.61.5-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nats-jetstream:2.12.3-custom-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/cloud-metadata:v3.61.5-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/heavy-engine:v3.61.5-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/integrations-adapter:v3.61.5-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nogate:v3.61.5-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/platform-integrations:v3.61.5-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/light-engine:v3.61.5-ubi
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
