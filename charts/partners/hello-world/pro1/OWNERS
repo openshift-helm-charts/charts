@@ -1,0 +1,10 @@
+chart:
+  name: pro1
+  shortDescription: testing account
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: Anandreddy125
+vendor:
+  label: hello-world
+  name: Prophaze Inc.
