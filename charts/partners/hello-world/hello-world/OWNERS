@@ -1,9 +1,10 @@
 chart:
   name: hello-world
-  shortDescription: unknown
+  shortDescription: Helm chart for deploying hello-world application on OpenShift.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Anandreddy125
 vendor:
   label: hello-world
   name: Prophaze Inc.
