@@ -1,0 +1,10 @@
+chart:
+  name: pro1
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: https://github.com/Anandreddy125/ansible.git
+vendor:
+  label: kube-system
+  name: Prophaze Inc.
