@@ -1,0 +1,9 @@
+chart:
+  name: hello-world
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: hello-world
+  name: Prophaze Inc.
