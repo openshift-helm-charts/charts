@@ -1,0 +1,100 @@
+{{- $fullName := include "cryostat.fullname" . -}}
+---
+{{- if gt (int (.Values.reports).replicas) 0 -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cryostat.deploymentName" . }}-reports
+  labels:
+    {{- include "cryostat.labels" . | nindent 4 }}
+    app.kubernetes.io/component: reports
+spec:
+  replicas: {{ (.Values.reports).replicas }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "cryostat.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: reports
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.reports.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cryostat.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: reports
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        {{- include "cryostat.reportsAuthProxy" . | nindent 8 }}
+        - name: {{ printf "%s-%s" .Chart.Name "reports" }}
+          securityContext:
+            {{- toYaml (.Values.reports).securityContext | nindent 12 }}
+          image: "{{ (.Values.reports).image.repository }}:{{ (.Values.reports).image.tag }}"
+          imagePullPolicy: {{ (.Values.reports).image.pullPolicy }}
+          env:
+          - name: QUARKUS_HTTP_PORT
+            value: "{{ .Values.reports.service.httpPort }}"
+          - name: QUARKUS_LOG_LEVEL
+            value: {{ .Values.reports.debug.log.level }}
+          {{- with (.Values.reports.config).extra.envVars }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- with (.Values.reports.config).extra.envSources }}
+          envFrom:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          ports:
+          - containerPort: {{ .Values.reports.service.httpPort }}
+            protocol: TCP
+          startupProbe:
+            httpGet:
+              path: "/health"
+              port: {{ .Values.reports.service.httpPort }}
+            periodSeconds: 10
+            failureThreshold: 9
+          livenessProbe:
+            httpGet:
+              path: "/health"
+              port: {{ .Values.reports.service.httpPort }}
+            periodSeconds: 10
+            failureThreshold: 2
+          resources:
+            {{- toYaml (.Values.reports).resources | nindent 12 }}
+      {{- with (default .Values.nodeSelector .Values.reports.nodeSelector) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.affinity .Values.reports.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.tolerations .Values.reports.tolerations) }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: {{ .Release.Name }}-reports-secret
+        secret:
+          defaultMode: 0440
+          secretName: {{ .Release.Name }}-reports-secret
+      {{- if (.Values.authentication.openshift).enabled }}
+      - name: {{ .Release.Name }}-proxy-tls
+        secret:
+          secretName: {{ .Release.Name }}-proxy-tls
+      {{- else if .Values.oauth2Proxy.tls.selfSigned.enabled }}
+      - name: {{ .Release.Name }}-oauth2proxy-reports-tls
+        secret:
+          secretName: {{ .Release.Name }}-oauth2proxy-reports-tls
+      {{- end }}
+{{- end -}}

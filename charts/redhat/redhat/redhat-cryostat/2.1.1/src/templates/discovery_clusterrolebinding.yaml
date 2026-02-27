@@ -1,0 +1,16 @@
+{{- if and .Values.rbac.create .Values.core.discovery.kubernetes.enabled .Values.core.discovery.kubernetes.allowAllNamespaces -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "cryostat.fullname" . }}-discovery
+  labels:
+    {{- include "cryostat.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "cryostat.fullname" . }}-discovery
+subjects:
+- kind: ServiceAccount
+  name: {{ include "cryostat.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}
