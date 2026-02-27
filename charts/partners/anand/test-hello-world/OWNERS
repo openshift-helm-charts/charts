@@ -1,0 +1,9 @@
+chart:
+  name: test-hello-world
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: anand
+  name: Prophaze Inc.
