@@ -1,0 +1,22 @@
+{{- if gt (int (.Values.reports).replicas) 0 -}}
+{{- $fullName := include "cryostat.fullname" . -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-reports
+  labels:
+    {{- include "cryostat.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: reports
+  {{- with .Values.reports.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.reports.service.type }}
+  ports:
+    - port: {{ .Values.reports.service.httpPort }}
+      targetPort: {{ include "cryostat.core.service.scheme" . }}
+  selector:
+    {{- include "cryostat.selectorLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: reports
+{{- end -}}

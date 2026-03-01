@@ -1,0 +1,64 @@
+{{- $envVars := list }}
+{{- $portForwards := false }}
+{{- $listNum := 1 }}
+{{- if not .Values.core.ingress.enabled }}
+{{ $listNum }}. Configure the application to serve external traffic:
+{{- $listNum = add1 $listNum }}
+  ```
+{{- if .Values.core.route.enabled }}
+{{- /* Do nothing */}}
+  No actions required with this configuration.
+{{- else if .Values.core.ingress.enabled }}
+{{- /* Do nothing */}}
+  No actions required with this configuration.
+{{- else if contains "ClusterIP" .Values.core.service.type }}
+  {{- /* Do nothing */}}
+  No actions required with this configuration.
+{{- $portForwards = true }}
+{{- else if contains "NodePort" .Values.core.service.type }}
+  export NODE_IP=$(oc get nodes -n {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export NODE_PORT=$(oc get -n {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "cryostat.fullname" . }})
+{{- $envVars = list "QUARKUS_HTTP_HOST=$NODE_IP" }}
+{{- else if contains "LoadBalancer" .Values.core.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status by running 'oc get -n {{ .Release.Namespace }} -w svc/{{ include "cryostat.fullname" . }}'
+  export SERVICE_IP=$(oc get svc -n {{ .Release.Namespace }} {{ include "cryostat.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+{{- $envVars = list "QUARKUS_HTTP_HOST=$SERVICE_IP" }}
+{{- end }}
+
+{{- if not (empty $envVars) }}
+  oc -n {{ .Release.Namespace }} set env deploy --containers={{ .Chart.Name }} {{ include "cryostat.deploymentName" . }} {{ join " " $envVars }}
+{{- end }}
+  ```
+{{- end }}
+
+{{- if $portForwards }}
+
+{{ $listNum }}. Forward local port to the application's service:
+  ```
+  oc -n {{ .Release.Namespace }} wait --for=condition=available --timeout=60s deploy/{{ include "cryostat.deploymentName" . }}
+
+  export SVC_NAME=$(oc get services -n {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "cryostat.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=cryostat" --sort-by=.metadata.creationTimestamp -o jsonpath="{.items[-1:].metadata.name}")
+  oc -n {{ .Release.Namespace }} port-forward svc/$SVC_NAME {{ include "cryostat.core.service.port" . }}:{{ include "cryostat.core.service.scheme" . }}
+  ```
+  {{- $listNum = add1 $listNum }}
+{{- end }}
+
+{{ $listNum }}. Visit the application at:
+  ```
+{{- if .Values.core.route.enabled }}
+  echo {{ ternary "https" "http" .Values.core.route.tls.enabled }}://$(oc get route -n {{ .Release.Namespace }} {{ include "cryostat.fullname" . }} -o jsonpath="{.status.ingress[0].host}")
+{{- else if .Values.core.ingress.enabled }}
+{{- range $host := .Values.core.ingress.hosts -}}
+  {{- range .paths }}
+  {{ ternary "http" "https" (empty $.Values.core.ingress.tls) }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.core.service.type }}
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.core.service.type }}
+  echo http://$SERVICE_IP:{{ .Values.core.service.httpPort }}
+{{- else if contains "ClusterIP" .Values.core.service.type }}
+  {{ include "cryostat.core.service.scheme" . }}://localhost:{{ include "cryostat.core.service.port" . }}
+{{- end }}
+  ```
