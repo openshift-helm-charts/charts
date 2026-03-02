@@ -653,6 +653,56 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/multipolar-bpjstk-service-1.0.0/bpjstk-service-1.0.0.tgz
     version: 1.0.0
+  camel-dashboard-openshift-all:
+  - annotations:
+      charts.openshift.io/digest: sha256:f163e31dfa04f3b3b532ea197167e82b0185f3a8677e1960ede688ca4a6ba3b1
+      charts.openshift.io/lastCertifiedTimestamp: '2026-02-27T11:29:53.882425+01:00'
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-03-02T21:08:24.462321+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.19'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    dependencies:
+    - condition: camel-dashboard-operator.enabled
+      name: camel-dashboard-operator
+      repository: https://camel-tooling.github.io/camel-dashboard/charts
+      version: 0.1.0
+    - condition: camel-dashboard-console.enabled
+      name: camel-dashboard-console
+      repository: https://camel-tooling.github.io/camel-dashboard/charts
+      version: 0.2.2
+    - condition: hawtio-online-console-plugin.enabled
+      name: hawtio-online-console-plugin
+      repository: https://hawtio.github.io/hawtio-charts
+      version: 0.6.3
+    description: Helm umbrella chart for Camel Dashboard on OpenShift
+    digest: 3f7e5ac379b5c18645f0fff210a608b6181c041de23584120067d01e298cf371
+    home: https://camel-tooling.github.io/camel-dashboard/
+    icon: https://raw.githubusercontent.com/camel-tooling/camel-dashboard-openshift-all/refs/heads/main/icons/logo.png
+    keywords:
+    - camel
+    - dashboard
+    - operator
+    - console
+    - integration
+    - hawtio
+    - jolokia
+    - jmx
+    - openshift
+    kubeVersion: '>= 1.32'
+    maintainers:
+    - email: gfournier@apache.org
+      name: gfournier
+    name: camel-dashboard-openshift-all
+    sources:
+    - https://github.com/camel-tooling/camel-dashboard
+    - https://github.com/camel-tooling/camel-dashboard-operator
+    - https://github.com/camel-tooling/camel-dashboard-console
+    - https://github.com/hawtio/hawtio-online
+    type: application
+    urls:
+    - https://camel-tooling.github.io/camel-dashboard/charts/camel-dashboard-openshift-all-4.19.1.tgz
+    version: 4.19.1
   canvas-dmid:
   - annotations:
       charts.openshift.io/digest: sha256:947a298988ef9d58d9efd7d443f09ea8679dd4f177cdefd92da0fa036cab83e7
@@ -15588,4 +15638,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-03-02T16:03:37.943428+00:00'
+generated: '2026-03-02T21:08:24.320876+00:00'
