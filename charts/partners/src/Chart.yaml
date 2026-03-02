@@ -1,0 +1,6 @@
+apiVersion: v2
+name: demo
+description: ANRS OpenShift Certified Dashboard
+type: application
+version: 1.0.1
+appVersion: "1.0.0"
