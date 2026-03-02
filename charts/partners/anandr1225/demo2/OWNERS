@@ -1,10 +1,9 @@
 chart:
-  name: anrs-dashboard
+  name: demo2
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users:
-- githubUsername: AnandR1225
+users: []
 vendor:
   label: anandr1225
   name: Prophaze Inc.
