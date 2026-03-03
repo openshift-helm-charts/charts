@@ -1,0 +1,16 @@
+apiVersion: v2
+name: nginx
+description: A Helm chart for deploying NGINX on OpenShift (Prophaze Inc.)
+type: application
+version: 0.1.0
+appVersion: "1.21.6"
+icon: https://raw.githubusercontent.com/nginx/nginx/master/logo.svg
+keywords:
+  - nginx
+  - webserver
+  - openshift
+  - prophaze
+sources:
+  - https://github.com/Anandreddy125/charts.git  # Your personal repo is fine
+maintainers:
+  - name: Prophaze Inc.

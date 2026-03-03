@@ -1,0 +1,71 @@
+# Default values for nginx.
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: registry.access.redhat.com/ubi8/nginx-120  # Red Hat UBI image
+  pullPolicy: IfNotPresent
+  tag: "1-124"  # Specific tag for OpenShift
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podSecurityContext:
+  fsGroup: 1001  # Non-root user for OpenShift
+  runAsUser: 1001
+  runAsNonRoot: true
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1001
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Environment variables for nginx
+env:
+  - name: NGINX_PORT
+    value: "8080"
