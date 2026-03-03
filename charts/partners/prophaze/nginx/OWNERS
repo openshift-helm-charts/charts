@@ -1,0 +1,10 @@
+chart:
+  name: nginx
+  shortDescription: A Helm chart for deploying NGINX on OpenShift
+publicPgpKey: null
+providerDelivery: false
+users:
+  - githubUsername: Anandreddy125  # Your GitHub username
+vendor:
+  label: prophaze
+  name: Prophaze Inc.
