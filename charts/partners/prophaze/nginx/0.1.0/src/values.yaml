@@ -1,7 +1,7 @@
 # Default values for nginx.
 # This is a YAML-formatted file.
 
-replicaCount: 1
+replicaCount: 2
 
 image:
   repository: registry.access.redhat.com/ubi8/nginx-120  # Red Hat UBI image
