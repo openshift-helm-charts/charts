@@ -1,0 +1,16 @@
+apiVersion: v2
+name: waf
+description: Prophaze Kubernetes Web Application Firewall
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+kubeVersion: ">=1.23.0-0"
+
+home: https://prophaze.com
+
+annotations:
+  charts.openshift.io/name: "Prophaze WAF"
+
+maintainers:
+  - name: Prophaze
+    email: support@prophaze.com
