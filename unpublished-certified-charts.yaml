@@ -9559,6 +9559,52 @@ entries:
     urls:
     - N/A
     version: 3.58.17
+  - annotations:
+      charts.openshift.io/digest: sha256:8bbd68068a6e6eac361e31ecd34cc88d24a5ada957e476f9c21e4e764f0a74b7
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-04T14:16:52.554309+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-03-04T14:20:14.592574+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.61.7
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 16.0.14
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: 458eb9bba942c8855cf048462812214ff1f591ca58a294c6903bf365d4913f6a
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.61.7
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -11646,4 +11692,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-03-04T14:17:32.290762+00:00'
+generated: '2026-03-04T14:20:14.476773+00:00'
