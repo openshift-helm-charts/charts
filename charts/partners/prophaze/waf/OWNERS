@@ -1,0 +1,9 @@
+chart:
+  name: waf
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: prophaze
+  name: Prophaze Inc.
