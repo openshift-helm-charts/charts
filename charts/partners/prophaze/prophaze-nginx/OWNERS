@@ -1,0 +1,10 @@
+chart:
+  name: prophaze-nginx
+  shortDescription: Prophaze NGINX Helm chart for OpenShift
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: Anandreddy125
+vendor:
+  label: prophaze
+  name: Prophaze Inc.
