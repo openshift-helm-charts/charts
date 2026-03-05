@@ -1,0 +1,7 @@
+apiVersion: v2
+name: waf
+description: Prophaze WAF Helm Chart
+type: application
+version: 0.1.0
+appVersion: "1.0"
+icon: https://raw.githubusercontent.com/helm/helm/main/docs/images/helm.svg
