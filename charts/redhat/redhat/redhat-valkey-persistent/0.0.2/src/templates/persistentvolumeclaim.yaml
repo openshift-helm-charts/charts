@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  {{ if .Values.pvc.netapp_nfs }}
+  annotations:
+    trident.netapp.io/reclaimPolicy: Delete
+  {{ end }}
+  labels:
+    template: valkey-persistent-template
+    {{ if .Values.pvc.netapp_nfs }}
+    paas.redhat.com/appcode: {{ .Values.pvc.app_code }}
+    {{ end }}
+  name: {{ .Values.database_service_name }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.volume_capacity }}
+  {{ if .Values.pvc.netapp_nfs }}
+  storageClassName: netapp-nfs
+  volumeMode: Filesystem
+  {{ end }}
