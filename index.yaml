@@ -3496,6 +3496,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.7.0/infinispan-0.7.0.tgz
     version: 0.7.0
+  - annotations:
+      charts.openshift.io/digest: sha256:56f3f0f7d948ee07cce46127acdf1493587a760491ece648e5a0534ceeb9f0a1
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-05T08:32:05.857114+00:00'
+      charts.openshift.io/provider: Infinispan
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-03-05T08:33:37.458185+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: '16.1'
+    description: A Helm chart that lets you build and deploy Infinispan clusters.
+    digest: f089f4ca9f4ebec6d06b34ccd8b651ed9f60d4a16e0e9b58d67d8a6ed5a0bec6
+    home: https://infinispan.org/
+    icon: https://design.jboss.org/infinispan/logo/final/PNG/infinispan_icon_rgb_lightbluewhite_256px.png
+    kubeVersion: '>= 1.21.0-0'
+    maintainers:
+    - name: Infinispan
+      url: https://infinispan.org/
+    name: infinispan
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/infinispan-infinispan-0.8.0/infinispan-0.8.0.tgz
+    version: 0.8.0
   jamaibase:
   - annotations:
       charts.openshift.io/digest: sha256:bf48eb1181fa2e34065e54fcb3bfe69d59d63eacfd172c52d0193cb27e3e0424
@@ -15767,4 +15793,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-03-04T17:45:05.672616+00:00'
+generated: '2026-03-05T08:33:37.299914+00:00'
