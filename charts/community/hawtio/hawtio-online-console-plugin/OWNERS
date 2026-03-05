@@ -1,0 +1,10 @@
+chart:
+  name: hawtio-online-console-plugin
+  shortDescription: Helm chart for installing the OpenShift Console plugin for HawtIO
+publicPgpKey: null
+users:
+- githubUsername: phantomjinx
+- githubUsername: gansheer
+vendor:
+  label: hawtio
+  name: HawtIO
