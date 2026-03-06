@@ -1,0 +1,4 @@
+vendor: prophaze
+chart:
+  name: waf-testing1
+  version: 0.1.0
