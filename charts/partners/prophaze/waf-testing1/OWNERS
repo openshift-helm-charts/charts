@@ -1,10 +1,10 @@
 chart:
   name: waf-testing1
-  shortDescription: Kubernetes native WAF Helm chart
+  shortDescription: Prophaze WAF Helm Chart
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: AnandR1225
+  - AnandR1225
 vendor:
   label: prophaze
   name: Prophaze Inc.
