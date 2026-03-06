@@ -1419,6 +1419,36 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-fsm-0.1.8-ubi.6/flomesh-fsm-0.1.8-ubi.6.tgz
     version: 0.1.8-ubi.6
+  hawtio-online-console-plugin:
+  - annotations:
+      artifacthub.io/prerelease: 'true'
+      charts.openshift.io/digest: sha256:4919666bdeeb73448b9973f48335357fbb23579b82847d31f57fc9126dc3f5d4
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-06T14:29:10.410885+01:00'
+      charts.openshift.io/name: hawtio-online-console-plugin
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-03-06T15:04:01.917796+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 0.6.0
+    description: A Helm chart for installing the OpenShift Console plugin for HawtIO
+    digest: 004aed86b5d6ae3640c52e94bac3b6e080fda7b4d771344916859ec214d8a50e
+    home: https://hawt.io
+    icon: https://hawtio.github.io/hawtio-charts/hawtio-console-plugin-logo.png
+    keywords:
+    - hawtio
+    - camel
+    - console
+    - jmx
+    - react
+    kubeVersion: '>= 1.24.0'
+    name: hawtio-online-console-plugin
+    sources:
+    - https://github.com/hawtio/hawtio-online-console-plugin.git
+    type: application
+    urls:
+    - https://hawtio.github.io/hawtio-charts/hawtio-online-console-plugin-0.6.3.tgz
+    version: 0.6.3
   i2i5gcorehelm:
   - annotations:
       charts.openshift.io/digest: sha256:e189b295ee18215a63d967e51320316c819a9e59cc0541df4a0eddb917034000
@@ -15793,4 +15823,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-03-05T08:33:37.299914+00:00'
+generated: '2026-03-06T15:04:01.752103+00:00'
