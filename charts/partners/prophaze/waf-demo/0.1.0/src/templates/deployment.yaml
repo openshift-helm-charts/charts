@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: waf-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: waf-demo
+  template:
+    metadata:
+      labels:
+        app: waf-demo
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
