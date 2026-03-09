@@ -1,0 +1,6 @@
+vendor: prophaze
+name: waf-demo
+version: 0.1.0
+description: Demo WAF Helm chart
+apiVersion: v2
+appVersion: "1.0"
