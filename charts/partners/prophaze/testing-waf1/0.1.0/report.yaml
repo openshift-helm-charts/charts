@@ -1,4 +1,5 @@
-chart:
+metadata:
   name: testing-waf1
+  vendor: prophaze
   version: 0.1.0
-  apiVersion: v2
+  webCatalogOnly: false
