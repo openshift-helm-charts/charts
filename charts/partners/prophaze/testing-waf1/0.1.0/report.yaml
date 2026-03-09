@@ -1,0 +1,4 @@
+chart:
+  name: testing-waf1
+  version: 0.1.0
+  apiVersion: v2
