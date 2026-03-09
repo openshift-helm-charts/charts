@@ -1,10 +1,16 @@
+approvers:
+  - AnandR1225
+reviewers:
+  - AnandR1225
+
 chart:
   name: testing-waf1
-  shortDescription: Kubernetes native WAF Helm chart
-providerDelivery: false
-publicPgpKey: unknown
-users:
-- githubUsername: AnandR1225
+  shortDescription: Prophaze WAF Helm chart
+  providerDelivery: false
+  webCatalogOnly: false
+
 vendor:
   label: prophaze
-  name: Prophaze Inc.
+
+tool:
+  helmVersion: v2
