@@ -1,0 +1,10 @@
+chart:
+  name: waf-testing3
+  shortDescription: Prophaze WAF Helm Chart
+providerDelivery: false
+publicPgpKey: unknown
+users:
+  - AnandR1225
+vendor:
+  label: prophaze
+  name: Prophaze Inc.
