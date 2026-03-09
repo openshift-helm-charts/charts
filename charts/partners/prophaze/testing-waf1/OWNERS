@@ -1,0 +1,9 @@
+chart:
+  name: testing-waf1
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: prophaze
+  name: Prophaze Inc.
