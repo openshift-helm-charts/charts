@@ -1,0 +1,10 @@
+chart:
+  name: waf-testing2
+  shortDescription: Kubernetes native WAF Helm chart
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: AnandR1225
+vendor:
+  label: prophaze
+  name: Prophaze Inc.
