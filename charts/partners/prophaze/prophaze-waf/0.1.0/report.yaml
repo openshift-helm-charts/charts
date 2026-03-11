@@ -1,0 +1,18 @@
+metadata:
+  tool:
+    name: chart-verifier
+    version: 1.14.0
+  chart:
+    name: prophaze-waf
+    version: 0.1.0
+
+results:
+  - check: v1.0/metadata
+    type: mandatory
+    outcome: PASS
+  - check: v1.0/helm-lint
+    type: mandatory
+    outcome: PASS
+  - check: v1.0/contains-readme
+    type: mandatory
+    outcome: PASS
