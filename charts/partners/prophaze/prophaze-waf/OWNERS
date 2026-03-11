@@ -6,7 +6,7 @@ publicPgpKey: null
 providerDelivery: False
 
 users:
-  - githubUsername: AnandR1225
+  - githubUsername: nidhinmp07
 
 vendor:
   label: prophaze
