@@ -1,0 +1,7 @@
+metadata:
+  chart:
+    name: prophaze-waf
+    version: 0.1.0
+
+passed:
+- check: v1.0/helm-lint

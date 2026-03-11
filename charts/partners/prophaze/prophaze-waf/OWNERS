@@ -1,0 +1,13 @@
+chart:
+  name: prophaze-waf
+  shortDescription: Prophaze Web Application Firewall for Kubernetes
+
+publicPgpKey: null
+providerDelivery: False
+
+users:
+  - githubUsername: AnandR1225
+
+vendor:
+  label: prophaze
+  name: Prophaze
