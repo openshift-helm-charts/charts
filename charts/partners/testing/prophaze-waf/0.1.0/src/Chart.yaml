@@ -1,0 +1,6 @@
+apiVersion: v2
+name: prophaze-waf
+description: Prophaze Web Application Firewall for Kubernetes and OpenShift
+type: application
+version: 0.1.0
+appVersion: "1.0"

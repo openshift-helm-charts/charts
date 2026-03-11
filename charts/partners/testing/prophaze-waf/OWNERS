@@ -1,0 +1,10 @@
+chart:
+  name: prophaze-waf
+  shortDescription: Kubernetes native WAF Helm chart
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: nidhinmp07
+vendor:
+  label: prophaze
+  name: Prophaze Inc.
