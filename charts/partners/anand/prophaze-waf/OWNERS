@@ -7,5 +7,5 @@ publicPgpKey: unknown
 users:
 - githubUsername: nidhinmp07
 vendor:
-  label: prophaze
+  label: anand
   name: Prophaze Inc.
