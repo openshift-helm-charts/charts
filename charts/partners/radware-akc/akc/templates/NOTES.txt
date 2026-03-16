@@ -1,0 +1,7 @@
+AKC has been installed in namespace {{ .Release.Namespace }}.
+ 
+Check pods:
+  kubectl get pods -n {{ .Release.Namespace }}
+ 
+Run the test hook again (if needed):
+  helm test {{ .Release.Name }} -n {{ .Release.Namespace }}

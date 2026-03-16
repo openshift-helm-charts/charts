@@ -1,0 +1,145 @@
+{{- if  .Values.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}
+  labels:
+    app: {{ .Values.name }}  
+    {{- include "akc.labels" . | nindent 4 }}    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        app: {{ .Values.name }}
+        {{- include "akc.labels" . | nindent 8 }}       
+    spec:
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser | default 65534 }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup | default 65534 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | default 65534 }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default true }}    
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default true }}
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default false }}
+            capabilities:
+              drop: ["ALL"]          
+          ports:
+            - name: akc-aggregator
+              containerPort:  {{ .Values.service.targetPort }}
+              protocol: TCP
+            - name: rest-port
+              containerPort:  {{ .Values.rest_service.targetPort }}
+              protocol: TCP
+          args:
+            -  "-v"
+            -  "{{  .Values.args.verbose }}"
+            -  "--log_file"
+            -  "{{  .Values.args.logfile }}"
+          env:
+            - name: "MAX_NODES_PER_CLUSTER"
+              value: {{ .Values.max_nodes_per_cluster | default 0 | quote }}
+            - name: "IS_GRPC_ENCRYPTED"
+              value: {{ .Values.grpc_conn.is_grpc_encrypted | default "enabled" | quote }}
+            - name: "IS_REST_ENCRYPTED"
+              value: {{ .Values.rest_conn.is_rest_encrypted | default "enabled" | quote }}
+            #set port from the service target port
+            - name: "AKCA_PORT"
+              value: {{ .Values.service.targetPort  | quote }}
+            - name: CONFIGURATOR_CLIENT
+              value: {{ .Values.configurator.client | default "vdclient" | quote }}
+            {{- if eq .Values.configurator.client "vdclient"}}
+            - name: "CONFIGURATOR_WORKFLOW"
+              value: {{ required "Configurator workflow name is required. Use '--set aggregator.configurator.workflow' to set it" .Values.configurator.workflow  | quote }}
+            - name: "CONFIGURATOR_POOL"
+              value: {{ required "Configurator IPs pool name is required. Use '--set aggregator.configurator.pool' to set it" .Values.configurator.pool  | quote }}
+            {{- end }}
+            - name: "CONFIGURATOR_PROTOCOL"
+            {{- if eq .Values.rest_conn.is_rest_encrypted "enabled" }}
+              value: "https"
+            {{- else }}
+              value: {{ .Values.configurator.protocol | default "http" | quote }}
+            {{- end}}
+            - name: "CONFIGURATOR_IP"
+              value: {{ required "Configurator IP/Host is required. Use '--set aggregator.configurator.ip' to set it" .Values.configurator.ip  | quote }}
+            - name: "CONFIGURATOR_PORT"
+              value: {{ .Values.configurator.port | default "2189" | quote }}
+            #set configurator password
+            {{- if .Values.configurator.passSecretName }}
+            - name: CONFIGURATOR_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.configurator.passSecretName }}
+                  key: username
+            - name: CONFIGURATOR_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.configurator.passSecretName }}
+                  key: password
+            {{- end }}
+            {{- if eq .Values.configurator.client "cfgclient"}}
+            - name: "IPAM_WORKFLOW"
+              value: {{ .Values.ipam.workflow  | quote }}
+            - name: "IPAM_POOL"
+              value: {{ .Values.ipam.pool  | quote }}
+            - name: "IPAM_PROTOCOL"
+              value: {{ .Values.ipam.protocol | default "https" | quote }}
+            - name: "IPAM_IP"
+              value: {{ .Values.ipam.ip  | quote }}
+            - name: "IPAM_PORT"
+              value: {{ .Values.ipam.port | default "2189" | quote }}
+            #set configurator password
+            - name: IPAM_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ipam.passSecretName | default "akc-ipam-device-secret" }} 
+                  key: u
+            - name: IPAM_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ipam.passSecretName | default "akc-ipam-device-secret" }}
+                  key: p
+            {{- end }}
+            #loop over the arguments in aggregator.env
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key | upper }}
+              value: {{ $value | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: akc-grpc-serving-cert
+              mountPath: /var/run/grpc/serving-cert
+            - name: akc-rest-serving-cert
+              mountPath: /var/run/rest/serving-cert
+            {{- if .Values.global.debug_secret.enabled }}
+            - name: akc-debug-rest-cert
+              mountPath: /var/run/rest/debug-cert
+            {{- end }}
+            - name: akc-log-dir
+              mountPath: /akc/log # Mount the volume at the required log directory                          
+      volumes:
+        - name: akc-grpc-serving-cert
+          secret:
+            secretName: {{ .Values.grpc_secret.secretname }}   
+        - name: akc-rest-serving-cert
+          secret:
+            secretName: {{ .Values.rest_secret.secretname }}        
+        {{- if .Values.global.debug_secret.enabled }}
+        - name: akc-debug-rest-cert
+          secret:
+            secretName: {{ .Values.global.debug_secret.secretname }}
+        {{- end }}     
+        - name: akc-log-dir
+          emptyDir: {} # A temporary, writable volume with the pod's lifespan          
+{{- end }}

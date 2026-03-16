@@ -1,0 +1,32 @@
+{{- $service := .Values.service }}
+{{- $rest_service := .Values.rest_service }}
+{{- if  .Values.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}  
+  labels:
+    app: {{ .Values.name }}
+    {{- include "akc.labels" . | nindent 4 }}
+spec:
+  type: {{ $service.type }}
+  ports:
+    - port: {{ $service.port }}
+      targetPort: {{ $service.targetPort }}
+      protocol: TCP
+      name: grpc
+      {{- if and (eq "NodePort" $service.type) $service.nodePort }}
+      nodePort: {{ $service.nodePort }}
+      {{- end }}
+    - port: {{ $rest_service.port }}
+      targetPort: {{ $rest_service.targetPort }}
+      protocol: TCP
+      name : rest-port
+      {{- if and (eq "NodePort" $rest_service.type) $rest_service.nodePort }}
+      nodePort: {{ $rest_service.nodePort }}
+      {{- end }}      
+  selector:
+    app: {{ .Values.name }}
+    {{- include "akc.labels" . | nindent 4 }}
+{{- end }}

@@ -1,0 +1,228 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "AKC Configurator Helm Chart Values",
+  "description": "Values definitions for AKC Configurator Helm Chart",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Enable or disable the AKC Configurator deployment",
+      "default": false
+    },
+    "serviceAccountName": {
+      "type": "string",
+      "description": "Name of the service account to use",
+      "default": "akc-configurator",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the configurator deployment",
+      "default": "akc-configurator",
+      "minLength": 1
+    },
+    "replicaCount": {
+      "type": "integer",
+      "description": "Number of replicas for the configurator",
+      "default": 1,
+      "minimum": 1
+    },
+    "image": {
+      "type": "object",
+      "description": "Container image configuration",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "Image repository",
+          "default": "akc-configurator",
+          "minLength": 1
+        },
+        "pullPolicy": {
+          "type": "string",
+          "description": "Image pull policy",
+          "default": "IfNotPresent",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        },
+        "tag": {
+          "type": "string",
+          "description": "Image tag (overrides chart appVersion)",
+          "default": "1.8.0",
+          "minLength": 1
+
+        }
+      },
+      "required": ["repository", "pullPolicy"]
+    },
+    "alteon": {
+      "type": "object",
+      "description": "Alteon device configuration parameters",
+      "properties": {
+        "master_ip": {
+          "type": "string",
+          "description": "Alteon master IP address"
+        },
+        "backup_ip": {
+          "type": "string",
+          "description": "Alteon backup IP address"
+        },
+        "adcSecretCredential": {
+          "type": "string",
+          "description": "Name of the secret containing Alteon device credentials"
+        },
+        "user": {
+          "type": "string",
+          "description": "Alteon admin username",
+          "default": "admin",
+          "minLength": 1
+        },
+        "pass": {
+          "type": "string",
+          "description": "Alteon admin password",
+          "default": "admin",
+          "minLength": 1
+        },
+        "pip": {
+          "type": "string",
+          "description": "Alteon PIP (Proxy IP) address",
+          "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+        },
+        "pip_mask": {
+          "type": "string",
+          "description": "Alteon PIP netmask",
+          "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+        }
+      },
+      "required": ["user", "pass"]
+    },
+    "loglevel": {
+      "type": "string",
+      "description": "Logging level for the configurator",
+      "default": "DEBUG",
+      "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    },
+    "rest_service": {
+      "type": "object",
+      "description": "REST API service configuration",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "description": "Service port",
+          "default": 30188,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "nodePort": {
+          "type": "integer",
+          "description": "Node port for external access",
+          "default": 30188,
+          "minimum": 30000,
+          "maximum": 32767
+        },
+        "type": {
+          "type": "string",
+          "description": "Kubernetes service type",
+          "default": "NodePort",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "targetPort": {
+          "type": "integer",
+          "description": "Container target port",
+          "default": 30188,
+          "minimum": 1,
+          "maximum": 65535
+        }
+      },
+      "required": ["port", "type", "targetPort"]
+    },
+    "securityContext": {
+      "type": "object",
+      "description": "Security context for the configurator pods",
+      "properties": {
+        "runAsUser": {
+          "type": "integer",
+          "description": "User ID to run the container as",
+          "default": 65534,
+          "minimum": 0
+        },
+        "runAsGroup": {
+          "type": "integer",
+          "description": "Group ID to run the container as",
+          "default": 65534,
+          "minimum": 0
+        },
+        "fsGroup": {
+          "type": "integer",
+          "description": "Group ID for filesystem ownership",
+          "default": 65534,
+          "minimum": 0
+        },
+        "runAsNonRoot": {
+          "type": "boolean",
+          "description": "Require the container to run as a non-root user",
+          "default": true
+        },
+        "readOnlyRootFilesystem": {
+          "type": "boolean",
+          "description": "Mount the root filesystem as read-only",
+          "default": true
+        },
+        "allowPrivilegeEscalation": {
+          "type": "boolean",
+          "description": "Allow privilege escalation",
+          "default": false
+        }
+      },
+      "required": ["runAsUser", "runAsGroup", "fsGroup", "runAsNonRoot", "readOnlyRootFilesystem", "allowPrivilegeEscalation"]
+    },
+    "podAnnotations": {
+      "type": "object",
+      "description": "Annotations to add to configurator pods",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {}
+    },
+    "rest_conn": {
+      "type": "object",
+      "description": "REST connection configuration",
+      "properties": {
+        "is_rest_encrypted": {
+          "type": "string",
+          "description": "Enable or disable REST encryption",
+          "default": "enabled",
+          "enum": ["enabled", "disabled"]
+        }
+      },
+      "required": ["is_rest_encrypted"]
+    },
+    "rest_secret": {
+      "type": "object",
+      "description": "REST TLS secret configuration",
+      "properties": {
+        "secretname": {
+          "type": "string",
+          "description": "Name of the secret containing REST certificates",
+          "default": "akc-rest-serving-cert",
+          "minLength": 1
+        },
+        "ca": {
+          "type": "string",
+          "description": "Base64-encoded CA certificate",
+          "minLength": 1
+        },
+        "crt": {
+          "type": "string",
+          "description": "Base64-encoded TLS certificate",
+          "minLength": 1
+        },
+        "key": {
+          "type": "string",
+          "description": "Base64-encoded TLS private key",
+          "minLength": 1
+        }
+      },
+      "required": ["secretname", "ca", "crt", "key"]
+    }
+  },
+  "required": []
+}

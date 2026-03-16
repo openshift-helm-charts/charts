@@ -1,0 +1,113 @@
+{{- $service := .Values.service }}
+{{- $rest_service := .Values.rest_service }}
+{{- if  .Values.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}  
+  labels:
+    app: {{ .Values.name }}
+    {{- include "akc.labels" . | nindent 4 }}
+spec:
+  type: {{ $rest_service.type }}
+  ports:
+    - port: {{ $rest_service.port }}
+      targetPort: {{ $rest_service.targetPort }}
+      protocol: TCP
+      name : rest-port
+      {{- if and (eq "NodePort" $rest_service.type) $rest_service.nodePort }}
+      nodePort: {{ $rest_service.nodePort }}
+      {{- end }}
+  selector:
+    app: {{ .Values.name }}
+    {{- include "akc.labels" . | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}
+  labels:
+    app: {{ .Values.name }}  
+    {{- include "akc.labels" . | nindent 4 }}    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        app: {{ .Values.name }}
+        {{- include "akc.labels" . | nindent 8 }}       
+    spec:
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser | default 65534 }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup | default 65534 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | default 65534 }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default true }}    
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default true }}
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default false }}
+            capabilities:
+              drop: ["ALL"]           
+          env:
+            - name: "IS_REST_ENCRYPTED"
+              value: {{ .Values.rest_conn.is_rest_encrypted | default "enabled" | quote }}
+            #set ....
+            - name: ALTEON_MASTER_IP
+              value: {{  .Values.alteon.master_ip  | default "NONE" | quote }}
+            - name: ALTEON_BACKUP_IP
+              value: {{ .Values.alteon.backup_ip  | default "NONE" | quote }}
+            - name: ALTEON_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.alteon.adcSecretCredential | default "akc-alteon-device-secret" }} 
+                  key: u            
+            - name: ALTEON_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.alteon.adcSecretCredential | default "akc-alteon-device-secret" }}
+                  key: p
+            - name: LOG_LEVEL
+              value: {{ .Values.loglevel | default "INFO" | quote }}
+            - name: ALTEON_PIP
+              value: {{ .Values.alteon.pip  | default "NONE"| quote }}
+            - name: ALTEON_PIP_MASK
+              value: {{ .Values.alteon.pip_mask  | default "255.255.255.255"| quote }}
+            #loop over the arguments in configurator.env
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key | upper }}
+              value: {{ $value | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: akc-rest-serving-cert
+              mountPath: /var/run/rest/serving-cert
+            - name: akc-log-dir
+              mountPath: /akc/log/ # Mount the volume at the required log directory              
+            - name: akc-tmp-dir
+              mountPath: /tmp/ # created for using by Gunicorn tempfile.mkstemp()
+      volumes:
+        - name: akc-rest-serving-cert
+          secret:
+            secretName: {{ .Values.rest_secret.secretname }}  
+        - name: akc-log-dir
+          emptyDir: {} # A temporary, writable volume with the pod's lifespan                       
+        - name: akc-tmp-dir
+          emptyDir: {} # A temporary, writable volume with the pod's lifespan
+{{- end }}

@@ -1,0 +1,98 @@
+{{- if  .Values.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}
+  labels:
+    {{- include "akc.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        app: {{ .Values.name }}
+        {{- include "akc.labels" . | nindent 8 }}  
+    spec:
+      serviceAccountName: akc-controller
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser | default 65534 }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup | default 65534 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | default 65534 }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default true }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default true }}
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default false }}
+            capabilities:
+              drop: ["ALL"]
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort:  {{ .Values.rest_service.targetPort }}
+              protocol: TCP
+          args:
+            -  "-v"
+            -  "{{  .Values.args.verbose }}"
+            -  "--log_file"
+            -  "{{  .Values.args.logfile }}"
+            -  "--tls-cert-file"
+            -  "{{  .Values.args.cert }}"
+            -  "--tls-private-key-file"
+            -  "{{  .Values.args.key }}"
+          env:
+            - name: "IS_GRPC_ENCRYPTED"
+              value: {{ .Values.grpc_conn.is_grpc_encrypted | default "enabled" | quote }}
+            - name: "AKC_UID"
+              value: {{ required "Controller identifier (e.g. cluster name) is required. Use '--set controller.uid' to set it" .Values.uid  | default "local_akc" |quote }}
+            - name: "AGGREGATOR_IP"
+              value: {{ required "Aggregator ip/host is required. Use '--set controller.aggregator_ip' to set it" .Values.aggregator_ip  | quote }}
+            - name: "AGGREGATOR_PORT"
+              value: {{ .Values.aggregator_port | default "30051" | quote }}
+            - name: "CONTROLLER_RECONCILE_PERIOD"
+              value: {{ .Values.controller_reconcile_period | default "3600" | quote }}
+            - name: "INFORMER_MONITORING_PERIOD"
+              value: {{ .Values.informer_monitoring_period | default "5" | quote }}
+            - name: "DIRECT_ACCESS"
+              value: {{ .Values.direct_access | default "disable" | quote }}
+            - name: "CIPHER_VALIDATION"
+              value: {{ .Values.cipher_validation | default "enable" | quote }}
+            #loop over the arguments in aggregator.env
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key | upper }}
+              value: {{ $value | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: serving-cert
+              mountPath: /var/run/webhook/serving-cert
+            - name: akc-grpc-serving-cert
+              mountPath: /var/run/grpc/serving-cert
+            {{- if .Values.global.debug_secret.enabled }}
+            - name: akc-debug-rest-cert
+              mountPath: /var/run/rest/debug-cert
+            {{- end }}
+            - name: akc-log-dir
+              mountPath: /akc/log # Mount the volume at the required log directory
+      volumes:
+        - name: serving-cert
+          secret:
+            secretName: {{ .Values.secret.secretname }}
+        - name: akc-grpc-serving-cert
+          secret:
+            secretName: {{ .Values.grpc_secret.secretname }}
+        {{- if .Values.global.debug_secret.enabled }}
+        - name: akc-debug-rest-cert
+          secret:
+            secretName: {{ .Values.global.debug_secret.secretname }}
+        {{- end }}
+        - name: akc-log-dir
+          emptyDir: {} # A temporary, writable volume with the pod's lifespan
+{{- end }}

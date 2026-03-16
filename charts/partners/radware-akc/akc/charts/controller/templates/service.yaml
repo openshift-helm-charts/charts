@@ -1,0 +1,30 @@
+{{- $service := .Values.service }}
+{{- $rest_service := .Values.rest_service }}
+{{- $validator_service := .Values.validator_service }}
+{{- if  .Values.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}  
+  labels:
+    app: {{ .Values.name }}
+    {{- include "akc.labels" . | nindent 4 }}
+spec:
+  type: {{ $service.type }}
+  ports:
+    - port: {{ $rest_service.port }}
+      targetPort: {{ $rest_service.targetPort }}
+      protocol: TCP
+      name : http
+      {{- if and (eq "NodePort" $service.type) $rest_service.nodePort }}
+      nodePort: {{ $rest_service.nodePort }}
+      {{- end }}
+    - port: {{ $validator_service.port }}
+      targetPort: {{ $validator_service.targetport }}
+      protocol: TCP
+      name : https
+  selector:
+    app: {{ .Values.name }}
+    {{- include "akc.labels" . | nindent 4 }}
+{{- end }}

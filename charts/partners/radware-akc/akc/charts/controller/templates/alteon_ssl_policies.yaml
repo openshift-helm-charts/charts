@@ -1,0 +1,140 @@
+{{- if  .Values.enabled }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: alteonsslpolicies.alteon.radware.com
+  labels:
+    app.kubernetes.io/managed-by: "Helm"
+  annotations:
+    meta.helm.sh/release-name: {{.Values.name }}
+    meta.helm.sh/release-namespace: {{.Values.global.namespace }}
+    helm.sh/resource-policy: keep
+spec:
+  group: alteon.radware.com
+  scope: Namespaced
+  names:
+    kind: alteonsslpolicy
+    listKind: alteonsslpolicylist
+    plural: alteonsslpolicies
+    singular: alteonsslpolicy
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                secRenegotiation:
+                  type: string
+                  description: "secRenegotiation 1-1024, unlimited. default 5"
+                  maxLength: 32
+                  pattern: "^(?:unlimited|(?:0|[1-9][0-9]{0,2}|1024))$"
+                  default: "5"
+                frontEndSSL:
+                  type: object
+                  properties:
+                    encryption:
+                      type: string
+                      description: "Frontend SSL Encryption. Default: Enable.."
+                      pattern: "^(?i)(enable|disable)$"
+                      default: "enable"
+                    authenticationPolicyID:
+                      type: string
+                      description: "Authentication Policy ID (Alphanumeric, must exist in Alteon/we must create)"
+                      maxLength: 128
+                      pattern: "^[a-zA-Z0-9]+$"
+                    supportedCiphers:
+                      type: string
+                      description: "Supported Ciphers (overrides cipher suite type, allows ':' delimiter). Default: 'Main'."
+                      default: "Main"
+                      pattern: "^$|([Mm]ain|(?:[A-Z0-9]+[-_])*[A-Z0-9]+(?:[-_][A-Z0-9]+)*(?::(?:[A-Z0-9]+[-_])*[A-Z0-9]+(?:[-_][A-Z0-9]+)*)?)$"
+                      maxLength: 893
+                    allowedSSLVersions:
+                      type: object
+                      properties:
+                        TLS1_0:
+                          type: string
+                          pattern: "^(?i)(|enable|disable)$"
+                          default: "disable"
+                        TLS1_1:
+                          type: string
+                          pattern: "^(?i)(|enable|disable)$"
+                          default: "disable"
+                        TLS1_2:
+                          type: string
+                          pattern: "^(?i)(|enable|disable)$"
+                          default: "enable"
+                        TLS1_3:
+                          type: string
+                          pattern: "^(?i)(|enable|disable)$"
+                          default: "enable"
+                    clientAuthentication:
+                      type: string
+                      description: "Client Authentication policy parameter that is relevant only if client-auth is enabled"
+                      pattern: "^(?i)(|enable|disable)$"
+                      default: "disable"
+                    caverity:
+                      type: string
+                      description: "client authentication policy parameter that is relevant only if client-auth is enabled"
+                      pattern: "^(?i)(|require|optional|none)$"
+                      default: "require"
+                    intermidiateCA:
+                      type: string
+                      description: "list of secrets that each includes a Intermidiate Trust CA certificates."
+                      maxLength: 128
+                      pattern: "^[a-zA-Z0-9]+$"
+                    caSecret:
+                      type: string
+                      description: "list of secrets that each includes a Trust CA certificate."
+                      maxLength: 128
+                      pattern: "^[a-zA-Z0-9]+$"
+                    sessionReuse:
+                      type: string
+                      pattern: "^(?i)(|enable|inherit|disable)$"
+                      default: "inherit"
+                backEndSSL:
+                  type: object
+                  properties:
+                    encryption:
+                      type: string
+                      pattern: "^(?i)(|enable|disable)$"
+                      default: "disable"
+                    includeSNI:
+                      type: string
+                      pattern: "^(?i)(|enable|disable)$"
+                      description: "Include SNI. Default: Enable."
+                      default: "disable"
+                    supportedCiphers:
+                      type: string
+                      description: "Supported Ciphers (overrides cipher suite type, allows ':' delimiter). Default: 'Main'."
+                      default: "Main"
+                      pattern: "^$|([Mm]ain|(?:[A-Z0-9]+[-_])*[A-Z0-9]+(?:[-_][A-Z0-9]+)*(?::(?:[A-Z0-9]+[-_])*[A-Z0-9]+(?:[-_][A-Z0-9]+)*)?)$"
+                      maxLength: 893
+                    allowedSSLVersions:
+                      type: object
+                      properties:
+                        TLS1_0:
+                          type: string
+                          pattern: "^(?i)(|enable|disable)$"
+                          default: "disable"
+                        TLS1_1:
+                          type: string
+                          pattern: "^(?i)(|enable|disable)$"
+                          default: "disable"
+                        TLS1_2:
+                          type: string
+                          pattern: "^(?i)(|enable|disable)$"
+                          default: "enable"
+                        TLS1_3:
+                          type: string
+                          pattern: "^(?i)(|enable|disable)$"
+                          default: "enable"
+                    sessionReuse:
+                      type: string
+                      pattern: "^(?i)(|enable|inherit|disable)$"
+                      default: "inherit"
+{{- end }}

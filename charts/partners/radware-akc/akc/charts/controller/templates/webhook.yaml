@@ -1,0 +1,34 @@
+{{- if  .Values.webhook.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ .Values.webhook.name }}
+webhooks:
+  - name: {{ .Values.webhook.name }}
+    matchPolicy: {{ .Values.webhook.matchpolicy }}
+    #objectSelector:
+    #  matchLabels:
+    #    AlteonDevice: 10.10.1.1
+    rules:
+      - apiGroups: ["*"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE", "DELETE"]
+        resources: ["services"]
+        scope: "*"
+      - apiGroups: ["alteon.radware.com"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE", "DELETE"]
+        resources: ["alteonsslpolicies","alteoncertgroups"]
+        scope: "*"
+    admissionReviewVersions: ["v1", "v1beta1"]
+    clientConfig:
+      service:
+        name: {{ .Values.name }}
+        namespace: {{.Values.global.namespace }}
+        path: {{ .Values.webhook.path }}
+        port: {{ .Values.webhook.port }}
+      caBundle: {{ .Values.secret.crt }}
+    sideEffects: None
+    timeoutSeconds: {{ .Values.webhook.timeout }}
+    failurePolicy: {{ .Values.webhook.failpolicy }}
+{{- end }}

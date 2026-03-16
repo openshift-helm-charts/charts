@@ -1,0 +1,23 @@
+annotations:
+  charts.openshift.io/name: akc
+apiVersion: v2
+appVersion: 1.8.0
+dependencies:
+- condition: controller.enabled
+  name: controller
+  repository: file://charts/controller
+  version: 1.8.0
+- condition: aggregator.enabled
+  name: aggregator
+  repository: file://charts/aggregator
+  version: 1.8.0
+- condition: configurator.enabled
+  name: configurator
+  repository: file://charts/configurator
+  version: 1.8.0
+description: The parent chart for Radware AKC
+icon: https://www.radware.com/favicon.ico
+kubeVersion: '>=1.23.0-0'
+name: akc
+type: application
+version: 1.8.0

@@ -1,0 +1,55 @@
+{{- if  .Values.enabled }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: alteoncertgroups.alteon.radware.com
+  labels:
+    app.kubernetes.io/managed-by: "Helm"
+  annotations:
+    meta.helm.sh/release-name: {{.Values.name }}
+    meta.helm.sh/release-namespace: {{.Values.global.namespace }}
+    helm.sh/resource-policy: keep
+spec:
+  group: alteon.radware.com
+  scope: Namespaced
+  names:
+    kind: alteoncertgroup
+    listKind: alteoncertgrouplist
+    plural: alteoncertgroups
+    singular: alteoncertgroup
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:   # ✅ schema root
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                groupDescription:
+                  type: string
+                  description: "Optional description of the certificate group"
+                groupType:
+                  type: string
+                  pattern: "^(?i)(Certificate|IntermediateCA|TrustedCA)$"
+                  default: "Certificate"
+                  description: "Defines the type of the group"
+                defaultCertificate:
+                  type: string
+                  description: "Name of the default certificate (required if groupType=Certificate)"
+                certificates:
+                  type: array
+                  description: "List of certificates belonging to this group"
+                  items:
+                    type: string
+                chainMode:
+                  type: string
+                  pattern: "^(?i)(ByKey|ByName|)$"
+                  default: ""
+                  description: "Mode for handling intermediate CA chains (required if groupType=IntermediateCA)"
+              required:
+                - groupType
+                - certificates
+{{- end }}

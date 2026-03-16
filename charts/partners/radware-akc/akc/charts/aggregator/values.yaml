@@ -1,0 +1,90 @@
+# Values definitions for AKC Controller
+
+
+enabled: false
+serviceAccountName: "akc-aggregator"
+name: "akc-aggregator"
+replicaCount: 1
+
+## maximum nodes for each service per cluster, specify 0 for unlimited
+max_nodes_per_cluster: 0
+
+image:
+  repository: ghcr.io/rdwr-ci-reports/akc-aggregator
+  pullPolicy: IfNotPresent
+  tag: 1.8.0
+
+args:
+  verbose: 1
+  logfile: "/akc/log/akc_aggregator.log"
+
+#configurator (vdirect) parameters
+configurator:
+  #workflow: "workflow name"
+  #pool: "pool" "ip pool name"
+  #ip: "vdirect ip"
+  port: 30188
+  #passSecretName: "akc-ipam-device-secret"
+# WARNING! The configurator "user" and "password" are inserted for future use 
+# when authenticating a connection to the configurator.
+# Currently they have dummy values and are not used.
+  user: "root"
+  pass: "password"
+  client: "cfgclient"
+ipam:
+  #workflow: "workflow name"
+  #pool: "pool" "ip pool name"
+  #ip: "vdirect ip"
+  port: 2189
+  #passSecretName: "akc-ipam-device-secret"
+  user: "root"
+  pass: "password"
+  client: "vdclient"
+
+
+#env variables that can easily be set e.g. '--set aggregator.env.max_inactivity=20'
+env:
+  max_delay: 120
+  max_inactivity: 30
+  apply_retry: 600
+  reconciliation_to: 43200
+  ageout_to: 120
+  assets_sync_period: 2
+      
+
+service:
+  type: NodePort
+  port: 30051
+  targetPort: 5778
+  nodePort: 30051
+
+# REST port 
+rest_service:
+  port: 30081
+  nodePort: 30081
+  type: NodePort
+  targetPort: 30081
+
+securityContext:
+  runAsUser:  65534
+  runAsGroup: 65534
+  fsGroup:  65534
+  runAsNonRoot: true
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  
+grpc_conn:
+  is_grpc_encrypted: "enabled"
+
+podAnnotations: {}
+
+rest_conn:
+  is_rest_encrypted: "enabled"
+  
+# GRPC  secret
+grpc_secret:
+  secretname: "akc-grpc-serving-cert"
+
+# REST  secret
+rest_secret:
+  secretname: "akc-rest-serving-cert"

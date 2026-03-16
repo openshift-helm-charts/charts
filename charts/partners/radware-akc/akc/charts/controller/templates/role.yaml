@@ -1,0 +1,44 @@
+
+{{- if  .Values.enabled }}
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}
+rules:
+- apiGroups: [""]
+  resources: ["services", "events", "nodes", "secrets"]
+  verbs: ["get", "watch", "list", "update"]
+- apiGroups: [""]
+  resources: ["services/status"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: ["discovery.k8s.io"]
+  resources: ["endpointslices"]
+  verbs: ["get", "watch", "list", "update"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses", "ingresses/status"]
+  verbs: ["get", "watch", "list", "update"]
+- apiGroups: ["alteon.radware.com"]
+  resources: ["alteonsslpolicies","alteoncertgroups"]
+  verbs: ["get", "watch", "list", "update"] 
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{.Values.global.namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Values.name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.name }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.name }}
+    namespace:  {{.Values.global.namespace }}
+
+{{- end }}

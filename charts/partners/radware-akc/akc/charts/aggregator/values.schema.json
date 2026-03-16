@@ -1,0 +1,390 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "AKC Aggregator Helm Chart Values",
+  "description": "Values definitions for AKC Aggregator Helm Chart",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Enable or disable the AKC Aggregator deployment",
+      "default": false
+    },
+    "serviceAccountName": {
+      "type": "string",
+      "description": "Name of the service account to use",
+      "default": "akc-aggregator",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the aggregator deployment",
+      "default": "akc-aggregator",
+      "minLength": 1
+    },
+    "replicaCount": {
+      "type": "integer",
+      "description": "Number of replicas for the aggregator",
+      "default": 1,
+      "minimum": 1
+    },
+    "max_nodes_per_cluster": {
+      "type": "integer",
+      "description": "Maximum nodes for each service per cluster, specify 0 for unlimited",
+      "default": 0,
+      "minimum": 0
+    },
+    "image": {
+      "type": "object",
+      "description": "Container image configuration",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "Image repository",
+          "default": "akc-aggregator",
+          "minLength": 1
+        },
+        "pullPolicy": {
+          "type": "string",
+          "description": "Image pull policy",
+          "default": "IfNotPresent",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        },
+        "tag": {
+          "type": "string",
+          "description": "Image tag (overrides chart appVersion)",
+          "default": "1.8.0",
+          "minLength": 1
+
+        }
+      },
+      "required": ["repository", "pullPolicy"]
+    },
+    "args": {
+      "type": "object",
+      "description": "Command line arguments for the aggregator",
+      "properties": {
+        "verbose": {
+          "type": "integer",
+          "description": "Verbosity level for logging",
+          "default": 1,
+          "minimum": 0
+        },
+        "logfile": {
+          "type": "string",
+          "description": "Path to the log file",
+          "default": "/akc/log/akc_aggregator.log",
+          "minLength": 1
+        }
+      },
+      "required": ["verbose", "logfile"]
+    },
+    "configurator": {
+      "type": "object",
+      "description": "Configurator (vDirect) parameters for Alteon configuration",
+      "properties": {
+        "workflow": {
+          "type": "string",
+          "description": "Workflow name for configurator"
+        },
+        "pool": {
+          "type": "string",
+          "description": "IP pool name for configurator"
+        },
+        "ip": {
+          "type": "string",
+          "description": "vDirect IP address for configurator"
+        },
+        "port": {
+          "type": "integer",
+          "description": "Port number for configurator service",
+          "default": 30188,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "passSecretName": {
+          "type": "string",
+          "description": "Name of the secret containing configurator credentials"
+        },
+        "user": {
+          "type": "string",
+          "description": "Configurator username (currently not used, placeholder for future authentication)",
+          "default": "root",
+          "minLength": 1
+        },
+        "pass": {
+          "type": "string",
+          "description": "Configurator password (currently not used, placeholder for future authentication)",
+          "default": "password",
+          "minLength": 1
+        },
+        "client": {
+          "type": "string",
+          "description": "Configurator client identifier",
+          "default": "cfgclient",
+          "minLength": 1
+        }
+      },
+      "required": ["port", "user", "pass", "client"]
+    },
+    "ipam": {
+      "type": "object",
+      "description": "IPAM (IP Address Management) parameters",
+      "properties": {
+        "workflow": {
+          "type": "string",
+          "description": "Workflow name for IPAM"
+        },
+        "pool": {
+          "type": "string",
+          "description": "IP pool name for IPAM"
+        },
+        "ip": {
+          "type": "string",
+          "description": "vDirect IP address for IPAM"
+        },
+        "port": {
+          "type": "integer",
+          "description": "Port number for IPAM service",
+          "default": 2189,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "passSecretName": {
+          "type": "string",
+          "description": "Name of the secret containing IPAM credentials"
+        },
+        "user": {
+          "type": "string",
+          "description": "IPAM username",
+          "default": "root",
+          "minLength": 1
+        },
+        "pass": {
+          "type": "string",
+          "description": "IPAM password",
+          "default": "password",
+          "minLength": 1
+        },
+        "client": {
+          "type": "string",
+          "description": "IPAM client identifier",
+          "default": "vdclient",
+          "minLength": 1
+        }
+      },
+      "required": ["port", "user", "pass", "client"]
+    },
+    "env": {
+      "type": "object",
+      "description": "Environment variables that can be set with '--set aggregator.env.param=value'",
+      "properties": {
+        "max_delay": {
+          "type": "integer",
+          "description": "Maximum delay in seconds",
+          "default": 120,
+          "minimum": 0
+        },
+        "max_inactivity": {
+          "type": "integer",
+          "description": "Maximum inactivity period in seconds",
+          "default": 30,
+          "minimum": 0
+        },
+        "apply_retry": {
+          "type": "integer",
+          "description": "Apply retry timeout in seconds",
+          "default": 600,
+          "minimum": 0
+        },
+        "reconciliation_to": {
+          "type": "integer",
+          "description": "Reconciliation timeout in seconds",
+          "default": 43200,
+          "minimum": 0
+        },
+        "ageout_to": {
+          "type": "integer",
+          "description": "Age-out timeout in seconds",
+          "default": 120,
+          "minimum": 0
+        },
+        "assets_sync_period": {
+          "type": "integer",
+          "description": "Assets synchronization period in seconds",
+          "default": 2,
+          "minimum": 0
+        }
+      },
+      "required": ["max_delay", "max_inactivity", "apply_retry", "reconciliation_to", "ageout_to", "assets_sync_period"]
+    },
+    "service": {
+      "type": "object",
+      "description": "gRPC service configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Kubernetes service type",
+          "default": "NodePort",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer",
+          "description": "Service port",
+          "default": 30051,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "targetPort": {
+          "type": "integer",
+          "description": "Container target port",
+          "default": 5778,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "nodePort": {
+          "type": "integer",
+          "description": "Node port for external access",
+          "default": 30051,
+          "minimum": 30000,
+          "maximum": 32767
+        }
+      },
+      "required": ["type", "port", "targetPort"]
+    },
+    "rest_service": {
+      "type": "object",
+      "description": "REST API service configuration",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "description": "Service port",
+          "default": 30081,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "nodePort": {
+          "type": "integer",
+          "description": "Node port for external access",
+          "default": 30081,
+          "minimum": 30000,
+          "maximum": 32767
+        },
+        "type": {
+          "type": "string",
+          "description": "Kubernetes service type",
+          "default": "NodePort",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "targetPort": {
+          "type": "integer",
+          "description": "Container target port",
+          "default": 30081,
+          "minimum": 1,
+          "maximum": 65535
+        }
+      },
+      "required": ["port", "type", "targetPort"]
+    },
+    "securityContext": {
+      "type": "object",
+      "description": "Security context for the aggregator pods",
+      "properties": {
+        "runAsUser": {
+          "type": "integer",
+          "description": "User ID to run the container as",
+          "default": 65534,
+          "minimum": 0
+        },
+        "runAsGroup": {
+          "type": "integer",
+          "description": "Group ID to run the container as",
+          "default": 65534,
+          "minimum": 0
+        },
+        "fsGroup": {
+          "type": "integer",
+          "description": "Group ID for filesystem ownership",
+          "default": 65534,
+          "minimum": 0
+        },
+        "runAsNonRoot": {
+          "type": "boolean",
+          "description": "Require the container to run as a non-root user",
+          "default": true
+        },
+        "readOnlyRootFilesystem": {
+          "type": "boolean",
+          "description": "Mount the root filesystem as read-only",
+          "default": true
+        },
+        "allowPrivilegeEscalation": {
+          "type": "boolean",
+          "description": "Allow privilege escalation",
+          "default": false
+        }
+      },
+      "required": ["runAsUser", "runAsGroup", "fsGroup", "runAsNonRoot", "readOnlyRootFilesystem", "allowPrivilegeEscalation"]
+    },
+    "grpc_conn": {
+      "type": "object",
+      "description": "gRPC connection configuration",
+      "properties": {
+        "is_grpc_encrypted": {
+          "type": "string",
+          "description": "Enable or disable gRPC encryption",
+          "default": "enabled",
+          "enum": ["enabled", "disabled"]
+        }
+      },
+      "required": ["is_grpc_encrypted"]
+    },
+    "podAnnotations": {
+      "type": "object",
+      "description": "Annotations to add to aggregator pods",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {}
+    },
+    "rest_conn": {
+      "type": "object",
+      "description": "REST connection configuration",
+      "properties": {
+        "is_rest_encrypted": {
+          "type": "string",
+          "description": "Enable or disable REST encryption",
+          "default": "enabled",
+          "enum": ["enabled", "disabled"]
+        }
+      },
+      "required": ["is_rest_encrypted"]
+    },
+    "grpc_secret": {
+      "type": "object",
+      "description": "gRPC TLS secret configuration",
+      "properties": {
+        "secretname": {
+          "type": "string",
+          "description": "Name of the secret containing gRPC certificates",
+          "default": "akc-grpc-serving-cert",
+          "minLength": 1
+        }
+      },
+      "required": ["secretname"]
+    },
+    "rest_secret": {
+      "type": "object",
+      "description": "REST TLS secret configuration",
+      "properties": {
+        "secretname": {
+          "type": "string",
+          "description": "Name of the secret containing REST certificates",
+          "default": "akc-rest-serving-cert",
+          "minLength": 1
+        }
+      },
+      "required": ["secretname"]
+    }
+  },
+  "required": []
+}

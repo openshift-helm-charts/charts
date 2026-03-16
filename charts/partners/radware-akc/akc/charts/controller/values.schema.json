@@ -1,0 +1,369 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "AKC Controller Helm Chart Values",
+  "description": "Values definitions for AKC Controller Helm Chart",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Enable or disable the AKC Controller deployment",
+      "default": true
+    },
+    "serviceAccountName": {
+      "type": "string",
+      "description": "Name of the service account to use",
+      "default": "akc-controller",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the controller deployment",
+      "default": "akc-controller",
+      "minLength": 1
+    },
+    "replicaCount": {
+      "type": "integer",
+      "description": "Number of replicas for the controller",
+      "default": 1,
+      "minimum": 1
+    },
+    "image": {
+      "type": "object",
+      "description": "Container image configuration",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "Image repository",
+          "default": "akc-controller",
+          "minLength": 1
+        },
+        "pullPolicy": {
+          "type": "string",
+          "description": "Image pull policy",
+          "default": "IfNotPresent",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        },
+        "tag": {
+          "type": "string",
+          "description": "Image tag (overrides chart appVersion)",
+          "default": "1.8.0",
+	  "minLength": 1
+
+        }
+      },
+      "required": ["repository", "pullPolicy"]
+    },
+    "uid": {
+      "type": "string",
+      "description": "Unique identifier for the local AKC instance"
+    },
+    "aggregator_ip": {
+      "type": "string",
+      "description": "IP address or hostname of the aggregator service (use 'akc-aggregator' if running on same cluster)"
+    },
+    "aggregator_port": {
+      "type": "integer",
+      "description": "Port number for the aggregator service",
+      "default": 30051,
+      "minimum": 1,
+      "maximum": 65535
+    },
+    "controller_reconcile_period": {
+      "type": "integer",
+      "description": "Reconciliation period in seconds",
+      "default": 3600,
+      "minimum": 1
+    },
+    "direct_access": {
+      "type": "string",
+      "description": "Enable or disable direct access",
+      "default": "disable",
+      "enum": ["enable", "disable"]
+    },
+    "cipher_validation": {
+      "type": "string",
+      "description": "Enable or disable cipher validation",
+      "default": "enable",
+      "enum": ["enable", "disable"]
+    },
+    "informer_monitoring_period": {
+      "type": "integer",
+      "description": "Informer monitoring period in seconds",
+      "default": 5,
+      "minimum": 1
+    },
+    "args": {
+      "type": "object",
+      "description": "Command line arguments for the controller",
+      "properties": {
+        "verbose": {
+          "type": "integer",
+          "description": "Verbosity level for logging",
+          "default": 1,
+          "minimum": 0
+        },
+        "logfile": {
+          "type": "string",
+          "description": "Path to the log file",
+          "default": "/akc/log/akc_controller.log",
+          "minLength": 1
+        },
+        "cert": {
+          "type": "string",
+          "description": "Path to the TLS certificate file",
+          "default": "/var/run/webhook/serving-cert/tls.crt",
+          "minLength": 1
+        },
+        "key": {
+          "type": "string",
+          "description": "Path to the TLS key file",
+          "default": "/var/run/webhook/serving-cert/tls.key",
+          "minLength": 1
+        }
+      },
+      "required": ["verbose", "logfile", "cert", "key"]
+    },
+    "env": {
+      "type": "object",
+      "description": "Environment variables that can be set with '--set controller.env.param=value'",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {}
+    },
+    "podAnnotations": {
+      "type": "object",
+      "description": "Annotations to add to controller pods",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {}
+    },
+    "service": {
+      "type": "object",
+      "description": "Service configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Kubernetes service type",
+          "default": "NodePort",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        }
+      },
+      "required": ["type"]
+    },
+    "rest_service": {
+      "type": "object",
+      "description": "REST API service configuration",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "description": "Service port",
+          "default": 30080,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "nodePort": {
+          "type": "integer",
+          "description": "Node port for external access",
+          "default": 30080,
+          "minimum": 30000,
+          "maximum": 32767
+        },
+        "targetPort": {
+          "type": "integer",
+          "description": "Container target port",
+          "default": 30080,
+          "minimum": 1,
+          "maximum": 65535
+        }
+      },
+      "required": ["port", "targetPort"]
+    },
+    "validator_service": {
+      "type": "object",
+      "description": "Validator webhook service configuration",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "description": "Service port",
+          "default": 8443,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "targetport": {
+          "type": "integer",
+          "description": "Container target port",
+          "default": 8443,
+          "minimum": 1,
+          "maximum": 65535
+        }
+      },
+      "required": ["port", "targetport"]
+    },
+    "securityContext": {
+      "type": "object",
+      "description": "Security context for the controller pods",
+      "properties": {
+        "runAsUser": {
+          "type": "integer",
+          "description": "User ID to run the container as",
+          "default": 65534,
+          "minimum": 0
+        },
+        "runAsGroup": {
+          "type": "integer",
+          "description": "Group ID to run the container as",
+          "default": 65534,
+          "minimum": 0
+        },
+        "fsGroup": {
+          "type": "integer",
+          "description": "Group ID for filesystem ownership",
+          "default": 65534,
+          "minimum": 0
+        },
+        "runAsNonRoot": {
+          "type": "boolean",
+          "description": "Require the container to run as a non-root user",
+          "default": true
+        },
+        "readOnlyRootFilesystem": {
+          "type": "boolean",
+          "description": "Mount the root filesystem as read-only",
+          "default": true
+        },
+        "allowPrivilegeEscalation": {
+          "type": "boolean",
+          "description": "Allow privilege escalation",
+          "default": false
+        }
+      },
+      "required": ["runAsUser", "runAsGroup", "fsGroup", "runAsNonRoot", "readOnlyRootFilesystem", "allowPrivilegeEscalation"]
+    },
+    "secret": {
+      "type": "object",
+      "description": "Validator webhook secret configuration",
+      "properties": {
+        "secretname": {
+          "type": "string",
+          "description": "Name of the secret containing webhook certificates",
+          "default": "alteon-svc-validator-cert",
+          "minLength": 1
+        },
+        "crt": {
+          "type": "string",
+          "description": "Base64-encoded TLS certificate",
+          "minLength": 1
+        },
+        "key": {
+          "type": "string",
+          "description": "Base64-encoded TLS private key",
+          "minLength": 1
+        }
+      },
+      "required": ["secretname", "crt", "key"]
+    },
+    "webhook": {
+      "type": "object",
+      "description": "Validator webhook configuration",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the webhook",
+          "default": "alteonsvcvalidator.webhook.svc",
+          "minLength": 1
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable or disable the webhook",
+          "default": true
+        },
+        "matchpolicy": {
+          "type": "string",
+          "description": "Match policy for the webhook",
+          "default": "Equivalent",
+          "enum": ["Exact", "Equivalent"]
+        },
+        "apigroups": {
+          "type": "string",
+          "description": "API groups as JSON array string",
+          "default": "[\"*\"]"
+        },
+        "apiversions": {
+          "type": "string",
+          "description": "API versions as JSON array string",
+          "default": "[\"v1\"]"
+        },
+        "path": {
+          "type": "string",
+          "description": "Webhook endpoint path",
+          "default": "/validate",
+          "minLength": 1
+        },
+        "port": {
+          "type": "integer",
+          "description": "Webhook service port",
+          "default": 8443,
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "Webhook timeout in seconds",
+          "default": 5,
+          "minimum": 1
+        },
+        "failpolicy": {
+          "type": "string",
+          "description": "Failure policy for the webhook",
+          "default": "Fail",
+          "enum": ["Fail", "Ignore"]
+        }
+      },
+      "required": ["name", "enabled", "path", "port", "failpolicy"]
+    },
+    "grpc_conn": {
+      "type": "object",
+      "description": "gRPC connection configuration",
+      "properties": {
+        "is_grpc_encrypted": {
+          "type": "string",
+          "description": "Enable or disable gRPC encryption",
+          "default": "enabled",
+          "enum": ["enabled", "disabled"]
+        }
+      },
+      "required": ["is_grpc_encrypted"]
+    },
+    "grpc_secret": {
+      "type": "object",
+      "description": "gRPC TLS secret configuration",
+      "properties": {
+        "secretname": {
+          "type": "string",
+          "description": "Name of the secret containing gRPC certificates",
+          "default": "akc-grpc-serving-cert",
+          "minLength": 1
+        },
+        "ca": {
+          "type": "string",
+          "description": "Base64-encoded CA certificate",
+          "minLength": 1
+        },
+        "crt": {
+          "type": "string",
+          "description": "Base64-encoded TLS certificate",
+          "minLength": 1
+        },
+        "key": {
+          "type": "string",
+          "description": "Base64-encoded TLS private key",
+          "minLength": 1
+        }
+      },
+      "required": ["secretname", "ca", "crt", "key"]
+    }
+  },
+  "required": []
+}
