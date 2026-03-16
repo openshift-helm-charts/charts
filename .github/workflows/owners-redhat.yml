@@ -8,7 +8,7 @@ on:
   # NOTE: There are implementation details in this workflow that require the
   # triggering event be pull_request_target or pull_request. See
   # TRUSTED_REF before changing the events that can trigger this workflow.
-  pull_request:
+  pull_request_target:
     paths:
     - charts/redhat/**/OWNERS
     - charts/community/redhat/**/OWNERS
