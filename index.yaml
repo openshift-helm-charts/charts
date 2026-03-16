@@ -5588,6 +5588,40 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/solace-pubsubplus-openshift-ha-3.3.2/pubsubplus-openshift-ha-3.3.2.tgz
     version: 3.3.2
+  radware-akc-helm:
+  - annotations:
+      charts.openshift.io/digest: sha256:33dc27a3f770fb537b6ee5610b71bd38f9ea0ec4039a373e6900c028e9c746ab
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-16T14:35:28.912352+00:00'
+      charts.openshift.io/name: akc
+      charts.openshift.io/provider: Radware
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-03-16T14:39:24.485183+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.10'
+      charts.openshift.io/testedOpenShiftVersion: '4.10'
+    apiVersion: v2
+    appVersion: 1.8.0
+    dependencies:
+    - condition: controller.enabled
+      name: controller
+      repository: file://charts/controller
+      version: 1.8.0
+    - condition: aggregator.enabled
+      name: aggregator
+      repository: file://charts/aggregator
+      version: 1.8.0
+    - condition: configurator.enabled
+      name: configurator
+      repository: file://charts/configurator
+      version: 1.8.0
+    description: The parent chart for Radware AKC
+    digest: 1d2ef4aa9c23c24a0c182a2de6535aed2e18b577ee431da33bfe9292d9b1704c
+    icon: https://www.radware.com/favicon.ico
+    kubeVersion: '>=1.23.0-0'
+    name: radware-akc-helm
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/radware-akc-radware-akc-helm-1.8.0/radware-akc-helm-1.8.0.tgz
+    version: 1.8.0
   rafay-operator-redhat:
   - annotations:
       charts.openshift.io/digest: sha256:e90ed52496459379a844f3c7e258f6e71f024ab6ed0a8530be643f84003d5987
@@ -15902,4 +15936,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-03-12T01:20:00.996439+00:00'
+generated: '2026-03-16T14:39:24.317841+00:00'
