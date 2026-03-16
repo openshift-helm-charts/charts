@@ -158,7 +158,7 @@ def append_to(msg, new_content, use_horizontal_divider=False):
 {msg}
 {divider_string}
 {new_content}
-""".strip()  # Remove surrounding whitespace, like that which is added by putting """ on a newline here.
+""".strip()  # Remove surrounding whitespace added by putting """ on a newline.
 
 
 def get_support_information():

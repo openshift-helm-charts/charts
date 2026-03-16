@@ -8,12 +8,12 @@ Each test is run against a list of "Scenarios":
 """
 
 import contextlib
-from dataclasses import dataclass, field
 import os
-from pathlib import Path
 import re
 import tarfile
 import tempfile
+from dataclasses import dataclass, field
+from pathlib import Path
 
 import pytest
 import responses
@@ -335,6 +335,33 @@ scenarios_submission_init = [
             ],
         ),
     ),
+    # PR contains a report and an OWNERS file
+    # While this is an invalid PR, there shouldn't be any error during the initalization of the Submission object.
+    # This specific error is handled in the is_valid_certification_submission test.
+    # See https://github.com/openshift-helm-charts/development/issues/477 for context
+    SubmissionInitScenario(
+        api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/6",
+        modified_files=[
+            f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/report.yaml",
+            f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS",
+        ],
+        expected_submission=submission.Submission(
+            api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/6",
+            chart=expected_chart,
+            modified_files=[
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/report.yaml",
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS",
+            ],
+            report=submission.Report(
+                found=True,
+                signed=False,
+                path=f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/report.yaml",
+            ),
+            modified_owners=[
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS"
+            ],
+        ),
+    ),
     # PR contains additional files, not fitting into any expected category
     SubmissionInitScenario(
         api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/7",
@@ -467,6 +494,27 @@ scenarios_certification_submission = [
             modified_files=[
                 f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS"
             ],
+            modified_owners=[
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS"
+            ],
+        ),
+        expected_is_valid_certification=False,
+        expected_reason="[ERROR] Send OWNERS file by itself in a separate PR.",
+    ),
+    # Invalid certification Submission contains OWNERS file and report file
+    CertificationScenario(
+        input_submission=submission.Submission(
+            api_url="https://api.github.com/repos/openshift-helm-charts/charts/pulls/1",
+            chart=expected_chart,
+            modified_files=[
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/report.yaml",
+                f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS",
+            ],
+            report=submission.Report(
+                found=True,
+                signed=False,
+                path=f"charts/{expected_category}/{expected_organization}/{expected_name}/{expected_version}/report.yaml",
+            ),
             modified_owners=[
                 f"charts/{expected_category}/{expected_organization}/{expected_name}/OWNERS"
             ],

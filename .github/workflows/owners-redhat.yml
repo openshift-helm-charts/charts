@@ -5,14 +5,20 @@ name: Red Hat OWNERS Files
 # submissions.
 
 on:
-  pull_request_target:
+  # NOTE: There are implementation details in this workflow that require the
+  # triggering event be pull_request_target or pull_request. See
+  # TRUSTED_REF before changing the events that can trigger this workflow.
+  pull_request:
     paths:
     - charts/redhat/**/OWNERS
     - charts/community/redhat/**/OWNERS
 
 env:
   SUCCESS_LABEL: redhat-owners-content-ok
-
+  # TRUSTED_REF is a repository ref value (e.g. refs/heads/main) that contains
+  # trusted content for use in CI. In effect, this ref should contain
+  # trusted content in the scripts/* directory.
+  TRUSTED_REF: ${{ format('refs/heads/{0}', (github.event_name == 'pull_request' && github.base_ref || 'main')) }}
 jobs:
   gather-metadata:
     name: Gather Metadata From Path
@@ -33,7 +39,7 @@ jobs:
           script: |
             const successLabel = process.env.SUCCESS_LABEL;
             try {
-              await github.issues.removeLabel({
+              await github.rest.issues.removeLabel({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -50,6 +56,8 @@ jobs:
             }
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TRUSTED_REF }}
 
       - name: Set up Python
         uses: ./.github/actions/setup-python
@@ -89,6 +97,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TRUSTED_REF }}
       - name: Set up Python
         uses: ./.github/actions/setup-python
       - name: Install Python CI tooling

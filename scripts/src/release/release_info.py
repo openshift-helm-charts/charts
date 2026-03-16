@@ -51,6 +51,17 @@ def get_replaces(from_repo, to_repo, directory):
     return []
 
 
+def get_edits(from_repo, to_repo, directory):
+    print(f"get edits for {from_repo} to {to_repo} ")
+    info = _get_release_info(directory)
+    if from_repo in info:
+        if "edit" in info[from_repo][to_repo]:
+            print(f"edits found: {info[from_repo][to_repo]['edit']}")
+            return info[from_repo][to_repo]["edit"]
+    print("no edits found")
+    return {}
+
+
 def get_merges(from_repo, to_repo, directory):
     print(f"get merges for {from_repo} to {to_repo}")
     info = _get_release_info(directory)
