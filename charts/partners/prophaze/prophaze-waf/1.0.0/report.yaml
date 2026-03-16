@@ -1,0 +1,63 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:7094592090263953422
+        chart-uri: /charts/prophaze-waf-1.0.0.tgz
+        digests:
+            chart: sha256:22439a95fab6b7a5e4591bd55b36373bf51dffc79d8ebff53f87f338dc09032b
+            package: 1e8b9edc68262c4dcc515d671a540b533a7d87199650981e3be066ce6f430a12
+        lastCertifiedTimestamp: "2026-03-16T05:55:40.326909+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: N/A
+        webCatalogOnly: false
+    chart:
+        name: prophaze-waf
+        home: ""
+        sources: []
+        version: 1.0.0
+        description: Prophaze Web Application Firewall for OpenShift
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.16.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: prophaze-waf
+        kubeversion: ""
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+

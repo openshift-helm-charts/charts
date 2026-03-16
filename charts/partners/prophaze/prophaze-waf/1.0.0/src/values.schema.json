@@ -1,0 +1,17 @@
+{
+ "type": "object",
+ "properties": {
+ "replicaCount": {
+ "type": "integer",
+ "minimum": 1
+ },
+ "image": {
+ "type": "object",
+ "properties": {
+ "repository": {"type": "string"},
+ "tag": {"type": "string"},
+ "pullPolicy": {"type": "string"}
+ }
+ }
+ }
+}
