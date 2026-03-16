@@ -10123,6 +10123,52 @@ entries:
     urls:
     - N/A
     version: 3.52.30-lts
+  - annotations:
+      charts.openshift.io/digest: sha256:6fc03554928e15af4357a22dbf7c671c503920c52b34c8a7a64b896833ae5d83
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-16T09:11:26.029528+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-03-16T09:14:58.502716+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.58.20
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 16.0.14
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: a7f8f81d57296216eaf650c75e4637732c0457ec5449f74e02545dac643fdb11
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.58.20
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -12246,4 +12292,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-03-16T07:33:53.987263+00:00'
+generated: '2026-03-16T09:14:58.378898+00:00'
