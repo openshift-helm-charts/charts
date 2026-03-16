@@ -41,13 +41,12 @@ except ImportError:
     from yaml import Dumper, SafeLoader
 
 sys.path.append("../")
+from chartrepomanager import indexannotations
 from pullrequest import prartifact
 from reporegex import matchers
 from report import report_info
 from signedchart import signedchart
 from tools import gitutils
-
-from chartrepomanager import indexannotations
 
 
 def _encode_chart_entry(chart_entry):

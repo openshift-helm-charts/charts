@@ -1,7 +1,7 @@
-from dataclasses import dataclass, field
 import os
 import re
 import tarfile
+from dataclasses import dataclass, field
 
 import requests
 import semver
@@ -14,9 +14,9 @@ except ImportError:
 
 
 from owners import owners_file
-from tools import gitutils
 from reporegex import matchers
 from report import verifier_report
+from tools import gitutils
 
 xRateLimit = "X-RateLimit-Limit"
 xRateRemain = "X-RateLimit-Remaining"
@@ -101,7 +101,7 @@ class Chart:
             (self.category and self.category != category)
             or (self.organization and self.organization != organization)
             or (self.name and self.name != name)
-            or (self.version and self.version != version)
+            or (self.version and version and self.version != version)
         ):
             msg = "[ERROR] A PR must contain only one chart. Current PR includes files for multiple charts."
             raise DuplicateChartError(msg)

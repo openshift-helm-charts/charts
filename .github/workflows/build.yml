@@ -2,9 +2,9 @@ name: CI
 
 on:
   # NOTE: There are implementation details in this workflow that require the
-  # triggering event be pull_request_target. See RESOLVED_GITHUB_REF before
-  # changing the events that can trigger this workflow.
-  pull_request_target:
+  # triggering event be pull_request_target or pull_request. See 
+  # TRUSTED_REF before changing the events that can trigger this workflow.
+  pull_request:
     types: [opened, synchronize, reopened, edited, ready_for_review, labeled]
 
 env:
@@ -14,13 +14,20 @@ env:
   # fetch them from the GitHub API a second time.
   SUBMISSION_PATH: "${{ github.workspace }}/submission.json"
   SUBMISSION_ARTIFACT_NAME: submission
-  # RESOLVED_GITHUB_REF works around an GitHub Actions bug where the GitHub
-  # Runner does not properly populate the GITHUB_REF value. For this workflow,
-  # we reconstruct a ref but only in cases where GITHUB_REF is missing.
+  # TRUSTED_REF is a repository ref value (e.g. refs/heads/main) that contains
+  # trusted content for use in CI. In effect, this ref should contain
+  # trusted content in the scripts/* directory.
+  TRUSTED_REF: ${{ format('refs/heads/{0}', (github.event_name == 'pull_request' && github.base_ref || 'main')) }}
+  # SANDBOX_REPO is a reference to a sandbox repository used in testing. This
+  # workflow leverages this information to change some behaviors. Format is
+  # always organization/repository
   #
-  # See https://github.com/openshift-helm-charts/development/issues/432 for more
-  # information.
-  RESOLVED_GITHUB_REF: ${{ github.ref || format('refs/heads/{0}', (github.event.pull_request.base.ref || ''))  }}
+  # Maintainers may set this to another value via their repository configuration
+  # for debugging/testing/development. This avoid the need to change this
+  # workflow to run E2E tests.
+  #
+  # If unset, the default (relative to openshift-helm-charts) is used.
+  SANDBOX_REPO: ${{ vars.SANDBOX_REPO || 'openshift-helm-charts/sandbox-2025-11' }}
 
 concurrency:
   group: cert-ci-${{ github.event.pull_request.number }}
@@ -44,6 +51,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TRUSTED_REF }}
 
       - name: Set up Python
         id: setup-python
@@ -144,6 +153,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
@@ -168,9 +179,10 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_API_URL: ${{ github.event.pull_request._links.self.href }}
           GITHUB_REPO: ${{ github.repository }}
+          SANDBOX_REPO: ${{ env.SANDBOX_REPO }}
         run: |
           # Sandbox repo does not have an helm repository index
-          if [ "$GITHUB_REPOSITORY" == "openshift-helm-charts/sandbox" ]; then
+          if [ "${GITHUB_REPOSITORY}" == "${SANDBOX_REPO}" ]; then
             CLI_FLAG="--ignore_missing_helm_index"
           fi
 
@@ -235,6 +247,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
@@ -443,6 +457,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
@@ -556,7 +572,7 @@ jobs:
           # The token we use for this changes for the Sandbox repository because the sandbox repository
           # receives PRs from the openshift-helm-charts-bot, and that same bot cannot approve its own
           # PRs which breaks workflows. Instead, for the Sandbox repo, we approve with the GHA bot.
-          github-token: ${{ github.repository == 'openshift-helm-charts/sandbox' && secrets.GITHUB_TOKEN || secrets.BOT_TOKEN }}
+          github-token: ${{ github.repository == env.SANDBOX_REPO && secrets.GITHUB_TOKEN || secrets.BOT_TOKEN }}
 
       - name: Merge PR
         id: merge_pr
@@ -587,6 +603,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
@@ -670,7 +688,7 @@ jobs:
           GITHUB_EVENT_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          INDEX_BRANCH=$(if [ "${RESOLVED_GITHUB_REF}" = "refs/heads/main" ]; then echo "gh-pages"; else echo "${RESOLVED_GITHUB_REF##*/}-gh-pages"; fi)
+          INDEX_BRANCH=$(if [ "${TRUSTED_REF}" = "refs/heads/main" ]; then echo "gh-pages"; else echo "${TRUSTED_REF##*/}-gh-pages"; fi)
 
           echo "[INFO] Creating Git worktree for index branch"
           INDEX_DIR=$(mktemp -d)
@@ -706,7 +724,7 @@ jobs:
 
       - name: Add a GitHub comment if release has failed
         uses: actions/github-script@v7
-        if: ${{ failure() && github.repository != 'openshift-helm-charts/sandbox' }}
+        if: ${{ failure() && github.repository != env.SANDBOX_REPO }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -726,7 +744,7 @@ jobs:
       # This can be removed once the metrics execution is restructured to have access to the PR
       # comment, or pulled out of the release job entirely.
       - name: Retrieve PR comment for metrics
-        if: ${{ always() && needs.setup.outputs.run_build == 'true' && github.repository != 'openshift-helm-charts/sandbox' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' && github.repository != env.SANDBOX_REPO }}
         env:
           MESSAGE_FILE: ${{ needs.manage-gh-pr.outputs.message_file }}
           MESSAGE_TEXT_B64: ${{ needs.manage-gh-pr.outputs.message_text_base64 }}
@@ -736,7 +754,7 @@ jobs:
 
       - name: Add metrics
         id: add_metrics
-        if: ${{ always() && needs.setup.outputs.run_build == 'true' && github.repository != 'openshift-helm-charts/sandbox' }}
+        if: ${{ always() && needs.setup.outputs.run_build == 'true' && github.repository != env.SANDBOX_REPO }}
         continue-on-error: true
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
