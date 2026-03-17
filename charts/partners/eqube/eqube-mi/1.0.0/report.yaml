@@ -14,7 +14,7 @@ metadata:
         lastCertifiedTimestamp: "2026-03-17T11:55:52.576729+00:00"
         testedOpenShiftVersion: "4.8"
         supportedOpenShiftVersions: '>=4.8'
-        webCatalogOnly: true
+        webCatalogOnly: false
     chart:
         name: eqube-mi
         home: https://www.1eq.com
