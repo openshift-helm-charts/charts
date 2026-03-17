@@ -1,0 +1,10 @@
+chart:
+  name: eqube-mi
+  shortDescription: eqube
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: shantanu-eq
+vendor:
+  label: eqube
+  name: eQ Technologic Inc.
