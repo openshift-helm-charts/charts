@@ -1,9 +1,0 @@
-chart:
-  name: eqube-mi-helm
-  shortDescription: A eQube Helm Chart which contains DB Schema, Metadata Creation and War Deployment
-publicPgpKey: ""   # optional
-users:
-  - githubUsername: Shantanu-eq
-vendor:
-  label: eq
-  name: "eQ-Technologic"
