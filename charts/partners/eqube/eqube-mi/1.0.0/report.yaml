@@ -63,6 +63,10 @@ results:
       type: Mandatory
       outcome: PASS
       reason: All required annotations present
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: SKIPPED
+      reason: "Images are certified via docker.io/1eqtech - certification in progress"
     - check: v1.0/signature-is-valid
       type: Mandatory
       outcome: SKIPPED
