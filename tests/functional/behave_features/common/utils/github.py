@@ -5,6 +5,7 @@ import json
 import requests
 import logging
 from retrying import retry
+from urllib import parse
 
 from common.utils.setttings import *
 
@@ -69,13 +70,13 @@ def check_release_assets(secrets, release_id, required_assets):
 
 @retry(stop_max_delay=15_000, wait_fixed=1000)
 def get_release_by_tag(secrets, release_tag):
-    r = github_api("get", f"repos/{secrets.test_repo}/releases", secrets.bot_token)
-    releases = json.loads(r.text)
-    for release in releases:
-        if release["tag_name"] == release_tag:
-            return release
+    url_encoded_release_tag = parse.quote(release_tag)
+    r = github_api("get", f"repos/{secrets.test_repo}/releases/tags/{url_encoded_release_tag}", secrets.bot_token)
+    release = json.loads(r.text)
+    # soft-check that we got an expected key in the response release.
+    if release.get("id"):
+        return release
     raise Exception("Release not published")
-
 
 def get_pr(secrets, pr_number=None):
     pr_number = secrets.pr_number if pr_number is None else pr_number

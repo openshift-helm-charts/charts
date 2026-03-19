@@ -3,10 +3,9 @@ import re
 import sys
 from argparse import ArgumentParser
 
+from pullrequest import prartifact
 from reporegex import matchers
 from tools import gitutils
-
-from pullrequest import prartifact
 
 
 class NoMatchesError(Exception):

@@ -1,0 +1,11 @@
+chart:
+  name: eqube-mi
+  shortDescription: Helm chart for deploying eQube-MI middleware integration platform
+    on OpenShift
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: shantanu-eq
+vendor:
+  label: eqube
+  name: eQ Technologic Inc.

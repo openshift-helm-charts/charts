@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:11308623543236616949
+        reportDigest: uint64:5063734628612381246
         chart-uri: N/A
         digests:
             chart: sha256:e69ce1544ce72e2a6e62d66978a858672f89977616fe0017570b557215ce627e
-            package: 96872482269305c676bca6b62d41bdc8f85b14a5898020780d191a7600ec15a6
-        lastCertifiedTimestamp: "2026-03-16T14:33:06.028531+00:00"
+            package: 5dd17a4e59a9c3b3f6c1baffdb6b0191eb2e39c2aa70e43ab93bd3718d6d417e
+        lastCertifiedTimestamp: "2026-03-16T17:41:31.487336+00:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.1'
         webCatalogOnly: true
@@ -64,48 +64,14 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-    - check: v1.1/images-are-certified
+    - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
-      reason: |-
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nginx:v3.58.20-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nats-jetstream:2.12.3-custom-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/heavy-engine:v3.58.20-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nogate:v3.58.20-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/platform-integrations:v3.58.20-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/light-engine:v3.58.20-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/cloud-metadata:v3.58.20-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/integrations-adapter:v3.58.20-lts-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/rhel8/postgresql-15:1-1768365248
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/router:v3.58.20-lts-ubi
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/not-contains-crds
-      type: Mandatory
-      outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
+      reason: Chart tests have passed
     - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
       reason: Values file exist
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
     - check: v1.0/has-notes
       type: Optional
       outcome: PASS
@@ -114,10 +80,14 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart has a README
-    - check: v1.0/chart-testing
+    - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
-      reason: Chart tests have passed
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
     - check: v1.0/contains-test
       type: Mandatory
       outcome: PASS
@@ -130,3 +100,33 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Kubernetes version specified
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/router:v3.58.20-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/light-engine:v3.58.20-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/heavy-engine:v3.58.20-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/rhel8/postgresql-15:1-1768365248
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nginx:v3.58.20-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nats-jetstream:2.12.3-custom-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/cloud-metadata:v3.58.20-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/integrations-adapter:v3.58.20-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nogate:v3.58.20-lts-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/platform-integrations:v3.58.20-lts-ubi
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
