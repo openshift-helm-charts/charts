@@ -10525,6 +10525,52 @@ entries:
     urls:
     - N/A
     version: 3.60.10
+  - annotations:
+      charts.openshift.io/digest: sha256:7e04a0539ac7cc82f4e59b1a2c3b8fde97a84f7166fade1fa61b120fb19cde6e
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-25T13:13:51.136331+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-03-25T13:17:30.006513+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.52.31
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 16.0.14
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: 060e8058658a53e5737ff8bf969a6f54581498c25d04530d225ef5c5a5234de4
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.52.31
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -12702,4 +12748,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-03-25T13:16:23.303762+00:00'
+generated: '2026-03-25T13:17:29.854348+00:00'
