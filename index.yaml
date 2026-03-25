@@ -5752,6 +5752,36 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-argocd-agent-0.5.4/redhat-argocd-agent-0.5.4.tgz
     version: 0.5.4
+  - annotations:
+      charts.openshift.io/digest: sha256:1419d37c8ba08f177345e56c2bef5ad238c58c4c15028afdfcf6ee01bb06c99a
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-25T14:27:14.684751+00:00'
+      charts.openshift.io/name: RedHat Argo CD Agent - Agent Component
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-03-25T14:28:34.895076+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.11'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.7.0
+    description: RedHat Argo CD Agent for connecting managed clusters to a Principal
+    digest: 60a3d5053473e73580693848a9bd640203308bb3f9e3578e535849f5c5daf980
+    home: https://github.com/argoproj-labs/argocd-agent
+    icon: https://raw.githubusercontent.com/redhat-developer/gitops-operator/refs/heads/master/docs/Red_Hat-OpenShift_GitOps-Standard-RGB.svg
+    keywords:
+    - argocd
+    - gitops
+    - agent
+    kubeVersion: '>=1.24.0-0'
+    maintainers:
+    - name: Argo Project Maintainers
+      url: https://github.com/argoproj-labs/argocd-agent
+    name: redhat-argocd-agent
+    sources:
+    - https://github.com/argoproj-labs/argocd-agent
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-argocd-agent-0.7.0/redhat-argocd-agent-0.7.0.tgz
+    version: 0.7.0
   redhat-cakephp-application-template:
   - annotations:
       charts.openshift.io/digest: sha256:9216b5e25c0f15c61081455a89c54292a6246ca02a083cc3cc9d4ca0bb9b2b8d
@@ -16043,4 +16073,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-03-23T18:48:42.390293+00:00'
+generated: '2026-03-25T14:28:34.729595+00:00'
