@@ -1,0 +1,9 @@
+chart:
+  name: prophaze-waf
+  shortDescription: Prophaze WAF Helm Chart
+publicPgpKey: ""
+users:
+  - githubUsername: <your-github-username>
+vendor:
+  label: prophaze
+  name: Prophaze
