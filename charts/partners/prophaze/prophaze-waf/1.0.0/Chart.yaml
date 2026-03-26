@@ -1,0 +1,13 @@
+apiVersion: v2
+name: prophaze-waf
+description: Prophaze Web Application Firewall
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+kubeVersion: ">=1.20.0"
+icon: https://prophaze.com/wp-content/uploads/2021/01/prophaze-logo.png
+annotations:
+  charts.openshift.io/name: Prophaze WAF
+maintainers:
+  - name: Prophaze
+    email: support@prophaze.com
