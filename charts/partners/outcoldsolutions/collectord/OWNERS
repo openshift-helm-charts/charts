@@ -1,0 +1,9 @@
+chart:
+  name: collectord
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: outcoldsolutions
+  name: Outcold Solutions LLC
