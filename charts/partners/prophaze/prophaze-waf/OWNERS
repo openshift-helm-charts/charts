@@ -5,7 +5,7 @@ chart:
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: nidhinmp07
+- githubUsername: AnandR1225
 vendor:
   label: prophaze
   name: Prophaze Inc.

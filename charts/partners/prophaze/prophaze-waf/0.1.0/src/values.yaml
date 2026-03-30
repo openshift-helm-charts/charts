@@ -1,0 +1,27 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 8080
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# ✅ Add this (fix for httproute error)
+httpRoute:
+  enabled: false
+
+# ✅ Add this (fix for hpa.yaml error)
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
