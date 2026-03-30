@@ -1,11 +1,16 @@
 chart:
   name: prophaze-waf
-  shortDescription: Prophaze Web Application Firewall Helm chart for Kubernetes and
-    OpenShift clusters.
-providerDelivery: false
-publicPgpKey: unknown
-users:
-- githubUsername: nidhinmp07
+  shortDescription: Prophaze Web Application Firewall Helm chart for Kubernetes and OpenShift clusters.
+
 vendor:
   label: prophaze
   name: Prophaze Inc.
+
+users:
+  - githubUsername: AnandR1225
+
+providerDelivery: false
+publicPgpKey: unknown
+
+metadata:
+  webCatalogOnly: false
