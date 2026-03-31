@@ -10713,6 +10713,52 @@ entries:
     urls:
     - N/A
     version: 3.58.23
+  - annotations:
+      charts.openshift.io/digest: sha256:b9663c035792460e70c1ac7c1e1669ce498e9e4b3faea20a335a4b996aa7d8f0
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-31T21:07:42.8515+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-03-31T21:10:59.547116+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.62.6
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: 4bff39026004dd0ad77adec96768f0d15559987884d6b9ca0e9d2195587471cc
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.62.6
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -12926,4 +12972,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-03-31T12:04:14.814296+00:00'
+generated: '2026-03-31T21:10:59.397275+00:00'
