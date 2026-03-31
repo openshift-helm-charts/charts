@@ -1,0 +1,10 @@
+chart:
+  name: redhat-openshift-mcp-server
+  shortDescription: This is the Helm Chart for MCP server for Red Hat OpenShift
+publicPgpKey: null
+users:
+  - githubUsername: Kaustubh-pande
+  - githubUsername: matzew
+vendor:
+  label: redhat
+  name: Red Hat
