@@ -10667,6 +10667,52 @@ entries:
     urls:
     - N/A
     version: 3.54.23
+  - annotations:
+      charts.openshift.io/digest: sha256:5132e08b463f7065c5fff83c9a9f7c0c813435dec00a77cb3b3d2502448abf47
+      charts.openshift.io/lastCertifiedTimestamp: '2026-03-31T10:39:04.014962+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-03-31T10:43:16.842783+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.58.23
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 16.0.14
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: db6d260ce4b35a710c47e2dc9797a980d35d7da9fc0454c31a1cc2f523be538b
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.58.23
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -12862,4 +12908,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-03-29T21:31:52.250662+00:00'
+generated: '2026-03-31T10:43:16.701418+00:00'
