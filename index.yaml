@@ -4557,6 +4557,94 @@ entries:
     urls:
     - https://maximilianopizarro.github.io/n8n-helm-chart/n8n-1.15.5.tgz
     version: 1.15.5
+  - annotations:
+      artifacthub.io/changes: "- kind: added\n  description: \"Add 7 MCP Server workflows
+        with real JSON-RPC tool calls (pods_list, monitorDeployments, getPerformanceMetrics,
+        checkClusterHealth, events_list, resources_list) + AI analysis via LiteLLM
+        + Mailpit email reports\"\n- kind: added\n  description: \"Add workflow auto-import
+        Job (Helm post-install hook) from n8n-sandbox GitHub repository\"\n- kind:
+        added\n  description: \"Add Mailpit as optional SMTP test service with OpenShift
+        Route support\"\n- kind: added\n  description: \"Add enableServiceLinks for
+        Developer Sandbox N8N_PORT env conflict resolution\"\n- kind: added\n  description:
+        \"Add route.sccRoleDisabled for Developer Sandbox RBAC compatibility\"\n-
+        kind: added\n  description: \"Add Red Hat UBI container image at quay.io/maximilianopizarro/n8n
+        via GitHub Actions CI\"\n- kind: added\n  description: \"Add Chart Verifier
+        GitHub Actions workflow for Red Hat Community certification\"\n- kind: added\n
+        \ description: \"Add configurable volume mount path (main.persistence.mountPath)
+        for restricted environments\"\n- kind: added\n  description: \"Add image.variant
+        option (official/ubi) for selecting between Alpine wget and UBI curl in workflow
+        auto-import initContainers\"\n- kind: added\n  description: \"Add AI Format
+        & Explain pipeline step to all 7 MCP workflows via LiteLLM/Granite with health
+        assessments\"\n- kind: changed\n  description: \"Update n8n app version to
+        1.123.28\"\n- kind: changed\n  description: \"Redesign GitHub Pages documentation
+        with MCP pipeline architecture, lightbox viewer, and Mermaid diagrams\"\n-
+        kind: fixed\n  description: \"Fix ClusterIP_ typo in service template\"\n-
+        kind: fixed\n  description: \"Fix hardcoded names in role.yaml to use chart
+        naming helpers (supports n8n-dev-east style release names)\"\n"
+      artifacthub.io/links: "- name: Documentation\n  url: https://maximilianopizarro.github.io/n8n-helm-chart/\n-
+        name: OpenShift MCP Server\n  url: https://maximilianopizarro.github.io/openshift-mcp-server\n-
+        name: OpenShift MCP Server (Artifact Hub)\n  url: https://artifacthub.io/packages/helm/openshift-mcp-server/openshift-mcp-server\n-
+        name: n8n Sandbox Workflows\n  url: https://github.com/maximilianoPizarro/n8n-sandbox\n"
+      artifacthub.io/prerelease: 'false'
+      artifacthub.io/recommendations: '- url: https://artifacthub.io/packages/helm/openshift-mcp-server/openshift-mcp-server
+
+        '
+      artifacthub.io/screenshots: "- title: Mailpit Inbox - Workflow Email Reports\n
+        \ url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/mailpit-inbox.png\n-
+        title: Pod Status Report - Red Hat Branded HTML Email\n  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/mailpit-email-detail.png\n-
+        title: MCP Inspector - monitorDeployments Verification\n  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/mcp-inspector-monitor-deployments.png\n-
+        title: n8n All Workflows List\n  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/n8n-all-workflows-list.png\n-
+        title: n8n Dashboard\n  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/n8n-dashboard.png\n-
+        title: n8n via Podman - Red Hat UBI 9 Container\n  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/n8n-podman-welcome.png\n"
+      charts.openshift.io/digest: sha256:39a1a3c8c2595c3b0a5b31d788811e84d15694219b46d6730e7d3c140fcbf605
+      charts.openshift.io/lastCertifiedTimestamp: '2026-04-06T14:41:45.300281+00:00'
+      charts.openshift.io/name: n8n
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-04-06T15:43:03.888593+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 1.123.28
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 2.4.7
+    description: Helm Chart for deploying n8n on Kubernetes and Red Hat OpenShift,
+      a fair-code workflow automation platform with native AI capabilities for technical
+      teams. Easily automate tasks across different services. Includes optional Mailpit
+      for email testing and OpenShift Developer Sandbox support.
+    digest: 7454754be38c7eeeba955be88d1169898a428d8098fc4f7294dac9101619e720
+    home: https://maximilianopizarro.github.io/n8n-helm-chart/
+    icon: https://avatars1.githubusercontent.com/u/45487711?s=200&v=4
+    keywords:
+    - Workflow Automation
+    - Workflow
+    - iPaaS
+    - integration-framework
+    - low-code-plattform
+    - low-code
+    - openshift
+    - mcp-server
+    - ai-workflows
+    kubeVersion: '>=1.20.0'
+    maintainers:
+    - email: maximiliano.pizarro.5@gmail.com
+      name: maximilianoPizarro
+      url: https://github.com/maximilianoPizarro
+    - email: cestay@redhat.com
+      name: pkstaz
+      url: https://github.com/n8n-io
+    name: n8n
+    sources:
+    - https://github.com/maximilianoPizarro/n8n-helm-chart
+    - https://github.com/n8n-io/n8n
+    - https://n8n.io/
+    - https://github.com/maximilianoPizarro/openshift-mcp-server
+    type: application
+    urls:
+    - https://maximilianopizarro.github.io/n8n-helm-chart/n8n-1.16.0.tgz
+    version: 1.16.0
   nearbyone-controller:
   - annotations:
       charts.openshift.io/digest: sha256:1cdd24c3ff3be63e1816b59962a027d03317c44776f55dfe6ef1b9277b896dcb
@@ -16290,4 +16378,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-04-03T02:24:58.705380+00:00'
+generated: '2026-04-06T15:43:03.716830+00:00'
