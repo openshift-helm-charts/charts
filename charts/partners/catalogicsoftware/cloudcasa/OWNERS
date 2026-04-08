@@ -5,6 +5,7 @@ providerDelivery: false
 publicPgpKey: unknown
 users:
 - githubUsername: bobadair
+- githubUsername: jsikorski-catalogicsoftware
 vendor:
   label: catalogicsoftware
   name: Catalogic Software
