@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:3917129916324854581
+        reportDigest: uint64:3616730542483821320
         chart-uri: N/A
         digests:
             chart: sha256:c5721260601f2d7d6d442a935d78c1197e12fdb48e3507acf32863546b056723
             package: 8401b28ee647964e631cbe2f5663e55155773d57ff77b8e0a5c1974f9ae89e2b
-        lastCertifiedTimestamp: "2026-04-09T05:43:40.51816+00:00"
+        lastCertifiedTimestamp: "2026-04-09T14:49:29.817333+00:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.1'
         webCatalogOnly: true
@@ -64,69 +64,69 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
     - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
       reason: Values schema file exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
       reason: Chart has a README
-    - check: v1.0/not-contains-crds
+    - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
-      reason: Chart does not contain CRDs
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
+      reason: Values file exist
     - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
       reason: |-
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/router:v3.58.24-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nats-jetstream:2.12.5-custom-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nogate:v3.58.24-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/rhel8/postgresql-15:1-1768365248
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nginx:v3.58.24-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/light-engine:v3.58.24-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/cloud-metadata:v3.58.24-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/heavy-engine:v3.58.24-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/integrations-adapter:v3.58.24-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nginx:v3.58.24-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/light-engine:v3.58.24-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nogate:v3.58.24-ubi
         Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/platform-integrations:v3.58.24-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/rhel8/postgresql-15:1-1768365248
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
     - check: v1.1/has-kubeversion
       type: Mandatory
       outcome: PASS
       reason: Kubernetes version specified
-    - check: v1.0/has-notes
-      type: Optional
+    - check: v1.0/required-annotations-present
+      type: Mandatory
       outcome: PASS
-      reason: Chart does contain NOTES.txt
+      reason: All required annotations present
     - check: v1.0/signature-is-valid
       type: Mandatory
       outcome: SKIPPED
       reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
