@@ -1,0 +1,168 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.1
+        profile:
+            VendorType: community
+            version: v1.1
+        reportDigest: uint64:10555983764321036333
+        chart-uri: https://maximilianopizarro.github.io/n8n-helm-chart/n8n-1.16.0.tgz
+        digests:
+            chart: sha256:39a1a3c8c2595c3b0a5b31d788811e84d15694219b46d6730e7d3c140fcbf605
+            package: 7454754be38c7eeeba955be88d1169898a428d8098fc4f7294dac9101619e720
+        lastCertifiedTimestamp: "2026-04-06T14:41:45.300281+00:00"
+        testedOpenShiftVersion: "4.20"
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: false
+    chart:
+        name: n8n
+        home: https://maximilianopizarro.github.io/n8n-helm-chart/
+        sources:
+            - https://github.com/maximilianoPizarro/n8n-helm-chart
+            - https://github.com/n8n-io/n8n
+            - https://n8n.io/
+            - https://github.com/maximilianoPizarro/openshift-mcp-server
+        version: 1.16.0
+        description: Helm Chart for deploying n8n on Kubernetes and Red Hat OpenShift, a fair-code workflow automation platform with native AI capabilities for technical teams. Easily automate tasks across different services. Includes optional Mailpit for email testing and OpenShift Developer Sandbox support.
+        keywords:
+            - Workflow Automation
+            - Workflow
+            - iPaaS
+            - integration-framework
+            - low-code-plattform
+            - low-code
+            - openshift
+            - mcp-server
+            - ai-workflows
+        maintainers:
+            - name: maximilianoPizarro
+              email: maximiliano.pizarro.5@gmail.com
+              url: https://github.com/maximilianoPizarro
+            - name: pkstaz
+              email: cestay@redhat.com
+              url: https://github.com/n8n-io
+        icon: https://avatars1.githubusercontent.com/u/45487711?s=200&v=4
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.123.28
+        deprecated: false
+        annotations:
+            artifacthub.io/changes: |
+                - kind: added
+                  description: "Add 7 MCP Server workflows with real JSON-RPC tool calls (pods_list, monitorDeployments, getPerformanceMetrics, checkClusterHealth, events_list, resources_list) + AI analysis via LiteLLM + Mailpit email reports"
+                - kind: added
+                  description: "Add workflow auto-import Job (Helm post-install hook) from n8n-sandbox GitHub repository"
+                - kind: added
+                  description: "Add Mailpit as optional SMTP test service with OpenShift Route support"
+                - kind: added
+                  description: "Add enableServiceLinks for Developer Sandbox N8N_PORT env conflict resolution"
+                - kind: added
+                  description: "Add route.sccRoleDisabled for Developer Sandbox RBAC compatibility"
+                - kind: added
+                  description: "Add Red Hat UBI container image at quay.io/maximilianopizarro/n8n via GitHub Actions CI"
+                - kind: added
+                  description: "Add Chart Verifier GitHub Actions workflow for Red Hat Community certification"
+                - kind: added
+                  description: "Add configurable volume mount path (main.persistence.mountPath) for restricted environments"
+                - kind: added
+                  description: "Add image.variant option (official/ubi) for selecting between Alpine wget and UBI curl in workflow auto-import initContainers"
+                - kind: added
+                  description: "Add AI Format & Explain pipeline step to all 7 MCP workflows via LiteLLM/Granite with health assessments"
+                - kind: changed
+                  description: "Update n8n app version to 1.123.28"
+                - kind: changed
+                  description: "Redesign GitHub Pages documentation with MCP pipeline architecture, lightbox viewer, and Mermaid diagrams"
+                - kind: fixed
+                  description: "Fix ClusterIP_ typo in service template"
+                - kind: fixed
+                  description: "Fix hardcoded names in role.yaml to use chart naming helpers (supports n8n-dev-east style release names)"
+            artifacthub.io/links: |
+                - name: Documentation
+                  url: https://maximilianopizarro.github.io/n8n-helm-chart/
+                - name: OpenShift MCP Server
+                  url: https://maximilianopizarro.github.io/openshift-mcp-server
+                - name: OpenShift MCP Server (Artifact Hub)
+                  url: https://artifacthub.io/packages/helm/openshift-mcp-server/openshift-mcp-server
+                - name: n8n Sandbox Workflows
+                  url: https://github.com/maximilianoPizarro/n8n-sandbox
+            artifacthub.io/prerelease: "false"
+            artifacthub.io/recommendations: |
+                - url: https://artifacthub.io/packages/helm/openshift-mcp-server/openshift-mcp-server
+            artifacthub.io/screenshots: |
+                - title: Mailpit Inbox - Workflow Email Reports
+                  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/mailpit-inbox.png
+                - title: Pod Status Report - Red Hat Branded HTML Email
+                  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/mailpit-email-detail.png
+                - title: MCP Inspector - monitorDeployments Verification
+                  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/mcp-inspector-monitor-deployments.png
+                - title: n8n All Workflows List
+                  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/n8n-all-workflows-list.png
+                - title: n8n Dashboard
+                  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/n8n-dashboard.png
+                - title: n8n via Podman - Red Hat UBI 9 Container
+                  url: https://raw.githubusercontent.com/maximilianoPizarro/n8n-helm-chart/main/docs/screenshots/n8n-podman-welcome.png
+            charts.openshift.io/name: n8n
+        kubeversion: '>=1.20.0'
+        dependencies:
+            - name: valkey
+              version: 2.4.7
+              repository: oci://registry-1.docker.io/bitnamicharts
+              condition: valkey.enabled
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/images-are-certified
+      type: Optional
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : n8nio/n8n:1.123.28 : repository not found: n8nio/n8n
+        Image is not Red Hat certified : n8nio/n8n:1.123.28
+        Image is not Red Hat certified : alpine : repository not found: alpine
+        Image is not Red Hat certified : alpine
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Optional
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+
