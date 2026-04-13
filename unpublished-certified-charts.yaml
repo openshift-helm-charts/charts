@@ -11127,6 +11127,56 @@ entries:
     urls:
     - N/A
     version: 3.58.28-lts
+  - annotations:
+      charts.openshift.io/digest: sha256:bef914cd36e84bcc8a10b65d34157c24f6ee03a7d7ac0ec85676d40fa9dc80e5
+      charts.openshift.io/lastCertifiedTimestamp: '2026-04-13T11:47:17.475414+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-04-13T11:51:35.399682+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.54.24
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: noagentapi.enabled
+      name: noagentapi
+      repository: file://charts/noagentapi
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 16.0.11
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: db818ff23423586d0ae558ff5848cdeb8b577a10a99c839f84cd69c1875afdf7
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.54.24
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -13394,4 +13444,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-04-12T20:31:23.199991+00:00'
+generated: '2026-04-13T11:51:35.230741+00:00'
