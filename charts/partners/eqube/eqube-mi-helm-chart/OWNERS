@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Shantanu-eq
 vendor:
   label: eqube
   name: eQ Technologic Inc.
