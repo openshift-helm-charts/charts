@@ -1390,6 +1390,30 @@ entries:
     urls:
     - N/A
     version: 0.1.0
+  iax-operator-crd:
+  - annotations:
+      charts.openshift.io/digest: sha256:cc480cbf750728180f7ea239ac5d8d2c317c6be27d1eee518ac294e7b0d94f9c
+      charts.openshift.io/lastCertifiedTimestamp: '2026-04-14T10:09:20.776845+00:00'
+      charts.openshift.io/name: itrsgroup-iax-operator-crd
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-04-14T10:17:14.741631+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 2.17.6
+    dependencies:
+    - alias: operator-crd
+      name: iax-operator-crd
+      repository: https://helm.itrsgroup.com
+      version: 2.17.6
+    description: ITRS Analytics Operator CRDs
+    digest: 30f2668ef426d4b234337b6ac1e2a0ae84a5ce4a3c87662f2c79fba3c3d001c1
+    kubeVersion: '>= 1.25.0-0'
+    name: iax-operator-crd
+    type: application
+    urls:
+    - N/A
+    version: 2.17.11
   idit-runtime:
   - annotations:
       app.idit/version: 19.2.0.2
@@ -13444,4 +13468,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-04-13T11:51:35.230741+00:00'
+generated: '2026-04-14T10:17:14.595936+00:00'
