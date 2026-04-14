@@ -1,0 +1,10 @@
+chart:
+  name: eqube-mi-helm-chart
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: Shantanu-eq
+vendor:
+  label: eqube
+  name: eQ Technologic Inc.
