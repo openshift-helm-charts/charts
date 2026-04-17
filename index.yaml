@@ -1619,6 +1619,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/i2i-i2i5gcorehelm-1.0.10/i2i5gcorehelm-1.0.10.tgz
     version: 1.0.10
+  iax-operator-crd-rh:
+  - annotations:
+      charts.openshift.io/digest: sha256:17ceef0ff7519edc43219484721e0d4aff3f2a5a4095d50c1ba56c0ad8b1194c
+      charts.openshift.io/lastCertifiedTimestamp: '2026-04-17T12:02:48.703546+00:00'
+      charts.openshift.io/name: itrsgroup-iax-operator-crd-rh
+      charts.openshift.io/provider: ITRS GROUP LIMITED
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-04-17T12:07:24.762131+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 2.17.6
+    dependencies:
+    - alias: operator-crd
+      name: iax-operator-crd
+      repository: https://helm.itrsgroup.com
+      version: 2.17.6
+    description: ITRS Analytics Operator CRDs
+    digest: ff680f61a5435aa41c3af3ddbb9ac761bda989be4fbde357ba1207d6eac1b6b6
+    kubeVersion: '>= 1.25.0-0'
+    name: iax-operator-crd-rh
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/itrs-analytics-iax-operator-crd-rh-2.17.11/iax-operator-crd-rh-2.17.11.tgz
+    version: 2.17.11
   ibm-object-storage-plugin:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: 4.7.0
@@ -16634,4 +16659,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-04-17T07:39:05.211648+00:00'
+generated: '2026-04-17T12:07:24.555017+00:00'
