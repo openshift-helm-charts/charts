@@ -1,9 +1,12 @@
 chart:
   name: iax-operator-crd-rh
-  shortDescription: unknown
+  shortDescription: ITRS Analytics Operator CRD and cluster-scoped resources
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: talhazubair-itrs
+- githubUsername: gjacobitrs
+- githubUsername: jadam-itrs
 vendor:
   label: itrs-analytics
   name: ITRS GROUP LIMITED
