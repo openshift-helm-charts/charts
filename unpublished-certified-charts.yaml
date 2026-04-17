@@ -11339,6 +11339,52 @@ entries:
     urls:
     - N/A
     version: 3.58.29-lts
+  - annotations:
+      charts.openshift.io/digest: sha256:a6d4aabac68f440a61339186e13a5b94b50dd24492a68d0011dd19ca22707b48
+      charts.openshift.io/lastCertifiedTimestamp: '2026-04-17T15:38:03.093683+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-04-17T15:41:22.017996+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.63.5
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: 04352a78e22533f666c0736201c50e56a66a149126d8b7ae6b961eb5cdb1d257
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.63.5
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -13672,4 +13718,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-04-17T15:35:58.219275+00:00'
+generated: '2026-04-17T15:41:21.856814+00:00'
