@@ -15444,6 +15444,37 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/stclab-inc-wave-autoscale-helm-3.1.0/wave-autoscale-helm-3.1.0.tgz
     version: 3.1.0
+  - annotations:
+      charts.openshift.io/digest: sha256:943ec40803af18592ce6e17675231107e064c5365b814509b3ddcc88bb9c27ee
+      charts.openshift.io/lastCertifiedTimestamp: '2026-04-20T03:42:47.183289+00:00'
+      charts.openshift.io/name: wave-autoscale
+      charts.openshift.io/provider: STCLAB
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-04-20T03:45:35.849030+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.13'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: 3.1.1
+    description: AI-powered Kubernetes resource optimization and cost reduction solution
+    digest: 10eaeaec0861eefa3b275607d9cb639d0e036bb408a2afe496dcd24d56f3f6f8
+    home: https://waveautoscale.com
+    icon: https://waveautoscale.com/wa-logo-text.svg
+    keywords:
+    - autoscaling
+    - kubernetes
+    - cost-optimization
+    - machine-learning
+    - resource-management
+    - openshift
+    kubeVersion: '>= 1.26.0-0'
+    maintainers:
+    - email: team@waveautoscale.com
+      name: STCLab Inc.
+    name: wave-autoscale-helm
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/stclab-inc-wave-autoscale-helm-3.1.1/wave-autoscale-helm-3.1.1.tgz
+    version: 3.1.1
   wavefront:
   - annotations:
       charts.openshift.io/digest: sha256:663b50a03cf0adac0485f8731a1e0c8cb729b216f75ce9e43d1f09ffbe2faa1a
@@ -16659,4 +16690,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-04-17T14:37:54.019165+00:00'
+generated: '2026-04-20T03:45:35.679328+00:00'
