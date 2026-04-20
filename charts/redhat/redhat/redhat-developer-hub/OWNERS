@@ -4,10 +4,6 @@ chart:
 publicPgpKey: null
 users:
   - githubUsername: rhdh-bot
-  - githubUsername: nickboldt
-  - githubUsername: schultzp2020
-  - githubUsername: kadel
-  - githubUsername: Fortune-Ndlovu
 vendor:
   label: redhat
   name: Red Hat
