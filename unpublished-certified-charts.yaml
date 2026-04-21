@@ -11753,6 +11753,52 @@ entries:
     urls:
     - N/A
     version: 3.52.34-lts
+  - annotations:
+      charts.openshift.io/digest: sha256:2231f683f867b80301d6717049cd5d9595d8cdfdf3fad1937351606abecae2cf
+      charts.openshift.io/lastCertifiedTimestamp: '2026-04-21T21:51:51.749843+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-04-21T21:57:26.248875+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.58.32-lts
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 16.0.14
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: a0c424950d2c43e3a2b507113763ab7b0af7496c73125496f4bfbcbcc7ff9e8c
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.58.32-lts
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -14158,4 +14204,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-04-21T21:50:51.970274+00:00'
+generated: '2026-04-21T21:57:26.090382+00:00'
