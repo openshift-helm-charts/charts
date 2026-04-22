@@ -6,5 +6,5 @@ publicPgpKey: unknown
 users:
 - githubUsername: feeblefakie
 vendor:
-  label: scalardb
+  label: scalar-labs
   name: Scalar Labs
