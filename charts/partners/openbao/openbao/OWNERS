@@ -1,9 +1,14 @@
 chart:
   name: openbao
-  shortDescription: unknown
+  shortDescription: OpenBao is an open source, community-driven fork of Vault managed
+    by the Linux Foundation.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: eyenx
+- githubUsername: karras
+- githubUsername: Nerkho
+- githubUsername: pree
 vendor:
   label: openbao
   name: Adfinis AG
