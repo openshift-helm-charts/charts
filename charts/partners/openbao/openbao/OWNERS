@@ -1,0 +1,9 @@
+chart:
+  name: openbao
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: openbao
+  name: Adfinis AG
