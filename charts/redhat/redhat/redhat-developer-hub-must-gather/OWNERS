@@ -7,7 +7,6 @@ users:
   - githubUsername: josephca
   - githubUsername: polasudo
   - githubUsername: nickboldt
-  - githubUsername: rm3l
 vendor:
   label: redhat
   name: Red Hat
