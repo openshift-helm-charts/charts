@@ -1,0 +1,12 @@
+chart:
+  name: peaka
+  shortDescription: "Peaka is an AI-ready data virtualization platform that lets you query and combine distributed data instantly without moving or duplicating it."
+providerDelivery: False
+publicPgpKey: null
+users:
+- githubUsername: iambugra
+- githubUsername: afurkanerdem
+vendor:
+  label: peaka
+  name: Peaka Inc.
+
