@@ -1,0 +1,12 @@
+chart:
+  name: redhat-developer-hub-must-gather
+  shortDescription: A Helm chart for running the Red Hat Developer Hub Must Gather tool
+publicPgpKey: null
+users:
+  - githubUsername: rhdh-bot
+  - githubUsername: josephca
+  - githubUsername: polasudo
+  - githubUsername: nickboldt
+vendor:
+  label: redhat
+  name: Red Hat
