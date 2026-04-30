@@ -10,5 +10,5 @@ users:
 - githubUsername: Nerkho
 - githubUsername: pree
 vendor:
-  label: openbao
+  label: adfinis
   name: Adfinis AG
