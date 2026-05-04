@@ -3893,6 +3893,97 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/appscode-kubedb-certified-2026.1.19/kubedb-certified-2026.1.19.tgz
     version: 2026.1.19
+  - annotations:
+      charts.openshift.io/digest: sha256:aaa5f5b7479c4ed661feb643a47d36400a58443c2f22ce889301060e172067bb
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-04T15:24:45.463583+06:00'
+      charts.openshift.io/name: kubedb-certified
+      charts.openshift.io/provider: Tamal Saha
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-05-04T09:29:02.484841+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: v2026.4.27
+    dependencies:
+    - condition: petset.enabled
+      name: petset
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.2.16
+    - condition: operator-shard-manager.enabled
+      name: operator-shard-manager
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.2.16
+    - condition: sidekick.enabled
+      name: sidekick
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.2.16
+    - condition: supervisor.enabled
+      name: supervisor
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.2.16
+    - condition: kubedb-crd-manager.enabled
+      name: kubedb-crd-manager
+      repository: file://../kubedb-crd-manager
+      version: v0.19.0
+    - condition: kubedb-provisioner.enabled
+      name: kubedb-provisioner
+      repository: file://../kubedb-provisioner
+      version: v0.64.0
+    - condition: kubedb-ops-manager.enabled
+      name: kubedb-ops-manager
+      repository: file://../kubedb-ops-manager
+      version: v0.51.0
+    - condition: kubedb-autoscaler.enabled
+      name: kubedb-autoscaler
+      repository: file://../kubedb-autoscaler
+      version: v0.49.0
+    - condition: kubedb-schema-manager.enabled
+      name: kubedb-schema-manager
+      repository: file://../kubedb-schema-manager
+      version: v0.40.0
+    - condition: kubedb-webhook-server.enabled
+      name: kubedb-webhook-server
+      repository: file://../kubedb-webhook-server
+      version: v0.40.0
+    - condition: kubedb-metrics.enabled
+      name: kubedb-metrics
+      repository: file://../kubedb-metrics
+      version: v2026.4.27
+    - condition: kubedb-catalog.enabled
+      name: kubedb-catalog
+      repository: file://../kubedb-catalog
+      version: v2026.4.27
+    - condition: kubedb-kubestash-catalog.enabled
+      name: kubedb-kubestash-catalog
+      repository: file://../kubedb-kubestash-catalog
+      version: v2026.4.27
+    - condition: kubedb-crd-manager.installGitOpsCRDs
+      name: kubedb-gitops
+      repository: file://../kubedb-gitops
+      version: v0.12.0
+    - condition: kubedb-migrator.enabled
+      name: kubedb-migrator
+      repository: file://../kubedb-migrator
+      version: v0.4.0
+    - condition: ace-user-roles.enabled
+      name: ace-user-roles
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.2.16
+    description: KubeDB by AppsCode - Production ready databases on Kubernetes
+    digest: 3061abd817d026e31fc3d8970c829c759ecb4d4af9bd27ae386043d0cf399a69
+    home: https://kubedb.com
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    kubeVersion: '>=1.28.0-0'
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: kubedb-certified
+    sources:
+    - https://github.com/kubedb
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/appscode-kubedb-certified-2026.4.27/kubedb-certified-2026.4.27.tgz
+    version: 2026.4.27
   kubedb-verified:
   - annotations:
       charts.openshift.io/digest: sha256:64838cb1a7602ae9f12466c91c165f8a8736e1b3550627d44ee8acd4c64e08ca
@@ -16972,4 +17063,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-05-04T09:06:32.565007+00:00'
+generated: '2026-05-04T09:29:02.325280+00:00'
