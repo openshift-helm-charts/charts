@@ -33,7 +33,7 @@ jobs:
       test-tags: ${{ steps.determine-test-tags.outputs.test-tags }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
@@ -139,8 +139,8 @@ jobs:
       bot-name: ${{ secrets.BOT_NAME }}
       bot-token: ${{ secrets.BOT_TOKEN }}
 
-  approve-and-merge:
-    name: Approve and merge
+  approve:
+    name: Approve
     needs:
     - determine-workflow-conditions
     - run-tests
@@ -152,16 +152,7 @@ jobs:
     steps:
     - name: Approve PR
       id: approve_pr
-      uses: hmarr/auto-approve-action@v4
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Merge PR
-      id: merge_pr
-      uses: pascalgn/automerge-action@v0.16.2
+      run: gh pr review "${PR_NUMBER}" --approve
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        MERGE_METHOD: squash
-        MERGE_LABELS: ""
-        MERGE_ERROR_FAIL: "true"
-
+        PR_NUMBER: ${{ github.event.number }}

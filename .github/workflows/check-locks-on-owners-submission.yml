@@ -30,7 +30,7 @@ jobs:
       github.event.pull_request.draft == false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         
       - name: Set up Python
         id: setup-python
@@ -58,7 +58,7 @@ jobs:
       - name: Determine if net-new OWNERS file
         id: populate-file-mod-type
         if: ${{ steps.check_for_owners.outputs.merge_pr == 'true' }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -74,7 +74,7 @@ jobs:
 
       # Only used to assert content of the OWNERS file.
       - name: Checkout Pull Request
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}

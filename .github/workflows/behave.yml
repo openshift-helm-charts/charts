@@ -76,7 +76,7 @@ jobs:
       features: ${{ steps.find-features.outputs.features }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ inputs.checkout-ref }}
           repository: ${{ inputs.checkout-repository }}
@@ -113,7 +113,7 @@ jobs:
         feature-file: ${{ fromJson(needs.get-features.outputs.features) }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           token: ${{ secrets.bot-token }}
           ref: ${{ inputs.checkout-ref }}

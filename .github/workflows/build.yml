@@ -50,7 +50,7 @@ jobs:
       github.actor != 'redhat-mercury-bot'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ env.TRUSTED_REF }}
 
@@ -152,13 +152,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -193,36 +193,24 @@ jobs:
             ${CLI_FLAG}
       
       - name: Upload PR information
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: ${{ always() && steps.validate-submission.outputs.submission_file_present == 'true' }}
         with:
           name: ${{ env.SUBMISSION_ARTIFACT_NAME }}
           path: ${{ env.SUBMISSION_PATH }}
 
       - name: Add 'content-ok' label
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['content-ok']
-            })
+        run: gh pr edit "${PR_NUMBER}" --add-label "content-ok"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
 
       - name: Remove 'content-ok' label
-        uses: actions/github-script@v7
         if: ${{ failure() && contains( github.event.pull_request.labels.*.name, 'content-ok') }}
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.removeLabel({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'content-ok'
-            })
+        run: gh pr edit "${PR_NUMBER}" --remove-label "content-ok"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
 
 
   chart-verifier:
@@ -246,13 +234,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -268,26 +256,17 @@ jobs:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
       - name: Download submission information
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: ${{ env.SUBMISSION_ARTIFACT_NAME }}
 
       - name: Remove 'authorized-request' label from PR
-        uses: actions/github-script@v7
         if: ${{ needs.setup.outputs.run_build == 'true' && contains( github.event.pull_request.labels.*.name, 'authorized-request') }}
         continue-on-error: true
+        run: gh pr edit "${PR_NUMBER}" --remove-label "authorized-request"
         env:
-          GITHUB_EVENT_NUMBER: ${{ github.event.number }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            var issue_number = process.env.GITHUB_EVENT_NUMBER;
-            github.rest.issues.removeLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: Number(issue_number),
-              name: 'authorized-request'
-            })
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
 
       - name: install chart verifier for action
         uses: redhat-actions/openshift-tools-installer@v1
@@ -364,7 +343,7 @@ jobs:
       - name: Get profile version set in report provided by the user
         id: get-profile-version
         if: ${{ needs.setup.outputs.run_build == 'true' && steps.verify_requires.outputs.report_provided == 'true' }}
-        uses: mikefarah/yq@master
+        uses: mikefarah/yq@751d8ad57b84f1794661bc70c0afb92a22ad7b3c
         with:
           cmd: yq '.metadata.tool.profile.version' ${{ format('./pr-branch/{0}', steps.verify_requires.outputs.provided_report_relative_path) }}
 
@@ -372,7 +351,7 @@ jobs:
         id: get-kube-range
         if: ${{ needs.setup.outputs.run_build == 'true' && steps.verify_requires.outputs.report_provided == 'true' }}
         continue-on-error: true
-        uses: mikefarah/yq@master
+        uses: mikefarah/yq@751d8ad57b84f1794661bc70c0afb92a22ad7b3c
         with:
           cmd: yq '.metadata.chart.kubeversion' ${{ format('./pr-branch/{0}', steps.verify_requires.outputs.provided_report_relative_path) }}
 
@@ -418,7 +397,7 @@ jobs:
 
       - name: Upload chart_report errors
         id: upload-chart-report-errors
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: ${{ always() && steps.check_report.outcome == 'failure' }}
         with:
           name: chart_report_errors
@@ -456,13 +435,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -479,13 +458,13 @@ jobs:
 
       # Submission information should always be present
       - name: Download submission information
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: ${{ env.SUBMISSION_ARTIFACT_NAME }}
 
       # Chart report errors are only present if an error has occured during the chart_report
       - name: Download chart_report errors
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         if: ${{ needs.chart-verifier.outputs.upload-chart-report-errors-outcome == 'success' }}
         with:
           name: chart_report_errors
@@ -522,26 +501,16 @@ jobs:
         
       - name: Comment on PR
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/github-script@v7
+        run: gh pr comment "${PR_NUMBER}" --body-file "${MESSAGE_FILE}"
         env:
-          GITHUB_EVENT_NUMBER: ${{ github.event.number }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            var fs = require('fs');
-            var issue_number = process.env.GITHUB_EVENT_NUMBER;
-            var comment = fs.readFileSync('./pr/comment', {encoding:'utf8', flag:'r'});
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: Number(issue_number),
-              body: comment
-            });
+          MESSAGE_FILE: ${{ steps.pr_comment.outputs.message-file }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
 
       - name: Send message to helm_dev slack channel
         id: notify_to_dev
         if: github.repository == 'openshift-helm-charts/charts' && steps.pr_comment.outputs.ping_helm_dev == 'true'
-        uses: archive/github-actions-slack@v2.8.0
+        uses: archive/github-actions-slack@433fef9978d3adae73168bfc9c5a7ce722780231
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C02979BDUPL
@@ -553,35 +522,30 @@ jobs:
         if: ${{ needs.validate-submission.outputs.validate-submission-outcome == 'success' &&
                 needs.chart-verifier.outputs.run-verifier-outcome != 'failure' &&
                 needs.setup.outputs.run_build == 'true' }}
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['authorized-request']
-            })
+        run: gh pr edit "${PR_NUMBER}" --add-label "authorized-request"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
 
       - name: Approve PR
         id: approve_pr
         if: ${{ needs.chart-verifier.outputs.check_report-outcome == 'success' }}
-        uses: hmarr/auto-approve-action@v4
-        with:
+        run: gh pr review "${PR_NUMBER}" --approve
+        env:
           # The token we use for this changes for the Sandbox repository because the sandbox repository
           # receives PRs from the openshift-helm-charts-bot, and that same bot cannot approve its own
           # PRs which breaks workflows. Instead, for the Sandbox repo, we approve with the GHA bot.
-          github-token: ${{ github.repository == env.SANDBOX_REPO && secrets.GITHUB_TOKEN || secrets.BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ github.repository == env.SANDBOX_REPO && secrets.GITHUB_TOKEN || secrets.BOT_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
 
       - name: Merge PR
         id: merge_pr
         if: ${{ steps.approve_pr.outcome == 'success' }}
-        uses: pascalgn/automerge-action@v0.16.2
+        run: gh pr merge "${PR_NUMBER}" --auto --squash --match-head-commit "${PR_HEAD_COMMIT}"
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-          MERGE_METHOD: squash
-          MERGE_LABELS: ""
+          PR_NUMBER: ${{ github.event.number }}
+          PR_HEAD_COMMIT: ${{ github.event.pull_request.head.sha }}
 
       - name: Check for PR merge
         if: ${{ steps.merge_pr.outcome == 'success' }}
@@ -602,13 +566,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -632,7 +596,7 @@ jobs:
 
       - name: Block until there is no running workflow
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: softprops/turnstyle@v2
+        uses: softprops/turnstyle@e565d2d86403c5d23533937e95980570545e5586
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -664,7 +628,7 @@ jobs:
       # The release tag format is <organization_name>-<chart_name>-<chart_version>
       - name: Create GitHub release
         if: ${{ needs.validate-submission.outputs.web_catalog_only == 'False' }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ needs.validate-submission.outputs.release_tag }}
@@ -723,21 +687,18 @@ jobs:
             HEAD:refs/heads/${INDEX_BRANCH}
 
       - name: Add a GitHub comment if release has failed
-        uses: actions/github-script@v7
         if: ${{ failure() && github.repository != env.SANDBOX_REPO }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: `### Release job failed
+        run: |
+          gh pr comment "${PR_NUMBER}" --body "${COMMENT_BODY}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
+          COMMENT_BODY: |
+            ### Release job failed
 
-              An error occured while updating the Helm repository index.
+            An error occured while updating the Helm repository index.
 
-              cc @komish @mgoerens`
-            });
+            cc @komish @mgoerens
 
       # Note(komish): This step is a temporary workaround. Metrics requires the PR comment
       # to be available, but it is written to the filesystem in the previous job.
@@ -793,7 +754,7 @@ jobs:
       - name: Alert Slack helm_dev on failure to update metrics
         continue-on-error: true
         if: steps.add_metrics.outcome == 'failure'
-        uses: archive/github-actions-slack@v2.8.0
+        uses: archive/github-actions-slack@433fef9978d3adae73168bfc9c5a7ce722780231
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C02979BDUPL
