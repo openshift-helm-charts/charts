@@ -4076,6 +4076,53 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/appscode-kubestash-certified-2026.1.19/kubestash-certified-2026.1.19.tgz
     version: 2026.1.19
+  - annotations:
+      charts.openshift.io/digest: sha256:85aaf8566e7ae0214f03e39079a2396b423cc932d3919cbc3bdbed6702762746
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-04T09:03:24.005052+00:00'
+      charts.openshift.io/name: kubestash-certified
+      charts.openshift.io/provider: Tamal Saha
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-05-04T09:06:32.781598+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: v2026.4.27
+    dependencies:
+    - condition: kubestash-operator.enabled
+      name: kubestash-operator
+      repository: file://../kubestash-operator
+      version: v0.27.0
+    - condition: kubestash-catalog.enabled
+      name: kubestash-catalog
+      repository: file://../kubestash-catalog
+      version: v2026.4.27
+    - condition: kubestash-metrics.enabled
+      name: kubestash-metrics
+      repository: file://../kubestash-metrics
+      version: v2026.4.27
+    - condition: ace-user-roles.enabled
+      name: ace-user-roles
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.2.16
+    - condition: global.taskQueue.enabled
+      name: taskqueue
+      repository: oci://ghcr.io/appscode-charts
+      version: v2026.2.16
+    description: KubeStash by AppsCode - Backup your Kubernetes native applications
+    digest: f14b4031bf9642cfa203ed357d57ad5f88ac02bfaebab82813f7837b743fe242
+    home: https://kubestash.com
+    icon: https://cdn.appscode.com/images/products/kubestash/stash-icon.png
+    kubeVersion: '>=1.28.0-0'
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: kubestash-certified
+    sources:
+    - https://github.com/kubestash
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/appscode-kubestash-certified-2026.4.27/kubestash-certified-2026.4.27.tgz
+    version: 2026.4.27
   kubevault-certified:
   - annotations:
       charts.openshift.io/digest: sha256:91778efbb304f971a9dddfdab4d7ca18dc3dbfd11aec8a8115fe0333d874d354
@@ -16925,4 +16972,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-04-30T06:44:57.151283+00:00'
+generated: '2026-05-04T09:06:32.565007+00:00'
