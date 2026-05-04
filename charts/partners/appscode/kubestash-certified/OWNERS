@@ -7,6 +7,7 @@ publicPgpKey: unknown
 users:
 - githubUsername: tamalsaha
 - githubUsername: Superm4n97
+- githubUsername: mdshihabuddin01
 vendor:
   label: appscode
-  name: Tamal Saha
+  name: AppsCode Inc.
