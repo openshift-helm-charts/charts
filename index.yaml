@@ -10703,6 +10703,34 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-orchestrator-infra-1.8.6/redhat-developer-hub-orchestrator-infra-1.8.6.tgz
     version: 1.8.6
+  - annotations:
+      charts.openshift.io/digest: sha256:8bf2b42d91c9303b342eb24f9b9177023ebbd8512ae299bae5df922b180e3008
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-05T18:02:03.570631+00:00'
+      charts.openshift.io/name: Orchestrator Infrastructure for Red Hat Developer
+        Hub
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-05-05T18:03:45.243015+00:00'
+      charts.openshift.io/supportURL: https://issues.redhat.com/browse/RHIDP
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    description: Helm chart to deploy the Orchestrator solution's required infrastructure
+      suite on OpenShift, including OpenShift Serverless Operator and OpenShift Serverless
+      Logic Operator, both required to configure Red Hat Developer Hub to use the
+      Orchestrator.
+    digest: aebbef7c06834e5985384a036c5e285d54ce956b1aa23c22d59f75d4e030ed1b
+    kubeVersion: '>= 1.25.0-0'
+    maintainers:
+    - name: Red Hat Developer Hub Team
+      url: https://github.com/redhat-developer/rhdh-chart
+    name: redhat-developer-hub-orchestrator-infra
+    sources:
+    - https://github.com/redhat-developer/rhdh-chart
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-orchestrator-infra-1.9.4/redhat-developer-hub-orchestrator-infra-1.9.4.tgz
+    version: 1.9.4
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -17063,4 +17091,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-05-04T09:29:02.325280+00:00'
+generated: '2026-05-05T18:03:45.067469+00:00'
