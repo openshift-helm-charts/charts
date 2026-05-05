@@ -14665,6 +14665,135 @@ entries:
     urls:
     - N/A
     version: 5.2.0
+  - annotations:
+      category: Touchstone
+      charts.openshift.io/digest: sha256:7c619c388b2dd5e4e2a91c68c934fc197139cba302e1fcece0990d56f29d857d
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-05T11:26:42.13103+00:00'
+      charts.openshift.io/name: Touchstone
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-05-05T11:34:03.016234+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.15'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: v5.3.0
+    dependencies:
+    - alias: mysql
+      condition: mysql.enabled
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.0
+    - alias: mongodb
+      condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.5.15
+    - alias: redis
+      condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.3.3
+    - alias: ingress_nginx
+      condition: ingress_nginx.enabled
+      name: nginx-ingress
+      repository: https://helm.nginx.com/stable
+      version: 2.4.2
+    - alias: ve_touchstone_db_helper
+      condition: ve_touchstone_db_helper.enabled
+      name: ve-touchstone-db-helper
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_touchstone_database_upgrade
+      condition: ve_touchstone_database_upgrade.enabled
+      name: ve-touchstone-database-migration
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_touchstone_api
+      condition: ve_touchstone_api.enabled
+      name: ve-touchstone-api
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_touchstone_engine_observer
+      condition: ve_touchstone_engine_observer.enabled
+      name: ve-touchstone-engine-observer
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_touchstone_management_database_upgrade
+      condition: ve_touchstone_management_database_upgrade.enabled
+      name: ve-touchstone-management-database-migration
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_touchstone_management_backend
+      condition: ve_touchstone_management_backend.enabled
+      name: ve-touchstone-management-backend
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_touchstone_management_frontend
+      condition: ve_touchstone_management_frontend.enabled
+      name: ve-touchstone-management-frontend
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_notification_dispatcher
+      condition: ve_notification_dispatcher.enabled
+      name: ve-notification-dispatcher
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_touchstone_ui
+      condition: ve_touchstone_ui.enabled
+      name: ve-touchstone-ui
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: ve_touchstone_ai
+      condition: ve_touchstone_ai.enabled
+      name: ve-touchstone-ai
+      repository: https://registry.voereir.io/chartrepo/voereir/
+      version: 5.3.0
+    - alias: kube_state_metrics
+      condition: kube_state_metrics.enabled
+      name: kube-state-metrics
+      repository: https://charts.bitnami.com/bitnami
+      version: 5.1.0
+    - alias: node_exporter
+      condition: node_exporter.enabled
+      name: node-exporter
+      repository: https://charts.bitnami.com/bitnami
+      version: 4.4.8
+    - alias: prometheus_alertmanager
+      condition: prometheus_alertmanager.enabled
+      name: prometheus
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.4.10
+    - alias: grafana
+      condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 7.0.19
+    - alias: elasticsearch
+      condition: elasticsearch.enabled
+      name: elasticsearch
+      repository: https://charts.bitnami.com/bitnami
+      version: 21.4.8
+    - alias: fluentd
+      condition: fluentd.enabled
+      name: fluentd
+      repository: https://charts.bitnami.com/bitnami
+      version: 7.1.4
+    - alias: kibana
+      condition: kibana.enabled
+      name: kibana
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.5.1
+    description: A Helm chart for Deploying Touchstone Portal as well as Touchstone
+      Management Portal End-to-End
+    digest: 56e6f30052adfdd7e1e3aed873cd783c27b51942ff08f3f19bf3d2e065ac44f1
+    kubeVersion: '>=1.28.0-0'
+    maintainers:
+    - name: VoerEir AB
+      url: https://github.com/VoerEirAB
+    name: ve-touchstone-master
+    type: application
+    urls:
+    - N/A
+    version: 5.3.0
   vsr:
   - annotations:
       charts.openshift.io/digest: sha256:0505e0601e67ad3a33905d233c72d0302160a6b77a2835fa43e083d0418ed9e9
@@ -14804,4 +14933,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-05-05T10:49:36.439526+00:00'
+generated: '2026-05-05T11:34:02.858428+00:00'
