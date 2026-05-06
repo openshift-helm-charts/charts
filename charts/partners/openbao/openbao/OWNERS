@@ -1,7 +1,7 @@
 chart:
   name: openbao
-  shortDescription: OpenBao is an open source, community-driven fork of Vault managed
-    by the Linux Foundation.
+  shortDescription: OpenBao is an open source, community-driven secrets manager and
+    fork of Vault managed by the Linux Foundation's OpenSSF.
 providerDelivery: false
 publicPgpKey: unknown
 users:
