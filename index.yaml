@@ -12237,6 +12237,33 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-openshift-mcp-server-0.2.0/redhat-openshift-mcp-server-0.2.0.tgz
     version: 0.2.0
+  - annotations:
+      charts.openshift.io/digest: sha256:ed11fc712430fa356a7bc7aff44249bf010a6c83ec3e9555791d91bc4cc33cf8
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-08T03:22:05.89843+00:00'
+      charts.openshift.io/name: MCP server for Red Hat OpenShift
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-05-08T03:23:50.642671+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.21'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: latest
+    description: Helm Chart for MCP server for Red Hat OpenShift
+    digest: 5c503715339cd33b19b3de1fc839e96f5cc6e14340e7696565cd3cdd79a5b5e6
+    home: https://github.com/openshift/openshift-mcp-server
+    keywords:
+    - openshift
+    - mcp
+    kubeVersion: '>=1.34.0-0'
+    maintainers:
+    - email: ablock@redhat.com
+      name: Andrew Block
+    - email: marc.nuri@redhat.com
+      name: Marc Nuri
+    name: redhat-openshift-mcp-server
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-openshift-mcp-server-0.3.0/redhat-openshift-mcp-server-0.3.0.tgz
+    version: 0.3.0
   redhat-perl-dancer-template:
   - annotations:
       charts.openshift.io/digest: sha256:337febe1599f08feb9f2ca380ee8298e9677f9073fff2b6baa52947ad9832120
@@ -17215,4 +17242,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-05-07T06:09:02.689680+00:00'
+generated: '2026-05-08T03:23:50.460911+00:00'
