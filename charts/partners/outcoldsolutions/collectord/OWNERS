@@ -1,9 +1,12 @@
 chart:
   name: collectord
-  shortDescription: unknown
+  shortDescription: Collectord Helm chart for Monitoring OpenShift application.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: outcoldman
+- githubUsername: dominique-ocs
+- githubUsername: OutcoldScott
 vendor:
   label: outcoldsolutions
   name: Outcold Solutions LLC
