@@ -5192,6 +5192,44 @@ entries:
     urls:
     - https://github.com/rhm-samples/edge-helm-charts/blob/master/nodered-chart-0.0.3.tgz?raw=true
     version: 0.0.3
+  openbao:
+  - annotations:
+      artifacthub.io/changes: "- kind: changed\n  description: |\n    fix: Switch
+        to certified Red Hat registry images for OpenShift\n"
+      artifacthub.io/containsSecurityUpdates: 'false'
+      charts.openshift.io/digest: sha256:c1744c1d1e28669ffc3c89a7d7bc708c21322f507619ec678d1352c6723cad0b
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-13T17:31:08.762188+02:00'
+      charts.openshift.io/name: Openbao
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-05-13T15:49:12.744974+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.17'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: v2.5.3
+    description: Official OpenBao Chart
+    digest: ddf5d7e7089bed6e3cf9cac71177d9fab3d59cf2f9b6f4997bfa37a58a0e01c1
+    home: https://github.com/openbao/openbao-helm
+    icon: https://raw.githubusercontent.com/openbao/artwork/refs/heads/main/color/openbao-color.svg
+    keywords:
+    - vault
+    - openbao
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.30.0-0'
+    maintainers:
+    - email: openbao-security@lists.openssf.org
+      name: OpenBao
+      url: https://openbao.org
+    name: openbao
+    sources:
+    - https://github.com/openbao/openbao-helm
+    urls:
+    - https://github.com/openbao/openbao-helm/releases/download/openbao-0.28.2/openbao-0.28.2.tgz
+    version: 0.28.2
   opscruise:
   - annotations:
       charts.openshift.io/digest: sha256:3936a9deac923380aa2dd842f19da07d32030a867ebd05eea48dd38b895b82c0
@@ -17316,4 +17354,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-05-13T05:09:44.917577+00:00'
+generated: '2026-05-13T15:49:12.569079+00:00'
