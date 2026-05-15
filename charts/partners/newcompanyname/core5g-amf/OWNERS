@@ -1,0 +1,9 @@
+chart:
+  name: core5g-amf
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: newcompanyname
+  name: Red Hat
