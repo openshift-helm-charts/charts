@@ -20,7 +20,7 @@ jobs:
       issues: write
     steps:
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
     - name: Set up Python
       id: setup-python
       uses: ./.github/actions/setup-python
@@ -34,7 +34,7 @@ jobs:
     - name: notify maintainers on failure
       id: notify
       if: failure() && steps.generate.outcome == 'failure' && github.repository == 'openshift-helm-charts/charts'
-      uses: archive/github-actions-slack@v2.8.0
+      uses: archive/github-actions-slack@433fef9978d3adae73168bfc9c5a7ce722780231
       with:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
         slack-channel: C02979BDUPL

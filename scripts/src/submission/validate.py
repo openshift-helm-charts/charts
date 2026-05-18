@@ -2,7 +2,7 @@ import argparse
 import json
 import sys
 
-from submission import submission, serializer
+from submission import serializer, submission
 from tools import gitutils
 
 

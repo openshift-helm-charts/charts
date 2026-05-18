@@ -1,0 +1,86 @@
+namespaceOverride: ''
+image:
+  repository: registry.redhat.io/openshift-gitops-1/argocd-agent-rhel9
+  tag: v1.20.0
+  pullPolicy: Always
+replicaCount: 1
+tlsSecretName: argocd-agent-client-tls
+tlsRootCASecretName: argocd-agent-ca
+userPasswordSecretName: argocd-agent-agent-userpass
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+serviceAccount:
+  create: true
+  name: ''
+  annotations: {}
+nodeSelector: {}
+affinity: {}
+tolerations: []
+podAnnotations: {}
+podLabels: {}
+priorityClassName: ''
+probes:
+  liveness:
+    enabled: true
+    httpGet:
+      path: /healthz
+      port: healthz
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    enabled: true
+    httpGet:
+      path: /healthz
+      port: healthz
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+agentMode: autonomous
+auth: mtls:any
+logLevel: info
+logFormat: text
+server: principal.server.address.com
+serverPort: '443'
+metricsPort: '8181'
+tlsClientInSecure: 'false'
+healthzPort: '8002'
+redisAddress: argocd-redis:6379
+redisUsername: ''
+argoCdRedisSecretName: argocd-redis
+argoCdRedisPasswordKey: auth
+enableWebSocket: false
+enableCompression: false
+pprofPort: '0'
+enableResourceProxy: true
+cacheRefreshInterval: 10s
+keepAliveInterval: 50s
+tlsClientKeyPath: ''
+tlsClientCertPath: ''
+tlsRootCAPath: ''
+tlsMinVersion: ''
+tlsMaxVersion: ''
+tlsCipherSuites: ''
+allowedNamespaces: ''
+destinationBasedMapping: false
+createNamespace: false
+service:
+  metrics:
+    port: 8181
+    targetPort: 8181
+    annotations: {}
+  healthz:
+    port: 8002
+    targetPort: 8002
+    annotations: {}
+tests:
+  enabled: false
+  image: bitnamilegacy/kubectl
+  tag: 1.33.4

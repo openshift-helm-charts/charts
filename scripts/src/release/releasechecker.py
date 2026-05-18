@@ -29,9 +29,9 @@ import re
 import sys
 
 import semver
-from reporegex import matchers
 
 from release import release_info, releaser
+from reporegex import matchers
 
 sys.path.append("../")
 from owners import checkuser

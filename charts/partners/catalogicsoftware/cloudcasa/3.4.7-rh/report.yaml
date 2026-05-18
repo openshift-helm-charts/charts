@@ -1,0 +1,105 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.1
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:9402197684409357286
+        chart-uri: ./cloudcasa-3.4.7-rh.tgz
+        digests:
+            chart: sha256:74045f487f4952b1cb4ebe7272fdc61bd5e492280720a9ecc1f546b774717471
+            package: d9c99b7df767ab8c5505d3a52cfedc2d186f3d3a6b68e62f5ec71bf465020643
+        lastCertifiedTimestamp: "2026-04-08T13:07:19.891968+02:00"
+        testedOpenShiftVersion: "4.19"
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: false
+    chart:
+        name: cloudcasa
+        home: https://cloudcasa.io
+        sources: []
+        version: 3.4.7-rh
+        description: CloudCasa backup, DR, and migration service agent for Kubernetes
+        keywords:
+            - backup
+            - restore
+            - migration
+            - catalogic
+            - cloudcasa
+            - velero
+        maintainers:
+            - name: CloudCasa Support
+              email: support@cloudcasa.io
+              url: ""
+        icon: https://raw.githubusercontent.com/catalogicsoftware/cloudcasa-helmchart/gh-pages/logo.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 3.1.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: CloudCasa Agent
+            cloudcasa.io/installation-method: openshift-helm
+        kubeversion: '>=1.20.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : registry.connect.redhat.com/catalogicsoftware/cloudcasa-amds-kagent:latest'
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+

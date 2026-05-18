@@ -8,6 +8,8 @@ users:
 - githubUsername: fzdarsky
 - githubUsername: hexfusion
 - githubUsername: rawagner
+- githubUsername: keitwb
+- githubUsername: asafbss
 vendor:
   label: redhat
   name: Red Hat

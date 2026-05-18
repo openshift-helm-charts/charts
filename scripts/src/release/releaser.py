@@ -19,7 +19,10 @@ to the charts and development repositories.
 """
 
 import argparse
+import difflib
+import fileinput
 import os
+import re
 import shutil
 import sys
 
@@ -35,6 +38,52 @@ CHARTS_PR_BRANCH_BODY_PREFIX = "Workflow and script updates from development rep
 CHARTS_PR_BRANCH_NAME_PREFIX = "Release-"
 STAGE_PR_BRANCH_BODY_PREFIX = "Workflow and script updates from development repository"
 STAGE_PR_BRANCH_NAME_PREFIX = "Release-"
+
+
+def switch_workflow_to_pull_request_target(workflow_path: str):
+    """Edit function that modifies the trigger of a workflow from pull_request
+    to pull_request_target.
+
+    It ensures that a single modification occurs and outputs a diff.
+
+    Args:
+        workflow_path (str): Path to the workflow to modify
+    """
+    replaced = False
+    with fileinput.FileInput(workflow_path, inplace=True, backup=".bak") as file:
+        for line in file:
+            if replaced:
+                print(line, end="")
+                continue
+            new_line, count = re.subn(
+                "^  pull_request:$",
+                r"  pull_request_target:",
+                line,
+            )
+            if count > 0:
+                replaced = True
+            print(new_line, end="")
+
+    with open(workflow_path, encoding="utf-8") as workflow_new_content:
+        with open(f"{workflow_path}.bak", encoding="utf-8") as workflow_bkp_content:
+            diff = difflib.unified_diff(
+                workflow_bkp_content.readlines(),
+                workflow_new_content.readlines(),
+                fromfile=f"{workflow_path}.bak",
+                tofile=workflow_path,
+            )
+            for line in diff:
+                print(line, end="")
+
+    os.remove(f"{workflow_path}.bak")
+
+
+# Mapping of allowed edit functions
+# This ensures only a predefined set of edit functions can be ran.
+# This also acts as a cast of str to callable.
+EDIT_FUNCTIONS = {
+    "switch_workflow_to_pull_request_target": switch_workflow_to_pull_request_target,
+}
 
 
 def make_required_changes(release_info_dir, origin, destination):
@@ -68,6 +117,18 @@ def make_required_changes(release_info_dir, origin, destination):
             print(f"Replace file {replace_this} with {with_this}")
             shutil.copy2(with_this, replace_this)
 
+    edits = release_info.get_edits(from_repository, to_repository, release_info_dir)
+
+    for filename, function in edits.items():
+        to_edit = f"{destination}/{filename}"
+        try:
+            edit_function = EDIT_FUNCTIONS[function]
+        except KeyError as e:
+            print(f"Edit function {function} not allowed")
+            raise e
+        print(f"Run edit function {function} on {to_edit}")
+        edit_function(to_edit)
+
     merges = release_info.get_merges(from_repository, to_repository, release_info_dir)
 
     for merge in merges:
@@ -91,7 +152,7 @@ def make_required_changes(release_info_dir, origin, destination):
             else:
                 print(f"Ignore/delete file {ignore_this}")
                 os.remove(ignore_this)
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             print(
                 f"[INFO] path {ignore_this} is explicitly ignored but was not found when syncing {from_repository} to {to_repository}."
                 + "This file can be removed from the ignore section of release_info.json"

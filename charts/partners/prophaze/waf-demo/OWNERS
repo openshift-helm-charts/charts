@@ -1,0 +1,11 @@
+chart:
+  name: waf-demo
+  shortDescription: Prophaze WAF Helm chart for deploying Web Application Firewall
+    on OpenShift and Kubernetes.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: AnandR1225
+vendor:
+  label: prophaze
+  name: Prophaze Inc.

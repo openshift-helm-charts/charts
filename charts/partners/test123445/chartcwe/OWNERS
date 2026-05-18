@@ -1,0 +1,9 @@
+chart:
+  name: chartcwe
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: test123445
+  name: prod-test-user-05

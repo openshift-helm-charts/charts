@@ -1,0 +1,11 @@
+chart:
+  name: recognition
+  shortDescription: Delivers OCR/ICR results with exceptional accuracy despite distorted,
+    poor-quality scans with machine-print and difficult handwriting.
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: tob1asr
+vendor:
+  label: planet-ai
+  name: PLANET AI GmbH

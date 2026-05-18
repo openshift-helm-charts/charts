@@ -454,6 +454,8 @@ def check_report_success(directory, api_url, report_path, report_info_path, vers
 
 def verify_package_digest(url, report):
     print("[INFO] check package digest.")
+    target_digest = None
+    pkg_digest = None
 
     response = requests.get(url, allow_redirects=True)
     if response.status_code == 200:

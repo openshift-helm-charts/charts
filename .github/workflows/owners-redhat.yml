@@ -5,6 +5,9 @@ name: Red Hat OWNERS Files
 # submissions.
 
 on:
+  # NOTE: There are implementation details in this workflow that require the
+  # triggering event be pull_request_target or pull_request. See
+  # TRUSTED_REF before changing the events that can trigger this workflow.
   pull_request_target:
     paths:
     - charts/redhat/**/OWNERS
@@ -12,7 +15,10 @@ on:
 
 env:
   SUCCESS_LABEL: redhat-owners-content-ok
-
+  # TRUSTED_REF is a repository ref value (e.g. refs/heads/main) that contains
+  # trusted content for use in CI. In effect, this ref should contain
+  # trusted content in the scripts/* directory.
+  TRUSTED_REF: ${{ format('refs/heads/{0}', (github.event_name == 'pull_request' && github.base_ref || 'main')) }}
 jobs:
   gather-metadata:
     name: Gather Metadata From Path
@@ -26,14 +32,14 @@ jobs:
       pull-requests: write
     steps:
       - name: Clean up stale label
-        uses: actions/github-script@v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const successLabel = process.env.SUCCESS_LABEL;
             try {
-              await github.issues.removeLabel({
+              await github.rest.issues.removeLabel({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -49,7 +55,9 @@ jobs:
               throw error
             }
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ env.TRUSTED_REF }}
 
       - name: Set up Python
         uses: ./.github/actions/setup-python
@@ -88,7 +96,9 @@ jobs:
     needs: [gather-metadata]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ env.TRUSTED_REF }}
       - name: Set up Python
         uses: ./.github/actions/setup-python
       - name: Install Python CI tooling
@@ -98,7 +108,7 @@ jobs:
 
       # Only used to assert content of the OWNERS file.
       - name: Checkout Pull Request
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -128,7 +138,7 @@ jobs:
     if: failure() && (needs.ensure-prefix-in-path.result == 'failure' || needs.ensure-owners-file-contents.result == 'failure')
     steps:
       - name: Send PR Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         env:
           PREFIX_CHECK_RESULT: ${{ needs.ensure-prefix-in-path.result != '' && needs.ensure-prefix-in-path.result || 'unknown' }}
           CONTENT_CHECK_RESULT: ${{ needs.ensure-owners-file-contents.result != '' && needs.ensure-owners-file-contents.result || 'unknown' }}
@@ -173,16 +183,8 @@ jobs:
     if: success()
     steps:
     - name: Label PR
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const issue_number = process.env.PR;
-          const successLabel = process.env.SUCCESS_LABEL;
-
-          github.rest.issues.addLabels({
-            issue_number: Number(issue_number),
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            labels: [successLabel],
-          });
+      run: gh pr edit "${PR_NUMBER}" --add-label "${SUCCESS_LABEL}"
+      env:
+        PR_NUMBER: ${{ env.PR }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SUCCESS_LABEL: ${{ env.SUCCESS_LABEL }}

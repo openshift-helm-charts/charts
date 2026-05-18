@@ -1,0 +1,99 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.1
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:5697951986270156012
+        chart-uri: /charts/iax-operator-crd-rh-2.17.11.tgz
+        digests:
+            chart: sha256:17ceef0ff7519edc43219484721e0d4aff3f2a5a4095d50c1ba56c0ad8b1194c
+            package: 50c11e68fb9b0792d73dd471dafa755c364f0aa8c7c2693e379785ad5e0925b2
+        lastCertifiedTimestamp: "2026-04-17T12:02:48.703546+00:00"
+        testedOpenShiftVersion: "4.21"
+        supportedOpenShiftVersions: '>=4.12'
+        webCatalogOnly: false
+    chart:
+        name: iax-operator-crd-rh
+        home: ""
+        sources: []
+        version: 2.17.11
+        description: ITRS Analytics Operator CRDs
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.17.6
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: itrsgroup-iax-operator-crd-rh
+        kubeversion: '>= 1.25.0-0'
+        dependencies:
+            - name: iax-operator-crd
+              version: 2.17.6
+              repository: https://helm.itrsgroup.com
+              alias: operator-crd
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-micro'
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+
