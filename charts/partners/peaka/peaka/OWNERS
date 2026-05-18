@@ -4,7 +4,6 @@ chart:
 providerDelivery: False
 publicPgpKey: null
 users:
-- githubUsername: iambugra
 - githubUsername: afurkanerdem
 vendor:
   label: peaka
