@@ -1,0 +1,10 @@
+chart:
+  name: peaka
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: afurkanerdem
+vendor:
+  label: peaka
+  name: Peaka
