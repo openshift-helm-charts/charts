@@ -1,6 +1,7 @@
 chart:
   name: peaka
-  shortDescription: unknown
+  shortDescription: Peaka is an AI-ready data virtualization platform that lets you
+    query and combine distributed data instantly.
 providerDelivery: false
 publicPgpKey: unknown
 users:
