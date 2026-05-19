@@ -1,0 +1,131 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.1
+        profile:
+            VendorType: community
+            version: v1.1
+        reportDigest: uint64:10588476536514532301
+        chart-uri: https://maximilianopizarro.github.io/jhipster-online-helm-chart/charts/jhipster-online-1.1.0.tgz
+        digests:
+            chart: sha256:ccf8aa9f9830eecf8111d05c13dc47fad7cc6827d28384a1997c607c24fb28a0
+            package: c9bd2d16bd434e6d5b4ab401edea0dae57edeb03756f2b85f2b3017a0ffca090
+        lastCertifiedTimestamp: "2026-05-14T20:46:57.384016+00:00"
+        testedOpenShiftVersion: N/A
+        supportedOpenShiftVersions: '>=4.12'
+        webCatalogOnly: false
+    chart:
+        name: jhipster-online
+        home: https://maximilianopizarro.github.io/jhipster-online-helm-chart/
+        sources:
+            - https://github.com/maximilianoPizarro/jhipster-online-helm-chart
+            - https://github.com/redhat-developer-demos/jhipster-online
+        version: 1.1.0
+        description: 'Helm chart for JHipster Online on Red Hat OpenShift (application 2.40.1). Main pod runs JHipster 9 (Quarkus / Spring Boot via image tag) with optional JHipster 8 HTTP worker for stacks that still use JH8 blueprints (.NET, Node/NestJS, Azure Container Apps). When jhipster8Worker.enabled, a second Deployment + ClusterIP Service exposes generator-jhipster@8.11; the main app delegates via APPLICATION_JHIPSTER8WORKER_* env vars. Optional pyhipsterWorker (on by default) adds a PyHipster HTTP worker on port 8082 with APPLICATION_PYHIPSTERWORKER_*; set enabled false to disable. Includes JDL Studio sidecar, MariaDB, OpenShift Route, optional in-cluster deploy RBAC, and JDL AI. Runtime images on Quay (2.40.1-quarkus / 2.40.1-spring-boot): UBI8 OpenJDK 21, Node 22.19, Maven 3.9.15, WAR at /deployments/jhonline.war. Default values target Red Hat Developer Sandbox.'
+        keywords:
+            - jhipster
+            - spring
+            - openshift
+            - quarkus
+            - jdl-ai
+            - vllm
+            - jhipster8
+            - dotnet
+            - python
+        maintainers:
+            - name: Maximiliano Pizarro
+              email: maximiliano.pizarro.5@gmail.com
+              url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+        icon: https://raw.githubusercontent.com/maximilianoPizarro/jhipster-online-helm-chart/main/rethat-jhipster.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 2.40.1
+        deprecated: false
+        annotations:
+            artifacthub.io/containsSecurityUpdates: "true"
+            artifacthub.io/images: |
+                - name: jhipster-online-quarkus
+                  image: quay.io/maximilianopizarro/jhipster-online:2.40.1-quarkus
+                - name: jhipster-online-spring-boot
+                  image: quay.io/maximilianopizarro/jhipster-online:2.40.1-spring-boot
+                - name: jhipster8-worker
+                  image: quay.io/maximilianopizarro/jhipster-online-jhipster8-worker:2.40.1-jhipster8-worker
+                - name: pyhipster-worker
+                  image: quay.io/maximilianopizarro/jhipster-online-pyhipster-worker:2.40.1-pyhipster-worker
+                - name: jdl-studio
+                  image: quay.io/maximilianopizarro/jdl-studio:latest
+            artifacthub.io/license: Apache-2.0
+            artifacthub.io/links: |
+                - name: Source (Application)
+                  url: https://github.com/redhat-developer-demos/jhipster-online
+                - name: Source (Helm Chart)
+                  url: https://github.com/maximilianoPizarro/jhipster-online-helm-chart
+                - name: Container Images (Quay.io)
+                  url: https://quay.io/repository/maximilianopizarro/jhipster-online
+            charts.openshift.io/name: JHipster Online
+            charts.openshift.io/provider: Red Hat Developer Demos
+            charts.openshift.io/supportURL: https://github.com/maximilianoPizarro/jhipster-online-helm-chart/issues
+        kubeversion: '>=1.25.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Optional
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/required-annotations-present
+      type: Optional
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Optional
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Optional
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Optional
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contain-csi-objects
+      type: Optional
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Optional
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-values
+      type: Optional
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Optional
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/images-are-certified
+      type: Optional
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : >- : repository not found: >-
+        Image is not Red Hat certified : >-
+        Image is not Red Hat certified : busybox : repository not found: busybox
+        Image is not Red Hat certified : busybox
+        Failed to certify images : quay.io/maximilianopizarro/jhipster-online-jhipster8-worker:2.40.1-jhipster8-worker : No images found for Registry/Repository: quay.io/maximilianopizarro/jhipster-online-jhipster8-worker
+        Failed to certify images : quay.io/maximilianopizarro/jhipster-online-pyhipster-worker:2.40.1-pyhipster-worker : No images found for Registry/Repository: quay.io/maximilianopizarro/jhipster-online-pyhipster-worker
+        Failed to certify images : quay.io/maximilianopizarro/jhipster-online:2.40.1-quarkus : No images found for Registry/Repository: quay.io/maximilianopizarro/jhipster-online
+        Failed to certify images : quay.io/maximilianopizarro/jdl-studio : No images found for Registry/Repository: quay.io/maximilianopizarro/jdl-studio
+    - check: v1.0/chart-testing
+      type: Optional
+      outcome: FAIL
+      reason: 'invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable'
+
