@@ -1,0 +1,111 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:7636540823493849806
+        chart-uri: wave-autoscale-helm-3.2.2.tgz
+        digests:
+            chart: sha256:abc8c6e0a56afa56f0aa6c2cd66ea3fa118c8e5de2e295cc0c48616b8b6d5d33
+            package: fa24242c45ea601e47a38fa2f88983cb7deda83828404e6cf298ce8b9465437d
+        lastCertifiedTimestamp: "2026-05-19T02:59:14.65197+00:00"
+        testedOpenShiftVersion: "4.18"
+        supportedOpenShiftVersions: '>=4.13'
+        webCatalogOnly: false
+    chart:
+        name: wave-autoscale-helm
+        home: https://waveautoscale.com
+        sources: []
+        version: 3.2.2
+        description: AI-powered Kubernetes resource optimization and cost reduction solution
+        keywords:
+            - autoscaling
+            - kubernetes
+            - cost-optimization
+            - machine-learning
+            - resource-management
+            - openshift
+        maintainers:
+            - name: STCLab Inc.
+              email: team@waveautoscale.com
+              url: ""
+        icon: https://waveautoscale.com/wa-logo-text.svg
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 3.2.2
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: wave-autoscale
+            charts.openshift.io/supportedOpenShiftVersions: '>=4.13'
+        kubeversion: '>= 1.26.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.connect.redhat.com/stclab-inc/wave-autoscale-agent:3.2.1-redhat
+        Image is Red Hat certified : registry.connect.redhat.com/stclab-inc/wave-autoscale-cadvisor:v0.52.1-redhat
+        Image is Red Hat certified : registry.connect.redhat.com/stclab-inc/wave-autoscale-core:3.2.2-redhat
+        Image is Red Hat certified : registry.connect.redhat.com/stclab-inc/wave-autoscale-web-console:3.2.2-redhat
+        Image is Red Hat certified : registry.connect.redhat.com/stclab-inc/wave-autoscale-intelligence:3.2.2-redhat
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi:latest
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+

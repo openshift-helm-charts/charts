@@ -1,0 +1,9 @@
+chart:
+  name: dynacov-safety-automation
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: dynacov
+  name: DynaCov, Inc.
