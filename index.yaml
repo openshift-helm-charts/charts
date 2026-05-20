@@ -3771,6 +3771,65 @@ entries:
     urls:
     - https://maximilianopizarro.github.io/jhipster-online-helm-chart/charts/jhipster-online-0.1.0.tgz
     version: 0.1.0
+  - annotations:
+      artifacthub.io/containsSecurityUpdates: 'true'
+      artifacthub.io/images: "- name: jhipster-online-quarkus\n  image: quay.io/maximilianopizarro/jhipster-online:2.40.1-quarkus\n-
+        name: jhipster-online-spring-boot\n  image: quay.io/maximilianopizarro/jhipster-online:2.40.1-spring-boot\n-
+        name: jhipster8-worker\n  image: quay.io/maximilianopizarro/jhipster-online-jhipster8-worker:2.40.1-jhipster8-worker\n-
+        name: pyhipster-worker\n  image: quay.io/maximilianopizarro/jhipster-online-pyhipster-worker:2.40.1-pyhipster-worker\n-
+        name: jdl-studio\n  image: quay.io/maximilianopizarro/jdl-studio:latest\n"
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: "- name: Source (Application)\n  url: https://github.com/redhat-developer-demos/jhipster-online\n-
+        name: Source (Helm Chart)\n  url: https://github.com/maximilianoPizarro/jhipster-online-helm-chart\n-
+        name: Container Images (Quay.io)\n  url: https://quay.io/repository/maximilianopizarro/jhipster-online\n"
+      charts.openshift.io/digest: sha256:ccf8aa9f9830eecf8111d05c13dc47fad7cc6827d28384a1997c607c24fb28a0
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-14T20:46:57.384016+00:00'
+      charts.openshift.io/name: JHipster Online
+      charts.openshift.io/provider: Red Hat Developer Demos
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-05-20T14:21:57.151740+00:00'
+      charts.openshift.io/supportURL: https://github.com/maximilianoPizarro/jhipster-online-helm-chart/issues
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 2.40.1
+    description: 'Helm chart for JHipster Online on Red Hat OpenShift (application
+      2.40.1). Main pod runs JHipster 9 (Quarkus / Spring Boot via image tag) with
+      optional JHipster 8 HTTP worker for stacks that still use JH8 blueprints (.NET,
+      Node/NestJS, Azure Container Apps). When jhipster8Worker.enabled, a second Deployment
+      + ClusterIP Service exposes generator-jhipster@8.11; the main app delegates
+      via APPLICATION_JHIPSTER8WORKER_* env vars. Optional pyhipsterWorker (on by
+      default) adds a PyHipster HTTP worker on port 8082 with APPLICATION_PYHIPSTERWORKER_*;
+      set enabled false to disable. Includes JDL Studio sidecar, MariaDB, OpenShift
+      Route, optional in-cluster deploy RBAC, and JDL AI. Runtime images on Quay (2.40.1-quarkus
+      / 2.40.1-spring-boot): UBI8 OpenJDK 21, Node 22.19, Maven 3.9.15, WAR at /deployments/jhonline.war.
+      Default values target Red Hat Developer Sandbox.'
+    digest: c9bd2d16bd434e6d5b4ab401edea0dae57edeb03756f2b85f2b3017a0ffca090
+    home: https://maximilianopizarro.github.io/jhipster-online-helm-chart/
+    icon: https://raw.githubusercontent.com/maximilianoPizarro/jhipster-online-helm-chart/main/rethat-jhipster.png
+    keywords:
+    - jhipster
+    - spring
+    - openshift
+    - quarkus
+    - jdl-ai
+    - vllm
+    - jhipster8
+    - dotnet
+    - python
+    kubeVersion: '>=1.25.0-0'
+    maintainers:
+    - email: maximiliano.pizarro.5@gmail.com
+      name: Maximiliano Pizarro
+      url: http://www.linkedin.com/in/maximiliano-gregorio-pizarro-consultor-it
+    name: jhipster-online
+    sources:
+    - https://github.com/maximilianoPizarro/jhipster-online-helm-chart
+    - https://github.com/redhat-developer-demos/jhipster-online
+    type: application
+    urls:
+    - https://maximilianopizarro.github.io/jhipster-online-helm-chart/charts/jhipster-online-1.1.0.tgz
+    version: 1.1.0
   kb-cloud-installer:
   - annotations:
       charts.openshift.io/digest: sha256:d38a1f3a8807c1c435eb3994b12bd624ee92c016051451ec8eaa6e5684fe4ee7
@@ -17385,4 +17444,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-05-19T03:03:29.373924+00:00'
+generated: '2026-05-20T14:21:56.975735+00:00'
