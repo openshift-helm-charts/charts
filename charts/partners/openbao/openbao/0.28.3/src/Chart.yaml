@@ -1,0 +1,39 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
+apiVersion: v2
+name: openbao
+version: 0.28.3
+appVersion: v2.5.4
+kubeVersion: ">= 1.30.0-0"
+description: Official OpenBao Chart
+home: https://github.com/openbao/openbao-helm
+icon: https://raw.githubusercontent.com/openbao/artwork/refs/heads/main/color/openbao-color.svg
+keywords:
+  [
+    "vault",
+    "openbao",
+    "security",
+    "encryption",
+    "secrets",
+    "management",
+    "automation",
+    "infrastructure",
+  ]
+sources:
+  - https://github.com/openbao/openbao-helm
+annotations:
+  charts.openshift.io/name: OpenBao
+  charts.openshift.io/provider: OpenBao
+  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/changes: |
+    - kind: changed
+      description: |
+        chore: Improve OpenShift annotations
+    - kind: changed
+      description: |
+        chore: bump OpenBao to v2.5.4
+maintainers:
+  - name: OpenBao
+    email: openbao-security@lists.openssf.org
+    url: https://openbao.org
