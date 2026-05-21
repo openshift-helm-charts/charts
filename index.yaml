@@ -5289,6 +5289,45 @@ entries:
     urls:
     - https://github.com/openbao/openbao-helm/releases/download/openbao-0.28.2/openbao-0.28.2.tgz
     version: 0.28.2
+  - annotations:
+      artifacthub.io/changes: "- kind: changed\n  description: |\n    chore: Improve
+        OpenShift annotations\n- kind: changed\n  description: |\n    chore: bump
+        OpenBao to v2.5.4\n"
+      artifacthub.io/containsSecurityUpdates: 'true'
+      charts.openshift.io/digest: sha256:657791b412568f666664496dbac57e18aea12d9c54117aabb6b7a1c4677813ec
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-21T15:15:18.132166+00:00'
+      charts.openshift.io/name: OpenBao
+      charts.openshift.io/provider: Adfinis AG
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-05-21T15:17:48.210419+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.17'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: v2.5.4
+    description: Official OpenBao Chart
+    digest: 7c11095b4d08dd869f8566514180d7050b36a0c80ef3311003b34a2ccced9ae4
+    home: https://github.com/openbao/openbao-helm
+    icon: https://raw.githubusercontent.com/openbao/artwork/refs/heads/main/color/openbao-color.svg
+    keywords:
+    - vault
+    - openbao
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.30.0-0'
+    maintainers:
+    - email: openbao-security@lists.openssf.org
+      name: OpenBao
+      url: https://openbao.org
+    name: openbao
+    sources:
+    - https://github.com/openbao/openbao-helm
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/openbao-openbao-0.28.3/openbao-0.28.3.tgz
+    version: 0.28.3
   opscruise:
   - annotations:
       charts.openshift.io/digest: sha256:3936a9deac923380aa2dd842f19da07d32030a867ebd05eea48dd38b895b82c0
@@ -17444,4 +17483,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-05-20T14:21:56.975735+00:00'
+generated: '2026-05-21T15:17:48.000960+00:00'
