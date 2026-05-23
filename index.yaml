@@ -4072,6 +4072,40 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/appscode-kubedb-certified-2026.4.27/kubedb-certified-2026.4.27.tgz
     version: 2026.4.27
+  kubesense:
+  - annotations:
+      charts.openshift.io/digest: sha256:e4a85d2c49b1edd6a875508eddb568b7f062a447e8a1cebc0d9490850c697206
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-23T10:46:31.58728+00:00'
+      charts.openshift.io/name: Kubesense
+      charts.openshift.io/provider: KubeSense, Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-05-23T10:48:09.565899+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: Kubesense Helm chart for APM, Logs, and Infrastructure Monitoring
+      on Kubernetes
+    digest: 1e89d3fc1d9400e3a2a8cf314fa17b7fc2ab684097726a95ae51dd574a6a02dc
+    home: https://kubesense.ai
+    keywords:
+    - observability
+    - apm
+    - monitoring
+    - logs
+    - kubernetes
+    kubeVersion: '>=1.21.0-0'
+    maintainers:
+    - email: support@kubesense.ai
+      name: Kubesense
+      url: https://kubesense.ai
+    name: kubesense
+    sources:
+    - https://github.com/kubesense-ai/kubesense
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/kubesense-kubesense-1.0.0/kubesense-1.0.0.tgz
+    version: 1.0.0
   kubestash-certified:
   - annotations:
       charts.openshift.io/digest: sha256:cbd144e5e513d498ba4cea7b3bdb147baeddeaa492d971ec7c4f6b9979816f73
@@ -17483,4 +17517,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-05-21T15:17:48.000960+00:00'
+generated: '2026-05-23T10:48:09.389932+00:00'
