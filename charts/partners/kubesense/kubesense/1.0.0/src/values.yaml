@@ -19,8 +19,6 @@ podLabels: {}
 
 podSecurityContext:
   runAsNonRoot: true
-  runAsUser: 1001
-  fsGroup: 0
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -28,7 +26,6 @@ securityContext:
     drop:
       - ALL
   runAsNonRoot: true
-  runAsUser: 1001
 
 service:
   type: ClusterIP
