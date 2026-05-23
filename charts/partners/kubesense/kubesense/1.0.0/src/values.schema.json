@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "repository": { "type": "string" },
+        "pullPolicy": {
+          "type": "string",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        },
+        "tag": { "type": "string" }
+      },
+      "required": ["repository", "pullPolicy"]
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer"]
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      },
+      "required": ["type", "port"]
+    },
+    "secrets": {
+      "type": "object",
+      "properties": {
+        "jwtSecret":            { "type": "string" },
+        "databasePassword":     { "type": "string" },
+        "tracesStorePassword":  { "type": "string" },
+        "alertmanagerPassword": { "type": "string" },
+        "smtpAuthPassword":     { "type": "string" }
+      }
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "port":               { "type": "string" },
+        "apiRateLimit":       { "type": "integer", "minimum": 1 },
+        "loginApiRateLimit":  { "type": "integer", "minimum": 1 },
+        "ipBlockTime":        { "type": "integer", "minimum": 1 },
+        "runDbMigrations":    { "type": "boolean" },
+        "database": {
+          "type": "object",
+          "properties": {
+            "driver":          { "type": "string", "enum": ["mysql", "postgres"] },
+            "host":            { "type": "string" },
+            "port":            { "type": "string" },
+            "source":          { "type": "string" },
+            "username":        { "type": "string" },
+            "maxOpenConns":    { "type": "integer", "minimum": 1 },
+            "maxIdleConns":    { "type": "integer", "minimum": 1 }
+          }
+        },
+        "tracesStore": {
+          "type": "object",
+          "properties": {
+            "host":     { "type": "string" },
+            "port":     { "type": "string" },
+            "username": { "type": "string" }
+          }
+        },
+        "metricsStore": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "string" },
+            "url":     { "type": "string" }
+          }
+        },
+        "logger": {
+          "type": "object",
+          "properties": {
+            "level":    { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+            "encoding": { "type": "string", "enum": ["console", "json"] }
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "limits": {
+          "type": "object",
+          "properties": {
+            "cpu":    { "type": "string" },
+            "memory": { "type": "string" }
+          }
+        },
+        "requests": {
+          "type": "object",
+          "properties": {
+            "cpu":    { "type": "string" },
+            "memory": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
