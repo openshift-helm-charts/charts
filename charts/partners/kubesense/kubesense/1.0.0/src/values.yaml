@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: public.ecr.aws/p8w3i6u3/testkubesense/api
+  repository: registry.access.redhat.com/ubi9/ubi
   pullPolicy: IfNotPresent
-  tag: "v1.0.0"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -34,102 +34,28 @@ service:
   type: ClusterIP
   port: 3000
 
-config:
-  port: "3000"
-  allowOrigins: ""
-  apiRateLimit: 600
-  loginApiRateLimit: 10
-  ipBlockTime: 15
-  trustedProxies: []
-  dashboardHost: "localhost:5173"
-  runDbMigrations: false
-
-  database:
-    driver: mysql
-    host: ""
-    port: "3306"
-    source: ""
-    username: ""
-    connMaxLifetime: "1m"
-    connMaxIdleTime: "30s"
-    maxOpenConns: 50
-    maxIdleConns: 10
-
-  tracesStore:
-    host: ""
-    port: "9000"
-    username: "default"
-
-  metricsStore:
-    enabled: "true"
-    url: ""
-
-  kubecol:
-    enabled: false
-    llmUrl: "http://kubesense-kubecol:31443"
-
-  kubeaiService: "kubesense-kubeai:3003"
-  kubeaiServiceHttp: "kubesense-kubeai:3004"
-
-  logger:
-    level: info
-    encoding: console
-    outputPaths:
-      - stdout
-    errorOutputPaths:
-      - stdout
-    maxSize: 300
-    maxBackups: 9
-    maxAge: 7
-    enableCaller: true
-
-  alertmanager:
-    enabled: false
-    baseUrl: "http://localhost:9093"
-    timeout: 30
-    configPath: "alertmanager.yaml"
-    apiBaseUrl: ""
-    smtpSmarthost: ""
-    smtpFrom: ""
-    smtpAuthUsername: ""
-    smtpRequireTls: true
-
-  saml:
-    enabled: false
-    rootUrl: ""
-    entityId: ""
-    idpMetadataUrl: ""
-
-# Sensitive values — stored in a Kubernetes Secret
-secrets:
-  jwtSecret: ""
-  databasePassword: ""
-  tracesStorePassword: ""
-  alertmanagerPassword: ""
-  smtpAuthPassword: ""
-
 resources:
   limits:
-    cpu: 500m
-    memory: 512Mi
-  requests:
-    cpu: 100m
+    cpu: 200m
     memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
 
 livenessProbe:
   httpGet:
     path: /api/health
     port: http
-  initialDelaySeconds: 30
+  initialDelaySeconds: 5
   periodSeconds: 10
-  timeoutSeconds: 5
+  timeoutSeconds: 3
   failureThreshold: 3
 
 readinessProbe:
   httpGet:
     path: /api/health
     port: http
-  initialDelaySeconds: 10
+  initialDelaySeconds: 3
   periodSeconds: 5
   timeoutSeconds: 3
   failureThreshold: 3

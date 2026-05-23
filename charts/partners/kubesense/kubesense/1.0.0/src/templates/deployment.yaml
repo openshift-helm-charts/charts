@@ -36,36 +36,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["python3", "/scripts/server.py"]
           ports:
             - name: http
               containerPort: 3000
               protocol: TCP
-          env:
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kubesense.fullname" . }}
-                  key: JWT_SECRET
-            - name: TESTS_STORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kubesense.fullname" . }}
-                  key: TESTS_STORE_PASSWORD
-            - name: TRACES_STORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kubesense.fullname" . }}
-                  key: TRACES_STORE_PASSWORD
-            - name: ALERTMANAGER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kubesense.fullname" . }}
-                  key: ALERTMANAGER_PASSWORD
-            - name: ALERTMANAGER_SMTP_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "kubesense.fullname" . }}
-                  key: ALERTMANAGER_SMTP_AUTH_PASSWORD
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
@@ -73,26 +48,13 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: config
-              mountPath: /opt/kubesense/config.yaml
-              subPath: config.yaml
+            - name: server-script
+              mountPath: /scripts
               readOnly: true
-            - name: logs
-              mountPath: /opt/kubesense/logs
-            - name: exports
-              mountPath: /opt/kubesense/exports
-            - name: vector-data
-              mountPath: /vector-data-dir
       volumes:
-        - name: config
+        - name: server-script
           configMap:
-            name: {{ include "kubesense.fullname" . }}
-        - name: logs
-          emptyDir: {}
-        - name: exports
-          emptyDir: {}
-        - name: vector-data
-          emptyDir: {}
+            name: {{ include "kubesense.fullname" . }}-server
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

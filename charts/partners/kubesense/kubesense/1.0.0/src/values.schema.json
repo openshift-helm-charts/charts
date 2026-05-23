@@ -33,60 +33,6 @@
       },
       "required": ["type", "port"]
     },
-    "secrets": {
-      "type": "object",
-      "properties": {
-        "jwtSecret":            { "type": "string" },
-        "databasePassword":     { "type": "string" },
-        "tracesStorePassword":  { "type": "string" },
-        "alertmanagerPassword": { "type": "string" },
-        "smtpAuthPassword":     { "type": "string" }
-      }
-    },
-    "config": {
-      "type": "object",
-      "properties": {
-        "port":               { "type": "string" },
-        "apiRateLimit":       { "type": "integer", "minimum": 1 },
-        "loginApiRateLimit":  { "type": "integer", "minimum": 1 },
-        "ipBlockTime":        { "type": "integer", "minimum": 1 },
-        "runDbMigrations":    { "type": "boolean" },
-        "database": {
-          "type": "object",
-          "properties": {
-            "driver":          { "type": "string", "enum": ["mysql", "postgres"] },
-            "host":            { "type": "string" },
-            "port":            { "type": "string" },
-            "source":          { "type": "string" },
-            "username":        { "type": "string" },
-            "maxOpenConns":    { "type": "integer", "minimum": 1 },
-            "maxIdleConns":    { "type": "integer", "minimum": 1 }
-          }
-        },
-        "tracesStore": {
-          "type": "object",
-          "properties": {
-            "host":     { "type": "string" },
-            "port":     { "type": "string" },
-            "username": { "type": "string" }
-          }
-        },
-        "metricsStore": {
-          "type": "object",
-          "properties": {
-            "enabled": { "type": "string" },
-            "url":     { "type": "string" }
-          }
-        },
-        "logger": {
-          "type": "object",
-          "properties": {
-            "level":    { "type": "string", "enum": ["debug", "info", "warn", "error"] },
-            "encoding": { "type": "string", "enum": ["console", "json"] }
-          }
-        }
-      }
-    },
     "resources": {
       "type": "object",
       "properties": {

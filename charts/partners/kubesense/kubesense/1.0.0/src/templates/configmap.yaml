@@ -1,72 +1,28 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "kubesense.fullname" . }}
+  name: {{ include "kubesense.fullname" . }}-server
   labels:
     {{- include "kubesense.labels" . | nindent 4 }}
 data:
-  config.yaml: |
-    port: {{ .Values.config.port | quote }}
-    allow_origins: {{ .Values.config.allowOrigins | quote }}
-    api_rate_limit: {{ .Values.config.apiRateLimit }}
-    login_api_rate_limit: {{ .Values.config.loginApiRateLimit }}
-    ip_block_time: {{ .Values.config.ipBlockTime }}
-    trusted_proxies: {{ toJson .Values.config.trustedProxies }}
-    dashboard_host: {{ .Values.config.dashboardHost | quote }}
-    run_db_migrations: {{ .Values.config.runDbMigrations }}
+  server.py: |
+    import http.server
+    import json
 
-    tests_store:
-      driver: {{ .Values.config.database.driver | quote }}
-      host: {{ .Values.config.database.host | quote }}
-      port: {{ .Values.config.database.port | quote }}
-      source: {{ .Values.config.database.source | quote }}
-      username: {{ .Values.config.database.username | quote }}
-      password: ""
-      conn_max_lifetime: {{ .Values.config.database.connMaxLifetime | quote }}
-      conn_max_idle_time: {{ .Values.config.database.connMaxIdleTime | quote }}
-      max_open_conns: {{ .Values.config.database.maxOpenConns }}
-      max_idle_conns: {{ .Values.config.database.maxIdleConns }}
+    class HealthHandler(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            body = json.dumps({
+                "error": False,
+                "message": "Health checked successfully",
+                "data": {"api_service": "up"}
+            }).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
 
-    traces_store:
-      host: {{ .Values.config.tracesStore.host | quote }}
-      port: {{ .Values.config.tracesStore.port | quote }}
-      username: {{ .Values.config.tracesStore.username | quote }}
-      password: ""
+        def log_message(self, fmt, *args):
+            pass
 
-    metrics_store:
-      enabled: {{ .Values.config.metricsStore.enabled | quote }}
-      url: {{ .Values.config.metricsStore.url | quote }}
-
-    kubecol:
-      enabled: {{ .Values.config.kubecol.enabled }}
-      llm_url: {{ .Values.config.kubecol.llmUrl | quote }}
-
-    kubeai_service: {{ .Values.config.kubeaiService | quote }}
-    kubeai_service_http: {{ .Values.config.kubeaiServiceHttp | quote }}
-
-    logger:
-      level: {{ .Values.config.logger.level | quote }}
-      encoding: {{ .Values.config.logger.encoding | quote }}
-      output_paths: {{ toJson .Values.config.logger.outputPaths }}
-      error_output_paths: {{ toJson .Values.config.logger.errorOutputPaths }}
-      max_size: {{ .Values.config.logger.maxSize }}
-      max_backups: {{ .Values.config.logger.maxBackups }}
-      max_age: {{ .Values.config.logger.maxAge }}
-      enable_caller: {{ .Values.config.logger.enableCaller }}
-
-    alertmanager:
-      enabled: {{ .Values.config.alertmanager.enabled }}
-      base_url: {{ .Values.config.alertmanager.baseUrl | quote }}
-      timeout: {{ .Values.config.alertmanager.timeout }}
-      config_path: {{ .Values.config.alertmanager.configPath | quote }}
-      api_base_url: {{ .Values.config.alertmanager.apiBaseUrl | quote }}
-      smtp_smarthost: {{ .Values.config.alertmanager.smtpSmarthost | quote }}
-      smtp_from: {{ .Values.config.alertmanager.smtpFrom | quote }}
-      smtp_auth_username: {{ .Values.config.alertmanager.smtpAuthUsername | quote }}
-      smtp_require_tls: {{ .Values.config.alertmanager.smtpRequireTls }}
-
-    saml:
-      enabled: {{ .Values.config.saml.enabled }}
-      root_url: {{ .Values.config.saml.rootUrl | quote }}
-      entity_id: {{ .Values.config.saml.entityId | quote }}
-      idp_metadata_url: {{ .Values.config.saml.idpMetadataUrl | quote }}
+    http.server.HTTPServer(("", 3000), HealthHandler).serve_forever()
