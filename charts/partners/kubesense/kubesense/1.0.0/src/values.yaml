@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: quay.io/guruprasad_kubesense/kubesense-api
+  repository: public.ecr.aws/p8w3i6u3/testkubesense/api
   pullPolicy: IfNotPresent
-  tag: "1.0.0"
+  tag: "v1.0.0"
 
 imagePullSecrets: []
 nameOverride: ""
