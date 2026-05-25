@@ -1,0 +1,22 @@
+apiVersion: v2
+name: kubesense
+description: Kubesense Helm chart for APM, Logs, and Infrastructure Monitoring on Kubernetes
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+kubeVersion: ">=1.21.0-0"
+keywords:
+  - observability
+  - apm
+  - monitoring
+  - logs
+  - kubernetes
+home: https://kubesense.ai
+sources:
+  - https://github.com/kubesense-ai/kubesense
+maintainers:
+  - name: Kubesense
+    email: support@kubesense.ai
+    url: https://kubesense.ai
+annotations:
+  charts.openshift.io/name: "Kubesense"
