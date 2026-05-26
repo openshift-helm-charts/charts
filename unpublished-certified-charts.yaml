@@ -309,6 +309,32 @@ entries:
     urls:
     - N/A
     version: 25.2.570-20250814.9942493
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:3ef508cb38db6c21a67cafa061f3d7e70720e0f9faba6cf66bf78ddfc471688b
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-21T09:00:11.739442-05:00'
+      charts.openshift.io/name: 5g-mongodb-upf-global-26a
+      charts.openshift.io/provider: Samsung Electronics
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/releaseDate: 26/03/15
+      charts.openshift.io/submissionTimestamp: '2026-05-26T22:07:51.632678+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 26.A.0
+    dependencies:
+    - condition: mdbm.enabled
+      name: mdbm
+      repository: ''
+      version: 14.2.2
+    description: A Helm chart for 5G Core MongoDB(for UPF NE)(26/03/15)
+    digest: f8a2fb835a2bee21e15630cc6d1536e27579618b796371415b35cfa8d1e2d61e
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-mongodb-upf-global
+    urls:
+    - N/A
+    version: 1.260315.10516330
   5g-nrf-global:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -15798,4 +15824,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-05-26T20:36:41.454609+00:00'
+generated: '2026-05-26T22:07:51.461542+00:00'
