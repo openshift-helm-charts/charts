@@ -11,4 +11,4 @@ users:
 - githubUsername: pree
 vendor:
   label: openbao
-  name: Adfinis AG
+  name: OpenBao
