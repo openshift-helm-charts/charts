@@ -352,6 +352,27 @@ entries:
     urls:
     - N/A
     version: 25.2.570-20250814.9942493
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:97b04095b64ec1052d749e665a5f1ab9bbc93a4412282506d57276ab0387b45b
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-21T08:41:53.917677-05:00'
+      charts.openshift.io/name: 5g-nrf-global-26a
+      charts.openshift.io/provider: Samsung Electronics
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/releaseDate: 26/03/15
+      charts.openshift.io/submissionTimestamp: '2026-05-26T20:36:41.647473+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 26.A.0
+    description: A Helm chart for 5G Core cNRF(26/03/15)
+    digest: 63d8947b96768330a90c70d4dc11ceb45ac2b8c648d64e52f57be17110654798
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-nrf-global
+    urls:
+    - N/A
+    version: 1.260315.10516330
   5g-nrf-global-24a:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -15777,4 +15798,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-05-26T19:43:54.481567+00:00'
+generated: '2026-05-26T20:36:41.454609+00:00'
