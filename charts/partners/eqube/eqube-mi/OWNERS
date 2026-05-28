@@ -2,3 +2,4 @@ approvers:
   - shantanu-eq
 reviewers:
   - shantanu-eq
+webCatalogOnly: true
