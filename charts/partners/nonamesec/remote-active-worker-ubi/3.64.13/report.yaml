@@ -6,48 +6,40 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:3041215444197099180
+        reportDigest: uint64:15069463061172534335
         chart-uri: N/A
         digests:
-            chart: sha256:d44742e48be1004e8657ab45ab5bc955f479506695a292f37d9e149c219f8029
-            package: 1d65aa960e407f2d21de57af2a552bbd5e6897fcdffa6fe431d422a10c83809b
-        lastCertifiedTimestamp: "2026-06-01T13:02:57.295667+00:00"
-        testedOpenShiftVersion: "4.18"
-        supportedOpenShiftVersions: '>=4.9'
+            chart: sha256:1e98f643e5df610a07c3255107d683fbfbf22152f7c0af188a4713771a9bab08
+            package: 423caa56d3a97be36cf3c0e2faf127dc3090af3bfecbc2cf88aee75f03f924ba
+        lastCertifiedTimestamp: "2026-05-31T21:38:08.16641+00:00"
+        testedOpenShiftVersion: "4.14"
+        supportedOpenShiftVersions: '>=4.1'
         webCatalogOnly: true
     chart:
-        name: noname-security-sensor-ubi
+        name: remote-active-worker-ubi
         home: ""
         sources: []
-        version: 3.3.57-rhel
-        description: A Helm chart for Kubernetes
+        version: 3.64.13
+        description: Active Worker Helm Chart for remote active worker deployments
         keywords: []
         maintainers: []
         icon: ""
         apiversion: v2
         condition: ""
         tags: ""
-        appversion: 3.3.57-rhel
+        appversion: 3.64.13-ubi
         deprecated: false
         annotations:
-            charts.openshift.io/name: noname-security-sensor
-        kubeversion: '>=1.22.0-0'
+            charts.openshift.io/name: Remote Active Testing Worker
+        kubeversion: '>=1.0.0-0'
         dependencies: []
         type: application
     chart-overrides: ""
 results:
-    - check: v1.0/chart-testing
+    - check: v1.0/contains-test
       type: Mandatory
       outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: 'Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/noname-sensor:3.3.57-rhel'
+      reason: Chart test files exist
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
@@ -56,10 +48,6 @@ results:
       type: Mandatory
       outcome: PASS
       reason: CSI objects do not exist
-    - check: v1.0/has-readme
-      type: Mandatory
-      outcome: PASS
-      reason: Chart has a README
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
@@ -82,12 +70,24 @@ results:
       reason: Values file exist
     - check: v1.0/has-notes
       type: Optional
-      outcome: FAIL
-      reason: Chart does not contain NOTES.txt
-    - check: v1.0/contains-test
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/has-readme
       type: Mandatory
       outcome: PASS
-      reason: Chart test files exist
+      reason: Chart has a README
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/active-worker:3.64.13-ubi'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
