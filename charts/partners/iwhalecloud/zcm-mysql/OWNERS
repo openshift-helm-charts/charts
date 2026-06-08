@@ -1,0 +1,10 @@
+chart:
+  name: zcm-mysql
+  shortDescription: ZCM MySQL Database Chart
+publicPgpKey: null
+providerDelivery: true
+users:
+  - githubUsername: Mredward123
+vendor:
+  label: iwhalecloud
+  name: Whale Cloud Singapore Pte. Ltd.

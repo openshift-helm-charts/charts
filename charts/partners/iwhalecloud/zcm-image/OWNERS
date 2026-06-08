@@ -1,0 +1,10 @@
+chart:
+  name: zcm-image
+  shortDescription: ZCM Image Management
+publicPgpKey: null
+providerDelivery: true
+users:
+  - githubUsername: Mredward123
+vendor:
+  label: iwhalecloud
+  name: Whale Cloud Singapore Pte. Ltd.
