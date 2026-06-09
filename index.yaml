@@ -7652,6 +7652,34 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-data-grid-8.6.0/redhat-data-grid-8.6.0.tgz
     version: 8.6.0
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:d67d95e34090db2fbeef7875cc37ad8df7035f0cea22273cf7f47632e5ed3d99
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-09T09:31:20.952153+00:00'
+      charts.openshift.io/name: Data Grid
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-09T09:33:10.310711+00:00'
+      charts.openshift.io/supportURL: https://github.com/infinispan/infinispan-helm-charts
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: '8.6'
+    description: A Helm chart that lets you build and deploy Red Hat Data Grid clusters.
+    digest: 2a2939236b5d26d9f572ba0c9cd21cd22a0e07e65bd5f18a8ad4b48d14ef8fcd
+    home: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.6
+    icon: https://access.redhat.com/webassets/avalon/d/red-hat-data-grid/images/rhdg-icon.png
+    maintainers:
+    - name: Red Hat
+      url: https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.6
+    name: redhat-data-grid
+    sources:
+    - https://github.com/infinispan/infinispan
+    - https://github.com/infinispan/infinispan-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-data-grid-8.6.1/redhat-data-grid-8.6.1.tgz
+    version: 8.6.1
   redhat-developer-hub:
   - annotations:
       artifacthub.io/category: integration-delivery
@@ -17938,4 +17966,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-09T01:50:14.514730+00:00'
+generated: '2026-06-09T09:33:10.136419+00:00'
