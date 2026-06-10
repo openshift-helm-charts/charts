@@ -1,9 +1,10 @@
 chart:
   name: yingchart
-  shortDescription: unknown
+  shortDescription: this is test chart for change project name
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: wying3
 vendor:
   label: redhat-arkady-test
   name: Red Hat, Inc.
