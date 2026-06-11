@@ -1,0 +1,9 @@
+chart:
+  name: zcm-resource
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: iwhalecloud
+  name: Whale Cloud Singapore Pte. Ltd.
