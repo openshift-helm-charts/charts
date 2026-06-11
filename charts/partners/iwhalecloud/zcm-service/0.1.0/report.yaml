@@ -1,0 +1,98 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.1
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:16036275455931759002
+        chart-uri: N/A
+        digests:
+            chart: sha256:b8113d30b8ad01b9e0a29668091d3d0f475fca9ddaa50ecb7404173456708695
+            package: fc50471bef5c0b5c16787115a39449bde95f2e290254ca57f24a69aee2c39131
+            publicKey: e80ff9a88c0e9a3495a8db06b1da25266a953ef2059342a01891652599d7c719
+        lastCertifiedTimestamp: "2026-06-10T17:43:37.315683+08:00"
+        testedOpenShiftVersion: "4.21"
+        supportedOpenShiftVersions: '>=4.7'
+        webCatalogOnly: true
+    chart:
+        name: zcm-service
+        home: ""
+        sources: []
+        version: 0.1.0
+        description: A Helm chart for Kubernetes
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: aik
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: zcm-service
+        kubeversion: '>=1.20.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: PASS
+      reason: 'Chart is signed : Signature verification passed'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Failed to certify images : 10.10.194.210:52800/zcm9/zcm-service:C_20260311112008 : Get "https://catalog.redhat.com/api/containers/v1/repositories/registry/10.10.194.210:52800/repository/zcm9/zcm-service/images?filter=repositories%3Dem%3D%28repository%3D%3Dzcm9%2Fzcm-service%3Bregistry%3D%3D10.10.194.210%3A52800%29&page=0&page_size=100": dial tcp [2409:8c20:5a63:13::249c:500a]:443: connect: no route to host
+        Failed to certify images : 10.10.194.210:52800/zcm9/redis:8.2.3.1 : Get "https://catalog.redhat.com/api/containers/v1/repositories/registry/10.10.194.210:52800/repository/zcm9/redis/images?filter=repositories%3Dem%3D%28repository%3D%3Dzcm9%2Fredis%3Bregistry%3D%3D10.10.194.210%3A52800%29&page=0&page_size=100": dial tcp [2409:8c20:5a63:13::249c:5031]:443: connect: no route to host
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+
