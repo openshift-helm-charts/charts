@@ -15385,6 +15385,43 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/scalar-labs-scalardb-cluster-1.11.1/scalardb-cluster-1.11.1.tgz
     version: 1.11.1
+  - annotations:
+      charts.openshift.io/digest: sha256:96e4b4bd20d63127f74bd31ee467b1cafab30d6d5538bcc9429547798194e638
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-12T15:35:47.895641+09:00'
+      charts.openshift.io/name: ScalarDB Cluster Helm Chart
+      charts.openshift.io/provider: Scalar Labs
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-06-12T06:43:25.365087+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.18'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 3.17.3
+    dependencies:
+    - condition: envoy.enabled
+      name: envoy
+      repository: https://scalar-labs.github.io/helm-charts
+      version: ~2.6.0
+    description: ScalarDB Cluster
+    digest: 0bbd7b86141e7b633c6e1d59b150ebb39b77e3d8a29e55727d2e821e1a29535f
+    home: https://scalar-labs.com/
+    icon: https://developers.scalar-labs.com/img/scalardb-logo-01.svg
+    keywords:
+    - database
+    - scalardb
+    - scalardb-cluster
+    - grpc
+    - grpc-server
+    kubeVersion: '>= 1.31.0-0'
+    maintainers:
+    - email: takanori.yokoyama@scalar-labs.com
+      name: Takanori Yokoyama
+    name: scalardb-cluster
+    sources:
+    - https://github.com/scalar-labs/scalardb-cluster
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/scalar-labs-scalardb-cluster-1.10.5/scalardb-cluster-1.10.5.tgz
+    version: 1.10.5
   smsf-configuration:
   - annotations:
       charts.openshift.io/digest: sha256:ce5cc09b428dc1ad70481e71843c4b367243fba77cde4900d6671c597d227e38
@@ -18226,4 +18263,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-11T20:13:33.075094+00:00'
+generated: '2026-06-12T06:43:25.180792+00:00'
