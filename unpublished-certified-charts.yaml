@@ -13553,6 +13553,52 @@ entries:
     urls:
     - N/A
     version: 3.58.39-lts
+  - annotations:
+      charts.openshift.io/digest: sha256:233bb9bbca429aaedd3887f0f5db7b45baa5f4572d5373bb5b529743cd7c7e6d
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-15T21:08:16.983557+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-06-15T21:13:33.786291+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.66.4
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: 788e2ca14fd1130f93e315b367390fca099c69fc1484820cb6c56a16f343018e
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.66.4
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -16375,4 +16421,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-06-15T21:09:12.456767+00:00'
+generated: '2026-06-15T21:13:33.612901+00:00'
