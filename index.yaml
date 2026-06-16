@@ -6578,6 +6578,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-cakephp-application-template-0.0.2/redhat-cakephp-application-template-0.0.2.tgz
     version: 0.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:27bdd8a4fbdff5b9fe8fd5d22384ecb8d27ac127627e2015962d9db1d2118100
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-16T14:54:46.764164+00:00'
+      charts.openshift.io/name: Red Hat Apache CakePHP application with no database
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-16T14:57:14.018896+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 0.0.3
+    description: This content is experimental, do not use it in production. An example
+      CakePHP application with no database. For more information about using this
+      template, including OpenShift considerations, see https://github.com/sclorg/cakephp-ex/blob/master/README.md.
+    digest: 5ec49a77b6d1fce01f550ad8e61e67a91fd204c7b1558ee002bb9bae2716568b
+    kubeVersion: '>=1.20.0'
+    name: redhat-cakephp-application-template
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,php,cakephp
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-cakephp-application-template-0.0.3/redhat-cakephp-application-template-0.0.3.tgz
+    version: 0.0.3
   redhat-cryostat:
   - annotations:
       charts.openshift.io/digest: sha256:16c798a6a148c3d5d7a95a1c25fa727f56cd065a2f412d0991781e5939472b64
@@ -18342,4 +18366,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-16T11:35:03.157583+00:00'
+generated: '2026-06-16T14:57:13.845633+00:00'
