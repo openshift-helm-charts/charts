@@ -5,6 +5,7 @@ metadata:
     description: Defines how to deploy the application server
     template.alpha.openshift.io/wait-for-ready: "true"
     image.openshift.io/triggers: |-
+  {{ if not .Values.registry.enabled }}
       [
         {
           "from": {
@@ -14,6 +15,7 @@ metadata:
           "fieldPath": "spec.template.spec.containers[0].image"
         }
       ]
+  {{ end }}
   labels:
     app: httpd-example
     template: httpd-example
@@ -33,7 +35,11 @@ spec:
     spec:
       containers:
       - env: []
+        {{ if .Values.registry.enabled }}
+        image: "{{ .Values.registry.name }}/{{ .Values.registry.namespace }}/{{ .Values.name }}:latest"
+        {{ else }}
         image: " "
+        {{ end }}
         livenessProbe:
           httpGet:
             path: /

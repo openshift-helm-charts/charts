@@ -21,7 +21,7 @@
         "httpd_version": {
             "type": "string",
             "description": "Specify HTTPD imagestream tag",
-            "enum": [ "latest", "2.4-el9", "2.4-el8", "2.4-el7" ]
+            "enum": [ "latest", "2.4-ubi8", "2.4-ubi9", "2.4-ubi10", "2.4-el8", "2.4-el9", "2.4-el10" ]
         },
         "application_domain": {
             "type": "string",
@@ -30,6 +30,26 @@
         "context_dir": {
             "type": "string",
             "description": "Set this to the relative path to your project if it is not in the root of your repository."
+        },
+        "registry": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of registry that will be used for pushing built image."
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "The namespace of registry that will be used for pushing built image."
+                },
+                "push_secret": {
+                    "type": "string",
+                    "description": "The push secret to push image to registry."
+                }
+            }
         }
     }
 }
