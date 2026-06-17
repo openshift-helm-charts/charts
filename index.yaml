@@ -12814,6 +12814,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-nginx-template-0.0.1/nginx-template-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:47b858fabdb6e4718f3d9f0cbf20823a817c6c40b7b1fec42c73af90e9d54a4b
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-17T09:56:49.014699+00:00'
+      charts.openshift.io/name: Red Hat Nginx HTTP Server (nginx) application (experimental).
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-17T09:59:03.543979+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: An example Nginx HTTP server and a reverse proxy (nginx) application
+      that serves static content. For more information about using this template,
+      including OpenShift considerations, see https://github.com/sclorg/nginx-ex/blob/master/README.md.
+    digest: be27f89a4e75980dadcb802791fc13ece49b0b04709e0cf55e7886ba4b5ac680
+    kubeVersion: '>=1.20.0'
+    name: redhat-nginx-template
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,nginx
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nginx-template-0.0.2/redhat-nginx-template-0.0.2.tgz
+    version: 0.0.2
   redhat-nodejs:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -18526,4 +18549,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-17T08:49:30.690525+00:00'
+generated: '2026-06-17T09:59:03.361380+00:00'
