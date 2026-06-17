@@ -1,9 +1,0 @@
-chart:
-  name: zcm
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: iwhalecloud
-  name: Whale Cloud Singapore Pte. Ltd.
