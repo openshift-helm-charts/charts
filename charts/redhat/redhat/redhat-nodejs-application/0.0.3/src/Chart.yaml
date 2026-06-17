@@ -1,0 +1,14 @@
+description: This content is experimental, do not use it in production. An example Node.js application with no database. For more information
+  about using this template, including OpenShift considerations, see https://github.com/sclorg/nodejs-ex/blob/master/README.md.
+name: redhat-nodejs-application
+tags: quickstart,nodejs
+version: 0.0.2
+kubeVersion: '>=1.20.0'
+annotations:
+  charts.openshift.io/name: Red Hat Apache Rails application with no database (experimental)
+  charts.openshift.io/provider: Red Hat
+  charts.openshift.io/providerType: redhat
+apiVersion: v2
+appVersion: 0.0.2
+sources:
+  - https://github.com/sclorg/helm-charts
