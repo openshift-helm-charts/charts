@@ -1,0 +1,9 @@
+context_dir: "" # TODO: must define a default value for .context_dir
+generic_webhook_secret: "SOMETHING" # TODO: must define a default value for .generic_webhook_secret
+github_webhook_secret: "FOOBAR" # TODO: must define a default value for .github_webhook_secret
+memory_limit: 512Mi
+name: nginx-example
+namespace: openshift
+nginx_version: 1.20-ubi8
+source_repository_ref: master # TODO: must define a default value for .source_repository_ref
+source_repository_url: https://github.com/sclorg/nginx-ex.git
