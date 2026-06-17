@@ -5452,6 +5452,45 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/openbao-openbao-0.28.3/openbao-0.28.3.tgz
     version: 0.28.3
+  - annotations:
+      artifacthub.io/changes: "- kind: changed\n  description: |\n    docs: Update
+        commented example with missing field\n- kind: changed\n  description: |\n
+        \   chore: bump OpenBao to v2.5.5\n"
+      artifacthub.io/containsSecurityUpdates: 'true'
+      charts.openshift.io/digest: sha256:2ebe74147c31d14b2e0fc0fd3cf1aef50a66fe2bd20c73b6e2b224fbf0de4f46
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-17T12:41:54.308087+00:00'
+      charts.openshift.io/name: OpenBao
+      charts.openshift.io/provider: Adfinis AG
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-06-17T12:43:44.319732+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.17'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: v2.5.5
+    description: Official OpenBao Chart
+    digest: ab1cd5d4edd8ad7ec3a7dc1a9dd06ab56f2cee004f79b0aabb9a8b2d9a34a73a
+    home: https://github.com/openbao/openbao-helm
+    icon: https://raw.githubusercontent.com/openbao/artwork/refs/heads/main/color/openbao-color.svg
+    keywords:
+    - vault
+    - openbao
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.30.0-0'
+    maintainers:
+    - email: openbao-security@lists.openssf.org
+      name: OpenBao
+      url: https://openbao.org
+    name: openbao
+    sources:
+    - https://github.com/openbao/openbao-helm
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/openbao-openbao-0.28.4/openbao-0.28.4.tgz
+    version: 0.28.4
   opscruise:
   - annotations:
       charts.openshift.io/digest: sha256:3936a9deac923380aa2dd842f19da07d32030a867ebd05eea48dd38b895b82c0
@@ -18596,4 +18635,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-17T11:30:28.267637+00:00'
+generated: '2026-06-17T12:43:44.145274+00:00'
