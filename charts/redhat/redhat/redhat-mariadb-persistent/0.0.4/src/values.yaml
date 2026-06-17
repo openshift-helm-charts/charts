@@ -6,4 +6,7 @@ mysql_password: testu
 mysql_root_password: testur
 mysql_user: testu
 namespace: openshift
-volume_capacity: 1Gi
+pvc:
+  volume_capacity: 1Gi
+  app_code: "something"
+  netapp_nfs: false

@@ -21,15 +21,6 @@
         "mysql_user": {
             "type": "string"
         },
-        "volume_capacity": {
-            "type": "string",
-            "title": "Persistent Volume Size",
-            "form": true,
-            "render": "slider",
-            "sliderMin": 1,
-            "sliderMax": 100,
-            "sliderUnit": "Gi"
-        },
         "memory_limit": {
             "type": "string",
             "title": "Database memory limit",
@@ -42,8 +33,37 @@
         "mariadb_version": {
             "type": "string",
             "description": "Specify mariadb imagestream tag",
-            "enum": [ "latest", "10.5-el9", "10.3-el8", "10.5-el8", "10.3-el7", "10.3", "10.5-el7" ]
+            "enum": [
+                "latest",
+                "10.5-el9",
+                "10.11-el9",
+                "10.11-el10",
+                "10.3-el8",
+                "10.11-el8",
+                "10.3",
+                "11.8-el9",
+                "11.8-el10"
+            ]
+        },
+        "pvc": {
+            "type": "object",
+            "properties": {
+                "volume_capacity": {
+                    "type": "string",
+                    "title": "Persistent Volume Size",
+                    "form": true,
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 100,
+                    "sliderUnit": "Gi"
+                },
+                "netapp_nfs": {
+                    "type": "boolean"
+                },
+                "app_code": {
+                    "type": "string"
+                }
+            }
         }
     }
 }
-

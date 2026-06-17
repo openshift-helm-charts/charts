@@ -16,7 +16,7 @@ Below is a table of each value used to configure this chart.
 | `mysql_root_password`                       | Password for the MariaDB root user. | | Expression like: `[a-zA-Z0-9]{16}` |
 | `mysql_database`                            | Name of the MariaDB database accessed. | `sampledb` |  |
 | `mysql_password`                            | Password for the MariaDB connection user. |  | Expression like: `[a-zA-Z0-9]{16}` |
-| `mariadb_version`                             | Version of MariaDB image to be used (10.3-el7, 10.3-el8, or latest). | `10.3-el8` |  |
+| `mariadb_version`                           | Version of MariaDB image to be used (10.11-el9, or latest). | `11.8-el10` |  |
 | `namespace`                                 | The OpenShift Namespace where the ImageStream resides. | `openshift` | |
 | `memory_limit`                              | Maximum amount of memory the container can use. | `521Mi` |  |
 | `volume_capacity`                           | Volume space available for data, e.g. 512Mi, 2Gi. | `1Gi` |  |
