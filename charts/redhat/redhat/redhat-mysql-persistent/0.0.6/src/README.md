@@ -16,7 +16,7 @@ Below is a table of each value used to configure this chart.
 | `mysql_root_password`                       | Password for the MySQL root user. | `testur` | Expression like: `[a-zA-Z0-9]{16}` |
 | `mysql_database`                            | Name of the MySQL database accessed. | `testdb` |  |
 | `mysql_password`                            | Password for the MySQL connection user. | `testp` | Expression like: `[a-zA-Z0-9]{16}` |
-| `mysql_version`                             | Version of MySQL image to be used (8.0-el8, or latest). | `8.0-el8` |  |
+| `mysql_version`                             | Version of MySQL image to be used (8.4-el9, or latest). | `8.4-el10` |  |
 | `namespace`                                 | The OpenShift Namespace where the ImageStream resides. | `mysql-persistent-testing` | |
 | `memory_limit`                              | Maximum amount of memory the container can use. | `521Mi` |  |
 | `volume_capacity`                           | Volume space available for data, e.g. 512Mi, 2Gi. | `1Gi` |  |
