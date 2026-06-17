@@ -12650,6 +12650,32 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-mysql-persistent-0.0.5/redhat-mysql-persistent-0.0.5.tgz
     version: 0.0.5
+  - annotations:
+      charts.openshift.io/digest: sha256:b0a357605ae55c1255bb7df97473253b1869d3128c751801ad3bad289bb8c03d
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-17T06:58:17.183852+00:00'
+      charts.openshift.io/name: Red Hat MySQL database service, with persistent storage
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-17T07:00:29.119158+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.6
+    description: 'This content is experimental, do not use it in production. MySQL
+      database service, with persistent storage. For more information about using
+      this template, including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/8.4/root/usr/share/container-scripts/mysql/README.md.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: 81b473fc83734f36e6e3d7c07f7753b087db6628794d8d1469f7c6246a04f177
+    kubeVersion: '>=1.20.0'
+    name: redhat-mysql-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,mysql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-mysql-persistent-0.0.6/redhat-mysql-persistent-0.0.6.tgz
+    version: 0.0.6
   redhat-mysql-sed:
   - annotations:
       charts.openshift.io/digest: sha256:451087463b43fdffa1bd542bdec76f50909355cced7310d8093c4da38a15be48
@@ -18476,4 +18502,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-17T06:46:18.366764+00:00'
+generated: '2026-06-17T07:00:28.941716+00:00'
