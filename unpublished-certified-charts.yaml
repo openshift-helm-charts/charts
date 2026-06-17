@@ -13186,52 +13186,6 @@ entries:
     - N/A
     version: 3.66.1
   - annotations:
-      charts.openshift.io/digest: sha256:8597c72f2b90d07b8061043386d8918a02d9895853adf9fd982d78e5745b3a1e
-      charts.openshift.io/lastCertifiedTimestamp: '2026-05-31T18:33:12.595723+00:00'
-      charts.openshift.io/name: Remote Engine
-      charts.openshift.io/providerType: partner
-      charts.openshift.io/submissionTimestamp: '2026-05-31T18:37:53.300200+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
-      charts.openshift.io/testedOpenShiftVersion: '4.14'
-    apiVersion: v2
-    appVersion: 3.64.13
-    dependencies:
-    - condition: global.noname.enabled
-      name: noname
-      repository: file://charts/noname
-      version: 0.1.0
-    - condition: global.engine.enabled
-      name: engine
-      repository: file://charts/engine
-      version: 0.1.0
-    - condition: global.active.enabled
-      name: active
-      repository: file://charts/active
-      version: 0.1.0
-    - condition: global.platform.enabled
-      name: platform
-      repository: file://charts/platform
-      version: 0.1.0
-    - condition: global.router.enabled
-      name: router
-      repository: file://charts/router
-      version: 0.1.0
-    - condition: global.noname.enabled,global.rabbitmq.enabled
-      name: rabbitmq
-      repository: file://charts/rabbitmq
-      version: 0.15.3
-    - condition: global.nns_eso.enabled
-      name: nns-eso
-      repository: file://charts/nns-eso
-      version: 0.1.0
-    description: Noname Helm on k8s
-    digest: d384e9c4cf0a221d7e1e09848726ab81a2e46db2141d4832af86086c8b46debd
-    kubeVersion: '>=1.0.0-0'
-    name: nonamesec-ubi
-    urls:
-    - N/A
-    version: 3.64.13
-  - annotations:
       charts.openshift.io/digest: sha256:4fa47933e743793b74bff5658a6ca69c6fe2e8aa18fc13d0b6ec343d54e78d4f
       charts.openshift.io/lastCertifiedTimestamp: '2026-06-01T07:26:10.738383+00:00'
       charts.openshift.io/name: Remote Engine
@@ -13691,6 +13645,52 @@ entries:
     urls:
     - N/A
     version: 3.64.17-lts
+  - annotations:
+      charts.openshift.io/digest: sha256:8597c72f2b90d07b8061043386d8918a02d9895853adf9fd982d78e5745b3a1e
+      charts.openshift.io/lastCertifiedTimestamp: '2026-05-31T21:37:50.873227+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-06-17T20:40:36.955495+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.64.13
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: d384e9c4cf0a221d7e1e09848726ab81a2e46db2141d4832af86086c8b46debd
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.64.13
   nrf:
   - annotations:
       charts.openshift.io/digest: sha256:23f85da7f8a66e3c6cdca6c835f433fba5d07fd0808d846f4fd3723288504545
@@ -16531,4 +16531,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-06-16T07:17:03.339007+00:00'
+generated: '2026-06-17T20:40:36.770262+00:00'
