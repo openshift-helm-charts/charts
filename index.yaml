@@ -12923,6 +12923,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nodejs-application-0.0.2/redhat-nodejs-application-0.0.2.tgz
     version: 0.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:2ffe24f59c64fd7950e7045f8ac6ac978e2d7a06dd51cf661123aff597b145c0
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-17T11:24:56.5996+00:00'
+      charts.openshift.io/name: Red Hat Apache Rails application with no database
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-17T11:26:41.656071+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.3
+    description: This content is experimental, do not use it in production. An example
+      Node.js application with no database. For more information about using this
+      template, including OpenShift considerations, see https://github.com/sclorg/nodejs-ex/blob/master/README.md.
+    digest: 77d0b76f1712b918c455f650b90a6d292ffe72c45d152688de9bbdfdfae09cbe
+    kubeVersion: '>=1.20.0'
+    name: redhat-nodejs-application
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,nodejs
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-nodejs-application-0.0.3/redhat-nodejs-application-0.0.3.tgz
+    version: 0.0.3
   redhat-nodejs-ex-k:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -18549,4 +18573,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-17T09:59:03.361380+00:00'
+generated: '2026-06-17T11:26:41.479701+00:00'
