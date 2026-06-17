@@ -12,8 +12,16 @@
         },
         "nodejs_version": {
             "type": "string",
-            "description": "Version of NodeJS image to be used (20-ubi8, 22-ubi9, or latest).",
-            "enum": [ "latest", "20-ubi8", "20-ubi9", "22-ubi9", "22-ubi10", "24-ubi10", "24-ubi9" ]
+            "description": "Version of NodeJS image to be used (22-ubi9, or latest).",
+            "enum": [
+                "latest",
+                "22-ubi8",
+                "24-ubi8",
+                "22-ubi9",
+                "24-ubi9",
+                "22-ubi10",
+                "24-ubi10"
+            ]
         },
         "memory_limit": {
             "type": "string",
