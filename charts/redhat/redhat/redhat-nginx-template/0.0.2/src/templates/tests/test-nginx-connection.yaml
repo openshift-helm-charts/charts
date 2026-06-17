@@ -11,7 +11,7 @@ spec:
   #serviceAccount: {{ .Values.serviceAccount }}
   containers:
     - name: "nginx-connection-test"
-      image: "registry.redhat.io/ubi8/nginx-122:latest"
+      image: "registry.redhat.io/ubi9/nginx-124:latest"
       imagePullPolicy: IfNotPresent
       command:
         - '/bin/bash'

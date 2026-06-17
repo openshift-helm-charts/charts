@@ -11,9 +11,9 @@ Below is a table of each value used to configure this chart.
 
 | Value                                       | Description | Default                                            | Additional Information |
 |---------------------------------------------| ----------- |----------------------------------------------------| ---------------------- |
-| `name`                                      | The name assigned to all of the frontend objects defined in this helm chart. | `httpd-example`                                    | |
+| `name`                                      | The name assigned to all of the frontend objects defined in this helm chart. | `nginx-example`                                    | |
 | `namespace`                                 | The OpenShift Namespace where the ImageStream resides. | `httpd-template`                                   | |
-| `nginx_version`                             | Version of NGINX image to be used (1.20-ubi8 by default). | `1.20-ubi8`                                        |  |
+| `nginx_version`                             | Version of NGINX image to be used (1.24-ubi8 by default). | `1.24-ubi10`                                        |  |
 | `memory_limit`                              | Maximum amount of memory the container can use. | `521Mi`                                            |  |
 | `source_repository_url`                     | The URL of the repository with your application source code. | `https://github.com/sclorg/nginx-ex.git` |  |
 | `source_repository_ref`                     | Set this to a branch name, tag or other ref of your repository if you are not using the default branch. |                                                    |  |
