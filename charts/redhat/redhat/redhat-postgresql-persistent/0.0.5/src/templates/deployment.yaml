@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: "true"
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "postgresql:{{ .Values.image.tag }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
+  labels:
+    template: postgresql-persistent-template
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: {{ .Values.database_service_name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.database_service_name }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRESQL_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: {{ .Values.database_service_name }}
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: {{ .Values.database_service_name }}
+        - name: POSTGRESQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: database-name
+              name: {{ .Values.database_service_name }}
+        image: " "
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /usr/libexec/check-container
+            - --live
+          initialDelaySeconds: 120
+          timeoutSeconds: 10
+        name: "postgresql-persistent"
+        ports:
+        - containerPort: {{ .Values.config.port }}
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /usr/libexec/check-container
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: {{ .Values.memory_limit }}
+        securityContext:
+          capabilities: {}
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /var/lib/pgsql/data
+          name: {{ .Values.database_service_name }}-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - name: {{ .Values.database_service_name }}-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.database_service_name }}
+status: {}
