@@ -13265,6 +13265,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-perl-dancer-template-0.0.1/perl-dancer-template-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:2a2c1eaf5652e63c7f35abc106c62099248e6cf6fbd7bfd9ca38f476c74a57f9
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-18T12:12:44.131511+00:00'
+      charts.openshift.io/name: Red Hat Dancer application on UBI (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-18T12:14:42.205806+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: This content is experimental, do not use it in production. An example
+      Dancer application with no database. For more information about using this template,
+      including OpenShift considerations,  see https://github.com/sclorg/dancer-ex/blob/master/README.md.
+    digest: 4d8d7382f30749305676ab28c55c91961b681b8cc950c71cb404276902bc3171
+    kubeVersion: '>=1.20.0'
+    name: redhat-perl-dancer-template
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,perl,dancer
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-perl-dancer-template-0.0.2/redhat-perl-dancer-template-0.0.2.tgz
+    version: 0.0.2
   redhat-perl-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:59e0ea50848a68c1710f8efe5c4451a3afd6bd28cb47eb7dd4590b01faf9d49c
@@ -18658,4 +18681,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-18T12:03:56.949459+00:00'
+generated: '2026-06-18T12:14:42.020501+00:00'
