@@ -1,0 +1,12 @@
+application_domain: "" # TODO: must define a default value for .application_domain
+context_dir: "" # TODO: must define a default value for .context_dir
+cpan_mirror: "" # TODO: must define a default value for .cpan_mirror
+github_webhook_secret: "SOMETHING" # TODO: must define a default value for .github_webhook_secret
+memory_limit: 512Mi
+name: dancer-example
+namespace: openshift
+perl_apache2_reload: "" # TODO: must define a default value for .perl_apache2_reload
+perl_version: 5.30-ubi8
+secret_key_base: "" # TODO: must define a default value for .secret_key_base
+source_repository_ref: master # TODO: must define a default value for .source_repository_ref
+source_repository_url: https://github.com/sclorg/dancer-ex.git

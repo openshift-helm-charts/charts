@@ -1,0 +1,38 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    description: Defines how to build the application
+    template.alpha.openshift.io/wait-for-ready: "true"
+  labels:
+    app: dancer-example
+    template: dancer-example
+  name: {{ .Values.name }}
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: {{ .Values.name }}:latest
+  postCommit:
+    script: perl -I extlib/lib/perl5 -I lib t/*
+  source:
+    contextDir: {{ .Values.context_dir }}
+    git:
+      ref: {{ .Values.source_repository_ref }}
+      uri: {{ .Values.source_repository_url }}
+    type: Git
+  strategy:
+    sourceStrategy:
+      env:
+      - name: CPAN_MIRROR
+        value: {{ .Values.cpan_mirror }}
+      from:
+        kind: ImageStreamTag
+        name: perl:{{ .Values.perl_version }}
+    type: Source
+  triggers:
+  - type: ImageChange
+  - type: ConfigChange
+  - github:
+      secret: {{ .Values.github_webhook_secret }}
+    type: GitHub
