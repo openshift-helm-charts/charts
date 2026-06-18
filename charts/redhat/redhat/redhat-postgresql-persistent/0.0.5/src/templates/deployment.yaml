@@ -47,7 +47,7 @@ spec:
             secretKeyRef:
               key: database-name
               name: {{ .Values.database_service_name }}
-        image: " "
+        image: "postgresql:{{ .Values.image.tag }}"
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:

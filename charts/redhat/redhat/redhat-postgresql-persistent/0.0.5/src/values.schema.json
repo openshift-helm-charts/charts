@@ -26,15 +26,6 @@
                 }
             }
         },
-        "volume_capacity": {
-            "type": "string",
-            "title": "Persistent Volume Size",
-            "form": true,
-            "render": "slider",
-            "sliderMin": 1,
-            "sliderMax": 100,
-            "sliderUnit": "Gi"
-        },
         "memory_limit": {
             "type": "string",
             "title": "Database memory limit",
@@ -50,7 +41,39 @@
                 "tag": {
                     "type": "string",
                     "description": "Specify postgresql imagestream tag",
-                    "enum": ["latest", "16-el9", "16-el8", "15-el9", "15-el8","13-el9", "13-el8", "12-el8", "12" ]
+                    "enum": [
+                        "latest",
+                        "13-el9",
+                        "12-el8",
+                        "12",
+                        "15-el9",
+                        "15-el8",
+                        "16-el9",
+                        "16-el8",
+                        "16-el10",
+                        "18-el9",
+                        "18-el10"
+                    ]
+                }
+            }
+        },
+        "pvc": {
+            "type": "object",
+            "properties": {
+                "volume_capacity": {
+                    "type": "string",
+                    "title": "Persistent Volume Size",
+                    "form": true,
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 100,
+                    "sliderUnit": "Gi"
+                },
+                "netapp_nfs": {
+                    "type": "boolean"
+                },
+                "app_code": {
+                    "type": "string"
                 }
             }
         }
