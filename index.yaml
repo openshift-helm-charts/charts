@@ -13474,6 +13474,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-php-imagestreams-0.0.5/redhat-php-imagestreams-0.0.5.tgz
     version: 0.0.5
+  - annotations:
+      charts.openshift.io/digest: sha256:cb18df24027bc316d6d6e2e31c989e72aa6dd7c05fd782a8c852f35763b4dca4
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-18T12:21:20.86638+00:00'
+      charts.openshift.io/name: Red Hat PHP imagestreams on UBI (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: redhat
+      charts.openshift.io/submissionTimestamp: '2026-06-18T12:23:16.487973+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 0.0.6
+    description: This content is experimental, do not use it in production. Import
+      PHP imagestreams to OpenShift 4. For more information about using this builder
+      image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/8.4/README.md.
+    digest: c0caa3ce8b0edbd2f0dd6ee621ecc96039e9a378709229ed7439a69b5de7570a
+    kubeVersion: '>=1.20.0'
+    name: redhat-php-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,php
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-php-imagestreams-0.0.6/redhat-php-imagestreams-0.0.6.tgz
+    version: 0.0.6
   redhat-postgresql-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:fb33002134a2c14de3ea86015565621fa636ae7d6861999dc09157aab17aa7f8
@@ -18704,4 +18727,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-18T12:20:01.145961+00:00'
+generated: '2026-06-18T12:23:16.252953+00:00'
