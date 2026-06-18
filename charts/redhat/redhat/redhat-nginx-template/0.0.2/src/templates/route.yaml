@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
+  labels:
+    app: {{ .Values.name }}
+    template: {{ .Values.name }}
+  name: {{ .Values.name }}
+spec:
+  host: {{ .Values.application_domain }}
+  to:
+    kind: Service
+    name: {{ .Values.name }}

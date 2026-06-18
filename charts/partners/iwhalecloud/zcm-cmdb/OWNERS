@@ -3,8 +3,7 @@ chart:
   shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
-users:
-- githubUsername: Mredward123
+users: []
 vendor:
   label: iwhalecloud
   name: Whale Cloud Singapore Pte. Ltd.

@@ -1,0 +1,69 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "database_service_name": {
+            "type": "string",
+            "pattern": "^[a-z0-9-_]+$"
+        },
+        "namespace": {
+            "type": "string"
+        },
+        "mysql_database": {
+            "type": "string"
+        },
+        "mysql_password": {
+            "type": "string"
+        },
+        "mysql_root_password": {
+            "type": "string"
+        },
+        "mysql_user": {
+            "type": "string"
+        },
+        "memory_limit": {
+            "type": "string",
+            "title": "Database memory limit",
+            "form": true,
+            "render": "slider",
+            "sliderMin": 512,
+            "sliderMax": 65536,
+            "sliderUnit": "Mi"
+        },
+        "mariadb_version": {
+            "type": "string",
+            "description": "Specify mariadb imagestream tag",
+            "enum": [
+                "latest",
+                "10.5-el9",
+                "10.11-el9",
+                "10.11-el10",
+                "10.3-el8",
+                "10.11-el8",
+                "10.3",
+                "11.8-el9",
+                "11.8-el10"
+            ]
+        },
+        "pvc": {
+            "type": "object",
+            "properties": {
+                "volume_capacity": {
+                    "type": "string",
+                    "title": "Persistent Volume Size",
+                    "form": true,
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 100,
+                    "sliderUnit": "Gi"
+                },
+                "netapp_nfs": {
+                    "type": "boolean"
+                },
+                "app_code": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
