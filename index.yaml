@@ -13728,6 +13728,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-postgresql-persistent-0.0.4/redhat-postgresql-persistent-0.0.4.tgz
     version: 0.0.4
+  - annotations:
+      charts.openshift.io/digest: sha256:74d3aca39ba1cd3b33e8ed3f2f725fb7525108e4d4fdca1c788b72a783913608
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-18T12:32:27.808125+00:00'
+      charts.openshift.io/name: Red Hat PostgreSQL database service, with persistent
+        storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-18T12:34:21.180223+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: N/A
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.5
+    description: 'This content is experimental, do not use it in production. PostgreSQL
+      database service, with persistent storage. For more information about using
+      this template, including OpenShift considerations, see https://github.com/sclorg/postgresql-container/.  NOTE:
+      Scaling to more than one replica is not supported. You must have persistent
+      volumes available in your cluster to use this template.'
+    digest: 97baebca3f77c3785a288bb307cbccf4d5ecec7f76f5b800537d4d332f7e4bfb
+    name: redhat-postgresql-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,postgresql
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-postgresql-persistent-0.0.5/redhat-postgresql-persistent-0.0.5.tgz
+    version: 0.0.5
   redhat-psql-sed:
   - annotations:
       charts.openshift.io/digest: sha256:9f6343df9aac5a44a06589169f912a9be9582df0e0ff9cb80865b0927e79c452
@@ -18727,4 +18752,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-18T12:23:16.252953+00:00'
+generated: '2026-06-18T12:34:20.995251+00:00'
