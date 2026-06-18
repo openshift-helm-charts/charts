@@ -13796,6 +13796,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-python-django-application-0.0.1/python-django-application-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:8748f611da7ab43abf0e4237a6bc0da5d034f7a6fff4f40a7dd69d1a54134d3b
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-18T12:40:42.859662+00:00'
+      charts.openshift.io/name: Red Hat Dancer application on UBI (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-18T12:42:23.798463+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: This content is experimental, do not use it in production. An example
+      Django application with no database. For more information about using this template,
+      including OpenShift considerations, see https://github.com/sclorg/django-ex/blob/master/README.md.
+    digest: 62f23a383549705df42789ebb03455a607d00336c6b9495c8fffc2c20867dfc8
+    kubeVersion: '>=1.20.0'
+    name: redhat-python-django-application
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,python,django
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-python-django-application-0.0.2/redhat-python-django-application-0.0.2.tgz
+    version: 0.0.2
   redhat-python-imagestreams:
   - annotations:
       charts.openshift.io/digest: sha256:8801644ed1c4da57ced8deae3cf0be56ab94df113c41a7301b9c73d4a85b2ff7
@@ -18752,4 +18775,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-18T12:34:20.995251+00:00'
+generated: '2026-06-18T12:42:23.653393+00:00'
