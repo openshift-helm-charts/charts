@@ -6,11 +6,11 @@ annotations:
   charts.openshift.io/name: Red Hat Dancer application on UBI (experimental)
   charts.openshift.io/provider: Red Hat
   charts.openshift.io/providerType: redhat
-name: perl-dancer-template
+name: redhat-perl-dancer-template
 tags: quickstart,perl,dancer
 apiVersion: v2
-appVersion: 0.0.1
+appVersion: 0.0.2
 kubeVersion: '>=1.20.0'
 sources:
   - https://github.com/sclorg/helm-charts
-version: 0.0.1
+version: 0.0.2
