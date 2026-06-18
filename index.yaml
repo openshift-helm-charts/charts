@@ -13889,6 +13889,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-python-imagestreams-0.0.3/redhat-python-imagestreams-0.0.3.tgz
     version: 0.0.3
+  - annotations:
+      charts.openshift.io/digest: sha256:189615660b6c3ab88ad952c5b4601e394f6021b38e71c1c2f32f437389b0a301
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-18T12:43:57.974891+00:00'
+      charts.openshift.io/name: Red Hat Python imagestreams (experimental).
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-18T12:45:44.543555+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 0.0.4
+    description: This content is experimental, do not use it in production. Python
+      imagestreams for using on OpenShift 4. For more information about using this
+      builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-python-container/blob/master/3.11/README.md.
+    digest: 9ef3951d8c58bdbb8c0b7fac79646fdbda583dee44db980dec2a0d26fff438c3
+    kubeVersion: '>=1.20.0'
+    name: redhat-python-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,python
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-python-imagestreams-0.0.4/redhat-python-imagestreams-0.0.4.tgz
+    version: 0.0.4
   redhat-quarkus:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -18775,4 +18798,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-18T12:42:23.653393+00:00'
+generated: '2026-06-18T12:45:44.366424+00:00'
