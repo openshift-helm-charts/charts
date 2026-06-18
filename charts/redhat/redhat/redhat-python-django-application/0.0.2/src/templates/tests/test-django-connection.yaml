@@ -11,8 +11,8 @@ spec:
   #serviceAccount: {{ .Values.serviceAccount }}
   containers:
     - name: "{{ .Release.Name }}-connection-test"
-      namespace: "{{ .Release.Namespace }}"
-      image: "registry.redhat.io/ubi8/ubi:latest"
+      #namespace: "{{ .Release.Namespace }}"
+      image: "registry.redhat.io/ubi9/ubi:latest"
       imagePullPolicy: IfNotPresent
       command:
         - '/bin/bash'

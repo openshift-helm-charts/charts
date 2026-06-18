@@ -9,26 +9,37 @@ metadata:
     template: django-example
   name: {{ .Values.name }}
 spec:
+  {{ if .Values.registry.enabled }}
+  output:
+    to:
+      kind: DockerImage
+      name: "{{ .Values.registry.name }}/{{ .Values.registry.namespace }}/{{ .Values.name }}:latest"
+    pushSecret:
+      name: {{ .Values.registry.push_secret }}
+  {{ else }}
   output:
     to:
       kind: ImageStreamTag
       name: {{ .Values.name }}:latest
+  {{ end }}
+  {{ if not .Values.registry.enabled }}
   postCommit:
     script: ./manage.py test
+  {{ end }}
   source:
     contextDir: {{ .Values.context_dir }}
     git:
-      ref: {{ .Values.source_repository_ref }}
-      uri: {{ .Values.source_repository_url }}
+      ref: "{{ .Values.source_repository_ref }}"
+      uri: "{{ .Values.source_repository_url }}"
     type: Git
   strategy:
     sourceStrategy:
       env:
       - name: PIP_INDEX_URL
-        value: {{ .Values.pip_index_url }}
+        value: "{{ .Values.pip_index_url }}"
       from:
         kind: ImageStreamTag
-        name: python:{{ .Values.python_version }}
+        name: "python:{{ .Values.python_version }}"
         namespace: {{ .Values.namespace }}
     type: Source
   triggers:
