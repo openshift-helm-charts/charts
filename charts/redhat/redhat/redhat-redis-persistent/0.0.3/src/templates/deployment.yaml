@@ -35,7 +35,7 @@ spec:
             secretKeyRef:
               key: database-password
               name: {{ .Values.database_service_name }}
-        image: " "
+        image: "redis:{{ .Values.redis_version }}"
         imagePullPolicy: IfNotPresent
         livenessProbe:
           initialDelaySeconds: 30
