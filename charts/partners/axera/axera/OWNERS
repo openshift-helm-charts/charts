@@ -1,0 +1,11 @@
+chart:
+  name: axera
+  shortDescription: "Kubernetes microsegmentation & NDR for OpenShift \u2014 least-privilege\
+    \ NetworkPolicy from observed traffic, with on-prem AI incident triage."
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: AltugYildirim
+vendor:
+  label: axera
+  name: QUASYS
