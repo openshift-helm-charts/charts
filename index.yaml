@@ -14002,6 +14002,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-persistent-0.0.2/redis-persistent-0.0.2.tgz
     version: 0.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:0658e9f822ecfe3fa48dfb028d68a30be93ef5d8ad742e1b90b34f75d327e4c5
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-19T08:19:47.833708+00:00'
+      charts.openshift.io/name: Red Hat Redis in-memory data structure store, with
+        persistent storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-19T11:47:47.005774+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.3
+    description: 'This content is experimental, do not use it in production. Redis
+      in-memory data structure store, with persistent storage. For more information
+      about using this template, including OpenShift considerations, see https://github.com/sclorg/redis-container/blob/master/7.  NOTE:
+      You must have persistent volumes available in your cluster to use this template.'
+    digest: ced3c90b7cd95fe779731cfe28d8fb1dbc63bce65476d62d7b16e38c1fa1d9a0
+    kubeVersion: '>=1.20.0'
+    name: redhat-redis-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,redis
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-redis-persistent-0.0.3/redhat-redis-persistent-0.0.3.tgz
+    version: 0.0.3
   redhat-redis-sed:
   - annotations:
       charts.openshift.io/digest: sha256:639de96ec12341cab72ca4aa1f539dcf475e3a5c82c0871e3798418004fd36c8
@@ -18920,4 +18945,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-19T08:36:28.783459+00:00'
+generated: '2026-06-19T11:47:46.823915+00:00'
