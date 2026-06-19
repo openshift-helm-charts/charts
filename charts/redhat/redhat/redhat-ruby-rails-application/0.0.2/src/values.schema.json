@@ -13,7 +13,16 @@
         "ruby_version": {
             "type": "string",
             "description": "Version of Ruby image to be used (3.0-ubi8 by default).",
-            "enum": [ "latest", "3.0-ubi8", "3.1-ubi8",  "3.0-ubi9", "3.1-ubi9" ]
+            "enum": [
+                "latest",
+                "2.5-ubi8",
+                "3.3-ubi8",
+                "3.0-ubi9",
+                "3.3-ubi9",
+                "3.3-ubi10",
+                "4.0-ubi9",
+                "4.0-ubi10"
+            ]
         },
         "memory_limit": {
             "type": "string",
@@ -53,6 +62,26 @@
         "rubygem_mirror": {
             "type": "string",
             "description": "The custom RubyGems mirror URL."
+        },
+        "registry": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of registry that will be used for pushing built image."
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "The namespace of registry that will be used for pushing built image."
+                },
+                "push_secret": {
+                    "type": "string",
+                    "description": "The push secret to push image to registry."
+                }
+            }
         }
     }
 }
