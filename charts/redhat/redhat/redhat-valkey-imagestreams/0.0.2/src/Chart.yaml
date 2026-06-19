@@ -1,0 +1,15 @@
+description: |-
+  This content is experimental, do not use it in production. Provides a Valkey database on RHEL imagestreams.
+  For more information about Valkey container see https://github.com/sclorg/valkey-container/.
+annotations:
+  charts.openshift.io/name: Provides a Valkey database on RHEL imagestreams (experimental)
+  charts.openshift.io/provider: Red Hat
+  charts.openshift.io/providerType: redhat
+apiVersion: v2
+appVersion: 0.0.2
+kubeVersion: '>=1.20.0'
+name: redhat-valkey-imagestreams
+tags: builder,valkey
+sources:
+  - https://github.com/sclorg/helm-charts
+version: 0.0.2
