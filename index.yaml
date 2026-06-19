@@ -13930,6 +13930,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-quarkus-0.0.3/redhat-quarkus-0.0.3.tgz
     version: 0.0.3
+  redhat-redis-imagestreams:
+  - annotations:
+      charts.openshift.io/digest: sha256:ce606137d3d671c13d7b47eedece21ec2f7a3ef670e00181de1c078d8cfdad83
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-19T08:10:29.541728+00:00'
+      charts.openshift.io/name: Provides a Redis database on RHEL imagestreams (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-19T08:12:19.315915+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: This content is experimental, do not use it in production. Provides
+      a Redis database on RHEL imagestreams. For more information about Redis container
+      see https://github.com/sclorg/redis-container/.
+    digest: 4749e2589d3d59d4e6c53ee8010c0f573d5a77f565844f90eeea7aaa45c2eab8
+    kubeVersion: '>=1.20.0'
+    name: redhat-redis-imagestreams
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: builder,redis
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-redis-imagestreams-0.0.2/redhat-redis-imagestreams-0.0.2.tgz
+    version: 0.0.2
   redhat-redis-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:eae26d4b45e70eb169356246007fb953f87ba84b5133da8e549b0df9f0fe54db
@@ -18824,4 +18848,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-18T12:48:16.278570+00:00'
+generated: '2026-06-19T08:12:19.119276+00:00'
