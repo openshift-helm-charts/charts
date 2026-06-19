@@ -15739,6 +15739,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-valkey-persistent-0.0.1/redhat-valkey-persistent-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:12803210525898955104337605793c4bb7abda70e0e781a5d5dd45c143a5a7d7
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-19T08:34:32.320716+00:00'
+      charts.openshift.io/name: Red Hat Valkey in-memory data structure store, with
+        persistent storage (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-19T08:36:28.939451+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: 'This content is experimental, do not use it in production. Valkey
+      in-memory data structure store, with persistent storage. For more information
+      about using this template, including OpenShift considerations, see https://github.com/sclorg/valkey-container/blob/master/8.  NOTE:
+      You must have persistent volumes available in your cluster to use this template.'
+    digest: 3a682b319cc44dce7c43435cb9aae80d1204a890e0b0f9de10ce8abb0b119682
+    kubeVersion: '>=1.20.0'
+    name: redhat-valkey-persistent
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: database,valkey
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-valkey-persistent-0.0.2/redhat-valkey-persistent-0.0.2.tgz
+    version: 0.0.2
   redhat-vertx:
   - annotations:
       charts.openshift.io/digest: sha256:3331fdb13510b38a2e420a370716e542a31dc764c02976659e653213b2e764ee
@@ -18895,4 +18920,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-19T08:30:08.780049+00:00'
+generated: '2026-06-19T08:36:28.783459+00:00'
