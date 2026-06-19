@@ -1,0 +1,12 @@
+application_domain: "" # TODO: must define a default value for .application_domain
+context_dir: "" # TODO: must define a default value for .context_dir
+github_webhook_secret: "SOMETHING" # TODO: must define a default value for .github_webhook_secret
+memory_limit: 512Mi
+name: rails-example
+namespace: openshift
+rails_env: production
+ruby_version: 3.1-ubi8
+rubygem_mirror: "" # TODO: must define a default value for .rubygem_mirror
+secret_key_base: "" # TODO: must define a default value for .secret_key_base
+source_repository_ref: "master" # TODO: must define a default value for .source_repository_ref
+source_repository_url: https://github.com/sclorg/rails-ex.git

@@ -1,0 +1,14 @@
+description: This content is experimental, do not use it in production. An example Rails application with no database. For more information about
+  using this template, including OpenShift considerations, see https://github.com/sclorg/rails-ex/blob/master/README.md.
+name: ruby-rails-application
+tags: quickstart,ruby,rails
+version: 0.0.1
+kubeVersion: '>=1.20.0'
+annotations:
+  charts.openshift.io/name: Red Hat Apache Rails application with no database (experimental)
+  charts.openshift.io/provider: Red Hat
+  charts.openshift.io/providerType: redhat
+apiVersion: v2
+appVersion: 0.0.1
+sources:
+  - https://github.com/sclorg/helm-charts
