@@ -1,0 +1,16 @@
+description: |-
+  This content is expermental, do not use it in production. Redis in-memory data structure store, with persistent storage. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/redis-container/blob/master/5.
+
+  NOTE: You must have persistent volumes available in your cluster to use this template.
+name: redis-persistent
+tags: database,redis
+version: 0.0.2
+annotations:
+  charts.openshift.io/name: Red Hat Redis in-memory data structure store, with persistent storage (experimental)
+  charts.openshift.io/provider: Red Hat
+  charts.openshift.io/providerType: redhat
+apiVersion: v2
+appVersion: 0.0.2
+kubeVersion: '>=1.20.0'
+sources:
+  - https://github.com/sclorg/helm-charts

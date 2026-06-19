@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: "true"
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "redis:{{ .Values.redis_version }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
+  labels:
+    template: redis-persistent-template
+  name: {{ .Values.database_service_name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: {{ .Values.database_service_name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.database_service_name }}
+    spec:
+      containers:
+      - env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: {{ .Values.database_service_name }}
+        image: " "
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 30
+          tcpSocket:
+            port: 6379
+          timeoutSeconds: 1
+        name: redis
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -i
+            - -c
+            - test "$(redis-cli -h 127.0.0.1 -a $REDIS_PASSWORD ping)" == "PONG"
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: {{ .Values.memory_limit }}
+        securityContext:
+          capabilities: {}
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /var/lib/redis/data
+          name: {{ .Values.database_service_name }}-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - name: {{ .Values.database_service_name }}-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.database_service_name }}
+status: {}
