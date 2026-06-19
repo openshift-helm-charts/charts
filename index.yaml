@@ -14896,6 +14896,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-ruby-rails-application-0.0.1/ruby-rails-application-0.0.1.tgz
     version: 0.0.1
+  - annotations:
+      charts.openshift.io/digest: sha256:82049cd7c75abd2bcb689e50c13a117359a90ab1daec2a170b5cdf9c73f2c5a1
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-19T08:28:28.97359+00:00'
+      charts.openshift.io/name: Red Hat Apache Rails application with no database
+        (experimental)
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-06-19T08:30:08.988046+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 0.0.2
+    description: This content is experimental, do not use it in production. An example
+      Rails application with no database. For more information about using this template,
+      including OpenShift considerations, see https://github.com/sclorg/rails-ex/blob/master/README.md.
+    digest: c8832aa0ba0bc609a3152bc476ea5e62f43c2d729414790293f17730ee2b93a5
+    kubeVersion: '>=1.20.0'
+    name: redhat-ruby-rails-application
+    sources:
+    - https://github.com/sclorg/helm-charts
+    tags: quickstart,ruby,rails
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-ruby-rails-application-0.0.2/redhat-ruby-rails-application-0.0.2.tgz
+    version: 0.0.2
   redhat-semeru-transition:
   - annotations:
       charts.openshift.io/digest: sha256:f01d4467137338d7ccc7b6cdeb28df219bfdda77f0384d8adfbfa4059de96703
@@ -15689,29 +15713,6 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-valkey-imagestreams-0.0.1/redhat-valkey-imagestreams-0.0.1.tgz
     version: 0.0.1
-  - annotations:
-      charts.openshift.io/digest: sha256:f379fbe511fdc0fcc05407ecabbf5ed47e43cb18e4fe3c0afac1ddc3f25f6037
-      charts.openshift.io/lastCertifiedTimestamp: '2026-06-19T08:26:23.65456+00:00'
-      charts.openshift.io/name: Provides a Valkey database on RHEL imagestreams (experimental)
-      charts.openshift.io/provider: Red Hat
-      charts.openshift.io/providerType: community
-      charts.openshift.io/submissionTimestamp: '2026-06-19T08:28:05.383152+00:00'
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
-      charts.openshift.io/testedOpenShiftVersion: '4.21'
-    apiVersion: v2
-    appVersion: 0.0.2
-    description: This content is experimental, do not use it in production. Provides
-      a Valkey database on RHEL imagestreams. For more information about Valkey container
-      see https://github.com/sclorg/valkey-container/.
-    digest: 501d6f19144afa62a8f8c675b43d94cc66c4889e6c2b763a246512452472a9ae
-    kubeVersion: '>=1.20.0'
-    name: redhat-valkey-imagestreams
-    sources:
-    - https://github.com/sclorg/helm-charts
-    tags: builder,valkey
-    urls:
-    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-valkey-imagestreams-0.0.2/redhat-valkey-imagestreams-0.0.2.tgz
-    version: 0.0.2
   redhat-valkey-persistent:
   - annotations:
       charts.openshift.io/digest: sha256:85571d8693a1740e2da61868086e1f3ac0fcbbbbf79fb385019f21a91d11afaf
@@ -18894,4 +18895,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-06-19T08:28:05.187825+00:00'
+generated: '2026-06-19T08:30:08.780049+00:00'
