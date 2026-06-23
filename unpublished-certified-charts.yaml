@@ -815,6 +815,49 @@ entries:
     urls:
     - N/A
     version: 10.1.0-4757
+  axera:
+  - annotations:
+      charts.openshift.io/archs: amd64
+      charts.openshift.io/digest: sha256:6ee76345d95d64a104dbe07eefc2e5cf9828e87798ab45ad9935543fdd21e9b7
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-19T19:34:58.179556+00:00'
+      charts.openshift.io/name: Axera Microsegmentation & NDR
+      charts.openshift.io/provider: Axera Security
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-06-23T07:03:32.142131+00:00'
+      charts.openshift.io/supportURL: https://axerasecurity.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 7.0.0
+    description: "Axera \u2014 Kubernetes microsegmentation and network detection
+      & response (NDR) for OpenShift. Maps every east-west and egress flow, turns
+      observed traffic into least-privilege NetworkPolicy, and triages incidents with
+      on-prem AI. Runs entirely in-cluster; CNI-agnostic; strictly additive (observes
+      first, enforces nothing until you choose). Supports all-internal (one-box) or
+      external Postgres + Kafka + AI endpoints."
+    digest: a5b9846e2ea39a8443afacd830e3969a444111c428aca1ae9980e225c668b9cf
+    home: https://axerasecurity.com
+    icon: https://axerasecurity.com/og.png
+    keywords:
+    - microsegmentation
+    - network-detection-and-response
+    - ndr
+    - kubernetes-network-policy
+    - zero-trust
+    - security
+    - openshift
+    kubeVersion: '>=1.25.0-0'
+    maintainers:
+    - email: support@axerasecurity.com
+      name: Axera Security
+      url: https://axerasecurity.com
+    name: axera
+    sources:
+    - https://github.com/AxeraSecurity
+    type: application
+    urls:
+    - N/A
+    version: 1.2.0
   caddy015:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -16549,4 +16592,4 @@ entries:
     urls:
     - N/A
     version: 0.1.5
-generated: '2026-06-18T09:09:10.762175+00:00'
+generated: '2026-06-23T07:03:31.948724+00:00'
