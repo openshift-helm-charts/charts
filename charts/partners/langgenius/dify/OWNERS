@@ -1,0 +1,10 @@
+chart:
+  name: dify
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: zhangx1n
+vendor:
+  label: langgenius
+  name: LangGenius, Inc.

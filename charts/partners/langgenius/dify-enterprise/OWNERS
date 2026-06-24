@@ -1,0 +1,9 @@
+chart:
+  name: dify-enterprise
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: langgenius
+  name: LangGenius, Inc.
