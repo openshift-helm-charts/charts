@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: zhangx1n
 vendor:
   label: langgenius
   name: LangGenius, Inc.
