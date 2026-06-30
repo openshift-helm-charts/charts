@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:15532565245180684795
+        reportDigest: uint64:15862592238784846305
         chart-uri: N/A
         digests:
             chart: sha256:8597c72f2b90d07b8061043386d8918a02d9895853adf9fd982d78e5745b3a1e
             package: d384e9c4cf0a221d7e1e09848726ab81a2e46db2141d4832af86086c8b46debd
-        lastCertifiedTimestamp: "2026-05-31T18:33:12.595723+00:00"
+        lastCertifiedTimestamp: "2026-05-31T21:37:50.873227+00:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.1'
         webCatalogOnly: true
@@ -64,36 +64,34 @@ metadata:
         type: ""
     chart-overrides: ""
 results:
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: |-
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/integrations-adapter:v3.64.13-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/platform-integrations:v3.64.13-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/rhel8/postgresql-15:1-1774427839
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nginx:v3.64.13-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nats-jetstream:2.12.7-custom-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nogate:v3.64.13-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/router:v3.64.13-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/light-engine:v3.64.13-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/cloud-metadata:v3.64.13-ubi
-        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/heavy-engine:v3.64.13-ubi
-    - check: v1.0/required-annotations-present
-      type: Mandatory
-      outcome: PASS
-      reason: All required annotations present
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
-    - check: v1.0/contains-values
-      type: Mandatory
-      outcome: PASS
-      reason: Values file exist
     - check: v1.0/has-notes
       type: Optional
       outcome: PASS
       reason: Chart does contain NOTES.txt
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
     - check: v1.0/not-contain-csi-objects
       type: Mandatory
       outcome: PASS
@@ -102,31 +100,33 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
-    - check: v1.1/has-kubeversion
-      type: Mandatory
-      outcome: PASS
-      reason: Kubernetes version specified
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
     - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
       reason: Chart tests have passed
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
-    - check: v1.0/has-readme
+    - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
-      reason: Chart has a README
+      reason: |-
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/cloud-metadata:v3.64.13-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/integrations-adapter:v3.64.13-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nogate:v3.64.13-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/rhel8/postgresql-15:1-1774427839
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/router:v3.64.13-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nginx:v3.64.13-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/nats-jetstream:2.12.7-custom-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/light-engine:v3.64.13-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/heavy-engine:v3.64.13-ubi
+        Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/platform-integrations:v3.64.13-ubi
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist

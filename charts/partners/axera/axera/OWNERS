@@ -1,0 +1,11 @@
+chart:
+  name: axera
+  shortDescription: Least-privilege NetworkPolicy & NDR for OpenShift, auto-generated
+    from observed traffic, with on-prem AI incident triage.
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: AltugYildirim
+vendor:
+  label: axera
+  name: QUASYS

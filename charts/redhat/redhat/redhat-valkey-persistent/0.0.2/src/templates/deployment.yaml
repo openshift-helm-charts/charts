@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: "true"
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "valkey:{{ .Values.valkey_version }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
+  labels:
+    template: valkey-persistent-template
+  name: {{ .Values.database_service_name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: {{ .Values.database_service_name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.database_service_name }}
+    spec:
+      containers:
+      - env:
+        - name: VALKEY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: {{ .Values.database_service_name }}
+        image: "valkey:{{ .Values.valkey_version }}"
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 30
+          tcpSocket:
+            port: 6379
+          timeoutSeconds: 1
+        name: valkey
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -i
+            - -c
+            - test "$(valkey-cli -h 127.0.0.1 -a $VALKEY_PASSWORD ping)" == "PONG"
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: {{ .Values.memory_limit }}
+        securityContext:
+          capabilities: {}
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /var/lib/valkey/data
+          name: {{ .Values.database_service_name }}-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - name: {{ .Values.database_service_name }}-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.database_service_name }}
+status: {}
