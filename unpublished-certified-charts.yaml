@@ -16799,4 +16799,24 @@ entries:
     urls:
     - N/A
     version: 0.1.0
-generated: '2026-07-02T20:27:18.974984+00:00'
+  zcm-mysql:
+  - annotations:
+      charts.openshift.io/digest: sha256:e8d84965c868c3e4a1d4d2c4eae0dcddc02cdfa724b0890e3332c87d44a08426
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-10T17:58:55.006324+08:00'
+      charts.openshift.io/name: zcm-mysql
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-02T20:32:40.534610+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 5.7.31
+    description: A Helm chart for Kubernetes
+    digest: 57f12e02b126f41e7ce39222a6b35f6ff973315aa887cbf80c2aedf165313cb4
+    icon: file://./mysql.jpg
+    kubeVersion: '>=1.20.0'
+    name: zcm-mysql
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
+generated: '2026-07-02T20:32:40.317756+00:00'
