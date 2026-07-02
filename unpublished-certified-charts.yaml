@@ -16819,4 +16819,23 @@ entries:
     urls:
     - N/A
     version: 0.1.0
-generated: '2026-07-02T20:32:40.317756+00:00'
+  zcm-ssc:
+  - annotations:
+      charts.openshift.io/digest: sha256:5e0034eeaba8d2c88405e930dbfe2a3769fe57e6fe3740b19121f100b11ab3a6
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-10T17:29:22.433191+08:00'
+      charts.openshift.io/name: zcm-ssc
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-02T21:10:17.986913+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: aik
+    description: A Helm chart for Kubernetes
+    digest: e482054bd2b3f274fffc1780aca2adc18d73e4a288f4242a6a539461c3ed6bb9
+    kubeVersion: '>=1.20.0'
+    name: zcm-ssc
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
+generated: '2026-07-02T21:10:17.784372+00:00'
