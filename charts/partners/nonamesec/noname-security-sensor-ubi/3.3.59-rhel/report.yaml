@@ -1,0 +1,94 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.15.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:8993664626567945732
+        chart-uri: N/A
+        digests:
+            chart: sha256:8806fd02098ff2e9b32aadd27435ae6c741848be8f78a5297ee46dfb93f1d240
+            package: 0ddd45afae15581acb094966b73502ca96ba46aa7ff4f5613d9bd358a2dbe08c
+        lastCertifiedTimestamp: "2026-07-02T14:45:13.547624+00:00"
+        testedOpenShiftVersion: "4.18"
+        supportedOpenShiftVersions: '>=4.9'
+        webCatalogOnly: true
+    chart:
+        name: noname-security-sensor-ubi
+        home: ""
+        sources: []
+        version: 3.3.59-rhel
+        description: A Helm chart for Kubernetes
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 3.3.59-rhel
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: noname-security-sensor
+        kubeversion: '>=1.22.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/noname-sensor:3.3.59-rhel'
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: FAIL
+      reason: Chart does not contain NOTES.txt
