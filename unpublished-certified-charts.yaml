@@ -16822,6 +16822,25 @@ entries:
     urls:
     - N/A
     version: 0.1.5
+  zcm-application:
+  - annotations:
+      charts.openshift.io/digest: sha256:6e750237a010c4f031a551bb37cd435bfa4a558cc6f1420177679ae231033b5d
+      charts.openshift.io/lastCertifiedTimestamp: '2026-06-10T17:47:50.120706+08:00'
+      charts.openshift.io/name: zcm-application
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-06T03:08:30.136702+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.7'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: aik
+    description: A Helm chart for Kubernetes
+    digest: f0d299cf42a5ab1682b2044510bd55d21113cee59f3d6de9ebb42fd3d1464f37
+    kubeVersion: '>=1.20.0'
+    name: zcm-application
+    type: application
+    urls:
+    - N/A
+    version: 0.1.0
   zcm-cmdb:
   - annotations:
       charts.openshift.io/digest: sha256:7b421070cb0d2bbb109314b64e173e03ecb47db4d7ceb15cfb0bd0745fd5f447
@@ -16994,4 +17013,4 @@ entries:
     urls:
     - N/A
     version: 0.1.0
-generated: '2026-07-03T20:29:23.816981+00:00'
+generated: '2026-07-06T03:08:29.943810+00:00'
