@@ -1,0 +1,166 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.15.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:13981362994336609613
+        chart-uri: peaka-1.1.0-beta.15-redhat.tgz
+        digests:
+            chart: sha256:eba152952e7f848dcf5046f2942e9fd3e3302bd23b5fc914c8bae14b8b1d08ee
+            package: 6507c71f40e6aa784b9fe2e42c5ab53aa846185e1779e7f42ef637fe3d628005
+        lastCertifiedTimestamp: "2026-07-06T12:24:27.831226+00:00"
+        testedOpenShiftVersion: "4.21"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: false
+    chart:
+        name: peaka
+        home: ""
+        sources: []
+        version: 1.1.0-beta.15-redhat
+        description: Helm chart of the best data integration platform, aka Peaka.
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.3.56
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Peaka
+        kubeversion: '>=1.21.0-0'
+        dependencies:
+            - name: minio
+              version: ~5.1.0
+              repository: https://charts.min.io/
+              condition: minio.enabled
+            - name: mariadb-galera
+              version: 11.2.3
+              repository: https://charts.bitnami.com/bitnami
+              condition: mariadb.enabled
+              alias: mariadb
+            - name: kafka
+              version: 26.8.5
+              repository: https://charts.bitnami.com/bitnami
+              condition: kafka.enabled
+            - name: mongodb
+              version: 14.8.0
+              repository: https://charts.bitnami.com/bitnami
+              condition: mongodb.enabled
+            - name: redis
+              version: 18.11.1
+              repository: https://charts.bitnami.com/bitnami
+              condition: redis.enabled
+            - name: traefik
+              version: 28.2.0
+              repository: https://helm.traefik.io/traefik
+              condition: traefik.enabled
+              alias: traefik
+            - name: permify
+              version: 0.4.0
+              repository: https://permify.github.io/helm-charts
+              condition: permify.enabled
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-ubi-images/permify:v1.3.6-ubi.3
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-common-flow-utilities-service:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-release-state:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-ubi-images/mongodb:7.0.5-ubi.1
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-dispatcher-assigner:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-permission-service:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-ubi-images/temporal-server:1.22.4-ubi.2
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-runtime-api:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-auth-service:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-dispatcher:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-workflow-starter:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-metadata-service:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-monitoring-service:v1.0.0-redhat_ubi
+        Image certification skipped : registry.redhat.io/rhel9/redis-7:9.8
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/peaka-kafka-connect:v1.0.0-redhat_ubi.2
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-metadata-connector:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-ubi-images/pgcat:v1.2.0-ubi.1
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/fe-studio-app:v1.0.0-redhat_ubi.5
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:latest
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-workflow-worker-express:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/peaka-postgres:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-ubi-images/temporal-admin-tools:1.22.4-ubi.2
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-ubi-images/minio:RELEASE.2024-03-03T17-50-39Z-ubi.3
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-cloud-gateway:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-data-rest:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-search-service:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-secret-store-service:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/trino:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/hive-metastore:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-ubi-images/traefik:v3.0.1-ubi.1
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-data-cache:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-email-service:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-scheduled-flow-runner:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-sql-service:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-studio-api:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-token-service:v1.0.0-redhat_ubi.3
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-webhook-resolver:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-collab-sharedb:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-data-migrator:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-dispatcher-dlq:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-service-container-images/be-workflow-history:v1.0.0-redhat_ubi
+        Image is Red Hat certified : europe-west3-docker.pkg.dev/code2-324814/peaka-ubi-images/kafka:4.0.0-ubi.3
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
