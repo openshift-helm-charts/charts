@@ -5978,6 +5978,56 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/peaka-peaka-1.1.0-beta.15-redhat/peaka-1.1.0-beta.15-redhat.tgz
     version: 1.1.0-beta.15-redhat
+  - annotations:
+      charts.openshift.io/digest: sha256:1c0766b0173d8c62f5f386a1f10bab34e5c2ed335d656c02ae705f9ae55e35ed
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-06T13:25:04.158808+00:00'
+      charts.openshift.io/name: Peaka
+      charts.openshift.io/provider: Peaka
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-06T13:34:30.900969+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 0.3.56
+    dependencies:
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.min.io/
+      version: ~5.1.0
+    - alias: mariadb
+      condition: mariadb.enabled
+      name: mariadb-galera
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.2.3
+    - condition: kafka.enabled
+      name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: 26.8.5
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 14.8.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 18.11.1
+    - alias: traefik
+      condition: traefik.enabled
+      name: traefik
+      repository: https://helm.traefik.io/traefik
+      version: 28.2.0
+    - condition: permify.enabled
+      name: permify
+      repository: https://permify.github.io/helm-charts
+      version: 0.4.0
+    description: Helm chart of the best data integration platform, aka Peaka.
+    digest: 7500de2d15fff7413cdd60c46c5d5f6931006f32c912428536f1d236f044153f
+    kubeVersion: '>=1.21.0-0'
+    name: peaka
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/peaka-peaka-1.1.0-beta.16-redhat/peaka-1.1.0-beta.16-redhat.tgz
+    version: 1.1.0-beta.16-redhat
   pubsubplus-openshift:
   - annotations:
       charts.openshift.io/digest: sha256:088b96c259efc2e3338a491a23904533fe94c49334c3c305b54a44987bd3eb4d
@@ -19480,4 +19530,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-07-06T12:31:41.485554+00:00'
+generated: '2026-07-06T13:34:30.683273+00:00'
