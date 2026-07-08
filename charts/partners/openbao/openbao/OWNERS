@@ -1,0 +1,14 @@
+chart:
+  name: openbao
+  shortDescription: Certified OpenBao chart for OpenShift with complementary 24/7
+    enterprise support and software assurance at a flat rate.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: eyenx
+- githubUsername: karras
+- githubUsername: Nerkho
+- githubUsername: pree
+vendor:
+  label: openbao
+  name: Adfinis AG
