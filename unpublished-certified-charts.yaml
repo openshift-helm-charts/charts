@@ -93,6 +93,52 @@ entries:
     urls:
     - N/A
     version: 3.67.5
+  - annotations:
+      charts.openshift.io/digest: sha256:5a3e3136e682ecd06b4850f8ab90460fd0e5d81d61e48cdd41699975e0440f13
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-08T10:11:00.080331+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-08T10:16:03.977517+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.66.6
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: 60cd958dece0480821b37579e67fe139846ecc905dca8cd9f83de11b77420149
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.66.6
   remote-active-worker-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:6aa81181b859d3a79c838dc265e38f4f840d66f13c4ee12616d7b06f07ff2a96
@@ -112,4 +158,4 @@ entries:
     urls:
     - N/A
     version: 3.66.6
-generated: '2026-07-08T10:11:39.759880+00:00'
+generated: '2026-07-08T10:16:03.975451+00:00'
