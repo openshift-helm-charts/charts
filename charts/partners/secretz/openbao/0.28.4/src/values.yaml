@@ -71,7 +71,7 @@ injector:
     # -- image registry to use for agent image
     registry: "registry.connect.redhat.com"
     # -- image repo to use for agent image
-    repository: "openbao/openbao-ubi"
+    repository: "secretz/openbao-ubi"
     # Use the certified OpenBao UBI image for better OpenShift compatibility
     # See: https://openbao.org/docs/install/#container-registries
 
@@ -339,7 +339,7 @@ server:
     # -- image registry to use for server image
     registry: "registry.connect.redhat.com"
     # -- image repo to use for server image
-    repository: "openbao/openbao-ubi"
+    repository: "secretz/openbao-ubi"
     # Use the certified OpenBao UBI image for better OpenShift compatibility
     # See: https://openbao.org/docs/install/#container-registries
 
