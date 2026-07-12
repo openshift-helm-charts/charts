@@ -231,6 +231,52 @@ entries:
     urls:
     - N/A
     version: 3.58.41-lts
+  - annotations:
+      charts.openshift.io/digest: sha256:1c97dcea62cd56c948c5b8b7576b2b888962cda6bd03a07a2ec37afe12d00523
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-12T10:02:39.169403+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-12T10:07:48.812602+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.67.6
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: d32b550e635c6b1ffed9f92d666e78bac49ceda5772a3d4b3c240ad9fb7326cd
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.67.6
   remote-active-worker-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:6aa81181b859d3a79c838dc265e38f4f840d66f13c4ee12616d7b06f07ff2a96
@@ -250,4 +296,4 @@ entries:
     urls:
     - N/A
     version: 3.66.6
-generated: '2026-07-08T12:46:16.547900+00:00'
+generated: '2026-07-12T10:07:48.809329+00:00'
