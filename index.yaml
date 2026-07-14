@@ -1252,6 +1252,67 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/confluentinc-cp-cmf-2.3.1/cp-cmf-2.3.1.tgz
     version: 2.3.1
+  dify-enterprise:
+  - annotations:
+      charts.openshift.io/digest: sha256:02d74c599b09bec830ede77b4e734604d3ca46de3de3cee02f71a6b41202ddf7
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-14T02:42:26.262189+00:00'
+      charts.openshift.io/name: Dify Enterprise
+      charts.openshift.io/provider: LangGenius, Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-14T03:01:25.431004+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+    apiVersion: v2
+    appVersion: 1.13.3
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - postgres
+      version: 12.5.6
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - redis
+      version: 16.13.2
+    - condition: weaviate.enabled
+      name: weaviate
+      repository: https://weaviate.github.io/weaviate-helm
+      tags:
+      - vector
+      - search
+      version: 16.1.0
+    - condition: qdrant.enabled
+      name: qdrant
+      repository: https://qdrant.github.io/qdrant-helm
+      tags:
+      - vector
+      - search
+      version: 0.8.5
+    description: Release https://langgenius.github.io/dify-helm/
+    digest: 8a1c9a8b2c42c979f2909bbc384c049e4e4635bb69a147c6d78d99a2b2696397
+    home: https://dify.ai
+    icon: https://avatars.githubusercontent.com/u/127165244
+    keywords:
+    - dify
+    - langgenius
+    - llm
+    kubeVersion: '>=1.21.0'
+    maintainers:
+    - email: yeuoly@dify.ai
+      name: Yeuoly
+    - email: takatost@dify.ai
+      name: takatost
+    name: dify-enterprise
+    sources:
+    - https://github.com/langgenius/dify
+    - https://github.com/langgenius/dify-helm
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/langgenius-dify-enterprise-3.9.6/dify-enterprise-3.9.6.tgz
+    version: 3.9.6
   dmi4j-backend:
   - annotations:
       charts.openshift.io/digest: sha256:77fb8ce001a77f9e2f12528599afa7370c0cfbf09795ba404cfcb81e89870917
@@ -19568,4 +19629,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-07-09T09:17:03.339553+00:00'
+generated: '2026-07-14T03:01:25.226211+00:00'
