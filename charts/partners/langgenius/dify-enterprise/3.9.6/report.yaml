@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:2313688235080826764
+        reportDigest: uint64:18246075952692521338
         chart-uri: /charts/dify-enterprise-3.9.6.tgz
         digests:
-            chart: sha256:02d74c599b09bec830ede77b4e734604d3ca46de3de3cee02f71a6b41202ddf7
-            package: 060b05c24e2aa46fedb48158d671e999b77b15f4785d724a371da93bf0bb1b05
-        lastCertifiedTimestamp: "2026-07-14T02:42:26.262189+00:00"
+            chart: sha256:34a7f9105f432a982613c2e4a14807f84e978479b89f36392d0958662e5fb65b
+            package: c9d8f0a4fecff5eb70bfb3d264c362e3dabe5a06704dc7b1621d8c2c3bb7dd85
+        lastCertifiedTimestamp: "2026-07-15T02:01:33.719229+00:00"
         testedOpenShiftVersion: "4.21"
         supportedOpenShiftVersions: '>=4.8'
         webCatalogOnly: false
@@ -73,36 +73,26 @@ metadata:
         type: application
     chart-overrides: ""
 results:
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
     - check: v1.1/has-kubeversion
       type: Mandatory
       outcome: PASS
       reason: Kubernetes version specified
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
     - check: v1.0/helm-lint
       type: Mandatory
       outcome: PASS
       reason: Helm lint successful
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: |-
-        Image is Red Hat certified : langgenius/dify-ee-gateway:3.9.6-ubi9
-        Image is Red Hat certified : langgenius/dify-ee-plugin-manager:3.9.6-ubi9
-        Image is Red Hat certified : langgenius/dify-ee-sandbox:3.9.6-ubi9
-        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:latest
-        Image is Red Hat certified : langgenius/dify-ee-api:3.9.6-ubi9
-        Image is Red Hat certified : langgenius/dify-ee-enterprise:3.9.6-ubi9
-        Image is Red Hat certified : langgenius/dify-ee-enterprise-frontend:3.9.6-ubi9
-        Image is Red Hat certified : langgenius/dify-ee-plugin-connector:3.9.6-ubi9
-        Image is Red Hat certified : langgenius/dify-ee-plugin-daemon-serverless:3.9.6-ubi9
-        Image is Red Hat certified : langgenius/dify-ee-web:3.9.6-ubi9
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
       reason: Chart does not contain CRDs
-    - check: v1.0/has-notes
-      type: Optional
-      outcome: PASS
-      reason: Chart does contain NOTES.txt
     - check: v1.0/required-annotations-present
       type: Mandatory
       outcome: PASS
@@ -111,6 +101,22 @@ results:
       type: Mandatory
       outcome: SKIPPED
       reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
     - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
@@ -119,24 +125,18 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Values file exist
-    - check: v1.0/has-readme
+    - check: v1.1/images-are-certified
       type: Mandatory
       outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/is-helm-v3
-      type: Mandatory
-      outcome: PASS
-      reason: API version is V2, used in Helm 3
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/contains-test
-      type: Mandatory
-      outcome: PASS
-      reason: Chart test files exist
+      reason: |-
+        Image is Red Hat certified : langgenius/dify-ee-enterprise-frontend:3.9.6-ubi9
+        Image is Red Hat certified : langgenius/dify-ee-plugin-connector:3.9.6-ubi9
+        Image is Red Hat certified : langgenius/dify-ee-plugin-daemon-serverless:3.9.6-ubi9
+        Image is Red Hat certified : langgenius/dify-ee-plugin-manager:3.9.6-ubi9
+        Image is Red Hat certified : langgenius/dify-ee-web:3.9.6-ubi9
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:latest
+        Image is Red Hat certified : langgenius/dify-ee-gateway:3.9.6-ubi9
+        Image is Red Hat certified : langgenius/dify-ee-sandbox:3.9.6-ubi9
+        Image is Red Hat certified : langgenius/dify-ee-api:3.9.6-ubi9
+        Image is Red Hat certified : langgenius/dify-ee-enterprise:3.9.6-ubi9
 
