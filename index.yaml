@@ -4022,6 +4022,29 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/kubeblocks-kb-cloud-installer-2.1.35/kb-cloud-installer-2.1.35.tgz
     version: 2.1.35
+  kite-agent:
+  - annotations:
+      charts.openshift.io/digest: sha256:6bbef17fdecd5368a6a58a135138189c510d58388b63bd2783bd3ed5fcae45af
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-15T09:07:53.497178+00:00'
+      charts.openshift.io/name: kite-agent
+      charts.openshift.io/provider: ZTE Corporation
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-15T09:10:12.945459+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.9'
+      charts.openshift.io/testedOpenShiftVersion: '4.21'
+      openpalette-subdomain: single_zone_security
+    apiVersion: v2
+    appVersion: V1.0.0
+    description: A Helm chart for Kubernetes
+    digest: 7c22e6734f35ffcc126c9b02e2f4b6b03c740ceb3485420d3df83754292f74ab
+    keywords:
+    - openpalette-platcom
+    kubeVersion: '>=1.22.0'
+    name: kite-agent
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/zte-kite-agent-1.0.0/kite-agent-1.0.0.tgz
+    version: 1.0.0
   kovairdevops-helm:
   - annotations:
       charts.openshift.io/digest: sha256:a4c8cc79dbc78fd8d10779d3e7e80518cacde3e4730e00207829d51cfc77b0f4
@@ -19629,4 +19652,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-07-14T03:01:25.226211+00:00'
+generated: '2026-07-15T09:10:12.744584+00:00'
