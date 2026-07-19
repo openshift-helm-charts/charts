@@ -415,6 +415,52 @@ entries:
     urls:
     - N/A
     version: 3.64.20
+  - annotations:
+      charts.openshift.io/digest: sha256:ed9be0254e3060751a885482b7d60e97b1a6fae7ce22a24aebadcd59d5850e63
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-19T15:55:05.214452+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-19T15:59:42.300786+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.64.20-lts
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: cb8adb73cd37300ab785692182cd7e239e7bcd30efad023b4cf92883925e95db
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.64.20-lts
   remote-active-worker-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:6aa81181b859d3a79c838dc265e38f4f840d66f13c4ee12616d7b06f07ff2a96
@@ -506,4 +552,4 @@ entries:
     urls:
     - N/A
     version: 3.64.20
-generated: '2026-07-19T13:25:17.475566+00:00'
+generated: '2026-07-19T15:59:42.295195+00:00'
