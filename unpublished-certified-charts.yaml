@@ -369,6 +369,52 @@ entries:
     urls:
     - N/A
     version: 3.67.8
+  - annotations:
+      charts.openshift.io/digest: sha256:5db939458c35f4abb8652068706f9254ceb7661c6ef982eb36b62f06e557d69c
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-19T13:20:15.096168+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-19T13:25:17.480563+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.64.20
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: 9e7f2d93d521dd4f3cc65983baa63c59ae4113ad4f254dd4b7d8a6ca04465475
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.64.20
   remote-active-worker-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:6aa81181b859d3a79c838dc265e38f4f840d66f13c4ee12616d7b06f07ff2a96
@@ -460,4 +506,4 @@ entries:
     urls:
     - N/A
     version: 3.64.20
-generated: '2026-07-19T13:22:07.351886+00:00'
+generated: '2026-07-19T13:25:17.475566+00:00'
