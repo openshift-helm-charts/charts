@@ -1,0 +1,116 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.15.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:10336316361347837257
+        chart-uri: N/A
+        digests:
+            chart: sha256:052bcf30e2a3d4bd0c5e00ba82785e57e369517df50a4bb457bb1c30dddbbc73
+            package: fc8b80314b89c95b9d432ba5a1e92881284dfe3d904a85dfb18f18db446ef58d
+        lastCertifiedTimestamp: "2026-07-24T05:00:41.557446+00:00"
+        testedOpenShiftVersion: "4.20"
+        supportedOpenShiftVersions: '>=4.14'
+        webCatalogOnly: true
+    chart:
+        name: namuax-naao
+        home: https://www.namutech.co.kr
+        sources:
+            - https://www.namutech.co.kr
+        version: 0.1.2
+        description: NAMU Agentic AI for Red Hat OpenShift — multi-stage agent orchestration platform (MCP-based document Q&A, NL→SQL, multi-source reporting)
+        keywords:
+            - ai
+            - agentic
+            - mcp
+            - rag
+            - document-qa
+            - rhoai
+            - openshift
+        maintainers:
+            - name: Namutech Co., Ltd.
+              email: support@namutech.co.kr
+              url: https://www.namutech.co.kr
+        icon: https://www.namutech.co.kr/favicon.ico
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.1.2
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: NAAO
+            charts.openshift.io/provider: Namutech Co., Ltd.
+            charts.openshift.io/supportURL: https://www.namutech.co.kr/en/customer/support/
+        kubeversion: '>=1.27.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : docker.io/namuax/naao-pg-mcp:0.1.2
+        Image is Red Hat certified : docker.io/namuax/naao-backend:0.1.2
+        Image is Red Hat certified : docker.io/namuax/naao-parser-vl:0.1.2
+        Image certification skipped : registry.redhat.io/rhel9/postgresql-15:latest
+        Image certification skipped : registry.redhat.io/rhel9/redis-7:latest
+        Image is Red Hat certified : docker.io/namuax/naao-fe:0.1.2
+        Image is Red Hat certified : docker.io/namuax/naao-parser-unified:0.1.2
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:latest
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+
