@@ -1,9 +1,10 @@
 chart:
   name: namuax-naao
-  shortDescription: unknown
+  shortDescription: NAAO Helm chart for NAMU Agentic AI on Red Hat OpenShift AI
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: jiroh1
 vendor:
   label: namuax
   name: namutech
