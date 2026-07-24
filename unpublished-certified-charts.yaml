@@ -22,6 +22,44 @@ entries:
     urls:
     - N/A
     version: 26.7.0-p1
+  namuax-naao:
+  - annotations:
+      charts.openshift.io/digest: sha256:052bcf30e2a3d4bd0c5e00ba82785e57e369517df50a4bb457bb1c30dddbbc73
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-24T05:00:41.557446+00:00'
+      charts.openshift.io/name: NAAO
+      charts.openshift.io/provider: Namutech Co., Ltd.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-24T07:16:57.358046+00:00'
+      charts.openshift.io/supportURL: https://www.namutech.co.kr/en/customer/support/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 0.1.2
+    description: "NAMU Agentic AI for Red Hat OpenShift \u2014 multi-stage agent orchestration
+      platform (MCP-based document Q&A, NL\u2192SQL, multi-source reporting)"
+    digest: fc8b80314b89c95b9d432ba5a1e92881284dfe3d904a85dfb18f18db446ef58d
+    home: https://www.namutech.co.kr
+    icon: https://www.namutech.co.kr/favicon.ico
+    keywords:
+    - ai
+    - agentic
+    - mcp
+    - rag
+    - document-qa
+    - rhoai
+    - openshift
+    kubeVersion: '>=1.27.0'
+    maintainers:
+    - email: support@namutech.co.kr
+      name: Namutech Co., Ltd.
+      url: https://www.namutech.co.kr
+    name: namuax-naao
+    sources:
+    - https://www.namutech.co.kr
+    type: application
+    urls:
+    - N/A
+    version: 0.1.2
   nonamesec-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:c1463fd0d01e94b1e36018eb1863ec0469e99dfe24525b1eaf6ed1615dc4ff5b
@@ -592,4 +630,4 @@ entries:
     urls:
     - N/A
     version: 3.68.3
-generated: '2026-07-22T12:40:54.589724+00:00'
+generated: '2026-07-24T07:16:57.350967+00:00'
