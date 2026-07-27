@@ -1,0 +1,121 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.1
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:17141377126766625666
+        chart-uri: /charts/peaka-1.1.0-beta.12.tgz
+        digests:
+            chart: sha256:3564e642ad599c1668f3d18b4140cf4d0405a46caf6b7079865d565e776686eb
+            package: d53628b1ad7fa6aee149600e05751e6c6f18d3fd53629e9ad68a28fb630f9583
+        lastCertifiedTimestamp: "2026-05-18T08:43:06.035356+00:00"
+        testedOpenShiftVersion: "4.18"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: false
+    chart:
+        name: peaka
+        home: ""
+        sources: []
+        version: 1.1.0-beta.12
+        description: Helm chart of the best data integration platform, aka Peaka.
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.3.56
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Peaka
+        kubeversion: '>=1.21.0-0'
+        dependencies:
+            - name: minio
+              version: ~5.1.0
+              repository: https://charts.min.io/
+              condition: minio.enabled
+            - name: mariadb-galera
+              version: 11.2.3
+              repository: https://charts.bitnami.com/bitnami
+              condition: mariadb.enabled
+              alias: mariadb
+            - name: kafka
+              version: 26.8.5
+              repository: https://charts.bitnami.com/bitnami
+              condition: kafka.enabled
+            - name: mongodb
+              version: 14.8.0
+              repository: https://charts.bitnami.com/bitnami
+              condition: mongodb.enabled
+            - name: redis
+              version: 18.11.1
+              repository: https://charts.bitnami.com/bitnami
+              condition: redis.enabled
+            - name: traefik
+              version: 28.2.0
+              repository: https://helm.traefik.io/traefik
+              condition: traefik.enabled
+              alias: traefik
+            - name: permify
+              version: 0.4.0
+              repository: https://permify.github.io/helm-charts
+              condition: permify.enabled
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+
