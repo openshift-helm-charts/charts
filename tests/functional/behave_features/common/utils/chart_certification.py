@@ -339,16 +339,16 @@ vendor:
             conclusion = get_run_result(self.secrets, run_id)
             if conclusion == expect_result:
                 logging.info(
-                    f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{expect_result}' which is expected"
+                    f"PR{pr_number if pr_number else self.secrets.pr_number} (https://github.com/{TEST_REPO}/pull/{pr_number if pr_number else self.secrets.pr_number}) Workflow run was '{expect_result}' which is expected"
                 )
             else:
                 if failure_type == "warning":
                     logging.warning(
-                        f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{conclusion}' which is unexpected, run id: {run_id}"
+                        f"PR{pr_number if pr_number else self.secrets.pr_number} (https://github.com/{TEST_REPO}/pull/{pr_number if pr_number else self.secrets.pr_number}) Workflow run was '{conclusion}' which is unexpected, run: https://github.com/{TEST_REPO}/actions/runs/{run_id}"
                     )
                 else:
                     raise AssertionError(
-                        f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{conclusion}' which is unexpected, run id: {run_id}"
+                        f"PR{pr_number if pr_number else self.secrets.pr_number} (https://github.com/{TEST_REPO}/pull/{pr_number if pr_number else self.secrets.pr_number}) Workflow run was '{conclusion}' which is unexpected, run: https://github.com/{TEST_REPO}/actions/runs/{run_id}"
                     )
 
             return run_id, conclusion

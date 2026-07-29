@@ -340,16 +340,16 @@ class OwnersFileSubmissionsE2ETest:
 
         if conclusion == expected_result:
             logging.info(
-                f"PR{pr_number} Workflow run was '{expected_result}' which is expected"
+                f"PR{pr_number} (https://github.com/{settings.TEST_REPO}/pull/{pr_number}) Workflow run was '{expected_result}' which is expected"
             )
         else:
             if failure_type == "error":
                 raise AssertionError(
-                    f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{conclusion}' which is unexpected, run id: {run_id}"
+                    f"PR{pr_number if pr_number else self.secrets.pr_number} (https://github.com/{settings.TEST_REPO}/pull/{pr_number if pr_number else self.secrets.pr_number}) Workflow run was '{conclusion}' which is unexpected, run: https://github.com/{settings.TEST_REPO}/actions/runs/{run_id}"
                 )
             else:
                 logging.warning(
-                    f"PR{pr_number if pr_number else self.secrets.pr_number} Workflow run was '{conclusion}' which is unexpected, run id: {run_id}"
+                    f"PR{pr_number if pr_number else self.secrets.pr_number} (https://github.com/{settings.TEST_REPO}/pull/{pr_number if pr_number else self.secrets.pr_number}) Workflow run was '{conclusion}' which is unexpected, run: https://github.com/{settings.TEST_REPO}/actions/runs/{run_id}"
                 )
 
         return run_id, conclusion

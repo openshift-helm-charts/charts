@@ -3,6 +3,9 @@ name: Behave Testing
 # Behave Testing will run the repository's Behave testing with each feature file
 # getting its own runner. All feature files found within the specific path are
 # included.
+#
+# Workflow callers should be gating to approved actors due to actions/checkout
+# checking out contributed content.
 
 on:
   workflow_call:
@@ -76,11 +79,14 @@ jobs:
       features: ${{ steps.find-features.outputs.features }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.checkout-ref }}
           repository: ${{ inputs.checkout-repository }}
           fetch-depth: ${{ inputs.checkout-fetch-depth }}
+          # Explicit fork checkout for test execution. Workflow caller
+          # should be gating this to approved actors
+          allow-unsafe-pr-checkout: true
       - name: find features
         # Find the feature files currently defined in repo. We expect to find at
         # least 15 files, though that number is arbitrarily chosen at a figure
@@ -113,12 +119,15 @@ jobs:
         feature-file: ${{ fromJson(needs.get-features.outputs.features) }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           token: ${{ secrets.bot-token }}
           ref: ${{ inputs.checkout-ref }}
           repository: ${{ inputs.checkout-repository }}
           fetch-depth: ${{ inputs.checkout-fetch-depth }}
+          # Explicit fork checkout for test execution. Workflow caller
+          # should be gating this to approved actors
+          allow-unsafe-pr-checkout: true
 
       - name: Set up Python
         id: setup-python
