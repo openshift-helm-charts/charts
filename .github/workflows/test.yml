@@ -33,12 +33,15 @@ jobs:
       test-tags: ${{ steps.determine-test-tags.outputs.test-tags }}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ secrets.BOT_TOKEN }}
           fetch-depth: 0
+          # Explicit fork checkout for test execution, gated by check-contributor
+          # and again by check-pr-for-ci
+          allow-unsafe-pr-checkout: true
 
       - name: Set up Python
         id: setup-python

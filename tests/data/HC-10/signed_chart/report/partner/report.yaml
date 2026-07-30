@@ -11,7 +11,7 @@ metadata:
         digests:
             chart: sha256:d075d16bb33bb33f66cc6fb8af5cce935b647972de4b4af49be385fcce7bed05
             package: 6fb1fea44b19334adff0b9c8bb2946d35f59150fea2ba98fb2d2fc902162ecb5
-            publicKey: 678b498cef687fc38ac5af7b2afe447b1562f79c046a5210678203afdaebf558
+            publicKey: 20bc5657ddfc42f0cb82ca5484f5b88dda78fe7b69a1bc5a309fe4434bfaeaba
         lastCertifiedTimestamp: "2023-09-11T12:30:18.702841-04:00"
         testedOpenShiftVersion: "4.13"
         supportedOpenShiftVersions: '>=4.2'
