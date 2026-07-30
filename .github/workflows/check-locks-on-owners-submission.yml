@@ -30,7 +30,7 @@ jobs:
       github.event.pull_request.draft == false
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         
       - name: Set up Python
         id: setup-python
@@ -74,13 +74,15 @@ jobs:
 
       # Only used to assert content of the OWNERS file.
       - name: Checkout Pull Request
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.BOT_TOKEN }}
           fetch-depth: 0
           path: "pr-branch"
+          # Explicit fork checkout to read OWNERS file content
+          allow-unsafe-pr-checkout: true
 
       - name: Ensure OWNERS content and path content align
         working-directory: "pr-branch"
