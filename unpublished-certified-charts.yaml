@@ -521,6 +521,52 @@ entries:
     urls:
     - N/A
     version: 3.64.20-lts
+  - annotations:
+      charts.openshift.io/digest: sha256:b64ed096f636a8d79cdc6e16e4e7c41536f42f26500a5cfe56b02bc7c0fe4989
+      charts.openshift.io/lastCertifiedTimestamp: '2026-07-30T09:46:25.708587+00:00'
+      charts.openshift.io/name: Remote Engine
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-07-30T09:51:04.476999+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.67.9
+    dependencies:
+    - condition: global.noname.enabled
+      name: noname
+      repository: file://charts/noname
+      version: 0.1.0
+    - condition: global.engine.enabled
+      name: engine
+      repository: file://charts/engine
+      version: 0.1.0
+    - condition: global.active.enabled
+      name: active
+      repository: file://charts/active
+      version: 0.1.0
+    - condition: global.platform.enabled
+      name: platform
+      repository: file://charts/platform
+      version: 0.1.0
+    - condition: global.router.enabled
+      name: router
+      repository: file://charts/router
+      version: 0.1.0
+    - condition: global.noname.enabled,global.rabbitmq.enabled
+      name: rabbitmq
+      repository: file://charts/rabbitmq
+      version: 0.15.3
+    - condition: global.nns_eso.enabled
+      name: nns-eso
+      repository: file://charts/nns-eso
+      version: 0.1.0
+    description: Noname Helm on k8s
+    digest: d418c9a81a890d465daf9ab5e9b9ca2f5d1f7db3e64d78eb42b871114d8fd482
+    kubeVersion: '>=1.0.0-0'
+    name: nonamesec-ubi
+    urls:
+    - N/A
+    version: 3.67.9
   remote-active-worker-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:6aa81181b859d3a79c838dc265e38f4f840d66f13c4ee12616d7b06f07ff2a96
@@ -648,4 +694,4 @@ entries:
     urls:
     - N/A
     version: 3.68.5
-generated: '2026-07-29T12:39:02.301236+00:00'
+generated: '2026-07-30T09:51:04.471190+00:00'
