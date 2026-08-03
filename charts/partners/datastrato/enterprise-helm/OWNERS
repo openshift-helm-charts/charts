@@ -1,0 +1,10 @@
+chart:
+  name: enterprise-helm
+  shortDescription: A Helm chart for deploying Datastrato Gravitino Enterprise application on Kubernetes
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: danhuawang
+vendor:
+  label: datastrato
+  name: Datastrato
