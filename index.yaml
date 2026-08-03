@@ -11918,41 +11918,6 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-must-gather-1.10.2/redhat-developer-hub-must-gather-1.10.2.tgz
     version: 1.10.2
-  - annotations:
-      charts.openshift.io/archs: x86_64
-      charts.openshift.io/digest: sha256:46f7512eb0953754cc74962e0fc317084dce2d5f5131c664d99e56e627c9db90
-      charts.openshift.io/lastCertifiedTimestamp: '2026-08-03T15:44:24.265353+00:00'
-      charts.openshift.io/name: Red Hat Developer Hub Must Gather
-      charts.openshift.io/provider: Red Hat
-      charts.openshift.io/providerType: community
-      charts.openshift.io/submissionTimestamp: '2026-08-03T15:46:24.308637+00:00'
-      charts.openshift.io/supportURL: https://access.redhat.com/support
-      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
-      charts.openshift.io/testedOpenShiftVersion: N/A
-    apiVersion: v2
-    appVersion: 1.10.3
-    description: 'A Helm chart for running the RHDH Must-Gather diagnostic tool on
-      Kubernetes '
-    digest: cd1f1df0d53338457109be337d5dc4b4e5aefb91519d6ffefbf2905ffef5cd1d
-    home: https://github.com/redhat-developer/rhdh-must-gather
-    keywords:
-    - rhdh
-    - red-hat-developer-hub
-    - backstage
-    - diagnostics
-    - must-gather
-    - troubleshooting
-    kubeVersion: '>= 1.27.0-0'
-    maintainers:
-    - name: Red Hat
-      url: https://redhat.com
-    name: redhat-developer-hub-must-gather
-    sources:
-    - https://github.com/redhat-developer/rhdh-must-gather
-    type: application
-    urls:
-    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-must-gather-1.10.3/redhat-developer-hub-must-gather-1.10.3.tgz
-    version: 1.10.3
   redhat-developer-hub-orchestrator-infra:
   - annotations:
       charts.openshift.io/digest: sha256:61f974912dce40329bc0c0157139033d553fd0421145fd8ec5db51ad38694d60
@@ -12598,6 +12563,34 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-orchestrator-infra-1.9.7/redhat-developer-hub-orchestrator-infra-1.9.7.tgz
     version: 1.9.7
+  - annotations:
+      charts.openshift.io/digest: sha256:d08771030db198efe41e91a4b32ed1bcc1460376a4c9b543f268fd68885f557a
+      charts.openshift.io/lastCertifiedTimestamp: '2026-08-03T15:44:43.48207+00:00'
+      charts.openshift.io/name: Orchestrator Infrastructure for Red Hat Developer
+        Hub
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-08-03T15:46:38.562673+00:00'
+      charts.openshift.io/supportURL: https://issues.redhat.com/browse/RHIDP
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    description: Helm chart to deploy the Orchestrator solution's required infrastructure
+      suite on OpenShift, including OpenShift Serverless Operator and OpenShift Serverless
+      Logic Operator, both required to configure Red Hat Developer Hub to use the
+      Orchestrator.
+    digest: b613f0922d536f84a5c729c6ee5977320131ba16d30cfbbb2cc02bce62ba3e94
+    kubeVersion: '>= 1.25.0-0'
+    maintainers:
+    - name: Red Hat Developer Hub Team
+      url: https://github.com/redhat-developer/rhdh-chart
+    name: redhat-developer-hub-orchestrator-infra
+    sources:
+    - https://github.com/redhat-developer/rhdh-chart
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-orchestrator-infra-1.10.3/redhat-developer-hub-orchestrator-infra-1.10.3.tgz
+    version: 1.10.3
   redhat-dotnet:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -20456,4 +20449,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-08-03T15:46:24.112148+00:00'
+generated: '2026-08-03T15:46:38.358558+00:00'
