@@ -1,0 +1,10 @@
+chart:
+  name: enterprise-helm
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: danhuawang
+vendor:
+  label: datastrato
+  name: danhua wang
