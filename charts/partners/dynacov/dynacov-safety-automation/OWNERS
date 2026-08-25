@@ -1,0 +1,11 @@
+chart:
+  name: dynacov-safety-automation
+  shortDescription: Namespace-scoped OpenShift resilience testing. No elevated privileges.
+    Automated chaos scenarios, live log streaming, audit reports (DORA)
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: TheRealHaui
+vendor:
+  label: dynacov
+  name: DynaCov, Inc.

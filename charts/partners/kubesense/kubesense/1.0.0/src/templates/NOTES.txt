@@ -1,0 +1,19 @@
+Kubesense has been deployed successfully!
+
+Application: {{ .Chart.Name }} {{ .Chart.AppVersion }}
+Release:     {{ .Release.Name }}
+Namespace:   {{ .Release.Namespace }}
+
+The Kubesense API is running on port 3000 (ClusterIP).
+
+To access the API within the cluster:
+  kubectl port-forward svc/{{ include "kubesense.fullname" . }} 3000:3000 -n {{ .Release.Namespace }}
+
+Then open:
+  http://localhost:3000/api/health
+
+Configuration notes:
+- Set secrets.jwtSecret with your JWT signing secret
+- Set config.database.host, config.database.source, config.database.username and secrets.databasePassword for the primary DB
+- Set config.tracesStore.host and secrets.tracesStorePassword for ClickHouse
+- Set config.metricsStore.url for VictoriaMetrics

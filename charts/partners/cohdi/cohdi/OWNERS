@@ -1,0 +1,9 @@
+chart:
+  name: cohdi
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: cohdi
+  name: Fujitsu Limited

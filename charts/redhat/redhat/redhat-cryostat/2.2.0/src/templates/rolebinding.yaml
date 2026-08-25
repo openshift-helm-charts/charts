@@ -1,0 +1,31 @@
+{{- define "cryostat.createRolebinding" -}}
+{{- $ns := index .  0 -}}
+{{- with index . 1 -}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "cryostat.fullname" . }}
+  namespace: {{ $ns }}
+  labels:
+    {{- include "cryostat.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "cryostat.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "cryostat.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}
+{{- end -}}
+
+{{- if and .Values.rbac.create .Values.core.discovery.kubernetes.enabled (not .Values.core.discovery.kubernetes.allowAllNamespaces) -}}
+{{- $watchNs := compact (default list .Values.core.discovery.kubernetes.namespaces) | uniq -}}
+{{- if and (not $watchNs) (not .Values.core.discovery.kubernetes.installNamespaceDisabled) -}}
+{{- $watchNs = list .Release.Namespace -}}
+{{- end -}}
+{{- range $ns := $watchNs }}
+{{ include "cryostat.createRolebinding" (list $ns $) }}
+{{- end -}}
+{{- end -}}

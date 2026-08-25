@@ -1,0 +1,139 @@
+namespaceOverride: ''
+nameOverride: ''
+fullnameOverride: ''
+image:
+  repository: registry.redhat.io/openshift-gitops-1/argocd-agent-rhel9
+  tag: v1.21.0
+  pullPolicy: IfNotPresent
+replicaCount: 1
+imagePullSecrets: []
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+revisionHistoryLimit: 10
+progressDeadlineSeconds: 600
+tlsSecretName: argocd-agent-client-tls
+tlsRootCASecretName: argocd-agent-ca
+userPasswordSecretName: argocd-agent-agent-userpass
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+serviceAccount:
+  create: true
+  name: ''
+  annotations: {}
+  automountServiceAccountToken: true
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+rbac:
+  create: true
+  createClusterRole: true
+nodeSelector: {}
+affinity: {}
+tolerations: []
+topologySpreadConstraints: []
+podAnnotations: {}
+podLabels: {}
+priorityClassName: ''
+terminationGracePeriodSeconds: 30
+hostAliases: []
+dnsPolicy: ''
+dnsConfig: {}
+probes:
+  liveness:
+    enabled: true
+    httpGet:
+      path: /healthz
+      port: healthz
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    enabled: true
+    httpGet:
+      path: /healthz
+      port: healthz
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+agentMode: autonomous
+auth: mtls:any
+logLevel: info
+logFormat: text
+server: principal.server.address.com
+serverPort: '443'
+metricsPort: '8181'
+tlsClientInSecure: 'false'
+healthzPort: '8002'
+redisAddress: argocd-redis:6379
+redisUsername: ''
+argoCdRedisSecretName: argocd-redis
+argoCdRedisPasswordKey: auth
+enableWebSocket: false
+enableCompression: false
+pprofPort: '0'
+enableResourceProxy: true
+cacheRefreshInterval: 10s
+informerSyncTimeout: 10s
+keepAliveInterval: 50s
+tlsClientKeyPath: ''
+tlsClientCertPath: ''
+tlsRootCAPath: ''
+tlsMinVersion: ''
+tlsMaxVersion: ''
+tlsCipherSuites: ''
+allowedNamespaces: ''
+tlsInsecurePlaintext: 'false'
+destinationBasedMapping: false
+createNamespace: false
+labelSelector: ''
+redisTLS:
+  enabled: false
+  caPath: /app/config/redis-tls/ca.crt
+  secretName: argocd-redis-tls
+  insecure: false
+service:
+  metrics:
+    port: 8181
+    targetPort: 8181
+    annotations: {}
+  healthz:
+    port: 8002
+    targetPort: 8002
+    annotations: {}
+serviceMonitor:
+  enabled: false
+  additionalLabels: {}
+  annotations: {}
+  namespace: ''
+  interval: 30s
+  scrapeTimeout: 10s
+  relabelings: []
+  metricRelabelings: []
+  honorLabels: false
+  scheme: ''
+  tlsConfig: {}
+tests:
+  enabled: false
+  image: bitnamilegacy/kubectl
+  tag: 1.33.4

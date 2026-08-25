@@ -1,0 +1,9 @@
+database_service_name: redis
+memory_limit: 512Mi
+namespace: redis-persistent-testing
+redis_password: testp # TODO: must define a default value for .redis_password'
+redis_version: 7-el9
+pvc:
+  volume_capacity: 1Gi
+  app_code: "something"
+  netapp_nfs: false

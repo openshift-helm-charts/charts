@@ -50,7 +50,7 @@ jobs:
       github.actor != 'redhat-mercury-bot'
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.TRUSTED_REF }}
 
@@ -152,17 +152,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
+          # Explicit fork checkout for certification, read as data only
+          allow-unsafe-pr-checkout: true
 
       - name: Set up Python
         id: setup-python
@@ -234,17 +236,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
+          # Explicit fork checkout for certification, chart-verifier runs if needed
+          allow-unsafe-pr-checkout: true
 
       - name: Set up Python
         id: setup-python
@@ -435,17 +439,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
+          # Explicit fork checkout for certification, read as data only
+          allow-unsafe-pr-checkout: true
 
       - name: Set up Python
         id: setup-python
@@ -520,7 +526,7 @@ jobs:
       # provided a valid report.yaml
       - name: Add 'authorized-request' label to PR
         if: ${{ needs.validate-submission.outputs.validate-submission-outcome == 'success' &&
-                needs.chart-verifier.outputs.run-verifier-outcome != 'failure' &&
+                contains(fromJSON('["success", "skipped"]'), needs.chart-verifier.outputs.run-verifier-outcome) &&
                 needs.setup.outputs.run_build == 'true' }}
         run: gh pr edit "${PR_NUMBER}" --add-label "authorized-request"
         env:
@@ -566,17 +572,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.TRUSTED_REF }}
 
       - name: Checkout PR Branch
         if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: "pr-branch"
+          # Explicit fork checkout for certification, read as data only
+          allow-unsafe-pr-checkout: true
 
       - name: Set up Python
         id: setup-python

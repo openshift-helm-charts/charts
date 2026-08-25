@@ -1,0 +1,10 @@
+chart:
+  name: helm-chart-check-prod
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: gsanwal
+vendor:
+  label: test-vite-react-19
+  name: Red Hat, Inc.

@@ -1,0 +1,146 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.1
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:18022705558158462993
+        chart-uri: N/A
+        digests:
+            chart: sha256:537f34c9d00ee873dbcc7b46388cfb7dafad96e422b70d635258683a6610e57a
+            package: c70687e4b5e1aa45e625629b681e005a0c501a5dce640471919ca8747659dc27
+        lastCertifiedTimestamp: "2026-05-20T16:02:20.806709-05:00"
+        testedOpenShiftVersion: "4.20"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: true
+    chart:
+        name: 5g-upf-global
+        home: ""
+        sources: []
+        version: 1.260315.10516330
+        description: A Helm chart for 5G Core cUPF(26/03/15)
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 26.A.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: 5g-upf-global-26a
+            charts.openshift.io/provider: Samsung Electronics
+            charts.openshift.io/releaseDate: 26/03/15
+            charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+        kubeversion: '>= 1.21.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: FAIL
+      reason: Chart does not contain NOTES.txt
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-lacm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-dpme:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-utilbox:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-imcm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-cap:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-bgpm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-drmm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-ucsm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-lem:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-crtm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-ui:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-imim:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-lbcm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-clbm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-ppsm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-cdbm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-pm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-pmexp:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-nsm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-fqm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-bfdm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-clbs:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-nfmc:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-vpbt:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-clm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-crm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-nidm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-uclb:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-fm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-twamp:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-trcm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-prm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-uppi:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ima:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-dm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-endm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-iscmp:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-lbim:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-eves:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-nlm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-vcdm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-frpe:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-fluentd:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ncdh:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ncth:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ldbm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-lbm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-upf-updm:SVR26A_20260315_10516330
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present

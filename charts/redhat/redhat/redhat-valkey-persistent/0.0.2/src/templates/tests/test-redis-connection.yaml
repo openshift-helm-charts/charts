@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-connection-test"
+  namespace: "{{ .Release.Namespace }}"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    name: {{ .Values.database_service_name }}
+spec:
+  #serviceAccount: {{ .Values.serviceAccount }}
+  containers:
+    - name: "valkey-connection-test"
+      image: "registry.redhat.io/rhel10/valkey-8:latest"
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: VALKEY_PASSWORD
+          value: "{{ .Values.valkey_password }}"
+      command:
+        - /bin/bash
+        - -ec
+        - "timeout 15 valkey-cli -h {{ .Values.database_service_name }} -a $VALKEY_PASSWORD ping"
+  restartPolicy: Never

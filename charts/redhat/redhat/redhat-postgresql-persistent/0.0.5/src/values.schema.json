@@ -1,0 +1,81 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "database_service_name": {
+            "type": "string",
+            "pattern": "^[a-z0-9-_]+$"
+        },
+        "namespace": {
+            "type": "string"
+        },
+        "config": {
+            "type": "object",
+            "properties": {
+                "postgresql_database": {
+                    "type": "string"
+                },
+                "postgresql_password": {
+                    "type": "string"
+                },
+                "postgresql_user": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
+        "memory_limit": {
+            "type": "string",
+            "title": "Database memory limit",
+            "form": true,
+            "render": "slider",
+            "sliderMin": 512,
+            "sliderMax": 65536,
+            "sliderUnit": "Mi"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "tag": {
+                    "type": "string",
+                    "description": "Specify postgresql imagestream tag",
+                    "enum": [
+                        "latest",
+                        "13-el9",
+                        "12-el8",
+                        "12",
+                        "15-el9",
+                        "15-el8",
+                        "16-el9",
+                        "16-el8",
+                        "16-el10",
+                        "18-el9",
+                        "18-el10"
+                    ]
+                }
+            }
+        },
+        "pvc": {
+            "type": "object",
+            "properties": {
+                "volume_capacity": {
+                    "type": "string",
+                    "title": "Persistent Volume Size",
+                    "form": true,
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 100,
+                    "sliderUnit": "Gi"
+                },
+                "netapp_nfs": {
+                    "type": "boolean"
+                },
+                "app_code": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

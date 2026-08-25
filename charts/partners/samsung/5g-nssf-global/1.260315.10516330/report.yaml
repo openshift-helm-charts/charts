@@ -1,0 +1,130 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.14.1
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:7306352265023075112
+        chart-uri: N/A
+        digests:
+            chart: sha256:d383d62bfb86724c73b5ad0519112ab3162a69b841d0c5b814e6d84199bcc15b
+            package: d13a2a9128c1bfb046507e726b576b23e4a45229ad96d6f7b22225d510c71775
+        lastCertifiedTimestamp: "2026-05-21T08:14:37.930942-05:00"
+        testedOpenShiftVersion: "4.20"
+        supportedOpenShiftVersions: '>=4.8'
+        webCatalogOnly: true
+    chart:
+        name: 5g-nssf-global
+        home: ""
+        sources: []
+        version: 1.260315.10516330
+        description: A Helm chart for 5G Core cNSSF(26/03/15)
+        keywords: []
+        maintainers: []
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 26.A.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: 5g-nssf-global-26a
+            charts.openshift.io/provider: Samsung Electronics
+            charts.openshift.io/releaseDate: 26/03/15
+            charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+        kubeversion: '>= 1.21.0-0'
+        dependencies: []
+        type: ""
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: FAIL
+      reason: |-
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-fqm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ndns:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nssf-ui:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nssf-nsam:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ncdh:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ncth:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-lbm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nssf-nfmc:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-cap:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ima:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nssf-nssm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-imcm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-dm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-crm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-clbm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-nsm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-clbs:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-utilbox:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-pmexp:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nssf-vcdm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-bfdm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-uclb:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-lem:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-fm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-clm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-imim:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-vpbt:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nssf-pm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-bgpm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-fluentd:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-crtm:SVR26A_20260315_10516330
+        Image is not Red Hat certified : quay.samsung.bos2.lab/samsung_5gc/integ-core/global-nf-ldbm:SVR26A_20260315_10516330
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: FAIL
+      reason: Chart does not contain NOTES.txt
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present

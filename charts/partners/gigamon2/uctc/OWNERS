@@ -4,7 +4,6 @@ chart:
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: haroonrasheeda
 - githubUsername: monivignesh1999
 vendor:
   label: gigamon2

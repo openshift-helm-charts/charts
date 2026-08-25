@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    template.openshift.io/expose-uri: valkey://{.spec.clusterIP}:{.spec.ports[?(.name=="valkey")].port}
+  labels:
+    template: valkey-persistent-template
+  name: {{ .Values.database_service_name }}
+spec:
+  ports:
+  - name: valkey
+    nodePort: 0
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    name: {{ .Values.database_service_name }}
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

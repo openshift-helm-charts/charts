@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-connection-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    name: {{ .Values.name }}
+    template: {{ .Values.name }}
+spec:
+  containers:
+    - name: "{{ .Release.Name }}-connection-test"
+      image: "registry.redhat.io/ubi8/ubi:latest"
+      imagePullPolicy: IfNotPresent
+      command:
+        - '/bin/bash'
+        - '-exc'
+        - >
+          curl {{ .Values.name }}.{{ .Release.Namespace }}:8080 | grep "Node.js Crud Application"
+  restartPolicy: Never

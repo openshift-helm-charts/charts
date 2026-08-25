@@ -9,6 +9,8 @@ users:
 - githubUsername: benashz
 - githubUsername: digivava
 - githubUsername: tomcf-hcp
+- githubUsername: vijayavelsekar
+- githubUsername: siyer-corp
 vendor:
   label: hashicorp
   name: HashiCorp

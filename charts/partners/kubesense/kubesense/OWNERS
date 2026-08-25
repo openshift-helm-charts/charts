@@ -1,0 +1,10 @@
+chart:
+  name: kubesense
+  shortDescription: ' Kubesense Helm chart for APM, Logs, and Infrastructure Monitoring  '
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: saurabhkaveri-03
+vendor:
+  label: kubesense
+  name: KubeSense, Inc.
