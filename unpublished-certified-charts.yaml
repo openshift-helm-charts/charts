@@ -22,6 +22,28 @@ entries:
     urls:
     - N/A
     version: 1.260814.10982825
+  5g-csdb-global:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:ba3a157ed4f5fad5c557d073dfe3aeaae209f1cff5f68babae5b0499a7ced415
+      charts.openshift.io/lastCertifiedTimestamp: '2026-08-25T11:02:26.405137-05:00'
+      charts.openshift.io/name: 5g-csdb-gmc-26b
+      charts.openshift.io/provider: Samsung Electronics
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/releaseDate: 26/08/14
+      charts.openshift.io/submissionTimestamp: '2026-08-26T19:30:01.886668+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 26.B.0
+    description: A Helm chart for 5G Core cCSDB(26/08/14)
+    digest: b7d9001e1accb6af19729dfcc9563866862f8e2a8a621518089cc46f7b81aee5
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-csdb-global
+    urls:
+    - N/A
+    version: 1.260814.10982825
   5g-nrf-global:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1345,4 +1367,4 @@ entries:
     urls:
     - N/A
     version: 3.70.4
-generated: '2026-08-26T19:24:35.041730+00:00'
+generated: '2026-08-26T19:30:01.873121+00:00'
