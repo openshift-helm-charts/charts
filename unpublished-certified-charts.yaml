@@ -110,6 +110,28 @@ entries:
     urls:
     - N/A
     version: 1.260814.10982825
+  5g-upf-global:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:01d8d34d49244acbb94b75a48f1426dddfb52c38f8b256fdac65644b6db8cf43
+      charts.openshift.io/lastCertifiedTimestamp: '2026-08-25T11:44:26.002769-05:00'
+      charts.openshift.io/name: 5g-upf-gmc-26b
+      charts.openshift.io/provider: Samsung Electronics
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/releaseDate: 26/08/14
+      charts.openshift.io/submissionTimestamp: '2026-08-26T19:35:55.743201+00:00'
+      charts.openshift.io/supportURL: https://www.samsung.com/global/business/networks/contact-us/
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.8'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 26.B.0
+    description: A Helm chart for 5G Core cUPF(26/08/14)
+    digest: 74d4686aa90b3a25c1e7037ad0dfba1ab31a56e52092e36b667085733ef3b1ce
+    kubeVersion: '>= 1.21.0-0'
+    name: 5g-upf-global
+    urls:
+    - N/A
+    version: 1.260814.10982825
   cmm-operator-k8s:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -1367,4 +1389,4 @@ entries:
     urls:
     - N/A
     version: 3.70.4
-generated: '2026-08-26T19:30:01.873121+00:00'
+generated: '2026-08-26T19:35:55.729703+00:00'
