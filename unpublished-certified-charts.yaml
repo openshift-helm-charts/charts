@@ -1528,6 +1528,24 @@ entries:
     urls:
     - N/A
     version: 3.70.9
+  - annotations:
+      charts.openshift.io/digest: sha256:b6fe4b10504fb4a0db9157e857b170cd3fb022ea261f17eaf7bcc56a5de814b5
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-03T01:39:35.694758+00:00'
+      charts.openshift.io/name: Remote Active Testing Worker
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-03T01:44:38.006273+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.1'
+      charts.openshift.io/testedOpenShiftVersion: '4.14'
+    apiVersion: v2
+    appVersion: 3.70.13-ubi
+    description: Active Worker Helm Chart for remote active worker deployments
+    digest: 39faa79c23d37ca8816e7000ef4621d9e19b52de0a286fc6fa655903ef3fe4b0
+    kubeVersion: '>=1.0.0-0'
+    name: remote-active-worker-ubi
+    type: application
+    urls:
+    - N/A
+    version: 3.70.13
   ve-touchstone-master:
   - annotations:
       category: Touchstone
@@ -1658,4 +1676,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-09-02T12:06:21.573687+00:00'
+generated: '2026-09-03T01:44:37.989938+00:00'
