@@ -1932,6 +1932,38 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-fsm-0.1.8-ubi.6/flomesh-fsm-0.1.8-ubi.6.tgz
     version: 0.1.8-ubi.6
+  harikube:
+  - annotations:
+      catalog.cattle.io/certified: partner
+      catalog.cattle.io/display-name: HariKube
+      catalog.cattle.io/kube-version: '>=1.34.0-0'
+      catalog.cattle.io/release-name: harikube
+      charts.openshift.io/digest: sha256:b32e892bb92521f2b218b9a55a2ad1fd550db087d66a8022a5849eadef4da8e6
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-06T11:39:30.502417+02:00'
+      charts.openshift.io/name: harikube
+      charts.openshift.io/provider: Andras Gryszko Szanto
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-06T09:46:02.513955+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.21'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 0.16.3
+    dependencies:
+    - name: vcluster
+      repository: https://charts.loft.sh
+      version: 0.32.1
+    description: A Helm chart for HariKube
+    digest: 1c5ea940ebad125dbc8ad219c4be1f469e58b9fe232683f278311f6e66c9a528
+    icon: file://assets/icons/harikube.png
+    kubeVersion: '>=1.34.0-0'
+    maintainers:
+    - email: richard.kovacs@harikube.com
+      name: Richard Kovacs
+    name: harikube
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/harikube-harikube-0.16.3/harikube-0.16.3.tgz
+    version: 0.16.3
   hawtio-online-console-plugin:
   - annotations:
       artifacthub.io/prerelease: 'true'
@@ -21315,4 +21347,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-09-03T00:33:56.902698+00:00'
+generated: '2026-09-06T09:46:02.285488+00:00'
