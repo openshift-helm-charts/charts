@@ -1,0 +1,9 @@
+chart:
+  name: hami
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: dynamia-ai
+  name: DYNAMIA INTELLIGENCE PTE. LTD
