@@ -5,7 +5,7 @@ chart:
 providerDelivery: false
 publicPgpKey: unknown
 users:
-- githubUsername: fouof
+- githubUsername: FouoF
 vendor:
   label: dynamia-ai
   name: DYNAMIA INTELLIGENCE PTE. LTD
