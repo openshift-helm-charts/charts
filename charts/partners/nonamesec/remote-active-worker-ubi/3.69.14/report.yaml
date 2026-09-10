@@ -6,12 +6,12 @@ metadata:
         profile:
             VendorType: partner
             version: v1.3
-        reportDigest: uint64:11031178062650210876
+        reportDigest: uint64:7988740934372537431
         chart-uri: N/A
         digests:
             chart: sha256:8390787650e8ce8c925747fc6abd221e1e9a6a9455325afee5dc11a18105de45
-            package: 721b015b14f9de5267f5ef79d4b6d7f2fca4a26d73b572e89d4b559b76c4b202
-        lastCertifiedTimestamp: "2026-09-10T16:12:30.915788+00:00"
+            package: f5811728218b04b3d4c3f5af4c82597d1fb1374c9a6b114420d64fd0ab0daeaa
+        lastCertifiedTimestamp: "2026-09-10T17:42:25.748099+00:00"
         testedOpenShiftVersion: "4.14"
         supportedOpenShiftVersions: '>=4.1'
         webCatalogOnly: true
@@ -40,26 +40,42 @@ results:
       type: Mandatory
       outcome: PASS
       reason: Kubernetes version specified
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
     - check: v1.0/has-notes
       type: Optional
       outcome: PASS
       reason: Chart does contain NOTES.txt
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: 'Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/active-worker:3.69.14-ubi'
     - check: v1.0/is-helm-v3
       type: Mandatory
       outcome: PASS
       reason: API version is V2, used in Helm 3
-    - check: v1.0/chart-testing
-      type: Mandatory
-      outcome: PASS
-      reason: Chart tests have passed
-    - check: v1.0/contains-values-schema
-      type: Mandatory
-      outcome: PASS
-      reason: Values schema file exist
     - check: v1.0/contains-values
       type: Mandatory
       outcome: PASS
       reason: Values file exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
     - check: v1.0/not-contains-crds
       type: Mandatory
       outcome: PASS
@@ -68,27 +84,11 @@ results:
       type: Mandatory
       outcome: PASS
       reason: All required annotations present
-    - check: v1.0/signature-is-valid
-      type: Mandatory
-      outcome: SKIPPED
-      reason: 'Chart is not signed : Signature verification not required'
-    - check: v1.0/contains-test
+    - check: v1.0/chart-testing
       type: Mandatory
       outcome: PASS
-      reason: Chart test files exist
-    - check: v1.0/has-readme
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
       type: Mandatory
       outcome: PASS
-      reason: Chart has a README
-    - check: v1.0/helm-lint
-      type: Mandatory
-      outcome: PASS
-      reason: Helm lint successful
-    - check: v1.1/images-are-certified
-      type: Mandatory
-      outcome: PASS
-      reason: 'Image is Red Hat certified : us-central1-docker.pkg.dev/noname-artifacts/nns-docker/active-worker:3.69.14-ubi'
-    - check: v1.0/not-contain-csi-objects
-      type: Mandatory
-      outcome: PASS
-      reason: CSI objects do not exist
+      reason: Values schema file exist
