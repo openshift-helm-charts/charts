@@ -1932,6 +1932,41 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/flomesh-fsm-0.1.8-ubi.6/flomesh-fsm-0.1.8-ubi.6.tgz
     version: 0.1.8-ubi.6
+  hami:
+  - annotations:
+      charts.openshift.io/digest: sha256:0a4be14c34e78c44fa2079e5869275942b5f753f0de676c9cb40abf466b09ba1
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-11T05:02:34.124431+00:00'
+      charts.openshift.io/name: HAMi Enterprise
+      charts.openshift.io/provider: DYNAMIA INTELLIGENCE PTE. LTD
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-11T06:11:26.503522+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: v2.10.0-r0-openshift.c4e22e88
+    dependencies:
+    - condition: dra.enabled
+      name: hami-dra
+      repository: https://project-hami.github.io/HAMi-DRA/
+      version: 0.2.0
+    description: Heterogeneous AI Computing Virtualization Middleware
+    digest: 71ef8fd8b23dfe79890603ecd232c973f264ff8b3ca9d16cc5f0000c02aa471d
+    keywords:
+    - vgpu
+    - gpu
+    kubeVersion: '>= 1.18.0-0'
+    maintainers:
+    - email: archlitchi@gmail.com
+      name: limengxuan
+    - email: xiaozhang0210@hotmail.com
+      name: zhangxiao
+    name: hami
+    sources:
+    - https://github.com/dynamia-ai/hami-enterprise
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/dynamia-ai-hami-2.10.0-r0-openshift.c4e22e88/hami-2.10.0-r0-openshift.c4e22e88.tgz
+    version: 2.10.0-r0-openshift.c4e22e88
   harikube:
   - annotations:
       catalog.cattle.io/certified: partner
@@ -21584,4 +21619,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-09-10T10:55:20.676195+00:00'
+generated: '2026-09-11T06:11:26.313393+00:00'
