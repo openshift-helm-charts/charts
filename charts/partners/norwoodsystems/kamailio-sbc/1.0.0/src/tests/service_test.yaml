@@ -1,0 +1,61 @@
+suite: Service tests
+templates:
+  - templates/service.yaml
+values:
+  - ../values.yaml
+tests:
+  - it: should be a Service
+    asserts:
+      - isKind:
+          of: Service
+
+  - it: should be LoadBalancer type
+    asserts:
+      - equal:
+          path: spec.type
+          value: LoadBalancer
+
+  - it: should set externalTrafficPolicy to Local
+    asserts:
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: should expose SIP UDP port 5060
+    asserts:
+      - contains:
+          path: spec.ports
+          content:
+            port: 5060
+            targetPort: sip-udp
+            protocol: UDP
+            name: sip-udp
+
+  - it: should expose SIP TCP port 5060
+    asserts:
+      - contains:
+          path: spec.ports
+          content:
+            port: 5060
+            targetPort: sip-tcp
+            protocol: TCP
+            name: sip-tcp
+
+  - it: should expose SIP TLS port 5061
+    asserts:
+      - contains:
+          path: spec.ports
+          content:
+            port: 5061
+            targetPort: sip-tls
+            protocol: TCP
+            name: sip-tls
+
+  - it: should add MetalLB annotations when enabled
+    set:
+      service.metallb.enabled: true
+      service.metallb.addressPool: "sip-pool"
+    asserts:
+      - equal:
+          path: metadata.annotations["metallb.universe.tf/address-pool"]
+          value: "sip-pool"

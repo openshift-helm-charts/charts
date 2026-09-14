@@ -1,0 +1,45 @@
+{{- if not .Values.service.splitByProtocol }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kamailio-sbc.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kamailio-sbc.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.service.metallb.enabled }}
+    metallb.universe.tf/address-pool: {{ .Values.service.metallb.addressPool }}
+    {{- if .Values.service.metallb.loadBalancerIPs }}
+    metallb.universe.tf/loadBalancerIPs: {{ .Values.service.metallb.loadBalancerIPs }}
+    {{- end }}
+    {{- end }}
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and .Values.service.externalTrafficPolicy (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (hasKey .Values.service "allocateLoadBalancerNodePorts") }}
+  allocateLoadBalancerNodePorts: {{ .Values.service.allocateLoadBalancerNodePorts }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.ports.sipUdp }}
+      targetPort: sip-udp
+      protocol: UDP
+      name: sip-udp
+    - port: {{ .Values.ports.sipTcp }}
+      targetPort: sip-tcp
+      protocol: TCP
+      name: sip-tcp
+    - port: {{ .Values.ports.sipTls }}
+      targetPort: sip-tls
+      protocol: TCP
+      name: sip-tls
+  selector:
+    {{- include "kamailio-sbc.selectorLabels" . | nindent 4 }}
+{{- end }}

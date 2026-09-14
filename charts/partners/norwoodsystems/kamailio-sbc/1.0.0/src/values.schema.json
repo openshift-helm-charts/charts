@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["image", "ports", "resources"],
+  "properties": {
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "image": {
+      "type": "object",
+      "required": ["registry", "repository"],
+      "properties": {
+        "registry": { "type": "string", "minLength": 1 },
+        "repository": { "type": "string", "minLength": 1 },
+        "tag": { "type": "string" },
+        "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] }
+      }
+    },
+    "ports": {
+      "type": "object",
+      "required": ["sipUdp", "sipTls", "health"],
+      "properties": {
+        "sipUdp": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "sipTcp": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "sipTls": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "health": { "type": "integer", "minimum": 1, "maximum": 65535 }
+      }
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["ClusterIP", "NodePort", "LoadBalancer"] }
+      }
+    },
+    "advertiseAddress": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "enum": ["config", "podIP"] }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "requests": { "type": "object" },
+        "limits": { "type": "object" }
+      }
+    },
+    "config": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

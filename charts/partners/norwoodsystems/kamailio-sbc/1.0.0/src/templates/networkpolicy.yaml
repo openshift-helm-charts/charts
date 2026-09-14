@@ -1,0 +1,127 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "kamailio-sbc.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kamailio-sbc.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "kamailio-sbc.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # SIP UDP + TCP + TLS from anywhere (LoadBalancer traffic)
+    - ports:
+        - port: {{ .Values.ports.sipUdp }}
+          protocol: UDP
+        - port: {{ .Values.ports.sipTcp }}
+          protocol: TCP
+        - port: {{ .Values.ports.sipTls }}
+          protocol: TCP
+        - port: 8033
+          protocol: TCP
+    # Health check from in-cluster only
+    - from:
+        - podSelector: {}
+      ports:
+        - port: {{ .Values.ports.health }}
+          protocol: TCP
+    # FreeSWITCH SIP (in-dialog requests, e.g. BYE). FreeSWITCH runs in
+    # vms-media, so this must be namespace-qualified; a bare podSelector only
+    # matches pods in vms-sip.
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: vms-media
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/component: media
+      ports:
+        - port: {{ .Values.ports.sipUdp }}
+          protocol: UDP
+        - port: {{ .Values.ports.sipTcp }}
+          protocol: TCP
+    {{- range .Values.networkPolicy.ingressRules }}
+    - from:
+        {{- if .namespaceSelector }}
+        - namespaceSelector:
+            matchLabels:
+              {{- toYaml .namespaceSelector | nindent 14 }}
+        {{- end }}
+        {{- if .podSelector }}
+        - podSelector:
+            matchLabels:
+              {{- toYaml .podSelector | nindent 14 }}
+        {{- end }}
+        {{- if .ipBlock }}
+        - ipBlock:
+            {{- toYaml .ipBlock | nindent 12 }}
+        {{- end }}
+      ports:
+        {{- range .ports }}
+        - port: {{ .port }}
+          protocol: {{ .protocol | default "TCP" }}
+        {{- end }}
+    {{- end }}
+  egress:
+    # DNS -- scoped to openshift-dns namespace
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: openshift-dns
+      ports:
+        - port: 5353
+          protocol: UDP
+        - port: 5353
+          protocol: TCP
+    # FreeSwitch SIP (UDP 6060). FreeSWITCH runs in vms-media, so this must be
+    # namespace-qualified; a bare podSelector only matches pods in vms-sip.
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: vms-media
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/component: media
+      ports:
+        - port: 6060
+          protocol: UDP
+    # kamailio-proxy (SIP relay for FS-initiated in-dialog requests, e.g. BYE)
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: proxy
+      ports:
+        - port: {{ .Values.ports.sipUdp }}
+          protocol: UDP
+        - port: {{ .Values.ports.sipTcp }}
+          protocol: TCP
+        - port: {{ .Values.ports.sipTls }}
+          protocol: TCP
+    {{- range .Values.networkPolicy.egressRules }}
+    - to:
+        {{- if .namespaceSelector }}
+        - namespaceSelector:
+            matchLabels:
+              {{- toYaml .namespaceSelector | nindent 14 }}
+        {{- end }}
+        {{- if .podSelector }}
+        - podSelector:
+            matchLabels:
+              {{- toYaml .podSelector | nindent 14 }}
+        {{- end }}
+        {{- if .ipBlock }}
+        - ipBlock:
+            {{- toYaml .ipBlock | nindent 12 }}
+        {{- end }}
+      ports:
+        {{- range .ports }}
+        - port: {{ .port }}
+          protocol: {{ .protocol | default "TCP" }}
+        {{- end }}
+    {{- end }}
+{{- end }}

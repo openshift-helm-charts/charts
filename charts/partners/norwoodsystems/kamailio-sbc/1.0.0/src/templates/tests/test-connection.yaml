@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "kamailio-sbc.fullname" . }}-test"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    # Deliberately not the shared "kamailio-sbc.labels" helper. Those are the workload's
+    # selector labels, and templates/networkpolicy.yaml selects on them, so a hook
+    # pod carrying them is captured by the workload's own policy — whose egress
+    # rules do not include this probe. `helm test` then times out whenever
+    # networkPolicy.enabled is true, which is the default. Overriding
+    # app.kubernetes.io/name keeps the hook outside that selector.
+    helm.sh/chart: {{ include "kamailio-sbc.chart" . }}
+    app.kubernetes.io/name: {{ include "kamailio-sbc.name" . }}-test
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: cogvoice
+    app.kubernetes.io/component: test
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: tcp-probe
+      image: busybox:1.36
+      command: ["sh", "-c"]
+      args:
+        - |
+          set -eu
+          host="{{ include "kamailio-sbc.fullname" . }}{{- if .Values.service.splitByProtocol }}-tcp{{- end }}"
+          for port in 5060; do
+            echo "Probing $host:$port"
+            nc -z -w 5 "$host" "$port"
+          done
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+  restartPolicy: Never

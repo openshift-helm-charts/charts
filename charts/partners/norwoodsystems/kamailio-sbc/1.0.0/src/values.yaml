@@ -1,0 +1,221 @@
+# -- Number of replicas (ignored if autoscaling.enabled)
+replicaCount: 2
+
+image:
+  # -- Container image registry
+  registry: "961341535886.dkr.ecr.ap-southeast-2.amazonaws.com"
+  # -- Container image repository
+  repository: "vms/kamailio"
+  # -- Container image tag (defaults to Chart.appVersion)
+  tag: ""
+  # -- Image pull policy
+  pullPolicy: IfNotPresent
+
+# -- Image pull secrets for private registries
+imagePullSecrets: []
+
+# -- Override the chart name
+nameOverride: ""
+# -- Override the full release name
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: false
+
+# -- Annotations applied to pods
+podAnnotations: {}
+
+# -- Pod-level securityContext
+podSecurityContext: {}
+
+# -- Container-level securityContext
+securityContext: {}
+
+# -- Host networking (binds directly to node network namespace)
+hostNetwork:
+  enabled: false
+
+advertiseAddress:
+  # -- Source for the MYIP environment variable used by kamailio.cfg advertise.
+  #    "config" reads config.MYIP or lets the image entrypoint derive it;
+  #    "podIP" uses status.podIP via Downward API.
+  source: config
+
+# -- Workload kind: "Deployment" (default) or "DaemonSet".
+#    Use DaemonSet on Optus prod so exactly one Kamailio runs per labelled
+#    ingress node (no port collisions, BGP/ECMP-friendly).
+workload:
+  kind: Deployment
+
+# -- Secondary-VLAN bind IP resolution (Optus traffic-segregation requirement).
+#    When enabled, an init container resolves the node's IP on the app VLAN
+#    interface and writes it to a shared volume at /etc/podinfo/bind-ip.
+#    The Kamailio container reads it at startup via the entrypoint and uses
+#    it as KAMAILIO_BIND_IP — ensuring SIP only binds to the secondary VLAN.
+secondaryNetwork:
+  enabled: false
+  # -- Interface on the node carrying the app VLAN (e.g. bond1.200). Placeholder
+  #    until Optus net team confirms naming convention.
+  interfaceName: "bond1.200"
+  # -- Image providing the `ip` tool for the init container
+  resolverImage: "registry.access.redhat.com/ubi9/ubi-minimal:latest"
+
+# -- Multus SIP-plane mode (PRIMARY design — docs/proposal-multus-cidr.md).
+#    The pod attaches to the sip-vlan NetworkAttachmentDefinition as `net1`,
+#    getting an IP on the SIP VLAN that the SBC addresses directly (no
+#    LoadBalancer/VIP). eth0 stays on the overlay for ALL in-cluster traffic
+#    (DB, Redis, dispatcher, Kamailio→FreeSWITCH SIP). kamailio.cfg listens on
+#    0.0.0.0 and advertises MYIP, so the only per-pod input is the advertise
+#    address.
+#    FIXED IPs: the SBC reaches Kamailio via 2 fixed IPs / DNS SRV. Pin each
+#    release's net1 IP with `ips` (requires the NAD's IPAM to be type=static)
+#    and set config.MYIP to the same address — deploy 2 single-replica
+#    releases (kamailio-1 / kamailio-2) for HA.
+#    Mutually exclusive with hostNetwork; requires workload.kind=Deployment.
+multus:
+  enabled: false
+  # -- NetworkAttachmentDefinition name (same namespace, or <ns>/<name>).
+  networkName: "sip-vlan"
+  # -- Interface name given to the secondary network inside the pod
+  interfaceName: "net1"
+  # -- Fixed IP(s) in CIDR form for this release's pod on the SIP VLAN, e.g.
+  #    ["10.1.0.10/24"]. Requires static IPAM in the NAD. MUST match
+  #    config.MYIP (the advertised SIP address).
+  ips: []
+  # -- Image providing the `ip` tool for the resolve init container
+  resolverImage: "registry.access.redhat.com/ubi9/ubi-minimal:latest"
+  # -- Path the resolved net1 IP is written to (KAMAILIO_BIND_IP_FILE)
+  ipFile: "/etc/podinfo/bind-ip"
+
+# -- SBC ports
+ports:
+  # -- SIP over UDP
+  sipUdp: 5060
+  # -- SIP over TCP
+  sipTcp: 5060
+  # -- SIP over TLS
+  sipTls: 5061
+  # -- Health check port
+  health: 5065
+
+service:
+  # -- Service type for backend use behind kamailio-proxy
+  type: ClusterIP
+  # -- When true, render two Services: one TCP (5060/5061) and one UDP (5060).
+  #    This is required on AWS NLB where mixed TCP+UDP in a single Service is not supported.
+  splitByProtocol: false
+  # -- Fixed LoadBalancer IP (set by MetalLB)
+  loadBalancerIP: ""
+  # -- Traffic policy (Local preserves client source IP for SIP)
+  externalTrafficPolicy: Local
+  # -- Service annotations
+  annotations: {}
+  metallb:
+    # -- Enable MetalLB annotations
+    enabled: false
+    # -- MetalLB address pool name
+    addressPool: "sip-pool"
+    # -- Fixed IP from MetalLB pool
+    loadBalancerIPs: ""
+
+# -- Application config injected as ConfigMap entries
+config:
+  PATH: "/usr/sbin/kamailio:/usr/sbin/:/usr/bin:/usr/local:/usr/local/sbin/"
+  DBURL: ""
+  DBHOST: ""
+  DBPORT: "5432"
+  DBNAME: ""
+  DBUSER: ""
+  ENABLE_TLS: "false"
+  DB_CONNECTION: ""
+  REDIS_CONNECTION: ""
+
+externalSecret:
+  enabled: false
+  name: "kamailio-sbc-secrets"
+
+# -- One-time DB ownership/privilege fix job (Helm hook)
+dbInit:
+  enabled: false
+  # -- Optional DB host/port override (use primary to avoid PgBouncer limits)
+  host: ""
+  port: "5432"
+  # -- Secret name containing postgres superuser creds from PGO
+  superuserSecretName: ""
+  # -- Secret key to use for the password (defaults to 'password')
+  superuserSecretKey: "password"
+  # -- Grant CREATEDB to app user (so kamdbctl reinit can CREATE DATABASE)
+  grantCreateDb: false
+  # -- When true, drop existing DB and create a fresh one (DANGEROUS in prod)
+  dropAndRecreate: false
+  image:
+    repository: postgres
+    tag: "16"
+    pullPolicy: IfNotPresent
+  # -- Image pull secrets for the db-init job (overrides global imagePullSecrets if set)
+  imagePullSecrets: []
+
+startupProbe:
+  tcpSocket:
+    port: health
+  periodSeconds: 10
+  failureThreshold: 12
+
+livenessProbe:
+  tcpSocket:
+    port: health
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  tcpSocket:
+    port: health
+  periodSeconds: 15
+  timeoutSeconds: 10
+  failureThreshold: 2
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+  limits:
+    cpu: "2000m"
+    memory: "2Gi"
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 75
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+  maxUnavailable: ""
+
+networkPolicy:
+  enabled: true
+  ingressRules: []
+  egressRules: []
+
+# -- Node selector constraints
+nodeSelector: {}
+
+# -- Tolerations for pod scheduling
+tolerations: []
+
+# -- Affinity rules
+affinity: {}
+
+# -- Topology spread constraints
+topologySpreadConstraints: []
+
+# -- Extra volume mounts
+extraVolumeMounts: []
+
+# -- Extra volumes
+extraVolumes: []

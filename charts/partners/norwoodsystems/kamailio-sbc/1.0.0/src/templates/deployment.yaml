@@ -1,0 +1,233 @@
+{{- if ne .Values.workload.kind "DaemonSet" }}
+{{- if and .Values.multus.enabled .Values.hostNetwork.enabled }}
+{{- fail "multus.enabled and hostNetwork.enabled are mutually exclusive (multus attaches the overlay pod to the SIP VLAN; hostNetwork bypasses the overlay)" }}
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kamailio-sbc.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kamailio-sbc.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "kamailio-sbc.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        {{- include "kamailio-sbc.labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ .Values.config | toYaml | sha256sum }}
+        checksum/kamailio-cfg: {{ .Files.Get "kamailio.cfg" | sha256sum }}
+        {{- if .Values.multus.enabled }}
+        # Attach the pod to the SIP VLAN (one NAD per pod, per the Multus +
+        # app-VLAN CIDR proposal). With multus.ips set (static IPAM), this
+        # release's pod gets a FIXED SIP-VLAN address — one of the 2 IPs the
+        # SBC is configured to reach (DNS SRV / dual next-hop).
+        {{- $net := dict "name" .Values.multus.networkName "interface" .Values.multus.interfaceName }}
+        {{- if .Values.multus.ips }}
+        {{- $_ := set $net "ips" .Values.multus.ips }}
+        {{- end }}
+        k8s.v1.cni.cncf.io/networks: {{ list $net | toJson | squote }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "kamailio-sbc.serviceAccountName" . }}
+      {{- if .Values.hostNetwork.enabled }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
+      {{- if .Values.multus.enabled }}
+      initContainers:
+        # Resolves the pod's IPv4 on the Multus secondary interface (net1) and
+        # writes it to a shared volume (KAMAILIO_BIND_IP_FILE). Init containers
+        # run after the CNI has attached all networks, so net1 is guaranteed to
+        # exist here. With static multus.ips this is a consistency check more
+        # than discovery — but it also lets dynamic-IPAM (whereabouts) setups
+        # work when the image entrypoint derives MYIP from this file.
+        - name: resolve-bind-ip
+          image: {{ .Values.multus.resolverImage }}
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              IFACE="{{ .Values.multus.interfaceName }}"
+              # Multus patches the annotation shortly AFTER sandbox creation
+              # and downwardAPI volumes refresh on the kubelet sync loop, so
+              # retry until populated (can take ~1 min on a slow node).
+              IP=""
+              for i in $(seq 1 45); do
+                IP=$(grep -A5 "\"interface\": \"$IFACE\"" /etc/net-status/network-status 2>/dev/null \
+                     | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | head -n1 || true)
+                [ -n "$IP" ] && break
+                sleep 2
+              done
+              if [ -z "$IP" ]; then
+                echo "ERROR: no IPv4 for $IFACE in network-status (is the NetworkAttachmentDefinition '{{ .Values.multus.networkName }}' present?)" >&2
+                cat /etc/net-status/network-status >&2 || true
+                exit 1
+              fi
+              echo "$IP" > {{ .Values.multus.ipFile }}
+              echo "Resolved SIP-VLAN bind IP: $IP (iface=$IFACE)"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: podinfo
+              mountPath: {{ dir .Values.multus.ipFile }}
+            - name: networks-status
+              mountPath: /etc/net-status
+              readOnly: true
+      {{- end }}
+      securityContext:
+        {{- $podSC := dict "runAsNonRoot" true "seccompProfile" (dict "type" "RuntimeDefault") }}
+        {{- toYaml (mustMergeOverwrite (.Values.podSecurityContext | default dict) $podSC) | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi
+        - name: run
+          emptyDir:
+            sizeLimit: 64Mi
+        - name: kamailio-config
+          configMap:
+            name: {{ include "kamailio-sbc.fullname" . }}-cfg
+      {{- if .Values.multus.enabled }}
+        - name: podinfo
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: networks-status
+          downwardAPI:
+            items:
+              - path: network-status
+                fieldRef:
+                  fieldPath: metadata.annotations['k8s.v1.cni.cncf.io/network-status']
+      {{- end }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- $mandatory := dict "allowPrivilegeEscalation" false "readOnlyRootFilesystem" true "runAsNonRoot" true }}
+            {{- $_ := set $mandatory "capabilities" (dict "drop" (list "ALL")) }}
+            {{- $_ := set $mandatory "seccompProfile" (dict "type" "RuntimeDefault") }}
+            {{- toYaml (mustMergeOverwrite (.Values.securityContext | default dict) $mandatory) | nindent 12 }}
+          ports:
+            - name: sip-udp
+              containerPort: {{ .Values.ports.sipUdp }}
+              protocol: UDP
+            - name: sip-tcp
+              containerPort: {{ .Values.ports.sipTcp }}
+              protocol: TCP
+            - name: sip-tls
+              containerPort: {{ .Values.ports.sipTls }}
+              protocol: TCP
+            - name: rpc-http
+              containerPort: 8033
+              protocol: TCP
+            - name: health
+              containerPort: {{ .Values.ports.health }}
+              protocol: TCP
+          {{- $myIpSource := default "config" .Values.advertiseAddress.source }}
+          {{- if or (eq $myIpSource "podIP") .Values.multus.enabled }}
+          env:
+            {{- if eq $myIpSource "podIP" }}
+            - name: MYIP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            {{- end }}
+            {{- if .Values.multus.enabled }}
+            # File holding this pod's net1 (SIP-VLAN) IP. kamailio.cfg listens
+            # on 0.0.0.0 (so eth0 in-cluster traffic still works) and
+            # advertises MYIP. With static multus.ips, set config.MYIP to the
+            # same fixed address; with dynamic IPAM the image entrypoint must
+            # export MYIP from this file before exec'ing kamailio.
+            - name: KAMAILIO_BIND_IP_FILE
+              value: {{ .Values.multus.ipFile | quote }}
+            {{- end }}
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "kamailio-sbc.fullname" . }}
+            {{- if .Values.externalSecret.enabled }}
+            - secretRef:
+                name: {{ .Values.externalSecret.name }}
+            {{- end }}
+          {{- with .Values.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: run
+              mountPath: /run
+            - name: kamailio-config
+              mountPath: /etc/kamailio/kamailio.cfg
+              subPath: kamailio.cfg
+              readOnly: true
+            - name: kamailio-config
+              mountPath: /usr/local/etc/kamailio/kamailio.cfg
+              subPath: kamailio.cfg
+              readOnly: true
+            {{- if .Values.multus.enabled }}
+            - name: podinfo
+              mountPath: {{ dir .Values.multus.ipFile }}
+              readOnly: true
+            {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -1,0 +1,36 @@
+{{- if .Values.service.splitByProtocol }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kamailio-sbc.fullname" . }}-tcp
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kamailio-sbc.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and .Values.service.externalTrafficPolicy (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (hasKey .Values.service "allocateLoadBalancerNodePorts") }}
+  allocateLoadBalancerNodePorts: {{ .Values.service.allocateLoadBalancerNodePorts }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.ports.sipTcp }}
+      targetPort: sip-tcp
+      protocol: TCP
+      name: sip-tcp
+    - port: {{ .Values.ports.sipTls }}
+      targetPort: sip-tls
+      protocol: TCP
+      name: sip-tls
+    - port: 8033
+      targetPort: rpc-http
+      protocol: TCP
+      name: rpc-http
+  selector:
+    {{- include "kamailio-sbc.selectorLabels" . | nindent 4 }}
+{{- end }}
