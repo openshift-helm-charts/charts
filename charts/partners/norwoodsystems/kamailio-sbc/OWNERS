@@ -1,0 +1,13 @@
+chart:
+  name: kamailio-sbc
+  shortDescription: Kamailio SIP Session Border Controller for the CogVoice VMS voicemail
+    platform.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: Showyilu
+- githubUsername: akxrepo
+- githubUsername: ljiljanaz
+vendor:
+  label: norwoodsystems
+  name: NORWOOD SYSTEMS (AUST) PTY LTD
