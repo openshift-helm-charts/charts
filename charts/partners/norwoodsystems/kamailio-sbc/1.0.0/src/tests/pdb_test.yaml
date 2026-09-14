@@ -1,0 +1,20 @@
+suite: PodDisruptionBudget tests
+templates:
+  - templates/poddisruptionbudget.yaml
+values:
+  - ../values.yaml
+tests:
+  - it: should render when enabled (default)
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget
+      - equal:
+          path: spec.minAvailable
+          value: 1
+
+  - it: should not render when disabled
+    set:
+      podDisruptionBudget.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

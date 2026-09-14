@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kamailio-sbc.fullname" . }}-cfg
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kamailio-sbc.labels" . | nindent 4 }}
+data:
+  kamailio.cfg: |-
+{{ .Files.Get "kamailio.cfg" | nindent 4 }}

@@ -1,0 +1,137 @@
+suite: Deployment tests
+templates:
+  - templates/deployment.yaml
+values:
+  - ../values.yaml
+tests:
+  - it: should be a Deployment
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should have 2 replicas by default
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 2
+
+  # -- SCC compliance --
+  - it: should set pod-level runAsNonRoot
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.runAsNonRoot
+          value: true
+
+  - it: should drop ALL capabilities
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop[0]
+          value: ALL
+
+  - it: should set readOnlyRootFilesystem
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem
+          value: true
+
+  - it: should NOT hardcode runAsUser
+    asserts:
+      - isNull:
+          path: spec.template.spec.securityContext.runAsUser
+
+  # -- SIP Ports (UDP + TCP + TLS + health) --
+  - it: should expose SIP UDP port 5060
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: sip-udp
+            containerPort: 5060
+            protocol: UDP
+
+  - it: should expose SIP TCP port 5060
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: sip-tcp
+            containerPort: 5060
+            protocol: TCP
+
+  - it: should expose SIP TLS port 5061
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: sip-tls
+            containerPort: 5061
+            protocol: TCP
+
+  - it: should expose health check port 5065
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: health
+            containerPort: 5065
+            protocol: TCP
+
+  # -- Probes (TCP on health port) --
+  - it: should use TCP startup probe on health port
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe.tcpSocket.port
+          value: health
+
+  - it: should use TCP liveness probe on health port
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.tcpSocket.port
+          value: health
+
+  - it: should use TCP readiness probe on health port
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.tcpSocket.port
+          value: health
+
+  # -- Volumes --
+  - it: should mount /tmp and /run as emptyDir
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: tmp
+            mountPath: /tmp
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: run
+            mountPath: /run
+
+  # -- Labels --
+  - it: should have component sbc label
+    asserts:
+      - equal:
+          path: spec.selector.matchLabels["app.kubernetes.io/component"]
+          value: sbc
+
+  - it: should have part-of cogvoice label
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/part-of"]
+          value: cogvoice
+
+  # -- Config --
+  - it: should reference configmap via envFrom
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].envFrom
+          content:
+            configMapRef:
+              name: RELEASE-NAME-kamailio-sbc
+
+  - it: should have checksum/config annotation
+    asserts:
+      - isNotNull:
+          path: spec.template.metadata.annotations["checksum/config"]

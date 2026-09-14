@@ -1,0 +1,18 @@
+Kamailio SBC has been deployed.
+
+SIP endpoint:  {{ include "kamailio-sbc.fullname" . }}.{{ .Release.Namespace }}.svc
+  UDP: {{ .Values.ports.sipUdp }}
+  TCP: {{ .Values.ports.sipTcp }}
+  TLS: {{ .Values.ports.sipTls }}
+
+{{- if eq .Values.service.type "LoadBalancer" }}
+
+Waiting for external IP:
+
+  kubectl get svc {{ include "kamailio-sbc.fullname" . }} -n {{ .Release.Namespace }} -w
+{{- end }}
+
+To verify the deployment:
+
+  kubectl get pods -l app.kubernetes.io/name={{ include "kamailio-sbc.name" . }} -n {{ .Release.Namespace }}
+  kubectl logs -l app.kubernetes.io/name={{ include "kamailio-sbc.name" . }} -n {{ .Release.Namespace }} --tail=50

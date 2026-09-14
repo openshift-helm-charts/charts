@@ -1,0 +1,29 @@
+{{- if .Values.service.splitByProtocol }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kamailio-sbc.fullname" . }}-udp
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kamailio-sbc.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and .Values.service.externalTrafficPolicy (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (hasKey .Values.service "allocateLoadBalancerNodePorts") }}
+  allocateLoadBalancerNodePorts: {{ .Values.service.allocateLoadBalancerNodePorts }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.ports.sipUdp }}
+      targetPort: sip-udp
+      protocol: UDP
+      name: sip-udp
+  selector:
+    {{- include "kamailio-sbc.selectorLabels" . | nindent 4 }}
+{{- end }}
+

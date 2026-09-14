@@ -1,0 +1,60 @@
+suite: NetworkPolicy tests
+templates:
+  - templates/networkpolicy.yaml
+values:
+  - ../values.yaml
+tests:
+  - it: should be a NetworkPolicy when enabled
+    asserts:
+      - isKind:
+          of: NetworkPolicy
+
+  - it: should not render when disabled
+    set:
+      networkPolicy.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should allow SIP UDP ingress on port 5060
+    asserts:
+      - contains:
+          path: spec.ingress[0].ports
+          content:
+            port: 5060
+            protocol: UDP
+
+  - it: should allow SIP TLS ingress on port 5061
+    asserts:
+      - contains:
+          path: spec.ingress[0].ports
+          content:
+            port: 5061
+            protocol: TCP
+
+  - it: should restrict health port to in-cluster pods
+    asserts:
+      - contains:
+          path: spec.ingress[1].ports
+          content:
+            port: 5065
+            protocol: TCP
+
+  - it: should allow DNS egress on port 5353 scoped to openshift-dns
+    asserts:
+      - contains:
+          path: spec.egress[0].ports
+          content:
+            port: 5353
+            protocol: UDP
+      - equal:
+          path: spec.egress[0].to[0].namespaceSelector.matchLabels["kubernetes.io/metadata.name"]
+          value: openshift-dns
+
+  - it: should allow egress to FreeSwitch on UDP 6060
+    asserts:
+      - contains:
+          path: spec.egress[1].ports
+          content:
+            port: 6060
+            protocol: UDP

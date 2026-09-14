@@ -1,0 +1,96 @@
+suite: Multus SIP-plane mode tests
+templates:
+  - templates/deployment.yaml
+  - templates/daemonset.yaml
+values:
+  - ../values.yaml
+tests:
+  # -- Off by default --
+  - it: should not render multus artifacts when disabled
+    template: templates/deployment.yaml
+    asserts:
+      - isNull:
+          path: spec.template.metadata.annotations["k8s.v1.cni.cncf.io/networks"]
+      - isNull:
+          path: spec.template.spec.initContainers
+
+  # -- NAD attachment --
+  - it: should attach the sip-vlan NAD as net1 when enabled
+    template: templates/deployment.yaml
+    set:
+      multus:
+        enabled: true
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["k8s.v1.cni.cncf.io/networks"]
+          value: '[{"interface":"net1","name":"sip-vlan"}]'
+
+  - it: should pin a fixed IP via the ips field (static IPAM)
+    template: templates/deployment.yaml
+    set:
+      multus:
+        enabled: true
+        ips:
+          - "10.1.0.10/24"
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["k8s.v1.cni.cncf.io/networks"]
+          value: '[{"interface":"net1","ips":["10.1.0.10/24"],"name":"sip-vlan"}]'
+
+  # -- net1 IP resolution --
+  - it: should add the resolve-bind-ip init container and KAMAILIO_BIND_IP_FILE
+    template: templates/deployment.yaml
+    set:
+      multus:
+        enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].name
+          value: resolve-bind-ip
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsNonRoot
+          value: true
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KAMAILIO_BIND_IP_FILE
+            value: /etc/podinfo/bind-ip
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: podinfo
+            mountPath: /etc/podinfo
+            readOnly: true
+
+  # -- Overlay untouched --
+  - it: should keep the pod on the overlay (no hostNetwork)
+    template: templates/deployment.yaml
+    set:
+      multus:
+        enabled: true
+    asserts:
+      - isNull:
+          path: spec.template.spec.hostNetwork
+
+  # -- Guards --
+  - it: should fail when combined with hostNetwork
+    template: templates/deployment.yaml
+    set:
+      multus:
+        enabled: true
+      hostNetwork:
+        enabled: true
+    asserts:
+      - failedTemplate:
+          errorPattern: mutually exclusive
+
+  - it: should fail on the DaemonSet workload
+    template: templates/daemonset.yaml
+    set:
+      workload:
+        kind: DaemonSet
+      multus:
+        enabled: true
+    asserts:
+      - failedTemplate:
+          errorPattern: requires workload.kind=Deployment

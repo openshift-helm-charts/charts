@@ -1,0 +1,35 @@
+apiVersion: v2
+name: kamailio-sbc
+description: |
+  Kamailio Session Border Controller for OpenShift. Provides carrier-grade
+  SIP signalling (UDP, TCP, TLS) with split-protocol Service rendering for
+  AWS NLB compatibility, in-cluster JSON-RPC management, and integration
+  hooks for the CogVoice voicemail stack.
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+
+kubeVersion: ">=1.25.0"
+
+keywords:
+  - sip
+  - sbc
+  - kamailio
+  - cogvoice
+  - norwood
+  - telephony
+  - voip
+
+maintainers:
+  - name: Norwood Systems
+    email: engineers@norwoodsystems.com
+    url: https://norwoodsystems.com
+
+annotations:
+  charts.openshift.io/name: "Kamailio SBC"
+  charts.openshift.io/provider: "Norwood Systems"
+  charts.openshift.io/displayName: "Kamailio SBC"
+  charts.openshift.io/supportURL: "https://norwoodsystems.com/support"
+  charts.openshift.io/documentationURL: "https://github.com/norwoodsystems/cloud-deployment/tree/openshift-migration/optus/openshift-migration/apps/kamailio/chart"
+  charts.openshift.io/archs: "amd64"
+  charts.openshift.io/providerType: "partner"

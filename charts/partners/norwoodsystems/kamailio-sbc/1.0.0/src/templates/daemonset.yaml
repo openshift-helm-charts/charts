@@ -1,0 +1,170 @@
+{{- if eq .Values.workload.kind "DaemonSet" }}
+{{- if .Values.multus.enabled }}
+{{- fail "multus.enabled requires workload.kind=Deployment (the DaemonSet model is the retired hostNetwork-per-node design)" }}
+{{- end }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "kamailio-sbc.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kamailio-sbc.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "kamailio-sbc.selectorLabels" . | nindent 6 }}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        {{- include "kamailio-sbc.labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ .Values.config | toYaml | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "kamailio-sbc.serviceAccountName" . }}
+      {{- if .Values.hostNetwork.enabled }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
+      securityContext:
+        {{- $podSC := dict "runAsNonRoot" true "seccompProfile" (dict "type" "RuntimeDefault") }}
+        {{- toYaml (mustMergeOverwrite (.Values.podSecurityContext | default dict) $podSC) | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.secondaryNetwork.enabled }}
+      initContainers:
+        # Resolves the node's IPv4 address on the app-VLAN interface and writes
+        # it to a shared volume so Kamailio binds ONLY to the secondary VLAN IP
+        # (not 0.0.0.0, which would expose SIP on the OAM plane too).
+        - name: resolve-bind-ip
+          image: {{ .Values.secondaryNetwork.resolverImage }}
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              IFACE="{{ .Values.secondaryNetwork.interfaceName }}"
+              IP=$(ip -4 -o addr show dev "$IFACE" | awk '{print $4}' | cut -d/ -f1 | head -n1)
+              if [ -z "$IP" ]; then
+                echo "ERROR: could not resolve IPv4 on $IFACE" >&2
+                exit 1
+              fi
+              echo "$IP" > /etc/podinfo/bind-ip
+              echo "Resolved secondary-VLAN bind IP: $IP (iface=$IFACE)"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: podinfo
+              mountPath: /etc/podinfo
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- $mandatory := dict "allowPrivilegeEscalation" false "readOnlyRootFilesystem" true "runAsNonRoot" true }}
+            {{- $_ := set $mandatory "capabilities" (dict "drop" (list "ALL")) }}
+            {{- $_ := set $mandatory "seccompProfile" (dict "type" "RuntimeDefault") }}
+            {{- toYaml (mustMergeOverwrite (.Values.securityContext | default dict) $mandatory) | nindent 12 }}
+          ports:
+            - name: sip-udp
+              containerPort: {{ .Values.ports.sipUdp }}
+              protocol: UDP
+            - name: sip-tcp
+              containerPort: {{ .Values.ports.sipTcp }}
+              protocol: TCP
+            - name: sip-tls
+              containerPort: {{ .Values.ports.sipTls }}
+              protocol: TCP
+            - name: rpc-http
+              containerPort: 8033
+              protocol: TCP
+            - name: health
+              containerPort: {{ .Values.ports.health }}
+              protocol: TCP
+          env:
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            {{- if .Values.secondaryNetwork.enabled }}
+            # Kamailio entrypoint MUST read KAMAILIO_BIND_IP_FILE and use its
+            # contents as the listen= address. Do NOT bind 0.0.0.0.
+            - name: KAMAILIO_BIND_IP_FILE
+              value: /etc/podinfo/bind-ip
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "kamailio-sbc.fullname" . }}
+            {{- if .Values.externalSecret.enabled }}
+            - secretRef:
+                name: {{ .Values.externalSecret.name }}
+            {{- end }}
+          {{- with .Values.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: run
+              mountPath: /run
+            {{- if .Values.secondaryNetwork.enabled }}
+            - name: podinfo
+              mountPath: /etc/podinfo
+              readOnly: true
+            {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 60 }}
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi
+        - name: run
+          emptyDir:
+            sizeLimit: 64Mi
+        {{- if .Values.secondaryNetwork.enabled }}
+        - name: podinfo
+          emptyDir:
+            sizeLimit: 1Mi
+        {{- end }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
