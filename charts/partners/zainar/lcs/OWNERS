@@ -1,0 +1,11 @@
+chart:
+  name: lcs
+  shortDescription: A Helm chart for Zainar 5G LCS stack (controller, LMF, amf-proxy, zps-light, optional gNB sim)
+publicPgpKey: null
+providerDelivery: False
+users:
+  - githubUsername: osoriohj-zainar
+  - githubUsername: spiros-zainar
+vendor:
+  label: zainar
+  name: Zainar Inc.

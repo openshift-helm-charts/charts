@@ -1,0 +1,368 @@
+# Default values — Kubernetes equivalent of
+# controller/docker/deployment-release/docker-compose.yml.
+#
+# Override secrets, image tags, and ingress in a local values file.
+# Do not commit real credentials.
+
+nameOverride: ""
+fullnameOverride: ""
+
+global:
+  env: default
+  imagePullPolicy: IfNotPresent
+  imageRegistry: "registry.gitlab.com/zainar-suite/5g"
+  # Empty so a default helm install does not require Secret gitlab-registry.
+  # Certified controller/LMF images are public on the GitLab registry listing
+  # in the Red Hat catalog; add a pull secret only for private overrides.
+  imagePullSecrets: []
+  # Init waiters + helm test. registry.redhat.io is skipped by images-are-certified.
+  waitImage:
+    repository: registry.redhat.io/ubi9/ubi
+    tag: "9.4"
+  # Observability is a separate chart. Default off so chart-testing / a bare
+  # OpenShift namespace is not blocked in Init waiting for loki:3100.
+  waitForLoki: false
+
+# Create a docker-registry Secret named gitlab-registry from these fields.
+# Leave disabled and create the Secret yourself if you prefer.
+registrySecret:
+  enabled: false
+  server: "registry.gitlab.com"
+  username: ""
+  password: ""
+
+# When externalSecret.enabled is false, secretEnv is rendered as a Secret.
+externalSecret:
+  enabled: false
+  targetSecretName: zainar-lcs-app
+
+secretEnv:
+  DB_USER: "postgres"
+  DB_PASSWORD: "dev-password-change-me"
+  DB_NAME: "controller_prod"
+  CONTROLLER_API_KEY: "change-me"
+  ZLP_WS_API_KEY: "dev-zlp-api-key-change-me"
+  DATABASE_URL: "ecto://postgres:dev-password-change-me@db/controller_prod"
+  SECRET_KEY_BASE: "O/CWr4KDI2yufUcsqfeKIe1UILV9HfuZ0kSQy3mkJ38YruJRx0aWPoa1uVkZ/7AR"
+  CONTROLLER_INTERNAL_API_KEY: "dev-internal-api-key-change-me"
+  CONTROLLER_LMF_API_KEY: "dev-lmf-key-change-me"
+  CONTROLLER_MANAGER_USERNAME: "admin"
+  CONTROLLER_MANAGER_PASSWORD: "dev-password-change-me"
+
+db:
+  enabled: true
+  image:
+    repository: registry.redhat.io/rhel9/postgresql-16
+    tag: latest
+  # RH image forbids POSTGRESQL_USER=postgres (reserved). Controller still
+  # connects as secretEnv DB_USER (postgres) via POSTGRESQL_ADMIN_PASSWORD.
+  role: controller
+  # false = emptyDir (chart-testing / MicroShift with no StorageClass).
+  # Data is lost when the pod is deleted.
+  persistence:
+    enabled: true
+  storage:
+    size: 10Gi
+    # Empty = cluster default StorageClass.
+    storageClassName: ""
+
+controller:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: controller # joined with global.imageRegistry
+    tag: v0.11.0
+    # Pyxis / Partner Connect certified digest (overrides tag in the pod spec).
+    digest: "sha256:b8973babe4ba14932a0655aa1425bf48bee5ad9f02620a3e2a01c382c1e2bebf"
+  resources:
+    requests:
+      cpu: "1"
+      memory: 2Gi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+  env:
+    PHX_SERVER: "true"
+    PHX_HOST: "localhost"
+    PORT: "4000"
+    POOL_SIZE: "10"
+    CONTROLLER_MANAGER_CHECK_ORIGIN: "false"
+    CONTROLLER_UE_CATALOG: '{"imsi-001010000000001":{"_metadata":{},"tags":["indoor"]},"imsi-001010000000002":{"_metadata":{},"tags":["indoor"]},"imsi-001010000000003":{"_metadata":{},"tags":["indoor"]}}'
+    CONTROLLER_API_PORT: "4000"
+    CONTROLLER_LMF_PORT: "4001"
+    CONTROLLER_MONITORING_PORT: "4002"
+    CONTROLLER_MANAGER_PORT: "4003"
+    CONTROLLER_INTERNAL_PORT: "4004"
+    CONTROLLER_API_AUTH_ENABLED: "true"
+    CONTROLLER_LMF_AUTH_ENABLED: "true"
+    CONTROLLER_MANAGER_AUTH_ENABLED: "true"
+    LOCATION_PROVIDER: "namf"
+    NLMF_API_ROOT: "http://lmf-pe:8080"
+    NLMF_API_MAINTENANCE_ROOT: "http://lmf-pe:8888"
+    NLMF_CALLBACK_BASE_URL: "http://controller:4001"
+    NAMF_API_ROOT: "http://amf-proxy:8082"
+    NAMF_HGMLC_CALLBACK_BASE_URL: "http://controller:4001"
+    NAMF_HTTP_TIMEOUT: "40000"
+    NAMF_CANCEL_TIMEOUT: "5000"
+    ZLP_WS_URL: "ws://zps-light:9095/ws"
+    ZLP_WS_API_KEY: "dev-zlp-api-key-change-me"
+    RUN_MIGRATIONS: "false"
+    ERL_FLAGS: "+S 4"
+    LOG_LEVEL: "info"
+    CONTROLLER_TRACKING_KEEP_ALIVE: "true"
+    LMF_RETRY_INITIAL_DELAY_MS: "5000"
+    LMF_TRANSIENT_RETRY_MAX_DELAY_MS: "60000"
+    LMF_PROVISIONING_RETRY_MAX_DELAY_MS: "900000"
+    LMF_POLICY_RETRY_MAX_DELAY_MS: "900000"
+    LMF_RETRY_AFTER_MAX_DELAY_MS: "900000"
+    LMF_RETRY_JITTER_PERCENT: "20"
+    INITIAL_TRACKING_TIMEOUT_MS: "60000"
+    MEASUREMENT_TIMEOUT_MS: "6000"
+    CANCEL_LOCATION_HTTP_TIMEOUT_MS: "5000"
+    CANCEL_STATE_TIMEOUT_MS: "65000"
+    LOCATION_CALL_TIMEOUT: "50000"
+    LMF_CANCEL_MAX_ATTEMPTS: "3"
+    LMF_CANCEL_RETRY_DELAY_MS: "2000"
+    TRACKING_RECONCILE_INTERVAL_MS: "5000"
+    TRACKING_RECONCILE_BATCH_SIZE: "50"
+    TRACKING_RECONCILE_CHUNK_BUDGET_MS: "1000"
+    TRACKING_COORDINATOR_CALL_TIMEOUT_MS: "10000"
+    HISTORY_RETENTION_SECONDS: "600"
+    CONTROLLER_UE_PERSIST_ON_CANCEL: "false"
+    DEFAULT_PERIODICITY: "160"
+    DEFAULT_REPORTING_AMOUNT: "53999"
+    MAX_LMF_RETRIES: "5"
+    LMF_RETRY_DELAY_MS: "5000"
+    LMF_UNSPECIFIED_RETRY_DELAY_MS: "60000"
+    ZLP_WS_ENVIRONMENT: "dev"
+    ZLP_WS_STREAM: "5g-locations-dev"
+    ZLP_WS_AUTH_MODE: "migration_query_to_header"
+    MEASUREMENT_QUEUE_MAX_DEPTH: "10000"
+    BROADWAY_PROCESSOR_CONCURRENCY: "8"
+    BROADWAY_BATCH_SIZE: "1"
+    BROADWAY_BATCH_TIMEOUT_MS: "500"
+    PRODUCER_BACKSTOP_INTERVAL_MS: "1000"
+  migrate:
+    enabled: true
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+    className: alb
+    annotations:
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
+      # Set certificate ARN before enabling:
+      # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:...
+    hosts:
+      api: api.example.com
+      manager: manager.example.com
+  serviceMonitor:
+    enabled: true
+    port: monitoring
+    path: /metrics
+
+lmfPe:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: production-lmf-and-pe
+    tag: v0.3.1
+    # Pyxis / Partner Connect certified digest (overrides tag in the pod spec).
+    digest: "sha256:7a7e6ab5aefacbfe6a531179c72a9bbf8f35badd11ab8ac910b2780e967ad7e4"
+  resources:
+    requests:
+      cpu: "1"
+      memory: 2Gi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+  env:
+    LOG_SINGLE_LINE: "true"
+    ERL_FLAGS: "+S 4"
+  # Mounted at /usr/lib/lmf_pe/etc/config.yaml
+  config:
+    logger:
+      level: notice
+      enable_file: false
+      path: /var/log/lmf_pe/lmf_pe
+    amf_uri: http://lcs-test-framework:9000
+    amf_subscriptions: true
+    nlmf_location:
+      ip: "0.0.0.0"
+      port: 8080
+    namf_communication:
+      ip: "0.0.0.0"
+      port: 8081
+    lmf_pe_id: 967fa14a-4f3c-4565-9482-3cd3a09ab534
+    lmf_pe_hostname: lmf-pe
+    requested_bandwidth_srs: mHz40
+    max_low_delay_ms: 4000
+    max_delay_ms: 30000
+    max_failed_fixes: 10
+    maint:
+      ip: "0.0.0.0"
+      port: 8888
+    optional_features:
+      reporting_interval_in_ms:
+        enabled: true
+        ldr_ref_prefix: ""
+  serviceMonitor:
+    enabled: true
+    port: metrics
+    path: /metrics
+
+lcsTestFramework:
+  enabled: false
+  replicaCount: 1
+  image:
+    repository: lcs-test-framework
+    tag: v0.1.0
+    digest: "" # when set, overrides tag
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  env:
+    LOG_SINGLE_LINE: "true"
+  config: |
+    {
+      "nlmf_location_uri": "http://lmf-pe:8080",
+      "zps_uri": "http://zps-light:9095",
+      "sim_hostname": "lcs-test-framework",
+      "amf_sim_plaintext_port": 9000,
+      "gmlc_sim_plaintext_port": 9001,
+      "log_path": "/tmp/lcs_test_framework",
+      "log_level": "debug",
+      "log_enabled": false,
+      "gnb_module": "simulators_gnb",
+      "network_config_file": "network_indoor",
+      "num_of_ues": 5,
+      "zps_enabled": false,
+      "subscription_enabled": true,
+      "pe_callback_uri": "http://lmf-pe:8081/n2-notify",
+      "preconfigure_srs_enabled": false,
+      "_comment_preconfigure_srs_ues": "preconfigure_srs_ues can be a list of UE ids, e.g. [\"imsi-001010000000001\", \"imsi-001010000000002\"], or \"all\" to include all UEs.",
+      "preconfigure_srs_ues": ["imsi-001010000000001"],
+      "preconfigure_srs_bandwidth": "MHZ100",
+      "preconfigure_srs_periodicity": "MS32",
+      "_comment_multiple_srs_handling": "Accepted values: current_srs, new_srs, reconfig_srs, another_srs",
+      "multiple_srs_handling": "current_srs",
+      "skip_empty_measurement_report": false,
+      "fail_pos_info_req_in_amf": false,
+      "can_configure_srs_in_gnb": true,
+      "test_data_enabled": false,
+      "trp_sync_error_enabled": false,
+      "max_loc_est_records": 0,
+      "_comment_ue_paths": "Predefined per-IMSI movement paths.",
+      "ue_paths_enabled": true,
+      "ue_paths_defaults": {
+        "coord_system": "xyz",
+        "tick_ms": 200,
+        "mode": "loop",
+        "speed_cm_s": 100,
+        "start_on_boot": false,
+        "record_gt": true,
+        "on_validation_error": "block"
+      },
+      "ue_paths": {
+        "imsi-001010000000001": {
+          "description": "mezz hallway loop",
+          "tick_ms": 200,
+          "speed_cm_s": 50,
+          "start_on_boot": true,
+          "waypoints": [
+            {"x": 2500, "y": 2000, "dwell_ms": 3000},
+            {"x": 3000, "y": 2000, "dwell_ms": 3000},
+            {"x": 3000, "y": 2300, "dwell_ms": 3000},
+            {"x": 2500, "y": 2300, "dwell_ms": 3000}
+          ]
+        },
+        "imsi-001010000000002": {
+          "description": "loop diagonal",
+          "speed_cm_s": 50,
+          "mode": "loop",
+          "tick_ms": 500,
+          "start_on_boot": true,
+          "waypoints": [
+            {"x": 2500, "y": 2000, "dwell_ms": 3000},
+            {"x": 3000, "y": 2300, "dwell_ms": 3000}
+          ]
+        },
+        "imsi-001010000000003": {
+          "description": "loop horizontal line",
+          "tick_ms": 500,
+          "speed_cm_s": 100,
+          "mode": "loop",
+          "start_on_boot": true,
+          "waypoints": [
+            {"x": 2500, "y": 2200, "dwell_ms": 3000},
+            {"x": 3000, "y": 2200, "dwell_ms": 3000}
+          ]
+        }
+      }
+    }
+
+amfProxy:
+  enabled: false
+  replicaCount: 1
+  image:
+    repository: controller/amf-proxy
+    tag: 0.1.0
+    digest: "" # when set, overrides tag
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  env:
+    AMF_ID: deployment-release-amf-proxy
+    LMF_PE_URL: http://lmf-pe:8080
+    PROXY_CALLBACK_BASE: http://amf-proxy:8082/internal/callback
+    CONTROLLER_CALLBACK_BASE: http://controller:4001
+    AMF_PROXY_LMF_TIMEOUT: "35000"
+    AMF_PROXY_CANCEL_TIMEOUT: "4000"
+    AMF_PROXY_SESSION_TTL_MS: "300000"
+
+zpsLight:
+  enabled: false
+  replicaCount: 1
+  image:
+    repository: controller/zps-light
+    tag: 0.1.0
+    digest: "" # when set, overrides tag
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  env:
+    ZPS_IMSIS: "imsi-001010000000001,imsi-001010000000002,imsi-001010000000003"
+    CONTROLLER_API_URL: "http://controller:4000"
+    ZLP_STREAM: "5g-locations-dev"
+    ZLP_ENVIRONMENT: "dev"
+    ZPS_SITE_RES_NAME: "belmont-poc-site-001"
+    ZPS_BROWSER_WS_PORT: "9095"
+  # Short-term: expose via NLB Service (HTTP ws://). Flip to Ingress after wss:// client fix.
+  service:
+    type: ClusterIP
+    nlb:
+      enabled: false
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: external
+        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+
+networkPolicy:
+  enabled: true
+
+terminationGracePeriodSeconds: 60
