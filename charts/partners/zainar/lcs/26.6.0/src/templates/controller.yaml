@@ -1,0 +1,172 @@
+{{- if .Values.controller.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: controller
+    app.kubernetes.io/component: controller
+spec:
+  replicas: {{ .Values.controller.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: controller
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: controller
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: controller
+        env: {{ .Values.global.env }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- include "lcs.podSecurityContext" . | nindent 8 }}
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.controller.migrate.enabled .Values.db.enabled .Values.global.waitForLoki }}
+      initContainers:
+        {{- if or .Values.db.enabled .Values.global.waitForLoki }}
+        - name: wait-for-dependencies
+          image: "{{ .Values.global.waitImage.repository }}:{{ .Values.global.waitImage.tag }}"
+          securityContext:
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
+          command:
+            - bash
+            - -ec
+            - |
+              {{- if .Values.db.enabled }}
+              db_host="${DB_SERVICE_HOST:-db}"
+              db_port="${DB_SERVICE_PORT:-5432}"
+              echo "waiting for db at ${db_host}:${db_port}"
+              until (echo >/dev/tcp/"$db_host"/"$db_port") >/dev/null 2>&1; do
+                echo "still waiting for db at ${db_host}:${db_port}"
+                sleep 2
+              done
+              {{- end }}
+              {{- if .Values.global.waitForLoki }}
+              loki_host="${LOKI_SERVICE_HOST:-loki}"
+              loki_port="${LOKI_SERVICE_PORT:-3100}"
+              echo "waiting for loki at ${loki_host}:${loki_port}"
+              until (echo >/dev/tcp/"$loki_host"/"$loki_port") >/dev/null 2>&1; do
+                echo "still waiting for loki at ${loki_host}:${loki_port}"
+                sleep 2
+              done
+              {{- end }}
+              echo "dependencies reachable"
+        {{- end }}
+        {{- if .Values.controller.migrate.enabled }}
+        - name: migrate
+          image: {{ include "lcs.image" (dict "root" . "repo" .Values.controller.image.repository "tag" .Values.controller.image.tag "digest" .Values.controller.image.digest) }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          securityContext:
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
+          command: ["/app/bin/migrate"]
+          envFrom:
+            - secretRef:
+                name: {{ .Values.externalSecret.targetSecretName }}
+          env:
+            {{- range $k, $v := .Values.controller.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+            {{- end }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: controller
+          image: {{ include "lcs.image" (dict "root" . "repo" .Values.controller.image.repository "tag" .Values.controller.image.tag "digest" .Values.controller.image.digest) }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          securityContext:
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
+          ports:
+            - name: api
+              containerPort: 4000
+            - name: lmf
+              containerPort: 4001
+            - name: monitoring
+              containerPort: 4002
+            - name: manager
+              containerPort: 4003
+            - name: internal
+              containerPort: 4004
+          envFrom:
+            - secretRef:
+                name: {{ .Values.externalSecret.targetSecretName }}
+          env:
+            {{- range $k, $v := .Values.controller.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+            {{- end }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: monitoring
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: monitoring
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: monitoring
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.controller.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: controller
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: controller
+spec:
+  type: {{ .Values.controller.service.type }}
+  selector:
+    app.kubernetes.io/name: controller
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - name: api
+      port: 4000
+      targetPort: api
+    - name: lmf
+      port: 4001
+      targetPort: lmf
+    - name: monitoring
+      port: 4002
+      targetPort: monitoring
+    - name: manager
+      port: 4003
+      targetPort: manager
+    - name: internal
+      port: 4004
+      targetPort: internal
+{{- if and .Values.controller.serviceMonitor.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: controller
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: controller
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: controller
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  endpoints:
+    - port: {{ .Values.controller.serviceMonitor.port }}
+      path: {{ .Values.controller.serviceMonitor.path }}
+      interval: 30s
+{{- end }}
+{{- end }}
