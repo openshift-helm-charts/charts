@@ -165,7 +165,9 @@ controller:
     path: /metrics
 
 lmfPe:
-  enabled: true
+  # Off by default: the certified image is ~1.7Gi and chart-testing's
+  # helm --wait budget is 5 minutes. Enable after the controller is Ready.
+  enabled: false
   replicaCount: 1
   image:
     repository: production-lmf-and-pe

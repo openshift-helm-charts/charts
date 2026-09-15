@@ -8,7 +8,8 @@ This chart matches the docker-compose stack:
   db         :5432
 
 1. Loki wait is off by default (`global.waitForLoki=false`). Set it true only
-   when Service `loki:3100` is already in this namespace.
+   when Service `loki:3100` is already in this namespace. LMF is also off
+   (`lmfPe.enabled=false`); set it true after the controller is Ready.
 
 2. Port-forward UIs:
 

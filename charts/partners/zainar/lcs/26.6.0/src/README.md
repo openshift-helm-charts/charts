@@ -26,9 +26,11 @@ Certified product images (Red Hat catalog / Pyxis):
 | `controller` | `registry.gitlab.com/zainar-suite/5g/controller` | `v0.11.0` |
 | `lmfPe` | `registry.gitlab.com/zainar-suite/5g/production-lmf-and-pe` | `v0.3.1` |
 
-Defaults pin the certified digests. `amfProxy`, `zpsLight`, and
-`lcsTestFramework` default to **off** (local-test images; they are not Red Hat
-certified). Enable them with
+Defaults pin the certified digests. `lmfPe` defaults to **off** so a bare
+`helm install --wait` can finish inside Red Hat chart-testing's 5-minute
+budget (the LMF image is ~1.7Gi). `amfProxy`, `zpsLight`, and
+`lcsTestFramework` also default to **off** (local-test images; they are not
+Red Hat certified). Enable the local-test extras with
 [`examples/values-local-test.yaml`](../../examples/values-local-test.yaml):
 
 ```bash
@@ -60,9 +62,11 @@ helm upgrade --install zainar-lcs ./charts/lcs -n zainar \
 When `externalSecret.enabled` is `false` (default), `secretEnv` is rendered as
 Secret `zainar-lcs-app` and mounted into the controller.
 
-`global.imagePullSecrets` defaults to empty. Add `gitlab-registry` (create it
-out of band, or set `registrySecret.enabled: true`) only when pulling private
-overrides.
+`global.imagePullSecrets` defaults to empty. Chart-testing on the OpenShift
+catalog cluster has no GitLab credentials, so
+`registry.gitlab.com/zainar-suite/5g/controller` must allow anonymous pull.
+Add `gitlab-registry` (create it out of band, or set
+`registrySecret.enabled: true`) only when pulling private overrides.
 
 ## Inter-service DNS
 
