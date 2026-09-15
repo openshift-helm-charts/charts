@@ -1,0 +1,97 @@
+{{- if .Values.controller.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: controller
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: controller
+    app.kubernetes.io/component: controller
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: controller
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+{{- if .Values.lmfPe.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: lmf-pe
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: lmf-pe
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lmf-pe
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+{{- if .Values.db.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: db
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: db
+    app.kubernetes.io/component: database
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: db
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+{{- if .Values.amfProxy.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: amf-proxy
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: amf-proxy
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: amf-proxy
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+{{- if .Values.zpsLight.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: zps-light
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: zps-light
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zps-light
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+{{- if .Values.lcsTestFramework.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: lcs-test-framework
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: lcs-test-framework
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lcs-test-framework
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

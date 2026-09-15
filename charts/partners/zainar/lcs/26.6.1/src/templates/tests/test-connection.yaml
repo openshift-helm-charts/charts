@@ -1,0 +1,32 @@
+{{- if .Values.controller.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "lcs.fullname" . }}-test-connection"
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  {{- include "lcs.podIdentity" . | nindent 2 }}
+  securityContext:
+    {{- include "lcs.podSecurityContext" . | nindent 4 }}
+  containers:
+    - name: wget
+      image: {{ include "lcs.waitImage" . }}
+      command: ["sh", "-c"]
+      args:
+        - |
+          curl -sf http://controller:4002/healthz || exit 1
+      securityContext:
+        {{- include "lcs.containerSecurityContext" . | nindent 8 }}
+      {{- include "lcs.terminationMessagePolicy" . | nindent 6 }}
+      resources:
+        {{- include "lcs.initResources" . | nindent 8 }}
+      volumeMounts:
+        {{- include "lcs.tmpVolumeMount" . | nindent 8 }}
+  volumes:
+    {{- include "lcs.tmpVolume" . | nindent 4 }}
+{{- end }}

@@ -1,0 +1,104 @@
+{{- if .Values.lcsTestFramework.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lcs-test-framework-config
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: lcs-test-framework
+data:
+  config.json: |
+    {{- .Values.lcsTestFramework.config | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lcs-test-framework
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: lcs-test-framework
+spec:
+  replicas: {{ .Values.lcsTestFramework.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lcs-test-framework
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: lcs-test-framework
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      {{- include "lcs.podIdentity" . | nindent 6 }}
+      securityContext:
+        {{- include "lcs.podSecurityContext" . | nindent 8 }}
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: lcs-test-framework
+          image: {{ include "lcs.image" (dict "root" . "repo" .Values.lcsTestFramework.image.repository "tag" .Values.lcsTestFramework.image.tag "digest" .Values.lcsTestFramework.image.digest) }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          securityContext:
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
+          {{- include "lcs.terminationMessagePolicy" . | nindent 10 }}
+          {{- include "lcs.containerLifecycle" . | nindent 10 }}
+          ports:
+            - name: tcp-amf
+              containerPort: 9000
+            - name: tcp-gmlc
+              containerPort: 9001
+          env:
+            {{- range $k, $v := .Values.lcsTestFramework.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+            {{- end }}
+          volumeMounts:
+            {{- include "lcs.tmpVolumeMount" . | nindent 12 }}
+            - name: config
+              mountPath: /tmp/lcs-test-framework.json
+              subPath: config.json
+              readOnly: true
+          startupProbe:
+            tcpSocket:
+              port: tcp-amf
+            failureThreshold: 24
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: tcp-amf
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: tcp-amf
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.lcsTestFramework.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: lcs-test-framework-config
+        {{- include "lcs.tmpVolume" . | nindent 8 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lcs-test-framework
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: lcs-test-framework
+spec:
+  type: ClusterIP
+  {{- include "lcs.serviceDualStack" . | nindent 2 }}
+  selector:
+    app.kubernetes.io/name: lcs-test-framework
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - name: tcp-amf
+      port: 9000
+      targetPort: tcp-amf
+    - name: tcp-gmlc
+      port: 9001
+      targetPort: tcp-gmlc
+{{- end }}
