@@ -24,9 +24,9 @@ app.kubernetes.io/name: {{ include "lcs.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
+{{/* Do not set runAsUser: OpenShift restricted SCC assigns the namespace UID. */}}
 {{- define "lcs.podSecurityContext" -}}
 runAsNonRoot: true
-runAsUser: {{ . }}
 seccompProfile:
   type: RuntimeDefault
 {{- end -}}
@@ -37,7 +37,6 @@ capabilities:
   drop:
     - ALL
 runAsNonRoot: true
-runAsUser: {{ . }}
 seccompProfile:
   type: RuntimeDefault
 {{- end -}}

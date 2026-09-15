@@ -25,7 +25,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       securityContext:
-        {{- include "lcs.podSecurityContext" 1001 | nindent 8 }}
+        {{- include "lcs.podSecurityContext" . | nindent 8 }}
       {{- if .Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
@@ -36,7 +36,7 @@ spec:
         - name: wait-for-dependencies
           image: "{{ .Values.global.waitImage.repository }}:{{ .Values.global.waitImage.tag }}"
           securityContext:
-            {{- include "lcs.containerSecurityContext" 1001 | nindent 12 }}
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
           command:
             - bash
             - -ec
@@ -66,7 +66,7 @@ spec:
           image: {{ include "lcs.image" (dict "root" . "repo" .Values.controller.image.repository "tag" .Values.controller.image.tag "digest" .Values.controller.image.digest) }}
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           securityContext:
-            {{- include "lcs.containerSecurityContext" 1001 | nindent 12 }}
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
           command: ["/app/bin/migrate"]
           envFrom:
             - secretRef:
@@ -83,7 +83,7 @@ spec:
           image: {{ include "lcs.image" (dict "root" . "repo" .Values.controller.image.repository "tag" .Values.controller.image.tag "digest" .Values.controller.image.digest) }}
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           securityContext:
-            {{- include "lcs.containerSecurityContext" 1001 | nindent 12 }}
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
           ports:
             - name: api
               containerPort: 4000

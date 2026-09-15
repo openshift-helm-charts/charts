@@ -22,8 +22,7 @@ spec:
         app.kubernetes.io/component: database
     spec:
       securityContext:
-        {{- include "lcs.podSecurityContext" 26 | nindent 8 }}
-        fsGroup: 26
+        {{- include "lcs.podSecurityContext" . | nindent 8 }}
       {{- if .Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
@@ -33,7 +32,7 @@ spec:
           image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}"
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           securityContext:
-            {{- include "lcs.containerSecurityContext" 26 | nindent 12 }}
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
           ports:
             - containerPort: 5432
               name: tcp-postgresql

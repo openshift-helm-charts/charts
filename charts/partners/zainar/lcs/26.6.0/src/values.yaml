@@ -57,10 +57,10 @@ db:
   # RH image forbids POSTGRESQL_USER=postgres (reserved). Controller still
   # connects as secretEnv DB_USER (postgres) via POSTGRESQL_ADMIN_PASSWORD.
   role: controller
-  # false = emptyDir (chart-testing / MicroShift with no StorageClass).
-  # Data is lost when the pod is deleted.
+  # false = emptyDir (default so chart-testing / a bare OpenShift namespace
+  # does not wait on a 10Gi PVC). Data is lost when the pod is deleted.
   persistence:
-    enabled: true
+    enabled: false
   storage:
     size: 10Gi
     # Empty = cluster default StorageClass.
@@ -76,11 +76,11 @@ controller:
     digest: "sha256:b8973babe4ba14932a0655aa1425bf48bee5ad9f02620a3e2a01c382c1e2bebf"
   resources:
     requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
       cpu: "1"
       memory: 2Gi
-    limits:
-      cpu: "2"
-      memory: 4Gi
   env:
     PHX_SERVER: "true"
     PHX_HOST: "localhost"
@@ -174,11 +174,11 @@ lmfPe:
     digest: "sha256:7a7e6ab5aefacbfe6a531179c72a9bbf8f35badd11ab8ac910b2780e967ad7e4"
   resources:
     requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
       cpu: "1"
       memory: 2Gi
-    limits:
-      cpu: "2"
-      memory: 4Gi
   env:
     LOG_SINGLE_LINE: "true"
     ERL_FLAGS: "+S 4"

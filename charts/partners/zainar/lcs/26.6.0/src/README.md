@@ -46,14 +46,13 @@ creates. Controller still connects as `secretEnv.DB_USER` (`postgres`)
 because `POSTGRESQL_ADMIN_PASSWORD` is set from `DB_PASSWORD`. Data is
 stored at `/var/lib/pgsql/data` (not the Docker Hub path).
 
-`db.persistence.enabled` (default `true`) creates a PVC via
-`volumeClaimTemplates`. Set it `false` for chart-testing or MicroShift
-without a StorageClass; Postgres then uses `emptyDir` and loses data when
-the pod is deleted:
+`db.persistence.enabled` defaults to `false` (`emptyDir`) so a bare
+OpenShift `helm install --wait` does not stall on a PVC. Set it `true`
+in production to create a PVC via `volumeClaimTemplates`:
 
 ```bash
 helm upgrade --install zainar-lcs ./charts/lcs -n zainar \
-  --set db.persistence.enabled=false
+  --set db.persistence.enabled=true
 ```
 
 ## Secrets

@@ -11,7 +11,7 @@ metadata:
 spec:
   restartPolicy: Never
   securityContext:
-    {{- include "lcs.podSecurityContext" 1001 | nindent 4 }}
+    {{- include "lcs.podSecurityContext" . | nindent 4 }}
   containers:
     - name: wget
       image: "{{ .Values.global.waitImage.repository }}:{{ .Values.global.waitImage.tag }}"
@@ -20,5 +20,5 @@ spec:
         - |
           curl -sf http://controller:4002/healthz || exit 1
       securityContext:
-        {{- include "lcs.containerSecurityContext" 1001 | nindent 8 }}
+        {{- include "lcs.containerSecurityContext" . | nindent 8 }}
 {{- end }}
