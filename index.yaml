@@ -5175,6 +5175,42 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/zainar-lcs-26.6.0/lcs-26.6.0.tgz
     version: 26.6.0
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/license: proprietary
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:d807e97fe2f27bf72d9730333114b7f60eeff7b0e7c9e2ece618e0eeb49cca56
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-15T19:57:47.253482+00:00'
+      charts.openshift.io/name: Zainar LCS
+      charts.openshift.io/provider: ZaiNar
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-15T20:02:49.096067+00:00'
+      charts.openshift.io/supportURL: https://www.zainartech.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 26.6.0
+    description: Zainar 5G LCS stack (controller, LMF, amf-proxy, zps-light, optional
+      gNB sim)
+    digest: 42f4f6cea571ae762918c294006a172381fab4f5d4708c9b9c2da23330610cbf
+    home: https://www.zainartech.com
+    icon: https://gitlab.com/zainar-suite/5g/zainar-helm-charts/-/raw/main/assets/3GPP_5G_logo.png
+    keywords:
+    - 5g
+    - lcs
+    - controller
+    - zainar
+    kubeVersion: '>=1.27.0-0'
+    maintainers:
+    - name: Zainar
+      url: https://www.zainartech.com
+    name: lcs
+    sources:
+    - https://gitlab.com/zainar-suite/5g/zainar-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/zainar-lcs-26.6.1/lcs-26.6.1.tgz
+    version: 26.6.1
   librechat:
   - annotations:
       charts.openshift.io/digest: sha256:41bfc8e827813ec6f6fd5bc96bf1a1c5f7ae144474588ae12cba6761f2b4221e
@@ -21656,4 +21692,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-09-15T12:27:03.194977+00:00'
+generated: '2026-09-15T20:02:48.876694+00:00'
