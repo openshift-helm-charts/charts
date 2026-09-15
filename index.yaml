@@ -5138,6 +5138,43 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/lacework-lacework-agent-5.4.1/lacework-lacework-agent-5.4.1.tgz
     version: 5.4.1
+  lcs:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/license: proprietary
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:dfda7064691f1ce016de1fc0c766dfb844aa799e992bb4b91c12e49a4d910444
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-15T08:22:24.817537-04:00'
+      charts.openshift.io/name: Zainar LCS
+      charts.openshift.io/provider: ZaiNar
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-15T12:27:03.396186+00:00'
+      charts.openshift.io/supportURL: https://www.zainartech.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.19'
+    apiVersion: v2
+    appVersion: 26.6.0
+    description: Zainar 5G LCS stack (controller, LMF, amf-proxy, zps-light, optional
+      gNB sim)
+    digest: 47478bb4807ce39996eb45438b87fd8b50be817267661c3e1a92224f4bb990cc
+    home: https://www.zainartech.com
+    icon: https://gitlab.com/zainar-suite/5g/zainar-helm-charts/-/raw/main/assets/3GPP_5G_logo.png
+    keywords:
+    - 5g
+    - lcs
+    - controller
+    - zainar
+    kubeVersion: '>=1.27.0-0'
+    maintainers:
+    - name: Zainar
+      url: https://www.zainartech.com
+    name: lcs
+    sources:
+    - https://gitlab.com/zainar-suite/5g/zainar-helm-charts
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/zainar-lcs-26.6.0/lcs-26.6.0.tgz
+    version: 26.6.0
   librechat:
   - annotations:
       charts.openshift.io/digest: sha256:41bfc8e827813ec6f6fd5bc96bf1a1c5f7ae144474588ae12cba6761f2b4221e
@@ -21619,4 +21656,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-09-11T06:11:26.313393+00:00'
+generated: '2026-09-15T12:27:03.194977+00:00'
