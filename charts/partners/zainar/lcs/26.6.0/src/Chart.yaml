@@ -1,0 +1,26 @@
+apiVersion: v2
+name: lcs
+description: Zainar 5G LCS stack (controller, LMF, amf-proxy, zps-light, optional gNB sim)
+type: application
+version: 26.6.0
+appVersion: "26.6.0"
+kubeVersion: ">=1.27.0-0"
+keywords:
+  - 5g
+  - lcs
+  - controller
+  - zainar
+maintainers:
+  - name: Zainar
+    url: https://www.zainartech.com
+home: https://www.zainartech.com
+icon: https://gitlab.com/zainar-suite/5g/zainar-helm-charts/-/raw/main/assets/3GPP_5G_logo.png
+sources:
+  - https://gitlab.com/zainar-suite/5g/zainar-helm-charts
+annotations:
+  charts.openshift.io/name: Zainar LCS
+  charts.openshift.io/provider: Zainar
+  charts.openshift.io/supportURL: https://www.zainartech.com
+  charts.openshift.io/archs: x86_64
+  artifacthub.io/category: networking
+  artifacthub.io/license: proprietary
