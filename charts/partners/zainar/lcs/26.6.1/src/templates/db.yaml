@@ -1,0 +1,130 @@
+{{- if .Values.db.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: db
+    app.kubernetes.io/component: database
+spec:
+  serviceName: db
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: db
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: db
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: database
+        {{- include "lcs.certsuiteLabels" . | nindent 8 }}
+    spec:
+      {{- include "lcs.podIdentity" . | nindent 6 }}
+      securityContext:
+        {{- include "lcs.podSecurityContext" . | nindent 8 }}
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: postgres
+          image: {{ include "lcs.plainImage" .Values.db.image }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          securityContext:
+            {{- include "lcs.containerSecurityContext" . | nindent 12 }}
+          {{- include "lcs.terminationMessagePolicy" . | nindent 10 }}
+          {{- include "lcs.containerLifecycle" . | nindent 10 }}
+          ports:
+            - containerPort: 5432
+              name: tcp-postgresql
+          env:
+            - name: POSTGRESQL_USER
+              value: {{ .Values.db.role | quote }}
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalSecret.targetSecretName }}
+                  key: DB_PASSWORD
+                  optional: true
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalSecret.targetSecretName }}
+                  key: DB_NAME
+                  optional: true
+            - name: POSTGRESQL_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalSecret.targetSecretName }}
+                  key: DB_PASSWORD
+                  optional: true
+            - name: POSTGRESQL_LOG_DESTINATION
+              value: /dev/stderr
+          volumeMounts:
+            - name: pghome
+              mountPath: /var/lib/pgsql
+            - name: pgdata
+              mountPath: /var/lib/pgsql/data
+            - name: pgrun
+              mountPath: /var/run/postgresql
+            {{- include "lcs.tmpVolumeMount" . | nindent 12 }}
+          startupProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.db.resources | nindent 12 }}
+      volumes:
+        - name: pghome
+          emptyDir: {}
+        - name: pgrun
+          emptyDir: {}
+        {{- include "lcs.tmpVolume" . | nindent 8 }}
+        {{- if not .Values.db.persistence.enabled }}
+        - name: pgdata
+          emptyDir: {}
+        {{- end }}
+  {{- if .Values.db.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: pgdata
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if .Values.db.storage.storageClassName }}
+        storageClassName: {{ .Values.db.storage.storageClassName | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.db.storage.size }}
+  {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    {{- include "lcs.labels" . | nindent 4 }}
+    app.kubernetes.io/name: db
+spec:
+  type: ClusterIP
+  {{- include "lcs.serviceDualStack" . | nindent 2 }}
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: db
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
