@@ -6464,6 +6464,46 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/secretz-openbao-0.29.2/openbao-0.29.2.tgz
     version: 0.29.2
+  - annotations:
+      artifacthub.io/changes: "- kind: added\n  description: |\n    feat: Allow setting
+        nodeSelector and affinity for snapshot-agent cronjob pod\n- kind: changed\n
+        \ description: |\n    chore(snpashotAgent): update to v0.4.4\n- kind: fixed\n
+        \ description: |\n    fix(chart): fix invalid yaml syntax in statefulset definition\n"
+      artifacthub.io/containsSecurityUpdates: 'false'
+      charts.openshift.io/digest: sha256:a221cd25fb18cca12c8a4b159d3d30674dda0c1ccea96131ef66d8873293bf44
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-17T07:00:35.960449+00:00'
+      charts.openshift.io/name: OpenBao
+      charts.openshift.io/provider: Adfinis AG
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-17T07:02:18.797817+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.17'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: v2.6.2
+    description: Official OpenBao Chart
+    digest: 29e1933a5dba55a0c7cbc1f81c22b6396c5f73500b4b5305e59847471132c6d7
+    home: https://github.com/openbao/openbao-helm
+    icon: https://raw.githubusercontent.com/openbao/artwork/refs/heads/main/color/openbao-color.svg
+    keywords:
+    - vault
+    - openbao
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.30.0-0'
+    maintainers:
+    - email: openbao-security@lists.openssf.org
+      name: OpenBao
+      url: https://openbao.org
+    name: openbao
+    sources:
+    - https://github.com/openbao/openbao-helm
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/secretz-openbao-0.29.4/openbao-0.29.4.tgz
+    version: 0.29.4
   opscruise:
   - annotations:
       charts.openshift.io/digest: sha256:3936a9deac923380aa2dd842f19da07d32030a867ebd05eea48dd38b895b82c0
@@ -21692,4 +21732,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-09-15T20:02:48.876694+00:00'
+generated: '2026-09-17T07:02:18.676052+00:00'
