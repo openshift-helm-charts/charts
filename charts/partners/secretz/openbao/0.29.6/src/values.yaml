@@ -59,7 +59,7 @@ injector:
   # required.
   agentImage:
     # -- image registry to use for agent image
-    registry: "quay.io"
+    registry: "registry.connect.redhat.com"
     # -- image repo to use for agent image
     repository: "secretz/openbao-ubi"
     # Use the OpenBao UBI image for better OpenShift compatibility
@@ -336,7 +336,7 @@ server:
   # By default no direct resource request is made.
   image:
     # -- image registry to use for server image
-    registry: "quay.io"
+    registry: "registry.connect.redhat.com"
     # -- image repo to use for server image
     repository: "secretz/openbao-ubi"
     # Use the OpenBao UBI image for better OpenShift compatibility
@@ -1208,7 +1208,7 @@ csi:
     extraArgs: []
     image:
       # -- image registry to use for agent image
-      registry: "quay.io"
+      registry: "registry.connect.redhat.com"
       # -- image repo to use for agent image
       repository: "secretz/openbao-ubi"
       # Use the OpenBao UBI image for better OpenShift compatibility
