@@ -1,7 +1,6 @@
 chart:
-  name: kamailio-sbc
-  shortDescription: Kamailio SIP Session Border Controller for the CogVoice VMS voicemail
-    platform.
+  name: freeswitch
+  shortDescription: FreeSWITCH media server for the CogVoice VMS voicemail platform.
 providerDelivery: true
 publicPgpKey: unknown
 users:
