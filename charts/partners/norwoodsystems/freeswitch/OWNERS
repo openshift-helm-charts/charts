@@ -1,9 +1,12 @@
 chart:
   name: freeswitch
-  shortDescription: unknown
+  shortDescription: FreeSWITCH media server for the CogVoice VMS voicemail platform.
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Showyilu
+- githubUsername: akxrepo
+- githubUsername: ljiljanaz
 vendor:
   label: norwoodsystems
   name: NORWOOD SYSTEMS (AUST) PTY LTD
