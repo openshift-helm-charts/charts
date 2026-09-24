@@ -203,6 +203,46 @@ entries:
     urls:
     - N/A
     version: 26.7.0-p1
+  freeswitch:
+  - annotations:
+      charts.openshift.io/archs: amd64
+      charts.openshift.io/digest: sha256:6252af52c1898e17d6d528b349fc8688e0d22cc26753b3cb990530f1d28207c3
+      charts.openshift.io/displayName: CogVoice FreeSWITCH Media Server
+      charts.openshift.io/documentationURL: https://github.com/norwoodsystems/cloud-deployment/tree/openshift-migration/optus/openshift-migration/apps/freeswitch/chart
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-24T16:48:13.583873+08:00'
+      charts.openshift.io/name: FreeSwitch
+      charts.openshift.io/provider: Norwood Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-24T08:52:05.108347+00:00'
+      charts.openshift.io/supportURL: https://norwoodsystems.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: 'FreeSWITCH media server for the Norwood CogVoice voicemail platform
+      on OpenShift. Terminates RTP for voicemail deposit and retrieval, runs the CogVoice
+      call flows through mod_voicemail_api_v2, and supports both overlay and Multus
+      media-plane networking for carrier deployments. '
+    digest: dd4b3135e72b8f62f29cb6ef2eb7970c31981a69572371615359d7e5825f6ab3
+    keywords:
+    - freeswitch
+    - media
+    - rtp
+    - voicemail
+    - telephony
+    - voip
+    - cogvoice
+    - norwood
+    kubeVersion: '>=1.25.0'
+    maintainers:
+    - email: engineers@norwoodsystems.com
+      name: Norwood Systems
+      url: https://norwoodsystems.com
+    name: freeswitch
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   kamailio-sbc:
   - annotations:
       charts.openshift.io/archs: amd64
@@ -1985,4 +2025,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-09-24T03:02:54.260477+00:00'
+generated: '2026-09-24T08:52:05.089540+00:00'
