@@ -1,9 +1,12 @@
 chart:
   name: mozart-api
-  shortDescription: unknown
+  shortDescription: Mozart API server for the CogVoice VMS voicemail platform.
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Showyilu
+- githubUsername: akxrepo
+- githubUsername: ljiljanaz
 vendor:
   label: norwoodsystems
   name: NORWOOD SYSTEMS (AUST) PTY LTD
