@@ -282,6 +282,41 @@ entries:
     urls:
     - N/A
     version: 1.0.0
+  mozart-api:
+  - annotations:
+      charts.openshift.io/archs: amd64
+      charts.openshift.io/digest: sha256:321ff3f81e4efd56bd3bb502ce6b42f1bfa54f965674204535404577ae8453f4
+      charts.openshift.io/displayName: CogVoice Mozart API Server
+      charts.openshift.io/documentationURL: https://github.com/norwoodsystems/cloud-deployment/tree/openshift-migration/optus/openshift-migration/apps/mozart-api/chart
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-25T20:31:32.21083+08:00'
+      charts.openshift.io/name: Mozart API
+      charts.openshift.io/provider: Norwood Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-25T12:35:23.625196+00:00'
+      charts.openshift.io/supportURL: https://norwoodsystems.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: 'Mozart API application server for the Norwood CogVoice platform.
+      This is the Optus OAM-facing deployment of the Mozart service. '
+    digest: 83ca61df9047479e5e9a191b386a85e3ff4785337b281f5c91594cfde0b5d85d
+    keywords:
+    - api
+    - unified-messaging
+    - telephony
+    - cogvoice
+    - norwood
+    kubeVersion: '>=1.25.0'
+    maintainers:
+    - email: engineers@norwoodsystems.com
+      name: Norwood Systems
+      url: https://norwoodsystems.com
+    name: mozart-api
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   mozart-voicemail:
   - annotations:
       charts.openshift.io/archs: amd64
@@ -2081,4 +2116,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-09-25T12:34:38.019688+00:00'
+generated: '2026-09-25T12:35:23.605803+00:00'
