@@ -282,6 +282,44 @@ entries:
     urls:
     - N/A
     version: 1.0.0
+  mozart-voicemail:
+  - annotations:
+      charts.openshift.io/archs: amd64
+      charts.openshift.io/digest: sha256:210932fc7734a0bb2d105b847530db9a7985b7830a8f362f8328f987df7989ca
+      charts.openshift.io/displayName: CogVoice Mozart Voicemail Server
+      charts.openshift.io/documentationURL: https://github.com/norwoodsystems/cloud-deployment/tree/openshift-migration/optus/openshift-migration/apps/mozart-voicemail/chart
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-25T20:30:18.164703+08:00'
+      charts.openshift.io/name: Mozart Voicemail
+      charts.openshift.io/provider: Norwood Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-25T12:34:38.039411+00:00'
+      charts.openshift.io/supportURL: https://norwoodsystems.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: "Mozart voicemail application server \u2014 the core of the Norwood
+      CogVoice platform. Serves the voicemail API consumed by FreeSWITCH call flows,
+      the admin dashboard and the notification channels, and owns subscriber provisioning
+      against the CogVoice PostgreSQL cluster. "
+    digest: 599205b8679583622b83a7a290eed96a751f9399d73d7418838eba196378a8de
+    keywords:
+    - voicemail
+    - api
+    - unified-messaging
+    - telephony
+    - cogvoice
+    - norwood
+    kubeVersion: '>=1.25.0'
+    maintainers:
+    - email: engineers@norwoodsystems.com
+      name: Norwood Systems
+      url: https://norwoodsystems.com
+    name: mozart-voicemail
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   namuax-naao:
   - annotations:
       charts.openshift.io/digest: sha256:052bcf30e2a3d4bd0c5e00ba82785e57e369517df50a4bb457bb1c30dddbbc73
@@ -2043,4 +2081,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-09-24T14:42:16.053122+00:00'
+generated: '2026-09-25T12:34:38.019688+00:00'
