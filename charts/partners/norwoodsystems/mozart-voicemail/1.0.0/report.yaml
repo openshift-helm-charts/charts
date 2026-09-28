@@ -1,0 +1,112 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.16.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:13161618699973270938
+        chart-uri: N/A
+        digests:
+            chart: sha256:210932fc7734a0bb2d105b847530db9a7985b7830a8f362f8328f987df7989ca
+            package: 599205b8679583622b83a7a290eed96a751f9399d73d7418838eba196378a8de
+        lastCertifiedTimestamp: "2026-09-25T20:30:18.164703+08:00"
+        testedOpenShiftVersion: "4.20"
+        supportedOpenShiftVersions: '>=4.12'
+        webCatalogOnly: true
+    chart:
+        name: mozart-voicemail
+        home: ""
+        sources: []
+        version: 1.0.0
+        description: 'Mozart voicemail application server — the core of the Norwood CogVoice platform. Serves the voicemail API consumed by FreeSWITCH call flows, the admin dashboard and the notification channels, and owns subscriber provisioning against the CogVoice PostgreSQL cluster. '
+        keywords:
+            - voicemail
+            - api
+            - unified-messaging
+            - telephony
+            - cogvoice
+            - norwood
+        maintainers:
+            - name: Norwood Systems
+              email: engineers@norwoodsystems.com
+              url: https://norwoodsystems.com
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 1.0.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/archs: amd64
+            charts.openshift.io/displayName: CogVoice Mozart Voicemail Server
+            charts.openshift.io/documentationURL: https://github.com/norwoodsystems/cloud-deployment/tree/openshift-migration/optus/openshift-migration/apps/mozart-voicemail/chart
+            charts.openshift.io/name: Mozart Voicemail
+            charts.openshift.io/provider: Norwood Systems
+            charts.openshift.io/providerType: partner
+            charts.openshift.io/supportURL: https://norwoodsystems.com/support
+        kubeversion: '>=1.25.0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : 961341535886.dkr.ecr.ap-southeast-2.amazonaws.com/vms/mozart:voicemail-server-1.0.0
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:latest
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+

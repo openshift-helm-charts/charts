@@ -1,0 +1,13 @@
+chart:
+  name: mozart-voicemail
+  shortDescription: Mozart voicemail application server for the CogVoice VMS voicemail
+    platform.
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: Showyilu
+- githubUsername: akxrepo
+- githubUsername: ljiljanaz
+vendor:
+  label: norwoodsystems
+  name: NORWOOD SYSTEMS (AUST) PTY LTD
