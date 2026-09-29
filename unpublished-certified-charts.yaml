@@ -2097,6 +2097,43 @@ entries:
     urls:
     - N/A
     version: 3.70.30
+  smpp-server:
+  - annotations:
+      charts.openshift.io/archs: amd64
+      charts.openshift.io/digest: sha256:d000b071d2f41d81fe3bfc8ac1582dac6d2231fe4099cf48456062b611319af2
+      charts.openshift.io/displayName: CogVoice SMPP Gateway
+      charts.openshift.io/documentationURL: https://github.com/norwoodsystems/cloud-deployment/tree/openshift-migration/optus/openshift-migration/apps/smpp-server/chart
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-29T15:05:42.696737+08:00'
+      charts.openshift.io/name: SMPP Server
+      charts.openshift.io/provider: Norwood Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-29T07:09:43.203440+00:00'
+      charts.openshift.io/supportURL: https://norwoodsystems.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: 'SMPP gateway for the Norwood CogVoice voicemail platform. Delivers
+      message-waiting and missed-call notifications to subscribers by submitting short
+      messages to the carrier SMSC over SMPP on behalf of the Mozart worker. '
+    digest: 047b4cb8272a517299f29677ec11c4c6a25dc801b3b85bf458f5200da4627e0d
+    keywords:
+    - smpp
+    - sms
+    - notifications
+    - gateway
+    - cogvoice
+    - norwood
+    kubeVersion: '>=1.25.0'
+    maintainers:
+    - email: engineers@norwoodsystems.com
+      name: Norwood Systems
+      url: https://norwoodsystems.com
+    name: smpp-server
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   ve-touchstone-master:
   - annotations:
       category: Touchstone
@@ -2227,4 +2264,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-09-29T02:56:50.831072+00:00'
+generated: '2026-09-29T07:09:43.186236+00:00'
