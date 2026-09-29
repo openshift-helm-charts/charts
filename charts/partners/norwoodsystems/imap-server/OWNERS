@@ -1,0 +1,9 @@
+chart:
+  name: imap-server
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: norwoodsystems
+  name: NORWOOD SYSTEMS (AUST) PTY LTD
