@@ -1,9 +1,12 @@
 chart:
   name: smpp-server
-  shortDescription: unknown
+  shortDescription: SMPP gateway for CogVoice VMS voicemail notifications.
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Showyilu
+- githubUsername: akxrepo
+- githubUsername: ljiljanaz
 vendor:
   label: norwoodsystems
   name: NORWOOD SYSTEMS (AUST) PTY LTD
