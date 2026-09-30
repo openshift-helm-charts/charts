@@ -10,6 +10,7 @@ users:
   - githubUsername: keithchong
   - githubUsername: jannfis
   - githubUsername: anandf
+  - githubUsername: nmirasch
 vendor:
   label: redhat
   name: Red Hat
