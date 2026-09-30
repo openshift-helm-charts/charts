@@ -1,9 +1,12 @@
 chart:
   name: kamailio-proxy
-  shortDescription: unknown
+  shortDescription: SIP edge proxy for the CogVoice VMS voicemail platform.
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: Showyilu
+- githubUsername: akxrepo
+- githubUsername: ljiljanaz
 vendor:
   label: norwoodsystems
   name: NORWOOD SYSTEMS (AUST) PTY LTD
