@@ -318,6 +318,41 @@ entries:
     urls:
     - N/A
     version: 1.0.0
+  kamailio-proxy:
+  - annotations:
+      charts.openshift.io/archs: amd64
+      charts.openshift.io/digest: sha256:0e8dcf7aef45e6be9c1531cd042642ae2fc32b2c5111b3797f185addd2ec9301
+      charts.openshift.io/displayName: Kamailio Proxy
+      charts.openshift.io/documentationURL: https://github.com/norwoodsystems/cloud-deployment/tree/openshift-migration/optus/openshift-migration/apps/kamailio-proxy/chart
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-30T11:20:03.02063+08:00'
+      charts.openshift.io/name: Kamailio Proxy
+      charts.openshift.io/provider: Norwood Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-30T03:23:41.587752+00:00'
+      charts.openshift.io/supportURL: https://norwoodsystems.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: 'Kamailio edge proxy for OpenShift. Receives carrier traffic on the
+      SIP VLAN and dispatches requests to the internal kamailio-sbc backend pool. '
+    digest: 2fe6cfb32bfb753fb90ab8be208fba1b06d60127ad1591e7cc23ccde737c6143
+    keywords:
+    - sip
+    - proxy
+    - kamailio
+    - dispatcher
+    - multus
+    kubeVersion: '>=1.25.0'
+    maintainers:
+    - email: engineers@norwoodsystems.com
+      name: Norwood Systems
+      url: https://norwoodsystems.com
+    name: kamailio-proxy
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   kamailio-sbc:
   - annotations:
       charts.openshift.io/archs: amd64
@@ -2302,4 +2337,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-09-30T02:46:50.132550+00:00'
+generated: '2026-09-30T03:23:41.567070+00:00'
