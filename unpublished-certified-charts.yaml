@@ -181,6 +181,44 @@ entries:
     urls:
     - N/A
     version: 1.260814.10982825
+  admin-dashboard:
+  - annotations:
+      charts.openshift.io/archs: amd64
+      charts.openshift.io/digest: sha256:8eb0525d021023f571ab5e3018f0b051bd0f01d4e677ef4386f8017993b2bef1
+      charts.openshift.io/displayName: CogVoice Admin Dashboard
+      charts.openshift.io/documentationURL: https://github.com/norwoodsystems/cloud-deployment/tree/openshift-migration/optus/openshift-migration/apps/admin-dashboard/chart
+      charts.openshift.io/lastCertifiedTimestamp: '2026-09-30T10:43:02.898538+08:00'
+      charts.openshift.io/name: Admin Dashboard
+      charts.openshift.io/provider: Norwood Systems
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-09-30T02:46:50.153264+00:00'
+      charts.openshift.io/supportURL: https://norwoodsystems.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 1.0.0
+    description: "CogVoice Admin Dashboard \u2014 web UI and API server for operating
+      the Norwood CogVoice voicemail platform on OpenShift. Provides subscriber and
+      voicemail-box management, embedded Prometheus / Loki observability, and IdP-backed
+      access control for NOC and carrier operations teams. "
+    digest: b13b103eced2d66fc007589dc1d90bd5a26d46395c8cbfe0d72c9489759f6b33
+    keywords:
+    - admin
+    - dashboard
+    - cogvoice
+    - voicemail
+    - norwood
+    - openshift
+    kubeVersion: '>=1.25.0'
+    maintainers:
+    - email: engineers@norwoodsystems.com
+      name: Norwood Systems
+      url: https://norwoodsystems.com
+    name: admin-dashboard
+    type: application
+    urls:
+    - N/A
+    version: 1.0.0
   cmm-operator-k8s:
   - annotations:
       charts.openshift.io/archs: x86_64
@@ -2264,4 +2302,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-09-29T07:09:43.186236+00:00'
+generated: '2026-09-30T02:46:50.132550+00:00'
