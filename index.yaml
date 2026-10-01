@@ -6682,6 +6682,44 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/secretz-openbao-0.30.0/openbao-0.30.0.tgz
     version: 0.30.0
+  - annotations:
+      artifacthub.io/changes: "- kind: fixed\n  description: \"fix(ocm): remove openbao-hsm-ubi-image
+        reference\"\n"
+      artifacthub.io/containsSecurityUpdates: 'false'
+      charts.openshift.io/digest: sha256:58f5f180b1600b02d8b31c92e5404219a16b833ccd3dbe1ac4b7ca80df5761d0
+      charts.openshift.io/lastCertifiedTimestamp: '2026-10-01T12:18:33.560051+00:00'
+      charts.openshift.io/name: OpenBao
+      charts.openshift.io/provider: Adfinis AG
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-10-01T12:20:37.317833+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.17'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: v2.7.0
+    description: Official OpenBao Chart
+    digest: 50357ed047be5db843b89c5b90794716312cf7b5df0397f3d00fd7b8d84669cc
+    home: https://github.com/openbao/openbao-helm
+    icon: https://raw.githubusercontent.com/openbao/artwork/refs/heads/main/color/openbao-color.svg
+    keywords:
+    - vault
+    - openbao
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.30.0-0'
+    maintainers:
+    - email: openbao-security@lists.openssf.org
+      name: OpenBao
+      url: https://openbao.org
+    name: openbao
+    sources:
+    - https://github.com/openbao/openbao-helm
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/secretz-openbao-0.30.1/openbao-0.30.1.tgz
+    version: 0.30.1
   opscruise:
   - annotations:
       charts.openshift.io/digest: sha256:3936a9deac923380aa2dd842f19da07d32030a867ebd05eea48dd38b895b82c0
@@ -22206,4 +22244,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-10-01T11:39:41.666198+00:00'
+generated: '2026-10-01T12:20:37.167355+00:00'
