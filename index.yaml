@@ -7775,6 +7775,39 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/radware-akc-radware-akc-helm-1.8.0/radware-akc-helm-1.8.0.tgz
     version: 1.8.0
+  - annotations:
+      charts.openshift.io/digest: sha256:24005915599fc102584a99db74d2bfe6d86504ced22d5c01ed48aa25a32b809c
+      charts.openshift.io/lastCertifiedTimestamp: '2026-10-01T10:40:03.061739+00:00'
+      charts.openshift.io/name: akc
+      charts.openshift.io/provider: Radware
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-10-01T11:39:41.843531+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.10'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 1.9.0
+    dependencies:
+    - condition: controller.enabled
+      name: controller
+      repository: file://charts/controller
+      version: 1.9.0
+    - condition: aggregator.enabled
+      name: aggregator
+      repository: file://charts/aggregator
+      version: 1.9.0
+    - condition: configurator.enabled
+      name: configurator
+      repository: file://charts/configurator
+      version: 1.9.0
+    description: The parent chart for Radware AKC
+    digest: 61616edb7e4990cfc7d690c20cd42aabed0aca43523e157e3876ccd1e1e1a7a1
+    icon: https://www.radware.com/favicon.ico
+    kubeVersion: '>=1.23.0-0'
+    name: radware-akc-helm
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/radware-akc-radware-akc-helm-1.9.0/radware-akc-helm-1.9.0.tgz
+    version: 1.9.0
   rafay-operator-redhat:
   - annotations:
       charts.openshift.io/digest: sha256:e90ed52496459379a844f3c7e258f6e71f024ab6ed0a8530be643f84003d5987
@@ -22173,4 +22206,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-09-30T14:44:52.382559+00:00'
+generated: '2026-10-01T11:39:41.666198+00:00'
