@@ -7,6 +7,7 @@ users:
 - githubUsername: shiremath
 - githubUsername: kumar-mallikarjuna
 - githubUsername: abhijeet2096-confluent
+- githubUsername: milindl
 vendor:
   label: confluentinc
   name: Confluent
