@@ -8,6 +8,7 @@ users:
 - githubUsername: kumar-mallikarjuna
 - githubUsername: abhijeet2096-confluent
 - githubUsername: milindl
+- githubUsername: spuru9
 vendor:
   label: confluentinc
   name: Confluent
