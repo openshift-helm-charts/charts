@@ -6,8 +6,9 @@ publicPgpKey: unknown
 users:
 - githubUsername: shiremath
 - githubUsername: kumar-mallikarjuna
-- githubUsername: abhijeet2096-confluent
 - githubUsername: milindl
+- githubUsername: spuru9
+- githubUsername: abhijeet2096-confluent
 vendor:
   label: confluentinc
   name: Confluent
