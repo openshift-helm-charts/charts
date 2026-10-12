@@ -1,9 +1,10 @@
 chart:
   name: pep
-  shortDescription: unknown
+  shortDescription: 'Helm chart for Zainar PEP '
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: andreip-zainar
 vendor:
   label: zainar
   name: ZaiNar
