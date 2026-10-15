@@ -1,0 +1,26 @@
+apiVersion: v2
+name: vistergy-agent-server
+description: >-
+  Vistergy governed AI agent server for asset-intensive critical
+  infrastructure. Serves governed agents grounded in engineering and
+  asset-management standards (international, domain, or the owner's own),
+  with an optional read connection to IBM Maximo as the system of record.
+  Answers cite their grounding and never fabricate.
+type: application
+version: 0.1.25
+appVersion: "1.65"
+kubeVersion: ">=1.27.0-0"
+home: https://vistergy.com
+icon: https://atlas.vistergy.com/favicon.png
+maintainers:
+  - name: Vistergy Ltd
+    email: directors@vistergy.com
+keywords:
+  - ai
+  - agents
+  - governed-ai
+  - asset-management
+  - maximo
+  - standards
+annotations:
+  charts.openshift.io/name: Vistergy Agent Server
