@@ -1,0 +1,10 @@
+chart:
+  name: vistergy-agent-server
+  shortDescription: Governed AI agents for asset-intensive critical infrastructure
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: the-dot-connector
+vendor:
+  label: vistergy
+  name: VISTERGY LTD
