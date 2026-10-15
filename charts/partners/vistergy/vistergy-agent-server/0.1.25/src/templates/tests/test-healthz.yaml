@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ printf "%s-test-healthz" (include "vistergy-agent-server.fullname" .) | trunc 63 | trimSuffix "-" }}
+  labels:
+    helm.sh/chart: {{ include "vistergy-agent-server.chart" . }}
+    app.kubernetes.io/component: test
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  # Pod-level seccomp as well as container-level: a user who can reach a
+  # permissive SCC (a cluster admin on a shared cluster, for example) otherwise
+  # gets the pod admitted with seccomp Unconfined, and
+  # `helm test` prints a PodSecurity baseline warning.
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  serviceAccountName: {{ include "vistergy-agent-server.serviceAccountName" . }}
+  automountServiceAccountToken: false
+  containers:
+    - name: healthz
+      image: registry.access.redhat.com/ubi9/ubi-minimal:9.6
+      # runAsNonRoot is deliberately not set here: OpenShift's restricted-v2
+      # SCC injects a non-root UID anyway, while permissive RunAsAny SCCs
+      # (e.g. granted to admins on shared clusters) would otherwise fail the
+      # kubelet's runAsNonRoot check against this image's root default.
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
+      command:
+        - curl
+        - -fsS
+        - --retry
+        - "30"
+        - --retry-delay
+        - "10"
+        - --retry-connrefused
+        - --retry-all-errors
+        - http://{{ include "vistergy-agent-server.fullname" . }}:{{ .Values.service.port }}/healthz

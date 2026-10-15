@@ -1,0 +1,105 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.16.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:769449485574763547
+        chart-uri: /charts/vistergy-agent-server
+        digests:
+            chart: sha256:c8c5e4879cddd3933ec374feddd8157ba0dee866e6127ec308bf7c83d8b7e752
+        lastCertifiedTimestamp: "2026-10-15T08:05:37.648423+00:00"
+        testedOpenShiftVersion: "4.18"
+        supportedOpenShiftVersions: '>=4.14'
+        webCatalogOnly: false
+    chart:
+        name: vistergy-agent-server
+        home: https://vistergy.com
+        sources: []
+        version: 0.1.25
+        description: Vistergy governed AI agent server for asset-intensive critical infrastructure. Serves governed agents grounded in engineering and asset-management standards (international, domain, or the owner's own), with an optional read connection to IBM Maximo as the system of record. Answers cite their grounding and never fabricate.
+        keywords:
+            - ai
+            - agents
+            - governed-ai
+            - asset-management
+            - maximo
+            - standards
+        maintainers:
+            - name: Vistergy Ltd
+              email: directors@vistergy.com
+              url: ""
+        icon: https://atlas.vistergy.com/favicon.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: "1.65"
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Vistergy Agent Server
+        kubeversion: '>=1.27.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.connect.redhat.com/vistergy/agent-server:ubi-v0.26
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal:9.6
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+
