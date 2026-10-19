@@ -2174,6 +2174,30 @@ entries:
     urls:
     - https://hawtio.github.io/hawtio-charts/hawtio-online-console-plugin-0.8.0.tgz
     version: 0.8.0
+  hvi-alert:
+  - annotations:
+      charts.openshift.io/digest: sha256:c3335b313f72c6081682e333e08db19417cc79294631433606ab6c5e94cafd1e
+      charts.openshift.io/lastCertifiedTimestamp: '2026-10-19T14:39:04.978112+00:00'
+      charts.openshift.io/name: Human_Voice_Speaker_Verification
+      charts.openshift.io/provider: Human Voice Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-10-19T14:55:29.124891+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '4.22'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 0.1.0-beta.1
+    description: Human Voice speaker verification candidate; external PostgreSQL required
+    digest: 31dd2501cebc0fa913d74061d04e9d2d2c937797835c6438022da2dc5acdc64b
+    home: https://humanvoice.inc
+    kubeVersion: '>=1.35.0-0 <1.36.0-0'
+    maintainers:
+    - email: bradley.warren@humanvoice.inc
+      name: Human Voice Inc.
+    name: hvi-alert
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/humanvoicealert-hvi-alert-0.1.3/hvi-alert-0.1.3.tgz
+    version: 0.1.3
   i2i5gcorehelm:
   - annotations:
       charts.openshift.io/digest: sha256:e189b295ee18215a63d967e51320316c819a9e59cc0541df4a0eddb917034000
@@ -22587,4 +22611,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-10-16T08:37:16.614112+00:00'
+generated: '2026-10-19T14:55:28.915846+00:00'
