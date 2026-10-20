@@ -2054,6 +2054,40 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/dynamia-ai-hami-2.10.0-r0-openshift.c4e22e88/hami-2.10.0-r0-openshift.c4e22e88.tgz
     version: 2.10.0-r0-openshift.c4e22e88
+  - annotations:
+      charts.openshift.io/digest: sha256:b3d62524370a2161f667fbe42cb93d2a39c419c9c106fa9901680896a1e0d3b7
+      charts.openshift.io/lastCertifiedTimestamp: '2026-10-20T06:31:41.433822+00:00'
+      charts.openshift.io/name: HAMi Enterprise
+      charts.openshift.io/provider: DYNAMIA INTELLIGENCE PTE. LTD
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-10-20T06:39:01.939553+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.5'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: v2.10.0-r4
+    dependencies:
+    - condition: dra.enabled
+      name: hami-dra
+      repository: https://project-hami.github.io/HAMi-DRA/
+      version: 0.2.0
+    description: Heterogeneous AI Computing Virtualization Middleware
+    digest: 0a948d3890256e7f99d86e9f9907f33e0ce4d03782e7041250a1cd39b04db945
+    keywords:
+    - vgpu
+    - gpu
+    kubeVersion: '>= 1.18.0-0'
+    maintainers:
+    - email: archlitchi@gmail.com
+      name: limengxuan
+    - email: xiaozhang0210@hotmail.com
+      name: zhangxiao
+    name: hami
+    sources:
+    - https://github.com/dynamia-ai/hami-enterprise
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/dynamia-ai-hami-2.10.0-r4/hami-2.10.0-r4.tgz
+    version: 2.10.0-r4
   harikube:
   - annotations:
       catalog.cattle.io/certified: partner
@@ -22611,4 +22645,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-10-19T14:55:28.915846+00:00'
+generated: '2026-10-20T06:39:01.803621+00:00'
