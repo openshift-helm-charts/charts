@@ -1,0 +1,10 @@
+chart:
+  name: hvi-alert
+  shortDescription: Speaker verification and enrollment search for Red Hat OpenShift.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: bwarrenphd
+vendor:
+  label: humanvoicealert
+  name: Human Voice Inc.
