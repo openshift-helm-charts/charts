@@ -1,0 +1,9 @@
+chart:
+  name: kube-noob
+  shortDescription: Kubernetes, OpenShift and ROSA audit, debugging and learning tools as an MCP server
+publicPgpKey: null
+users:
+  - githubUsername: aashishmahajan
+vendor:
+  label: kube-noob
+  name: kube-noob
