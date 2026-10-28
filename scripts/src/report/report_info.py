@@ -9,10 +9,17 @@ REPORT_ANNOTATIONS = "annotations"
 REPORT_RESULTS = "results"
 REPORT_DIGESTS = "digests"
 REPORT_METADATA = "metadata"
-SHA_ERROR = "Digest in report did not match report content"
+# Substring of chart-verifier's "error executing command: ..." line, matched
+# case-insensitively.
+SHA_ERROR = "digest in report did not match report content"
 
 
 def write_error_log(*msg):
+    """Write msg to the errors file and to the console.
+
+    The errors file is rendered verbatim into the PR comment, so keep it to
+    content that is actionable for the chart submitter.
+    """
     directory = os.environ.get("WORKFLOW_WORKING_DIRECTORY")
     if directory:
         os.makedirs(directory, exist_ok=True)
@@ -89,25 +96,45 @@ def _get_report_info(
                     ],
                     capture_output=True,
                 )
-            output = out.stdout.decode("utf-8")
+            output = out.stdout
 
-        if SHA_ERROR in output:
+        if isinstance(output, bytes):
+            try:
+                output = output.decode("utf-8")
+            except UnicodeDecodeError as err:
+                # Strict: U+FFFD parses as valid JSON, so replacing would
+                # publish a corrupted digest. Render lossily for the console.
+                lossy = output.decode("utf-8", errors="replace")
+                print(f"[ERROR] exception was: {err=}, {type(err)=}")
+                print(f"[ERROR] chart-verifier output was:\n{lossy}")
+                write_error_log(
+                    "[ERROR] The chart-verifier report could not be processed.",
+                    "[ERROR] chart-verifier output was not valid UTF-8.",
+                )
+                sys.exit(1)
+
+        if SHA_ERROR in output.lower():
             msg = f"[ERROR] {SHA_ERROR}"
             write_error_log(msg)
             sys.exit(1)
 
         try:
             report_out = json.loads(output)
-        except BaseException as err:
-            msgs = []
-            msgs.append(f"[ERROR] loading report output: /n{output}")
-            msgs.append(f"[ERROR] exception was: {err=}, {type(err)=}")
-            write_error_log(*msgs)
+        except json.JSONDecodeError as err:
+            # Keep the exception detail on the console only: it is noise to the
+            # chart submitter, who sees whatever write_error_log records.
+            print(f"[ERROR] exception was: {err=}, {type(err)=}")
+            write_error_log(
+                "[ERROR] The chart-verifier report could not be processed.",
+                f"[ERROR] chart-verifier output was:\n{output}",
+            )
             sys.exit(1)
 
     if info_type not in report_out:
-        msg = f"Error extracting {info_type} from the report:", report_out.strip()
-        write_error_log(msg)
+        write_error_log(
+            f"[ERROR] The chart-verifier report has no {info_type} section.",
+            f"[ERROR] chart-verifier report was:\n{json.dumps(report_out)}",
+        )
         sys.exit(1)
 
     if info_type == REPORT_ANNOTATIONS:
