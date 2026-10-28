@@ -565,6 +565,10 @@ jobs:
   release:
     name: Release Chart
     runs-on: ubuntu-24.04
+    concurrency:
+      group: release-index-update
+      cancel-in-progress: false
+      queue: max
     permissions:
       contents: write
       pull-requests: write
@@ -601,12 +605,6 @@ jobs:
           source: github
           skip_cache: true
           chart-verifier: ${{ needs.setup.outputs.verifier-action-image }}
-
-      - name: Block until there is no running workflow
-        if: ${{ needs.setup.outputs.run_build == 'true' }}
-        uses: softprops/turnstyle@e565d2d86403c5d23533937e95980570545e5586
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
         if: ${{ needs.setup.outputs.run_build == 'true' }}
