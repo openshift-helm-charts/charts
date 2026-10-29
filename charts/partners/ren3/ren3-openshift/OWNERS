@@ -1,0 +1,10 @@
+chart:
+  name: ren3-openshift
+  shortDescription: Helm chart for Ren3 V1 application
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: bazza-ren3
+vendor:
+  label: ren3
+  name: THE REENTRY FOUNDATION PTE. LTD.
