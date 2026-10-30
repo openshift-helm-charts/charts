@@ -1,0 +1,9 @@
+chart:
+  name: derbent
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: denegra
+  name: Denegra L.L.C-FZ
