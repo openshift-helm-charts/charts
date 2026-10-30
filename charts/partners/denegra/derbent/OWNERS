@@ -1,9 +1,11 @@
 chart:
   name: derbent
-  shortDescription: unknown
+  shortDescription: 'Denegra Derbent AI gateway: masks personal data and stops prompt
+    injection before any model call.'
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: denegradev
 vendor:
   label: denegra
   name: Denegra L.L.C-FZ
