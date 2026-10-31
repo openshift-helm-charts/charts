@@ -1,0 +1,99 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.16.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:1078056898480443117
+        chart-uri: /input/chart.tgz
+        digests:
+            chart: sha256:c3335b313f72c6081682e333e08db19417cc79294631433606ab6c5e94cafd1e
+            package: fbad2117c269b8d5987f09a54947ca869965ea4b59682c0fe6738327f8e04a47
+        lastCertifiedTimestamp: "2026-10-19T14:39:04.978112+00:00"
+        testedOpenShiftVersion: "4.22"
+        supportedOpenShiftVersions: "4.22"
+        webCatalogOnly: false
+    chart:
+        name: hvi-alert
+        home: https://humanvoice.inc
+        sources: []
+        version: 0.1.3
+        description: Human Voice speaker verification candidate; external PostgreSQL required
+        keywords: []
+        maintainers:
+            - name: Human Voice Inc.
+              email: bradley.warren@humanvoice.inc
+              url: ""
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.1.0-beta.1
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Human_Voice_Speaker_Verification
+        kubeversion: '>=1.35.0-0 <1.36.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/humanvoicealert/alert-api@sha256:cb218550d1a05a71aa543d558b46c193e3011e0e11396bd02aa4ede262db26a4
+        Image is Red Hat certified : quay.io/humanvoicealert/alert-model@sha256:4990d55dfe6135f13ed02e66aff5c5499d167e75e65cad961264154ff75b7ad4
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist

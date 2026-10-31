@@ -1,0 +1,109 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.16.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:6107705550793737000
+        chart-uri: /Users/osoriohj/zainar/gitlab/5g/charts/charts/partners/zainar/lcs/26.6.0/src
+        digests:
+            chart: sha256:dfda7064691f1ce016de1fc0c766dfb844aa799e992bb4b91c12e49a4d910444
+        lastCertifiedTimestamp: "2026-09-15T08:22:24.817537-04:00"
+        testedOpenShiftVersion: "4.19"
+        supportedOpenShiftVersions: '>=4.14'
+        webCatalogOnly: false
+    chart:
+        name: lcs
+        home: https://www.zainartech.com
+        sources:
+            - https://gitlab.com/zainar-suite/5g/zainar-helm-charts
+        version: 26.6.0
+        description: Zainar 5G LCS stack (controller, LMF, amf-proxy, zps-light, optional gNB sim)
+        keywords:
+            - 5g
+            - lcs
+            - controller
+            - zainar
+        maintainers:
+            - name: Zainar
+              email: ""
+              url: https://www.zainartech.com
+        icon: https://gitlab.com/zainar-suite/5g/zainar-helm-charts/-/raw/main/assets/3GPP_5G_logo.png
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 26.6.0
+        deprecated: false
+        annotations:
+            artifacthub.io/category: networking
+            artifacthub.io/license: proprietary
+            charts.openshift.io/archs: x86_64
+            charts.openshift.io/name: Zainar LCS
+            charts.openshift.io/provider: Zainar
+            charts.openshift.io/supportURL: https://www.zainartech.com
+        kubeversion: '>=1.27.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image certification skipped : registry.redhat.io/ubi9/ubi:9.4
+        Image is Red Hat certified : registry.gitlab.com/zainar-suite/5g/controller:v0.11.0
+        Image certification skipped : registry.redhat.io/rhel9/postgresql-16:latest

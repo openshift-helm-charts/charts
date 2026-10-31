@@ -1,0 +1,118 @@
+# Default values for vistergy-agent-server.
+# This chart creates no Secrets. All credentials are referenced by the NAME
+# of a pre-existing Secret in the release namespace (see envFromSecrets and
+# imagePullSecrets). See README.md for the required secrets.
+
+replicaCount: 1
+
+image:
+  # The Red Hat certified image.
+  repository: registry.connect.redhat.com/vistergy/agent-server
+  tag: "ubi-v0.26"
+  pullPolicy: IfNotPresent
+
+# Names of pre-existing image pull secrets, e.g. [{ name: my-pull-secret }].
+# Not needed when the cluster's global pull secret covers
+# registry.connect.redhat.com.
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  # If not set and create is true, the fullname is used.
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 8080
+
+# OpenShift Route (optional; requires OpenShift).
+route:
+  enabled: false
+  # Optional explicit host; empty lets OpenShift assign one.
+  host: ""
+  # Route annotations. The default raises the router's 30s timeout, because
+  # answers that call the model can take longer.
+  annotations:
+    haproxy.router.openshift.io/timeout: 120s
+  # TLS settings. By policy this chart carries no key material in values:
+  # certificate/key are not accepted here (use a pre-existing certificate
+  # secret managed outside the chart); caCertificate and
+  # destinationCACertificate are allowed.
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: "1"
+    memory: 2Gi
+
+# Names of pre-existing Secrets whose keys are injected as environment
+# variables (envFrom). Example: [vistergy-agent-keys, vistergy-model-service,
+# vistergy-corpus-reader]
+envFromSecrets: []
+
+# Plain, non-secret environment variables. A working install sets
+# VISTERGY_AGENT_CORPUS_BUCKET, VISTERGY_AGENT_CORPUS_REGION, VISTERGY_ENV,
+# VISTERGY_EXPECTED_CORPUS_DIGEST and VISTERGY_AGENT_PUBLIC_URL (README).
+env: []
+
+# Optional container command/args override. The image's own entrypoint
+# fetches the corpus and starts the server, so most installs leave these empty.
+command: []
+args: []
+
+# Left empty so OpenShift's restricted-v2 SCC can assign an arbitrary UID.
+# Set runAsUser here only on platforms without SCC-style UID assignment.
+podSecurityContext: {}
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+probes:
+  # The server reports ready on /healthz once its retrieval index is loaded.
+  # A cold start fetches the corpus first, which can take several minutes, so
+  # the startup probe allows up to 10 minutes before liveness takes over.
+  #
+  # timeoutSeconds is stated rather than left to Kubernetes' 1-second default.
+  # /healthz answers in about 2 ms, so 5 seconds cannot mask a hung server.
+  # One second is thin enough that a garbage-collection pause or CPU
+  # throttling on a half-core request can fail a probe and take a serving pod
+  # out of the Route. Each value stays within its own period.
+  startup:
+    httpGet:
+      path: /healthz
+      port: http
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 60
+  readiness:
+    httpGet:
+      path: /healthz
+      port: http
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  liveness:
+    httpGet:
+      path: /healthz
+      port: http
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

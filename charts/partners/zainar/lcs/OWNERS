@@ -1,0 +1,12 @@
+chart:
+  name: lcs
+  shortDescription: Helm chart for the Zainar 5G LCS stack (LCSGW/controller and LMF
+    Positioning Engine).
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: osoriohj-zainar
+- githubUsername: spiros-zainar
+vendor:
+  label: zainar
+  name: ZaiNar

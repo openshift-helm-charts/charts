@@ -1,0 +1,11 @@
+chart:
+  name: hami
+  shortDescription: HAMi accelerator virtualization middleware for Kubernetes and
+    OpenShift
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: FouoF
+vendor:
+  label: dynamia-ai
+  name: DYNAMIA INTELLIGENCE PTE. LTD
