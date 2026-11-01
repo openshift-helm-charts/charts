@@ -1,0 +1,11 @@
+chart:
+  name: varek
+  shortDescription: Kernel-level pre-execution authorization for AI agent processes
+    on OpenShift.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: kwdoug63
+vendor:
+  label: soberagents
+  name: SOBER AGENTIC INFRASTRUCTURE INC.
