@@ -1506,6 +1506,31 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/denegra-derbent-0.1.3/derbent-0.1.3.tgz
     version: 0.1.3
+  - annotations:
+      charts.openshift.io/digest: sha256:81b2fc81e020c790165fd8758e109ac5d1b06505d377cb7439e5ee3f838b049f
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-02T07:16:50.462097+00:00'
+      charts.openshift.io/name: Denegra Derbent AI Gateway
+      charts.openshift.io/provider: Denegra L.L.C-FZ
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-02T08:09:07.696667+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.20'
+    apiVersion: v2
+    appVersion: 0.1.0
+    description: Denegra Derbent AI gateway (LiteLLM with Denegra's masking and checks)
+      for OpenShift and Kubernetes; 14-day free trial at https://denegra.ai
+    digest: 408672c4eb694c11b9e09f2e248a9421de88ca3e5f8bb9830e44e77a88755542
+    keywords:
+    - ai-gateway
+    - llm
+    - dlp
+    - openshift
+    kubeVersion: '>=1.27.0-0'
+    name: derbent
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/denegra-derbent-0.1.4/derbent-0.1.4.tgz
+    version: 0.1.4
   dify-enterprise:
   - annotations:
       charts.openshift.io/digest: sha256:02d74c599b09bec830ede77b4e734604d3ca46de3de3cee02f71a6b41202ddf7
@@ -23076,4 +23101,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-02T03:19:06.548294+00:00'
+generated: '2026-11-02T08:09:07.460350+00:00'
