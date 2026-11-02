@@ -20317,6 +20317,41 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/exfo-uverifier-0.1.2/exfo-uverifier-0.1.2.tgz
     version: 0.1.2
+  varek:
+  - annotations:
+      charts.openshift.io/archs: x86_64,aarch64
+      charts.openshift.io/digest: sha256:f08c82fe1e2a2bedc8182228468244573dd5cf77503143e637e09318a28dca05
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-01T17:58:19.011971+00:00'
+      charts.openshift.io/name: VAREK
+      charts.openshift.io/provider: SOBER AGENTIC INFRASTRUCTURE INC.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-02T03:19:06.766057+00:00'
+      charts.openshift.io/supportURL: https://github.com/kwdoug63/varek/blob/main/SECURITY.md
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.17'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+      varek.dev/design: docs/security/v1.34-kubernetes.md
+    apiVersion: v2
+    appVersion: 1.36.1
+    description: 'VAREK on Kubernetes: the Warden''s node agent, NRI plugin and launcher
+      on each node (a DaemonSet), the VarekPolicy resource and its admission webhook.
+      Each container of a pod that names a policy (the annotation varek.dev/policy)
+      runs with the Warden deciding its calls under that policy, or does not run.'
+    digest: 582e246203467ed676e5eb7c34cd518208bfb99329816295751701d57b31aea2
+    home: https://github.com/kwdoug63/varek
+    keywords:
+    - security
+    - seccomp
+    - agents
+    - policy
+    - nri
+    kubeVersion: '>=1.30.0-0'
+    name: varek
+    sources:
+    - https://github.com/kwdoug63/varek
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/soberagents-varek-1.36.1/varek-1.36.1.tgz
+    version: 1.36.1
   vault:
   - annotations:
       charts.openshift.io/certifiedOpenShiftVersions: '4.7'
@@ -23041,4 +23076,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-10-31T07:16:14.176451+00:00'
+generated: '2026-11-02T03:19:06.548294+00:00'
