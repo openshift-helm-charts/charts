@@ -1362,6 +1362,44 @@ entries:
     urls:
     - N/A
     version: 0.1.0
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/license: proprietary
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:fe8e649dbc02d02a965e27cfed08e3b97c2b6476eedbc5d4695a66a26854daaa
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-02T11:26:46.830715+00:00'
+      charts.openshift.io/name: Zainar PEP
+      charts.openshift.io/provider: Zainar
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-02T11:55:09.393438+00:00'
+      charts.openshift.io/supportURL: https://www.zainartech.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 4.7.0
+    description: "ZaiNar PEP (Phy External Process) positioning dApp \u2014 SCTP server
+      for 5G UL positioning, on the pod network or a Multus SR-IOV interface"
+    digest: 45d630f36e05cc5da4a6587ea46e4e87fd9d7f7140a2e59eeca0cb97964fe69c
+    home: https://www.zainartech.com
+    icon: https://gitlab.com/zainar-suite/5g/zainar-helm-charts/-/raw/main/assets/3GPP_5G_logo.png
+    keywords:
+    - pep
+    - positioning
+    - sctp
+    - ran
+    - zainar
+    kubeVersion: '>=1.27.0-0'
+    maintainers:
+    - email: support@zainartech.com
+      name: ZaiNar
+      url: https://www.zainartech.com
+    name: pep
+    sources:
+    - https://gitlab.com/zainar-suite/5g/zainar-helm-charts
+    type: application
+    urls:
+    - N/A
+    version: 0.2.2
   remote-active-worker-ubi:
   - annotations:
       charts.openshift.io/digest: sha256:6aa81181b859d3a79c838dc265e38f4f840d66f13c4ee12616d7b06f07ff2a96
@@ -2664,4 +2702,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-11-02T04:44:19.733089+00:00'
+generated: '2026-11-02T11:55:09.369308+00:00'
