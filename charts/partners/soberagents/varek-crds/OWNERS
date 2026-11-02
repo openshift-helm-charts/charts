@@ -1,9 +1,11 @@
 chart:
   name: varek-crds
-  shortDescription: unknown
+  shortDescription: The custom resources of VAREK (VarekPolicy, VarekPlan, VarekCredential,
+    VarekNodeKey), installed before the VAREK chart.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: kwdoug63
 vendor:
   label: soberagents
   name: SOBER AGENTIC INFRASTRUCTURE INC.
