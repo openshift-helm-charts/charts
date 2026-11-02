@@ -5,6 +5,7 @@ providerDelivery: true
 publicPgpKey: unknown
 users:
 - githubUsername: andreip-zainar
+- githubUsername: danielpostolache
 vendor:
   label: zainar
   name: ZaiNar
