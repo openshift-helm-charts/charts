@@ -1,6 +1,6 @@
 chart:
   name: varek
-  shortDescription: Kernel-level pre-execution authorization for AI agent processes
+  shortDescription: Kernel-enforced, policy-checked supervision of AI agent processes
     on OpenShift.
 providerDelivery: false
 publicPgpKey: unknown
