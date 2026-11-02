@@ -6,5 +6,5 @@ publicPgpKey: unknown
 users:
 - githubUsername: YuehChun
 vendor:
-  label: phison-vllm-stack
+  label: aidaptiv-mw
   name: phison electronics corp
