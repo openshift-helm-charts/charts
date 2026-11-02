@@ -1,0 +1,9 @@
+chart:
+  name: varek-crds
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: soberagents
+  name: SOBER AGENTIC INFRASTRUCTURE INC.
