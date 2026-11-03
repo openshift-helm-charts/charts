@@ -7599,6 +7599,42 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/peaka-peaka-1.1.0-beta.17-redhat/peaka-1.1.0-beta.17-redhat.tgz
     version: 1.1.0-beta.17-redhat
+  phison-vllm-stack:
+  - annotations:
+      charts.openshift.io/digest: sha256:208f5c0d8de1754e53da41b22df3d4799bf8f1f775118a5ab52c208c4939f5e7
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-03T09:34:22.584548+08:00'
+      charts.openshift.io/name: Phison vLLM on OpenShift AI
+      charts.openshift.io/provider: phison electronics corp
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-03T01:57:33.633367+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12 <=4.22'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 0.32.0
+    description: One model on upstream vLLM (UBI 9 image), served by Red Hat OpenShift
+      AI's KServe as an LLMInferenceService. OpenShift AI provides the router, the
+      scheduler, the Gateway route and authentication; the chart only sets the model,
+      the vLLM image and its resources.
+    digest: ca8c1116aa13fcd52c4a98262216a403c4a0c194429d45551d8b7571ff191c4c
+    home: https://github.com/vllm-project/vllm
+    keywords:
+    - vllm
+    - llm
+    - inference
+    - openai
+    - kserve
+    - openshift-ai
+    kubeVersion: '>=1.25.0-0 <1.36.0-0'
+    maintainers:
+    - email: hugo_tsai@phison.com
+      name: Phison MW
+    name: phison-vllm-stack
+    sources:
+    - https://github.com/vllm-project/vllm/tree/v0.32.0
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/aidaptiv-mw-phison-vllm-stack-0.2.4/phison-vllm-stack-0.2.4.tgz
+    version: 0.2.4
   pubsubplus-openshift:
   - annotations:
       charts.openshift.io/digest: sha256:088b96c259efc2e3338a491a23904533fe94c49334c3c305b54a44987bd3eb4d
@@ -23136,4 +23172,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-02T19:19:49.550657+00:00'
+generated: '2026-11-03T01:57:33.365616+00:00'
