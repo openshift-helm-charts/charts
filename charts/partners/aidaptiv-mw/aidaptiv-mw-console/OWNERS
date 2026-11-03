@@ -1,0 +1,9 @@
+chart:
+  name: aidaptiv-mw-console
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: aidaptiv-mw
+  name: phison electronics corp
