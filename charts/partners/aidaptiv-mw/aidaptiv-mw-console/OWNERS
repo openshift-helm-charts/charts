@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: YuehChun
 vendor:
   label: aidaptiv-mw
   name: phison electronics corp
