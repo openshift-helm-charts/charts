@@ -24,6 +24,38 @@ entries:
     urls:
     - https://github.com/a10networks/tkc-doc/raw/master/charts/a10tkc-0.2.0.tgz
     version: 0.2.0
+  aidaptiv-mw-console:
+  - annotations:
+      charts.openshift.io/digest: sha256:614237d31a5aa695fa3a2af731dae370f546d56e82a8ba67b0ba8049b32b6057
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-03T09:31:56.627939+08:00'
+      charts.openshift.io/name: aiDAPTIV-MW-Console
+      charts.openshift.io/provider: phison electronics corp
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-03T02:33:55.185576+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12 <=4.22'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 503-0001-rh4
+    description: 'aiDAPTIV-MW-Console: a web UI for the models Red Hat OpenShift AI
+      serves with KServe (LLMInferenceService). List, test, deploy and edit models
+      and see their performance; users log in with their OpenShift account and act
+      with their own permissions.'
+    digest: e9684df8fe682e2239417952359944bc8d38854d6ec2cfb68fa3ac58a6c7c9d1
+    keywords:
+    - llm
+    - inference
+    - kserve
+    - openshift-ai
+    - console
+    kubeVersion: '>=1.25.0-0 <1.36.0-0'
+    maintainers:
+    - email: hugo_tsai@phison.com
+      name: Phison MW
+    name: aidaptiv-mw-console
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/aidaptiv-mw-aidaptiv-mw-console-0.1.4/aidaptiv-mw-console-0.1.4.tgz
+    version: 0.1.4
   akeyless-api-gateway:
   - annotations:
       charts.openshift.io/digest: sha256:35f918ae91e10db00705a0f2adffd8d7dedb77d14a384177eea44bed5c37ef61
@@ -23172,4 +23204,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-03T01:57:33.365616+00:00'
+generated: '2026-11-03T02:33:54.952822+00:00'
