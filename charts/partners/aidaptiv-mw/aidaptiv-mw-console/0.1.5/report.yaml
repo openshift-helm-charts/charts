@@ -1,0 +1,107 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.16.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:14647738689708783966
+        chart-uri: /home/poc/ocp/rh-cert/cv-2ab2c613/aidaptiv-mw-console-0.1.5.tgz
+        digests:
+            chart: sha256:6dc41893f269ba6e33d14a130ddfe69a0d35fcbe28b1233f0c4af218c5e3de5c
+            package: bff2d77b6b7871ef9165c38eeafe92f9fa29109eccf22ab18f422eda7c62d1fd
+        lastCertifiedTimestamp: "2026-11-03T14:26:06.448747+08:00"
+        testedOpenShiftVersion: "4.22"
+        supportedOpenShiftVersions: '>=4.12 <=4.22'
+        webCatalogOnly: false
+    chart:
+        name: aidaptiv-mw-console
+        home: ""
+        sources: []
+        version: 0.1.5
+        description: 'aiDAPTIV-MW-Console: a web UI for the models Red Hat OpenShift AI serves with KServe (LLMInferenceService). List, test, deploy and edit models and see their performance; users log in with their OpenShift account and act with their own permissions.'
+        keywords:
+            - llm
+            - inference
+            - kserve
+            - openshift-ai
+            - console
+        maintainers:
+            - name: Phison MW
+              email: hugo_tsai@phison.com
+              url: ""
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 503-0001-rh5
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: aiDAPTIV-MW-Console
+            charts.openshift.io/provider: Phison Electronics Corporation
+            charts.openshift.io/supportedOpenShiftVersions: '>=4.12 <4.23'
+        kubeversion: '>=1.25.0-0 <1.36.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : quay.io/aidaptiv-mw/console:503-0001-rh5
+        Image certification skipped : registry.redhat.io/openshift4/ose-oauth-proxy-rhel9:v4.16
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal@sha256:c2fcb1793e00a434470271be7f46eadc2462b39f8370e6a81c861c72fb8d38db
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
