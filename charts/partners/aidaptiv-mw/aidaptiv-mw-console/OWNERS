@@ -1,9 +1,11 @@
 chart:
   name: aidaptiv-mw-console
-  shortDescription: unknown
+  shortDescription: Web UI to list, test, deploy and monitor LLMs served by Red Hat
+    OpenShift AI (KServe).
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: YuehChun
 vendor:
   label: aidaptiv-mw
   name: phison electronics corp
