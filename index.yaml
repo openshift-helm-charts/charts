@@ -56,6 +56,37 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/aidaptiv-mw-aidaptiv-mw-console-0.1.4/aidaptiv-mw-console-0.1.4.tgz
     version: 0.1.4
+  - annotations:
+      charts.openshift.io/digest: sha256:6dc41893f269ba6e33d14a130ddfe69a0d35fcbe28b1233f0c4af218c5e3de5c
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-03T14:26:06.448747+08:00'
+      charts.openshift.io/name: aiDAPTIV-MW-Console
+      charts.openshift.io/provider: phison electronics corp
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-03T06:36:46.489272+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.12 <=4.22'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 503-0001-rh5
+    description: 'aiDAPTIV-MW-Console: a web UI for the models Red Hat OpenShift AI
+      serves with KServe (LLMInferenceService). List, test, deploy and edit models
+      and see their performance; users log in with their OpenShift account and act
+      with their own permissions.'
+    digest: 438f3d121360e1a6a534674d9ad4724a0726571283e13ab0e8b70387461fd47a
+    keywords:
+    - llm
+    - inference
+    - kserve
+    - openshift-ai
+    - console
+    kubeVersion: '>=1.25.0-0 <1.36.0-0'
+    maintainers:
+    - email: hugo_tsai@phison.com
+      name: Phison MW
+    name: aidaptiv-mw-console
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/aidaptiv-mw-aidaptiv-mw-console-0.1.5/aidaptiv-mw-console-0.1.5.tgz
+    version: 0.1.5
   akeyless-api-gateway:
   - annotations:
       charts.openshift.io/digest: sha256:35f918ae91e10db00705a0f2adffd8d7dedb77d14a384177eea44bed5c37ef61
@@ -23204,4 +23235,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-03T02:33:54.952822+00:00'
+generated: '2026-11-03T06:36:46.263529+00:00'
