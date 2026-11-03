@@ -1,0 +1,10 @@
+chart:
+  name: phison-vllm-stack
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: YuehChun
+vendor:
+  label: aidaptiv-mw
+  name: phison electronics corp
