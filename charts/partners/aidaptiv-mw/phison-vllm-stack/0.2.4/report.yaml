@@ -1,0 +1,108 @@
+apiversion: v1
+kind: verify-report
+metadata:
+    tool:
+        verifier-version: 1.16.0
+        profile:
+            VendorType: partner
+            version: v1.3
+        reportDigest: uint64:15940354650325788114
+        chart-uri: /home/poc/ocp/rh-cert/cv-f00070aa/phison-vllm-stack-0.2.4.tgz
+        digests:
+            chart: sha256:208f5c0d8de1754e53da41b22df3d4799bf8f1f775118a5ab52c208c4939f5e7
+            package: 580592328368451c0342b650f3b85b0ebaab963da1834a02143fa91794383c88
+        lastCertifiedTimestamp: "2026-11-03T09:34:22.584548+08:00"
+        testedOpenShiftVersion: "4.22"
+        supportedOpenShiftVersions: '>=4.12 <=4.22'
+        webCatalogOnly: false
+    chart:
+        name: phison-vllm-stack
+        home: https://github.com/vllm-project/vllm
+        sources:
+            - https://github.com/vllm-project/vllm/tree/v0.32.0
+        version: 0.2.4
+        description: One model on upstream vLLM (UBI 9 image), served by Red Hat OpenShift AI's KServe as an LLMInferenceService. OpenShift AI provides the router, the scheduler, the Gateway route and authentication; the chart only sets the model, the vLLM image and its resources.
+        keywords:
+            - vllm
+            - llm
+            - inference
+            - openai
+            - kserve
+            - openshift-ai
+        maintainers:
+            - name: Phison MW
+              email: hugo_tsai@phison.com
+              url: ""
+        icon: ""
+        apiversion: v2
+        condition: ""
+        tags: ""
+        appversion: 0.32.0
+        deprecated: false
+        annotations:
+            charts.openshift.io/name: Phison vLLM on OpenShift AI
+            charts.openshift.io/provider: Phison Electronics Corporation
+            charts.openshift.io/supportedOpenShiftVersions: '>=4.12 <4.23'
+        kubeversion: '>=1.25.0-0 <1.36.0-0'
+        dependencies: []
+        type: application
+    chart-overrides: ""
+results:
+    - check: v1.0/contains-test
+      type: Mandatory
+      outcome: PASS
+      reason: Chart test files exist
+    - check: v1.0/contains-values-schema
+      type: Mandatory
+      outcome: PASS
+      reason: Values schema file exist
+    - check: v1.1/has-kubeversion
+      type: Mandatory
+      outcome: PASS
+      reason: Kubernetes version specified
+    - check: v1.0/has-notes
+      type: Optional
+      outcome: PASS
+      reason: Chart does contain NOTES.txt
+    - check: v1.0/is-helm-v3
+      type: Mandatory
+      outcome: PASS
+      reason: API version is V2, used in Helm 3
+    - check: v1.0/contains-values
+      type: Mandatory
+      outcome: PASS
+      reason: Values file exist
+    - check: v1.0/not-contain-csi-objects
+      type: Mandatory
+      outcome: PASS
+      reason: CSI objects do not exist
+    - check: v1.0/has-readme
+      type: Mandatory
+      outcome: PASS
+      reason: Chart has a README
+    - check: v1.0/helm-lint
+      type: Mandatory
+      outcome: PASS
+      reason: Helm lint successful
+    - check: v1.1/images-are-certified
+      type: Mandatory
+      outcome: PASS
+      reason: |-
+        Image is Red Hat certified : registry.access.redhat.com/ubi9/ubi-minimal@sha256:c2fcb1793e00a434470271be7f46eadc2462b39f8370e6a81c861c72fb8d38db
+        Image is Red Hat certified : quay.io/aidaptiv-mw/vllm:0.32.0-3
+    - check: v1.0/chart-testing
+      type: Mandatory
+      outcome: PASS
+      reason: Chart tests have passed
+    - check: v1.0/not-contains-crds
+      type: Mandatory
+      outcome: PASS
+      reason: Chart does not contain CRDs
+    - check: v1.0/required-annotations-present
+      type: Mandatory
+      outcome: PASS
+      reason: All required annotations present
+    - check: v1.0/signature-is-valid
+      type: Mandatory
+      outcome: SKIPPED
+      reason: 'Chart is not signed : Signature verification not required'
