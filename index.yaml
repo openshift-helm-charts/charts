@@ -13760,6 +13760,41 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-must-gather-2.1.0/redhat-developer-hub-must-gather-2.1.0.tgz
     version: 2.1.0
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:4bbe2b4bf1bc1d7804fd01dcded932ce07b2897174203e87c4516e72398be7e3
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-11T21:04:28.801987+00:00'
+      charts.openshift.io/name: Red Hat Developer Hub Must Gather
+      charts.openshift.io/provider: Red Hat
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-11-11T21:07:32.711977+00:00'
+      charts.openshift.io/supportURL: https://access.redhat.com/support
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.10.7
+    description: 'A Helm chart for running the RHDH Must-Gather diagnostic tool on
+      Kubernetes '
+    digest: 4f126983178e2a71628a8de4356f06551c08e8355b17ec4ce0b74d83dee7eb43
+    home: https://github.com/redhat-developer/rhdh-must-gather
+    keywords:
+    - rhdh
+    - red-hat-developer-hub
+    - backstage
+    - diagnostics
+    - must-gather
+    - troubleshooting
+    kubeVersion: '>= 1.27.0-0'
+    maintainers:
+    - name: Red Hat
+      url: https://redhat.com
+    name: redhat-developer-hub-must-gather
+    sources:
+    - https://github.com/redhat-developer/rhdh-must-gather
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/redhat-redhat-developer-hub-must-gather-1.10.7/redhat-developer-hub-must-gather-1.10.7.tgz
+    version: 1.10.7
   redhat-developer-hub-orchestrator-infra:
   - annotations:
       charts.openshift.io/digest: sha256:61f974912dce40329bc0c0157139033d553fd0421145fd8ec5db51ad38694d60
@@ -23695,4 +23730,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-11T21:06:16.905698+00:00'
+generated: '2026-11-11T21:07:32.563649+00:00'
