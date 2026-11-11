@@ -21916,6 +21916,41 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/vistergy-vistergy-agent-server-0.1.27/vistergy-agent-server-0.1.27.tgz
     version: 0.1.27
+  - annotations:
+      charts.openshift.io/digest: sha256:407dcdafb94f39337c8531aa270b60a92e25a0b2474eedbed78240856f7f622a
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-11T12:40:24.799095+00:00'
+      charts.openshift.io/name: Vistergy Agent Server
+      charts.openshift.io/provider: VISTERGY LTD
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-11T12:46:49.343833+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.18'
+    apiVersion: v2
+    appVersion: '1.71'
+    description: Vistergy governed AI agent server for asset-intensive critical infrastructure.
+      Serves governed agents grounded in engineering and asset-management standards
+      (international, domain, or the owner's own), with an optional read connection
+      to IBM Maximo as the system of record. Answers cite their grounding and never
+      fabricate.
+    digest: 6059374a258b19d1f8e995fb9114c88670df72df1e08d2d00b6cc0ad93a7c347
+    home: https://vistergy.com
+    icon: https://atlas.vistergy.com/favicon.png
+    keywords:
+    - ai
+    - agents
+    - governed-ai
+    - asset-management
+    - maximo
+    - standards
+    kubeVersion: '>=1.27.0-0'
+    maintainers:
+    - email: directors@vistergy.com
+      name: Vistergy Ltd
+    name: vistergy-agent-server
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/vistergy-vistergy-agent-server-0.1.28/vistergy-agent-server-0.1.28.tgz
+    version: 0.1.28
   voyager-gateway:
   - annotations:
       charts.openshift.io/digest: sha256:2f0cd4b5163a46b5386db672ce11b70929aeed21cb170703223ae6d4a511244e
@@ -23606,4 +23641,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-10T08:01:20.456656+00:00'
+generated: '2026-11-11T12:46:49.160699+00:00'
