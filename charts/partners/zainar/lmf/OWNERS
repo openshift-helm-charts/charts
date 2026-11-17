@@ -1,0 +1,11 @@
+chart:
+  name: pep
+  shortDescription: 'Zainar 5G LMF and Positioning Engine (lmf-pe)'
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: andreip-zainar
+- githubUsername: danielpostolache
+vendor:
+  label: zainar
+  name: ZaiNar
