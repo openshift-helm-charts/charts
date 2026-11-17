@@ -1,0 +1,11 @@
+chart:
+  name: aibom-webhook
+  shortDescription: Records an AI Bill of Materials for AI workloads on OpenShift
+publicPgpKey: null
+providerDelivery: False
+users:
+  - githubUsername: gavinsan33
+  - githubUsername: memalhot
+vendor:
+  label: project-aibom
+  name: Project AIBOM
