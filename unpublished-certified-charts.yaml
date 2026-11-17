@@ -412,6 +412,42 @@ entries:
     urls:
     - N/A
     version: 1.0.0
+  lmf:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/license: proprietary
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:d92d600ad0dabc367f057c60c08181b3fda4ec6ea22a6b26111343a890e6b360
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-17T13:36:35.678315+00:00'
+      charts.openshift.io/name: Zainar LMF Positioning Engine
+      charts.openshift.io/provider: Zainar
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-17T15:23:35.135333+00:00'
+      charts.openshift.io/supportURL: https://www.zainartech.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 0.5.4
+    description: Zainar 5G LMF and Positioning Engine (lmf-pe). Install into the lcsgw
+      release's namespace, after lcsgw.
+    digest: 3ccd0162b2c7f165c37440f8a37647943a59689e32eed759a9f10b2e54847635
+    home: https://www.zainartech.com
+    icon: https://gitlab.com/zainar-suite/5g/zainar-helm-charts/-/raw/main/assets/3GPP_5G_logo.png
+    keywords:
+    - 5g
+    - lmf
+    - zainar
+    kubeVersion: '>=1.27.0-0'
+    maintainers:
+    - name: Zainar
+      url: https://www.zainartech.com
+    name: lmf
+    sources:
+    - https://gitlab.com/zainar-suite/5g/zainar-helm-charts
+    type: application
+    urls:
+    - N/A
+    version: 0.1.1
   mozart-api:
   - annotations:
       charts.openshift.io/archs: amd64
@@ -2758,4 +2794,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-11-10T09:38:28.910885+00:00'
+generated: '2026-11-17T15:23:35.118333+00:00'
