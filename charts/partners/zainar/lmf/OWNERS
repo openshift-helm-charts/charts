@@ -1,6 +1,6 @@
 chart:
   name: lmf
-  shortDescription: unknown
+  shortDescription: Helm chart for Zainar LMF
 providerDelivery: true
 publicPgpKey: unknown
 users:
