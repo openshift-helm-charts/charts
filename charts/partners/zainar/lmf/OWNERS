@@ -3,7 +3,9 @@ chart:
   shortDescription: unknown
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: andreip-zainar
+- githubUsername: danielpostolache
 vendor:
   label: zainar
   name: ZaiNar
