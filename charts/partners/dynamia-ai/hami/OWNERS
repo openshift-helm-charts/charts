@@ -6,6 +6,7 @@ providerDelivery: false
 publicPgpKey: unknown
 users:
 - githubUsername: FouoF
+- githubUsername: spencercjh
 vendor:
   label: dynamia-ai
   name: DYNAMIA INTELLIGENCE PTE. LTD
