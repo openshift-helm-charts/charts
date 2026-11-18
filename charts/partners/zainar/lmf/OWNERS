@@ -1,0 +1,11 @@
+chart:
+  name: lmf
+  shortDescription: Helm chart for Zainar LMF
+providerDelivery: true
+publicPgpKey: unknown
+users:
+- githubUsername: andreip-zainar
+- githubUsername: danielpostolache
+vendor:
+  label: zainar
+  name: ZaiNar

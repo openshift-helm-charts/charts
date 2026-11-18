@@ -1,0 +1,11 @@
+chart:
+  name: spatiumddi
+  shortDescription: Helm chart for SpatiumDDI, an open-source DNS, DHCP and IP address
+    management (DDI) platform.
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: mzac
+vendor:
+  label: spatiumnorth
+  name: Spatium North Inc.

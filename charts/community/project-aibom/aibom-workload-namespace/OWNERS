@@ -1,0 +1,11 @@
+chart:
+  name: aibom-workload-namespace
+  shortDescription: Enables a namespace for AIBOM collection
+publicPgpKey: null
+providerDelivery: False
+users:
+  - githubUsername: gavinsan33
+  - githubUsername: memalhot
+vendor:
+  label: project-aibom
+  name: Project AIBOM

@@ -1,0 +1,31 @@
+{{ .Chart.Name }} {{ .Chart.Version }} (app version {{ .Chart.AppVersion }}) is installed as release {{ .Release.Name }}.
+
+1. Wait for the server to become ready (a cold start fetches the corpus
+   first, which can take several minutes):
+
+     kubectl -n {{ .Release.Namespace }} rollout status deploy/{{ include "vistergy-agent-server.fullname" . }}
+
+2. Check health from inside the cluster:
+
+     kubectl -n {{ .Release.Namespace }} run healthz --rm -it --restart=Never \
+       --image=registry.access.redhat.com/ubi9/ubi-minimal:9.6 -- \
+       curl -fsS http://{{ include "vistergy-agent-server.fullname" . }}:{{ .Values.service.port }}/healthz
+
+{{- if .Values.route.enabled }}
+
+3. The OpenShift Route:
+
+     oc -n {{ .Release.Namespace }} get route {{ include "vistergy-agent-server.fullname" . }} -o jsonpath='{.spec.host}'
+{{- else }}
+
+3. No Route was created (route.enabled=false). To expose the service on
+   OpenShift, set route.enabled=true.
+{{- end }}
+
+4. Run the chart's built-in test:
+
+     helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+Agent endpoints require a per-client API key (x-api-key header). Keys and
+other credentials come from the pre-existing Secrets named in
+envFromSecrets; this chart never creates or contains credentials.

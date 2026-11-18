@@ -6,6 +6,7 @@ publicPgpKey: unknown
 users:
 - githubUsername: bobadair
 - githubUsername: jsikorski-catalogicsoftware
+- githubUsername: jongarner
 vendor:
   label: catalogicsoftware
   name: Catalogic Software
