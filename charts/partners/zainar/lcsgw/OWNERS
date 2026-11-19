@@ -1,9 +1,11 @@
 chart:
   name: lcsgw
-  shortDescription: unknown
+  shortDescription: Helm chart for Zainar LCSGW
 providerDelivery: true
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: andreip-zainar
+- githubUsername: danielpostolache
 vendor:
   label: zainar
   name: ZaiNar
