@@ -412,6 +412,43 @@ entries:
     urls:
     - N/A
     version: 1.0.0
+  lcsgw:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/license: proprietary
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:a12b537484bec6748e7fbe91816805aea94de1dd2f841124b24c4473147ad020
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-19T15:43:19.450907+00:00'
+      charts.openshift.io/name: Zainar LCS Gateway
+      charts.openshift.io/provider: Zainar
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-19T15:50:42.607283+00:00'
+      charts.openshift.io/supportURL: https://www.zainartech.com
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.14'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 0.19.0
+    description: Zainar 5G LCS gateway. Deploys the controller and PostgreSQL.
+    digest: 9ec79f1d525c247b089ecbe905041c412e3bfb60e26add78f3709205d107ff8f
+    home: https://www.zainartech.com
+    icon: https://gitlab.com/zainar-suite/5g/zainar-helm-charts/-/raw/main/assets/3GPP_5G_logo.png
+    keywords:
+    - 5g
+    - lcs
+    - lcsgw
+    - controller
+    - zainar
+    kubeVersion: '>=1.27.0-0'
+    maintainers:
+    - name: Zainar
+      url: https://www.zainartech.com
+    name: lcsgw
+    sources:
+    - https://gitlab.com/zainar-suite/5g/zainar-helm-charts
+    type: application
+    urls:
+    - N/A
+    version: 0.2.0
   lmf:
   - annotations:
       artifacthub.io/category: networking
@@ -2812,4 +2849,4 @@ entries:
     urls:
     - N/A
     version: 5.4.0
-generated: '2026-11-18T18:14:58.371631+00:00'
+generated: '2026-11-19T15:50:42.586330+00:00'
