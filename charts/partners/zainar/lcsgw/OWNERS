@@ -1,0 +1,9 @@
+chart:
+  name: lcsgw
+  shortDescription: unknown
+providerDelivery: true
+publicPgpKey: unknown
+users: []
+vendor:
+  label: zainar
+  name: ZaiNar
