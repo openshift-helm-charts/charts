@@ -24,6 +24,32 @@ entries:
     urls:
     - https://github.com/a10networks/tkc-doc/raw/master/charts/a10tkc-0.2.0.tgz
     version: 0.2.0
+  aibom-webhook:
+  - annotations:
+      charts.openshift.io/digest: sha256:8e5f8a5198eb178cf78cf9c199adcbf40fa249943e865fff2b85629c9cdd1a90
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-20T21:21:19.53713+00:00'
+      charts.openshift.io/name: AIBOM Webhook
+      charts.openshift.io/provider: Project AIBOM
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-11-20T21:23:28.601476+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.16'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.0.4
+    description: 'AIBOM mutating admission webhook and controller for OpenShift. PREREQUISITE:
+      the AIBOM CRDs, which this chart does not include. Install them first, see the
+      README.'
+    digest: af1aff9a8d1138b8dac4065ddb77cc2229db6cabe7324d02c046a532db19d1ee
+    home: https://gavinsan33.github.io/project-aibom/
+    icon: https://gavinsan33.github.io/project-aibom/assets/logo.svg
+    kubeVersion: '>=1.29.0-0'
+    name: aibom-webhook
+    sources:
+    - https://github.com/gavinsan33/aibom-webhook-service
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/project-aibom-aibom-webhook-1.0.4/aibom-webhook-1.0.4.tgz
+    version: 1.0.4
   aibom-workload-namespace:
   - annotations:
       charts.openshift.io/digest: sha256:c8122db2f550d2851b2713dcc8b5d52fc6ce926c7611bef24cb4bb05e47c31f0
@@ -24053,4 +24079,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-20T21:05:28.682692+00:00'
+generated: '2026-11-20T21:23:28.432622+00:00'
