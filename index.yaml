@@ -49,6 +49,30 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/project-aibom-aibom-workload-namespace-1.0.2/aibom-workload-namespace-1.0.2.tgz
     version: 1.0.2
+  - annotations:
+      charts.openshift.io/digest: sha256:7a2c0761eb56bac78333452f3e41201f74c60a56f53cdca0f4665fa5653bcd43
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-20T21:03:20.352839+00:00'
+      charts.openshift.io/name: AIBOM Workload Namespace
+      charts.openshift.io/provider: Project AIBOM
+      charts.openshift.io/providerType: community
+      charts.openshift.io/submissionTimestamp: '2026-11-20T21:05:28.836894+00:00'
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.16'
+      charts.openshift.io/testedOpenShiftVersion: N/A
+    apiVersion: v2
+    appVersion: 1.0.4
+    description: Per-namespace RBAC and scripts ConfigMap for AIBOM-instrumented workload
+      namespaces
+    digest: 44acf0717f4a858273053955f36492bfa834b6a36b68eb0179e65e81a27e2d70
+    home: https://gavinsan33.github.io/project-aibom/
+    icon: https://gavinsan33.github.io/project-aibom/assets/logo.svg
+    kubeVersion: '>=1.29.0-0'
+    name: aibom-workload-namespace
+    sources:
+    - https://github.com/gavinsan33/aibom-webhook-service
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/project-aibom-aibom-workload-namespace-1.0.4/aibom-workload-namespace-1.0.4.tgz
+    version: 1.0.4
   aidaptiv-mw-console:
   - annotations:
       charts.openshift.io/digest: sha256:614237d31a5aa695fa3a2af731dae370f546d56e82a8ba67b0ba8049b32b6057
@@ -24029,4 +24053,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-20T10:35:55.599414+00:00'
+generated: '2026-11-20T21:05:28.682692+00:00'
