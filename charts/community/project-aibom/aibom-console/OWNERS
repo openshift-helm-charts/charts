@@ -1,0 +1,11 @@
+chart:
+  name: aibom-console
+  shortDescription: OpenShift console views for AIBOM records
+publicPgpKey: null
+providerDelivery: False
+users:
+  - githubUsername: gavinsan33
+  - githubUsername: memalhot
+vendor:
+  label: project-aibom
+  name: Project AIBOM
