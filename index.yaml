@@ -2092,6 +2092,39 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/dynacov-dynacov-safety-automation-0.1.1/dynacov-safety-automation-0.1.1.tgz
     version: 0.1.1
+  ella-core:
+  - annotations:
+      charts.openshift.io/digest: sha256:67148767d6f625e1039d939799d23e4a63fc911ebfac455b511c80cb20e054ab
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-25T14:59:57.708856+00:00'
+      charts.openshift.io/name: Ella Core
+      charts.openshift.io/provider: Ella Networks Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-25T15:07:50.407097+00:00'
+      charts.openshift.io/supportURL: https://github.com/ellanetworks/core/issues
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.17'
+      charts.openshift.io/testedOpenShiftVersion: '4.23'
+    apiVersion: v2
+    appVersion: v1.23.0
+    description: Ella Core, a 5G and 4G mobile core network.
+    digest: f0386f007f082a58dd283219e18793daacd1f9dd00bffc47f3f8f19d3cee86a9
+    home: https://docs.ellanetworks.com/core/
+    icon: https://raw.githubusercontent.com/ellanetworks/core/main/docs/images/logo-mark.svg
+    keywords:
+    - 5g
+    - 4g
+    - mobile-core
+    - cnf
+    kubeVersion: '>=1.30.0-0'
+    maintainers:
+    - name: Ella Networks
+      url: https://ellanetworks.com
+    name: ella-core
+    sources:
+    - https://github.com/ellanetworks/core
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/ellanetworks-ella-core-1.23.0/ella-core-1.23.0.tgz
+    version: 1.23.0
   enterprise-helm:
   - annotations:
       charts.openshift.io/category: AI/Machine Learning
@@ -24243,4 +24276,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-24T12:23:05.941045+00:00'
+generated: '2026-11-25T15:07:50.174232+00:00'
