@@ -1,0 +1,10 @@
+chart:
+  name: ella-smsc
+  shortDescription: Ella SMSC enables SMS messaging in private cellular networks
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- githubUsername: gruyaume
+vendor:
+  label: ellanetworks
+  name: Ella Networks Inc.
