@@ -1,0 +1,59 @@
+{{- $data := fromYaml (.Files.Get "data.yaml") -}}
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: dotnet-runtime
+  annotations:
+    openshift.io/display-name: .NET Runtime
+spec:
+  tags:
+  {{- $latestversion := $data.latestversion }}
+  {{- $latest := index $data.releases $latestversion }}
+  - name: latest
+    annotations:
+      openshift.io/display-name: .NET Runtime (Latest)
+      openshift.io/provider-display-name: Red Hat, Inc.
+      description: |-
+        Base image for running non-web .NET applications using the latest .NET runtime. For more information, see {{ $latest.runtimedoc }}.
+
+        WARNING: By selecting this tag, your application will automatically update to use the latest version of .NET available on OpenShift, including major version updates. Instead, it is recommended to use the tag that corresponds to the .NET version targeted by your application. Unless configured differently, .NET applications won't start on a different major runtime version.
+      iconClass: icon-dotnet
+      tags: dotnet-runtime,hidden
+      supports: dotnet-runtime
+    from:
+      kind: ImageStreamTag
+      name: '{{ $latestversion }}'
+    referencePolicy:
+      type: Local
+  {{- range $version, $info := $data.releases }}
+  - name: {{ $version }}-{{ include "platformTag" $info.platform }}
+    annotations:
+      openshift.io/display-name: .NET {{ $version }} Runtime ({{ $info.platform }})
+      openshift.io/provider-display-name: Red Hat, Inc.
+      description: Base image for running non-web .NET {{ $version }} applications on {{ $info.platform }}. For more information,
+        see {{ $info.runtimedoc }}.
+      iconClass: icon-dotnet
+      tags: dotnet-runtime,hidden
+      version: '{{ $version }}'
+      supports: dotnet-runtime,dotnet-runtime:{{ $version }}
+    from:
+      kind: DockerImage
+      name: {{ $info.runtimerepository }}
+    referencePolicy:
+      type: Local
+  - name: '{{ $version }}'
+    annotations:
+      openshift.io/display-name: .NET {{ $version }} Runtime ({{ $info.platform }})
+      openshift.io/provider-display-name: Red Hat, Inc.
+      description: Base image for running non-web .NET {{ $version }} applications on {{ $info.platform }}. For more information,
+        see {{ $info.runtimedoc }}.
+      iconClass: icon-dotnet
+      tags: dotnet-runtime
+      version: '{{ $version }}'
+      supports: dotnet-runtime,dotnet-runtime:{{ $version }}
+    from:
+      kind: DockerImage
+      name: {{ $info.runtimerepository }}
+    referencePolicy:
+      type: Local
+  {{- end }}

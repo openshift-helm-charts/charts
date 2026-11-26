@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-test"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+{{- if .Values.build.pullSecret }}
+  {{- include "imagePullSecrets" . | nindent 2 }}
+{{- end }}
+  containers:
+    - name: {{ .Release.Name }}-test
+      image: image-registry.openshift-image-registry.svc:5000/{{ .Release.Namespace }}/{{ include "dotnet.name" . }}:{{ .Values.image.tag | default "latest" }}
+      imagePullPolicy: IfNotPresent
+      command:
+        - /bin/sh
+        - -c
+        - |
+          /usr/libexec/s2i/run &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/ > /dev/null 2>&1; then
+              echo "Application responded on port 8080"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Application did not respond within 60 seconds"
+          exit 1
+  restartPolicy: Never
