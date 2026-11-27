@@ -1,0 +1,9 @@
+chart:
+  name: ella-ims
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users: []
+vendor:
+  label: ellanetworks
+  name: Ella Networks Inc.
