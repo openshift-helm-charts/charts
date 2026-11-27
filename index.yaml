@@ -2125,6 +2125,39 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/ellanetworks-ella-core-1.23.0/ella-core-1.23.0.tgz
     version: 1.23.0
+  ella-ims:
+  - annotations:
+      charts.openshift.io/digest: sha256:ee7fe13dd89062e189d6439cb9c6b47f4f93f310d334f0b603f1d19c8bf52163
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-27T18:02:22.940269+00:00'
+      charts.openshift.io/name: Ella IMS
+      charts.openshift.io/provider: Ella Networks Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-27T18:08:15.589039+00:00'
+      charts.openshift.io/supportURL: https://github.com/ellanetworks/ims/issues
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.17'
+      charts.openshift.io/testedOpenShiftVersion: '4.23'
+    apiVersion: v2
+    appVersion: v0.0.2
+    description: Ella IMS, an IP Multimedia Subsystem for private 4G and 5G networks.
+    digest: 42f189544bee220ef4434eacbaa5d1548600d239aed45ecfd9d8711ca731d21f
+    home: https://docs.ellanetworks.com/ims/
+    icon: https://raw.githubusercontent.com/ellanetworks/ims/main/docs/images/logo-mark.svg
+    keywords:
+    - ims
+    - volte
+    - vonr
+    - cnf
+    kubeVersion: '>=1.30.0-0'
+    maintainers:
+    - name: Ella Networks
+      url: https://ellanetworks.com
+    name: ella-ims
+    sources:
+    - https://github.com/ellanetworks/ims
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/ellanetworks-ella-ims-0.0.2/ella-ims-0.0.2.tgz
+    version: 0.0.2
   enterprise-helm:
   - annotations:
       charts.openshift.io/category: AI/Machine Learning
@@ -24339,4 +24372,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-27T16:49:46.389784+00:00'
+generated: '2026-11-27T18:08:15.409788+00:00'
