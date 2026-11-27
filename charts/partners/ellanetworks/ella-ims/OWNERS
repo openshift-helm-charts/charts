@@ -1,9 +1,11 @@
 chart:
   name: ella-ims
-  shortDescription: unknown
+  shortDescription: Helm chart for Ella IMS, an IP Multimedia Subsystem for private
+    4G and 5G networks.
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- githubUsername: gruyaume
 vendor:
   label: ellanetworks
   name: Ella Networks Inc.
