@@ -21024,6 +21024,42 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/telenity-smsf-registration-1.0.4/smsf-registration-1.0.4.tgz
     version: 1.0.4
+  spatiumddi:
+  - annotations:
+      charts.openshift.io/archs: x86_64
+      charts.openshift.io/digest: sha256:afee506a076eac3c08558654f855f77dde59fa8cebdefb4009e3d7f4b2e5fb31
+      charts.openshift.io/lastCertifiedTimestamp: '2026-11-27T16:43:05.169908+00:00'
+      charts.openshift.io/name: SpatiumDDI
+      charts.openshift.io/provider: Spatium North Inc.
+      charts.openshift.io/providerType: partner
+      charts.openshift.io/submissionTimestamp: '2026-11-27T16:49:46.564784+00:00'
+      charts.openshift.io/supportURL: https://github.com/spatiumnorth/spatiumddi/issues
+      charts.openshift.io/supportedOpenShiftVersions: '>=4.18'
+      charts.openshift.io/testedOpenShiftVersion: '4.22'
+    apiVersion: v2
+    appVersion: 1.0.1
+    description: "SpatiumDDI \u2014 all-in-one DDI (DNS, DHCP, IPAM) control plane
+      + optional managed service agents"
+    digest: d387ad64bc2ea6519939f418ca0b586f46c131c7a5e6de0c750aa250b3639647
+    home: https://www.spatiumddi.com/
+    icon: https://www.spatiumddi.com/assets/logo-icon.svg
+    keywords:
+    - ipam
+    - dns
+    - dhcp
+    - ddi
+    - networking
+    kubeVersion: '>=1.31.0-0'
+    maintainers:
+    - name: SpatiumDDI Contributors
+      url: https://github.com/spatiumnorth/spatiumddi
+    name: spatiumddi
+    sources:
+    - https://github.com/spatiumnorth
+    type: application
+    urls:
+    - https://github.com/openshift-helm-charts/charts/releases/download/spatiumnorth-spatiumddi-1.0.1/spatiumddi-1.0.1.tgz
+    version: 1.0.1
   tokenvisor:
   - annotations:
       charts.openshift.io/digest: sha256:d9ad29d2d60038365c3dcbff262ab3d692159957f892b3996fa8825a8dcde25f
@@ -24303,4 +24339,4 @@ entries:
     urls:
     - https://github.com/openshift-helm-charts/charts/releases/download/yugabytedb-yugaware-openshift-2024.2.0/yugaware-openshift-2024.2.0.tgz
     version: 2024.2.0
-generated: '2026-11-26T10:22:14.452492+00:00'
+generated: '2026-11-27T16:49:46.389784+00:00'
