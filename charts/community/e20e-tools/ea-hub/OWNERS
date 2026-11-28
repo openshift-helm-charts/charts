@@ -1,0 +1,9 @@
+chart:
+  name: ea-hub
+  shortDescription: EA-Hub, a self-hosted enterprise architecture hub with its own PostgreSQL
+publicPgpKey: null
+users:
+- githubUsername: e20etools
+vendor:
+  label: e20e-tools
+  name: E20E Tools
